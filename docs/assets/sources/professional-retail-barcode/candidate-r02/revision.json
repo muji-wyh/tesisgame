@@ -1,0 +1,8 @@
+{
+  "origin": "candidate-r01",
+  "previous_result": "21/0 visual checks; wrapper rejected audio-device startup ERROR",
+  "change": "Exact renderer content except output directory; run with --audio-driver Dummy for an image-only check.",
+  "source_sha256": "b70663f6c6f5aba6233125cf86b3618aec29bd5a3336542d58aa5dce3329b067",
+  "renderer_sha256": "457e1ed4d8c9d9354c478017ef93500d4d8ed4008feda5ba99fc2e097398c6e3",
+  "production_changed": false
+}

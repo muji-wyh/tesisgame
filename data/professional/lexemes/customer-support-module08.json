@@ -1,0 +1,1389 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "one-time-code.single-use-verification-code.n",
+      "text": "one-time code",
+      "display_text": "one-time code",
+      "pos": "noun",
+      "definition": "A code intended to be used once as part of a verification or access process.",
+      "example": "The agent reminded the customer not to post a one-time code in the chat.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "one-time code"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional masked verification screen with no usable code.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "one-time-code.single-use-verification-code.n.analysis.v1",
+        "lexeme_id": "one-time-code.single-use-verification-code.n",
+        "text": "one-time code",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.one",
+            "type": "stem",
+            "canonical": "one",
+            "surface": "one"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.time",
+            "type": "stem",
+            "canonical": "time",
+            "surface": "time"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.code",
+            "type": "stem",
+            "canonical": "code",
+            "surface": "code"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "one-time",
+            "rule": "hyphenated_compound"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "one-time code",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ico-data-minimization",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "ftc-tech-support-scams",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "osha-computer-workstations",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-w3c-accessibility",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "account-recovery.authorized-process-for-regaining-account-access.n",
+      "text": "account recovery",
+      "display_text": "account recovery",
+      "pos": "noun",
+      "definition": "An authorized process for helping a legitimate user regain access to an account.",
+      "example": "The agent referred the request to the approved account recovery route.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "account recovery"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional recovery information page without bypass instructions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "account-recovery.authorized-process-for-regaining-account-access.n.analysis.v1",
+        "lexeme_id": "account-recovery.authorized-process-for-regaining-account-access.n",
+        "text": "account recovery",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.account",
+            "type": "stem",
+            "canonical": "account",
+            "surface": "account"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.recovery",
+            "type": "stem",
+            "canonical": "recovery",
+            "surface": "recovery"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "account recovery",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ico-data-minimization",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "ftc-tech-support-scams",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-w3c-accessibility",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "account-takeover.unauthorized-control-of-account.n",
+      "text": "account takeover",
+      "display_text": "account takeover",
+      "pos": "noun",
+      "definition": "Unauthorized control of an account by someone other than its legitimate user.",
+      "example": "The agent escalated the suspected account takeover.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "account takeover"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional security incident report with no attack instructions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "account-takeover.unauthorized-control-of-account.n.analysis.v1",
+        "lexeme_id": "account-takeover.unauthorized-control-of-account.n",
+        "text": "account takeover",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.account",
+            "type": "stem",
+            "canonical": "account",
+            "surface": "account"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.take",
+            "type": "stem",
+            "canonical": "take",
+            "surface": "take"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.over",
+            "type": "stem",
+            "canonical": "over",
+            "surface": "over"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "takeover",
+            "rule": "closed_compound"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "account takeover",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ico-data-minimization",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "ftc-tech-support-scams",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "impersonation.pretending-to-be-another-person-or-organization.n",
+      "text": "impersonation",
+      "display_text": "impersonation",
+      "pos": "noun",
+      "definition": "Pretending to be another person or organization in order to mislead someone.",
+      "example": "The worker reported suspected impersonation through the approved route.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "impersonation"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clearly labeled fictional identity concern without a realistic scam script.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "impersonation.pretending-to-be-another-person-or-organization.n.analysis.v1",
+        "lexeme_id": "impersonation.pretending-to-be-another-person-or-organization.n",
+        "text": "impersonation",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.impersonate",
+            "type": "stem",
+            "canonical": "impersonate",
+            "surface": "impersonat"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ion.suffix",
+            "type": "suffix",
+            "canonical": "ion",
+            "surface": "ion"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "impersonation",
+            "rule": "drop_final_e_before_suffix"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ico-data-minimization",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "ftc-tech-support-scams",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "osha-computer-workstations",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "data-minimization.limiting-data-to-what-purpose-requires.n",
+      "text": "data minimization",
+      "display_text": "data minimization",
+      "pos": "noun",
+      "definition": "Keeping personal information sufficient, relevant, and limited to what the stated purpose requires, under applicable rules.",
+      "example": "The team reviewed the request form for data minimization.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "data minimization",
+        "data minimisation"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional support form with unrelated personal fields removed.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "data-minimization.limiting-data-to-what-purpose-requires.n.analysis.v1",
+        "lexeme_id": "data-minimization.limiting-data-to-what-purpose-requires.n",
+        "text": "data minimization",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.data",
+            "type": "stem",
+            "canonical": "data",
+            "surface": "data"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.minimize",
+            "type": "stem",
+            "canonical": "minimize",
+            "surface": "minimiz"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.ation.suffix",
+            "type": "suffix",
+            "canonical": "ation",
+            "surface": "ation"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "minimization",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "data minimization",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ico-data-minimization",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "osha-computer-workstations",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "onet-shipping-receiving-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "visitengland-accessible-tourism",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-gps-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-ncsc-phishing",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-assistants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-assessment",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "secure-channel.communication-route-with-appropriate-protection.n",
+      "text": "secure channel",
+      "display_text": "secure channel",
+      "pos": "noun",
+      "definition": "A communication route using protections appropriate to the information and applicable requirements.",
+      "example": "The agent checked which secure channel was approved for the document.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "secure channel"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional approved transfer option without implying perfect security.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "secure-channel.communication-route-with-appropriate-protection.n.analysis.v1",
+        "lexeme_id": "secure-channel.communication-route-with-appropriate-protection.n",
+        "text": "secure channel",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.secure",
+            "type": "stem",
+            "canonical": "secure",
+            "surface": "secure"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.channel",
+            "type": "stem",
+            "canonical": "channel",
+            "surface": "channel"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "secure channel",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ico-data-minimization",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "osha-computer-workstations",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "redaction.removal-or-obscuring-of-sensitive-information.n",
+      "text": "redaction",
+      "display_text": "redaction",
+      "pos": "noun",
+      "definition": "The removal or obscuring of information before a document or message is shared.",
+      "example": "The supervisor checked that redaction removed the hidden as well as visible sensitive content.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "redaction"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional document with verified removed fields and no actual personal data.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "redaction.removal-or-obscuring-of-sensitive-information.n.analysis.v1",
+        "lexeme_id": "redaction.removal-or-obscuring-of-sensitive-information.n",
+        "text": "redaction",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.redact",
+            "type": "stem",
+            "canonical": "redact",
+            "surface": "redact"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ion.suffix",
+            "type": "suffix",
+            "canonical": "ion",
+            "surface": "ion"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "redaction",
+            "rule": "suffix_attachment"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ico-data-minimization",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "education-bls-assistants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-assessment",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-conflicts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "recording-notice.information-that-interaction-may-be-recorded.n",
+      "text": "recording notice",
+      "display_text": "recording notice",
+      "pos": "noun",
+      "definition": "Information telling participants that an interaction may be recorded and explaining the applicable arrangements.",
+      "example": "The agent checked the current recording notice and consent requirements.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "recording notice"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional call notice with a route to ask questions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "recording-notice.information-that-interaction-may-be-recorded.n.analysis.v1",
+        "lexeme_id": "recording-notice.information-that-interaction-may-be-recorded.n",
+        "text": "recording notice",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.record",
+            "type": "stem",
+            "canonical": "record",
+            "surface": "record"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.notice",
+            "type": "stem",
+            "canonical": "notice",
+            "surface": "notice"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "recording",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "recording notice",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ico-data-minimization",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "authorized-representative.person-permitted-to-act-for-another.n",
+      "text": "authorized representative",
+      "display_text": "authorized representative",
+      "pos": "noun",
+      "definition": "A person permitted to act for someone else within a verified scope of authority.",
+      "example": "The agent checked the authorized representative's permitted scope.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "authorized representative"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional representation record with a limited authority field.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "authorized-representative.person-permitted-to-act-for-another.n.analysis.v1",
+        "lexeme_id": "authorized-representative.person-permitted-to-act-for-another.n",
+        "text": "authorized representative",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.authorize",
+            "type": "stem",
+            "canonical": "authorize",
+            "surface": "authoriz"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ed.suffix",
+            "type": "suffix",
+            "canonical": "ed",
+            "surface": "ed"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.represent",
+            "type": "stem",
+            "canonical": "represent",
+            "surface": "represent"
+          },
+          {
+            "id": "p4",
+            "canonical_id": "affix.ative.suffix",
+            "type": "suffix",
+            "canonical": "ative",
+            "surface": "ative"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "authorized",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "p3",
+            "right": "p4",
+            "surface": "representative",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n3",
+            "left": "n1",
+            "right": "n2",
+            "surface": "authorized representative",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n3"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ico-data-minimization",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "osha-computer-workstations",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "visitengland-accessible-tourism",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-usps-redelivery",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-support",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "abusive-language.language-that-mistreats-or-threatens-person.n",
+      "text": "abusive language",
+      "display_text": "abusive language",
+      "pos": "noun",
+      "definition": "Language used to mistreat, insult, or threaten a person.",
+      "example": "The agent followed the workplace support process after abusive language.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "abusive language"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A calm staff-support scene without displayed abusive words.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "abusive-language.language-that-mistreats-or-threatens-person.n.analysis.v1",
+        "lexeme_id": "abusive-language.language-that-mistreats-or-threatens-person.n",
+        "text": "abusive language",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.abuse",
+            "type": "stem",
+            "canonical": "abuse",
+            "surface": "abus"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ive.suffix",
+            "type": "suffix",
+            "canonical": "ive",
+            "surface": "ive"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.language",
+            "type": "stem",
+            "canonical": "language",
+            "surface": "language"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "abusive",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "abusive language",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ico-data-minimization",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    }
+  ]
+}

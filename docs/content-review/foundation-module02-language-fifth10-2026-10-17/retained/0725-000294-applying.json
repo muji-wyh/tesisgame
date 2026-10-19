@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 294,
+  "status": "applying",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "6467b780a5af418124f7bb1f1fcaea0a752752e9ba4076601405d42b73fd457d",
+  "recorded_at": "2026-10-16T22:49:13.006Z",
+  "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-commit-proposal-r01/guard-probe.cjs",
+  "work": "work/51626f6d-a337-4f9a-ac8f-28c3f252abef.bin"
+}

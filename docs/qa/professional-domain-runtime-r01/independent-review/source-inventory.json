@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "kind": "professional_runtime_independent_static_review_sources_v1",
+  "files": [
+    {
+      "path": "scripts/professional_round_loader.gd",
+      "bytes": 10408,
+      "sha256": "83186aeb5c993e6dcd544f71e6939de8a3b08ab60b3fc610987b22bf94d3182d",
+      "freeze_confirmed": true
+    },
+    {
+      "path": "tests/godot/professional_round_loader_tests.gd",
+      "bytes": 24170,
+      "sha256": "99904fff2e23cd83976647c89990a76c7786f91ba51feb2108983833a01ae96d",
+      "freeze_confirmed": true
+    },
+    {
+      "path": "scripts/professional_play.gd",
+      "bytes": 9400,
+      "sha256": "1841fb1b60d6a0b576d352d50221202c94611ec9832f8f5b039e4fe13a078489",
+      "freeze_confirmed": true
+    },
+    {
+      "path": "scripts/game_ui.gd",
+      "bytes": 229244,
+      "sha256": "6348a813929d530bd1332a096f3eb43b7f95be7c87b391e2a76dc37143c40aef",
+      "freeze_confirmed": true
+    },
+    {
+      "path": "scripts/professional_session.gd",
+      "bytes": 13663,
+      "sha256": "a6d5115d6e65a74c97cd129be4a3613358295566ac2065d046ac440560be8616",
+      "freeze_confirmed": false
+    },
+    {
+      "path": "scripts/professional_media_loader.gd",
+      "bytes": 7369,
+      "sha256": "d9d348d665b443300009f7490dbcb613a73eff58f9e91d6e70e364c9c76e7390",
+      "freeze_confirmed": false
+    },
+    {
+      "path": "scripts/professional_media_access.gd",
+      "bytes": 3639,
+      "sha256": "ad4350579562aec2d49c72c0ccfd72c54df162992fe8e30604504b52aef30025",
+      "freeze_confirmed": false
+    },
+    {
+      "path": "scripts/professional_media_cache.gd",
+      "bytes": 6801,
+      "sha256": "98d128ec9a80d178f95cd9484f6e4107a2075e49114228be7b0c16c2a24485f1",
+      "freeze_confirmed": false
+    },
+    {
+      "path": "scripts/professional_store.gd",
+      "bytes": 13762,
+      "sha256": "671fe81e308241e976d2307d1dc3ed7544226314b5d12f5e4215754f90197c2f",
+      "freeze_confirmed": false
+    },
+    {
+      "path": "tests/godot/professional_play_tests.gd",
+      "bytes": 17543,
+      "sha256": "3014b5a1e539743cf2b4918f2d11a5d29a450622e4d3b1df2a246f979e29d3de",
+      "freeze_confirmed": true
+    },
+    {
+      "path": "tests/godot/professional_application_flow_tests.gd",
+      "bytes": 14673,
+      "sha256": "0e78000274fa10800ea9eb368d56cb1d30b6a96eba8879422411afdbb4d95ffd",
+      "freeze_confirmed": true
+    },
+    {
+      "path": "tests/godot/professional_view_teardown_tests.gd",
+      "bytes": 3312,
+      "sha256": "8bbb0d26a15e2c0e4226f4f779597540d0e868afe0bbd3846313645ebeb6d05a",
+      "freeze_confirmed": false
+    }
+  ],
+  "scope": "Bounded files inspected for the production integration review, not a complete transitive dependency or build inventory."
+}

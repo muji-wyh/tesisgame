@@ -1,0 +1,99 @@
+{
+  "schema": 1,
+  "status": "exact_shared_test_replacements_prepared",
+  "patches": [
+    {
+      "file": "tests/professional-content.test.cjs",
+      "before_sha256": "471f1eee4c01ffd0a0f9a43db0692311774afd5996ba29f5865d4674ec38ab19",
+      "after_sha256": "64d754533e5b7aa329ab4c044bce454e7c641fa6afe0257e7f76134586c67fa7",
+      "before_artifact": "professional-content.test.cjs.before",
+      "after_artifact": "professional-content.test.cjs.after",
+      "exact_anchor_edits": [
+        {
+          "before": "function beforeAttendanceLanguage(entry) {",
+          "after": "const foundation02SecondLanguageRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/foundation-module02-language-second10-2026-10-17.json'), 'utf8'));\nfunction beforeFoundation02SecondLanguage(entry) {\n  const patch = foundation02SecondLanguageRecord.patches.find(item => item.id === entry.id);\n  if (!patch) return entry;\n  if (require('node:util').isDeepStrictEqual(entry, patch.before)) return structuredClone(patch.before);\n  assert.deepEqual(entry, patch.after, entry.id + ': exact later second-ten accepted language and reviewed metadata');\n  return structuredClone(patch.before);\n}\nfunction beforeAttendanceLanguage(entry) {\n  entry = beforeFoundation02SecondLanguage(entry);",
+          "count": 1
+        },
+        {
+          "before": "...attendanceLanguageRecord.patches].map(item => item.id)",
+          "after": "...attendanceLanguageRecord.patches, ...foundation02SecondLanguageRecord.patches].map(item => item.id)",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(result.summary.reviewed_lexemes, 122);",
+          "after": "assert.equal(result.summary.reviewed_lexemes, 130);",
+          "count": 1
+        },
+        {
+          "before": "assert.match(word('complete').definition,/providing everything required/);",
+          "after": "assert.match(beforeFoundation02SecondLanguage(word('complete')).definition,/providing everything required/);",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(hash(source.lexemes.filter(e=>e.id!==p.id)),c.all_other_lexemes_json_sha256);",
+          "after": "assert.equal(hash(source.lexemes.map(beforeFoundation02SecondLanguage).filter(e=>e.id!==p.id)),c.all_other_lexemes_json_sha256);",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(hash(source.sources.slice(0,-r.sources.length)),c.previous_sources_json_sha256);",
+          "after": "assert.equal(hash(source.sources.slice(0,-foundation02SecondLanguageRecord.sources.length).slice(0,-r.sources.length)),c.previous_sources_json_sha256);",
+          "count": 1
+        },
+        {
+          "before": "const audit=auditProfessionalContent({data:source});assert.equal(audit.summary.reviewed_lexemes,122);",
+          "after": "const historical={...source,lexemes:source.lexemes.map(beforeFoundation02SecondLanguage),sources:source.sources.slice(0,-foundation02SecondLanguageRecord.sources.length)};const audit=auditProfessionalContent({data:historical});assert.equal(audit.summary.reviewed_lexemes,122);",
+          "count": 1
+        }
+      ],
+      "appended_tests": 6,
+      "projected_callbacks_passed": 181,
+      "native": false,
+      "syntax_valid": true,
+      "native_execution_required_after_delivery": false
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "before_sha256": "47474805af1db61c9a2bc944395f5790a5853c73420b02f29563559b2b1a4459",
+      "after_sha256": "c7bc3e1448ee006c6441c9cf1eb0fb3be875efc9c762f1a78d9c0c478a62135f",
+      "before_artifact": "professional-retail-morphology.test.cjs.before",
+      "after_artifact": "professional-retail-morphology.test.cjs.after",
+      "exact_anchor_edits": [
+        {
+          "before": "function beforeAttendanceLanguage(entry) {",
+          "after": "const foundation02SecondLanguageRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/foundation-module02-language-second10-2026-10-17.json'), 'utf8'));\nfunction beforeFoundation02SecondLanguage(entry) {\n  const patch = foundation02SecondLanguageRecord.patches.find(item => item.id === entry.id);\n  if (!patch) return entry;\n  if (require('node:util').isDeepStrictEqual(entry, patch.before)) return structuredClone(patch.before);\n  assert.deepEqual(entry, patch.after, entry.id + ': exact later second-ten accepted language and reviewed metadata');\n  return structuredClone(patch.before);\n}\nfunction beforeAttendanceLanguage(entry) {\n  entry = beforeFoundation02SecondLanguage(entry);",
+          "count": 1
+        }
+      ],
+      "appended_tests": 1,
+      "projected_callbacks_passed": 36,
+      "native": false,
+      "syntax_valid": true,
+      "native_execution_required_after_delivery": false
+    },
+    {
+      "file": "tests/godot/professional_retail_morphology_tests.gd",
+      "before_sha256": "f0bd041c0c50413b9f0b399df1abb89aea7d66062c5f4ad5fcbc30290e4208f1",
+      "after_sha256": "7cd10db267b373fea44ac287924ef67de0d47fa13d4a5c4e2c299afaeea6008c",
+      "before_artifact": "professional_retail_morphology_tests.gd.before",
+      "after_artifact": "professional_retail_morphology_tests.gd.after",
+      "exact_anchor_edits": [
+        {
+          "before": "\t_check_retail04_third10()",
+          "after": "\t_check_retail04_third10()\n\t_check_foundation02_second_language()",
+          "count": 1
+        },
+        {
+          "before": "\tvar comparable: Dictionary = current[0]",
+          "after": "\tvar second_language: Dictionary = _f02s_reverse(current[0])\n\tcheck(second_language.ok, \"Newest Foundation02 language state must match its exact chronological boundary\")\n\tif not second_language.ok:\n\t\treturn {}\n\tvar comparable: Dictionary = second_language.entry",
+          "count": 1
+        }
+      ],
+      "appended_tests": 1,
+      "projected_callbacks_passed": 0,
+      "native": true,
+      "syntax_valid": null,
+      "native_execution_required_after_delivery": true
+    }
+  ],
+  "production_mutated": false
+}

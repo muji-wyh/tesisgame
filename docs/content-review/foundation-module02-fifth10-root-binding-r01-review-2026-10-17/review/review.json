@@ -1,0 +1,96 @@
+{
+  "schema": 1,
+  "status": "source_revision_required_actual_persisted_predecessor_failed",
+  "reviewer": "/root/morph_review",
+  "source_inventory": {
+    "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r01/source-inventory.json",
+    "bytes": 1666,
+    "raw_sha256": "706a57585e1d96755755ac6c081b1623ac19bd55a0d83cb7f4742ae963797c9a"
+  },
+  "helper_source_sha256": "884dee02200c7216fe1ed0d4b498c3b39fba005c83c511b27ba6de55a460493a",
+  "source_only_inspection_completed": true,
+  "helper_execution_accepted": false,
+  "actual_binding_accepted": false,
+  "preparation_execution_accepted": false,
+  "findings": [
+    {
+      "id": "F01",
+      "priority": 1,
+      "file": "build/professional-english/foundation02-fifth10-root-binding-proposal-r01/capture.cjs",
+      "line": 385,
+      "title": "Merge the two sealed pin collections instead of requiring evidence to be a subset",
+      "finding": "The helper requires every evidence_files row to have an identical existing entry in bagInput.expected_inputs before adding it. The genuine sealed bag input intentionally separates these collections: 11,740 expected inputs and 579 evidence records have 89 overlapping paths and 490 evidence-only paths, with zero overlap conflicts. The first evidence-only row is shopping-bag-commit-independent-review-r01/exact-contract-review.json; commit.cjs, the persisted wrapper source and most actual transaction states are also evidence-only. Thus the genuine input always fails this assertion before the helper can construct its binding. This is independent of the later persisted-receipt failure.",
+      "required_change": "In a fresh source revision, retain and rehash the complete union of expected_inputs and evidence_files. Require matching hashes only for actual overlaps and reject conflicting pins through the existing add gate. Add every evidence-only path with its original sealed hash and retain every evidence record. Preserve the 11,740 and 579 source collections and their exact input identity; do not manufacture a combined input or silently drop/refresh pins.",
+      "actual_counts": {
+        "expected_inputs": 11740,
+        "evidence_files": 579,
+        "overlapping_paths": 89,
+        "overlap_hash_conflicts": 0,
+        "evidence_only_paths": 490,
+        "complete_inherited_union_paths": 12230
+      },
+      "evidence_input": {
+        "path": "build/professional-english/shopping-bag-persisted-validation-r01/input.json",
+        "bytes": 1808178,
+        "raw_sha256": "a31cd76e3f21b19fc727a5ce735bac6c3d20c9de8a71fe80b70b587c1907b70f"
+      },
+      "method": "Independent raw JSON/key/hash comparison; no helper or guard execution. All 490 failed static comparisons identify evidence-only rows, not modified bytes."
+    }
+  ],
+  "actual_predecessor_limitation": {
+    "status": "failed_persisted_r01_requires_fresh_actual_success",
+    "selected_original_path_in_helper": "build/professional-english/shopping-bag-persisted-validation-r01/attempt-001/receipt.json",
+    "receipt": {
+      "path": "build/professional-english/shopping-bag-persisted-validation-r01/attempt-001/receipt.json",
+      "bytes": 2981,
+      "raw_sha256": "8680e417f593aa1e04225e258b9390e1cb944c7d91cf378288ff19011de2204d"
+    },
+    "observed_ok": false,
+    "postcheck_error": null,
+    "command_exit_codes": [0, 0],
+    "receipt_test_values": {"tests": null, "pass": null, "fail": null, "cancelled": null, "skipped": null},
+    "failure": "The persisted wrapper only parses TAP # summary lines. The genuine command emitted Node spec-reporter information lines, so its callback parser obtained NaN and asserted NaN !== 255. The receipt remains failed even though the raw log reports tests 255, pass 255 and zero fail/cancelled/skipped.",
+    "command_logs": [
+      {"path": "build/professional-english/shopping-bag-persisted-validation-r01/attempt-001/command-1.log", "raw_sha256": "0020b63f47249956e1122188f101d26390511a6b02ec16e52377033dd6504ae6"},
+      {"path": "build/professional-english/shopping-bag-persisted-validation-r01/attempt-001/command-2.log", "raw_sha256": "5c51c6b4a8a8b4016fab7fee1126473f50ebb799dfc70df7df953f54e291fc23"}
+    ],
+    "required_change": "Preserve the original failed wrapper, input, logs and receipt. A fresh helper revision must bind the separately reviewed corrected persisted wrapper/input and its genuine successful receipt after root execution. Do not replace the failed receipt or translate command exit codes into an overall success claim. Root has stated that r01 helper remains undispatched."
+  },
+  "supported_source_findings": [
+    "All seven helper inventory members match their frozen pins; all 149 measured raw inputs were rehashed unchanged. The 141 supplemental pins and 112 members across eleven complete inventories match.",
+    "Predecessor functions from at through successfulPredecessor are exact normalized source-text copies of frozen preparation r03. Their genuine schema, independent-role and complete manifest checks remain intact.",
+    "Registry/count/context functions differ only by local hash utility and removal of the preparation-session guard. The accepted projection prefix differs only by documented local utilities, prep path, removed not-yet-existing binding comparisons and direct measured return. All three exact text correspondences passed.",
+    "Only fs, path, crypto and assert/strict are imported. No project/preparation import, dynamic evaluation or subprocess dispatch appears. The helper has one mkdir call and one exclusive write call, both confined to fixed fresh scratch output after validation.",
+    "Helper acceptance uses a distinct status and exact source inventory pin, rejects author/inherited-author/dispatcher identities, and requires actual-binding and preparation acceptance to remain false. Existing r03 source-only review keeps its null actual binding and false preparation acceptance.",
+    "Supplement/inherited overlaps agree; all 961 explicitly named runtime dependencies are present in the expected-input/supplement map. The broader evidence union is currently blocked by F01. This review does not rehash all 11,740 inherited runtime files or claim complete future test visibility.",
+    "The sealed bag persisted input names exactly the helper's durable bag commit path and original committed state, all 153 target hashes, and 255 expected callbacks. The fourth-ten persisted receipt names exactly the helper's selected durable fourth-ten commit path.",
+    "Original selected bag persisted output and exact log hashes are always pinned even when a durable copy is selected. The selected copy is verified against the same original hash and byte length.",
+    "The helper computes a registry only through raw JSON construction, preserves accepted entries/holds/donors/context and the delivered bag, and requires its before hash to equal the actual bag registry and the current reviewed-status anchor to remain 148.",
+    "Retained destinations use a sorted complete source list and shallow numbered basenames. Six replacements, metadata additions, individually retained copies and three deferred external artifacts form the exact unique target/absence set. No production target is written. Inputs, predecessors and absent additions are checked again before capture completion.",
+    "The twenty-four guard cases and unbound template remain unexecuted specifications. A failed consumed output is retained. The helper creates no actual-binding acceptance or preparation root input."
+  ],
+  "static_inspection": {
+    "script": "inspect-source.cjs",
+    "script_sha256": "6bd098cf205b6648e64122f2d9fadf56c33690b7c75ed5b120f8326d0053b5f7",
+    "inspection": "inspection-r01/inspection.json",
+    "inspection_sha256": "7a189c5fdc0b0b8fb709aeba3aa2fda8e226b80359a10de2579ba404e440c620",
+    "inputs": "inspection-r01/inputs.json",
+    "inputs_sha256": "ffc2bc4b220bcb98b8a170c93103dd180150d9009cf4a21372e1a9b0ea4c97e1",
+    "comparisons_passed": 1699,
+    "comparisons_failed": 490,
+    "failed_comparisons_have_single_source_cause": "F01: evidence-only paths are not members of expected_inputs",
+    "raw_inputs_measured": 149,
+    "all_raw_inputs_rehashed_unchanged": true,
+    "copied_source_fragments_matched": 3,
+    "helper_source_imported_or_executed": false,
+    "guard_syntax_project_test_native_or_preparation_execution": false,
+    "actual_binding_created": false,
+    "replay_allowed": false
+  },
+  "limitations": [
+    "This is an independent source rejection, not a helper-execution or project-test failure. The static capture is immutable and must not be rerun or revised to erase its findings.",
+    "Actual bag persisted success, a concrete root capture input, actual binding output, independent actual-binding approval and preparation authorization remain absent from this review.",
+    "No language, morphology, expression, media, specialist, ready-module or release acceptance is provided. No production/shared test content changed."
+  ],
+  "required_next_step": "Preserve helper r01 and this review. Independently inspect a fresh helper revision with the complete conflict-checked evidence union and the genuine new persisted predecessor selections. Actual helper dispatch remains root-owned and requires successful persisted evidence and concrete input."
+}

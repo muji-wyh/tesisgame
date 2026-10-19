@@ -1,8 +1,33 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
-const { MODES, THEME_NAMES, openGame, openModeMenu, chooseMode, chooseTheme, metrics, tap, enterGame, rendered,
+const { MODES, THEME_NAMES, openGame, openModeMenu, chooseMode, metrics, tap, enterGame, rendered,
   visibleColorCount, libraryControl, activateLibraryControl, openRewards,
   activateGrowthControl, growthView, matchWords, discoverMatchCards, boardPoint } = require('./game-ui.cjs');
+const learningThemes = require('../../data/professional/themes.json').profiles;
+
+async function expectAutomaticPalette(page, themeId) {
+  const palette = learningThemes.find(profile => profile.id === themeId).palette;
+  await expect.poll(() => page.locator('#game').evaluate(element => element.style.getPropertyValue('--voice-accent').toLowerCase()))
+    .toBe(palette.accent.toLowerCase());
+  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', palette.background.toLowerCase());
+}
+
+async function browseDraftRetailModule(page) {
+  await activateLibraryControl(page, 'ChangeLearningPath');
+  await expect.poll(async () => (await metrics(page)).library.learning.screen).toBe('paths');
+  await activateLibraryControl(page, 'ProfessionalPath');
+  await expect.poll(async () => (await metrics(page)).library.learning.screen).toBe('courses');
+  await activateLibraryControl(page, 'Career_retail');
+  await expect.poll(async () => (await metrics(page)).library.learning.screen).toBe('modules');
+  expect((await metrics(page)).library.learning.course_id).toBe('retail');
+  await expectAutomaticPalette(page, 'professional_retail');
+  await activateLibraryControl(page, 'Module_module03');
+  await expect.poll(async () => (await metrics(page)).library.learning.screen).toBe('summary');
+  expect((await metrics(page)).library.learning.selection).toMatchObject({
+    track: 'professional', course_id: 'retail', module_id: 'module03'
+  });
+  expect((await metrics(page)).library.learning.continue_enabled, 'A draft module cannot start a lesson').toBe(false);
+}
 
 async function openHome(page, { reducedMotion = 'reduce' } = {}) {
   const errors = [];
@@ -12,6 +37,17 @@ async function openHome(page, { reducedMotion = 'reduce' } = {}) {
   await page.emulateMedia({ reducedMotion });
   await page.goto('/');
   await enterGame(page, { home: true });
+  await expect.poll(async () => (await metrics(page)).library.learning.screen).toBe('paths');
+  await expect.poll(async () => (await metrics(page)).library.previews.every(item => !item.animating),
+    { message: 'Hidden game previews do not animate' }).toBe(true);
+  const initial = (await metrics(page)).library;
+  expect(initial.controls.filter(item => item.name.startsWith('Mode_') && item.visible),
+    'A new learner chooses a path before seeing the games').toEqual([]);
+  await libraryControl(page, 'GrowthPath');
+  await libraryControl(page, 'ProfessionalPath');
+  await activateLibraryControl(page, 'GrowthPath');
+  await expect.poll(async () => (await metrics(page)).library.learning.screen).toBe('summary');
+  expect((await metrics(page)).library.learning.selection.track).toBe('growth');
   return errors;
 }
 
@@ -97,7 +133,8 @@ test('Home previews loop through all six games automatically without changing ga
   await chooseMode(page, 'word_jelly');
   await expect.poll(async () => {
     const state = await jellyState(page);
-    return state.tiles?.length >= 18 && state.tiles.every(tile => tile.settled);
+    return state.mode === 'word_jelly' && state.visible && state.phase === 'playing' &&
+      state.authored_morphology && state.tiles?.length > 0 && state.tiles.every(tile => tile.settled);
   }).toBe(true);
   await openModeMenu(page);
   await expect.poll(async () => (await metrics(page)).library.previews.every(item => item.animating),
@@ -175,6 +212,7 @@ test('Home grows alongside Pip when a word is mastered and after reloading', asy
 
   await page.reload();
   await enterGame(page, { home: true });
+  await expect.poll(async () => (await metrics(page)).library.learning.selection.track).toBe('growth');
   const restored = (await metrics(page)).library;
   expect(restored.hero.mastered).toBe(1);
   expect(restored.hero.progress).toBeCloseTo(earned.hero.progress, 5);
@@ -183,8 +221,9 @@ test('Home grows alongside Pip when a word is mastered and after reloading', asy
 });
 
 async function swipeHome(page, testInfo) {
+  const card = await libraryControl(page, 'Mode_word_jelly');
   const bounds = await metrics(page), home = bounds.library;
-  const [x, y, width, height] = home.viewport_rect;
+  const [x, y, width, height] = card.rect;
   const start = { x: bounds.x + (x + width * 0.25) * bounds.scale,
     y: bounds.y + (y + height * 0.8) * bounds.scale };
   const distance = Math.min(180, height * bounds.scale * 0.6);
@@ -253,11 +292,14 @@ for (const reducedMotion of ['reduce', 'no-preference']) {
       if (browserName === 'chromium' && reducedMotion === 'reduce' && size.width === 390 && size.height === 420) {
         await swipeHome(page, testInfo);
       }
-      const footer = (await metrics(page)).library.controls.filter(item => !THEME_NAMES.includes(item.name) && !item.name.startsWith('Mode_'));
+      const controls = (await metrics(page)).library.controls;
+      expect(controls.filter(item => THEME_NAMES.includes(item.name) && item.visible),
+        'Learning paths choose their presentation automatically without a separate theme picker').toEqual([]);
+      const footer = controls.filter(item => ['HomeCollection', 'LibrarySound'].includes(item.name));
       expect(footer.map(item => item.name), 'The Home footer contains only the word library and sound controls')
         .toEqual(['HomeCollection', 'LibrarySound']);
       expect(Math.abs(footer[0].rect[2] - footer[1].rect[2]), 'The two footer controls share the width equally').toBeLessThanOrEqual(1);
-      for (const name of [...THEME_NAMES, ...names, 'HomeCollection', 'LibrarySound']) {
+      for (const name of ['ChangeLearningPath', 'ContinueLearningPath', ...names, 'HomeCollection', 'LibrarySound']) {
         const control = await libraryControl(page, name), bounds = await metrics(page);
         const [x, y, w, h] = control.rect;
         expect(control.disabled, `${name} is enabled`).toBe(false);
@@ -274,7 +316,7 @@ for (const reducedMotion of ['reduce', 'no-preference']) {
 }
 
 test('every game is selected from home and choosing the current game continues its round', async ({ page }, testInfo) => {
-  test.setTimeout(240000);
+  test.setTimeout(420000);
   const errors = await openHome(page);
   for (const mode of MODES) {
     await chooseMode(page, mode);
@@ -309,18 +351,22 @@ test('every game is selected from home and choosing the current game continues i
   await chooseMode(page, 'word_jelly');
   await expect.poll(async () => {
     const state = await jellyState(page);
-    return state.mode === 'word_jelly' && state.tiles?.length >= 18 && state.tiles.every(tile => tile.settled);
+    return state.mode === 'word_jelly' && state.visible && state.phase === 'playing' &&
+      state.authored_morphology && state.tiles?.length > 0 && state.tiles.every(tile => tile.settled);
   }).toBe(true);
   await openModeMenu(page);
   await expect.poll(async () => (await jellyState(page)).paused).toBe(true);
   const paused = await jellyState(page);
-  await chooseTheme(page, 5);
-  expect((await metrics(page)).library.visible, 'Choosing a Home theme keeps the game paused').toBe(true);
+  await browseDraftRetailModule(page);
+  expect((await metrics(page)).library.visible, 'Browsing another learning path keeps the current game paused').toBe(true);
   expect((await jellyState(page)).paused).toBe(true);
   await page.waitForTimeout(1100);
   expect((await jellyState(page)).spawn_elapsed, 'Falling word supply pauses on home').toBe(paused.spawn_elapsed);
-  await chooseMode(page, 'word_jelly');
+  await activateLibraryControl(page, 'ContinueCurrentRound');
+  await expect.poll(async () => (await metrics(page)).library.visible).toBe(false);
+  expect((await metrics(page)).library.current).toBe('word_jelly');
   await expect.poll(async () => (await jellyState(page)).paused).toBe(false);
+  await expectAutomaticPalette(page, 'growth_garden');
   expect((await jellyState(page)).tiles.map(tile => tile.id), 'Returning from home keeps the current Jelly Words board')
     .toEqual(paused.tiles.map(tile => tile.id));
   await page.screenshot({ path: testInfo.outputPath('jelly-words-resumed-from-home.png'), scale: 'css' });
@@ -359,6 +405,7 @@ test('collection and background visits return to home without resuming its pause
 });
 
 test('returning home releases the microphone until Voice Pop is selected again', async ({ page }) => {
+  test.setTimeout(240000);
   await page.addInitScript(() => {
     const speech = { starts: 0, stops: 0, active: false };
     class Recognition {
@@ -389,10 +436,13 @@ test('returning home releases the microphone until Voice Pop is selected again',
   const paused = await page.evaluate(() => ({ ...window.__homeSpeech }));
   expect(paused.stops).toBeGreaterThan(0);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'paused');
-  await chooseTheme(page, 4);
-  expect(await page.evaluate(() => window.__homeSpeech.starts), 'Choosing a Home theme keeps the microphone stopped').toBe(paused.starts);
+  await browseDraftRetailModule(page);
+  expect(await page.evaluate(() => window.__homeSpeech.starts), 'Browsing careers and draft modules keeps the microphone stopped').toBe(paused.starts);
   expect(await page.evaluate(() => window.__homeSpeech.active)).toBe(false);
-  await chooseMode(page, 'pop');
+  await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'paused');
+  await activateLibraryControl(page, 'ContinueCurrentRound');
+  await expect.poll(async () => (await metrics(page)).library.visible).toBe(false);
+  expect((await metrics(page)).library.current).toBe('pop');
   await expect.poll(() => page.evaluate(() => window.__homeSpeech.starts)).toBe(paused.starts + 1);
   await expect(page.locator('#pop-status')).toHaveAttribute('data-phase', 'running');
   await openModeMenu(page);
@@ -406,20 +456,29 @@ test('returning home releases the microphone until Voice Pop is selected again',
   expect(errors).toEqual([]);
 });
 
-test('home keeps sound and theme choices while motion follows the system and ignores old saved overrides', async ({ page }) => {
-  test.setTimeout(180000);
+test('automatic learning themes preserve historical preferences while sound persists and motion follows the system', async ({ page }) => {
+  // Two engine starts, course changes and keyboard scrolling must all finish on
+  // the software renderer; retain the normal per-step assertion timeouts.
+  test.setTimeout(300000);
   await page.addInitScript(() => {
     if (sessionStorage.getItem('legacyMotionSeeded')) return;
-    localStorage.setItem('pipAndWords.presentation.v1', JSON.stringify({ muted: false, reduced_motion: false, preferred_theme: 'spring' }));
+    localStorage.setItem('pipAndWords.presentation.v1', JSON.stringify({ muted: false, reduced_motion: false, preferred_theme: 'ocean' }));
     sessionStorage.setItem('legacyMotionSeeded', 'true');
   });
   const errors = await openHome(page);
   await expect(page.locator('html')).toHaveAttribute('data-reduced-motion', 'true');
   expect((await metrics(page)).library.controls.some(item => item.name === 'LibraryMotion')).toBe(false);
-  await chooseTheme(page, 4);
+  await expectAutomaticPalette(page, 'growth_garden');
+  expect((await metrics(page)).library.controls.filter(item => THEME_NAMES.includes(item.name) && item.visible)).toEqual([]);
   await activateLibraryControl(page, 'LibrarySound');
   const savedPreferences = { muted: true, preferred_theme: 'ocean' };
   await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')))).toEqual(savedPreferences);
+  await browseDraftRetailModule(page);
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1'))),
+    'Automatic course previews preserve the historical theme preference').toEqual(savedPreferences);
+  await activateLibraryControl(page, 'ChangeLearningPath');
+  await activateLibraryControl(page, 'GrowthPath');
+  await expectAutomaticPalette(page, 'growth_garden');
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await expect(page.locator('html')).toHaveAttribute('data-reduced-motion', 'false');
   await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -432,14 +491,54 @@ test('home keeps sound and theme choices while motion follows the system and ign
   });
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.reload({ waitUntil: 'domcontentloaded' });
-  await expect(page.locator('#loading-theme-options button[data-theme="ocean"]')).toHaveAttribute('aria-pressed', 'true');
-  await page.locator('#loading-theme-options button[data-theme="ocean"]').focus();
+  await expect(page.locator('#loading-themes')).toBeHidden();
+  await expect(page.locator('#loading-themes')).toHaveAttribute('inert');
   await expect(page.locator('html')).toHaveAttribute('data-reduced-motion', 'false');
   await enterGame(page, { home: true });
-  expect((await metrics(page)).library.theme_id, 'The selected Home theme survives reload').toBe('ocean');
+  await expect.poll(async () => (await metrics(page)).library.learning.selection.track).toBe('growth');
+  await expectAutomaticPalette(page, 'growth_garden');
+  expect((await metrics(page)).library.controls.filter(item => THEME_NAMES.includes(item.name) && item.visible)).toEqual([]);
   expect((await metrics(page)).library.controls.some(item => item.name === 'LibraryMotion')).toBe(false);
   await expect(page.locator('html')).toHaveAttribute('data-reduced-motion', 'false');
   await activateLibraryControl(page, 'LibrarySound');
   await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')))).toEqual({ muted: false, preferred_theme: 'ocean' });
+  expect(errors).toEqual([]);
+});
+
+test('saved Sound reload restores the actual toggle state with the automatic Growth theme', async ({ page }, info) => {
+  test.setTimeout(180000);
+  await page.addInitScript(() => {
+    if (sessionStorage.getItem('soundReloadSeeded')) return;
+    localStorage.setItem('pipAndWords.presentation.v1', JSON.stringify({ muted: false, reduced_motion: true, preferred_theme: 'ocean' }));
+    sessionStorage.setItem('soundReloadSeeded', 'true');
+  });
+  const errors = await openHome(page, { reducedMotion: 'no-preference' });
+  // Exercise the real reverse keyboard route to the footer. This focused reload
+  // check does not repeat the separate full forward-navigation acceptance case.
+  async function revealSound() {
+    for (let step = 0; step < 12; step++) {
+      const sound = (await metrics(page)).library.controls.find(item => item.name === 'LibrarySound');
+      if (sound?.focused && sound.visible) return libraryControl(page, 'LibrarySound');
+      await page.locator('#canvas').press('Shift+Tab');
+      await rendered(page);
+    }
+    throw new Error('The reverse keyboard route did not reveal Sound.');
+  }
+  await revealSound();
+  await activateLibraryControl(page, 'LibrarySound');
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1'))))
+    .toEqual({ muted: true, preferred_theme: 'ocean' });
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await enterGame(page, { home: true });
+  await expect.poll(async () => (await metrics(page)).library.learning.selection.track).toBe('growth');
+  await expectAutomaticPalette(page, 'growth_garden');
+  await expect(page.locator('html')).toHaveAttribute('data-reduced-motion', 'false');
+  expect((await metrics(page)).library.controls.filter(item => THEME_NAMES.includes(item.name) && item.visible)).toEqual([]);
+  await revealSound();
+  await page.screenshot({ path: info.outputPath('sound-after-reload.png'), scale: 'css' });
+  await activateLibraryControl(page, 'LibrarySound');
+  // Defaulting to unmuted on reload would toggle to true and fail this check.
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1'))))
+    .toEqual({ muted: false, preferred_theme: 'ocean' });
   expect(errors).toEqual([]);
 });

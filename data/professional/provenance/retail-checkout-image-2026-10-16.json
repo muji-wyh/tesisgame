@@ -1,0 +1,1943 @@
+{
+  "schema": 1,
+  "status": "reviewed_image_integrated_pending_production_delivery_validation",
+  "integrated_on": "2026-10-16",
+  "independent_approval": {
+    "schema": 1,
+    "recorded_at": "2026-10-16T09:38:36.366Z",
+    "status": "accepted_exact_checkout_image_and_scoped_adaptations_for_integration",
+    "reviewer": "Codex root independent AI source, physical-sense and minimum-card picture review",
+    "sense_id": "checkout.payment-area.n",
+    "approved_brief": "Show a complete staffed checkout lane: customer side, short goods belt or counter, and a register, with a shopper presenting purchases. Frame the lane as one place while the equipment stays subordinate. Reject a close-up of a register alone, a help desk, or a hotel reception. No readable payment credentials or brand marks.",
+    "image_sha256": "eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe",
+    "rgba_pixel_sha256": "15cf24c616d3741e7b4fceb39994322eb2548a76c1183fb32951115f723776ad",
+    "review_receipt_raw_sha256": "0eb077b0f57d88626abbc38a0b6067263fdbfd9789eadd837e3e3eadb8c2cad3",
+    "evidence_files": [
+      {
+        "path": "composition-decision.json",
+        "bytes": 3866,
+        "sha256": "3ad6642a2a0c9d67545cc9802419892a4efd60baa50d3892a596d31326deb6d8"
+      },
+      {
+        "path": "composition-native-receipt.json",
+        "bytes": 3181,
+        "sha256": "b8154c6b339b32e42c75b83f8c0eea89bb24e8af6c72056280b8cef72d7e312d"
+      },
+      {
+        "path": "composition-native.log",
+        "bytes": 2131,
+        "sha256": "59a08bca0f3e4355c5de7995cb653be907399a7d6fbb780db11fbac30fe71bfb"
+      },
+      {
+        "path": "composition-probe/all-native-word-card-contacts.png",
+        "bytes": 193382,
+        "sha256": "959329374efbd88dac8ea6a47ec07a0f9cb5fccaf2f4603674018fd7f2a44f63"
+      },
+      {
+        "path": "composition-probe/compact-high/actual-word-card-contact-3x.png",
+        "bytes": 72606,
+        "sha256": "8c60fd6bef6ddd400bf1ffa246b1ef6f661b2c4014e927b4cae81c7bd53c8ae7"
+      },
+      {
+        "path": "composition-probe/compact-high/actual-word-card-contact.png",
+        "bytes": 51946,
+        "sha256": "50afbb155c9c0e40db14e5e0f2a2cea77679fe271d9f4e21641ec3ed542848cf"
+      },
+      {
+        "path": "composition-probe/compact-high/checkout.png",
+        "bytes": 155079,
+        "sha256": "5eee948ef6a77ecbce79e0b745c204f9c4952ea27b0895a27efd61ed29b1259e"
+      },
+      {
+        "path": "composition-probe/compact-high/match-matched.png",
+        "bytes": 6531,
+        "sha256": "fba9ce435045df8095c52a3147896d48d87c8a77c400d8c610fb00792206a48a"
+      },
+      {
+        "path": "composition-probe/compact-high/match-unmatched.png",
+        "bytes": 6028,
+        "sha256": "c1712d7a94d644763fb01dcb943e9c40da08d81190ef03fed8ae699ef9cb6c39"
+      },
+      {
+        "path": "composition-probe/compact-high/memory-matched.png",
+        "bytes": 6336,
+        "sha256": "b9e24b0c8ff66580976c2dd34eea20a2a015121c67a68675b941aa55db449037"
+      },
+      {
+        "path": "composition-probe/compact-high/memory-unmatched.png",
+        "bytes": 6026,
+        "sha256": "4ebe6d8749ebed97fad9b3ff951687a3d5035072b85de6fa929e2291dd35b27c"
+      },
+      {
+        "path": "composition-probe/compact-high/render-raw.png",
+        "bytes": 148425,
+        "sha256": "12a5a98ae586c2fc46d8255543e04967d7a01336d3a1f636361cb64d0fae5dc5"
+      },
+      {
+        "path": "composition-probe/compact-three-quarter/actual-word-card-contact-3x.png",
+        "bytes": 75386,
+        "sha256": "d27e228fbe1a8b82736920c7adeafb900ad21ef4a0b6d8cc970780908aab809f"
+      },
+      {
+        "path": "composition-probe/compact-three-quarter/actual-word-card-contact.png",
+        "bytes": 54178,
+        "sha256": "821159d2c220c06b276a7b87c8abc108931bda2fa20ebf78a6cae21493264a7d"
+      },
+      {
+        "path": "composition-probe/compact-three-quarter/checkout.png",
+        "bytes": 148338,
+        "sha256": "eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe"
+      },
+      {
+        "path": "composition-probe/compact-three-quarter/match-matched.png",
+        "bytes": 7015,
+        "sha256": "1570b960d76632b267a981f02989aa612faf00b5f40acc3407d545e879d0ca8d"
+      },
+      {
+        "path": "composition-probe/compact-three-quarter/match-unmatched.png",
+        "bytes": 6544,
+        "sha256": "1e933fdd8d0722062fbec79a2575d140fbc71ccd4985be0569598a29d22e6a3c"
+      },
+      {
+        "path": "composition-probe/compact-three-quarter/memory-matched.png",
+        "bytes": 6752,
+        "sha256": "39246a9c3ba7900f42b8c9edc162b71acd10c5355aaebacc97c5baf5594b2a65"
+      },
+      {
+        "path": "composition-probe/compact-three-quarter/memory-unmatched.png",
+        "bytes": 6536,
+        "sha256": "92015c89686b11c09643329ae676b45f2609fc21daeddf7cfb7034b0fcb7703f"
+      },
+      {
+        "path": "composition-probe/compact-three-quarter/render-raw.png",
+        "bytes": 131482,
+        "sha256": "f8373f45fc444cb830efb3d577406a940d20f88fa6c1ba4dd01fec1963e44f3f"
+      },
+      {
+        "path": "composition-probe/composition-contact.png",
+        "bytes": 481825,
+        "sha256": "5b3a240212962953d425d67687a7905ae24c1ca8ef80cfbb2637eb247e430d4a"
+      },
+      {
+        "path": "composition-probe/report.json",
+        "bytes": 31982,
+        "sha256": "dd8a7045eb9fbc1bb7352fcdb38c7f6d8568b2af516566b86c555c6afec65e07"
+      },
+      {
+        "path": "composition-probe/tiled-high/actual-word-card-contact-3x.png",
+        "bytes": 74089,
+        "sha256": "5beb98dcd9550000a7ede1a97408c56ca221b3c705fda42b9f6232cefbc5b84c"
+      },
+      {
+        "path": "composition-probe/tiled-high/actual-word-card-contact.png",
+        "bytes": 53071,
+        "sha256": "71ff9e9e85c70b6ecf620353e17ad55e98c7fba7d278d23c5eaf855285857234"
+      },
+      {
+        "path": "composition-probe/tiled-high/checkout.png",
+        "bytes": 119164,
+        "sha256": "7f5c9f4d14a4d96a5b8c4be2ea9598159fa0a423699d35a90bbeea5b8c4485f7"
+      },
+      {
+        "path": "composition-probe/tiled-high/match-matched.png",
+        "bytes": 6915,
+        "sha256": "2db292eea6be30d2e625788ed57197736ae50297958e3c0d6674d2d31803d600"
+      },
+      {
+        "path": "composition-probe/tiled-high/match-unmatched.png",
+        "bytes": 6331,
+        "sha256": "ba4f0d06463da25d7723d6b4c4d36590d13075f50bf7ea92fd70e9b63cc53eab"
+      },
+      {
+        "path": "composition-probe/tiled-high/memory-matched.png",
+        "bytes": 6723,
+        "sha256": "b99fd49c931d7ca494b298cc34acd7390a43ef7d21a361d163e284ff2e602ca5"
+      },
+      {
+        "path": "composition-probe/tiled-high/memory-unmatched.png",
+        "bytes": 6371,
+        "sha256": "f35cba627369db96d58dbe01f183d58c86142c3998fc7e1d2047e981755aafff"
+      },
+      {
+        "path": "composition-probe/tiled-high/render-raw.png",
+        "bytes": 143413,
+        "sha256": "c3d63c9267e44320db2f0ec9d1fb21b8d93d3b334648394e0fa74b653c3f79d6"
+      },
+      {
+        "path": "composition-probe/tiled-three-quarter/actual-word-card-contact-3x.png",
+        "bytes": 77093,
+        "sha256": "6e5c864aa58561896cef68524c3b96e88405ea5e59f22a571c2f92e33fc88bae"
+      },
+      {
+        "path": "composition-probe/tiled-three-quarter/actual-word-card-contact.png",
+        "bytes": 55473,
+        "sha256": "06ca43fbf8e7f99d8b20c1452bcb601880c210f7680f509c88243fbb541fb2e4"
+      },
+      {
+        "path": "composition-probe/tiled-three-quarter/checkout.png",
+        "bytes": 105674,
+        "sha256": "800826e687ba79a70ae9414708980d7ae5d224689c8d7970142081cae8b1db4a"
+      },
+      {
+        "path": "composition-probe/tiled-three-quarter/match-matched.png",
+        "bytes": 7368,
+        "sha256": "2f3f0356dff570d293d320572cfaeb98cc65d44bae94d60d65b44ff214e307d6"
+      },
+      {
+        "path": "composition-probe/tiled-three-quarter/match-unmatched.png",
+        "bytes": 6878,
+        "sha256": "f942c3e9dd8d18ee3f285b1fce30387baca7775d9e7262954d2041885854f4d9"
+      },
+      {
+        "path": "composition-probe/tiled-three-quarter/memory-matched.png",
+        "bytes": 7260,
+        "sha256": "965076587ba42387455666c740ed59548613bc042c42864e555cac109900ed7f"
+      },
+      {
+        "path": "composition-probe/tiled-three-quarter/memory-unmatched.png",
+        "bytes": 6951,
+        "sha256": "78e700e508dfb0a3e1eaf2ac5d4673e43c6fd9cd35e324b7cc92ba5707f44b22"
+      },
+      {
+        "path": "composition-probe/tiled-three-quarter/render-raw.png",
+        "bytes": 118433,
+        "sha256": "23c2389096efe0e26ec77848cc5b285394d03e91f1b664775830ac1d07e73ac9"
+      },
+      {
+        "path": "freeze-selection-attempt-r01.json",
+        "bytes": 439,
+        "sha256": "9a100570c317529e14c7ac35dce8b3ec2a5f476d5ac20e303431b81dc009b6ca"
+      },
+      {
+        "path": "freeze-selection-r02.cjs",
+        "bytes": 5402,
+        "sha256": "0b081049c25e3f3e79906748beabc09b1406198e92749ce12eb941c0fd9fbdcb"
+      },
+      {
+        "path": "freeze-selection.cjs",
+        "bytes": 5405,
+        "sha256": "e6b1fccf89445e95003666f29815d83ff8f35403cd0651d4ffc1a0bdbd6f7f5d"
+      },
+      {
+        "path": "inspect-sources.gd",
+        "bytes": 6540,
+        "sha256": "1a94177d1c8e3064977fb461724a634e739861c25ffb7de13c63a4de55cd2f08"
+      },
+      {
+        "path": "make-composition-contacts.py",
+        "bytes": 1530,
+        "sha256": "aa3dbdbdf39c54c9797efb47bd8f2ff56b2fd0543f467b023c3a3c1af3b15f8e"
+      },
+      {
+        "path": "make-source-contact.py",
+        "bytes": 1619,
+        "sha256": "da7292332bf9cad58e42a76ab8cb68a4d68556c51b18d38349cde64a3b7187dc"
+      },
+      {
+        "path": "preparation-receipt.json",
+        "bytes": 1011,
+        "sha256": "09df1fd1c66b2f353972690a5396cc29b5f304d8cf3fa7ba7276ae45bad6b319"
+      },
+      {
+        "path": "prepare-sources.cjs",
+        "bytes": 10587,
+        "sha256": "9e6d58dd6a0ea3549b10d913960725f5990478980d328c1001b300042f4abd92"
+      },
+      {
+        "path": "probe-composition.gd",
+        "bytes": 11965,
+        "sha256": "a86a91e175f0434f11c70826eefd579ca7ea04450a3696e1665c9e5e6f543558"
+      },
+      {
+        "path": "ranked-composition-review.json",
+        "bytes": 6753,
+        "sha256": "ecbf3bf6efe2263633d97e374654b40af4a97a9d79f8d9affaf568fcc69e1b68"
+      },
+      {
+        "path": "README.md",
+        "bytes": 3206,
+        "sha256": "7840cc9d9cbcd7144920b1c44343db7c043a541f29ed75022b4a0a9edada8f3b"
+      },
+      {
+        "path": "record-composition-review.py",
+        "bytes": 5149,
+        "sha256": "159c394799faa0ba50bd7cc05691f8c1dc86629643c1d5fce4679eebe1d36885"
+      },
+      {
+        "path": "run-native-probe.cjs",
+        "bytes": 4202,
+        "sha256": "2aeeed51a81e3691c32c85d44e511b0939a38abaffd00f12f4e06048b6d7a30b"
+      },
+      {
+        "path": "source-coordinate-evidence.json",
+        "bytes": 935,
+        "sha256": "c560b9e8ba2097c089f4a57ae0a10e50b0ce702c64f0e83537f773f9c3ff387f"
+      },
+      {
+        "path": "source-inspection/contact.png",
+        "bytes": 521304,
+        "sha256": "2e89249292d24907e8577228d9d3708c0b82455ae422373115d9385de44b9d27"
+      },
+      {
+        "path": "source-inspection/food-kit--apple-front.png",
+        "bytes": 36848,
+        "sha256": "baf860236a820722eb0f981162eda05089ea92f541bbc0b623568fe161364a77"
+      },
+      {
+        "path": "source-inspection/food-kit--carton-front.png",
+        "bytes": 13073,
+        "sha256": "6266f47ea4d689596dc82e9e8160c117e3925d63932138469462432d951cf5e7"
+      },
+      {
+        "path": "source-inspection/mini-characters--character-female-b-idle-start.png",
+        "bytes": 61899,
+        "sha256": "9cefa4cd414918cbecc3e310084e81463d52fc63448c6d4ef76149c2a8c3e531"
+      },
+      {
+        "path": "source-inspection/mini-characters--character-female-b-interact-end.png",
+        "bytes": 62165,
+        "sha256": "953cd968e83512bb43494305776cdb45bd5fa05beaee0a75a2135b0ef7edffe1"
+      },
+      {
+        "path": "source-inspection/mini-characters--character-female-b-interact-middle-side.png",
+        "bytes": 58216,
+        "sha256": "fe55851259f8b3a95b4c1929a564a42ed6efd7971b2fed7cf42a911ddc2c70e2"
+      },
+      {
+        "path": "source-inspection/mini-characters--character-female-b-interact-middle.png",
+        "bytes": 62223,
+        "sha256": "7c075fc8b5fd13b25dbf5e1852f6b75f04c541794e71a022e11839332748f87c"
+      },
+      {
+        "path": "source-inspection/mini-characters--character-female-b-interact-start.png",
+        "bytes": 61899,
+        "sha256": "9cefa4cd414918cbecc3e310084e81463d52fc63448c6d4ef76149c2a8c3e531"
+      },
+      {
+        "path": "source-inspection/mini-characters--character-female-b-static.png",
+        "bytes": 59493,
+        "sha256": "b85082a09496d385d79ba0a4e47b22b7b3b3a845b526f0a070de2438a70c0393"
+      },
+      {
+        "path": "source-inspection/mini-market--cash-register-front.png",
+        "bytes": 34117,
+        "sha256": "37f59f32f5d8d195cd77108785e30edd10b761ce149ace9f530a512a9d772982"
+      },
+      {
+        "path": "source-inspection/mini-market--cash-register-high.png",
+        "bytes": 38788,
+        "sha256": "7f6999d7144b509a16508c54f958ed2db33bd962f82f6028788fc950045b4609"
+      },
+      {
+        "path": "source-inspection/mini-market--cash-register-rear.png",
+        "bytes": 25070,
+        "sha256": "4b96a5329b2e7de7df00b891bb9c0d6b21165c8f6371b79e4fbe39f25313daaf"
+      },
+      {
+        "path": "source-inspection/mini-market--character-employee-idle-start.png",
+        "bytes": 50874,
+        "sha256": "6ec21b262e2280cd1c55923769389b25e33d1fe02eaddbce1d0c9bfd56375d69"
+      },
+      {
+        "path": "source-inspection/mini-market--character-employee-interact-end.png",
+        "bytes": 51831,
+        "sha256": "9300ca026e0907a0ae7b7322b5b02f0bcefd87d2b89fa042909116717511fc00"
+      },
+      {
+        "path": "source-inspection/mini-market--character-employee-interact-middle-side.png",
+        "bytes": 45417,
+        "sha256": "cd9d8003deea6ace9d432161f859b8e76498efdd328211ca66058bbcc089abc4"
+      },
+      {
+        "path": "source-inspection/mini-market--character-employee-interact-middle.png",
+        "bytes": 50888,
+        "sha256": "f63475c69607178dc23fd14c15f43437af566339923abf98120801beae7ff60b"
+      },
+      {
+        "path": "source-inspection/mini-market--character-employee-interact-start.png",
+        "bytes": 50874,
+        "sha256": "6ec21b262e2280cd1c55923769389b25e33d1fe02eaddbce1d0c9bfd56375d69"
+      },
+      {
+        "path": "source-inspection/mini-market--character-employee-static.png",
+        "bytes": 47219,
+        "sha256": "077bb573358cd658276f2f977581e8113b62bcccd106c6a0b462cfd6a24d003f"
+      },
+      {
+        "path": "source-inspection/mini-market--floor-front.png",
+        "bytes": 9580,
+        "sha256": "40861966b56cf29186fd19865bd05eeb0458e3c32f79ba65e9b268bb79a7383f"
+      },
+      {
+        "path": "source-inspection/report.json",
+        "bytes": 20174,
+        "sha256": "c7ce7596f86dd9195beeeba97628f337ca3942f720053695ac078e339f35ebda"
+      },
+      {
+        "path": "source-pose-review-proposal.json",
+        "bytes": 2445,
+        "sha256": "ee6bc84dc016b3aef9ca09c4689d5004fef721d0750618ed0bfa65b37253c4aa"
+      },
+      {
+        "path": "source-pose-review.json",
+        "bytes": 3001,
+        "sha256": "e42735517811a7bed07721cdd9d1143510e01b2d9bb7e90d0f0777cc2af95ec5"
+      },
+      {
+        "path": "source-record.json",
+        "bytes": 45893,
+        "sha256": "ea4f1e66fb38f55ea908a6d52c69bbddea86ae62dceaf232d6b22bc62f59fe91"
+      },
+      {
+        "path": "source/food-kit/License.txt",
+        "bytes": 711,
+        "sha256": "32a081c2035dd4db47d850c83244da048165f0e53d71c076b76c1afc0590bc7f"
+      },
+      {
+        "path": "source/food-kit/original/apple.glb",
+        "bytes": 14376,
+        "sha256": "2a80ab65d5bc2cb4f2bca1e8176cbb591849a288596d4b2e76e411338761a526"
+      },
+      {
+        "path": "source/food-kit/original/carton.glb",
+        "bytes": 9352,
+        "sha256": "b63a5081c6edbda7ba8172e6a776f222e781f886a011a887789b2fde42095d04"
+      },
+      {
+        "path": "source/food-kit/original/Textures/colormap.png",
+        "bytes": 10715,
+        "sha256": "75baf74d9483a0fc56ac21ceba346fbe16fc24a2a1bf0524c53e6bbe802e1153"
+      },
+      {
+        "path": "source/food-kit/Overview.html",
+        "bytes": 29848,
+        "sha256": "361722dd387f8986c08ea216567713f405b1be9b029a63f4e7781fefa8790183"
+      },
+      {
+        "path": "source/food-kit/previews/apple.png",
+        "bytes": 1808,
+        "sha256": "1fa189f9f6e88750743c93e97e548d70a3765c7fb2446edd5ed6355ffabb3259"
+      },
+      {
+        "path": "source/food-kit/previews/carton.png",
+        "bytes": 1518,
+        "sha256": "6d3cd2d4a8a00858628cdc045d293ea3a058959d7230c50358eee12dbba2918d"
+      },
+      {
+        "path": "source/mini-characters/License.txt",
+        "bytes": 718,
+        "sha256": "28358ae5accc85b572eb42507956afc8beae05acb4648bb9026a5714d421b785"
+      },
+      {
+        "path": "source/mini-characters/original/character-female-b.glb",
+        "bytes": 252140,
+        "sha256": "2288438e7baf9acc91a870c82dc00d66710bb486592cfc3474ef8ed93a03863a"
+      },
+      {
+        "path": "source/mini-characters/original/Textures/colormap.png",
+        "bytes": 8706,
+        "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e"
+      },
+      {
+        "path": "source/mini-characters/Overview.html",
+        "bytes": 7690,
+        "sha256": "d27bd2bca14e3c581938375f210ff3f7b671c08bb047083b2401cb91542b6d36"
+      },
+      {
+        "path": "source/mini-characters/previews/character-female-b.png",
+        "bytes": 1820,
+        "sha256": "db299b4ab11a3f038cbd961b62f93cb67677d3e1a9b4cd12577978120f5f9ea6"
+      },
+      {
+        "path": "source/mini-characters/previews/Preview.png",
+        "bytes": 106511,
+        "sha256": "ed425bf02d6a2de2bc44adc0ba52996b0cdb7b99d98859ea60b038958790f256"
+      },
+      {
+        "path": "source/mini-market/License.txt",
+        "bytes": 767,
+        "sha256": "5ee4df809330c05896f223c97f250cc1bdc13b46a370eb464533c85c94146070"
+      },
+      {
+        "path": "source/mini-market/original/cash-register.glb",
+        "bytes": 20332,
+        "sha256": "155f2eb666dea3a931d133a4953379898c8adb4b827ab60b86cae07235b9b598"
+      },
+      {
+        "path": "source/mini-market/original/character-employee.glb",
+        "bytes": 215836,
+        "sha256": "8774b93a5ff11af146176505035cc351d37a8a69ad0b1fde612bba9c8ffa84cc"
+      },
+      {
+        "path": "source/mini-market/original/floor.glb",
+        "bytes": 3928,
+        "sha256": "b18da447e10ae1afb327c90bc316590c780c68b04097a038f3fbb26fd28ca0f8"
+      },
+      {
+        "path": "source/mini-market/original/Textures/colormap.png",
+        "bytes": 8706,
+        "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e"
+      },
+      {
+        "path": "source/mini-market/Overview.html",
+        "bytes": 6652,
+        "sha256": "58dee631a02b854f1b511d6184302f06647ac908ad560039ad3c4d0aad1011c8"
+      },
+      {
+        "path": "source/mini-market/previews/cash-register.png",
+        "bytes": 1569,
+        "sha256": "db169c7da59d220e24e55081ff75bc44b768bf9fb8caa9b1ff8e9a20aee20258"
+      },
+      {
+        "path": "source/mini-market/previews/character-employee.png",
+        "bytes": 1802,
+        "sha256": "10bdce51445eadd07de6c0584d09dc50cdb6c98a2336567eb7074c296a42a902"
+      },
+      {
+        "path": "source/mini-market/previews/floor.png",
+        "bytes": 870,
+        "sha256": "16e529175af85f5a372b80779a1e15fd081d8a0b0f4d9fa0e513b16bb297e4e0"
+      },
+      {
+        "path": "source/mini-market/previews/Preview.png",
+        "bytes": 99231,
+        "sha256": "db0bc243ed956e21ab55915c794130ca4cfda8ed181d27f856444fdcb7f7e5f7"
+      },
+      {
+        "path": "source/mini-market/previews/Sample.png",
+        "bytes": 113281,
+        "sha256": "77e54d04afde778892f0e2a7ab548b6daaa6b7922a8fcd4bee97b9b9c1dd094b"
+      },
+      {
+        "path": "sources-native-receipt.json",
+        "bytes": 987,
+        "sha256": "b815d58fff38a1b16a1a52b56d322a538bc23605939302f3e692a1a254abf78e"
+      },
+      {
+        "path": "sources-native.log",
+        "bytes": 546,
+        "sha256": "e895a50201c572e6002561d37bd85900b287b5cba8a716402bb25262e8cf1773"
+      }
+    ],
+    "render_dependencies": [
+      {
+        "path": "scripts/word_card.gd",
+        "sha256": "ddb3f7ef5b1910086e0418e476ceee4f551aa2e048bed6993005bdbd0402a3bf"
+      },
+      {
+        "path": "scripts/game_data.gd",
+        "sha256": "7dc8a8e151e2e0af27ea1733d3d7835cc9611002c9b88da6915983a6b5f3df9a"
+      },
+      {
+        "path": "scripts/ui_style.gd",
+        "sha256": "5991ec95ba399174d3f207f6a16d3fdd4e614938093c1cb42a6a7768b5de9221"
+      },
+      {
+        "path": "scripts/professional_catalog.gd",
+        "sha256": "89865c3e86d2140d6b495461632a4a16ecf6eb1bd03e0d2ce4902cce33eeb15e"
+      },
+      {
+        "path": "tools/run-godot.cjs",
+        "sha256": "a411f937acd304761e0ac9f6513f45e0f2a6aa886856e3b32a537a04ff5189be"
+      }
+    ],
+    "verified_evidence_files": 101,
+    "source_findings": "Five complete original models from the acquired Kenney Mini Market 1.0, Mini Characters 1.0 and Food Kit 2.0 CC0 packs form the selected scene. Geometry, materials, textures and skins are preserved. Employee idle at 0 seconds and shopper interact-right at 0.333 seconds are sampled original clips. The sixth inspected floor model remains retained but is absent from the compact selection.",
+    "visual_findings": [
+      "Root inspected the source contact and all four complete composition images and native-size contacts containing four real WordCard states each.",
+      "Compact-three-quarter shows one complete checkout station with the shopper on the goods side and apron-wearing employee behind the payment terminal. The belt, register and groceries convey the payment area as one place.",
+      "The source poses are friendly, with no visible hand or body penetration in the selected view. The dark belt and terminal retain contrast at actual Match 126x72 and Memory 144x74 sizes.",
+      "The image remains identifiable under the real matched alpha and badge. Small grocery detail supports the whole scene; this is visual judgment and not a participant recognition result.",
+      "Compact-high remains technically intact but is less balanced. Both tiled views reduce useful subject area and have genuine floor framing failures. The original 72-check aggregate with two failures remains failed."
+    ],
+    "accepted_adaptations": [
+      "Position, rotate and uniformly scale complete licensed model roots.",
+      "Sample included character animation clips at the exact recorded times.",
+      "Use the recorded orthographic camera and lighting, transparent render, alpha-margin crop and proportional downscale."
+    ],
+    "selected_native_checks": {
+      "checks": 18,
+      "failures": 0,
+      "successful_checks": [
+        {
+          "check": "compact-three-quarter: transparent background",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: complete scene in viewport",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: match-unmatched card size",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: match-unmatched picture size",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: match-unmatched badge",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: match-unmatched picture alpha",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: match-matched card size",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: match-matched picture size",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: match-matched badge",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: match-matched picture alpha",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: memory-unmatched card size",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: memory-unmatched picture size",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: memory-unmatched badge",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: memory-unmatched picture alpha",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: memory-matched card size",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: memory-matched picture size",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: memory-matched badge",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: memory-matched picture alpha",
+          "passed": true
+        }
+      ]
+    },
+    "failed_aggregate": {
+      "ok": false,
+      "checks": 72,
+      "failures": 2,
+      "failed_checks": [
+        {
+          "check": "tiled-three-quarter: complete scene in viewport",
+          "passed": false
+        },
+        {
+          "check": "tiled-high: complete scene in viewport",
+          "passed": false
+        }
+      ],
+      "receipt": {
+        "path": "composition-native-receipt.json",
+        "bytes": 3181,
+        "sha256": "b8154c6b339b32e42c75b83f8c0eea89bb24e8af6c72056280b8cef72d7e312d"
+      },
+      "report": {
+        "path": "composition-probe/report.json",
+        "bytes": 31982,
+        "sha256": "dd8a7045eb9fbc1bb7352fcdb38c7f6d8568b2af516566b86c555c6afec65e07"
+      },
+      "log": {
+        "path": "composition-native.log",
+        "bytes": 2131,
+        "sha256": "59a08bca0f3e4355c5de7995cb653be907399a7d6fbb780db11fbac30fe71bfb"
+      },
+      "reason": "Both tiled variants clip the complete floor at the viewport sides. The aggregate failed and remains failed; selected-candidate success is bounded to compact-three-quarter only."
+    },
+    "card_crops": [
+      {
+        "path": "composition-probe/compact-three-quarter/match-unmatched.png",
+        "sha256": "1e933fdd8d0722062fbec79a2575d140fbc71ccd4985be0569598a29d22e6a3c",
+        "rgba_pixel_sha256": "db313fb22f9d513c7c34c4e7a9c82ba18659ec6adaf3fbc60b98d5c52bfe5a0a",
+        "dimensions": [
+          126,
+          72
+        ],
+        "bytes": 6544
+      },
+      {
+        "path": "composition-probe/compact-three-quarter/match-matched.png",
+        "sha256": "1570b960d76632b267a981f02989aa612faf00b5f40acc3407d545e879d0ca8d",
+        "rgba_pixel_sha256": "ef8c023efc87327514236af6eb9cb41d3c9a4d4c981c990a68e7709bc71aa798",
+        "dimensions": [
+          126,
+          72
+        ],
+        "bytes": 7015
+      },
+      {
+        "path": "composition-probe/compact-three-quarter/memory-unmatched.png",
+        "sha256": "92015c89686b11c09643329ae676b45f2609fc21daeddf7cfb7034b0fcb7703f",
+        "rgba_pixel_sha256": "13ed929adf7dfb658590b4141d28e8d395c8c2cf2e1e0b800b8c4f194109a9c0",
+        "dimensions": [
+          144,
+          74
+        ],
+        "bytes": 6536
+      },
+      {
+        "path": "composition-probe/compact-three-quarter/memory-matched.png",
+        "sha256": "39246a9c3ba7900f42b8c9edc162b71acd10c5355aaebacc97c5baf5594b2a65",
+        "rgba_pixel_sha256": "c9c5f252c9dcb22c89c77dc82bd713afc5a77a9de84bb3bb164a0807d5079f09",
+        "dimensions": [
+          144,
+          74
+        ],
+        "bytes": 6752
+      }
+    ],
+    "production_delivery": "Pending exact approved-byte copy and production media-loader, pixel, crop and cache-release verification. Direct scratch WordCard rendering does not establish production delivery.",
+    "exclusions": [
+      "Other checkout senses or accepted answers",
+      "Human recognition study",
+      "Audio or acoustic mix",
+      "Morphology or domain review",
+      "Module or release readiness"
+    ]
+  },
+  "source_records": [
+    "docs/assets/sources/professional-retail-checkout/source-record.json"
+  ],
+  "retained_evidence": "docs/assets/sources/professional-retail-checkout",
+  "retained_files": [
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/bind-current-baseline.cjs",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r01/bind-current-baseline.cjs",
+      "policy": "immutable",
+      "raw_sha256": "9bb5dc68269578d2bb58b5c1efca824ad255a2a5afbc82fbf0e1f3ee4b3aab39"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/delivery-lib.cjs",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r01/delivery-lib.cjs",
+      "policy": "immutable",
+      "raw_sha256": "afc4a1d25e12b7ef799498540a68825cdadc3d99a545dadd93249f6006d8d00b"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/guarded-transaction.cjs",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r01/guarded-transaction.cjs",
+      "policy": "immutable",
+      "raw_sha256": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/HANDOFF.md",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r01/HANDOFF.md",
+      "policy": "immutable",
+      "raw_sha256": "6fac4d5e26ab2a17c50019fd2b81a4ebe6ec3acf55fc3004db9d8daaaa743822"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/helper-origin.json",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r01/helper-origin.json",
+      "policy": "immutable",
+      "raw_sha256": "f4a855518d6106f70e3565deb1a10c0ae5afee6b995f62f3a631d7d9854d7429"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/integrate-reviewed.cjs",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r01/integrate-reviewed.cjs",
+      "policy": "immutable",
+      "raw_sha256": "120d2dcaba24442b13a98800f49ae252171ccb4467997451faca1bf93f08b0fa"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/persisted-test-transforms.cjs",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r01/persisted-test-transforms.cjs",
+      "policy": "immutable",
+      "raw_sha256": "6abdabffaababa931b7b9e2784fc30776a53b7b012f7cd0cbff7e1d5cb6e32c0"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/preparation-receipt.json",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r01/preparation-receipt.json",
+      "policy": "immutable",
+      "raw_sha256": "555a99cc29595e4c869274908f23e8dc0a4534bd7d636cf7f237b9274d7bc1a5"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/prepare-delivery.cjs",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r01/prepare-delivery.cjs",
+      "policy": "immutable",
+      "raw_sha256": "dbdf6aa09ad1d0996425cb2f7c4a6f57bc9a8646e07fb649c92dcf204286d196"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/preview/tests/professional-content.test.cjs",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r01/preview/tests/professional-content.test.cjs",
+      "policy": "immutable",
+      "raw_sha256": "7478a2600173704ad6f294e5494716c454f0dbb14f4e0711d11ac9520a40132d"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/preview/tests/professional-retail-media.test.cjs",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r01/preview/tests/professional-retail-media.test.cjs",
+      "policy": "immutable",
+      "raw_sha256": "d1efb69ec5aa075dc150fb2883507ca652f5243276ab50c955cca289e68ec26f"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/preview/tests/professional-retail-morphology.test.cjs",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r01/preview/tests/professional-retail-morphology.test.cjs",
+      "policy": "immutable",
+      "raw_sha256": "424f9172c45385a1e7ab7769f2c03ed330707317bf285094da8857df1c3a9811"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/scratch-preview-receipt.json",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r01/scratch-preview-receipt.json",
+      "policy": "immutable",
+      "raw_sha256": "0f4d32c3b7faf725d3e9e1425b5545a6f8cfe4444dbd02ec60f5a49820dc3e64"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/source-doc-draft.md",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r01/source-doc-draft.md",
+      "policy": "immutable",
+      "raw_sha256": "47b85bac24360ac22e9a2db906f46d4098e437c9b506623eb0faa1bbbc5a5d16"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/transaction-plan.cjs",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r01/transaction-plan.cjs",
+      "policy": "immutable",
+      "raw_sha256": "dca101335d6c1f9bdc379f566c1d048e094638371e720f7afde2398ca1ab1ea2"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/update-persisted-tests.cjs",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r01/update-persisted-tests.cjs",
+      "policy": "immutable",
+      "raw_sha256": "5ba12c270b706421a76cbcee8124a072abeaaa5415d7aff47adcb1918ccc4d89"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/artifact-inventory.json",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r01/artifact-inventory.json",
+      "policy": "immutable",
+      "raw_sha256": "4bc85c58e1444ae8a76b20b8ee73626b64bfbdff735bde5a7187c929aee8eb06"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-decision.json",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-decision.json",
+      "policy": "immutable",
+      "raw_sha256": "3ad6642a2a0c9d67545cc9802419892a4efd60baa50d3892a596d31326deb6d8"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-native-receipt.json",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-native-receipt.json",
+      "policy": "immutable",
+      "raw_sha256": "b8154c6b339b32e42c75b83f8c0eea89bb24e8af6c72056280b8cef72d7e312d"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-native.log",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-native.log",
+      "policy": "immutable",
+      "raw_sha256": "59a08bca0f3e4355c5de7995cb653be907399a7d6fbb780db11fbac30fe71bfb"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/all-native-word-card-contacts.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/all-native-word-card-contacts.png",
+      "policy": "immutable",
+      "raw_sha256": "959329374efbd88dac8ea6a47ec07a0f9cb5fccaf2f4603674018fd7f2a44f63"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/compact-high/actual-word-card-contact-3x.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/compact-high/actual-word-card-contact-3x.png",
+      "policy": "immutable",
+      "raw_sha256": "8c60fd6bef6ddd400bf1ffa246b1ef6f661b2c4014e927b4cae81c7bd53c8ae7"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/compact-high/actual-word-card-contact.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/compact-high/actual-word-card-contact.png",
+      "policy": "immutable",
+      "raw_sha256": "50afbb155c9c0e40db14e5e0f2a2cea77679fe271d9f4e21641ec3ed542848cf"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/compact-high/checkout.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/compact-high/checkout.png",
+      "policy": "immutable",
+      "raw_sha256": "5eee948ef6a77ecbce79e0b745c204f9c4952ea27b0895a27efd61ed29b1259e"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/compact-high/match-matched.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/compact-high/match-matched.png",
+      "policy": "immutable",
+      "raw_sha256": "fba9ce435045df8095c52a3147896d48d87c8a77c400d8c610fb00792206a48a"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/compact-high/match-unmatched.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/compact-high/match-unmatched.png",
+      "policy": "immutable",
+      "raw_sha256": "c1712d7a94d644763fb01dcb943e9c40da08d81190ef03fed8ae699ef9cb6c39"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/compact-high/memory-matched.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/compact-high/memory-matched.png",
+      "policy": "immutable",
+      "raw_sha256": "b9e24b0c8ff66580976c2dd34eea20a2a015121c67a68675b941aa55db449037"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/compact-high/memory-unmatched.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/compact-high/memory-unmatched.png",
+      "policy": "immutable",
+      "raw_sha256": "4ebe6d8749ebed97fad9b3ff951687a3d5035072b85de6fa929e2291dd35b27c"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/compact-high/render-raw.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/compact-high/render-raw.png",
+      "policy": "immutable",
+      "raw_sha256": "12a5a98ae586c2fc46d8255543e04967d7a01336d3a1f636361cb64d0fae5dc5"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/compact-three-quarter/actual-word-card-contact-3x.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/compact-three-quarter/actual-word-card-contact-3x.png",
+      "policy": "immutable",
+      "raw_sha256": "d27e228fbe1a8b82736920c7adeafb900ad21ef4a0b6d8cc970780908aab809f"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/compact-three-quarter/actual-word-card-contact.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/compact-three-quarter/actual-word-card-contact.png",
+      "policy": "immutable",
+      "raw_sha256": "821159d2c220c06b276a7b87c8abc108931bda2fa20ebf78a6cae21493264a7d"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/compact-three-quarter/checkout.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/compact-three-quarter/checkout.png",
+      "policy": "immutable",
+      "raw_sha256": "eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/compact-three-quarter/match-matched.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/compact-three-quarter/match-matched.png",
+      "policy": "immutable",
+      "raw_sha256": "1570b960d76632b267a981f02989aa612faf00b5f40acc3407d545e879d0ca8d"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/compact-three-quarter/match-unmatched.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/compact-three-quarter/match-unmatched.png",
+      "policy": "immutable",
+      "raw_sha256": "1e933fdd8d0722062fbec79a2575d140fbc71ccd4985be0569598a29d22e6a3c"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/compact-three-quarter/memory-matched.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/compact-three-quarter/memory-matched.png",
+      "policy": "immutable",
+      "raw_sha256": "39246a9c3ba7900f42b8c9edc162b71acd10c5355aaebacc97c5baf5594b2a65"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/compact-three-quarter/memory-unmatched.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/compact-three-quarter/memory-unmatched.png",
+      "policy": "immutable",
+      "raw_sha256": "92015c89686b11c09643329ae676b45f2609fc21daeddf7cfb7034b0fcb7703f"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/compact-three-quarter/render-raw.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/compact-three-quarter/render-raw.png",
+      "policy": "immutable",
+      "raw_sha256": "f8373f45fc444cb830efb3d577406a940d20f88fa6c1ba4dd01fec1963e44f3f"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/composition-contact.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/composition-contact.png",
+      "policy": "immutable",
+      "raw_sha256": "5b3a240212962953d425d67687a7905ae24c1ca8ef80cfbb2637eb247e430d4a"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/report.json",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/report.json",
+      "policy": "immutable",
+      "raw_sha256": "dd8a7045eb9fbc1bb7352fcdb38c7f6d8568b2af516566b86c555c6afec65e07"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/tiled-high/actual-word-card-contact-3x.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/tiled-high/actual-word-card-contact-3x.png",
+      "policy": "immutable",
+      "raw_sha256": "5beb98dcd9550000a7ede1a97408c56ca221b3c705fda42b9f6232cefbc5b84c"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/tiled-high/actual-word-card-contact.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/tiled-high/actual-word-card-contact.png",
+      "policy": "immutable",
+      "raw_sha256": "71ff9e9e85c70b6ecf620353e17ad55e98c7fba7d278d23c5eaf855285857234"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/tiled-high/checkout.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/tiled-high/checkout.png",
+      "policy": "immutable",
+      "raw_sha256": "7f5c9f4d14a4d96a5b8c4be2ea9598159fa0a423699d35a90bbeea5b8c4485f7"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/tiled-high/match-matched.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/tiled-high/match-matched.png",
+      "policy": "immutable",
+      "raw_sha256": "2db292eea6be30d2e625788ed57197736ae50297958e3c0d6674d2d31803d600"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/tiled-high/match-unmatched.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/tiled-high/match-unmatched.png",
+      "policy": "immutable",
+      "raw_sha256": "ba4f0d06463da25d7723d6b4c4d36590d13075f50bf7ea92fd70e9b63cc53eab"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/tiled-high/memory-matched.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/tiled-high/memory-matched.png",
+      "policy": "immutable",
+      "raw_sha256": "b99fd49c931d7ca494b298cc34acd7390a43ef7d21a361d163e284ff2e602ca5"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/tiled-high/memory-unmatched.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/tiled-high/memory-unmatched.png",
+      "policy": "immutable",
+      "raw_sha256": "f35cba627369db96d58dbe01f183d58c86142c3998fc7e1d2047e981755aafff"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/tiled-high/render-raw.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/tiled-high/render-raw.png",
+      "policy": "immutable",
+      "raw_sha256": "c3d63c9267e44320db2f0ec9d1fb21b8d93d3b334648394e0fa74b653c3f79d6"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/tiled-three-quarter/actual-word-card-contact-3x.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/tiled-three-quarter/actual-word-card-contact-3x.png",
+      "policy": "immutable",
+      "raw_sha256": "6e5c864aa58561896cef68524c3b96e88405ea5e59f22a571c2f92e33fc88bae"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/tiled-three-quarter/actual-word-card-contact.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/tiled-three-quarter/actual-word-card-contact.png",
+      "policy": "immutable",
+      "raw_sha256": "06ca43fbf8e7f99d8b20c1452bcb601880c210f7680f509c88243fbb541fb2e4"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/tiled-three-quarter/checkout.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/tiled-three-quarter/checkout.png",
+      "policy": "immutable",
+      "raw_sha256": "800826e687ba79a70ae9414708980d7ae5d224689c8d7970142081cae8b1db4a"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/tiled-three-quarter/match-matched.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/tiled-three-quarter/match-matched.png",
+      "policy": "immutable",
+      "raw_sha256": "2f3f0356dff570d293d320572cfaeb98cc65d44bae94d60d65b44ff214e307d6"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/tiled-three-quarter/match-unmatched.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/tiled-three-quarter/match-unmatched.png",
+      "policy": "immutable",
+      "raw_sha256": "f942c3e9dd8d18ee3f285b1fce30387baca7775d9e7262954d2041885854f4d9"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/tiled-three-quarter/memory-matched.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/tiled-three-quarter/memory-matched.png",
+      "policy": "immutable",
+      "raw_sha256": "965076587ba42387455666c740ed59548613bc042c42864e555cac109900ed7f"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/tiled-three-quarter/memory-unmatched.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/tiled-three-quarter/memory-unmatched.png",
+      "policy": "immutable",
+      "raw_sha256": "78e700e508dfb0a3e1eaf2ac5d4673e43c6fd9cd35e324b7cc92ba5707f44b22"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/composition-probe/tiled-three-quarter/render-raw.png",
+      "path": "docs/assets/sources/professional-retail-checkout/composition-probe/tiled-three-quarter/render-raw.png",
+      "policy": "immutable",
+      "raw_sha256": "23c2389096efe0e26ec77848cc5b285394d03e91f1b664775830ac1d07e73ac9"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/freeze-selection-attempt-r01.json",
+      "path": "docs/assets/sources/professional-retail-checkout/freeze-selection-attempt-r01.json",
+      "policy": "immutable",
+      "raw_sha256": "9a100570c317529e14c7ac35dce8b3ec2a5f476d5ac20e303431b81dc009b6ca"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/freeze-selection-r02.cjs",
+      "path": "docs/assets/sources/professional-retail-checkout/freeze-selection-r02.cjs",
+      "policy": "immutable",
+      "raw_sha256": "0b081049c25e3f3e79906748beabc09b1406198e92749ce12eb941c0fd9fbdcb"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/freeze-selection.cjs",
+      "path": "docs/assets/sources/professional-retail-checkout/freeze-selection.cjs",
+      "policy": "immutable",
+      "raw_sha256": "e6b1fccf89445e95003666f29815d83ff8f35403cd0651d4ffc1a0bdbd6f7f5d"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/inspect-sources.gd",
+      "path": "docs/assets/sources/professional-retail-checkout/inspect-sources.gd",
+      "policy": "immutable",
+      "raw_sha256": "1a94177d1c8e3064977fb461724a634e739861c25ffb7de13c63a4de55cd2f08"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/make-composition-contacts.py",
+      "path": "docs/assets/sources/professional-retail-checkout/make-composition-contacts.py",
+      "policy": "immutable",
+      "raw_sha256": "aa3dbdbdf39c54c9797efb47bd8f2ff56b2fd0543f467b023c3a3c1af3b15f8e"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/make-source-contact.py",
+      "path": "docs/assets/sources/professional-retail-checkout/make-source-contact.py",
+      "policy": "immutable",
+      "raw_sha256": "da7292332bf9cad58e42a76ab8cb68a4d68556c51b18d38349cde64a3b7187dc"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/preparation-receipt.json",
+      "path": "docs/assets/sources/professional-retail-checkout/preparation-receipt.json",
+      "policy": "immutable",
+      "raw_sha256": "09df1fd1c66b2f353972690a5396cc29b5f304d8cf3fa7ba7276ae45bad6b319"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/prepare-sources.cjs",
+      "path": "docs/assets/sources/professional-retail-checkout/prepare-sources.cjs",
+      "policy": "immutable",
+      "raw_sha256": "9e6d58dd6a0ea3549b10d913960725f5990478980d328c1001b300042f4abd92"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/probe-composition.gd",
+      "path": "docs/assets/sources/professional-retail-checkout/probe-composition.gd",
+      "policy": "immutable",
+      "raw_sha256": "a86a91e175f0434f11c70826eefd579ca7ea04450a3696e1665c9e5e6f543558"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/ranked-composition-review.json",
+      "path": "docs/assets/sources/professional-retail-checkout/ranked-composition-review.json",
+      "policy": "immutable",
+      "raw_sha256": "ecbf3bf6efe2263633d97e374654b40af4a97a9d79f8d9affaf568fcc69e1b68"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/README.md",
+      "path": "docs/assets/sources/professional-retail-checkout/README.md",
+      "policy": "immutable",
+      "raw_sha256": "7840cc9d9cbcd7144920b1c44343db7c043a541f29ed75022b4a0a9edada8f3b"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/record-composition-review.py",
+      "path": "docs/assets/sources/professional-retail-checkout/record-composition-review.py",
+      "policy": "immutable",
+      "raw_sha256": "159c394799faa0ba50bd7cc05691f8c1dc86629643c1d5fce4679eebe1d36885"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/run-native-probe.cjs",
+      "path": "docs/assets/sources/professional-retail-checkout/run-native-probe.cjs",
+      "policy": "immutable",
+      "raw_sha256": "2aeeed51a81e3691c32c85d44e511b0939a38abaffd00f12f4e06048b6d7a30b"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source-coordinate-evidence.json",
+      "path": "docs/assets/sources/professional-retail-checkout/source-coordinate-evidence.json",
+      "policy": "immutable",
+      "raw_sha256": "c560b9e8ba2097c089f4a57ae0a10e50b0ce702c64f0e83537f773f9c3ff387f"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source-inspection/contact.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source-inspection/contact.png",
+      "policy": "immutable",
+      "raw_sha256": "2e89249292d24907e8577228d9d3708c0b82455ae422373115d9385de44b9d27"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source-inspection/food-kit--apple-front.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source-inspection/food-kit--apple-front.png",
+      "policy": "immutable",
+      "raw_sha256": "baf860236a820722eb0f981162eda05089ea92f541bbc0b623568fe161364a77"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source-inspection/food-kit--carton-front.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source-inspection/food-kit--carton-front.png",
+      "policy": "immutable",
+      "raw_sha256": "6266f47ea4d689596dc82e9e8160c117e3925d63932138469462432d951cf5e7"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source-inspection/mini-characters--character-female-b-idle-start.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source-inspection/mini-characters--character-female-b-idle-start.png",
+      "policy": "immutable",
+      "raw_sha256": "9cefa4cd414918cbecc3e310084e81463d52fc63448c6d4ef76149c2a8c3e531"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source-inspection/mini-characters--character-female-b-interact-end.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source-inspection/mini-characters--character-female-b-interact-end.png",
+      "policy": "immutable",
+      "raw_sha256": "953cd968e83512bb43494305776cdb45bd5fa05beaee0a75a2135b0ef7edffe1"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source-inspection/mini-characters--character-female-b-interact-middle-side.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source-inspection/mini-characters--character-female-b-interact-middle-side.png",
+      "policy": "immutable",
+      "raw_sha256": "fe55851259f8b3a95b4c1929a564a42ed6efd7971b2fed7cf42a911ddc2c70e2"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source-inspection/mini-characters--character-female-b-interact-middle.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source-inspection/mini-characters--character-female-b-interact-middle.png",
+      "policy": "immutable",
+      "raw_sha256": "7c075fc8b5fd13b25dbf5e1852f6b75f04c541794e71a022e11839332748f87c"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source-inspection/mini-characters--character-female-b-interact-start.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source-inspection/mini-characters--character-female-b-interact-start.png",
+      "policy": "immutable",
+      "raw_sha256": "9cefa4cd414918cbecc3e310084e81463d52fc63448c6d4ef76149c2a8c3e531"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source-inspection/mini-characters--character-female-b-static.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source-inspection/mini-characters--character-female-b-static.png",
+      "policy": "immutable",
+      "raw_sha256": "b85082a09496d385d79ba0a4e47b22b7b3b3a845b526f0a070de2438a70c0393"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source-inspection/mini-market--cash-register-front.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source-inspection/mini-market--cash-register-front.png",
+      "policy": "immutable",
+      "raw_sha256": "37f59f32f5d8d195cd77108785e30edd10b761ce149ace9f530a512a9d772982"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source-inspection/mini-market--cash-register-high.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source-inspection/mini-market--cash-register-high.png",
+      "policy": "immutable",
+      "raw_sha256": "7f6999d7144b509a16508c54f958ed2db33bd962f82f6028788fc950045b4609"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source-inspection/mini-market--cash-register-rear.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source-inspection/mini-market--cash-register-rear.png",
+      "policy": "immutable",
+      "raw_sha256": "4b96a5329b2e7de7df00b891bb9c0d6b21165c8f6371b79e4fbe39f25313daaf"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source-inspection/mini-market--character-employee-idle-start.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source-inspection/mini-market--character-employee-idle-start.png",
+      "policy": "immutable",
+      "raw_sha256": "6ec21b262e2280cd1c55923769389b25e33d1fe02eaddbce1d0c9bfd56375d69"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source-inspection/mini-market--character-employee-interact-end.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source-inspection/mini-market--character-employee-interact-end.png",
+      "policy": "immutable",
+      "raw_sha256": "9300ca026e0907a0ae7b7322b5b02f0bcefd87d2b89fa042909116717511fc00"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source-inspection/mini-market--character-employee-interact-middle-side.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source-inspection/mini-market--character-employee-interact-middle-side.png",
+      "policy": "immutable",
+      "raw_sha256": "cd9d8003deea6ace9d432161f859b8e76498efdd328211ca66058bbcc089abc4"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source-inspection/mini-market--character-employee-interact-middle.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source-inspection/mini-market--character-employee-interact-middle.png",
+      "policy": "immutable",
+      "raw_sha256": "f63475c69607178dc23fd14c15f43437af566339923abf98120801beae7ff60b"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source-inspection/mini-market--character-employee-interact-start.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source-inspection/mini-market--character-employee-interact-start.png",
+      "policy": "immutable",
+      "raw_sha256": "6ec21b262e2280cd1c55923769389b25e33d1fe02eaddbce1d0c9bfd56375d69"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source-inspection/mini-market--character-employee-static.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source-inspection/mini-market--character-employee-static.png",
+      "policy": "immutable",
+      "raw_sha256": "077bb573358cd658276f2f977581e8113b62bcccd106c6a0b462cfd6a24d003f"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source-inspection/mini-market--floor-front.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source-inspection/mini-market--floor-front.png",
+      "policy": "immutable",
+      "raw_sha256": "40861966b56cf29186fd19865bd05eeb0458e3c32f79ba65e9b268bb79a7383f"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source-inspection/report.json",
+      "path": "docs/assets/sources/professional-retail-checkout/source-inspection/report.json",
+      "policy": "immutable",
+      "raw_sha256": "c7ce7596f86dd9195beeeba97628f337ca3942f720053695ac078e339f35ebda"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source-pose-review-proposal.json",
+      "path": "docs/assets/sources/professional-retail-checkout/source-pose-review-proposal.json",
+      "policy": "immutable",
+      "raw_sha256": "ee6bc84dc016b3aef9ca09c4689d5004fef721d0750618ed0bfa65b37253c4aa"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source-pose-review.json",
+      "path": "docs/assets/sources/professional-retail-checkout/source-pose-review.json",
+      "policy": "immutable",
+      "raw_sha256": "e42735517811a7bed07721cdd9d1143510e01b2d9bb7e90d0f0777cc2af95ec5"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source-record.json",
+      "path": "docs/assets/sources/professional-retail-checkout/source-record.json",
+      "policy": "immutable",
+      "raw_sha256": "ea4f1e66fb38f55ea908a6d52c69bbddea86ae62dceaf232d6b22bc62f59fe91"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source/food-kit/License.txt",
+      "path": "docs/assets/sources/professional-retail-checkout/source/food-kit/License.txt",
+      "policy": "immutable",
+      "raw_sha256": "32a081c2035dd4db47d850c83244da048165f0e53d71c076b76c1afc0590bc7f"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source/food-kit/original/apple.glb",
+      "path": "docs/assets/sources/professional-retail-checkout/source/food-kit/original/apple.glb",
+      "policy": "immutable",
+      "raw_sha256": "2a80ab65d5bc2cb4f2bca1e8176cbb591849a288596d4b2e76e411338761a526"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source/food-kit/original/carton.glb",
+      "path": "docs/assets/sources/professional-retail-checkout/source/food-kit/original/carton.glb",
+      "policy": "immutable",
+      "raw_sha256": "b63a5081c6edbda7ba8172e6a776f222e781f886a011a887789b2fde42095d04"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source/food-kit/original/Textures/colormap.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source/food-kit/original/Textures/colormap.png",
+      "policy": "immutable",
+      "raw_sha256": "75baf74d9483a0fc56ac21ceba346fbe16fc24a2a1bf0524c53e6bbe802e1153"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source/food-kit/Overview.html",
+      "path": "docs/assets/sources/professional-retail-checkout/source/food-kit/Overview.html",
+      "policy": "immutable",
+      "raw_sha256": "361722dd387f8986c08ea216567713f405b1be9b029a63f4e7781fefa8790183"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source/food-kit/previews/apple.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source/food-kit/previews/apple.png",
+      "policy": "immutable",
+      "raw_sha256": "1fa189f9f6e88750743c93e97e548d70a3765c7fb2446edd5ed6355ffabb3259"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source/food-kit/previews/carton.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source/food-kit/previews/carton.png",
+      "policy": "immutable",
+      "raw_sha256": "6d3cd2d4a8a00858628cdc045d293ea3a058959d7230c50358eee12dbba2918d"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source/mini-characters/License.txt",
+      "path": "docs/assets/sources/professional-retail-checkout/source/mini-characters/License.txt",
+      "policy": "immutable",
+      "raw_sha256": "28358ae5accc85b572eb42507956afc8beae05acb4648bb9026a5714d421b785"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source/mini-characters/original/character-female-b.glb",
+      "path": "docs/assets/sources/professional-retail-checkout/source/mini-characters/original/character-female-b.glb",
+      "policy": "immutable",
+      "raw_sha256": "2288438e7baf9acc91a870c82dc00d66710bb486592cfc3474ef8ed93a03863a"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source/mini-characters/original/Textures/colormap.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source/mini-characters/original/Textures/colormap.png",
+      "policy": "immutable",
+      "raw_sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source/mini-characters/Overview.html",
+      "path": "docs/assets/sources/professional-retail-checkout/source/mini-characters/Overview.html",
+      "policy": "immutable",
+      "raw_sha256": "d27bd2bca14e3c581938375f210ff3f7b671c08bb047083b2401cb91542b6d36"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source/mini-characters/previews/character-female-b.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source/mini-characters/previews/character-female-b.png",
+      "policy": "immutable",
+      "raw_sha256": "db299b4ab11a3f038cbd961b62f93cb67677d3e1a9b4cd12577978120f5f9ea6"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source/mini-characters/previews/Preview.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source/mini-characters/previews/Preview.png",
+      "policy": "immutable",
+      "raw_sha256": "ed425bf02d6a2de2bc44adc0ba52996b0cdb7b99d98859ea60b038958790f256"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/License.txt",
+      "path": "docs/assets/sources/professional-retail-checkout/source/mini-market/License.txt",
+      "policy": "immutable",
+      "raw_sha256": "5ee4df809330c05896f223c97f250cc1bdc13b46a370eb464533c85c94146070"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/original/cash-register.glb",
+      "path": "docs/assets/sources/professional-retail-checkout/source/mini-market/original/cash-register.glb",
+      "policy": "immutable",
+      "raw_sha256": "155f2eb666dea3a931d133a4953379898c8adb4b827ab60b86cae07235b9b598"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/original/character-employee.glb",
+      "path": "docs/assets/sources/professional-retail-checkout/source/mini-market/original/character-employee.glb",
+      "policy": "immutable",
+      "raw_sha256": "8774b93a5ff11af146176505035cc351d37a8a69ad0b1fde612bba9c8ffa84cc"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/original/floor.glb",
+      "path": "docs/assets/sources/professional-retail-checkout/source/mini-market/original/floor.glb",
+      "policy": "immutable",
+      "raw_sha256": "b18da447e10ae1afb327c90bc316590c780c68b04097a038f3fbb26fd28ca0f8"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/original/Textures/colormap.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source/mini-market/original/Textures/colormap.png",
+      "policy": "immutable",
+      "raw_sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/Overview.html",
+      "path": "docs/assets/sources/professional-retail-checkout/source/mini-market/Overview.html",
+      "policy": "immutable",
+      "raw_sha256": "58dee631a02b854f1b511d6184302f06647ac908ad560039ad3c4d0aad1011c8"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/previews/cash-register.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source/mini-market/previews/cash-register.png",
+      "policy": "immutable",
+      "raw_sha256": "db169c7da59d220e24e55081ff75bc44b768bf9fb8caa9b1ff8e9a20aee20258"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/previews/character-employee.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source/mini-market/previews/character-employee.png",
+      "policy": "immutable",
+      "raw_sha256": "10bdce51445eadd07de6c0584d09dc50cdb6c98a2336567eb7074c296a42a902"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/previews/floor.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source/mini-market/previews/floor.png",
+      "policy": "immutable",
+      "raw_sha256": "16e529175af85f5a372b80779a1e15fd081d8a0b0f4d9fa0e513b16bb297e4e0"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/previews/Preview.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source/mini-market/previews/Preview.png",
+      "policy": "immutable",
+      "raw_sha256": "db0bc243ed956e21ab55915c794130ca4cfda8ed181d27f856444fdcb7f7e5f7"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/previews/Sample.png",
+      "path": "docs/assets/sources/professional-retail-checkout/source/mini-market/previews/Sample.png",
+      "policy": "immutable",
+      "raw_sha256": "77e54d04afde778892f0e2a7ab548b6daaa6b7922a8fcd4bee97b9b9c1dd094b"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/sources-native-receipt.json",
+      "path": "docs/assets/sources/professional-retail-checkout/sources-native-receipt.json",
+      "policy": "immutable",
+      "raw_sha256": "b815d58fff38a1b16a1a52b56d322a538bc23605939302f3e692a1a254abf78e"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/sources-native.log",
+      "path": "docs/assets/sources/professional-retail-checkout/sources-native.log",
+      "policy": "immutable",
+      "raw_sha256": "e895a50201c572e6002561d37bd85900b287b5cba8a716402bb25262e8cf1773"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/review-receipt.json",
+      "path": "docs/assets/sources/professional-retail-checkout/review-receipt.json",
+      "policy": "immutable",
+      "raw_sha256": "0eb077b0f57d88626abbc38a0b6067263fdbfd9789eadd837e3e3eadb8c2cad3"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/root-image-review.json",
+      "path": "docs/assets/sources/professional-retail-checkout/root-image-review.json",
+      "policy": "immutable",
+      "raw_sha256": "9f91735ea130c4b035c053084e46ac289aa60ad8184816a6c9a8f0344f1b0a47"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r02/delivery-lib.cjs",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r02/delivery-lib.cjs",
+      "policy": "immutable",
+      "raw_sha256": "c379cd3a8fe9b7e4a75c7a16a6dd1f8f0fe6f802959d00611b30b35b136bcbf0"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r02/bind-current-baseline.cjs",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r02/bind-current-baseline.cjs",
+      "policy": "immutable",
+      "raw_sha256": "9bb5dc68269578d2bb58b5c1efca824ad255a2a5afbc82fbf0e1f3ee4b3aab39"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r02/integrate-reviewed.cjs",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r02/integrate-reviewed.cjs",
+      "policy": "immutable",
+      "raw_sha256": "120d2dcaba24442b13a98800f49ae252171ccb4467997451faca1bf93f08b0fa"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r02/transaction-plan.cjs",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r02/transaction-plan.cjs",
+      "policy": "immutable",
+      "raw_sha256": "dca101335d6c1f9bdc379f566c1d048e094638371e720f7afde2398ca1ab1ea2"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r02/guarded-transaction.cjs",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r02/guarded-transaction.cjs",
+      "policy": "immutable",
+      "raw_sha256": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r02/helper-origin.json",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r02/helper-origin.json",
+      "policy": "immutable",
+      "raw_sha256": "f4a855518d6106f70e3565deb1a10c0ae5afee6b995f62f3a631d7d9854d7429"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r02/persisted-test-transforms.cjs",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r02/persisted-test-transforms.cjs",
+      "policy": "immutable",
+      "raw_sha256": "6abdabffaababa931b7b9e2784fc30776a53b7b012f7cd0cbff7e1d5cb6e32c0"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r02/update-persisted-tests.cjs",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r02/update-persisted-tests.cjs",
+      "policy": "immutable",
+      "raw_sha256": "5ba12c270b706421a76cbcee8124a072abeaaa5415d7aff47adcb1918ccc4d89"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r02/prepare-delivery.cjs",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r02/prepare-delivery.cjs",
+      "policy": "immutable",
+      "raw_sha256": "c8f7d02a6fe59b0c6ea37b19c63434109f402eb6b94f93a19129224d58248903"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r02/HANDOFF.md",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r02/HANDOFF.md",
+      "policy": "immutable",
+      "raw_sha256": "0b356874f89859cffafc4e841b87fde3c49a4331d31f41e33f0d55c038e0c727"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r02/source-doc-draft.md",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r02/source-doc-draft.md",
+      "policy": "immutable",
+      "raw_sha256": "47b85bac24360ac22e9a2db906f46d4098e437c9b506623eb0faa1bbbc5a5d16"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r02/preparation-lineage.json",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r02/preparation-lineage.json",
+      "policy": "immutable",
+      "raw_sha256": "b0c50a66f6161480a4314ab27933278e2a2cc04b52cf87324f1326abf86f3c9e"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r02/preparation-receipt.json",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r02/preparation-receipt.json",
+      "policy": "immutable",
+      "raw_sha256": "ac24c6cfa67fcf2f4f8e975d9581ff31ff658320a0342844e5e06af554cc8245"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r02/scratch-preview-receipt.json",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r02/scratch-preview-receipt.json",
+      "policy": "immutable",
+      "raw_sha256": "c29444eb572756eeb1a0c90fa44da16e1e33c0196c26dd1c7867c35857c39aa1"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r02/preview/tests/professional-content.test.cjs",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r02/preview/tests/professional-content.test.cjs",
+      "policy": "immutable",
+      "raw_sha256": "d0722f852c6a25f0f708a71c1c213c84d0ae73d783676d8737987ffb65c583d8"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r02/preview/tests/professional-retail-morphology.test.cjs",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r02/preview/tests/professional-retail-morphology.test.cjs",
+      "policy": "immutable",
+      "raw_sha256": "424f9172c45385a1e7ab7769f2c03ed330707317bf285094da8857df1c3a9811"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r02/preview/tests/professional-retail-media.test.cjs",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r02/preview/tests/professional-retail-media.test.cjs",
+      "policy": "immutable",
+      "raw_sha256": "d1efb69ec5aa075dc150fb2883507ca652f5243276ab50c955cca289e68ec26f"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r02/preimages.json",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r02/preimages.json",
+      "policy": "create",
+      "raw_sha256": "0fedded31a70ffe43151b1e732405d39c5421ad04b63a2ab6774cea02649b593"
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r02/binding-receipt.json",
+      "path": "docs/assets/sources/professional-retail-checkout/delivery-r02/binding-receipt.json",
+      "policy": "create",
+      "raw_sha256": "484ca63fbaa0fe25b777012e9d0848c67f576f93d6e63dcdf068586da4376608"
+    }
+  ],
+  "resource": {
+    "id": "sha256:eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe",
+    "sha256": "eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe",
+    "path": "professional-media/eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe.png",
+    "kind": "image",
+    "format": "png",
+    "compressed_bytes": 148338,
+    "decoded_bytes": 1609728,
+    "width": 512,
+    "height": 393
+  },
+  "patches": [
+    {
+      "id": "checkout.payment-area.n",
+      "before": {
+        "id": "checkout.payment-area.n",
+        "text": "checkout",
+        "display_text": "checkout",
+        "pos": "noun",
+        "definition": "The place in a store where purchases are paid for.",
+        "example": "A second checkout is open near the entrance.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "checkout"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "Show a complete staffed checkout lane: customer side, short goods belt or counter, and a register, with a shopper presenting purchases. Frame the lane as one place while the equipment stays subordinate. Reject a close-up of a register alone, a help desk, or a hotel reception. No readable payment credentials or brand marks.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "integrated",
+            "path": "res://professional-media/39df6ba3406a891283f99379ca8526d93fc8f3279b571134c0213dd824282224.wav",
+            "sha256": "39df6ba3406a891283f99379ca8526d93fc8f3279b571134c0213dd824282224",
+            "source": "res://docs/assets/sources/professional-retail-ava/counter-checkout/listening-approval-2026-10-16.json",
+            "creator": "Microsoft Ava Neural; original project term text",
+            "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+            "acquisition_status": "integrated",
+            "review": {
+              "status": "reviewed",
+              "reviewer": "User (exact counter and checkout samples approved in the continuation chat; see counter-checkout listening-approval-2026-10-16.json)",
+              "reviewed_at": "2026-10-16"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "professional.checkout.payment-area.n.morphology.retail03.proposal.v2",
+          "lexeme_id": "checkout.payment-area.n",
+          "text": "checkout",
+          "kind": "compound",
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.check",
+              "type": "stem",
+              "canonical": "check",
+              "surface": "check",
+              "break_offsets": []
+            },
+            {
+              "id": "p2",
+              "canonical_id": "morph.out",
+              "type": "word",
+              "canonical": "out",
+              "surface": "out",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [
+            {
+              "id": "whole",
+              "left": "p1",
+              "right": "p2",
+              "surface": "checkout",
+              "rule": "authored-closed-nominalization-of-check-out",
+              "break_offsets": []
+            }
+          ],
+          "roots": [
+            "whole"
+          ],
+          "review": {
+            "status": "reviewed",
+            "draft_author": "Codex (AI source consultation; not human or subject-matter approval)",
+            "notes": "The payment-area noun is lexicalized from check out, explicitly documented by the source. This is a closed nominalized phrase, not an assertion that the modern store-area meaning is the sum of literal check and outside. Check and out are current lexical components with examined histories, not syllables. Canonical identity follows the existing Professional pair inventory; a selected contextual meaning does not automatically establish an unrelated homonym. Existing Growth graphs and other Professional analyses remain unchanged.",
+            "references": [
+              "https://www.dictionary.com/browse/checkout",
+              "https://www.dictionary.com/browse/check",
+              "https://www.dictionary.com/browse/out"
+            ],
+            "source_record_ids": [
+              "retail03-morph-dcom-checkout",
+              "retail03-morph-dcom-check",
+              "retail03-morph-dcom-out"
+            ],
+            "independent_review": "completed_exact_first10_v2_graph_and_current_stem_depth",
+            "reviewer": "Codex (independent AI morphology review; not human or subject-matter approval)",
+            "reviewed_at": "2026-10-16",
+            "acceptance_record": "data/professional/provenance/retail-module03-morphology-first10-2026-10-16.json"
+          }
+        },
+        "review": {
+          "status": "reviewed",
+          "language": "reviewed",
+          "domain": "not_required",
+          "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "bls-cashiers",
+            "status": "pending_term_check",
+            "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+          },
+          {
+            "source_id": "retail03-mw-checkout",
+            "status": "verified",
+            "scope": "Selected passage consulted: Noun sense 3. A store counter or area used to process purchases is distinct from hotel checkout and the phrasal verb check out. Selected lexical sense only; pronunciation recordings and images were not acquired. Headword syllable dots do not establish morphology. This editorial proposal does not approve language, morphology, domain practice, or media."
+          }
+        ],
+        "editorial_notes": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the store payment-area noun; exclude hotel departure and the phrasal verb check out. Retain checkout as the selected noun spelling; check out is not an interchangeable noun answer. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Domain review is not required for the current memberships. Independent AI morphology review was completed on 2026-10-16 for this exact graph at the documented modern-stem depth; this is not human or subject-matter approval. Picture suitability and word-image production remain pending. The exact Ava word recording has user listening approval and is integrated. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready."
+      },
+      "after": {
+        "id": "checkout.payment-area.n",
+        "text": "checkout",
+        "display_text": "checkout",
+        "pos": "noun",
+        "definition": "The place in a store where purchases are paid for.",
+        "example": "A second checkout is open near the entrance.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "checkout"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "integrated",
+            "path": "res://professional-media/eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe.png",
+            "sha256": "eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe",
+            "source": "res://docs/assets/sources/professional-retail-checkout/source-record.json",
+            "creator": "Kenney; Mini Market additional credits: Fleur Keijsers and Guus Vermeulen",
+            "license": "CC0 1.0",
+            "acquisition_status": "integrated",
+            "review": {
+              "status": "reviewed",
+              "reviewer": "Codex independent AI source and scoped payment-area picture review; see root-image-review.json",
+              "reviewed_at": "2026-10-16"
+            },
+            "brief": "Show a complete staffed checkout lane: customer side, short goods belt or counter, and a register, with a shopper presenting purchases. Frame the lane as one place while the equipment stays subordinate. Reject a close-up of a register alone, a help desk, or a hotel reception. No readable payment credentials or brand marks.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "integrated",
+            "path": "res://professional-media/39df6ba3406a891283f99379ca8526d93fc8f3279b571134c0213dd824282224.wav",
+            "sha256": "39df6ba3406a891283f99379ca8526d93fc8f3279b571134c0213dd824282224",
+            "source": "res://docs/assets/sources/professional-retail-ava/counter-checkout/listening-approval-2026-10-16.json",
+            "creator": "Microsoft Ava Neural; original project term text",
+            "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+            "acquisition_status": "integrated",
+            "review": {
+              "status": "reviewed",
+              "reviewer": "User (exact counter and checkout samples approved in the continuation chat; see counter-checkout listening-approval-2026-10-16.json)",
+              "reviewed_at": "2026-10-16"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "professional.checkout.payment-area.n.morphology.retail03.proposal.v2",
+          "lexeme_id": "checkout.payment-area.n",
+          "text": "checkout",
+          "kind": "compound",
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.check",
+              "type": "stem",
+              "canonical": "check",
+              "surface": "check",
+              "break_offsets": []
+            },
+            {
+              "id": "p2",
+              "canonical_id": "morph.out",
+              "type": "word",
+              "canonical": "out",
+              "surface": "out",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [
+            {
+              "id": "whole",
+              "left": "p1",
+              "right": "p2",
+              "surface": "checkout",
+              "rule": "authored-closed-nominalization-of-check-out",
+              "break_offsets": []
+            }
+          ],
+          "roots": [
+            "whole"
+          ],
+          "review": {
+            "status": "reviewed",
+            "draft_author": "Codex (AI source consultation; not human or subject-matter approval)",
+            "notes": "The payment-area noun is lexicalized from check out, explicitly documented by the source. This is a closed nominalized phrase, not an assertion that the modern store-area meaning is the sum of literal check and outside. Check and out are current lexical components with examined histories, not syllables. Canonical identity follows the existing Professional pair inventory; a selected contextual meaning does not automatically establish an unrelated homonym. Existing Growth graphs and other Professional analyses remain unchanged.",
+            "references": [
+              "https://www.dictionary.com/browse/checkout",
+              "https://www.dictionary.com/browse/check",
+              "https://www.dictionary.com/browse/out"
+            ],
+            "source_record_ids": [
+              "retail03-morph-dcom-checkout",
+              "retail03-morph-dcom-check",
+              "retail03-morph-dcom-out"
+            ],
+            "independent_review": "completed_exact_first10_v2_graph_and_current_stem_depth",
+            "reviewer": "Codex (independent AI morphology review; not human or subject-matter approval)",
+            "reviewed_at": "2026-10-16",
+            "acceptance_record": "data/professional/provenance/retail-module03-morphology-first10-2026-10-16.json"
+          }
+        },
+        "review": {
+          "status": "reviewed",
+          "language": "reviewed",
+          "domain": "not_required",
+          "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "bls-cashiers",
+            "status": "pending_term_check",
+            "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+          },
+          {
+            "source_id": "retail03-mw-checkout",
+            "status": "verified",
+            "scope": "Selected passage consulted: Noun sense 3. A store counter or area used to process purchases is distinct from hotel checkout and the phrasal verb check out. Selected lexical sense only; pronunciation recordings and images were not acquired. Headword syllable dots do not establish morphology. This editorial proposal does not approve language, morphology, domain practice, or media."
+          }
+        ],
+        "editorial_notes": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the store payment-area noun; exclude hotel departure and the phrasal verb check out. Retain checkout as the selected noun spelling; check out is not an interchangeable noun answer. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Domain review is not required for the current memberships. Independent AI morphology review was completed on 2026-10-16 for this exact graph at the documented modern-stem depth; this is not human or subject-matter approval. The checkout image has completed scoped payment-area picture review. The exact Ava word recording has user listening approval and is integrated. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready."
+      },
+      "before_sha256": "c5f62cb2482dd12796d0bfcbb031a04c1ca1af7021a96025d941535eca76762b",
+      "after_sha256": "26c4eb794d21582c665961a423511267917f528b6e33513fc347590414ce4515",
+      "protected_fields_sha256": "fee9dafb56a937a492220fcd1e17a1acf7e1eceeae17008215feb9097525d821",
+      "note_change": {
+        "before": "Picture suitability and word-image production remain pending.",
+        "after": "The checkout image has completed scoped payment-area picture review."
+      },
+      "resource": {
+        "id": "sha256:eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe",
+        "sha256": "eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe",
+        "path": "professional-media/eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe.png",
+        "kind": "image",
+        "format": "png",
+        "compressed_bytes": 148338,
+        "decoded_bytes": 1609728,
+        "width": 512,
+        "height": 393
+      }
+    }
+  ],
+  "before_registry_sha256": "9162bb11ab9ceceddc509407855a42d12c13069ed5035fcd1f02ac33e6571e89",
+  "after_registry_sha256": "bdd07516c489f2f728f8ad09912b0cbc01d97765a04e2403373de13238ee2bbf",
+  "scope": "Only the exact checkout image descriptor and obsolete pending-image sentence change. The approved Ava audio and every lexical, morphology, review, expression and curriculum field remain exact. The aggregate 72-check scratch probe retains two rejected tiled-variant failures; selected compact-three-quarter passed all 18 local checks.",
+  "integration_guards": {
+    "preimages_raw_sha256": "0fedded31a70ffe43151b1e732405d39c5421ad04b63a2ab6774cea02649b593",
+    "binding_receipt_raw_sha256": "484ca63fbaa0fe25b777012e9d0848c67f576f93d6e63dcdf068586da4376608",
+    "delivery_files": {
+      "delivery-lib.cjs": "c379cd3a8fe9b7e4a75c7a16a6dd1f8f0fe6f802959d00611b30b35b136bcbf0",
+      "bind-current-baseline.cjs": "9bb5dc68269578d2bb58b5c1efca824ad255a2a5afbc82fbf0e1f3ee4b3aab39",
+      "integrate-reviewed.cjs": "120d2dcaba24442b13a98800f49ae252171ccb4467997451faca1bf93f08b0fa",
+      "transaction-plan.cjs": "dca101335d6c1f9bdc379f566c1d048e094638371e720f7afde2398ca1ab1ea2",
+      "guarded-transaction.cjs": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6",
+      "helper-origin.json": "f4a855518d6106f70e3565deb1a10c0ae5afee6b995f62f3a631d7d9854d7429",
+      "persisted-test-transforms.cjs": "6abdabffaababa931b7b9e2784fc30776a53b7b012f7cd0cbff7e1d5cb6e32c0",
+      "update-persisted-tests.cjs": "5ba12c270b706421a76cbcee8124a072abeaaa5415d7aff47adcb1918ccc4d89",
+      "prepare-delivery.cjs": "c8f7d02a6fe59b0c6ea37b19c63434109f402eb6b94f93a19129224d58248903",
+      "HANDOFF.md": "0b356874f89859cffafc4e841b87fde3c49a4331d31f41e33f0d55c038e0c727",
+      "source-doc-draft.md": "47b85bac24360ac22e9a2db906f46d4098e437c9b506623eb0faa1bbbc5a5d16",
+      "preparation-lineage.json": "b0c50a66f6161480a4314ab27933278e2a2cc04b52cf87324f1326abf86f3c9e"
+    },
+    "helper": {
+      "helper_source": "build/professional-english/retail-module03-morphology-review/fifth10/serializer-review-r01/guarded-transaction.cjs",
+      "helper_raw_sha256": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6",
+      "helper_validation": {
+        "path": "build/professional-english/retail-module03-morphology-review/fifth10/serializer-review-r01/validation-attempt-XE9O6l/receipt.json",
+        "raw_sha256": "abd19b9952fe3085ef8cab5b87e430ef442780ed05f3a9a2105f909f968a9bae",
+        "tests": 20,
+        "pass": 20,
+        "fail": 0
+      },
+      "adapter_source": "build/professional-english/retail-term-art-review/counter-r01/delivery-r02/transaction-plan.cjs",
+      "adapter_raw_sha256": "dca101335d6c1f9bdc379f566c1d048e094638371e720f7afde2398ca1ab1ea2",
+      "adapter_validation": {
+        "path": "build/professional-english/retail-term-art-review/counter-r01/delivery-r02/adapter-tests-r02/result.json",
+        "raw_sha256": "61764fb1c4587e19d88a27d9494988539a17336cf0687baa792fc5e214c0a38d",
+        "assertions": 32,
+        "failures": 0
+      },
+      "scope": "Byte-identical reused guarded helper and plan adapter. Their earlier scratch fixture tests remain evidence; this new checkout image package has not run tests or native rendering."
+    },
+    "transaction_path": "build/professional-english/transactions/checkout-image-r02",
+    "validation": {
+      "path": "build/professional-english/continuation-validation-r18.json",
+      "raw_sha256": "933c2f61bbfcc8375d0f9a018dc9ed3b7ce67c2894fe047e38178071b6754585",
+      "measured_input_count": 659
+    }
+  },
+  "audit": {
+    "errors": 0,
+    "warnings": 29574,
+    "summary": {
+      "courses": 20,
+      "modules": 200,
+      "themes": 21,
+      "unique_lexemes": 4939,
+      "vocabulary_memberships": 10000,
+      "vocabulary_memberships_target": 10000,
+      "vocabulary_memberships_remaining": 0,
+      "expressions": 1620,
+      "expression_memberships": 2000,
+      "expression_memberships_target": 2000,
+      "expression_memberships_remaining": 0,
+      "ready_modules": 0,
+      "reviewed_lexemes": 71,
+      "morphology_authored": 4043,
+      "morphology_reviewed": 69,
+      "integrated_word_images": 6,
+      "integrated_word_audio": 10,
+      "release_ready": false
+    }
+  }
+}

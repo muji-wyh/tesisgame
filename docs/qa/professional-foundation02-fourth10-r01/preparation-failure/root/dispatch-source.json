@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "time": "2026-10-16T21:01:12.632Z",
+  "wrapper_sha256": "f0a70611dcccb06e076e8100a14fdbea7b55af92347a1bf26ba1e0a08d9d7a76",
+  "execution": false,
+  "reviewer": "root",
+  "independent_review_sha256": "c5c0d17720fc7e02a52c9623ad08c0546f8e6c00c6787cdd25ed08403dfa034d",
+  "scope": "Root read HANDOFF, TRANSACTION, projection, transforms, prepare and independent static review. Three syntax checks and one scratch preparation accepted; no production or native acceptance."
+}

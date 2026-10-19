@@ -1,0 +1,98 @@
+{
+  "schema": 1,
+  "status": "exact_copy_verified",
+  "recorded_at": "2026-10-16T21:50:17.660Z",
+  "copied_files": [
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-proposal-r01/proposal.json",
+      "destination": "docs/content-review/foundation-module02-language-fifth10-delivery-proposal-review-2026-10-17/proposal/proposal.json",
+      "sha256": "b72ae6d5f52531e828c5ef819cc4ae34e6a940010a6bebf58d502968d04d6067",
+      "bytes": 426549
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-proposal-r01/context-preservation.json",
+      "destination": "docs/content-review/foundation-module02-language-fifth10-delivery-proposal-review-2026-10-17/proposal/context-preservation.json",
+      "sha256": "5cf815fb77ebdc45325063e40eb2b1940718e721ed18f46f347277689dd2993a",
+      "bytes": 1751439
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-proposal-r01/history-preservation.json",
+      "destination": "docs/content-review/foundation-module02-language-fifth10-delivery-proposal-review-2026-10-17/proposal/history-preservation.json",
+      "sha256": "7078897f88e9db12c282e55fcb28dc9e6ffb5619c059b0aaa246aa1a5724355b",
+      "bytes": 414426
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-proposal-r01/evidence-pins.json",
+      "destination": "docs/content-review/foundation-module02-language-fifth10-delivery-proposal-review-2026-10-17/proposal/evidence-pins.json",
+      "sha256": "209d5439582e7da4bd7b909819de7427d15bd248f2fbd4debcb6e5a3c8ed8ce5",
+      "bytes": 9936
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-proposal-r01/static-observations.json",
+      "destination": "docs/content-review/foundation-module02-language-fifth10-delivery-proposal-review-2026-10-17/proposal/static-observations.json",
+      "sha256": "0357af64195dfbf5ba85a9255afce9626ba28f1413012ad0290db3a969f954fe",
+      "bytes": 1566
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-proposal-r01/HANDOFF.md",
+      "destination": "docs/content-review/foundation-module02-language-fifth10-delivery-proposal-review-2026-10-17/proposal/HANDOFF.md",
+      "sha256": "ed005b593489932be6e27de91d8c6e6240ee58fa775014701423e2a13cb810bb",
+      "bytes": 6995
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-proposal-r01/inventory.json",
+      "destination": "docs/content-review/foundation-module02-language-fifth10-delivery-proposal-review-2026-10-17/proposal/inventory.json",
+      "sha256": "0e806ef501bbd9e90b1a026857292f13c40e96a5a53906a2ec476800f8b71db9",
+      "bytes": 1436
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-proposal-review-r01/README.md",
+      "destination": "docs/content-review/foundation-module02-language-fifth10-delivery-proposal-review-2026-10-17/review/README.md",
+      "sha256": "b4ffa30bddf1723718ffa25a1e01e1a1f652164449e6f320ddf24878682deddc",
+      "bytes": 3722
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-proposal-review-r01/capture-start.json",
+      "destination": "docs/content-review/foundation-module02-language-fifth10-delivery-proposal-review-2026-10-17/review/capture-start.json",
+      "sha256": "c792384c1ad9f293b4c1a4ffd6affe0e8c7117135b188731124dbb10ceae222b",
+      "bytes": 276
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-proposal-review-r01/capture.cjs",
+      "destination": "docs/content-review/foundation-module02-language-fifth10-delivery-proposal-review-2026-10-17/review/capture.cjs",
+      "sha256": "651ba393c6bdccb93b21f0f4f256031449c1b0ea601ead03a25266dfcf00a34f",
+      "bytes": 36142
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-proposal-review-r01/input-audit.json",
+      "destination": "docs/content-review/foundation-module02-language-fifth10-delivery-proposal-review-2026-10-17/review/input-audit.json",
+      "sha256": "c7cc948d879745960c8faa6440c0464b0fe882e8769c1eabd9ca95c47201d28b",
+      "bytes": 113000
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-proposal-review-r01/inspection.json",
+      "destination": "docs/content-review/foundation-module02-language-fifth10-delivery-proposal-review-2026-10-17/review/inspection.json",
+      "sha256": "a563b2959dfae97a7fdc8b612b970158c1ed87e7b7cd64a0050682d1049dd9b2",
+      "bytes": 791764
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-proposal-review-r01/review.json",
+      "destination": "docs/content-review/foundation-module02-language-fifth10-delivery-proposal-review-2026-10-17/review/review.json",
+      "sha256": "65a00b7d353ade569cfd5fa129c95451dbc1aaf506baeef62cf4b95f44155d0a",
+      "bytes": 9776
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-proposal-review-r01/source-review.json",
+      "destination": "docs/content-review/foundation-module02-language-fifth10-delivery-proposal-review-2026-10-17/review/source-review.json",
+      "sha256": "ca061dbe755f41aa2a615d8c9fae19e0901c780fd181f303bb9b69ff7688fa08",
+      "bytes": 15131
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-proposal-review-r01/inventory.json",
+      "destination": "docs/content-review/foundation-module02-language-fifth10-delivery-proposal-review-2026-10-17/review/inventory.json",
+      "sha256": "b357729273451d34436cb6ea3ec4f81b943594f9c875938c6d83400f4b6c2ebf",
+      "bytes": 1245
+    }
+  ],
+  "scope": "Static proposed language delivery metadata and independent context/history review. Final baseline remains unbound; production unchanged."
+}

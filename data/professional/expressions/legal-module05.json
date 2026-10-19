@@ -1,0 +1,1722 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.legal_paralegal.module05.01",
+      "text": "The bill is still a proposal; the legislature has not enacted it as a statute.",
+      "meaning": "Distinguish a legislative proposal from enacted law.",
+      "context": "Describing the stated status of a fictional measure.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "bill",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "is",
+          "start": 9,
+          "end": 11
+        },
+        {
+          "index": 3,
+          "text": "still",
+          "start": 12,
+          "end": 17
+        },
+        {
+          "index": 4,
+          "text": "a",
+          "start": 18,
+          "end": 19
+        },
+        {
+          "index": 5,
+          "text": "proposal",
+          "start": 20,
+          "end": 28
+        },
+        {
+          "index": 6,
+          "text": ";",
+          "start": 28,
+          "end": 29
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 8,
+          "text": "legislature",
+          "start": 34,
+          "end": 45
+        },
+        {
+          "index": 9,
+          "text": "has",
+          "start": 46,
+          "end": 49
+        },
+        {
+          "index": 10,
+          "text": "not",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 11,
+          "text": "enacted",
+          "start": 54,
+          "end": 61
+        },
+        {
+          "index": 12,
+          "text": "it",
+          "start": 62,
+          "end": 64
+        },
+        {
+          "index": 13,
+          "text": "as",
+          "start": 65,
+          "end": 67
+        },
+        {
+          "index": 14,
+          "text": "a",
+          "start": 68,
+          "end": 69
+        },
+        {
+          "index": 15,
+          "text": "statute",
+          "start": 70,
+          "end": 77
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 77,
+          "end": 78
+        }
+      ],
+      "focus_lexeme_ids": [
+        "bill.proposed-law-presented-to-legislature.n",
+        "legislature.body-with-law-making-function.n",
+        "statute.law-enacted-by-legislative-body.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-bls-paralegals",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-lawyers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-uk-parliament-laws",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-us-courts-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-cornell-headnote",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module05.02",
+      "text": "The jurisdiction and court hierarchy matter when assessing whether a decision is binding precedent.",
+      "meaning": "Identify context needed for a qualified precedent assessment.",
+      "context": "Preparing a research question without deciding a case's authority.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "jurisdiction",
+          "start": 4,
+          "end": 16
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "court",
+          "start": 21,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "hierarchy",
+          "start": 27,
+          "end": 36
+        },
+        {
+          "index": 5,
+          "text": "matter",
+          "start": 37,
+          "end": 43
+        },
+        {
+          "index": 6,
+          "text": "when",
+          "start": 44,
+          "end": 48
+        },
+        {
+          "index": 7,
+          "text": "assessing",
+          "start": 49,
+          "end": 58
+        },
+        {
+          "index": 8,
+          "text": "whether",
+          "start": 59,
+          "end": 66
+        },
+        {
+          "index": 9,
+          "text": "a",
+          "start": 67,
+          "end": 68
+        },
+        {
+          "index": 10,
+          "text": "decision",
+          "start": 69,
+          "end": 77
+        },
+        {
+          "index": 11,
+          "text": "is",
+          "start": 78,
+          "end": 80
+        },
+        {
+          "index": 12,
+          "text": "binding",
+          "start": 81,
+          "end": 88
+        },
+        {
+          "index": 13,
+          "text": "precedent",
+          "start": 89,
+          "end": 98
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 98,
+          "end": 99
+        }
+      ],
+      "focus_lexeme_ids": [
+        "jurisdiction.legal-authority-of-court-or-body-over-matter.n",
+        "court-hierarchy.relationship-of-court-levels-within-system.n",
+        "binding-precedent.precedent-later-court-must-follow-in-applicable-circumstances.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-bls-paralegals",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-lawyers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-uk-parliament-laws",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-us-courts-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-cornell-headnote",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module05.03",
+      "text": "Please ask the reviewer whether the passage is ratio decidendi or an obiter dictum.",
+      "meaning": "Request qualified review of a passage's role in a decision.",
+      "context": "Discussing a fictional common-law judgment analysis.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "ask",
+          "start": 7,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 11,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "reviewer",
+          "start": 15,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "whether",
+          "start": 24,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "passage",
+          "start": 36,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "is",
+          "start": 44,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "ratio",
+          "start": 47,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "decidendi",
+          "start": 53,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "or",
+          "start": 63,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": "an",
+          "start": 66,
+          "end": 68
+        },
+        {
+          "index": 12,
+          "text": "obiter",
+          "start": 69,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": "dictum",
+          "start": 76,
+          "end": 82
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 82,
+          "end": 83
+        }
+      ],
+      "focus_lexeme_ids": [
+        "ratio-decidendi.legal-reasoning-necessary-to-decision-in-common-law-analysis.n",
+        "obiter-dictum.judicial-observation-not-necessary-to-decision.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-bls-paralegals",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-lawyers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-uk-parliament-laws",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-us-courts-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-cornell-headnote",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module05.04",
+      "text": "The repeal may affect this provision; please identify the section and any relevant transitional wording.",
+      "meaning": "Flag a source-status issue for legal review.",
+      "context": "Recording an unresolved legislative research question.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "repeal",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "may",
+          "start": 11,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "affect",
+          "start": 15,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "this",
+          "start": 22,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "provision",
+          "start": 27,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": ";",
+          "start": 36,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "please",
+          "start": 38,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "identify",
+          "start": 45,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "section",
+          "start": 58,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": "any",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 13,
+          "text": "relevant",
+          "start": 74,
+          "end": 82
+        },
+        {
+          "index": 14,
+          "text": "transitional",
+          "start": 83,
+          "end": 95
+        },
+        {
+          "index": 15,
+          "text": "wording",
+          "start": 96,
+          "end": 103
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 103,
+          "end": 104
+        }
+      ],
+      "focus_lexeme_ids": [
+        "repeal.removal-of-laws-legal-force-by-authorized-legislative-action.n",
+        "provision.rule-or-requirement-contained-in-legal-instrument.n",
+        "section.identified-division-of-written-document.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-bls-paralegals",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-lawyers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-uk-parliament-laws",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-us-courts-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-cornell-headnote",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module05.05",
+      "text": "The bibliography separates each primary source from commentary used as a secondary source.",
+      "meaning": "Distinguish original legal material from explanations of it.",
+      "context": "Reviewing a fictional research source list.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "bibliography",
+          "start": 4,
+          "end": 16
+        },
+        {
+          "index": 2,
+          "text": "separates",
+          "start": 17,
+          "end": 26
+        },
+        {
+          "index": 3,
+          "text": "each",
+          "start": 27,
+          "end": 31
+        },
+        {
+          "index": 4,
+          "text": "primary",
+          "start": 32,
+          "end": 39
+        },
+        {
+          "index": 5,
+          "text": "source",
+          "start": 40,
+          "end": 46
+        },
+        {
+          "index": 6,
+          "text": "from",
+          "start": 47,
+          "end": 51
+        },
+        {
+          "index": 7,
+          "text": "commentary",
+          "start": 52,
+          "end": 62
+        },
+        {
+          "index": 8,
+          "text": "used",
+          "start": 63,
+          "end": 67
+        },
+        {
+          "index": 9,
+          "text": "as",
+          "start": 68,
+          "end": 70
+        },
+        {
+          "index": 10,
+          "text": "a",
+          "start": 71,
+          "end": 72
+        },
+        {
+          "index": 11,
+          "text": "secondary",
+          "start": 73,
+          "end": 82
+        },
+        {
+          "index": 12,
+          "text": "source",
+          "start": 83,
+          "end": 89
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 89,
+          "end": 90
+        }
+      ],
+      "focus_lexeme_ids": [
+        "bibliography.list-of-sources-used-or-relevant-to-work.n",
+        "primary-source.source-containing-original-authoritative-material-in-legal-research.n",
+        "secondary-source.source-discussing-or-explaining-primary-legal-material.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-bls-paralegals",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-lawyers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-uk-parliament-laws",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-us-courts-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-cornell-headnote",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module05.06",
+      "text": "The filter changed the search result list; please save the search query in the search history.",
+      "meaning": "Describe what changed the retrieval results and retain context.",
+      "context": "Recording a search in a fictional service.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "filter",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "changed",
+          "start": 11,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "search",
+          "start": 23,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "result",
+          "start": 30,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "list",
+          "start": 37,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": ";",
+          "start": 41,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "please",
+          "start": 43,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": "save",
+          "start": 50,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 55,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": "search",
+          "start": 59,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "query",
+          "start": 66,
+          "end": 71
+        },
+        {
+          "index": 13,
+          "text": "in",
+          "start": 72,
+          "end": 74
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 15,
+          "text": "search",
+          "start": 79,
+          "end": 85
+        },
+        {
+          "index": 16,
+          "text": "history",
+          "start": 86,
+          "end": 93
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 93,
+          "end": 94
+        }
+      ],
+      "focus_lexeme_ids": [
+        "filter.result-limiting-control.n",
+        "search-result.item-returned-by-search-system.n",
+        "search-query.complete-input-submitted-to-search-system.n",
+        "search-history.record-of-previous-search-queries-and-related-context.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-bls-paralegals",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-lawyers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-uk-parliament-laws",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-us-courts-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-cornell-headnote",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module05.07",
+      "text": "This judgment interprets a statute; case law also includes decisions developing common law.",
+      "meaning": "Recognize overlapping but distinct uses of case law and common law.",
+      "context": "Comparing legal source categories without determining a rule's present effect.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "This",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "judgment",
+          "start": 5,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "interprets",
+          "start": 14,
+          "end": 24
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 25,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "statute",
+          "start": 27,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": ";",
+          "start": 34,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "case",
+          "start": 36,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "law",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "also",
+          "start": 45,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": "includes",
+          "start": 50,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "decisions",
+          "start": 59,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": "developing",
+          "start": 69,
+          "end": 79
+        },
+        {
+          "index": 12,
+          "text": "common",
+          "start": 80,
+          "end": 86
+        },
+        {
+          "index": 13,
+          "text": "law",
+          "start": 87,
+          "end": 90
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 90,
+          "end": 91
+        }
+      ],
+      "focus_lexeme_ids": [
+        "judgment.courts-decision-and-reasons-as-applicable.n",
+        "statute.law-enacted-by-legislative-body.n",
+        "case-law.body-of-law-expressed-in-court-decisions.n",
+        "common-law.law-developed-through-judicial-decisions-in-selected-sense.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-bls-paralegals",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-lawyers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-uk-parliament-laws",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-us-courts-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-cornell-headnote",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module05.08",
+      "text": "The legal research note links the legal issue to a citation; the headnote summarizes points without forming part of the judgment.",
+      "meaning": "Distinguish an editorial case summary from the court's decision.",
+      "context": "Checking a fictional legal report and research note without assigning authority to the summary.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "legal",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "research",
+          "start": 10,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "note",
+          "start": 19,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "links",
+          "start": 24,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "legal",
+          "start": 34,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "issue",
+          "start": 40,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "to",
+          "start": 46,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "a",
+          "start": 49,
+          "end": 50
+        },
+        {
+          "index": 10,
+          "text": "citation",
+          "start": 51,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": ";",
+          "start": 59,
+          "end": 60
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 61,
+          "end": 64
+        },
+        {
+          "index": 13,
+          "text": "headnote",
+          "start": 65,
+          "end": 73
+        },
+        {
+          "index": 14,
+          "text": "summarizes",
+          "start": 74,
+          "end": 84
+        },
+        {
+          "index": 15,
+          "text": "points",
+          "start": 85,
+          "end": 91
+        },
+        {
+          "index": 16,
+          "text": "without",
+          "start": 92,
+          "end": 99
+        },
+        {
+          "index": 17,
+          "text": "forming",
+          "start": 100,
+          "end": 107
+        },
+        {
+          "index": 18,
+          "text": "part",
+          "start": 108,
+          "end": 112
+        },
+        {
+          "index": 19,
+          "text": "of",
+          "start": 113,
+          "end": 115
+        },
+        {
+          "index": 20,
+          "text": "the",
+          "start": 116,
+          "end": 119
+        },
+        {
+          "index": 21,
+          "text": "judgment",
+          "start": 120,
+          "end": 128
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 128,
+          "end": 129
+        }
+      ],
+      "focus_lexeme_ids": [
+        "legal-research.systematic-investigation-of-legal-questions-and-sources.n",
+        "legal-issue.question-of-law-requiring-consideration.n",
+        "citation.reference-identifying-source-of-information.n",
+        "headnote.editorial-summary-of-legal-points-preceding-reported-decision.n",
+        "judgment.courts-decision-and-reasons-as-applicable.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-bls-paralegals",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-lawyers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-uk-parliament-laws",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-us-courts-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-cornell-headnote",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module05.09",
+      "text": "The publication date may differ from commencement, so the source's current status needs review.",
+      "meaning": "Distinguish publication from coming into force.",
+      "context": "Checking source dates without calculating legal effect.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "publication",
+          "start": 4,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "date",
+          "start": 16,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "may",
+          "start": 21,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "differ",
+          "start": 25,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "from",
+          "start": 32,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "commencement",
+          "start": 37,
+          "end": 49
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 49,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": "so",
+          "start": 51,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "source's",
+          "start": 58,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": "current",
+          "start": 67,
+          "end": 74
+        },
+        {
+          "index": 12,
+          "text": "status",
+          "start": 75,
+          "end": 81
+        },
+        {
+          "index": 13,
+          "text": "needs",
+          "start": 82,
+          "end": 87
+        },
+        {
+          "index": 14,
+          "text": "review",
+          "start": 88,
+          "end": 94
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 94,
+          "end": 95
+        }
+      ],
+      "focus_lexeme_ids": [
+        "publication-date.date-on-which-content-is-or-will-be-published.n",
+        "commencement.coming-into-force-of-legislation-or-provision.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-bls-paralegals",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-lawyers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-uk-parliament-laws",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-us-courts-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-cornell-headnote",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module05.10",
+      "text": "The UK note identifies the statutory instrument as secondary legislation and names the enabling law.",
+      "meaning": "Describe the relationship between an instrument and its stated authority.",
+      "context": "Reading a fictional UK legislative overview.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "UK",
+          "start": 4,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "note",
+          "start": 7,
+          "end": 11
+        },
+        {
+          "index": 3,
+          "text": "identifies",
+          "start": 12,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 23,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "statutory",
+          "start": 27,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "instrument",
+          "start": 37,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "as",
+          "start": 48,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": "secondary",
+          "start": 51,
+          "end": 60
+        },
+        {
+          "index": 9,
+          "text": "legislation",
+          "start": 61,
+          "end": 72
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 73,
+          "end": 76
+        },
+        {
+          "index": 11,
+          "text": "names",
+          "start": 77,
+          "end": 82
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 83,
+          "end": 86
+        },
+        {
+          "index": 13,
+          "text": "enabling",
+          "start": 87,
+          "end": 95
+        },
+        {
+          "index": 14,
+          "text": "law",
+          "start": 96,
+          "end": 99
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 99,
+          "end": 100
+        }
+      ],
+      "focus_lexeme_ids": [
+        "statutory-instrument.instrument-making-secondary-legislation-under-uk-authority.n",
+        "secondary-legislation.legislation-made-under-powers-conferred-by-primary-legislation.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-bls-paralegals",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-lawyers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-uk-parliament-laws",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-us-courts-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-cornell-headnote",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

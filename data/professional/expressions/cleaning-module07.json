@@ -1,0 +1,1645 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.cleaning_facilities.module07.01",
+      "text": "The building is part of the facility, and the premises include the surrounding grounds.",
+      "meaning": "Distinguish the structure, its function, and the associated property.",
+      "context": "Clarifying the site description.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "building",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "is",
+          "start": 13,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "part",
+          "start": 16,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "of",
+          "start": 21,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 6,
+          "text": "facility",
+          "start": 28,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 36,
+          "end": 37
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 38,
+          "end": 41
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 10,
+          "text": "premises",
+          "start": 46,
+          "end": 54
+        },
+        {
+          "index": 11,
+          "text": "include",
+          "start": 55,
+          "end": 62
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 13,
+          "text": "surrounding",
+          "start": 67,
+          "end": 78
+        },
+        {
+          "index": 14,
+          "text": "grounds",
+          "start": 79,
+          "end": 86
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 86,
+          "end": 87
+        }
+      ],
+      "focus_lexeme_ids": [
+        "building.structure-with-roof-and-walls.n",
+        "facility.place-provided-for-particular-activity-or-service.n",
+        "premises.building-and-associated-land-used-by-organization.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module07.02",
+      "text": "The door, window, wall, ceiling, and roof are separate items in the building inspection record.",
+      "meaning": "Identify building elements without diagnosing their condition.",
+      "context": "Reviewing an inspection list.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "door",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": ",",
+          "start": 8,
+          "end": 9
+        },
+        {
+          "index": 3,
+          "text": "window",
+          "start": 10,
+          "end": 16
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 16,
+          "end": 17
+        },
+        {
+          "index": 5,
+          "text": "wall",
+          "start": 18,
+          "end": 22
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 22,
+          "end": 23
+        },
+        {
+          "index": 7,
+          "text": "ceiling",
+          "start": 24,
+          "end": 31
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 31,
+          "end": 32
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 33,
+          "end": 36
+        },
+        {
+          "index": 10,
+          "text": "roof",
+          "start": 37,
+          "end": 41
+        },
+        {
+          "index": 11,
+          "text": "are",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 12,
+          "text": "separate",
+          "start": 46,
+          "end": 54
+        },
+        {
+          "index": 13,
+          "text": "items",
+          "start": 55,
+          "end": 60
+        },
+        {
+          "index": 14,
+          "text": "in",
+          "start": 61,
+          "end": 63
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 16,
+          "text": "building",
+          "start": 68,
+          "end": 76
+        },
+        {
+          "index": 17,
+          "text": "inspection",
+          "start": 77,
+          "end": 87
+        },
+        {
+          "index": 18,
+          "text": "record",
+          "start": 88,
+          "end": 94
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 94,
+          "end": 95
+        }
+      ],
+      "focus_lexeme_ids": [
+        "door.movable-barrier-closing-building-opening.n",
+        "window.opening-in-wall-or-roof-admitting-light-or-air.n",
+        "wall.vertical-structure-enclosing-or-dividing-space.n",
+        "ceiling.upper-interior-surface-of-room.n",
+        "roof.upper-covering-of-building.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module07.03",
+      "text": "The hinge, door frame, and window frame have separate records from the door handle.",
+      "meaning": "Distinguish attached components and frames.",
+      "context": "Reviewing component descriptions.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "hinge",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": ",",
+          "start": 9,
+          "end": 10
+        },
+        {
+          "index": 3,
+          "text": "door",
+          "start": 11,
+          "end": 15
+        },
+        {
+          "index": 4,
+          "text": "frame",
+          "start": 16,
+          "end": 21
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 21,
+          "end": 22
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 23,
+          "end": 26
+        },
+        {
+          "index": 7,
+          "text": "window",
+          "start": 27,
+          "end": 33
+        },
+        {
+          "index": 8,
+          "text": "frame",
+          "start": 34,
+          "end": 39
+        },
+        {
+          "index": 9,
+          "text": "have",
+          "start": 40,
+          "end": 44
+        },
+        {
+          "index": 10,
+          "text": "separate",
+          "start": 45,
+          "end": 53
+        },
+        {
+          "index": 11,
+          "text": "records",
+          "start": 54,
+          "end": 61
+        },
+        {
+          "index": 12,
+          "text": "from",
+          "start": 62,
+          "end": 66
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 67,
+          "end": 70
+        },
+        {
+          "index": 14,
+          "text": "door",
+          "start": 71,
+          "end": 75
+        },
+        {
+          "index": 15,
+          "text": "handle",
+          "start": 76,
+          "end": 82
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 82,
+          "end": 83
+        }
+      ],
+      "focus_lexeme_ids": [
+        "hinge.joint-allowing-connected-parts-to-pivot.n",
+        "door-frame.assembly-surrounding-and-supporting-door.n",
+        "window-frame.assembly-surrounding-and-supporting-window.n",
+        "door-handle.part-used-to-open-or-close-door.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module07.04",
+      "text": "The pipe, fitting, and valve are identified on the drawing, alongside the gutter and downpipe.",
+      "meaning": "Identify water-service and drainage components.",
+      "context": "Discussing a building drawing.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "pipe",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": ",",
+          "start": 8,
+          "end": 9
+        },
+        {
+          "index": 3,
+          "text": "fitting",
+          "start": 10,
+          "end": 17
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 17,
+          "end": 18
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 6,
+          "text": "valve",
+          "start": 23,
+          "end": 28
+        },
+        {
+          "index": 7,
+          "text": "are",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 8,
+          "text": "identified",
+          "start": 33,
+          "end": 43
+        },
+        {
+          "index": 9,
+          "text": "on",
+          "start": 44,
+          "end": 46
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 11,
+          "text": "drawing",
+          "start": 51,
+          "end": 58
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 58,
+          "end": 59
+        },
+        {
+          "index": 13,
+          "text": "alongside",
+          "start": 60,
+          "end": 69
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 15,
+          "text": "gutter",
+          "start": 74,
+          "end": 80
+        },
+        {
+          "index": 16,
+          "text": "and",
+          "start": 81,
+          "end": 84
+        },
+        {
+          "index": 17,
+          "text": "downpipe",
+          "start": 85,
+          "end": 93
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 93,
+          "end": 94
+        }
+      ],
+      "focus_lexeme_ids": [
+        "pipe.hollow-tube-carrying-fluid.n",
+        "fitting.pipe-connection-component.n",
+        "valve.device-controlling-fluid-flow.n",
+        "gutter.channel-collecting-water-from-roof.n",
+        "downpipe.pipe-carrying-roof-water-downward.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module07.05",
+      "text": "The switch and light fitting need specialist attention; please record the light bulb type without attempting a repair.",
+      "meaning": "Report electrical-component information without a repair procedure.",
+      "context": "Preparing a maintenance request.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "switch",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 11,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "light",
+          "start": 15,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "fitting",
+          "start": 21,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "need",
+          "start": 29,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "specialist",
+          "start": 34,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "attention",
+          "start": 45,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": ";",
+          "start": 54,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "please",
+          "start": 56,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "record",
+          "start": 63,
+          "end": 69
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": "light",
+          "start": 74,
+          "end": 79
+        },
+        {
+          "index": 13,
+          "text": "bulb",
+          "start": 80,
+          "end": 84
+        },
+        {
+          "index": 14,
+          "text": "type",
+          "start": 85,
+          "end": 89
+        },
+        {
+          "index": 15,
+          "text": "without",
+          "start": 90,
+          "end": 97
+        },
+        {
+          "index": 16,
+          "text": "attempting",
+          "start": 98,
+          "end": 108
+        },
+        {
+          "index": 17,
+          "text": "a",
+          "start": 109,
+          "end": 110
+        },
+        {
+          "index": 18,
+          "text": "repair",
+          "start": 111,
+          "end": 117
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 117,
+          "end": 118
+        }
+      ],
+      "focus_lexeme_ids": [
+        "switch.device-changing-electrical-circuit-state.n",
+        "light-fitting.fixture-holding-or-providing-electric-light.n",
+        "light-bulb.replaceable-unit-producing-electric-light.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module07.06",
+      "text": "The thermostat, ventilation, air conditioning, and heating system appear in the building service information.",
+      "meaning": "Identify systems and controls in a record.",
+      "context": "Checking facility information.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "thermostat",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": ",",
+          "start": 14,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "ventilation",
+          "start": 16,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 27,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "air",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "conditioning",
+          "start": 33,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 45,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "heating",
+          "start": 51,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "system",
+          "start": 59,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": "appear",
+          "start": 66,
+          "end": 72
+        },
+        {
+          "index": 12,
+          "text": "in",
+          "start": 73,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 76,
+          "end": 79
+        },
+        {
+          "index": 14,
+          "text": "building",
+          "start": 80,
+          "end": 88
+        },
+        {
+          "index": 15,
+          "text": "service",
+          "start": 89,
+          "end": 96
+        },
+        {
+          "index": 16,
+          "text": "information",
+          "start": 97,
+          "end": 108
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 108,
+          "end": 109
+        }
+      ],
+      "focus_lexeme_ids": [
+        "thermostat.control-regulating-temperature-to-setting.n",
+        "ventilation.air-exchange.n",
+        "air-conditioning.system-or-process-controlling-indoor-air-conditions.n",
+        "heating-system.equipment-arrangement-providing-heat-to-building.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module07.07",
+      "text": "The asset requires maintenance, and the backlog includes both preventive maintenance and reactive maintenance requests.",
+      "meaning": "Distinguish a managed item, its upkeep, and pending work.",
+      "context": "Discussing maintenance planning.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "asset",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "requires",
+          "start": 10,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "maintenance",
+          "start": 19,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 30,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "backlog",
+          "start": 40,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "includes",
+          "start": 48,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "both",
+          "start": 57,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": "preventive",
+          "start": 62,
+          "end": 72
+        },
+        {
+          "index": 11,
+          "text": "maintenance",
+          "start": 73,
+          "end": 84
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 85,
+          "end": 88
+        },
+        {
+          "index": 13,
+          "text": "reactive",
+          "start": 89,
+          "end": 97
+        },
+        {
+          "index": 14,
+          "text": "maintenance",
+          "start": 98,
+          "end": 109
+        },
+        {
+          "index": 15,
+          "text": "requests",
+          "start": 110,
+          "end": 118
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 118,
+          "end": 119
+        }
+      ],
+      "focus_lexeme_ids": [
+        "asset.physical-resource-managed-by-organization.n",
+        "maintenance.care-and-work-to-keep-asset-in-required-condition.n",
+        "backlog.uncompleted-work-list.n",
+        "preventive-maintenance.planned-maintenance-intended-to-reduce-failure-likelihood.n",
+        "reactive-maintenance.maintenance-carried-out-in-response-to-fault-or-failure.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module07.08",
+      "text": "The leak and blocked drain have been reported; the water supply and water meter need the responsible team's review.",
+      "meaning": "Report observed plumbing concerns without intervening.",
+      "context": "Communicating with the maintenance contact.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "leak",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 9,
+          "end": 12
+        },
+        {
+          "index": 3,
+          "text": "blocked",
+          "start": 13,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "drain",
+          "start": 21,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "have",
+          "start": 27,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "been",
+          "start": 32,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": "reported",
+          "start": 37,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": ";",
+          "start": 45,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 10,
+          "text": "water",
+          "start": 51,
+          "end": 56
+        },
+        {
+          "index": 11,
+          "text": "supply",
+          "start": 57,
+          "end": 63
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 13,
+          "text": "water",
+          "start": 68,
+          "end": 73
+        },
+        {
+          "index": 14,
+          "text": "meter",
+          "start": 74,
+          "end": 79
+        },
+        {
+          "index": 15,
+          "text": "need",
+          "start": 80,
+          "end": 84
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 85,
+          "end": 88
+        },
+        {
+          "index": 17,
+          "text": "responsible",
+          "start": 89,
+          "end": 100
+        },
+        {
+          "index": 18,
+          "text": "team's",
+          "start": 101,
+          "end": 107
+        },
+        {
+          "index": 19,
+          "text": "review",
+          "start": 108,
+          "end": 114
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 114,
+          "end": 115
+        }
+      ],
+      "focus_lexeme_ids": [
+        "leak.unintended-escape.n",
+        "blocked-drain.drain-with-obstructed-flow.n",
+        "water-supply.provision-or-source-of-water-for-use.n",
+        "water-meter.device-measuring-volume-of-water-used.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module07.09",
+      "text": "The warranty and service interval are recorded with the spare part details and the latest inspection date.",
+      "meaning": "Locate relevant maintenance and product information.",
+      "context": "Reviewing equipment records.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "warranty",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "service",
+          "start": 17,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "interval",
+          "start": 25,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "are",
+          "start": 34,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "recorded",
+          "start": 38,
+          "end": 46
+        },
+        {
+          "index": 7,
+          "text": "with",
+          "start": 47,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "spare",
+          "start": 56,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": "part",
+          "start": 62,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": "details",
+          "start": 67,
+          "end": 74
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 79,
+          "end": 82
+        },
+        {
+          "index": 14,
+          "text": "latest",
+          "start": 83,
+          "end": 89
+        },
+        {
+          "index": 15,
+          "text": "inspection",
+          "start": 90,
+          "end": 100
+        },
+        {
+          "index": 16,
+          "text": "date",
+          "start": 101,
+          "end": 105
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 105,
+          "end": 106
+        }
+      ],
+      "focus_lexeme_ids": [
+        "warranty.product-assurance.n",
+        "service-interval.period-or-usage-between-scheduled-services.n",
+        "spare-part.replacement-component.n",
+        "inspection-date.date-of-planned-or-completed-inspection.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module07.10",
+      "text": "The electrical outlet and circuit breaker are identified in the report; the utility service needs qualified review.",
+      "meaning": "Identify recorded electrical and utility information.",
+      "context": "Passing a concern to the responsible specialist.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "electrical",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "outlet",
+          "start": 15,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 22,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "circuit",
+          "start": 26,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "breaker",
+          "start": 34,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "are",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "identified",
+          "start": 46,
+          "end": 56
+        },
+        {
+          "index": 8,
+          "text": "in",
+          "start": 57,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "report",
+          "start": 64,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": ";",
+          "start": 70,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 72,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": "utility",
+          "start": 76,
+          "end": 83
+        },
+        {
+          "index": 14,
+          "text": "service",
+          "start": 84,
+          "end": 91
+        },
+        {
+          "index": 15,
+          "text": "needs",
+          "start": 92,
+          "end": 97
+        },
+        {
+          "index": 16,
+          "text": "qualified",
+          "start": 98,
+          "end": 107
+        },
+        {
+          "index": 17,
+          "text": "review",
+          "start": 108,
+          "end": 114
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 114,
+          "end": 115
+        }
+      ],
+      "focus_lexeme_ids": [
+        "electrical-outlet.connection-point-supplying-electrical-power.n",
+        "circuit-breaker.protective-device-interrupting-electrical-circuit.n",
+        "utility-service.provided-service-such-as-water-power-or-drainage.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

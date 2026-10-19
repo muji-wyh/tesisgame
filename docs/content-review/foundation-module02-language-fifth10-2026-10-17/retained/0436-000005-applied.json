@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 5,
+  "status": "applied",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "5da8f9a134e853e00d57684d1376aadebf19fe010826196448e70f7ad1219ae1",
+  "recorded_at": "2026-10-16T22:48:01.945Z",
+  "index": 1,
+  "path": "tests/professional-content.test.cjs"
+}

@@ -1,0 +1,71 @@
+'use strict';
+// Bind the unchanged reviewed validator to the actual corrected preparation.
+const fs = require('node:fs'), path = require('node:path'), crypto = require('node:crypto');
+const assert = require('node:assert/strict');
+const root = path.resolve(__dirname, '../../..');
+assert.equal(root.replaceAll('\\', '/').toLowerCase(), 'q:/.codex/worktrees/current-age-vocabulary/tesisgame');
+assert.equal(process.cwd(), root);
+const own = 'build/professional-english/foundation02-fifth10-projected-validation-r03';
+const prep = 'build/professional-english/foundation02-fifth10-delivery-preparation-r04/execution-r01';
+const repair = 'build/professional-english/foundation02-fifth10-root-native-route-repair-r01';
+const reviewDir = 'build/professional-english/foundation02-fifth10-corrected-afterimage-review-r01';
+const sha = b => crypto.createHash('sha256').update(b).digest('hex');
+const raw = p => fs.readFileSync(path.join(root, p));
+const read = p => JSON.parse(raw(p));
+const pin = p => {const b = raw(p); return {path:p, bytes:b.length, raw_sha256:sha(b)};};
+function exact(p) {assert.deepEqual(pin(p.path), p); return JSON.parse(raw(p.path));}
+function files(dir) {return fs.readdirSync(path.join(root,dir), {withFileTypes:true}).flatMap(e => {
+  assert(!e.isSymbolicLink()); const p=dir+'/'+e.name; return e.isDirectory()?files(p):(assert(e.isFile()),[p]);
+}).sort();}
+assert(!fs.existsSync(path.join(root,own,'input.json')));
+assert(!fs.existsSync(path.join(root,own,'attempt-001')));
+const source=pin(own+'/run.cjs');
+assert.equal(source.raw_sha256,'7961b9c2e01a867d64f68ea4dbed83b9e58ff5025b71e8b986b50bc0f7f29f80');
+const priorPath='build/professional-english/foundation02-fifth10-projected-validation-r02/input.json';
+assert.equal(pin(priorPath).raw_sha256,'ec33c157b371d368d0551a50fc768be5bc76eb4cff632158b16dc09212dd78a6');
+const input=read(priorPath);
+const afterReview=pin(reviewDir+'/projected-review.json'), accepted=exact(afterReview);
+assert.equal(accepted.status,'accepted_for_root_owned_fifth10_projected_validation');
+assert.equal(accepted.projected_afterimages_accepted,true);
+assert.match(accepted.reviewer,/^\/root\/[a-z0-9_]+$/);
+assert.notEqual(accepted.reviewer,'/root/recover_delivery');
+const correction={receipt:pin(repair+'/execution-r01/correction-receipt.json'),attempt_end:pin(repair+'/execution-r01/attempt-end.json'),root_dispatch:pin(repair+'/dispatch-r01/witness.json'),output_manifest:pin(repair+'/execution-r01/output-manifest.json'),source_observations:pin(repair+'/execution-r01/source-observations.json')};
+assert.equal(correction.receipt.raw_sha256,'539f1ecce9a3ff4bf72c299251f4f44b3981e164ddc0105324ba2ecc498e91f8');
+assert.equal(correction.root_dispatch.raw_sha256,'72a06095d9e8c71cad165e228e8366a5d3e80f7419457968ac79a7fa51bee405');
+const repairReceipt=exact(correction.receipt),end=exact(correction.attempt_end),witness=exact(correction.root_dispatch);
+assert.equal(repairReceipt.status,'corrected_preparation_pending_fresh_afterimage_review_and_root_validation');
+assert.equal(end.status,'corrected_preparation_pending_validation');
+assert.equal(witness.exit_code,0);assert.equal(witness.error,null);assert.equal(witness.signal,null);
+assert.equal(witness.kind,'native-route-repair');assert.deepEqual(witness.receipt,correction.receipt);assert.deepEqual(witness.attempt_end,correction.attempt_end);
+const outer=pin(repair+'/dispatch-r01/outer-completion.json');
+assert.equal(outer.raw_sha256,'e70cbbf079075865e8b37315f725e561d9812b06a881616079b5f5ee1288dd32');
+assert.equal(exact(outer).exit_code,0);
+const preparation={receipt:pin(prep+'/preparation-receipt.json'),execution_end:pin(prep+'/execution-end.json'),target_plan:pin(prep+'/target-plan.json'),projection_observation:pin(prep+'/projection-observation.json'),root_input:pin(repair+'/input.json')};
+assert.deepEqual(accepted.preparation,preparation);assert.deepEqual(accepted.correction,correction);
+assert.deepEqual(accepted.actual_binding,{path:input.actual_binding.path,bytes:3187477,raw_sha256:input.actual_binding.sha256});
+assert.deepEqual(repairReceipt.corrected_preparation_receipt,preparation.receipt);assert.deepEqual(repairReceipt.corrected_target_plan,preparation.target_plan);
+const receipt=exact(preparation.receipt),manifest=exact(correction.output_manifest);
+assert.deepEqual(receipt.correction_lineage,repairReceipt.lineage);
+assert.equal(manifest.count,835);assert.equal(manifest.directory,prep);
+assert.deepEqual(files(prep),manifest.files.map(p=>p.path).sort());
+for(const p of manifest.files) assert.deepEqual(pin(p.path),p);
+assert.equal(repairReceipt.copied_byte_exact_output_count,829);
+assert.equal(repairReceipt.target_count,823);
+const expected=new Map(Object.entries(input.expected_inputs));
+const evidence=new Map(input.evidence_files.map(p=>[p.path,p.sha256]));
+function include(p) {const actual=pin(p);if(expected.has(p))assert.equal(expected.get(p),actual.raw_sha256,p);expected.set(p,actual.raw_sha256);evidence.set(p,actual.raw_sha256);}
+for(const p of [...files(prep),...files(reviewDir),...files(repair+'/execution-r01'),...files(repair+'/dispatch-r01'),repair+'/input.json',repair+'/contract.json',own+'/source-copy.json',own+'/SOURCE.md'])include(p);
+for(const p of Object.values(correction))include(p.path);
+include(afterReview.path);include(priorPath);
+// Preserve and recheck every prior protected input, then add only new immutable evidence.
+for(const [p,h]of expected)assert.equal(sha(raw(p)),h,p);
+for(const p of input.must_remain_absent)assert(!fs.existsSync(path.join(root,p)),p);
+input.preparation_directory=prep;input.preparation=preparation;input.correction=correction;
+input.correction_outer_completion=outer;input.independent_afterimage_review=afterReview;
+input.expected_inputs=Object.fromEntries([...expected].sort((a,b)=>a[0].localeCompare(b[0])));
+input.evidence_files=[...evidence].sort((a,b)=>a[0].localeCompare(b[0])).map(([p,h])=>({path:p,sha256:h}));
+input.validator_source_relocation=pin(own+'/source-copy.json');
+fs.writeFileSync(path.join(root,own,'input.json'),JSON.stringify(input,null,2)+'\n',{flag:'wx'});
+const result={schema:1,status:'root_concrete_corrected_projected_input_verified',source,input:pin(own+'/input.json'),preparation,correction,afterimage_review:afterReview,expected_inputs:expected.size,evidence_files:evidence.size,actual_byte_verification:true,projected_execution:false,prior_validation_success_transferred:false};
+fs.writeFileSync(path.join(root,own,'binding-inspection.json'),JSON.stringify(result,null,2)+'\n',{flag:'wx'});
+console.log(JSON.stringify(result));

@@ -12,10 +12,10 @@ function runGodot(args, { timeout = 180000 } = {}) {
     timeout,
     windowsHide: true
   });
-  if (result.error) {
-    throw new Error(`Could not run Godot: ${result.error.message}`, { cause: result.error });
-  }
   const output = `${result.stdout || ''}${result.stderr || ''}`;
+  if (result.error) {
+    throw new Error(`Could not run Godot: ${result.error.message}${output ? `\n${output}` : ''}`, { cause: result.error });
+  }
   if (result.status !== 0 || /(?:^|\n)(?:SCRIPT )?ERROR:/m.test(output)) {
     throw new Error(`Godot failed (exit ${result.status}):\n${output}`);
   }

@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "status": "root_authorized_scoped_language_commit",
+  "repository_root": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame",
+  "exclusive_content_mutation_window": true,
+  "root_window_token_sha256": "9e6acc20a4c11d1ba81aea6dda2678b568d6ec86dafd093130b8d32ed6590ea9",
+  "prepared_binding": {
+    "path": "build/professional-english/foundation02-fourth10-prepared-output-review-r02/binding.json",
+    "sha256": "dbacf79ca796410664a1a6af9a577172c93234109b3c33c326ba669a5394dc21"
+  },
+  "native_receipt": {
+    "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/receipt.json",
+    "sha256": "1dbb1e3a9d34226b77381502edd6a9d745605f0e05d320297519e45106c5bc0c"
+  },
+  "candidate_copied_inputs": {
+    "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/copied-inputs.json",
+    "sha256": "9c8005d0a81412dc9186cd8ae8f58008a9d8cd855e54edd4d5ab7b70c06dc029"
+  },
+  "baseline_dependency_transfer": {
+    "accepted": true,
+    "scope": "unchanged_prior_baseline_only",
+    "receipt": {
+      "path": "build/professional-english/foundation02-third10-persisted-validation-r01/attempt-001/receipt.json",
+      "sha256": "509d64c10012756c7d44d0cdf6fb9b204a3c1cbfe1c4e0e76434ea2af36a33f8"
+    }
+  },
+  "proposal_inventory": {
+    "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/author-inventory.json",
+    "sha256": "f0043bfeada59d497be43cde8e3d753c0322cfa982c632fa40eae36cd62838d7"
+  },
+  "commit_technical_review": {
+    "path": "build/professional-english/foundation02-fourth10-commit-review-r01/review.json",
+    "sha256": "47e9f6c6e719421e4ff6e82ea6c7788a5d6b509d8a57ba4c7a54546d588b0550"
+  }
+}

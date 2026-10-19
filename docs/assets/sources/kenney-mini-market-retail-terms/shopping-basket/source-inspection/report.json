@@ -1,0 +1,52 @@
+{
+	"bounds": [
+		-0.174999997019768,
+		0.0,
+		-0.175000011920929,
+		0.349999994039536,
+		0.25,
+		0.350000023841858
+	],
+	"captures": [
+		{
+			"camera": [
+				3.0,
+				2.40000009536743,
+				4.0
+			],
+			"file": "front-three-quarter.png"
+		},
+		{
+			"camera": [
+				-3.0,
+				2.40000009536743,
+				4.0
+			],
+			"file": "other-side.png"
+		},
+		{
+			"camera": [
+				3.0,
+				2.40000009536743,
+				-4.0
+			],
+			"file": "rear-three-quarter.png"
+		},
+		{
+			"camera": [
+				3.0,
+				1.20000004768372,
+				4.0
+			],
+			"file": "front-low.png"
+		}
+	],
+	"model_sha256": "a7704926cb56c5a9ab74488230fc7c4d7b914387c59e9c1b6f62376965c0ea7d",
+	"orthographic_size": 0.63770580291748,
+	"scope": "Original source inspection only; no final term candidate, card QA or approval.",
+	"target": [
+		0.0,
+		0.125,
+		0.0
+	]
+}

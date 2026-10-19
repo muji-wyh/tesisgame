@@ -1,0 +1,877 @@
+{
+  "schema": 1,
+  "status": "prepared_transactional_audio_revision_unbound_no_production_writes",
+  "recorded_at": "2026-10-16T09:07:36.006Z",
+  "checks": 6290,
+  "failures": 0,
+  "delivery_files": {
+    "delivery-lib.cjs": "ee4054988c52271c662bf962770892fbd04bf632c62546e1ec5ebda3060a50a5",
+    "bind-current-baseline.cjs": "d8dad5ba5c32ebe82a45bcc654aa7146bbadc0529d199b7812c143b3c17499b9",
+    "integrate-reviewed.cjs": "562e0afbd7c28903dfc269e10ad7fceb818ac77246cf3c9c5cf0fb94a5655bde",
+    "transaction-plan.cjs": "dca101335d6c1f9bdc379f566c1d048e094638371e720f7afde2398ca1ab1ea2",
+    "guarded-transaction.cjs": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6",
+    "helper-origin.json": "ca9fc913ac187268813e900f55e3748e4317944a29ed43f0578aa3ce18dc012d",
+    "persisted-test-transforms.cjs": "d08e9b5b6231dddedb2b8a2488be90d9d6ca2e169aef7b87b6bece8307a5295c",
+    "update-persisted-tests.cjs": "1f718989b4e13221fb19e3884cd10ac9111a22091e2c5674203cf306bee87a79",
+    "HANDOFF.md": "4ae8e78754f3ea44ec44c7f839c4a84a6976d15388f8b6175d730c68080520d1",
+    "source-doc-draft.md": "857704297b30db42bf025ddfb97710f1c91cba07dcf9a4ef7b057e12c6ce0d1a"
+  },
+  "syntax_checks": [
+    {
+      "file": "delivery-lib.cjs",
+      "raw_sha256": "ee4054988c52271c662bf962770892fbd04bf632c62546e1ec5ebda3060a50a5",
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "bind-current-baseline.cjs",
+      "raw_sha256": "d8dad5ba5c32ebe82a45bcc654aa7146bbadc0529d199b7812c143b3c17499b9",
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "integrate-reviewed.cjs",
+      "raw_sha256": "562e0afbd7c28903dfc269e10ad7fceb818ac77246cf3c9c5cf0fb94a5655bde",
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "transaction-plan.cjs",
+      "raw_sha256": "dca101335d6c1f9bdc379f566c1d048e094638371e720f7afde2398ca1ab1ea2",
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "guarded-transaction.cjs",
+      "raw_sha256": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6",
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "persisted-test-transforms.cjs",
+      "raw_sha256": "d08e9b5b6231dddedb2b8a2488be90d9d6ca2e169aef7b87b6bece8307a5295c",
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "update-persisted-tests.cjs",
+      "raw_sha256": "1f718989b4e13221fb19e3884cd10ac9111a22091e2c5674203cf306bee87a79",
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "human_approval": {
+    "path": "human-approval-r01.json",
+    "raw_sha256": "d9487d9a2a2a93805fa597f87dcf775f1cebae88c89fc97c13de90acbece2e82",
+    "question_call_id": "call_fBfAoFlUyKmhWveN2mNUORiZ",
+    "response_english": "Both are acceptable"
+  },
+  "technical_qa": {
+    "path": "technical-qa-r01.json",
+    "raw_sha256": "5300530a5630b15ca27921f488f123ef228fab38d89cc9ad982e3f71460b608b",
+    "checks": 51,
+    "failures": 0
+  },
+  "listening_request": {
+    "path": "listening-request.json",
+    "raw_sha256": "10cdbe11ca4e9a0ae1122dc5ae2acffc69228db3d68bc7245988186667359bab"
+  },
+  "reused_transaction_support": {
+    "helper_source": "build/professional-english/retail-module03-morphology-review/fifth10/serializer-review-r01/guarded-transaction.cjs",
+    "helper_raw_sha256": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6",
+    "helper_validation": {
+      "path": "build/professional-english/retail-module03-morphology-review/fifth10/serializer-review-r01/validation-attempt-XE9O6l/receipt.json",
+      "raw_sha256": "abd19b9952fe3085ef8cab5b87e430ef442780ed05f3a9a2105f909f968a9bae",
+      "tests": 20,
+      "pass": 20,
+      "fail": 0
+    },
+    "adapter_source": "build/professional-english/retail-term-art-review/counter-r01/delivery-r02/transaction-plan.cjs",
+    "adapter_raw_sha256": "dca101335d6c1f9bdc379f566c1d048e094638371e720f7afde2398ca1ab1ea2",
+    "adapter_validation": {
+      "path": "build/professional-english/retail-term-art-review/counter-r01/delivery-r02/adapter-tests-r02/result.json",
+      "raw_sha256": "61764fb1c4587e19d88a27d9494988539a17336cf0687baa792fc5e214c0a38d",
+      "assertions": 32,
+      "failures": 0
+    },
+    "scope": "Byte-identical reused guarded helper and plan adapter. Their earlier scratch fixture tests remain evidence; this new audio package has not run tests or native rendering."
+  },
+  "test_preview": {
+    "path": "persisted-test-preview-r01/receipt.json",
+    "raw_sha256": "a9c9a4573d61fd0279cfd136f5cf789dc4d067b9b7c6b18a8cd89c219f80a48c",
+    "files": [
+      {
+        "file": "tests/professional-content.test.cjs",
+        "preview": "build/professional-english/retail-audio-review/counter-checkout-acquired-r01/delivery-r01/persisted-test-preview-r01/professional-content.test.cjs",
+        "input_sha256": "fb6caf63d6a94858956c3a27ffc241d3c8fd7130c7616eb917a2def91b57c27b",
+        "output_sha256": "e3642206ab3317e5b0ad20b92a6b4360d21c1cbec7b27accb559ed88439d05e9",
+        "syntax_status": 0,
+        "native_parse_executed": false
+      },
+      {
+        "file": "tests/professional-retail-morphology.test.cjs",
+        "preview": "build/professional-english/retail-audio-review/counter-checkout-acquired-r01/delivery-r01/persisted-test-preview-r01/professional-retail-morphology.test.cjs",
+        "input_sha256": "be74eb9f3ea5062e2aa0d7266d1dacc40c45dba8194b4258877181b8ab46abcf",
+        "output_sha256": "fbe9cc2eecd1d58f48d55f5d1f62ae9c29092fe6976aeda833c0e77cf3df4683",
+        "syntax_status": 0,
+        "native_parse_executed": false
+      },
+      {
+        "file": "tests/professional-retail-media.test.cjs",
+        "preview": "build/professional-english/retail-audio-review/counter-checkout-acquired-r01/delivery-r01/persisted-test-preview-r01/professional-retail-media.test.cjs",
+        "input_sha256": "9daf814bfca85900c8417a35cbba5f69ce2ef86375c4a4e8b91b47870f23d9a3",
+        "output_sha256": "fc842c2da7fc021242ffbce5f4567a22c24836fa1f9ea7e7c306bc1b19a682eb",
+        "syntax_status": 0,
+        "native_parse_executed": false
+      },
+      {
+        "file": "tests/godot/professional_approved_audio_tests.gd",
+        "preview": "build/professional-english/retail-audio-review/counter-checkout-acquired-r01/delivery-r01/persisted-test-preview-r01/professional_approved_audio_tests.gd",
+        "input_sha256": "b8a4e123fc2cef9caf08259dc897509c618edaf13a299ebe503fdab18f10855c",
+        "output_sha256": "92a6f4208daf0acd5b913d29b5d16dca1d690669758d86a39548930d7f18e349",
+        "syntax_status": null,
+        "native_parse_executed": false
+      }
+    ],
+    "shared_tests_written": false,
+    "tests_executed": false,
+    "native_executed": false,
+    "input_preimages_bound": false
+  },
+  "successful_validation_observation": {
+    "path": "build/professional-english/continuation-validation-r12.json",
+    "raw_sha256": "7f1b218b268be3b63773c44e1391402474d11793f6868ddb231e0c8527d03d91",
+    "measured_input_count": 652,
+    "runs": [
+      {
+        "name": "node",
+        "status": 0,
+        "tests": 190,
+        "pass": 190,
+        "fail": 0
+      },
+      {
+        "name": "native",
+        "status": 0,
+        "checks": 1210,
+        "failures": 0
+      },
+      {
+        "name": "native-audio",
+        "status": 0,
+        "checks": 97,
+        "failures": 0
+      }
+    ]
+  },
+  "counter_image_delivery_observation": {
+    "path": "build/professional-english/retail-term-art-review/counter-r01/production-delivery-r02/production-check-r02.json",
+    "raw_sha256": "657e497c3e29c8b5f7a79b5c56c2d68c1f8317a214586fea9b87d599674a34f4",
+    "checks": 81,
+    "failures": 0,
+    "image_pixels_exact": true,
+    "all_four_crops_pixel_equal": true,
+    "cache_teardown_zero": true,
+    "resource_reference_released": true
+  },
+  "current_registry_observation_only": "284918768ad2df30585d0efa3ab099a1bfa58ee22d9fc71afa00ae334f81042d",
+  "proposed_registry_observation_only": "af2c950cf3c7d2d22e487817526d464e96956ac2c7df40bd890783bd3dd73bdf",
+  "proposed_patches": [
+    {
+      "sense_id": "counter.service-surface.n",
+      "before": {
+        "id": "counter.service-surface.n",
+        "text": "counter",
+        "display_text": "counter",
+        "pos": "noun",
+        "definition": "A raised work surface used to serve customers.",
+        "example": "Please place the parcel on the counter.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "counter"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "integrated",
+            "path": "res://professional-media/c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a.png",
+            "sha256": "c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a",
+            "source": "Kenney Furniture Kit 2.1: https://kenney.nl/assets/furniture-kit; Kenney Car Kit 3.1: https://kenney.nl/assets/car-kit",
+            "creator": "Kenney",
+            "license": "CC0 1.0",
+            "acquisition_status": "integrated",
+            "review": {
+              "status": "reviewed",
+              "reviewer": "Codex root independent AI source, physical-sense and minimum-card picture review",
+              "reviewed_at": "2026-10-16"
+            },
+            "brief": "Show a broad, raised service surface with a solid front, a small parcel resting on top, a staff side behind it, and clear customer standing space in front. Crop around the surface and front panel. Exclude a dominant register, refund receipt, or order handoff that would turn the image into a particular service function.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": [
+              "Four complete acquired Furniture Kit 2.1 kitchenBar models form a broad raised surface with a solid front and a perpendicular staff-side return. Original geometry, materials, textures and source child transforms are preserved; only complete model roots are placed and rotated, then the common assembly is recentered.",
+              "One complete acquired Car Kit 3.1 box model supplies the small sealed parcel. Its original geometry, materials, texture and child transforms are preserved; the root is uniformly scaled to 0.16, rotated -10 degrees and placed at the countertop height of 0.42. No added register, refund receipt, printed label or service-function prop is used.",
+              "The orthographic camera is at [-1.1,1.8,4], aimed at [0,0.24,0], size 1.55. Ambient energy 0.18 and directional energy 0.38 illuminate a transparent 768 by 768 render. The complete alpha bounds remain within the frame; a 16-pixel margin and proportional Lanczos downscale produce 512 by 293.",
+              "Independent root review covers the exact broad-return image and actual Match 126 by 72 and Memory 144 by 74 cards, including the real badge and matched alpha. The pale top has reduced contour contrast on white and the badge overlaps the far-right return, while the solid front and staff-side recess remain readable. This scoped AI picture review is not a participant recognition study, service-function classification, domain approval or module-readiness claim."
+            ]
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "professional.counter.service-surface.n.morphology.retail03.proposal.v2",
+          "lexeme_id": "counter.service-surface.n",
+          "text": "counter",
+          "kind": "atomic",
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.counter",
+              "canonical": "counter",
+              "type": "atomic",
+              "surface": "counter",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ],
+          "review": {
+            "status": "reviewed",
+            "draft_author": "Codex (AI source consultation; not human or subject-matter approval)",
+            "notes": "Deliberate current-base teaching depth after examining the service-table derivation through counting plus a place/object formative descended from -atorium. The source distinguishes this from count plus agent -er. This scope preserves the modern counter stem and does not deny that history or manufacture a count/person-er graph. Atomic collection is exposure only, not composition mastery. The same service-surface sense is retained in Retail and Food Service; no counting-person or opposing-prefix sense is included.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/counter"
+            ],
+            "source_record_ids": [
+              "retail03-morph-mw-counter"
+            ],
+            "independent_review": "completed_exact_first10_v2_graph_and_current_stem_depth",
+            "reviewer": "Codex (independent AI morphology review; not human or subject-matter approval)",
+            "reviewed_at": "2026-10-16",
+            "acceptance_record": "data/professional/provenance/retail-module03-morphology-first10-2026-10-16.json"
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "reviewed",
+          "domain": "pending",
+          "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "bls-cashiers",
+            "status": "pending_term_check",
+            "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+          },
+          {
+            "source_id": "bls-food-preparation",
+            "status": "pending_term_check",
+            "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+          },
+          {
+            "source_id": "retail03-collins-counter",
+            "status": "verified",
+            "scope": "Selected passage consulted: COBUILD countable noun sense 1. The customer-service noun denotes the shop or cafe serving surface, not the opposing prefix or a counting person. Selected noun sense only; no artwork, recordings, or historical analysis approved. This editorial proposal does not approve language, morphology, domain practice, or media."
+          }
+        ],
+        "editorial_notes": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the customer-serving surface noun. The surface is shared across different store functions; it does not specify payment, pickup, or returns. Retain counter; a desk, table, or checkout is not automatically the same sense. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Required domain review remains pending. Independent AI morphology review was completed on 2026-10-16 for this exact graph at the documented modern-stem depth; this is not human or subject-matter approval. The counter image has completed scoped physical-sense picture review and integration; word audio remains pending. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready."
+      },
+      "after": {
+        "id": "counter.service-surface.n",
+        "text": "counter",
+        "display_text": "counter",
+        "pos": "noun",
+        "definition": "A raised work surface used to serve customers.",
+        "example": "Please place the parcel on the counter.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "counter"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "integrated",
+            "path": "res://professional-media/c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a.png",
+            "sha256": "c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a",
+            "source": "Kenney Furniture Kit 2.1: https://kenney.nl/assets/furniture-kit; Kenney Car Kit 3.1: https://kenney.nl/assets/car-kit",
+            "creator": "Kenney",
+            "license": "CC0 1.0",
+            "acquisition_status": "integrated",
+            "review": {
+              "status": "reviewed",
+              "reviewer": "Codex root independent AI source, physical-sense and minimum-card picture review",
+              "reviewed_at": "2026-10-16"
+            },
+            "brief": "Show a broad, raised service surface with a solid front, a small parcel resting on top, a staff side behind it, and clear customer standing space in front. Crop around the surface and front panel. Exclude a dominant register, refund receipt, or order handoff that would turn the image into a particular service function.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": [
+              "Four complete acquired Furniture Kit 2.1 kitchenBar models form a broad raised surface with a solid front and a perpendicular staff-side return. Original geometry, materials, textures and source child transforms are preserved; only complete model roots are placed and rotated, then the common assembly is recentered.",
+              "One complete acquired Car Kit 3.1 box model supplies the small sealed parcel. Its original geometry, materials, texture and child transforms are preserved; the root is uniformly scaled to 0.16, rotated -10 degrees and placed at the countertop height of 0.42. No added register, refund receipt, printed label or service-function prop is used.",
+              "The orthographic camera is at [-1.1,1.8,4], aimed at [0,0.24,0], size 1.55. Ambient energy 0.18 and directional energy 0.38 illuminate a transparent 768 by 768 render. The complete alpha bounds remain within the frame; a 16-pixel margin and proportional Lanczos downscale produce 512 by 293.",
+              "Independent root review covers the exact broad-return image and actual Match 126 by 72 and Memory 144 by 74 cards, including the real badge and matched alpha. The pale top has reduced contour contrast on white and the badge overlaps the far-right return, while the solid front and staff-side recess remain readable. This scoped AI picture review is not a participant recognition study, service-function classification, domain approval or module-readiness claim."
+            ]
+          },
+          "audio": {
+            "status": "integrated",
+            "path": "res://professional-media/685b544dbb353f3a1f3fb999fbe3f541cb94874d0e4543ad0cba774c39fd4bc3.wav",
+            "sha256": "685b544dbb353f3a1f3fb999fbe3f541cb94874d0e4543ad0cba774c39fd4bc3",
+            "source": "res://docs/assets/sources/professional-retail-ava/counter-checkout/listening-approval-2026-10-16.json",
+            "creator": "Microsoft Ava Neural; original project term text",
+            "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+            "acquisition_status": "integrated",
+            "review": {
+              "status": "reviewed",
+              "reviewer": "User (exact counter and checkout samples approved in the continuation chat; see counter-checkout listening-approval-2026-10-16.json)",
+              "reviewed_at": "2026-10-16"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "professional.counter.service-surface.n.morphology.retail03.proposal.v2",
+          "lexeme_id": "counter.service-surface.n",
+          "text": "counter",
+          "kind": "atomic",
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.counter",
+              "canonical": "counter",
+              "type": "atomic",
+              "surface": "counter",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ],
+          "review": {
+            "status": "reviewed",
+            "draft_author": "Codex (AI source consultation; not human or subject-matter approval)",
+            "notes": "Deliberate current-base teaching depth after examining the service-table derivation through counting plus a place/object formative descended from -atorium. The source distinguishes this from count plus agent -er. This scope preserves the modern counter stem and does not deny that history or manufacture a count/person-er graph. Atomic collection is exposure only, not composition mastery. The same service-surface sense is retained in Retail and Food Service; no counting-person or opposing-prefix sense is included.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/counter"
+            ],
+            "source_record_ids": [
+              "retail03-morph-mw-counter"
+            ],
+            "independent_review": "completed_exact_first10_v2_graph_and_current_stem_depth",
+            "reviewer": "Codex (independent AI morphology review; not human or subject-matter approval)",
+            "reviewed_at": "2026-10-16",
+            "acceptance_record": "data/professional/provenance/retail-module03-morphology-first10-2026-10-16.json"
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "reviewed",
+          "domain": "pending",
+          "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "bls-cashiers",
+            "status": "pending_term_check",
+            "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+          },
+          {
+            "source_id": "bls-food-preparation",
+            "status": "pending_term_check",
+            "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+          },
+          {
+            "source_id": "retail03-collins-counter",
+            "status": "verified",
+            "scope": "Selected passage consulted: COBUILD countable noun sense 1. The customer-service noun denotes the shop or cafe serving surface, not the opposing prefix or a counting person. Selected noun sense only; no artwork, recordings, or historical analysis approved. This editorial proposal does not approve language, morphology, domain practice, or media."
+          }
+        ],
+        "editorial_notes": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the customer-serving surface noun. The surface is shared across different store functions; it does not specify payment, pickup, or returns. Retain counter; a desk, table, or checkout is not automatically the same sense. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Required domain review remains pending. Independent AI morphology review was completed on 2026-10-16 for this exact graph at the documented modern-stem depth; this is not human or subject-matter approval. The counter image has completed scoped physical-sense picture review and integration; the exact Ava word recording has user listening approval and is integrated. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready."
+      },
+      "before_audio": {
+        "status": "pending",
+        "path": null,
+        "sha256": null,
+        "source": null,
+        "creator": null,
+        "license": null,
+        "acquisition_status": "not_started",
+        "review": {
+          "status": "pending"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "after_audio": {
+        "status": "integrated",
+        "path": "res://professional-media/685b544dbb353f3a1f3fb999fbe3f541cb94874d0e4543ad0cba774c39fd4bc3.wav",
+        "sha256": "685b544dbb353f3a1f3fb999fbe3f541cb94874d0e4543ad0cba774c39fd4bc3",
+        "source": "res://docs/assets/sources/professional-retail-ava/counter-checkout/listening-approval-2026-10-16.json",
+        "creator": "Microsoft Ava Neural; original project term text",
+        "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact counter and checkout samples approved in the continuation chat; see counter-checkout listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "before_sha256": "e0d7a6d3b506a77a09c6e8d4e7c5f3d3131f0414bec88ebda5fecca07ab4dab8",
+      "protected_fields_sha256": "838295e912154a450e9c9dc0662de418c3eb395b39b12b7287fda92161a2f34f",
+      "note_change": {
+        "before": "word audio remains pending.",
+        "after": "the exact Ava word recording has user listening approval and is integrated."
+      },
+      "resource": {
+        "id": "sha256:685b544dbb353f3a1f3fb999fbe3f541cb94874d0e4543ad0cba774c39fd4bc3",
+        "sha256": "685b544dbb353f3a1f3fb999fbe3f541cb94874d0e4543ad0cba774c39fd4bc3",
+        "path": "professional-media/685b544dbb353f3a1f3fb999fbe3f541cb94874d0e4543ad0cba774c39fd4bc3.wav",
+        "kind": "audio",
+        "format": "wav",
+        "compressed_bytes": 82598,
+        "decoded_bytes": 82554,
+        "frames": 41277,
+        "channels": 1,
+        "sample_rate": 22050
+      }
+    },
+    {
+      "sense_id": "checkout.payment-area.n",
+      "before": {
+        "id": "checkout.payment-area.n",
+        "text": "checkout",
+        "display_text": "checkout",
+        "pos": "noun",
+        "definition": "The place in a store where purchases are paid for.",
+        "example": "A second checkout is open near the entrance.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "checkout"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "Show a complete staffed checkout lane: customer side, short goods belt or counter, and a register, with a shopper presenting purchases. Frame the lane as one place while the equipment stays subordinate. Reject a close-up of a register alone, a help desk, or a hotel reception. No readable payment credentials or brand marks.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "professional.checkout.payment-area.n.morphology.retail03.proposal.v2",
+          "lexeme_id": "checkout.payment-area.n",
+          "text": "checkout",
+          "kind": "compound",
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.check",
+              "type": "stem",
+              "canonical": "check",
+              "surface": "check",
+              "break_offsets": []
+            },
+            {
+              "id": "p2",
+              "canonical_id": "morph.out",
+              "type": "word",
+              "canonical": "out",
+              "surface": "out",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [
+            {
+              "id": "whole",
+              "left": "p1",
+              "right": "p2",
+              "surface": "checkout",
+              "rule": "authored-closed-nominalization-of-check-out",
+              "break_offsets": []
+            }
+          ],
+          "roots": [
+            "whole"
+          ],
+          "review": {
+            "status": "reviewed",
+            "draft_author": "Codex (AI source consultation; not human or subject-matter approval)",
+            "notes": "The payment-area noun is lexicalized from check out, explicitly documented by the source. This is a closed nominalized phrase, not an assertion that the modern store-area meaning is the sum of literal check and outside. Check and out are current lexical components with examined histories, not syllables. Canonical identity follows the existing Professional pair inventory; a selected contextual meaning does not automatically establish an unrelated homonym. Existing Growth graphs and other Professional analyses remain unchanged.",
+            "references": [
+              "https://www.dictionary.com/browse/checkout",
+              "https://www.dictionary.com/browse/check",
+              "https://www.dictionary.com/browse/out"
+            ],
+            "source_record_ids": [
+              "retail03-morph-dcom-checkout",
+              "retail03-morph-dcom-check",
+              "retail03-morph-dcom-out"
+            ],
+            "independent_review": "completed_exact_first10_v2_graph_and_current_stem_depth",
+            "reviewer": "Codex (independent AI morphology review; not human or subject-matter approval)",
+            "reviewed_at": "2026-10-16",
+            "acceptance_record": "data/professional/provenance/retail-module03-morphology-first10-2026-10-16.json"
+          }
+        },
+        "review": {
+          "status": "reviewed",
+          "language": "reviewed",
+          "domain": "not_required",
+          "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "bls-cashiers",
+            "status": "pending_term_check",
+            "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+          },
+          {
+            "source_id": "retail03-mw-checkout",
+            "status": "verified",
+            "scope": "Selected passage consulted: Noun sense 3. A store counter or area used to process purchases is distinct from hotel checkout and the phrasal verb check out. Selected lexical sense only; pronunciation recordings and images were not acquired. Headword syllable dots do not establish morphology. This editorial proposal does not approve language, morphology, domain practice, or media."
+          }
+        ],
+        "editorial_notes": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the store payment-area noun; exclude hotel departure and the phrasal verb check out. Retain checkout as the selected noun spelling; check out is not an interchangeable noun answer. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Domain review is not required for the current memberships. Independent AI morphology review was completed on 2026-10-16 for this exact graph at the documented modern-stem depth; this is not human or subject-matter approval. Picture suitability and word-media production remain pending. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready."
+      },
+      "after": {
+        "id": "checkout.payment-area.n",
+        "text": "checkout",
+        "display_text": "checkout",
+        "pos": "noun",
+        "definition": "The place in a store where purchases are paid for.",
+        "example": "A second checkout is open near the entrance.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "checkout"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "Show a complete staffed checkout lane: customer side, short goods belt or counter, and a register, with a shopper presenting purchases. Frame the lane as one place while the equipment stays subordinate. Reject a close-up of a register alone, a help desk, or a hotel reception. No readable payment credentials or brand marks.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "integrated",
+            "path": "res://professional-media/39df6ba3406a891283f99379ca8526d93fc8f3279b571134c0213dd824282224.wav",
+            "sha256": "39df6ba3406a891283f99379ca8526d93fc8f3279b571134c0213dd824282224",
+            "source": "res://docs/assets/sources/professional-retail-ava/counter-checkout/listening-approval-2026-10-16.json",
+            "creator": "Microsoft Ava Neural; original project term text",
+            "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+            "acquisition_status": "integrated",
+            "review": {
+              "status": "reviewed",
+              "reviewer": "User (exact counter and checkout samples approved in the continuation chat; see counter-checkout listening-approval-2026-10-16.json)",
+              "reviewed_at": "2026-10-16"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "professional.checkout.payment-area.n.morphology.retail03.proposal.v2",
+          "lexeme_id": "checkout.payment-area.n",
+          "text": "checkout",
+          "kind": "compound",
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.check",
+              "type": "stem",
+              "canonical": "check",
+              "surface": "check",
+              "break_offsets": []
+            },
+            {
+              "id": "p2",
+              "canonical_id": "morph.out",
+              "type": "word",
+              "canonical": "out",
+              "surface": "out",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [
+            {
+              "id": "whole",
+              "left": "p1",
+              "right": "p2",
+              "surface": "checkout",
+              "rule": "authored-closed-nominalization-of-check-out",
+              "break_offsets": []
+            }
+          ],
+          "roots": [
+            "whole"
+          ],
+          "review": {
+            "status": "reviewed",
+            "draft_author": "Codex (AI source consultation; not human or subject-matter approval)",
+            "notes": "The payment-area noun is lexicalized from check out, explicitly documented by the source. This is a closed nominalized phrase, not an assertion that the modern store-area meaning is the sum of literal check and outside. Check and out are current lexical components with examined histories, not syllables. Canonical identity follows the existing Professional pair inventory; a selected contextual meaning does not automatically establish an unrelated homonym. Existing Growth graphs and other Professional analyses remain unchanged.",
+            "references": [
+              "https://www.dictionary.com/browse/checkout",
+              "https://www.dictionary.com/browse/check",
+              "https://www.dictionary.com/browse/out"
+            ],
+            "source_record_ids": [
+              "retail03-morph-dcom-checkout",
+              "retail03-morph-dcom-check",
+              "retail03-morph-dcom-out"
+            ],
+            "independent_review": "completed_exact_first10_v2_graph_and_current_stem_depth",
+            "reviewer": "Codex (independent AI morphology review; not human or subject-matter approval)",
+            "reviewed_at": "2026-10-16",
+            "acceptance_record": "data/professional/provenance/retail-module03-morphology-first10-2026-10-16.json"
+          }
+        },
+        "review": {
+          "status": "reviewed",
+          "language": "reviewed",
+          "domain": "not_required",
+          "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "bls-cashiers",
+            "status": "pending_term_check",
+            "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+          },
+          {
+            "source_id": "retail03-mw-checkout",
+            "status": "verified",
+            "scope": "Selected passage consulted: Noun sense 3. A store counter or area used to process purchases is distinct from hotel checkout and the phrasal verb check out. Selected lexical sense only; pronunciation recordings and images were not acquired. Headword syllable dots do not establish morphology. This editorial proposal does not approve language, morphology, domain practice, or media."
+          }
+        ],
+        "editorial_notes": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the store payment-area noun; exclude hotel departure and the phrasal verb check out. Retain checkout as the selected noun spelling; check out is not an interchangeable noun answer. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Domain review is not required for the current memberships. Independent AI morphology review was completed on 2026-10-16 for this exact graph at the documented modern-stem depth; this is not human or subject-matter approval. Picture suitability and word-image production remain pending. The exact Ava word recording has user listening approval and is integrated. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready."
+      },
+      "before_audio": {
+        "status": "pending",
+        "path": null,
+        "sha256": null,
+        "source": null,
+        "creator": null,
+        "license": null,
+        "acquisition_status": "not_started",
+        "review": {
+          "status": "pending"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "after_audio": {
+        "status": "integrated",
+        "path": "res://professional-media/39df6ba3406a891283f99379ca8526d93fc8f3279b571134c0213dd824282224.wav",
+        "sha256": "39df6ba3406a891283f99379ca8526d93fc8f3279b571134c0213dd824282224",
+        "source": "res://docs/assets/sources/professional-retail-ava/counter-checkout/listening-approval-2026-10-16.json",
+        "creator": "Microsoft Ava Neural; original project term text",
+        "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact counter and checkout samples approved in the continuation chat; see counter-checkout listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "before_sha256": "b584417ba98f7bd0d5977c82295643462c6d3ef99ad42aa7a7cf266efa67f2e2",
+      "protected_fields_sha256": "f8d171d6c72e5cc01918054608391ba66917e58815a155b80e1584ff039a402f",
+      "note_change": {
+        "before": "Picture suitability and word-media production remain pending.",
+        "after": "Picture suitability and word-image production remain pending. The exact Ava word recording has user listening approval and is integrated."
+      },
+      "resource": {
+        "id": "sha256:39df6ba3406a891283f99379ca8526d93fc8f3279b571134c0213dd824282224",
+        "sha256": "39df6ba3406a891283f99379ca8526d93fc8f3279b571134c0213dd824282224",
+        "path": "professional-media/39df6ba3406a891283f99379ca8526d93fc8f3279b571134c0213dd824282224.wav",
+        "kind": "audio",
+        "format": "wav",
+        "compressed_bytes": 82598,
+        "decoded_bytes": 82554,
+        "frames": 41277,
+        "channels": 1,
+        "sample_rate": 22050
+      }
+    }
+  ],
+  "preserved_prior_audio_files": 1903,
+  "collection_source_master_checked_separately": true,
+  "observation_boundary": "Read-only preparation is not a permitted integration baseline. Root must bind an exact successful current validation, the successful counter image delivery receipt and this preparation receipt before reviewing the full transactional plan.",
+  "review_status": {
+    "root_static_review": "Root reported the full adapter, recovery path and updater scope appeared sound; exact baseline dry-run remains pending.",
+    "independent_new_adapter_review": "Pending independent nursing_theme review before root integrates."
+  },
+  "required_remaining": [
+    "Independent review of the new audio adapter/updater",
+    "Root-owned exact baseline binding and full read-only plan review",
+    "Root-owned transactional audio integration and persisted test update",
+    "Root-owned updated Node/native tests and combined post-integration validation",
+    "Root-owned documentation completion"
+  ],
+  "production_content_written": false,
+  "baseline_bound": false,
+  "integration_executed": false,
+  "shared_tests_written": false,
+  "tests_executed": false,
+  "native_executed": false
+}

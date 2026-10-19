@@ -13,6 +13,7 @@ signal finished(result: Dictionary)
 const Motion = preload("res://scripts/jelly_motion.gd")
 const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const WordSampler = preload("res://scripts/word_sampler.gd")
+const LearningWord = preload("res://scripts/learning_word.gd")
 const COLUMNS: int = 4
 const ROWS: int = 6
 const CAPACITY: int = COLUMNS * ROWS
@@ -304,6 +305,8 @@ func finish_round(reason: String = "finished") -> Dictionary:
 
 
 func _eligible(word: Dictionary, level: int) -> bool:
+	if word.get("track") == "professional":
+		return LearningWord.professional(word, "jelly")
 	for key in ["id", "text", "image", "audio"]:
 		if not word.get(key) is String or str(word[key]).strip_edges().is_empty():
 			return false

@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "status": "frozen_independent_exact_shopping_bag_contract_acceptance",
+  "reviewer": "Codex runtime_recovery",
+  "contract_sha256": "94d2dd3c166a57f4dc5ec7e456944edf4f131e6769ebce4385b4977414f9ee0b",
+  "files": [
+    {
+      "path": "build/professional-english/shopping-bag-commit-independent-review-r01/exact-contract-data-inspection.json",
+      "bytes": 4155,
+      "sha256": "3fbfbb1a9fbbbe0e58cc8bdf6689f75e1f67dc0c00e4cd89910c0693c8113f93"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-commit-independent-review-r01/exact-contract-target-inspection.json",
+      "bytes": 39560,
+      "sha256": "45342071f6cf6243d5cd563be8adf1c179248138a06ec2e5c59dcacd6d3c18f1"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-commit-independent-review-r01/exact-contract-target-inspection-r02.json",
+      "bytes": 40147,
+      "sha256": "97281e23663f3a28526d7108a85568aa96416ada8bb8cb10e3e0ed09838e7163"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-commit-independent-review-r01/exact-contract-review.json",
+      "bytes": 5622,
+      "sha256": "c63d6251c69be7eb028e12540900e66ab19b559a507200bc1661bc16a9b600ef"
+    }
+  ],
+  "preserved_prior_inventories": [
+    {
+      "path": "build/professional-english/shopping-bag-commit-independent-review-r01/inventory.json",
+      "bytes": 919,
+      "sha256": "f99e091e7ece2a899df31fd6e50ef5b79054d678cc9849d01a516f4ed554c2d5"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-commit-independent-review-r01/guard-wrapper-review-inventory.json",
+      "bytes": 694,
+      "sha256": "d2b505c502f5930cddaced894997b982e74e249351a5e0ad49b4c3ee610cab95"
+    }
+  ]
+}

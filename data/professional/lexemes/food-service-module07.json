@@ -1,0 +1,1175 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "recipe.food-preparation-specification.n",
+      "text": "recipe",
+      "display_text": "recipe",
+      "pos": "noun",
+      "definition": "A description of ingredients and the intended method for preparing a food or drink.",
+      "example": "The worker checked that the recipe was the current version.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "recipe"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional recipe layout with no real safety thresholds.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "professional.recipe.food-preparation-specification.n.morphology.v1",
+        "lexeme_id": "recipe.food-preparation-specification.n",
+        "text": "recipe",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.recipe",
+            "canonical": "recipe",
+            "surface": "recipe",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Pending Professional English review. Explicit sense comparison: Both nouns denote ingredients and preparation instructions for a dish or drink. The same whole borrowed instruction noun applies. Inherited Growth rationale: The cooking-instructions noun is a whole English loanword. The Growth AI editorial status is not transferred. External sources listed here are inherited repository records, not newly consulted in this pass.",
+          "references": [
+            "https://openlibrary-repo.ecampusontario.ca/jspui/bitstream/123456789/497/6/Essentials-of-Linguistics-1539375829.html"
+          ],
+          "provenance": {
+            "corpus": "Growth",
+            "file": "data/vocabulary/morphology/age-07.json",
+            "entry_id": "recipe",
+            "analysis_id": "growth.recipe.analysis.v1",
+            "analysis_sha256": "2ebf1296eac286ad54e4c7c3b3d425ab45f64f9b4ca938c5a364e68ddba9d882",
+            "source_review_status": "reviewed"
+          },
+          "source_consultation": "inherited_repository_record_not_newly_consulted_in_this_pass"
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "recipe-yield.amount-produced-by-recipe.n",
+      "text": "recipe yield",
+      "display_text": "recipe yield",
+      "pos": "noun",
+      "definition": "The amount of finished food or number of portions expected from a recipe.",
+      "example": "The chef clarified the recipe yield.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "recipe yield"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional recipe summary showing an unspecified output amount.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "recipe-yield.amount-produced-by-recipe.n.analysis.v1",
+        "lexeme_id": "recipe-yield.amount-produced-by-recipe.n",
+        "text": "recipe yield",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.recipe",
+            "type": "stem",
+            "canonical": "recipe",
+            "surface": "recipe"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.yield",
+            "type": "stem",
+            "canonical": "yield",
+            "surface": "yield"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "recipe yield",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "preparation-list.list-of-planned-preparation-tasks.n",
+      "text": "preparation list",
+      "display_text": "preparation list",
+      "pos": "noun",
+      "definition": "A list of food-preparation work planned for a period of service.",
+      "example": "The supervisor reviewed the preparation list.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "preparation list"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional kitchen task list with assigned responsibilities.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "preparation-list.list-of-planned-preparation-tasks.n.analysis.v1",
+        "lexeme_id": "preparation-list.list-of-planned-preparation-tasks.n",
+        "text": "preparation list",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.prepare",
+            "type": "stem",
+            "canonical": "prepare",
+            "surface": "prepar"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ation.suffix",
+            "type": "suffix",
+            "canonical": "ation",
+            "surface": "ation"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.list",
+            "type": "stem",
+            "canonical": "list",
+            "surface": "list"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "preparation",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "preparation list",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "preparation-station.assigned-food-preparation-area.n",
+      "text": "preparation station",
+      "display_text": "preparation station",
+      "pos": "noun",
+      "definition": "An area set aside for specified food-preparation work.",
+      "example": "The chef explained the purpose of each preparation station.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "preparation station"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clean, unoccupied work area with a fictional task label.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "preparation-station.assigned-food-preparation-area.n.analysis.v1",
+        "lexeme_id": "preparation-station.assigned-food-preparation-area.n",
+        "text": "preparation station",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.prepare",
+            "type": "stem",
+            "canonical": "prepare",
+            "surface": "prepar"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ation.suffix",
+            "type": "suffix",
+            "canonical": "ation",
+            "surface": "ation"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.station",
+            "type": "stem",
+            "canonical": "station",
+            "surface": "station"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "preparation",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "preparation station",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "mise-en-place.pre-service-preparation-arrangement.n",
+      "text": "mise en place",
+      "display_text": "mise en place",
+      "pos": "noun",
+      "definition": "The advance preparation and arrangement of ingredients and equipment for intended work.",
+      "example": "The trainee asked what mise en place included for this station.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "mise en place"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A tidy collection of assigned utensils and labeled ingredients.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "food-waste.food-discarded-or-lost.n",
+      "text": "food waste",
+      "display_text": "food waste",
+      "pos": "noun",
+      "definition": "Food that is discarded or lost from its intended use.",
+      "example": "The supervisor asked why the food waste was recorded.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "food waste"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional waste report without showing unsafe reuse.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "food-waste.food-discarded-or-lost.n.analysis.v1",
+        "lexeme_id": "food-waste.food-discarded-or-lost.n",
+        "text": "food waste",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.food",
+            "type": "stem",
+            "canonical": "food",
+            "surface": "food"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.waste",
+            "type": "stem",
+            "canonical": "waste",
+            "surface": "waste"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "food waste",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-cdc-home-definitions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-gov-waste-transfer",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-epa-recycling",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "portion-control.consistency-of-serving-amounts.n",
+      "text": "portion control",
+      "display_text": "portion control",
+      "pos": "noun",
+      "definition": "Managing serving amounts according to an established specification.",
+      "example": "The chef explained how portion control relates to the recipe yield.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "portion control"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional serving specification with no dietary instruction.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "portion-control.consistency-of-serving-amounts.n.analysis.v1",
+        "lexeme_id": "portion-control.consistency-of-serving-amounts.n",
+        "text": "portion control",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.portion",
+            "type": "stem",
+            "canonical": "portion",
+            "surface": "portion"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.control",
+            "type": "stem",
+            "canonical": "control",
+            "surface": "control"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "portion control",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "preparation-time.time-spent-preparing-food.n",
+      "text": "preparation time",
+      "display_text": "preparation time",
+      "pos": "noun",
+      "definition": "The time used for preparation work before or alongside cooking.",
+      "example": "The planner asked about the expected preparation time.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "preparation time"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional schedule showing preparation as a distinct activity.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "preparation-time.time-spent-preparing-food.n.analysis.v1",
+        "lexeme_id": "preparation-time.time-spent-preparing-food.n",
+        "text": "preparation time",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.prepare",
+            "type": "stem",
+            "canonical": "prepare",
+            "surface": "prepar"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ation.suffix",
+            "type": "suffix",
+            "canonical": "ation",
+            "surface": "ation"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.time",
+            "type": "stem",
+            "canonical": "time",
+            "surface": "time"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "preparation",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "preparation time",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "cooking-time.time-food-is-being-cooked.n",
+      "text": "cooking time",
+      "display_text": "cooking time",
+      "pos": "noun",
+      "definition": "The period during which food is being cooked.",
+      "example": "The worker asked which approved instruction defined the cooking time.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "cooking time"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A recipe query with no prescribed cooking duration.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "cooking-time.time-food-is-being-cooked.n.analysis.v1",
+        "lexeme_id": "cooking-time.time-food-is-being-cooked.n",
+        "text": "cooking time",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.cook",
+            "type": "atomic",
+            "canonical": "cook",
+            "surface": "cook"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.time",
+            "type": "stem",
+            "canonical": "time",
+            "surface": "time"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "cooking",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "cooking time",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "batch-cooking.preparing-multiple-portions-together.n",
+      "text": "batch cooking",
+      "display_text": "batch cooking",
+      "pos": "noun",
+      "definition": "Preparing a quantity of food or several portions together as one planned batch.",
+      "example": "The supervisor discussed the batch cooking plan.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "batch cooking"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional production plan without food-holding instructions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "batch-cooking.preparing-multiple-portions-together.n.analysis.v1",
+        "lexeme_id": "batch-cooking.preparing-multiple-portions-together.n",
+        "text": "batch cooking",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.batch",
+            "type": "stem",
+            "canonical": "batch",
+            "surface": "batch"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.cook",
+            "type": "atomic",
+            "canonical": "cook",
+            "surface": "cook"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "cooking",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "batch cooking",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    }
+  ]
+}

@@ -1,0 +1,277 @@
+{
+  "schema": 1,
+  "status": "independent_actual_probe_evidence_verified",
+  "reviewer": "Codex recover_delivery",
+  "reviewed_at": "2026-10-16T21:52:24.871Z",
+  "proposal_inventory": {
+    "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/author-inventory.json",
+    "sha256": "f0043bfeada59d497be43cde8e3d753c0322cfa982c632fa40eae36cd62838d7"
+  },
+  "probe_source": {
+    "path": "build/professional-english/foundation02-fourth10-commit-review-r01/probe.cjs",
+    "sha256": "43cdd6e7c22e13419b98e6fb2c50115db1a363bb34602b537c078211a535948e"
+  },
+  "probe_inventory": {
+    "path": "build/professional-english/foundation02-fourth10-commit-review-r01/inventory.json",
+    "sha256": "c0c72404f09f04058c01d27068bf7daa7cec14549f8ed5b6e2ad3ef0be2500c1"
+  },
+  "start": {
+    "path": "build/professional-english/foundation02-fourth10-commit-review-r01/execution-foundation02-fourth10-commit-proposal-r01/start.json",
+    "sha256": "379702836ffdff0cda5ea6959dbdff4dea3f6f75356d31a9dd4695160ee7acc7"
+  },
+  "result": {
+    "path": "build/professional-english/foundation02-fourth10-commit-review-r01/execution-foundation02-fourth10-commit-proposal-r01/result.json",
+    "sha256": "480fc04cce34e18420567af7d2c8f1a3dadfdc88aca767ed9ab54414c83a1e4b"
+  },
+  "cases": [
+    {
+      "name": "exact_before_and_after",
+      "passed": true,
+      "method": "New exact commit.main and helper execution entirely inside memory, then exact verifyPersisted reconstruction",
+      "detail": {
+        "five_exact_afterimages": true,
+        "memory_only_commit_and_journal": true,
+        "persisted_contract_reconstructed": true
+      }
+    },
+    {
+      "name": "allowed_field_drift",
+      "passed": true,
+      "method": "New exact loadBundle probe with one memory-only input mutation",
+      "detail": {
+        "rejection": "data/professional/lexemes/foundation-module02.json\n+ actual - expected\n\n+ '20720b6627638424cb6a876b3425776f2d2599eb7d52360adb0d471c3d3341ea'\n- 'bec08364a841f92351d04cd4c891bbd9d7de6dbf00f9949cc58f18e2551962ad'\n"
+      }
+    },
+    {
+      "name": "protected_field_drift",
+      "passed": true,
+      "method": "New exact loadBundle probe with one memory-only input mutation",
+      "detail": {
+        "rejection": "data/professional/lexemes/foundation-module02.json\n+ actual - expected\n\n+ 'efe236beaa145824be77eb289b69a2b3461171be8da46286f8649512cf0c1e09'\n- 'bec08364a841f92351d04cd4c891bbd9d7de6dbf00f9949cc58f18e2551962ad'\n"
+      }
+    },
+    {
+      "name": "source_suffix_drift",
+      "passed": true,
+      "method": "New exact loadBundle probe with one memory-only input mutation",
+      "detail": {
+        "rejection": "data/professional/sources.json\n+ actual - expected\n\n+ '7d24b5df7ccfdd41959539a66e746ad51e01a1bc924389b59a2218de975ff8a3'\n- '268caddf5f9acb1d806729200b1edf6ffe4d4dec7a737d1f57d176238500ae58'\n"
+      }
+    },
+    {
+      "name": "missing_identity",
+      "passed": true,
+      "method": "New exact loadBundle probe with one memory-only input mutation",
+      "detail": {
+        "rejection": "data/professional/lexemes/foundation-module02.json\n+ actual - expected\n\n+ '5b5e5d052d9670662ed2b8a013c7c6fa7b39449dc73294c79503d80f64488de2'\n- 'bec08364a841f92351d04cd4c891bbd9d7de6dbf00f9949cc58f18e2551962ad'\n"
+      }
+    },
+    {
+      "name": "duplicate_identity",
+      "passed": true,
+      "method": "New exact loadBundle probe with one memory-only input mutation",
+      "detail": {
+        "rejection": "data/professional/lexemes/foundation-module02.json\n+ actual - expected\n\n+ 'bd84c38764407a5495e66dbfead0c159952cac69fe209137f57bf3d47188b93f'\n- 'bec08364a841f92351d04cd4c891bbd9d7de6dbf00f9949cc58f18e2551962ad'\n"
+      }
+    },
+    {
+      "name": "input_drift",
+      "passed": true,
+      "method": "New unchanged-complement raw-hash guard probe",
+      "detail": {
+        "rejection": "build/professional-english/foundation-module01-language-review/fifth10/delivery-r01/guarded-transaction.cjs\n+ actual - expected\n\n+ '0b56f117690db0172ece46930f5b2f04685cae890f29b82a5aada2959618d55b'\n- '1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6'\n"
+      }
+    },
+    {
+      "name": "duplicate_destination",
+      "passed": true,
+      "method": "New exact normalized allowlist guard probe",
+      "detail": {
+        "rejection": "Duplicate normalized paths.\n\n1 !== 2\n"
+      }
+    },
+    {
+      "name": "scoped_overlapping_destination_rejected",
+      "passed": true,
+      "method": "New concrete contract ancestor/descendant overlap rejection before transaction planning",
+      "detail": {
+        "rejection": "Overlapping destinations."
+      }
+    },
+    {
+      "name": "overlapping_destination",
+      "passed": true,
+      "method": "New actual helper overlap attempt in memory; characterize commit rejection and preserved target absence",
+      "detail": {
+        "rejection": "Transaction failed (recovery-required): Ancestor must be a directory: Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fourth10-commit-review-r01\\virtual-helper-target",
+        "transaction_status": "recovery-required",
+        "planning_accepted_absent_overlap": true,
+        "plan_sha256": "ac4254594ff97fedabe8694e2c71f8ae4c1436d30faf0b961a4c1f6382b5af6c",
+        "target_bytes_remain_absent": true
+      }
+    },
+    {
+      "name": "preexisting_destination",
+      "passed": true,
+      "method": "New absent destination guards for all three production output families",
+      "detail": [
+        {
+          "field": "docs",
+          "rejection": "Destination already exists: docs/content-review/foundation-module02-language-fourth10-2026-10-17"
+        },
+        {
+          "field": "provenance",
+          "rejection": "Destination already exists: data/professional/provenance/foundation-module02-language-fourth10-2026-10-17.json"
+        },
+        {
+          "field": "transaction",
+          "rejection": "Destination already exists: build/professional-english/transactions/foundation02-fourth10-language-r01"
+        }
+      ]
+    },
+    {
+      "name": "missing_receipt",
+      "passed": true,
+      "method": "New exact pinned receipt absence probe",
+      "detail": {
+        "rejection": "ENOENT: Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fourth10-native-candidate-r02\\attempt-001\\receipt.json"
+      }
+    },
+    {
+      "name": "forged_receipt",
+      "passed": true,
+      "method": "New stale pinned hash plus exact receipt semantic guard probes",
+      "detail": {
+        "stale_hash_rejected": {
+          "rejection": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/receipt.json\n+ actual - expected\n\n+ '1077704e2f0c8fd8530b4825b5145e3e144241fc57858b6be429a54a4a0ca9ea'\n- '1dbb1e3a9d34226b77381502edd6a9d745605f0e05d320297519e45106c5bc0c'\n"
+        },
+        "structurally_forged_receipt_rejected": {
+          "rejection": "Expected values to be strictly equal:\n\n9 !== 0\n"
+        }
+      }
+    },
+    {
+      "name": "prepared_afterimage_mismatch",
+      "passed": true,
+      "method": "New exact commit guard with an explicitly fault-injected projection return, without changing source or prepared bytes",
+      "detail": {
+        "rejection": "Recomputed afterimage mismatch: data/professional/lexemes/foundation-module02.json"
+      }
+    },
+    {
+      "name": "one_shot_attempt",
+      "passed": true,
+      "method": "New proposal-attempt and actual helper-journal reuse guards; all writes stay in memory",
+      "detail": {
+        "repeatedMain": {
+          "rejection": "Never replay an attempted commit."
+        },
+        "preexistingAttempt": {
+          "rejection": "Never replay an attempted commit."
+        },
+        "helperReuse": {
+          "rejection": "Use a fresh transaction directory; recover an existing one explicitly"
+        }
+      }
+    },
+    {
+      "name": "committed_journal_required",
+      "passed": true,
+      "method": "New persisted reconstruction failure when the successful virtual journal is missing",
+      "detail": {
+        "rejection": "ENOENT: Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\transactions\\foundation02-fourth10-language-r01\\prepared.json"
+      }
+    },
+    {
+      "name": "missing_reviewer_rejected",
+      "passed": true,
+      "method": "Exact contract rejects independent review without reviewer identity",
+      "detail": {
+        "rejection": "Independent reviewer identity is required.\n+ actual - expected\n\n+ 'undefined'\n- 'string'\n"
+      }
+    },
+    {
+      "name": "empty_reviewer_rejected",
+      "passed": true,
+      "method": "Exact contract rejects empty independent reviewer identity",
+      "detail": {
+        "rejection": "Independent reviewer identity cannot be empty."
+      }
+    },
+    {
+      "name": "author_reviewer_rejected",
+      "passed": true,
+      "method": "New trimmed, case-normalized and decorated author/dispatcher identity guards",
+      "detail": [
+        {
+          "reviewer": " Codex runtime_recovery ",
+          "rejection": "The proposal author or dispatcher cannot approve this source."
+        },
+        {
+          "reviewer": "CODEX RUNTIME_RECOVERY",
+          "rejection": "The proposal author or dispatcher cannot approve this source."
+        },
+        {
+          "reviewer": "Codex runtime_recovery proposal author",
+          "rejection": "The proposal author or dispatcher cannot approve this source."
+        },
+        {
+          "reviewer": " codex ROOT ",
+          "rejection": "The proposal author or dispatcher cannot approve this source."
+        },
+        {
+          "reviewer": "Codex root dispatcher",
+          "rejection": "The proposal author or dispatcher cannot approve this source."
+        }
+      ]
+    },
+    {
+      "name": "postcommit_plan_hash_drift_rejected",
+      "passed": true,
+      "method": "New persisted postcommit metadata plan-hash guard while preserving the valid journal",
+      "detail": {
+        "rejection": "Expected values to be strictly equal:\n+ actual - expected\n\n+ '0000000000000000000000000000000000000000000000000000000000000000'\n- 'd3d5d6aa4a46ec991d4551345100148cb66186fcf33595422cebccc47541d928'\n"
+      }
+    },
+    {
+      "name": "empty_source_witness_rejected",
+      "passed": true,
+      "method": "Exact persisted contract rejects mutually empty source witness arrays even after untrusted postinventory hashes and byte counts are refreshed",
+      "detail": {
+        "rejection": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ []\n- [\n-   {\n-     path: 'build/professional-english/foundation02-fourth10-commit-proposal-r01/commit.cjs',\n-     sha256: 'd9df7689e7e958036e6f328d91db9a090527fcfea0e00055ba50546b0caf7b61'\n-   },\n-   {\n-     path: 'build/professional-english/foundation02-fourth10-commit-proposal-r01/evidence-contract.cjs',\n-     sha256: '85dbf8515a67b479fb6b904ac65b8c6ca1a6477983fa14b17beb06e34b8b2efd'\n-   },\n-   {\n-     path: 'build/professional-english/foundation02-fourth10-commit-proposal-r01/committed-evidence.test.cjs',\n-     sha256: '85a70750e79b4c0fe1511a5289cb6b232c4a8511f7478368c7a3c41df26acc9f'\n-   },\n-   {\n-     path: 'build/professional-english/foundation02-fourth10-commit-proposal-r01/INPUTS.md',\n-     sha256: 'dd11e83f7996cac0b339121a6cd1fe57a9b56b26d46e5e321f664228770072b9'\n-   },\n-   {\n-     path: 'build/professional-english/foundation02-fourth10-commit-proposal-r01/root-commit-input.example.json',\n-     sha256: 'f6ce26aa9d18382c70791eb21706a59eb2a6eaa9df18773047f84386da2736c5'\n-   },\n-   {\n-     path: 'build/professional-english/foundation02-fourth10-commit-proposal-r01/evidence-inputs.json',\n-     sha256: '391c9292b5b9cd1cb30a0a47c968565a41750d4c49e2b30556d61d6bdff83654'\n-   },\n-   {\n-     path: 'build/professional-english/foundation02-fourth10-commit-proposal-r01/author-inventory.json',\n-     sha256: 'f0043bfeada59d497be43cde8e3d753c0322cfa982c632fa40eae36cd62838d7'\n-   }\n- ]\n"
+      }
+    }
+  ],
+  "independently_rehashed_probe_paths": 1366,
+  "all_current_probe_paths_unchanged": true,
+  "positive_reconstruction": {
+    "ok": true,
+    "plan_sha256": "d3d5d6aa4a46ec991d4551345100148cb66186fcf33595422cebccc47541d928",
+    "prepared_journal_sha256": "c956bf7760a6d8bac26f41677f92bc912ef787d893464f10f2db4e34d9596314",
+    "committed_state_sha256": "a4224da2cf070b9c02cb27eaecdf2534124804313dbceb741860a42672901670",
+    "retained_files": 111,
+    "current_inputs": 864,
+    "retained_scratch_input_count": 48,
+    "additional_candidate_inputs": 0,
+    "scope": "864 exact measured input bindings: current non-build files plus retained scratch inputs. Fresh root audit, affected Node suites and native validation remain separate."
+  },
+  "retained_scratch_reconstruction": {
+    "ok": true,
+    "original_paths_hidden_in_memory": 48,
+    "result": {
+      "ok": true,
+      "plan_sha256": "d3d5d6aa4a46ec991d4551345100148cb66186fcf33595422cebccc47541d928",
+      "prepared_journal_sha256": "c956bf7760a6d8bac26f41677f92bc912ef787d893464f10f2db4e34d9596314",
+      "committed_state_sha256": "a4224da2cf070b9c02cb27eaecdf2534124804313dbceb741860a42672901670",
+      "retained_files": 111,
+      "current_inputs": 864,
+      "retained_scratch_input_count": 48,
+      "additional_candidate_inputs": 0,
+      "scope": "864 exact measured input bindings: current non-build files plus retained scratch inputs. Fresh root audit, affected Node suites and native validation remain separate."
+    }
+  },
+  "root_dispatch_evidence": "Root reported exclusive one-time dispatch in session 14821 and completion; source and result hashes are independently verified here.",
+  "reviewer_project_modules_imported": false,
+  "reviewer_tests_or_native_executed": false,
+  "reviewer_production_mutated": false
+}

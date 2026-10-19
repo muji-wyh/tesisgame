@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "status": "started",
+  "started_at": "2026-10-17T00:04:54.521Z",
+  "root_input": {
+    "path": "build/professional-english/foundation02-fifth10-root-native-route-repair-r01/input.json",
+    "bytes": 2659,
+    "raw_sha256": "e5533d9c5876251b97df37e3c3dd2965b91eb711ecc67dc60cc24981d3b410fc"
+  },
+  "operation": "bounded_native_historical_route_correction",
+  "output": "build/professional-english/foundation02-fifth10-delivery-preparation-r04/execution-r01",
+  "project_or_test_execution": false,
+  "production_mutated": false
+}

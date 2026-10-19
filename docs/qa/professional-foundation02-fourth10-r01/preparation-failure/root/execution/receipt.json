@@ -1,0 +1,161 @@
+{
+  "schema": 1,
+  "ok": false,
+  "started_at": "2026-10-16T21:01:18.539Z",
+  "finished_at": "2026-10-16T21:04:22.941Z",
+  "review": {
+    "path": "build/professional-english/foundation02-fourth10-preparation-source-review-r01/review.json",
+    "bytes": 10186,
+    "sha256": "c5c0d17720fc7e02a52c9623ad08c0546f8e6c00c6787cdd25ed08403dfa034d"
+  },
+  "inventory": {
+    "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r01/author-inventory.json",
+    "bytes": 2586,
+    "sha256": "b4e418aaaec0c4748b32264438c66e0ba6f65944e97f3f31988a430f570e0f04"
+  },
+  "sources": [
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r01/input-pins.json",
+      "bytes": 224601,
+      "sha256": "d58ea126241c8585d7b8887fa7698520fde2d0134de5f60d9599a19bb92adaa5"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r01/input-freeze-receipt.json",
+      "bytes": 1549,
+      "sha256": "11199e3c062e250f654bdd9daead9803565afe075fd1e96b457bd7fcdf71c9ed"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r01/projection.cjs",
+      "bytes": 23650,
+      "sha256": "c07b67580921610e94425d3f2c01b620203163d7a6ef40be2a4ebe07edf12da9"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r01/test-transforms.cjs",
+      "bytes": 22440,
+      "sha256": "f28949a1cdb0dfceb1875ec7abfd6478aa2502dfecb3b6e8e37d1bd113c58d5e"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r01/prepare.cjs",
+      "bytes": 9039,
+      "sha256": "6fa9ddd5547673b797c302a4b1c78d8b3be64a9b90f07cfe2771a3f2236b9c11"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r01/HANDOFF.md",
+      "bytes": 5161,
+      "sha256": "4b0e0f9b4a020e33c580ec5082daf83dc8752dcd4dad98f31e429b6abefedba6"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r01/TRANSACTION.md",
+      "bytes": 6089,
+      "sha256": "2a68f99c9198418f6cdd41aad76b3df583be1ec6716d7d33c70b5d20e734b9c4"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r01/author-inventory.json",
+      "bytes": 2586,
+      "sha256": "b4e418aaaec0c4748b32264438c66e0ba6f65944e97f3f31988a430f570e0f04"
+    }
+  ],
+  "sources_after": [
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r01/input-pins.json",
+      "bytes": 224601,
+      "sha256": "d58ea126241c8585d7b8887fa7698520fde2d0134de5f60d9599a19bb92adaa5"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r01/input-freeze-receipt.json",
+      "bytes": 1549,
+      "sha256": "11199e3c062e250f654bdd9daead9803565afe075fd1e96b457bd7fcdf71c9ed"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r01/projection.cjs",
+      "bytes": 23650,
+      "sha256": "c07b67580921610e94425d3f2c01b620203163d7a6ef40be2a4ebe07edf12da9"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r01/test-transforms.cjs",
+      "bytes": 22440,
+      "sha256": "f28949a1cdb0dfceb1875ec7abfd6478aa2502dfecb3b6e8e37d1bd113c58d5e"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r01/prepare.cjs",
+      "bytes": 9039,
+      "sha256": "6fa9ddd5547673b797c302a4b1c78d8b3be64a9b90f07cfe2771a3f2236b9c11"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r01/HANDOFF.md",
+      "bytes": 5161,
+      "sha256": "4b0e0f9b4a020e33c580ec5082daf83dc8752dcd4dad98f31e429b6abefedba6"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r01/TRANSACTION.md",
+      "bytes": 6089,
+      "sha256": "2a68f99c9198418f6cdd41aad76b3df583be1ec6716d7d33c70b5d20e734b9c4"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r01/author-inventory.json",
+      "bytes": 2586,
+      "sha256": "b4e418aaaec0c4748b32264438c66e0ba6f65944e97f3f31988a430f570e0f04"
+    }
+  ],
+  "sources_unchanged": true,
+  "commands": [
+    {
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.exe",
+        "--check",
+        "build/professional-english/foundation02-fourth10-delivery-preparation-r01/projection.cjs"
+      ],
+      "started_at": "2026-10-16T21:01:18.553Z",
+      "finished_at": "2026-10-16T21:01:18.770Z",
+      "exit_code": 0,
+      "error": null,
+      "signal": null,
+      "log": "command-1.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.exe",
+        "--check",
+        "build/professional-english/foundation02-fourth10-delivery-preparation-r01/test-transforms.cjs"
+      ],
+      "started_at": "2026-10-16T21:01:18.778Z",
+      "finished_at": "2026-10-16T21:01:19.004Z",
+      "exit_code": 0,
+      "error": null,
+      "signal": null,
+      "log": "command-2.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.exe",
+        "--check",
+        "build/professional-english/foundation02-fourth10-delivery-preparation-r01/prepare.cjs"
+      ],
+      "started_at": "2026-10-16T21:01:19.018Z",
+      "finished_at": "2026-10-16T21:01:19.182Z",
+      "exit_code": 0,
+      "error": null,
+      "signal": null,
+      "log": "command-3.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.exe",
+        "build/professional-english/foundation02-fourth10-delivery-preparation-r01/prepare.cjs",
+        "--root-dispatch",
+        "confirmed-by-root"
+      ],
+      "started_at": "2026-10-16T21:01:19.196Z",
+      "finished_at": "2026-10-16T21:04:22.936Z",
+      "exit_code": 1,
+      "error": null,
+      "signal": null,
+      "log": "command-4.log",
+      "log_sha256": "241d2609dd7cc6def544b42130468140c6689a6b2d8bfddfa8397cde9dbe78b7"
+    }
+  ],
+  "scope": "Single scratch preparation; no production, native or persisted acceptance."
+}

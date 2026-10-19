@@ -1,0 +1,4004 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "parent.person-in-parental-family-role.n",
+      "text": "parent",
+      "display_text": "parent",
+      "pos": "noun",
+      "definition": "A person who is a child's parent through birth, adoption, or another recognized family relationship.",
+      "example": "The parent shared information about the child's interests.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "parent"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A welcoming conversation with a family, avoiding an assumed family structure or legal authority.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "guardian.person-with-recognized-guardianship-role.n",
+      "text": "guardian",
+      "display_text": "guardian",
+      "pos": "noun",
+      "definition": "A person with a recognized responsibility for another person under the applicable guardianship arrangements.",
+      "example": "The school checked the guardian's recorded role before discussing permissions.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "guardian"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional role record in a respectful family meeting; do not infer authority from appearance.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "birth-parent.parent-in-biological-parentage-relationship.n",
+      "text": "birth parent",
+      "display_text": "birth parent",
+      "pos": "noun",
+      "definition": "A parent in relation to a child's biological parentage.",
+      "example": "The record distinguishes a birth parent from the currently authorized contact.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "birth parent"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A neutral fictional family relationship diagram without ranking family bonds or implying current legal authority.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "birth-parent.parent-in-biological-parentage-relationship.n.analysis.v1",
+        "lexeme_id": "birth-parent.parent-in-biological-parentage-relationship.n",
+        "text": "birth parent",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored pending modern word-boundary, compound, affix, or intact-unit decision. Exact spelling reconstruction is checked; semantic transparency, historical versus modern analysis, lexicalization, allomorphs, and intact stems need qualified linguistic review. No syllable, midpoint, or automatic suffix splitting is used. Null analyses are not atomic decisions. Educational sound and syllable vocabulary does not authorize phoneme or syllable cuts as morphemes.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.birth",
+            "type": "stem",
+            "canonical": "birth",
+            "surface": "birth"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.parent",
+            "type": "stem",
+            "canonical": "parent",
+            "surface": "parent"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "birth parent",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "foster-carer.person-providing-care-under-fostering-arrangement.n",
+      "text": "foster carer",
+      "display_text": "foster carer",
+      "pos": "noun",
+      "definition": "A person who cares for a child under a fostering arrangement.",
+      "example": "The educator confirmed the communication arrangements with the foster carer.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "foster carer",
+        "foster parent"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A respectful adult-child family scene with a fictional role caption, without custody assumptions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "foster-carer.person-providing-care-under-fostering-arrangement.n.analysis.v1",
+        "lexeme_id": "foster-carer.person-providing-care-under-fostering-arrangement.n",
+        "text": "foster carer",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored pending modern word-boundary, compound, affix, or intact-unit decision. Exact spelling reconstruction is checked; semantic transparency, historical versus modern analysis, lexicalization, allomorphs, and intact stems need qualified linguistic review. No syllable, midpoint, or automatic suffix splitting is used. Null analyses are not atomic decisions. Educational sound and syllable vocabulary does not authorize phoneme or syllable cuts as morphemes.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.foster",
+            "type": "stem",
+            "canonical": "foster",
+            "surface": "foster"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.carer",
+            "type": "stem",
+            "canonical": "carer",
+            "surface": "carer"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "foster carer",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "kinship-care.care-by-relative-or-person-with-existing-family-connection.n",
+      "text": "kinship care",
+      "display_text": "kinship care",
+      "pos": "noun",
+      "definition": "Care of a child by a relative or another person with an existing family connection, under the relevant arrangements.",
+      "example": "The team checked how the kinship care arrangement was recorded.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "kinship care"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A neutral fictional care-network diagram showing an existing family connection without legal claims.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "kinship-care.care-by-relative-or-person-with-existing-family-connection.n.analysis.v1",
+        "lexeme_id": "kinship-care.care-by-relative-or-person-with-existing-family-connection.n",
+        "text": "kinship care",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored pending modern word-boundary, compound, affix, or intact-unit decision. Exact spelling reconstruction is checked; semantic transparency, historical versus modern analysis, lexicalization, allomorphs, and intact stems need qualified linguistic review. No syllable, midpoint, or automatic suffix splitting is used. Null analyses are not atomic decisions. Educational sound and syllable vocabulary does not authorize phoneme or syllable cuts as morphemes.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.kinship",
+            "type": "stem",
+            "canonical": "kinship",
+            "surface": "kinship"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.care",
+            "type": "stem",
+            "canonical": "care",
+            "surface": "care"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "kinship care",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "key-person.designated-early-years-contact-for-child-and-family.n",
+      "text": "key person",
+      "display_text": "key person",
+      "pos": "noun",
+      "definition": "A designated person in an early years setting who supports continuity with a child and family under that setting's arrangements.",
+      "example": "The family asked to speak with the child's key person.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "key person"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An educator and family reviewing a fictional named-contact card, without implying a universal statutory role.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "key-person.designated-early-years-contact-for-child-and-family.n.analysis.v1",
+        "lexeme_id": "key-person.designated-early-years-contact-for-child-and-family.n",
+        "text": "key person",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored pending modern word-boundary, compound, affix, or intact-unit decision. Exact spelling reconstruction is checked; semantic transparency, historical versus modern analysis, lexicalization, allomorphs, and intact stems need qualified linguistic review. No syllable, midpoint, or automatic suffix splitting is used. Null analyses are not atomic decisions. Educational sound and syllable vocabulary does not authorize phoneme or syllable cuts as morphemes.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.key",
+            "type": "stem",
+            "canonical": "key",
+            "surface": "key"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.person",
+            "type": "stem",
+            "canonical": "person",
+            "surface": "person"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "key person",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "family-engagement.family-participation-in-learning-and-setting-life.n",
+      "text": "family engagement",
+      "display_text": "family engagement",
+      "pos": "noun",
+      "definition": "Families' participation in and contribution to learning and the life of an educational setting.",
+      "example": "The team offered several accessible options for family engagement.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "family engagement"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A range of original participation options, including remote and flexible contributions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "family-engagement.family-participation-in-learning-and-setting-life.n.analysis.v1",
+        "lexeme_id": "family-engagement.family-participation-in-learning-and-setting-life.n",
+        "text": "family engagement",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored pending modern word-boundary, compound, affix, or intact-unit decision. Exact spelling reconstruction is checked; semantic transparency, historical versus modern analysis, lexicalization, allomorphs, and intact stems need qualified linguistic review. No syllable, midpoint, or automatic suffix splitting is used. Null analyses are not atomic decisions. Educational sound and syllable vocabulary does not authorize phoneme or syllable cuts as morphemes.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.family",
+            "type": "stem",
+            "canonical": "family",
+            "surface": "family"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.engagement",
+            "type": "stem",
+            "canonical": "engagement",
+            "surface": "engagement"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "family engagement",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "parent-teacher-conference.planned-meeting-about-childs-learning-and-experience.n",
+      "text": "parent-teacher conference",
+      "display_text": "parent-teacher conference",
+      "pos": "noun",
+      "definition": "A planned meeting between a teacher and a child's parent or relevant caregiver about learning and experience.",
+      "example": "The parent-teacher conference includes time for the family's questions.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "parent-teacher conference",
+        "parent-teacher meeting"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An equal, welcoming discussion of fictional learning evidence with accessible communication support.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "parent-teacher-conference.planned-meeting-about-childs-learning-and-experience.n.analysis.v1",
+        "lexeme_id": "parent-teacher-conference.planned-meeting-about-childs-learning-and-experience.n",
+        "text": "parent-teacher conference",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored pending modern word-boundary, compound, affix, or intact-unit decision. Exact spelling reconstruction is checked; semantic transparency, historical versus modern analysis, lexicalization, allomorphs, and intact stems need qualified linguistic review. No syllable, midpoint, or automatic suffix splitting is used. Null analyses are not atomic decisions. Educational sound and syllable vocabulary does not authorize phoneme or syllable cuts as morphemes.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.parent",
+            "type": "stem",
+            "canonical": "parent",
+            "surface": "parent"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.teach",
+            "type": "atomic",
+            "canonical": "teach",
+            "surface": "teach"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.er.suffix",
+            "type": "suffix",
+            "canonical": "er",
+            "surface": "er"
+          },
+          {
+            "id": "p4",
+            "canonical_id": "morph.conference",
+            "type": "stem",
+            "canonical": "conference",
+            "surface": "conference"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "teacher",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "parent-teacher",
+            "rule": "hyphenated_compound"
+          },
+          {
+            "id": "n3",
+            "left": "n2",
+            "right": "p4",
+            "surface": "parent-teacher conference",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n3"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "family-partnership.reciprocal-working-relationship-with-family.n",
+      "text": "family partnership",
+      "display_text": "family partnership",
+      "pos": "noun",
+      "definition": "A reciprocal relationship in which families and educators share knowledge and work together.",
+      "example": "The team discussed how to strengthen the family partnership.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "family partnership"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A two-way conversation with family and educator contributions visibly valued.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "family-partnership.reciprocal-working-relationship-with-family.n.analysis.v1",
+        "lexeme_id": "family-partnership.reciprocal-working-relationship-with-family.n",
+        "text": "family partnership",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored pending modern word-boundary, compound, affix, or intact-unit decision. Exact spelling reconstruction is checked; semantic transparency, historical versus modern analysis, lexicalization, allomorphs, and intact stems need qualified linguistic review. No syllable, midpoint, or automatic suffix splitting is used. Null analyses are not atomic decisions. Educational sound and syllable vocabulary does not authorize phoneme or syllable cuts as morphemes.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.family",
+            "type": "stem",
+            "canonical": "family",
+            "surface": "family"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.partnership",
+            "type": "stem",
+            "canonical": "partnership",
+            "surface": "partnership"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "family partnership",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "settling-in-period.time-of-adjusting-to-new-setting.n",
+      "text": "settling-in period",
+      "display_text": "settling-in period",
+      "pos": "noun",
+      "definition": "A period in which a child and family become familiar with a new setting and its arrangements.",
+      "example": "The settling-in period will be discussed with the family.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "settling-in period"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A gradual familiarization scene without a fixed deadline or promise of distress-free separation.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "settling-in-period.time-of-adjusting-to-new-setting.n.analysis.v1",
+        "lexeme_id": "settling-in-period.time-of-adjusting-to-new-setting.n",
+        "text": "settling-in period",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored pending modern word-boundary, compound, affix, or intact-unit decision. Exact spelling reconstruction is checked; semantic transparency, historical versus modern analysis, lexicalization, allomorphs, and intact stems need qualified linguistic review. No syllable, midpoint, or automatic suffix splitting is used. Null analyses are not atomic decisions. Educational sound and syllable vocabulary does not authorize phoneme or syllable cuts as morphemes.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.settling",
+            "type": "stem",
+            "canonical": "settling",
+            "surface": "settling"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.in",
+            "type": "stem",
+            "canonical": "in",
+            "surface": "in"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.period",
+            "type": "stem",
+            "canonical": "period",
+            "surface": "period"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "settling-in",
+            "rule": "hyphenated_compound"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "settling-in period",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "school-transition.change-between-school-stages-or-settings.n",
+      "text": "school transition",
+      "display_text": "school transition",
+      "pos": "noun",
+      "definition": "A change into, between, or out of school stages or settings.",
+      "example": "The educators shared relevant information for the school transition.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "school transition"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two fictional educational settings linked by an agreed support plan.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "school-transition.change-between-school-stages-or-settings.n.analysis.v1",
+        "lexeme_id": "school-transition.change-between-school-stages-or-settings.n",
+        "text": "school transition",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored pending modern word-boundary, compound, affix, or intact-unit decision. Exact spelling reconstruction is checked; semantic transparency, historical versus modern analysis, lexicalization, allomorphs, and intact stems need qualified linguistic review. No syllable, midpoint, or automatic suffix splitting is used. Null analyses are not atomic decisions. Educational sound and syllable vocabulary does not authorize phoneme or syllable cuts as morphemes.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.school",
+            "type": "stem",
+            "canonical": "school",
+            "surface": "school"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.transition",
+            "type": "stem",
+            "canonical": "transition",
+            "surface": "transition"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "school transition",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "drop-off.handover-of-child-on-arrival.n",
+      "text": "drop-off",
+      "display_text": "drop-off",
+      "pos": "noun",
+      "definition": "The handover of a child when they arrive at a setting under its arrangements.",
+      "example": "The family asked about the drop-off arrangements.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "drop-off"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A calm arrival handover at a fictional setting, with responsible adults present.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "drop-off.handover-of-child-on-arrival.n.analysis.v1",
+        "lexeme_id": "drop-off.handover-of-child-on-arrival.n",
+        "text": "drop-off",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored pending modern word-boundary, compound, affix, or intact-unit decision. Exact spelling reconstruction is checked; semantic transparency, historical versus modern analysis, lexicalization, allomorphs, and intact stems need qualified linguistic review. No syllable, midpoint, or automatic suffix splitting is used. Null analyses are not atomic decisions. Educational sound and syllable vocabulary does not authorize phoneme or syllable cuts as morphemes.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.drop",
+            "type": "stem",
+            "canonical": "drop",
+            "surface": "drop"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.off",
+            "type": "stem",
+            "canonical": "off",
+            "surface": "off"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "drop-off",
+            "rule": "hyphenated_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "pickup.collection-of-child-from-setting.n",
+      "text": "pickup",
+      "display_text": "pickup",
+      "pos": "noun",
+      "definition": "The collection of a child from a setting under its arrangements.",
+      "example": "The pickup time has been updated in the agreed record.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "pickup"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An end-of-session handover with a fictional authorization record, without security details.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "authorized-collector.person-authorized-to-collect-child.n",
+      "text": "authorized collector",
+      "display_text": "authorized collector",
+      "pos": "noun",
+      "definition": "A person recorded as authorized to collect a child under the applicable arrangements.",
+      "example": "The educator checked the authorized collector information.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "authorized collector"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional authorization record with invented details; appearance does not establish identity.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "authorized-collector.person-authorized-to-collect-child.n.analysis.v1",
+        "lexeme_id": "authorized-collector.person-authorized-to-collect-child.n",
+        "text": "authorized collector",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored pending modern word-boundary, compound, affix, or intact-unit decision. Exact spelling reconstruction is checked; semantic transparency, historical versus modern analysis, lexicalization, allomorphs, and intact stems need qualified linguistic review. No syllable, midpoint, or automatic suffix splitting is used. Null analyses are not atomic decisions. Educational sound and syllable vocabulary does not authorize phoneme or syllable cuts as morphemes.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.authorized",
+            "type": "stem",
+            "canonical": "authorized",
+            "surface": "authorized"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.collector",
+            "type": "stem",
+            "canonical": "collector",
+            "surface": "collector"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "authorized collector",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "pronouns.words-used-in-place-of-nouns-or-names.n",
+      "text": "pronouns",
+      "display_text": "pronouns",
+      "pos": "noun",
+      "definition": "Words used in place of nouns or names, including forms people use when referring to themselves or others.",
+      "example": "The family shared the pronouns they use for the child.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "pronouns"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A respectful fictional introduction card with clearly optional pronoun information.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "translation.written-meaning-conveyed-between-languages.n",
+      "text": "translation",
+      "display_text": "translation",
+      "pos": "noun",
+      "definition": "The conveying of written meaning from one language into another.",
+      "example": "The family requested a translation of the written information.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "translation"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "The same original short notice in two accurately reviewed languages, with professional review pending.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "nursery.early-years-education-or-childcare-setting.n",
+      "text": "nursery",
+      "display_text": "nursery",
+      "pos": "noun",
+      "definition": "An early years setting providing education or childcare, with exact usage varying by region.",
+      "example": "The family asked about the nursery's daily arrangements.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "nursery"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A welcoming early years setting, distinct from a plant nursery or hospital room.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "childminder.person-providing-childcare-usually-in-home-setting.n",
+      "text": "childminder",
+      "display_text": "childminder",
+      "pos": "noun",
+      "definition": "A person who provides childcare, commonly in a home setting, under applicable local arrangements.",
+      "example": "The parent asked how to share information with the childminder.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "childminder"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A professional home-based childcare setting without claims about registration or qualifications.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "childminder.person-providing-childcare-usually-in-home-setting.n.analysis.v1",
+        "lexeme_id": "childminder.person-providing-childcare-usually-in-home-setting.n",
+        "text": "childminder",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored pending modern word-boundary, compound, affix, or intact-unit decision. Exact spelling reconstruction is checked; semantic transparency, historical versus modern analysis, lexicalization, allomorphs, and intact stems need qualified linguistic review. No syllable, midpoint, or automatic suffix splitting is used. Null analyses are not atomic decisions. Educational sound and syllable vocabulary does not authorize phoneme or syllable cuts as morphemes.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.child",
+            "type": "atomic",
+            "canonical": "child",
+            "surface": "child"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.mind",
+            "type": "stem",
+            "canonical": "mind",
+            "surface": "mind"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.er.suffix",
+            "type": "suffix",
+            "canonical": "er",
+            "surface": "er"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "minder",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "childminder",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "enrollment.process-of-registering-for-educational-service.n",
+      "text": "enrollment",
+      "display_text": "enrollment",
+      "pos": "noun",
+      "definition": "The process of registering a learner for an educational or childcare service.",
+      "example": "The office explained the enrollment process.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "enrollment",
+        "enrolment"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional registration workflow with clear steps and no personal information.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "enrollment.process-of-registering-for-educational-service.n.analysis.v1",
+        "lexeme_id": "enrollment.process-of-registering-for-educational-service.n",
+        "text": "enrollment",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored pending modern word-boundary, compound, affix, or intact-unit decision. Exact spelling reconstruction is checked; semantic transparency, historical versus modern analysis, lexicalization, allomorphs, and intact stems need qualified linguistic review. No syllable, midpoint, or automatic suffix splitting is used. Null analyses are not atomic decisions. Educational sound and syllable vocabulary does not authorize phoneme or syllable cuts as morphemes.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.enroll",
+            "type": "stem",
+            "canonical": "enroll",
+            "surface": "enroll"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ment.suffix",
+            "type": "suffix",
+            "canonical": "ment",
+            "surface": "ment"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "enrollment",
+            "rule": "suffix_attachment"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "photo-consent.consent-arrangements-for-taking-or-using-images.n",
+      "text": "photo consent",
+      "display_text": "photo consent",
+      "pos": "noun",
+      "definition": "The relevant consent arrangements for taking, storing, or using a person's images for stated purposes.",
+      "example": "The team checked the scope of photo consent before the planned use.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "photo consent"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional image-use record separating capture, storage, and publication choices.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "photo-consent.consent-arrangements-for-taking-or-using-images.n.analysis.v1",
+        "lexeme_id": "photo-consent.consent-arrangements-for-taking-or-using-images.n",
+        "text": "photo consent",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored pending modern word-boundary, compound, affix, or intact-unit decision. Exact spelling reconstruction is checked; semantic transparency, historical versus modern analysis, lexicalization, allomorphs, and intact stems need qualified linguistic review. No syllable, midpoint, or automatic suffix splitting is used. Null analyses are not atomic decisions. Educational sound and syllable vocabulary does not authorize phoneme or syllable cuts as morphemes.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.photo",
+            "type": "stem",
+            "canonical": "photo",
+            "surface": "photo"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.consent",
+            "type": "stem",
+            "canonical": "consent",
+            "surface": "consent"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "photo consent",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "permission-slip.form-for-requesting-specific-activity-permission.n",
+      "text": "permission slip",
+      "display_text": "permission slip",
+      "pos": "noun",
+      "definition": "A form used to request or record permission for a specified activity.",
+      "example": "The permission slip identifies the planned activity.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "permission slip"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional activity-permission form, clearly not sufficient by itself to establish valid consent.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "permission-slip.form-for-requesting-specific-activity-permission.n.analysis.v1",
+        "lexeme_id": "permission-slip.form-for-requesting-specific-activity-permission.n",
+        "text": "permission slip",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored pending modern word-boundary, compound, affix, or intact-unit decision. Exact spelling reconstruction is checked; semantic transparency, historical versus modern analysis, lexicalization, allomorphs, and intact stems need qualified linguistic review. No syllable, midpoint, or automatic suffix splitting is used. Null analyses are not atomic decisions. Educational sound and syllable vocabulary does not authorize phoneme or syllable cuts as morphemes.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.permission",
+            "type": "stem",
+            "canonical": "permission",
+            "surface": "permission"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.slip",
+            "type": "stem",
+            "canonical": "slip",
+            "surface": "slip"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "permission slip",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "daily-report.summary-of-events-during-day.n",
+      "text": "daily report",
+      "display_text": "daily report",
+      "pos": "noun",
+      "definition": "A summary of relevant events or information from a day.",
+      "example": "The educator prepared the daily report for the family.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "daily report"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional daily summary without unnecessary personal details.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "daily-report.summary-of-events-during-day.n.analysis.v1",
+        "lexeme_id": "daily-report.summary-of-events-during-day.n",
+        "text": "daily report",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored pending modern word-boundary, compound, affix, or intact-unit decision. Exact spelling reconstruction is checked; semantic transparency, historical versus modern analysis, lexicalization, allomorphs, and intact stems need qualified linguistic review. No syllable, midpoint, or automatic suffix splitting is used. Null analyses are not atomic decisions. Educational sound and syllable vocabulary does not authorize phoneme or syllable cuts as morphemes.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.daily",
+            "type": "stem",
+            "canonical": "daily",
+            "surface": "daily"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.report",
+            "type": "stem",
+            "canonical": "report",
+            "surface": "report"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "daily report",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-planning",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-paralegals",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-lawyers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "home-school-diary.record-supporting-communication-between-home-and-school.n",
+      "text": "home-school diary",
+      "display_text": "home-school diary",
+      "pos": "noun",
+      "definition": "A record used for relevant communication between a learner's home and school.",
+      "example": "The family added a question to the home-school diary.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "home-school diary"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional two-way communication notebook with accessible alternatives acknowledged.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "home-school-diary.record-supporting-communication-between-home-and-school.n.analysis.v1",
+        "lexeme_id": "home-school-diary.record-supporting-communication-between-home-and-school.n",
+        "text": "home-school diary",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored pending modern word-boundary, compound, affix, or intact-unit decision. Exact spelling reconstruction is checked; semantic transparency, historical versus modern analysis, lexicalization, allomorphs, and intact stems need qualified linguistic review. No syllable, midpoint, or automatic suffix splitting is used. Null analyses are not atomic decisions. Educational sound and syllable vocabulary does not authorize phoneme or syllable cuts as morphemes.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.home",
+            "type": "stem",
+            "canonical": "home",
+            "surface": "home"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.school",
+            "type": "stem",
+            "canonical": "school",
+            "surface": "school"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.diary",
+            "type": "stem",
+            "canonical": "diary",
+            "surface": "diary"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "home-school",
+            "rule": "hyphenated_compound"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "home-school diary",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "care-routine.usual-arrangement-for-everyday-care.n",
+      "text": "care routine",
+      "display_text": "care routine",
+      "pos": "noun",
+      "definition": "A usual arrangement for everyday care activities, adapted to individual requirements.",
+      "example": "The educator discussed the care routine with the family.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "care routine"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional individualized daily-care plan without demonstrating care techniques.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "care-routine.usual-arrangement-for-everyday-care.n.analysis.v1",
+        "lexeme_id": "care-routine.usual-arrangement-for-everyday-care.n",
+        "text": "care routine",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored pending modern word-boundary, compound, affix, or intact-unit decision. Exact spelling reconstruction is checked; semantic transparency, historical versus modern analysis, lexicalization, allomorphs, and intact stems need qualified linguistic review. No syllable, midpoint, or automatic suffix splitting is used. Null analyses are not atomic decisions. Educational sound and syllable vocabulary does not authorize phoneme or syllable cuts as morphemes.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.care",
+            "type": "stem",
+            "canonical": "care",
+            "surface": "care"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.routine",
+            "type": "stem",
+            "canonical": "routine",
+            "surface": "routine"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "care routine",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "rest-time.period-set-aside-for-rest.n",
+      "text": "rest time",
+      "display_text": "rest time",
+      "pos": "noun",
+      "definition": "A period set aside for rest under the person's and setting's arrangements.",
+      "example": "The family discussed what helps during rest time.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "rest time"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A calm resting area without infant-sleep demonstrations or universal sleep instructions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "rest-time.period-set-aside-for-rest.n.analysis.v1",
+        "lexeme_id": "rest-time.period-set-aside-for-rest.n",
+        "text": "rest time",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored pending modern word-boundary, compound, affix, or intact-unit decision. Exact spelling reconstruction is checked; semantic transparency, historical versus modern analysis, lexicalization, allomorphs, and intact stems need qualified linguistic review. No syllable, midpoint, or automatic suffix splitting is used. Null analyses are not atomic decisions. Educational sound and syllable vocabulary does not authorize phoneme or syllable cuts as morphemes.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.rest",
+            "type": "stem",
+            "canonical": "rest",
+            "surface": "rest"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.time",
+            "type": "stem",
+            "canonical": "time",
+            "surface": "time"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "rest time",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "snack-time.period-for-small-amount-of-food-between-meals.n",
+      "text": "snack time",
+      "display_text": "snack time",
+      "pos": "noun",
+      "definition": "A period for a small amount of food between meals under the setting's arrangements.",
+      "example": "The educator checked the individual requirements for snack time.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "snack time"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional snack schedule linked to individual requirements, without feeding instructions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "snack-time.period-for-small-amount-of-food-between-meals.n.analysis.v1",
+        "lexeme_id": "snack-time.period-for-small-amount-of-food-between-meals.n",
+        "text": "snack time",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored pending modern word-boundary, compound, affix, or intact-unit decision. Exact spelling reconstruction is checked; semantic transparency, historical versus modern analysis, lexicalization, allomorphs, and intact stems need qualified linguistic review. No syllable, midpoint, or automatic suffix splitting is used. Null analyses are not atomic decisions. Educational sound and syllable vocabulary does not authorize phoneme or syllable cuts as morphemes.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.snack",
+            "type": "stem",
+            "canonical": "snack",
+            "surface": "snack"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.time",
+            "type": "stem",
+            "canonical": "time",
+            "surface": "time"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "snack time",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "food-allergy.immune-reaction-to-food-substance.n",
+      "text": "food allergy",
+      "display_text": "food allergy",
+      "pos": "noun",
+      "definition": "An immune-system reaction to a substance in food, whose assessment and management require appropriate expertise.",
+      "example": "The food allergy information is included in the agreed care records.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "food allergy"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional allergy-information record, without diagnosis, treatment, or a guaranteed safe food claim.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "food-allergy.immune-reaction-to-food-substance.n.analysis.v1",
+        "lexeme_id": "food-allergy.immune-reaction-to-food-substance.n",
+        "text": "food allergy",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored pending modern word-boundary, compound, affix, or intact-unit decision. Exact spelling reconstruction is checked; semantic transparency, historical versus modern analysis, lexicalization, allomorphs, and intact stems need qualified linguistic review. No syllable, midpoint, or automatic suffix splitting is used. Null analyses are not atomic decisions. Educational sound and syllable vocabulary does not authorize phoneme or syllable cuts as morphemes.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.food",
+            "type": "stem",
+            "canonical": "food",
+            "surface": "food"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.allergy",
+            "type": "stem",
+            "canonical": "allergy",
+            "surface": "allergy"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "food allergy",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "comfort-item.familiar-object-providing-reassurance.n",
+      "text": "comfort item",
+      "display_text": "comfort item",
+      "pos": "noun",
+      "definition": "A familiar object that may help a person feel reassured.",
+      "example": "The family described the child's comfort item.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "comfort item"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original familiar soft toy in a daytime transition scene, without a sleep-safety claim.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "comfort-item.familiar-object-providing-reassurance.n.analysis.v1",
+        "lexeme_id": "comfort-item.familiar-object-providing-reassurance.n",
+        "text": "comfort item",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored pending modern word-boundary, compound, affix, or intact-unit decision. Exact spelling reconstruction is checked; semantic transparency, historical versus modern analysis, lexicalization, allomorphs, and intact stems need qualified linguistic review. No syllable, midpoint, or automatic suffix splitting is used. Null analyses are not atomic decisions. Educational sound and syllable vocabulary does not authorize phoneme or syllable cuts as morphemes.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.comfort",
+            "type": "stem",
+            "canonical": "comfort",
+            "surface": "comfort"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.item",
+            "type": "stem",
+            "canonical": "item",
+            "surface": "item"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "comfort item",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "spare-clothes.additional-clothing-kept-for-change.n",
+      "text": "spare clothes",
+      "display_text": "spare clothes",
+      "pos": "noun",
+      "definition": "Additional clothing kept available for a change when needed.",
+      "example": "The spare clothes are stored in the labeled bag.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "spare clothes"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A set of clean additional clothing in a clearly labeled fictional bag.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "spare-clothes.additional-clothing-kept-for-change.n.analysis.v1",
+        "lexeme_id": "spare-clothes.additional-clothing-kept-for-change.n",
+        "text": "spare clothes",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored pending modern word-boundary, compound, affix, or intact-unit decision. Exact spelling reconstruction is checked; semantic transparency, historical versus modern analysis, lexicalization, allomorphs, and intact stems need qualified linguistic review. No syllable, midpoint, or automatic suffix splitting is used. Null analyses are not atomic decisions. Educational sound and syllable vocabulary does not authorize phoneme or syllable cuts as morphemes.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.spare",
+            "type": "stem",
+            "canonical": "spare",
+            "surface": "spare"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.clothes",
+            "type": "stem",
+            "canonical": "clothes",
+            "surface": "clothes"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "spare clothes",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "wet-bag.bag-for-containing-wet-or-soiled-items.n",
+      "text": "wet bag",
+      "display_text": "wet bag",
+      "pos": "noun",
+      "definition": "A bag intended to contain wet or soiled items under the setting's arrangements.",
+      "example": "The educator checked the labeled wet bag.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "wet bag"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A closed reusable wet-item bag, distinct from a general school backpack.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "wet-bag.bag-for-containing-wet-or-soiled-items.n.analysis.v1",
+        "lexeme_id": "wet-bag.bag-for-containing-wet-or-soiled-items.n",
+        "text": "wet bag",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored pending modern word-boundary, compound, affix, or intact-unit decision. Exact spelling reconstruction is checked; semantic transparency, historical versus modern analysis, lexicalization, allomorphs, and intact stems need qualified linguistic review. No syllable, midpoint, or automatic suffix splitting is used. Null analyses are not atomic decisions. Educational sound and syllable vocabulary does not authorize phoneme or syllable cuts as morphemes.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.wet",
+            "type": "stem",
+            "canonical": "wet",
+            "surface": "wet"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.bag",
+            "type": "stem",
+            "canonical": "bag",
+            "surface": "bag"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "wet bag",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "diaper.absorbent-garment-for-bodily-waste.n",
+      "text": "diaper",
+      "display_text": "diaper",
+      "pos": "noun",
+      "definition": "An absorbent garment used to contain urine and feces.",
+      "example": "The family packed spare diapers for the day.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "diaper",
+        "nappy"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An unused unbranded absorbent garment shown alone, with no changing procedure.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "sunscreen.product-intended-to-reduce-ultraviolet-exposure.n",
+      "text": "sunscreen",
+      "display_text": "sunscreen",
+      "pos": "noun",
+      "definition": "A product intended to help reduce skin exposure to ultraviolet radiation when used appropriately.",
+      "example": "The educator checked the sunscreen arrangements with the responsible person.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "sunscreen",
+        "sun cream"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An unbranded sunscreen container with no universal dose, schedule, age, or protection guarantee.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "sunscreen.product-intended-to-reduce-ultraviolet-exposure.n.analysis.v1",
+        "lexeme_id": "sunscreen.product-intended-to-reduce-ultraviolet-exposure.n",
+        "text": "sunscreen",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored pending modern word-boundary, compound, affix, or intact-unit decision. Exact spelling reconstruction is checked; semantic transparency, historical versus modern analysis, lexicalization, allomorphs, and intact stems need qualified linguistic review. No syllable, midpoint, or automatic suffix splitting is used. Null analyses are not atomic decisions. Educational sound and syllable vocabulary does not authorize phoneme or syllable cuts as morphemes.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.sun",
+            "type": "stem",
+            "canonical": "sun",
+            "surface": "sun"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.screen",
+            "type": "stem",
+            "canonical": "screen",
+            "surface": "screen"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "sunscreen",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "individual-support-plan.documented-person-specific-support-arrangements.n",
+      "text": "individual support plan",
+      "display_text": "individual support plan",
+      "pos": "noun",
+      "definition": "A documented set of support arrangements for a particular person.",
+      "example": "The team reviewed the individual support plan with the family.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "individual support plan"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional collaborative support plan with personal details removed.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "individual-support-plan.documented-person-specific-support-arrangements.n.analysis.v1",
+        "lexeme_id": "individual-support-plan.documented-person-specific-support-arrangements.n",
+        "text": "individual support plan",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored pending modern word-boundary, compound, affix, or intact-unit decision. Exact spelling reconstruction is checked; semantic transparency, historical versus modern analysis, lexicalization, allomorphs, and intact stems need qualified linguistic review. No syllable, midpoint, or automatic suffix splitting is used. Null analyses are not atomic decisions. Educational sound and syllable vocabulary does not authorize phoneme or syllable cuts as morphemes.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.individual",
+            "type": "stem",
+            "canonical": "individual",
+            "surface": "individual"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.support",
+            "type": "stem",
+            "canonical": "support",
+            "surface": "support"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.plan",
+            "type": "stem",
+            "canonical": "plan",
+            "surface": "plan"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "individual support",
+            "rule": "word_boundary"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "individual support plan",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "additional-needs.support-needs-beyond-usual-provision.n",
+      "text": "additional needs",
+      "display_text": "additional needs",
+      "pos": "noun",
+      "definition": "Needs requiring support beyond a setting's usual provision, with usage depending on context.",
+      "example": "The family described the child's additional needs in their own words.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "additional needs"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A respectful planning conversation about specific supports without labels or diagnosis.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "additional-needs.support-needs-beyond-usual-provision.n.analysis.v1",
+        "lexeme_id": "additional-needs.support-needs-beyond-usual-provision.n",
+        "text": "additional needs",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored pending modern word-boundary, compound, affix, or intact-unit decision. Exact spelling reconstruction is checked; semantic transparency, historical versus modern analysis, lexicalization, allomorphs, and intact stems need qualified linguistic review. No syllable, midpoint, or automatic suffix splitting is used. Null analyses are not atomic decisions. Educational sound and syllable vocabulary does not authorize phoneme or syllable cuts as morphemes.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.additional",
+            "type": "stem",
+            "canonical": "additional",
+            "surface": "additional"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.needs",
+            "type": "stem",
+            "canonical": "needs",
+            "surface": "needs"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "additional needs",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "family-preference.choice-or-priority-expressed-by-family.n",
+      "text": "family preference",
+      "display_text": "family preference",
+      "pos": "noun",
+      "definition": "A choice or priority expressed by a family.",
+      "example": "The educator recorded the family preference and clarified the available arrangements.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "family preference"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional family contribution recorded alongside a respectful discussion of practical arrangements.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "family-preference.choice-or-priority-expressed-by-family.n.analysis.v1",
+        "lexeme_id": "family-preference.choice-or-priority-expressed-by-family.n",
+        "text": "family preference",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored pending modern word-boundary, compound, affix, or intact-unit decision. Exact spelling reconstruction is checked; semantic transparency, historical versus modern analysis, lexicalization, allomorphs, and intact stems need qualified linguistic review. No syllable, midpoint, or automatic suffix splitting is used. Null analyses are not atomic decisions. Educational sound and syllable vocabulary does not authorize phoneme or syllable cuts as morphemes.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.family",
+            "type": "stem",
+            "canonical": "family",
+            "surface": "family"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.preference",
+            "type": "stem",
+            "canonical": "preference",
+            "surface": "preference"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "family preference",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "status": "failed",
+  "recorded_at": "2026-10-16T21:04:22.694Z",
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n2 !== 1\n\n    at Object.fn (tests/professional-retail-morphology.test.cjs:990:266)\n    at Object.<anonymous> (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fourth10-delivery-preparation-r01\\prepare.cjs:80:33)\n    at Module._compile (node:internal/modules/cjs/loader:1804:14)\n    at Object..js (node:internal/modules/cjs/loader:1936:10)\n    at Module.load (node:internal/modules/cjs/loader:1525:32)\n    at Module._load (node:internal/modules/cjs/loader:1327:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:328:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)\n    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)\n    at node:internal/main/run_main_module:33:47",
+  "source_files": [
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r01/input-pins.json",
+      "raw_sha256": "d58ea126241c8585d7b8887fa7698520fde2d0134de5f60d9599a19bb92adaa5"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r01/input-freeze-receipt.json",
+      "raw_sha256": "11199e3c062e250f654bdd9daead9803565afe075fd1e96b457bd7fcdf71c9ed"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r01/projection.cjs",
+      "raw_sha256": "c07b67580921610e94425d3f2c01b620203163d7a6ef40be2a4ebe07edf12da9"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r01/test-transforms.cjs",
+      "raw_sha256": "f28949a1cdb0dfceb1875ec7abfd6478aa2502dfecb3b6e8e37d1bd113c58d5e"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r01/prepare.cjs",
+      "raw_sha256": "6fa9ddd5547673b797c302a4b1c78d8b3be64a9b90f07cfe2771a3f2236b9c11"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r01/HANDOFF.md",
+      "raw_sha256": "4b0e0f9b4a020e33c580ec5082daf83dc8752dcd4dad98f31e429b6abefedba6"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r01/TRANSACTION.md",
+      "raw_sha256": "2a68f99c9198418f6cdd41aad76b3df583be1ec6716d7d33c70b5d20e734b9c4"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r01/author-inventory.json",
+      "raw_sha256": "b4e418aaaec0c4748b32264438c66e0ba6f65944e97f3f31988a430f570e0f04"
+    }
+  ],
+  "production_mutated": false,
+  "instruction": "Preserve this attempt and sources; any correction must use a distinct revision and execution directory."
+}

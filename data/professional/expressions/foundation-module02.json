@@ -1,0 +1,1560 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.foundation.module02.01",
+      "text": "Could you repeat the instruction and explain your answer to my question?",
+      "meaning": "Ask for spoken information again and for an explanation of the response.",
+      "context": "A worker seeks understanding before starting a task.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Could",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "you",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "repeat",
+          "start": 10,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "instruction",
+          "start": 21,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 33,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "explain",
+          "start": 37,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "your",
+          "start": 45,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "answer",
+          "start": 50,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "to",
+          "start": 57,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "my",
+          "start": 60,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "question",
+          "start": 63,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "?",
+          "start": 71,
+          "end": 72
+        }
+      ],
+      "focus_lexeme_ids": [
+        "repeat.say-again.v",
+        "instruction.direction.n",
+        "explain.make-clear.v",
+        "answer.response.n",
+        "question.information-request.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "british-council-requests",
+          "status": "pending_term_check",
+          "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+        }
+      ]
+    },
+    {
+      "id": "expr.foundation.module02.02",
+      "text": "Please contact the supplier to confirm the delivery time, and inform us of any delay.",
+      "meaning": "Ask someone to communicate with the provider and pass on timing changes.",
+      "context": "A team coordinates an expected delivery.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "contact",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "supplier",
+          "start": 19,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "to",
+          "start": 28,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "confirm",
+          "start": 31,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 39,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "delivery",
+          "start": 43,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "time",
+          "start": 52,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 56,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": "inform",
+          "start": 62,
+          "end": 68
+        },
+        {
+          "index": 12,
+          "text": "us",
+          "start": 69,
+          "end": 71
+        },
+        {
+          "index": 13,
+          "text": "of",
+          "start": 72,
+          "end": 74
+        },
+        {
+          "index": 14,
+          "text": "any",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 15,
+          "text": "delay",
+          "start": 79,
+          "end": 84
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 84,
+          "end": 85
+        }
+      ],
+      "focus_lexeme_ids": [
+        "contact.communicate-with.v",
+        "confirm.verify-arrangement.v",
+        "inform.give-information.v",
+        "delay.late-occurrence.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex runtime_recovery, independent AI reviewer of language_delivery research; not human or subject-matter approval",
+        "reviewed_at": "2026-10-17"
+      },
+      "references": [
+        {
+          "source_id": "british-council-requests",
+          "status": "pending_term_check",
+          "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+        },
+        {
+          "source_id": "foundation02-notify-resolution-oxford-inform",
+          "status": "verified",
+          "scope": "Recorded lexical support for the exact complete original request separately accepted by the independent language/context review. This expression uses the selected focus sense; the source row itself grants no whole-expression, audio, specialist or release approval. No old expression completion transfers to the new requirements namespace."
+        },
+        {
+          "source_id": "foundation02-notify-resolution-collins-inform",
+          "status": "verified",
+          "scope": "Recorded lexical support for the exact complete original request separately accepted by the independent language/context review. This expression uses the selected focus sense; the source row itself grants no whole-expression, audio, specialist or release approval. No old expression completion transfers to the new requirements namespace."
+        },
+        {
+          "source_id": "foundation02-notify-resolution-cefrj-v15",
+          "status": "verified",
+          "scope": "Recorded lexical support for the exact complete original request separately accepted by the independent language/context review. This expression uses the selected focus sense; the source row itself grants no whole-expression, audio, specialist or release approval. No old expression completion transfers to the new requirements namespace."
+        }
+      ]
+    },
+    {
+      "id": "expr.foundation.module02.03",
+      "text": "I need clarification before I can approve or reject this request.",
+      "meaning": "Explain why a decision needs more information.",
+      "context": "A colleague reviews a workplace request.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "I",
+          "start": 0,
+          "end": 1
+        },
+        {
+          "index": 1,
+          "text": "need",
+          "start": 2,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "clarification",
+          "start": 7,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "before",
+          "start": 21,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "I",
+          "start": 28,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "can",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "approve",
+          "start": 34,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "or",
+          "start": 42,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "reject",
+          "start": 45,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "this",
+          "start": 52,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "request",
+          "start": 57,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 64,
+          "end": 65
+        }
+      ],
+      "focus_lexeme_ids": [
+        "clarification.clearer-explanation.n",
+        "approve.authorize.v",
+        "reject.decline-acceptance.v",
+        "request.asking-action.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "british-council-requests",
+          "status": "pending_term_check",
+          "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+        }
+      ]
+    },
+    {
+      "id": "expr.foundation.module02.04",
+      "text": "Please check the form, correct any error, and ensure that the reference number is included before you submit it.",
+      "meaning": "Ask someone to examine a form, remove mistakes, and make certain it contains a reference number before sending it for processing.",
+      "context": "A worker prepares a fictional workshop registration form. Its reference number must be entered before the form is sent for routine processing.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "check",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "form",
+          "start": 17,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 21,
+          "end": 22
+        },
+        {
+          "index": 5,
+          "text": "correct",
+          "start": 23,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "any",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "error",
+          "start": 35,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 40,
+          "end": 41
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 10,
+          "text": "ensure",
+          "start": 46,
+          "end": 52
+        },
+        {
+          "index": 11,
+          "text": "that",
+          "start": 53,
+          "end": 57
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 13,
+          "text": "reference",
+          "start": 62,
+          "end": 71
+        },
+        {
+          "index": 14,
+          "text": "number",
+          "start": 72,
+          "end": 78
+        },
+        {
+          "index": 15,
+          "text": "is",
+          "start": 79,
+          "end": 81
+        },
+        {
+          "index": 16,
+          "text": "included",
+          "start": 82,
+          "end": 90
+        },
+        {
+          "index": 17,
+          "text": "before",
+          "start": 91,
+          "end": 97
+        },
+        {
+          "index": 18,
+          "text": "you",
+          "start": 98,
+          "end": 101
+        },
+        {
+          "index": 19,
+          "text": "submit",
+          "start": 102,
+          "end": 108
+        },
+        {
+          "index": 20,
+          "text": "it",
+          "start": 109,
+          "end": 111
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 111,
+          "end": 112
+        }
+      ],
+      "focus_lexeme_ids": [
+        "ensure.make-certain.v",
+        "correct.put-right.v",
+        "error.mistake.n",
+        "check.examine.v",
+        "submit.send-for-consideration.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex root independent AI language and curriculum reviewer; not human or subject-matter approval",
+        "reviewed_at": "2026-10-17"
+      },
+      "references": [
+        {
+          "source_id": "british-council-requests",
+          "status": "pending_term_check",
+          "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+        },
+        {
+          "source_id": "foundation02-verify-resolution-oxford-ensure",
+          "status": "verified",
+          "scope": "Recorded lexical support for the exact complete original request separately accepted by the independent language/context review. This expression uses the selected focus sense; the source row itself grants no whole-expression, audio, specialist or release approval. No old expression completion transfers to the new requirements namespace."
+        },
+        {
+          "source_id": "foundation02-verify-resolution-collins-ensure",
+          "status": "verified",
+          "scope": "Recorded lexical support for the exact complete original request separately accepted by the independent language/context review. This expression uses the selected focus sense; the source row itself grants no whole-expression, audio, specialist or release approval. No old expression completion transfers to the new requirements namespace."
+        },
+        {
+          "source_id": "foundation02-verify-resolution-cefrj-ensure-v15",
+          "status": "verified",
+          "scope": "Recorded lexical support for the exact complete original request separately accepted by the independent language/context review. This expression uses the selected focus sense; the source row itself grants no whole-expression, audio, specialist or release approval. No old expression completion transfers to the new requirements namespace."
+        }
+      ]
+    },
+    {
+      "id": "expr.foundation.module02.05",
+      "text": "Please help resolve this urgent delivery problem; I have a concern about the proposed solution.",
+      "meaning": "Ask for prompt help with a worrying issue and a workable response.",
+      "context": "A team discusses conflicting delivery information.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "help",
+          "start": 7,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "resolve",
+          "start": 12,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "this",
+          "start": 20,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "urgent",
+          "start": 25,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "delivery",
+          "start": 32,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "problem",
+          "start": 41,
+          "end": 48
+        },
+        {
+          "index": 7,
+          "text": ";",
+          "start": 48,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "I",
+          "start": 50,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "have",
+          "start": 52,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "a",
+          "start": 57,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": "concern",
+          "start": 59,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "about",
+          "start": 67,
+          "end": 72
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 73,
+          "end": 76
+        },
+        {
+          "index": 14,
+          "text": "proposed",
+          "start": 77,
+          "end": 85
+        },
+        {
+          "index": 15,
+          "text": "solution",
+          "start": 86,
+          "end": 94
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 94,
+          "end": 95
+        }
+      ],
+      "focus_lexeme_ids": [
+        "resolve.solve-problem.v",
+        "urgent.needing-prompt-attention.adj",
+        "concern.worrying-matter.n",
+        "solution.problem-answer.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "british-council-requests",
+          "status": "pending_term_check",
+          "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+        }
+      ]
+    },
+    {
+      "id": "expr.foundation.module02.06",
+      "text": "Please report the fault and ask the authorized team to replace the broken handle.",
+      "meaning": "Request reporting and authorized attention to a damaged item.",
+      "context": "A worker communicates an equipment problem without giving repair instructions.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "report",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "fault",
+          "start": 18,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "ask",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "authorized",
+          "start": 36,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "team",
+          "start": 47,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "to",
+          "start": 52,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "replace",
+          "start": 55,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "broken",
+          "start": 67,
+          "end": 73
+        },
+        {
+          "index": 13,
+          "text": "handle",
+          "start": 74,
+          "end": 80
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 80,
+          "end": 81
+        }
+      ],
+      "focus_lexeme_ids": [
+        "report.give-information.v",
+        "fault.equipment-defect.n",
+        "replace.put-instead.v",
+        "broken.not-working.adj"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "british-council-requests",
+          "status": "pending_term_check",
+          "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+        }
+      ]
+    },
+    {
+      "id": "expr.foundation.module02.07",
+      "text": "We can adjust the start time or arrange to postpone the meeting; cancel only the duplicate booking.",
+      "meaning": "Distinguish changing a time from stopping a duplicate arrangement.",
+      "context": "Colleagues review conflicting meeting bookings.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "We",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "can",
+          "start": 3,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "adjust",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 4,
+          "text": "start",
+          "start": 18,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "time",
+          "start": 24,
+          "end": 28
+        },
+        {
+          "index": 6,
+          "text": "or",
+          "start": 29,
+          "end": 31
+        },
+        {
+          "index": 7,
+          "text": "arrange",
+          "start": 32,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "to",
+          "start": 40,
+          "end": 42
+        },
+        {
+          "index": 9,
+          "text": "postpone",
+          "start": 43,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 11,
+          "text": "meeting",
+          "start": 56,
+          "end": 63
+        },
+        {
+          "index": 12,
+          "text": ";",
+          "start": 63,
+          "end": 64
+        },
+        {
+          "index": 13,
+          "text": "cancel",
+          "start": 65,
+          "end": 71
+        },
+        {
+          "index": 14,
+          "text": "only",
+          "start": 72,
+          "end": 76
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 77,
+          "end": 80
+        },
+        {
+          "index": 16,
+          "text": "duplicate",
+          "start": 81,
+          "end": 90
+        },
+        {
+          "index": 17,
+          "text": "booking",
+          "start": 91,
+          "end": 98
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 98,
+          "end": 99
+        }
+      ],
+      "focus_lexeme_ids": [
+        "adjust.change-slightly.v",
+        "arrange.organize.v",
+        "postpone.delay-until-later.v",
+        "cancel.stop-arrangement.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "british-council-requests",
+          "status": "pending_term_check",
+          "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+        }
+      ]
+    },
+    {
+      "id": "expr.foundation.module02.08",
+      "text": "Could you assist me while I collect one form from each team and return the borrowed key?",
+      "meaning": "Ask a colleague to help gather forms from several teams and give a borrowed key back.",
+      "context": "A worker gathers one fictional workshop form from each of three teams and gives a borrowed meeting-room key back to reception.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Could",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "you",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "assist",
+          "start": 10,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "me",
+          "start": 17,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "while",
+          "start": 20,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "I",
+          "start": 26,
+          "end": 27
+        },
+        {
+          "index": 6,
+          "text": "collect",
+          "start": 28,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "one",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "form",
+          "start": 40,
+          "end": 44
+        },
+        {
+          "index": 9,
+          "text": "from",
+          "start": 45,
+          "end": 49
+        },
+        {
+          "index": 10,
+          "text": "each",
+          "start": 50,
+          "end": 54
+        },
+        {
+          "index": 11,
+          "text": "team",
+          "start": 55,
+          "end": 59
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 13,
+          "text": "return",
+          "start": 64,
+          "end": 70
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 15,
+          "text": "borrowed",
+          "start": 75,
+          "end": 83
+        },
+        {
+          "index": 16,
+          "text": "key",
+          "start": 84,
+          "end": 87
+        },
+        {
+          "index": 17,
+          "text": "?",
+          "start": 87,
+          "end": 88
+        }
+      ],
+      "focus_lexeme_ids": [
+        "assist.help.v",
+        "collect.bring-together.v",
+        "return.send-back.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex root independent AI language and context reviewer; not human or subject-matter approval",
+        "reviewed_at": "2026-10-17"
+      },
+      "references": [
+        {
+          "source_id": "british-council-requests",
+          "status": "pending_term_check",
+          "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+        },
+        {
+          "source_id": "foundation02-collect-repair-oxford-collect",
+          "status": "verified",
+          "scope": "Recorded lexical support for the exact complete original request separately accepted by the independent language/context review. This expression uses the selected focus sense; the source row itself grants no whole-expression, audio, specialist or release approval. No old expression completion transfers to the new requirements namespace."
+        },
+        {
+          "source_id": "foundation02-collect-repair-collins-collect",
+          "status": "verified",
+          "scope": "Recorded lexical support for the exact complete original request separately accepted by the independent language/context review. This expression uses the selected focus sense; the source row itself grants no whole-expression, audio, specialist or release approval. No old expression completion transfers to the new requirements namespace."
+        }
+      ]
+    },
+    {
+      "id": "expr.foundation.module02.09",
+      "text": "Please follow the procedure to report the unsafe area and ask for a safe route.",
+      "meaning": "Request reporting and use of established arrangements for a concern.",
+      "context": "A worker notices a possible workplace risk without giving a technical response.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "follow",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "procedure",
+          "start": 18,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "to",
+          "start": 28,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "report",
+          "start": 31,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 38,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "unsafe",
+          "start": 42,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "area",
+          "start": 49,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "ask",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": "for",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "a",
+          "start": 66,
+          "end": 67
+        },
+        {
+          "index": 13,
+          "text": "safe",
+          "start": 68,
+          "end": 72
+        },
+        {
+          "index": 14,
+          "text": "route",
+          "start": 73,
+          "end": 78
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 78,
+          "end": 79
+        }
+      ],
+      "focus_lexeme_ids": [
+        "report.give-information.v",
+        "unsafe.presenting-danger.adj",
+        "follow.act-on.v",
+        "procedure.agreed-method.n",
+        "safe.free-from-unacceptable-danger.adj"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "british-council-requests",
+          "status": "pending_term_check",
+          "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+        }
+      ]
+    },
+    {
+      "id": "expr.foundation.module02.10",
+      "text": "Please report the hazard and record the incident for review by the responsible team.",
+      "meaning": "Ask someone to communicate an observed danger and the related workplace event.",
+      "context": "A team raises a concern through the workplace's applicable arrangements.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "report",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "hazard",
+          "start": 18,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 25,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "record",
+          "start": 29,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "incident",
+          "start": 40,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "for",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "review",
+          "start": 53,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "by",
+          "start": 60,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "responsible",
+          "start": 67,
+          "end": 78
+        },
+        {
+          "index": 13,
+          "text": "team",
+          "start": 79,
+          "end": 83
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 83,
+          "end": 84
+        }
+      ],
+      "focus_lexeme_ids": [
+        "report.give-information.v",
+        "hazard.possible-harm.n",
+        "incident.workplace-event.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "british-council-requests",
+          "status": "pending_term_check",
+          "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+        }
+      ]
+    }
+  ]
+}

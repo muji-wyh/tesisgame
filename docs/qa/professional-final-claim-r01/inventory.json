@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "status": "frozen-prepared-not-executed",
+  "date": "2026-10-17",
+  "scope": "Final claim failure after successful preflight, native real lifecycle with synthetic owner/catalog/media; authoring and static inspection only.",
+  "excludes": [
+    "inventory.json",
+    "future attempt-001 output"
+  ],
+  "files": [
+    {
+      "path": "assets.md",
+      "sha256": "c7ff910730f8201cb66fafbcd510f26e2cc09ec93c7d85ec7615bb6afa434aa0",
+      "bytes": 1759
+    },
+    {
+      "path": "inputs.json",
+      "sha256": "9c4c671b5761b93ea87ba749836f0b5e95319e4ef490f34c4c58220fb1bdc996",
+      "bytes": 105874
+    },
+    {
+      "path": "probe_ui.gd",
+      "sha256": "448c0e7685e37ca7671fdfb13a5c053d53edaed182f16b7888ad65ab5488bf7d",
+      "bytes": 1532
+    },
+    {
+      "path": "probe_ui.tscn",
+      "sha256": "fb8f996f5314669d621446588bddc346c827e3297e3eb1c336ca5b6d2a424723",
+      "bytes": 335
+    },
+    {
+      "path": "probe.gd",
+      "sha256": "a10bf54317792565fad77da8f3fccfa0e712a144512944e1c55cacdaedab09e5",
+      "bytes": 20625
+    },
+    {
+      "path": "README.md",
+      "sha256": "e9cb0e6ab7b54345251a1eeaccde9a9fb2a6586798ef0672e3f6eaa4b43dc2fa",
+      "bytes": 6083
+    },
+    {
+      "path": "run-once.cjs",
+      "sha256": "5cc2a53743c0a2425374268215fc4335ae52a0f4c7d0a455e46514fd6312ba3e",
+      "bytes": 5297
+    }
+  ]
+}

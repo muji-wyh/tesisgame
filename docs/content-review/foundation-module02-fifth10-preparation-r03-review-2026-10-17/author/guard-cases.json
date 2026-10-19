@@ -1,0 +1,186 @@
+{
+  "schema": 1,
+  "status": "unexecuted_root_owned_guard_specification",
+  "author": "/root/recover_delivery",
+  "actual_fixture": null,
+  "executed": false,
+  "positive_case": "After actual bag persistence and independent source/binding acceptance, the exact genuine fourth10 and bag receipts, complete installed manifest, independent roles and complete pins should open one scratch session. An exact explicitly bound durable journal copy is also eligible.",
+  "negative_cases": [
+    {
+      "id": "reviewer_missing",
+      "mutation": "Remove independent acceptance reviewer.",
+      "expected": "reject before preparation output or project imports",
+      "executed": false
+    },
+    {
+      "id": "reviewer_empty",
+      "mutation": "Set independent acceptance reviewer to an empty string.",
+      "expected": "reject before preparation output or project imports",
+      "executed": false
+    },
+    {
+      "id": "reviewer_whitespace",
+      "mutation": "Use whitespace-only or padded reviewer identity.",
+      "expected": "reject before preparation output or project imports",
+      "executed": false
+    },
+    {
+      "id": "reviewer_current_author",
+      "mutation": "Use /root/recover_delivery as reviewer and align the other caller-supplied reviewer role fields.",
+      "expected": "reject before preparation output or project imports",
+      "executed": false
+    },
+    {
+      "id": "reviewer_inherited_author",
+      "mutation": "Use /root/runtime_recovery as reviewer and align other reviewer role fields.",
+      "expected": "reject before preparation output or project imports",
+      "executed": false
+    },
+    {
+      "id": "reviewer_dispatcher",
+      "mutation": "Use /root as reviewer.",
+      "expected": "reject before preparation output or project imports",
+      "executed": false
+    },
+    {
+      "id": "reviewer_role_mismatch",
+      "mutation": "Use a valid distinct reviewer but mismatch binding/acceptance reviewer roles.",
+      "expected": "reject before preparation output or project imports",
+      "executed": false
+    },
+    {
+      "id": "review_pin_identity_mismatch",
+      "mutation": "Keep a hash but change the accepted actual-binding or inventory path or byte length.",
+      "expected": "reject before preparation output or project imports",
+      "executed": false
+    },
+    {
+      "id": "unrelated_committed_journal",
+      "mutation": "Select another committed journal while preserving the selected genuine commit receipt.",
+      "expected": "reject before preparation output or project imports",
+      "executed": false
+    },
+    {
+      "id": "changed_state_hash",
+      "mutation": "Select a state pin whose raw hash differs from the selected commit state.",
+      "expected": "reject before preparation output or project imports",
+      "executed": false
+    },
+    {
+      "id": "changed_prepared_identity",
+      "mutation": "Select prepared bytes or a state prepared hash that differ from the selected commit.",
+      "expected": "reject before preparation output or project imports",
+      "executed": false
+    },
+    {
+      "id": "changed_plan_identity",
+      "mutation": "Change the prepared plan or plan hash independently of the selected receipt.",
+      "expected": "reject before preparation output or project imports",
+      "executed": false
+    },
+    {
+      "id": "partial_prepared_manifest",
+      "mutation": "Remove a prepared/plan/journal target while retaining receipt linkage.",
+      "expected": "reject before preparation output or project imports",
+      "executed": false
+    },
+    {
+      "id": "partial_installed_targets",
+      "mutation": "Remove any target from installed_targets, including a durable evidence target outside the five named files.",
+      "expected": "reject before preparation output or project imports",
+      "executed": false
+    },
+    {
+      "id": "extra_installed_target",
+      "mutation": "Add an unrelated installed target pin.",
+      "expected": "reject before preparation output or project imports",
+      "executed": false
+    },
+    {
+      "id": "duplicate_installed_target",
+      "mutation": "Repeat a target or introduce a case-insensitive path duplicate.",
+      "expected": "reject before preparation output or project imports",
+      "executed": false
+    },
+    {
+      "id": "wrong_installed_bytes_or_hash",
+      "mutation": "Change one installed target byte length or afterimage hash.",
+      "expected": "reject before preparation output or project imports",
+      "executed": false
+    },
+    {
+      "id": "changed_installed_file",
+      "mutation": "Alter a current installed target after capturing its pin.",
+      "expected": "reject before preparation output or project imports",
+      "executed": false
+    },
+    {
+      "id": "unbound_journal_copy",
+      "mutation": "Select a durable journal copy without its exact original/copy binding.",
+      "expected": "reject before preparation output or project imports",
+      "executed": false
+    },
+    {
+      "id": "changed_journal_copy",
+      "mutation": "Use a copied journal differing from the receipt-bound original.",
+      "expected": "reject before preparation output or project imports",
+      "executed": false
+    },
+    {
+      "id": "unused_journal_alias",
+      "mutation": "Add an unused or mismatched journal_copies row.",
+      "expected": "reject before preparation output or project imports",
+      "executed": false
+    },
+    {
+      "id": "wrong_bag_receipt_schema",
+      "mutation": "Use a nested compatibility result or a schema identifier for the wrong predecessor.",
+      "expected": "reject before preparation output or project imports",
+      "executed": false
+    },
+    {
+      "id": "wrong_bag_persisted_input",
+      "mutation": "Select persisted input or source bytes that do not match the actual receipt hashes.",
+      "expected": "reject before preparation output or project imports",
+      "executed": false
+    },
+    {
+      "id": "persisted_commit_or_state_mismatch",
+      "mutation": "Select persisted input bound to a different commit receipt or committed state.",
+      "expected": "reject before preparation output or project imports",
+      "executed": false
+    },
+    {
+      "id": "persisted_target_omission",
+      "mutation": "Omit any committed target from persisted input expected_inputs or change its afterimage hash.",
+      "expected": "reject before preparation output or project imports",
+      "executed": false
+    },
+    {
+      "id": "persisted_command_failure",
+      "mutation": "Use a nonzero command exit, nonnull error/signal, or mismatched log bytes.",
+      "expected": "reject before preparation output or project imports",
+      "executed": false
+    },
+    {
+      "id": "persisted_postcheck_failure",
+      "mutation": "Use a nonnull persisted postcheck_error or failed/cancelled/skipped tests.",
+      "expected": "reject before preparation output or project imports",
+      "executed": false
+    },
+    {
+      "id": "later_journal_state",
+      "mutation": "Append a later numbered journal state after selected commitment; the initial gate or recheck must reject.",
+      "expected": "reject before preparation output or project imports",
+      "executed": false
+    },
+    {
+      "id": "unbound_template",
+      "mutation": "Use either untouched UNBOUND template.",
+      "expected": "reject before preparation output or project imports",
+      "executed": false
+    }
+  ],
+  "root_evidence_requirement": "Before actual preparation, root must preserve a fresh guard receipt with genuine positive-schema evidence and all applicable independent negative rejections. Mutations belong in isolated guard fixtures; never modify historical receipts, frozen sources, production files or consumed attempts.",
+  "scope": "This JSON is an authored checklist only. No guard, syntax parser, proposal module, transformer, test, validator or native process was executed by this author."
+}

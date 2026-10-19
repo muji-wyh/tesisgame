@@ -1,0 +1,67 @@
+{
+  "status": "prepared-not-executed",
+  "date": "2026-10-17",
+  "scope": "Five actual Professional view lifecycles with held replacement media",
+  "inputs": [
+    {
+      "path": "tests/godot/professional_scene_modes_disposal_tests.gd",
+      "sha256": "cf86ac8d35282b834986e962ef8f44360e06cd3eef56c2d1972731b90a7e9a13"
+    },
+    {
+      "path": "tests/godot/professional_scene_disposal_tests.gd",
+      "sha256": "eaf0c87b4f928a2b81c01ed80b7dcf822d5b3e19abbf8a5c5aa73e53631eb8ab"
+    },
+    {
+      "path": "scripts/professional_play.gd",
+      "sha256": "e1af572288b804bb0fc51d98bb35926096cfd732da595170ab9c8247b0d6ee40"
+    },
+    {
+      "path": "scripts/professional_store.gd",
+      "sha256": "671fe81e308241e976d2307d1dc3ed7544226314b5d12f5e4215754f90197c2f"
+    },
+    {
+      "path": "scripts/professional_round_loader.gd",
+      "sha256": "83186aeb5c993e6dcd544f71e6939de8a3b08ab60b3fc610987b22bf94d3182d"
+    },
+    {
+      "path": "scripts/professional_session.gd",
+      "sha256": "a6d5115d6e65a74c97cd129be4a3613358295566ac2065d046ac440560be8616"
+    },
+    {
+      "path": "scripts/game_ui.gd",
+      "sha256": "db0f63f690bab13aa18a512f173ee7315f7e9f0dd5bae86590c40b878c23989a"
+    },
+    {
+      "path": "scripts/jelly_match.gd",
+      "sha256": "93f14e2977850958ad94d9d1bacc232974ce0c63fc648d6585b3e158e31a6627"
+    },
+    {
+      "path": "scripts/word_jelly.gd",
+      "sha256": "5a91ceb5bf2cbf4a067a3f66bd114fd1c488c0b2d585bf4eb4b4f44e7aced5f8"
+    },
+    {
+      "path": "scripts/memory_garden.gd",
+      "sha256": "51083ab9d49640247783ef57438a03af4da50361bf7b3d99e6a593bf5db021f4"
+    },
+    {
+      "path": "scripts/phrase_game.gd",
+      "sha256": "548551410477c01b7618c04a7967b5c1a02e3cdb3b55a58c4da736846bcf0307"
+    },
+    {
+      "path": "scripts/voice_pop.gd",
+      "sha256": "80ef93158599a4aece8c27968a6fd5b997aaa63ed6ea28b2bf5cb7fbc87ec993"
+    },
+    {
+      "path": "tests/godot/professional_application_flow_tests.gd",
+      "sha256": "0e78000274fa10800ea9eb368d56cb1d30b6a96eba8879422411afdbb4d95ffd"
+    },
+    {
+      "path": "tests/godot/professional_round_loader_tests.gd",
+      "sha256": "99904fff2e23cd83976647c89990a76c7786f91ba51feb2108983833a01ae96d"
+    },
+    {
+      "path": "tests/godot/player_flow_fixture.gd",
+      "sha256": "9052606c885bd1f5fdac10a38f10ef014c2ba11e56f9c2d59193a0acd89cb1c7"
+    }
+  ]
+}

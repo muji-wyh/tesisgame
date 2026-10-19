@@ -1,0 +1,1327 @@
+[
+  {
+    "path": "project.godot",
+    "bytes": 1185,
+    "sha256": "c46da66bda422a1b04ad2bf51c4388c472f8931be32f3c33ef44721f47c29ac3"
+  },
+  {
+    "path": "scripts/age_word_catalog.gd",
+    "bytes": 21873,
+    "sha256": "fa05203e6d2287987b4a10e3b6179f11f5dc29e6aaf36a9bdcbf2061d492dced"
+  },
+  {
+    "path": "scripts/card_motion.gd",
+    "bytes": 1122,
+    "sha256": "16e558daefe835571da73b5a504cea1a01b09278a320330668b5bf74cc47cd9f"
+  },
+  {
+    "path": "scripts/chest_feel.gd",
+    "bytes": 14988,
+    "sha256": "9e0a8f2c9caed80d73c1bab495b4aa1b4476232810bddb58c26164790a70a565"
+  },
+  {
+    "path": "scripts/chest_model_view.gd",
+    "bytes": 20636,
+    "sha256": "151ea47ad21e9d06db971de1a526e3279cdd67b22006c2c4f2472d2b12fc3fef"
+  },
+  {
+    "path": "scripts/chest_opening_effect.gd",
+    "bytes": 4165,
+    "sha256": "ce71fd03ef46fa57e774877375b4dd03145d32f30bf730412c17c2d9475b09b9"
+  },
+  {
+    "path": "scripts/chest_reward_flight.gd",
+    "bytes": 3139,
+    "sha256": "34f1ed6da61c6e9b756bd90b431b3bb10dd48be96c605573c7ac16f401bf89d4"
+  },
+  {
+    "path": "scripts/chest_reward_model.gd",
+    "bytes": 3189,
+    "sha256": "fc73aaa40f43207b1f11be84faff8d8ef57986826db66735e003abc689ca726a"
+  },
+  {
+    "path": "scripts/chest_sound_bank.gd",
+    "bytes": 10846,
+    "sha256": "446827c73227db9f44677b1dabcc961bffd7b1b277247883f4eb3828c7b0ee36"
+  },
+  {
+    "path": "scripts/chest_view.gd",
+    "bytes": 79327,
+    "sha256": "eae351ce93659774019ada12c32aad9ccd519ce0aa72ef61f456624430655a61"
+  },
+  {
+    "path": "scripts/coin_counter.gd",
+    "bytes": 3980,
+    "sha256": "b4f12fb3218e1277a85435fb450e26a9c3007c5a6304b31abea10fcc3f31298b"
+  },
+  {
+    "path": "scripts/coin_economy.gd",
+    "bytes": 1168,
+    "sha256": "f7ff280c3bd7bec56fd5d800bea2b541ac624fea4388b999db58c41fede54060"
+  },
+  {
+    "path": "scripts/coin_reward_flight.gd",
+    "bytes": 8885,
+    "sha256": "4041fa92b0e1463ec822b68fe17c345511b84e31d8df4fdacdd647e3b7d96b01"
+  },
+  {
+    "path": "scripts/coin_wallet.gd",
+    "bytes": 9873,
+    "sha256": "cea4d3781cb1db8101b01f1dce074037d1f5e405a5ccb73a6f30c2040f4a6a02"
+  },
+  {
+    "path": "scripts/duck_mascot.gd",
+    "bytes": 33305,
+    "sha256": "ff2e56c6f6a3651da9efed8f52d707c52eb6536cce919ebfc4b2d425fd4e081b"
+  },
+  {
+    "path": "scripts/finish_confirmation.gd",
+    "bytes": 5224,
+    "sha256": "d97d67bbace872388b1e926c9c9cd249b6d6c3c96cabebfa1d0d4e7a6373bc29"
+  },
+  {
+    "path": "scripts/game_audio.gd",
+    "bytes": 37273,
+    "sha256": "d7c42eb1b554f10b7ab99a2cec7ccd842b92e1b9a06e6bcaf131501167099859"
+  },
+  {
+    "path": "scripts/game_data.gd",
+    "bytes": 20942,
+    "sha256": "7dc8a8e151e2e0af27ea1733d3d7835cc9611002c9b88da6915983a6b5f3df9a"
+  },
+  {
+    "path": "scripts/game_library.gd",
+    "bytes": 36259,
+    "sha256": "f0c08cb22e61c2df4cb9bd77bf4984a603672f51c882eb2758173eeff3636c8d"
+  },
+  {
+    "path": "scripts/game_mode_preview.gd",
+    "bytes": 17913,
+    "sha256": "92b7a2d8b7342203a8dabc9174e01f689854009643e1ed861b51865fd5e48f8e"
+  },
+  {
+    "path": "scripts/game_model.gd",
+    "bytes": 13328,
+    "sha256": "a82af00944d17e182a746e144c14cceaf12f8d8466b1138888117bc251a3faad"
+  },
+  {
+    "path": "scripts/game_ui.gd",
+    "bytes": 229244,
+    "sha256": "6348a813929d530bd1332a096f3eb43b7f95be7c87b391e2a76dc37143c40aef"
+  },
+  {
+    "path": "scripts/growth_badge.gd",
+    "bytes": 5776,
+    "sha256": "d1b2ab5b41aa01fbf25d680184c26131982f22d8204925bcfdbe912ff9b3952b"
+  },
+  {
+    "path": "scripts/growth_morphology.gd",
+    "bytes": 4976,
+    "sha256": "cf5140ffff2ca4ac2f9bfa7368d07617fa4d2200659f7dbf47a95eeb3f6f4b8f"
+  },
+  {
+    "path": "scripts/growth_state.gd",
+    "bytes": 19217,
+    "sha256": "bd0d298e193c6cf27c02da7513f5c0409f15496efcde030050af057f9330d728"
+  },
+  {
+    "path": "scripts/hint_link.gd",
+    "bytes": 9546,
+    "sha256": "7c2191e850f370914980c20c4adb427f9c803b054b0918b1967f5b52baea1a74"
+  },
+  {
+    "path": "scripts/icon_button.gd",
+    "bytes": 3809,
+    "sha256": "2707c36fb90a0f3d294060ac50fc8f6580b530e92daa999f45ec0fa54802b551"
+  },
+  {
+    "path": "scripts/jelly_backdrop.gd",
+    "bytes": 4485,
+    "sha256": "ee7d283e9256a569dfe21de4f25b3856bee74cf0c0abf3c75afce1cb949cdbaf"
+  },
+  {
+    "path": "scripts/jelly_chest_celebration.gd",
+    "bytes": 12361,
+    "sha256": "6ccc68263688d4695114cb58b6ebb6a7b9ebc364493d55b19302433ba041f8bf"
+  },
+  {
+    "path": "scripts/jelly_chest_tap.gd",
+    "bytes": 4412,
+    "sha256": "eaf7310ad9585bf5b8e2a43c437105bc189b9780dce4d041607204f9eed4d7bd"
+  },
+  {
+    "path": "scripts/jelly_danger_frame.gd",
+    "bytes": 2560,
+    "sha256": "8014575b315672bc738803cc94a65a2d77ae836876ed5182d9945bed9d05172e"
+  },
+  {
+    "path": "scripts/jelly_finish_button.gd",
+    "bytes": 17611,
+    "sha256": "b7e28d35e04bc4b3ef8028afcc885f0b8e8bcf1366b947b89497ba123655782c"
+  },
+  {
+    "path": "scripts/jelly_footprint.gd",
+    "bytes": 3982,
+    "sha256": "3f2652eb72b1e7830b27b85e682157b7f2466b06f6331138e998f477e3836f2e"
+  },
+  {
+    "path": "scripts/jelly_fusion.gd",
+    "bytes": 4306,
+    "sha256": "3817f9c1afae93dc415f0a18a1df9623473b1158aeb3e8b412c6dad4048a33c2"
+  },
+  {
+    "path": "scripts/jelly_loot_meter.gd",
+    "bytes": 3615,
+    "sha256": "aac7c9a6d72d87cc5a7dc0b6dbc39253a3e4f67aaef3e9bf8b1906ce44628563"
+  },
+  {
+    "path": "scripts/jelly_match.gd",
+    "bytes": 64516,
+    "sha256": "0d98d2af15f72f2678afcb412e3c4d46bd364c4c086766e3438fd0cd29add591"
+  },
+  {
+    "path": "scripts/jelly_match_model.gd",
+    "bytes": 18968,
+    "sha256": "ae51ac61ba6e71f9437ab900ab70bac68191d3fe2e9145b91737d15c35c0ec3e"
+  },
+  {
+    "path": "scripts/jelly_motion.gd",
+    "bytes": 4794,
+    "sha256": "8b0beabfd25b78d12df15e728c2e06376a402d017187f4311fba1bb2aa8127eb"
+  },
+  {
+    "path": "scripts/jelly_read_panel.gd",
+    "bytes": 3709,
+    "sha256": "0a17f3e1e135bd990c794b063255a36491dd59878a85e62593b11b78d611d9f3"
+  },
+  {
+    "path": "scripts/jelly_reward_progress.gd",
+    "bytes": 1090,
+    "sha256": "e03a057757ea03aaa5b4ee07e462bfbc0fa62d070f857a1207da74932afbffd7"
+  },
+  {
+    "path": "scripts/jelly_tile.gd",
+    "bytes": 10840,
+    "sha256": "d94890880b1bddfcbbfe517e10b8836c46c5dde319200bc04ecbeae840a80aa3"
+  },
+  {
+    "path": "scripts/learning_content_resolver.gd",
+    "bytes": 17119,
+    "sha256": "d491e2641ee37c201cdb7f132cb472e6f4f18fa31a367bd5d9aa75d0aacedad3"
+  },
+  {
+    "path": "scripts/learning_context.gd",
+    "bytes": 2446,
+    "sha256": "f7099fa50517a593b2adc95a52566905b3b27b0dde010ed4c834ab96ff3497e5"
+  },
+  {
+    "path": "scripts/learning_path_selector.gd",
+    "bytes": 20855,
+    "sha256": "930145d368aca58bfd73d076d44047d51f37c06f13758d7a4a38f4a8b7eaf141"
+  },
+  {
+    "path": "scripts/learning_theme_art.gd",
+    "bytes": 8618,
+    "sha256": "acbebea59544eb3227bd013dfb5790b6b2c3459faae9395f904587c5468f39b9"
+  },
+  {
+    "path": "scripts/learning_theme_motion.gd",
+    "bytes": 2700,
+    "sha256": "8509e2445381d990cbda4281f9e0b13049d6b58b1f4b07380b704e726f6eb80d"
+  },
+  {
+    "path": "scripts/learning_word.gd",
+    "bytes": 708,
+    "sha256": "8f2e6d0c606e70674497ef9a5c5b8151ec922ee9f4040c5a3360996bdc23039b"
+  },
+  {
+    "path": "scripts/match_connections.gd",
+    "bytes": 4488,
+    "sha256": "eb8b0461f2fa9b48a90e3b1b8e74f85002503469bdb7f4caf9c26bf869fc5b8b"
+  },
+  {
+    "path": "scripts/medal_progress.gd",
+    "bytes": 18841,
+    "sha256": "c4ae3af64fb09bdb1d869615d465e7de70fb144d829074f88f3b333c470e3808"
+  },
+  {
+    "path": "scripts/medal_view.gd",
+    "bytes": 1532,
+    "sha256": "f304a9c531a7c903de7b5ebdabf5bedc940657456becb1152996570314167ce6"
+  },
+  {
+    "path": "scripts/memory_game_model.gd",
+    "bytes": 5170,
+    "sha256": "b42ca4dcb4342be08b487022cdb0fbc09d26cc869d52dcf4a806e9fefa6166a7"
+  },
+  {
+    "path": "scripts/memory_garden.gd",
+    "bytes": 22814,
+    "sha256": "51083ab9d49640247783ef57438a03af4da50361bf7b3d99e6a593bf5db021f4"
+  },
+  {
+    "path": "scripts/memory_peek_button.gd",
+    "bytes": 314,
+    "sha256": "a1d4152a18207937b376b4f5a18a09462225be8f7def3d3a977cc568af6f6b48"
+  },
+  {
+    "path": "scripts/memory_peek_countdown.gd",
+    "bytes": 5769,
+    "sha256": "b4d256e1b2aa9d31645d33647c2bf70cab933af7769b79bcabe94ed54902f8fe"
+  },
+  {
+    "path": "scripts/morphology_analysis.gd",
+    "bytes": 7877,
+    "sha256": "f3d22c45d79b11e80e967de42840669fb282ceb5afa5891b0622df2959209f9b"
+  },
+  {
+    "path": "scripts/morphology_resolver.gd",
+    "bytes": 10233,
+    "sha256": "bbd22c8fb11f96d7dcc4a8d534ba80bc63f0c2ed1b2cc1578e7656c06d7d67e8"
+  },
+  {
+    "path": "scripts/pair_chest_reward.gd",
+    "bytes": 18434,
+    "sha256": "fc2aaf8466d164e4e479e271de4a1da0980ca3151b2f3aec2b5368beaa19460d"
+  },
+  {
+    "path": "scripts/phrase_audio_bar.gd",
+    "bytes": 7636,
+    "sha256": "a128fac069747aa4b9ab934a3c33b7b03ef660628f144996931a37597f5c1773"
+  },
+  {
+    "path": "scripts/phrase_data.gd",
+    "bytes": 1685,
+    "sha256": "31dd271853f2c114b763857ee61112aa7d740009f27f8a57086ca82d49314f96"
+  },
+  {
+    "path": "scripts/phrase_game.gd",
+    "bytes": 46059,
+    "sha256": "548551410477c01b7618c04a7967b5c1a02e3cdb3b55a58c4da736846bcf0307"
+  },
+  {
+    "path": "scripts/phrase_game_model.gd",
+    "bytes": 11968,
+    "sha256": "5b79220ffd5c57f1eb65971158f2a0dcb38af3f499023e9d0c8fe5e3220d05a3"
+  },
+  {
+    "path": "scripts/pip_age_motion.gd",
+    "bytes": 1709,
+    "sha256": "a464bc801056e0bab57870505ac02bc9ec2e77cb0ef98109e055683943db8148"
+  },
+  {
+    "path": "scripts/pip_outfits.gd",
+    "bytes": 953,
+    "sha256": "646dd6c0703c21b1a9260f891150952286d7a94b8170227edc734191c0a1a8dd"
+  },
+  {
+    "path": "scripts/pop_reward_room.gd",
+    "bytes": 48544,
+    "sha256": "77cd6a36d8744929eabb51d212a94a44f3cc24543d75855dcdebd957266e0394"
+  },
+  {
+    "path": "scripts/pop_reward_state.gd",
+    "bytes": 10037,
+    "sha256": "fec8bd5076faf6307ba9a9538f44466abaa50a131b23c5cc01d2533f0d927c85"
+  },
+  {
+    "path": "scripts/presentation_preferences.gd",
+    "bytes": 1498,
+    "sha256": "15c179a0dbd87be180f94250337ae4c375df47efe0fe02041d9b8bdb6c4c301c"
+  },
+  {
+    "path": "scripts/priced_icon_button.gd",
+    "bytes": 4942,
+    "sha256": "8e7ac687378b716ecd3a310b12d23a580261a8fa84e2962edf4cc964887538eb"
+  },
+  {
+    "path": "scripts/professional_catalog.gd",
+    "bytes": 7570,
+    "sha256": "a80f9f847e515f882bc2ef94c2a284d6938ea811b4a7ac64882f90223909467b"
+  },
+  {
+    "path": "scripts/professional_domain_catalog.gd",
+    "bytes": 3137,
+    "sha256": "9b9959ecf79894abfd1f6ec279bf597987e68068bd0d3ef5f257c8237f574b19"
+  },
+  {
+    "path": "scripts/professional_domain_owner.gd",
+    "bytes": 30569,
+    "sha256": "a5d38afb67e53eede47fc2a50bec1e42060c39597021d3c0774be8cd45855feb"
+  },
+  {
+    "path": "scripts/professional_domain_release.gd",
+    "bytes": 543,
+    "sha256": "ffe5411752295e30abcb81bfa4634da56654ee60575d36f56426cba082f1161f"
+  },
+  {
+    "path": "scripts/professional_media_access.gd",
+    "bytes": 3639,
+    "sha256": "ad4350579562aec2d49c72c0ccfd72c54df162992fe8e30604504b52aef30025"
+  },
+  {
+    "path": "scripts/professional_media_cache.gd",
+    "bytes": 6801,
+    "sha256": "98d128ec9a80d178f95cd9484f6e4107a2075e49114228be7b0c16c2a24485f1"
+  },
+  {
+    "path": "scripts/professional_media_loader.gd",
+    "bytes": 7369,
+    "sha256": "d9d348d665b443300009f7490dbcb613a73eff58f9e91d6e70e364c9c76e7390"
+  },
+  {
+    "path": "scripts/professional_media_manifest.gd",
+    "bytes": 14605,
+    "sha256": "a6b41f99f97c2b537837ebf457d04e7f9189bf82325ff258747d4e1db7943a1c"
+  },
+  {
+    "path": "scripts/professional_play.gd",
+    "bytes": 9400,
+    "sha256": "1841fb1b60d6a0b576d352d50221202c94611ec9832f8f5b039e4fe13a078489"
+  },
+  {
+    "path": "scripts/professional_progress.gd",
+    "bytes": 12616,
+    "sha256": "56437fdfb907bc9cfcbeb0b9ba1442f98f6c07aaf21bc81024af9a70838f5c4f"
+  },
+  {
+    "path": "scripts/professional_round_loader.gd",
+    "bytes": 10408,
+    "sha256": "83186aeb5c993e6dcd544f71e6939de8a3b08ab60b3fc610987b22bf94d3182d"
+  },
+  {
+    "path": "scripts/professional_session.gd",
+    "bytes": 13663,
+    "sha256": "a6d5115d6e65a74c97cd129be4a3613358295566ac2065d046ac440560be8616"
+  },
+  {
+    "path": "scripts/professional_store.gd",
+    "bytes": 13762,
+    "sha256": "671fe81e308241e976d2307d1dc3ed7544226314b5d12f5e4215754f90197c2f"
+  },
+  {
+    "path": "scripts/professional_word_library.gd",
+    "bytes": 16023,
+    "sha256": "c5ad8cf2aa2a0e0d634f2f79c7e41ce97e0d814963700180a310c94d6e9317a9"
+  },
+  {
+    "path": "scripts/result_scroll.gd",
+    "bytes": 10890,
+    "sha256": "3eb9d59e140b088d977c1602fcc1a051f06f65178324ab9c689dbfc3285b042f"
+  },
+  {
+    "path": "scripts/review_scroll.gd",
+    "bytes": 306,
+    "sha256": "6721c194017213bbfaab1057926d7f7b5ed1957511516afaf04fb10b0fb752aa"
+  },
+  {
+    "path": "scripts/reward_confetti.gd",
+    "bytes": 7531,
+    "sha256": "db9aa7aaafc1488320c44eb232699530d88f31407f6cc6c91e8a7828fcd98d71"
+  },
+  {
+    "path": "scripts/round_celebration.gd",
+    "bytes": 13790,
+    "sha256": "19d66120172e807d5759d346f319a7488a0348ba9cd056c12d2f798b0e5d3779"
+  },
+  {
+    "path": "scripts/round_reward_layout.gd",
+    "bytes": 2280,
+    "sha256": "823aeb9bfe813b65f5434a18bf9ed6eb14e9e6240f39cb0949fb086d04825f89"
+  },
+  {
+    "path": "scripts/round_settlement.gd",
+    "bytes": 9178,
+    "sha256": "f71f218134900adbbd3d135021a25e8911e5598cbb025ead3625f6d6f30ee4ba"
+  },
+  {
+    "path": "scripts/scroll_momentum.gd",
+    "bytes": 2712,
+    "sha256": "f16cc6b4795f132041b7ffda2d016b66423007c6f5c625247c804cb57fbd4c01"
+  },
+  {
+    "path": "scripts/search_line_edit.gd",
+    "bytes": 857,
+    "sha256": "f9a1ecfd7deb36fc0ab18a4bab370319f21f70d2817c81ba8c781f43341382e7"
+  },
+  {
+    "path": "scripts/settlement_dialog.gd",
+    "bytes": 3352,
+    "sha256": "6f9a4560ae764c8de6ec9469cfa4b07a2781108242592356d58df9ebe5108ee9"
+  },
+  {
+    "path": "scripts/speech_words.gd",
+    "bytes": 12361,
+    "sha256": "6192769a898ba3992120064a5275478b21f084d23fa51b9ab171b92e8ea948e2"
+  },
+  {
+    "path": "scripts/treasure_scroll.gd",
+    "bytes": 1482,
+    "sha256": "7085a3bd23873b6354cec8b51030fe212ae18ebcc74e26aaf2589a0eca40fe55"
+  },
+  {
+    "path": "scripts/ui_click.gd",
+    "bytes": 736,
+    "sha256": "c806041d99cb0c1c4debe50d09b2144c64406c443b42756d48b3d05ecf3f9ffe"
+  },
+  {
+    "path": "scripts/ui_style.gd",
+    "bytes": 8872,
+    "sha256": "5991ec95ba399174d3f207f6a16d3fdd4e614938093c1cb42a6a7768b5de9221"
+  },
+  {
+    "path": "scripts/vocabulary_loader.gd",
+    "bytes": 5746,
+    "sha256": "eb169809e9709a6b4d825354228ec24d5f68021899e88dacc648af346cef6f7c"
+  },
+  {
+    "path": "scripts/voice_pop.gd",
+    "bytes": 80223,
+    "sha256": "80ef93158599a4aece8c27968a6fd5b997aaa63ed6ea28b2bf5cb7fbc87ec993"
+  },
+  {
+    "path": "scripts/voice_pop_chest_art.gd",
+    "bytes": 2055,
+    "sha256": "2e9c7e58b06b74af36181f857d2a128b60e77918e543620c631262ea9634b24b"
+  },
+  {
+    "path": "scripts/voice_pop_model.gd",
+    "bytes": 13982,
+    "sha256": "a665aac25fb9d6f9d1d3e38fbd77a6c462b5873194c502e39dbd56b205872d54"
+  },
+  {
+    "path": "scripts/voice_pop_slice.gd",
+    "bytes": 5643,
+    "sha256": "740bf37ca0b993ba16b6aed3fe660e184e55b75b5e29ea5e767c3f8e12e38664"
+  },
+  {
+    "path": "scripts/web_bootstrap.gd",
+    "bytes": 1373,
+    "sha256": "135d73601423d416f0e3dc07eee89580b63790d9afdb80669edf20cff74dc3cd"
+  },
+  {
+    "path": "scripts/word_art.gd",
+    "bytes": 9590,
+    "sha256": "edcb6c1cd41375df4d91d195bddd8bebf31d9a7e10116c10bdd7c8797ad11845"
+  },
+  {
+    "path": "scripts/word_card.gd",
+    "bytes": 15387,
+    "sha256": "ddb3f7ef5b1910086e0418e476ceee4f551aa2e048bed6993005bdbd0402a3bf"
+  },
+  {
+    "path": "scripts/word_jelly.gd",
+    "bytes": 65285,
+    "sha256": "5a91ceb5bf2cbf4a067a3f66bd114fd1c488c0b2d585bf4eb4b4f44e7aced5f8"
+  },
+  {
+    "path": "scripts/word_jelly_collect_button.gd",
+    "bytes": 12837,
+    "sha256": "b9d359e6ebef8d415306b01ac7145e85f7606735781fb669750632c9b313d9c3"
+  },
+  {
+    "path": "scripts/word_jelly_model.gd",
+    "bytes": 88126,
+    "sha256": "4d3bf6b496b04c8f7de251b099881a6b3a44166f18a0ad3f751c7a3dd8863a6e"
+  },
+  {
+    "path": "scripts/word_jelly_palette.gd",
+    "bytes": 3790,
+    "sha256": "cd132c93e2de23a730c231bb4f2609137dc26adfacb7bd7d5b6c929075d3749f"
+  },
+  {
+    "path": "scripts/word_jelly_powerup_button.gd",
+    "bytes": 12190,
+    "sha256": "687ec33216c1d142897fe5a0655c55e70de04046650292aa7ea79f7616735606"
+  },
+  {
+    "path": "scripts/word_jelly_powerup_effects.gd",
+    "bytes": 739,
+    "sha256": "eace259a448f8c6259e416dfad1d1b0412f629cfea80eff8c560d396114a6496"
+  },
+  {
+    "path": "scripts/word_jelly_tile.gd",
+    "bytes": 16300,
+    "sha256": "f8f9ebbe60c9840f50ef831661f9474e0e3d3abc1aa39fbe1109b2c2d8394d1a"
+  },
+  {
+    "path": "scripts/word_jelly_word_reveal.gd",
+    "bytes": 5384,
+    "sha256": "9a3e211729edfff385de274ac8291e1ca66531a90e651b69d8fcdca4f75ee964"
+  },
+  {
+    "path": "scripts/word_jelly_word_reveal_card.gd",
+    "bytes": 7692,
+    "sha256": "caff6b571b0b86d8d47183ec7615d80740e413279fa21eb86a659d1ec7d9a5e7"
+  },
+  {
+    "path": "scripts/word_play.gd",
+    "bytes": 2958,
+    "sha256": "e3ae1f1acaa9b1f6ca5f8fc1d9e28a9c3eac92b59109578b756047dee087a646"
+  },
+  {
+    "path": "scripts/word_sampler.gd",
+    "bytes": 2556,
+    "sha256": "be096a3923765ae6fafa5ceea0b67afa6115a352185c48ce59dba58008a3f57d"
+  },
+  {
+    "path": "tests/godot/adventure_model_tests.gd",
+    "bytes": 13982,
+    "sha256": "3a79fa370fbf92ae80b609569bab96d5e282416610d75fac281068a7aebc2a5a"
+  },
+  {
+    "path": "tests/godot/adventure_scene_tests.gd",
+    "bytes": 14381,
+    "sha256": "286fad53e6b29a4d4390a936f479efa023ea9214bc8a28964c9bbea4faa8e59b"
+  },
+  {
+    "path": "tests/godot/age_level_tests.gd",
+    "bytes": 8703,
+    "sha256": "5200be8d12043a5b1994b52968e1a5b6bfb3c49270116aa2e953771a22b32a7a"
+  },
+  {
+    "path": "tests/godot/age_scene_tests.gd",
+    "bytes": 16022,
+    "sha256": "7a63b70623a667cf130d1afd4561d539b3e9cb77dd1b741b6ba85956543638c1"
+  },
+  {
+    "path": "tests/godot/age_word_catalog_tests.gd",
+    "bytes": 24774,
+    "sha256": "4788c4a7c580e9c2db2fb87f275933ccbd80f401a209b8a57d7fae9db8d4782e"
+  },
+  {
+    "path": "tests/godot/card_polish_tests.gd",
+    "bytes": 10252,
+    "sha256": "d5f9568e59547ae5931e8851f4d8a33a2517e8c00dc89d9058bfd8e76d080a71"
+  },
+  {
+    "path": "tests/godot/chest_audio_tests.gd",
+    "bytes": 57945,
+    "sha256": "94e96ea0d0f6bc2d22830e9cf10edb73c7d962b06e5f11e699d2a4eae8e42a0c"
+  },
+  {
+    "path": "tests/godot/chest_charge_flow_tests.gd",
+    "bytes": 52259,
+    "sha256": "7ce4acf08714fc841f60215b081e20833603e4b1c2b0e30f2f77efc7fc1b80b3"
+  },
+  {
+    "path": "tests/godot/chest_feel_tests.gd",
+    "bytes": 42145,
+    "sha256": "df53c8cb2ef87f88c8fcdd077b8563d83300458efb914b469c370ad3e65b196c"
+  },
+  {
+    "path": "tests/godot/chest_models_tests.gd",
+    "bytes": 12272,
+    "sha256": "e9e91fda183807a02fe79f0990869846c29876e8e27cc3409b100973423d3624"
+  },
+  {
+    "path": "tests/godot/chest_models_visual_review.gd",
+    "bytes": 4192,
+    "sha256": "67d0bff85b40ac69e026ed42c329e4cf557203da32269f9c40ad8254582d79cc"
+  },
+  {
+    "path": "tests/godot/chest_reveal_tests.gd",
+    "bytes": 61394,
+    "sha256": "bf9751157248001f635b7d8aee5e33788e9073f632330ce928d661e09df755d1"
+  },
+  {
+    "path": "tests/godot/coin_audio_tests.gd",
+    "bytes": 27039,
+    "sha256": "dfd5e400c6a8fad295f9bd0c3963b94b7145e4c26de1a707d06a78ec3fca7573"
+  },
+  {
+    "path": "tests/godot/coin_economy_tests.gd",
+    "bytes": 10192,
+    "sha256": "03460ed644f27d4cf75f2539b0160b865c96ee551ea77f242d0c829c2eceddb8"
+  },
+  {
+    "path": "tests/godot/coin_reward_flow_tests.gd",
+    "bytes": 21542,
+    "sha256": "d4b6f5d2e590e806234ed40548273617bc822c6cf4ae919a345b28e0f97e3bc4"
+  },
+  {
+    "path": "tests/godot/coin_wallet_tests.gd",
+    "bytes": 25858,
+    "sha256": "a753cfc8ada395e93deea4928907ec69e1881cf96f889c3acd1e496c452e7c0b"
+  },
+  {
+    "path": "tests/godot/collection_polish_tests.gd",
+    "bytes": 5792,
+    "sha256": "2e6c7ed37e442e16273dc8d56f72c42e3356cbb95eb93132ff5e8be6764faa81"
+  },
+  {
+    "path": "tests/godot/danger_game_over_tests.gd",
+    "bytes": 15212,
+    "sha256": "b4835e399dfd4f03a23f22278ad7b9554a653c41f2a0f3b81b647eb16e9f81cd"
+  },
+  {
+    "path": "tests/godot/exit_code.gd",
+    "bytes": 62,
+    "sha256": "ed1d969440c26644647b18fdca7efd83e6c349357052cd3b8824356d0151504f"
+  },
+  {
+    "path": "tests/godot/expansion_scene_tests.gd",
+    "bytes": 6770,
+    "sha256": "485229e16b81756e9b42e06a2d5f257e538d63ac6a25852383eda10b5c171613"
+  },
+  {
+    "path": "tests/godot/game_library_tests.gd",
+    "bytes": 21228,
+    "sha256": "d29989e529780b68ba35001ce4c7089319f8dc8a11be2c27a9d885273975b25d"
+  },
+  {
+    "path": "tests/godot/game_mode_preview_tests.gd",
+    "bytes": 1570,
+    "sha256": "ed448930020208f84bbc92933becbfbbbc31ffd5fef0d7598225cb15155ad449"
+  },
+  {
+    "path": "tests/godot/growth_flow_tests.gd",
+    "bytes": 23963,
+    "sha256": "86e7a9058a7451cdbb3142bfa58eaafb9631827f94fba6dc0d46379b1800b952"
+  },
+  {
+    "path": "tests/godot/growth_morphology_tests.gd",
+    "bytes": 14813,
+    "sha256": "aa6bab2e11099a8a10244a99b61beff7c9478802c8848cd6b9b5d846cdb9d2f7"
+  },
+  {
+    "path": "tests/godot/growth_state_tests.gd",
+    "bytes": 41688,
+    "sha256": "2139cabaec8e882f6f05cdaaf64f1c686ca34be91631c6c5dbf3dae6160aef81"
+  },
+  {
+    "path": "tests/godot/hint_link_tests.gd",
+    "bytes": 11630,
+    "sha256": "9893838dff5264edd9177a2ca0d429fe82a5fd3588623ad4effe8c0fdae6c435"
+  },
+  {
+    "path": "tests/godot/hover_tooltip_tests.gd",
+    "bytes": 9781,
+    "sha256": "01234f132718800485e2ec1ea8cf483a062cc01488764be77ffa7ed1f53cda2c"
+  },
+  {
+    "path": "tests/godot/jelly_backdrop_tests.gd",
+    "bytes": 13675,
+    "sha256": "7b12dc1852ff04e93ee57632d47cef258f735768bb3c70628f4ffe6dfbb627ec"
+  },
+  {
+    "path": "tests/godot/jelly_chest_celebration_tests.gd",
+    "bytes": 46481,
+    "sha256": "229c4927c1a318aa92308e8b09fb5f49b5257bfc3a38fb16d4d754233717d2b7"
+  },
+  {
+    "path": "tests/godot/jelly_chest_tap_tests.gd",
+    "bytes": 10080,
+    "sha256": "0bb8caea79946f26f4712d4e04a83f0e0d4bfaa56b5945ef62c9f4fce4b3744e"
+  },
+  {
+    "path": "tests/godot/jelly_finish_confirmation_tests.gd",
+    "bytes": 16264,
+    "sha256": "d9e6dff67a0948c876affb2935beadcec8dffb55fa5a81382746a820a4546638"
+  },
+  {
+    "path": "tests/godot/jelly_finish_pull_tests.gd",
+    "bytes": 18268,
+    "sha256": "63cdcc848fc57109dd9ab9ea1f983671b90cbb6173a7460c865adaf9fbf5dac5"
+  },
+  {
+    "path": "tests/godot/jelly_header_layout_tests.gd",
+    "bytes": 6824,
+    "sha256": "391ab7e7e13b5e312a18daf38a5a7c7b86f0d7e2a0383b7308e628c27eefd2ac"
+  },
+  {
+    "path": "tests/godot/jelly_loot_meter_tests.gd",
+    "bytes": 23230,
+    "sha256": "d24fa43f7872a07518583021a7feb4b49313fd30384226c82f045c87cb5e2674"
+  },
+  {
+    "path": "tests/godot/jelly_match_audio_tests.gd",
+    "bytes": 23984,
+    "sha256": "b051f66e57645f48cef2dbc7a4dd002d443972731b86be5121cbc31f33641469"
+  },
+  {
+    "path": "tests/godot/jelly_match_flow_tests.gd",
+    "bytes": 32866,
+    "sha256": "db6d08b37dff8e92819873d044a82fba70f9cecc9cec9b02dbb9ae353927bccf"
+  },
+  {
+    "path": "tests/godot/jelly_match_model_tests.gd",
+    "bytes": 86433,
+    "sha256": "2d5bf96f2b9768d50f6ae000521fd8a33d104c5f950e8e4df98f6e85cd5d006f"
+  },
+  {
+    "path": "tests/godot/jelly_match_view_tests.gd",
+    "bytes": 127736,
+    "sha256": "589aa5e0fc036261c7ca0f14d6cdc9e820570aed80458f4f4be4c6ecef76de7e"
+  },
+  {
+    "path": "tests/godot/jelly_queued_upgrade_settlement_tests.gd",
+    "bytes": 14822,
+    "sha256": "23d5ce3a17bb9ca15c105586ed2db8cb154a34ac0309ebf3613ba481f644913c"
+  },
+  {
+    "path": "tests/godot/jelly_result_coin_tests.gd",
+    "bytes": 19669,
+    "sha256": "76b4f5b2bbc2fbda239a316fbca8d53c4591e003725a719a9d5889207901817a"
+  },
+  {
+    "path": "tests/godot/layout_finish_tests.gd",
+    "bytes": 4958,
+    "sha256": "5655d1b85e7fdf41786ebcaa613a695bd979fd88aff4300f423f874d5ace425a"
+  },
+  {
+    "path": "tests/godot/layout_release_tests.gd",
+    "bytes": 4324,
+    "sha256": "c41417a1f0cc9b52a6243c6e50bc3d7d46f7e98c1a9ea0b18f77ffcfee5be8ff"
+  },
+  {
+    "path": "tests/godot/layout_tests.gd",
+    "bytes": 14252,
+    "sha256": "720930756cb42880eb6a1413eea7583b7643cb5728397d6814a5aa9fd641b6c0"
+  },
+  {
+    "path": "tests/godot/learning_content_tests.gd",
+    "bytes": 11723,
+    "sha256": "a1af5bc3b9b349de864884649310bf3da51e5ba4f8ab8fb6c28cb6e9596607ce"
+  },
+  {
+    "path": "tests/godot/learning_context_flow_tests.gd",
+    "bytes": 2996,
+    "sha256": "cbb70e752a9e7d17e57270cbcfbcdc167bdff42665884696121c5463102a5165"
+  },
+  {
+    "path": "tests/godot/learning_path_selector_tests.gd",
+    "bytes": 13056,
+    "sha256": "2356e728cc098cc7ee73387aa2e210a50d00b5b21ae4417ff54a1704b02e2029"
+  },
+  {
+    "path": "tests/godot/learning_theme_art_tests.gd",
+    "bytes": 8510,
+    "sha256": "f275b72954f11503ab5c3fba796b01ac57c4791dab7e8344bc66d24f422b1fd5"
+  },
+  {
+    "path": "tests/godot/lesson_navigation_tests.gd",
+    "bytes": 5341,
+    "sha256": "1115bcdb1785f7e26e148cc154776a6cc2c978984b3d0e8ff4b624613c5f0a31"
+  },
+  {
+    "path": "tests/godot/lesson_scene_tests.gd",
+    "bytes": 8290,
+    "sha256": "c1298f49a530f189a305f8829210f3bb9afe419e3cb7ef89909dffff1c1bb0f5"
+  },
+  {
+    "path": "tests/godot/mascot_redraw_tests.gd",
+    "bytes": 5984,
+    "sha256": "dac316634688f4d3041f8703376094cbfd72b5d34068659ad7bbba0fde7ce28f"
+  },
+  {
+    "path": "tests/godot/mascot_tests.gd",
+    "bytes": 18573,
+    "sha256": "c5c58f6995d2a0924c26270927ba2e980705e8956ddab9687086345b2b1013a3"
+  },
+  {
+    "path": "tests/godot/match_connections_tests.gd",
+    "bytes": 23639,
+    "sha256": "5d8162ff656a7900db764dfa6a30f0c54c02b63c85d3d5e16fc664984a3365da"
+  },
+  {
+    "path": "tests/godot/match_groups_tests.gd",
+    "bytes": 9661,
+    "sha256": "cc65c3b8d4f365c9153f4f0032ae80c3ca79aa2350477d5774a9382d5805fa3c"
+  },
+  {
+    "path": "tests/godot/match_hint_payment_tests.gd",
+    "bytes": 21210,
+    "sha256": "9d682a480af80751b582b054913c744bfdb1751b0b1e916a41d8451a7a8a9170"
+  },
+  {
+    "path": "tests/godot/match_voice_feedback_tests.gd",
+    "bytes": 15826,
+    "sha256": "0bdc00feaa9103f03264e01df5bf7bebe19bf79bd3a3675371962eec67ade358"
+  },
+  {
+    "path": "tests/godot/medal_progress_tests.gd",
+    "bytes": 41288,
+    "sha256": "381e73edd2bd13bcbcf8fb88ea816916267ae125dd162459a12afacc3648682f"
+  },
+  {
+    "path": "tests/godot/medal_scene_tests.gd",
+    "bytes": 13945,
+    "sha256": "45d22d8e47d6f0cd8955196d4cf62cc0e284964151db6e3d78a40ada51ef30aa"
+  },
+  {
+    "path": "tests/godot/memory_back_design_tests.gd",
+    "bytes": 7924,
+    "sha256": "797c5c3518438f20f265168832f401e51905f914e1436fef1016a37031991194"
+  },
+  {
+    "path": "tests/godot/memory_garden_tests.gd",
+    "bytes": 27096,
+    "sha256": "77bc5fb3fd6c65f8ee57d1b50604ed12e2e824db1db57841d8bd73dd360ccd8c"
+  },
+  {
+    "path": "tests/godot/memory_model_tests.gd",
+    "bytes": 21054,
+    "sha256": "58d1db14b30634f4fd7d6f87521fff1564c6749a3d200bd07f8c2f9c9d6d3960"
+  },
+  {
+    "path": "tests/godot/memory_peek_payment_tests.gd",
+    "bytes": 15000,
+    "sha256": "1b80300dd97eda020d673672cb30555f9a0fe9ebabcf2ec9eed42d9dea8e616d"
+  },
+  {
+    "path": "tests/godot/memory_peek_tests.gd",
+    "bytes": 25063,
+    "sha256": "79ec61bfe4ceb90334ab7d85fa2db070ed2fe887e6f3c91cad03666a500096d2"
+  },
+  {
+    "path": "tests/godot/memory_scene_tests.gd",
+    "bytes": 26245,
+    "sha256": "662e7487729796b201997b5710b711d4b289baf77499c43b3cfb5848f241de7f"
+  },
+  {
+    "path": "tests/godot/morphology_tests.gd",
+    "bytes": 16891,
+    "sha256": "4a1449384260dc1899a0e7bcc196750c1b37e2ae06c2e89acede5bc7d86f2579"
+  },
+  {
+    "path": "tests/godot/navigation_removal_tests.gd",
+    "bytes": 5634,
+    "sha256": "1db1f30fc1fdd190e0e425be25aa66a973cec7f63ae8f4ca72439fc007b60119"
+  },
+  {
+    "path": "tests/godot/new_theme_tests.gd",
+    "bytes": 5740,
+    "sha256": "cd50aee5c1f0bc57004ddd0f811dae8e79ca425f9ae71bda0b94313bac45e1d6"
+  },
+  {
+    "path": "tests/godot/pair_chest_flow_tests.gd",
+    "bytes": 17483,
+    "sha256": "f7224448980ca528d58f683fdb18d487aed7fa1a35315e92e9e578ad43ef317b"
+  },
+  {
+    "path": "tests/godot/pair_chest_progress_tests.gd",
+    "bytes": 18989,
+    "sha256": "7105d629e3945276015b9b0ec8c4671856ccd6a79b7e7ebebfc424e10914ca52"
+  },
+  {
+    "path": "tests/godot/pair_chest_reward_tests.gd",
+    "bytes": 18780,
+    "sha256": "b0304859a1ae6eb31d567ebe879998377081405b32a4fa84d983f5302722b434"
+  },
+  {
+    "path": "tests/godot/phrase_model_tests.gd",
+    "bytes": 23419,
+    "sha256": "ea664c640ed2fd514776a1b57edcd368f32af3adc1dbbc58f0dda11387c5fdc0"
+  },
+  {
+    "path": "tests/godot/phrase_scene_tests.gd",
+    "bytes": 68922,
+    "sha256": "94c8ee7442078a05fb17981fa894f7bd369ef9a3c65c62ae764d882bd46eab86"
+  },
+  {
+    "path": "tests/godot/pip_age_motion_tests.gd",
+    "bytes": 4767,
+    "sha256": "4a119e141a366f410d1535870af86db95d258b5e837ddf50e55a621173c4d18d"
+  },
+  {
+    "path": "tests/godot/pip_audio_fixture.gd",
+    "bytes": 825,
+    "sha256": "0ed1998800f4ce79944fcf2fb831c59d39a2e77ba2b17734c83c36b7bd860392"
+  },
+  {
+    "path": "tests/godot/pip_audio_tests.gd",
+    "bytes": 7593,
+    "sha256": "d6fe361f0da07ba4758ef78585a74d8562b5750053de77b421e0c44e3e232041"
+  },
+  {
+    "path": "tests/godot/pip_engagement_scene_tests.gd",
+    "bytes": 17035,
+    "sha256": "874448dd87f9ca16e6b325706548f5d4eec6cd997148932cee62bc352f07b65c"
+  },
+  {
+    "path": "tests/godot/pip_expression_tests.gd",
+    "bytes": 18834,
+    "sha256": "65b9aa8bbc735594f16fa82d7a69617da2ec45d573200d128f9a09182427278a"
+  },
+  {
+    "path": "tests/godot/pip_gameplay_feedback_tests.gd",
+    "bytes": 19035,
+    "sha256": "712fa6a7ff02b001f89ec172377e04d1702a7ec373121e7e7eaec8e77bdffe12"
+  },
+  {
+    "path": "tests/godot/pip_gameplay_motion_tests.gd",
+    "bytes": 10397,
+    "sha256": "714e0732011cd9ab3c8e7878f31b674fb57245edeb3aa248b5bfba3ed998d49c"
+  },
+  {
+    "path": "tests/godot/pip_growth_tests.gd",
+    "bytes": 8812,
+    "sha256": "246abd237d4be9da4b32c5e62312a06aee1df78af1ad45569959939eda08bfb8"
+  },
+  {
+    "path": "tests/godot/pip_mode_menu_tests.gd",
+    "bytes": 21567,
+    "sha256": "514ffdd8cc285948c90229421d45167d623a22708dcc3c07a2b3f093f8a284f4"
+  },
+  {
+    "path": "tests/godot/pip_outfit_tests.gd",
+    "bytes": 8466,
+    "sha256": "8003e96689c057f73e557fc5948065e8a965753e401d65079fff110eb8ef4f23"
+  },
+  {
+    "path": "tests/godot/player_flow_fixture.gd",
+    "bytes": 2685,
+    "sha256": "9052606c885bd1f5fdac10a38f10ef014c2ba11e56f9c2d59193a0acd89cb1c7"
+  },
+  {
+    "path": "tests/godot/playful_affordance_tests.gd",
+    "bytes": 4922,
+    "sha256": "32dbdb5d5055c6f1fbe926fb12d74a3a138d7348c68e4c633e1e3474c429c972"
+  },
+  {
+    "path": "tests/godot/playful_controls_tests.gd",
+    "bytes": 7402,
+    "sha256": "fd42d00da52767daf29f9b5a319d1ecfb3fa3967af8bb2491fe3cc8c383ee326"
+  },
+  {
+    "path": "tests/godot/playful_words_tests.gd",
+    "bytes": 8068,
+    "sha256": "537b1c0ea8d76ad0d32c2194c31e1a9780a2ef80d883e008a4bc75069aace194"
+  },
+  {
+    "path": "tests/godot/pop_result_audio_tests.gd",
+    "bytes": 4652,
+    "sha256": "c40b976b6dfb8a874f550f86d276a528c67d43ad0803f20feec597ee2467f3d9"
+  },
+  {
+    "path": "tests/godot/pop_reward_flow_tests.gd",
+    "bytes": 20169,
+    "sha256": "ca9d590161302dfc79c9f38de3a1a18ba626753190a31fab9176442460b19f6c"
+  },
+  {
+    "path": "tests/godot/pop_reward_identity_tests.gd",
+    "bytes": 6202,
+    "sha256": "0b540f25cb560acf90ab158c0b71b8259385d0cc0af0cbf81bfab0d276e6d14b"
+  },
+  {
+    "path": "tests/godot/pop_reward_room_tests.gd",
+    "bytes": 75537,
+    "sha256": "f0de781b23b155eb45e2ec11a7e25828ff8da91d13b6c215fae5941012314027"
+  },
+  {
+    "path": "tests/godot/pop_treasure_scroll_tests.gd",
+    "bytes": 16400,
+    "sha256": "fe37ceefec19d2532e60b9ace1a3544d55da65ad549f4a42bdedd1ccfe86c17c"
+  },
+  {
+    "path": "tests/godot/pop_treasure_visual_review.gd",
+    "bytes": 5269,
+    "sha256": "4b6d220f5eaa86a3b1bb094a342a29da3a2b07c237d709e8f903b7aa83e92917"
+  },
+  {
+    "path": "tests/godot/presentation_tests.gd",
+    "bytes": 6689,
+    "sha256": "99f33bab63a8c90a018982e7f9a078fbc25981b497eda287f9b92ecd80fd475a"
+  },
+  {
+    "path": "tests/godot/presentation_visual_review.gd",
+    "bytes": 3452,
+    "sha256": "e4c2ee0cec9190bb97c51ba0f9a760ef55189a78b2b2f6aa6e26816cc7695247"
+  },
+  {
+    "path": "tests/godot/proactive_pip_tests.gd",
+    "bytes": 14520,
+    "sha256": "66d782985b7f450a5aec8b587742e44583877c28d50cb675da9e6f8e1d753f68"
+  },
+  {
+    "path": "tests/godot/professional_application_flow_tests.gd",
+    "bytes": 14673,
+    "sha256": "0e78000274fa10800ea9eb368d56cb1d30b6a96eba8879422411afdbb4d95ffd"
+  },
+  {
+    "path": "tests/godot/professional_application_visual_review.gd",
+    "bytes": 6067,
+    "sha256": "7186ef9c46d82daa2df4ea19f356b96ca3be402827f17b49c8a4059190a385a9"
+  },
+  {
+    "path": "tests/godot/professional_approved_audio_tests.gd",
+    "bytes": 5773,
+    "sha256": "e82c49230e080dc2156b5157a519496cd8ca951581e6738cde32bea8d99ba0b9"
+  },
+  {
+    "path": "tests/godot/professional_domain_owner_tests.gd",
+    "bytes": 15718,
+    "sha256": "0408ae845d85b244e1a04a46a282a495fc9ebc27918f167e1a0404c0f33f9e34"
+  },
+  {
+    "path": "tests/godot/professional_domain_pack_verifier.gd",
+    "bytes": 4906,
+    "sha256": "bb3804fb61b3df6ae0a5befdafa2c683a9645504253043559430f267c43ce9a1"
+  },
+  {
+    "path": "tests/godot/professional_game_adapters_tests.gd",
+    "bytes": 7524,
+    "sha256": "142f1cae7712e9b98e6cce3aed7b4aee8935b80cb7e0ee64fcbb4c3a9f4497bb"
+  },
+  {
+    "path": "tests/godot/professional_media_bundles_tests.gd",
+    "bytes": 13805,
+    "sha256": "55aa1b00a8ff514a0cc47206d21d3f938c310babb8f0ca3ea024e5cbf7eed0c4"
+  },
+  {
+    "path": "tests/godot/professional_media_tests.gd",
+    "bytes": 13780,
+    "sha256": "ec2666793d99f449e9759f0f87f29ea78e0e759faea8f0d71ac62d01910d4903"
+  },
+  {
+    "path": "tests/godot/professional_picture_exclusions_tests.gd",
+    "bytes": 11268,
+    "sha256": "fd070a7105604dc9a405765cdb60867a010d1a33fb0a311e1e349c4850d85549"
+  },
+  {
+    "path": "tests/godot/professional_play_tests.gd",
+    "bytes": 17543,
+    "sha256": "3014b5a1e539743cf2b4918f2d11a5d29a450622e4d3b1df2a246f979e29d3de"
+  },
+  {
+    "path": "tests/godot/professional_progress_tests.gd",
+    "bytes": 12313,
+    "sha256": "e8f74e0f55e9802d94e12d213925d0fe1ae448d6632fc56762a3e30c3ff9a827"
+  },
+  {
+    "path": "tests/godot/professional_retail_morphology_tests.gd",
+    "bytes": 107018,
+    "sha256": "7cd10db267b373fea44ac287924ef67de0d47fa13d4a5c4e2c299afaeea6008c"
+  },
+  {
+    "path": "tests/godot/professional_round_loader_tests.gd",
+    "bytes": 24170,
+    "sha256": "99904fff2e23cd83976647c89990a76c7786f91ba51feb2108983833a01ae96d"
+  },
+  {
+    "path": "tests/godot/professional_session_tests.gd",
+    "bytes": 12615,
+    "sha256": "03b394dd6cf7a656adb7fbf04040723484694a3756f8e26873b38c925b98d6cc"
+  },
+  {
+    "path": "tests/godot/professional_store_tests.gd",
+    "bytes": 10336,
+    "sha256": "40a896ea2e1862dee9a050ddb80e88ae6c2bc9a2906ea85fcdd7ee242056b4d2"
+  },
+  {
+    "path": "tests/godot/professional_view_teardown_tests.gd",
+    "bytes": 3312,
+    "sha256": "8bbb0d26a15e2c0e4226f4f779597540d0e868afe0bbd3846313645ebeb6d05a"
+  },
+  {
+    "path": "tests/godot/professional_word_library_tests.gd",
+    "bytes": 10377,
+    "sha256": "3fac3b5dd760b44af6aea24a950e07adbb2c689f3d4c5b4947a6343f7138afd1"
+  },
+  {
+    "path": "tests/godot/render_scenes.gd",
+    "bytes": 2647,
+    "sha256": "b6566217ba887c7ae125fc6653262e31f641bde27ae1bf8abd54b3cb66403680"
+  },
+  {
+    "path": "tests/godot/result_scroll_tests.gd",
+    "bytes": 8505,
+    "sha256": "86651c6aa7123a3d00add8bf4ae3238011423d0ad9e65a0e171962b117d64df2"
+  },
+  {
+    "path": "tests/godot/reward_confetti_tests.gd",
+    "bytes": 14102,
+    "sha256": "8d15dd504da259e77582155cd56abb0d2e9ed4ef2cfacb82a2fde4bcf18d5d48"
+  },
+  {
+    "path": "tests/godot/round_celebration_audio_tests.gd",
+    "bytes": 11630,
+    "sha256": "69fb99478cd58be5a1a47c85c7849b57d86f2ef049bcd41f6982b47948e9b1b2"
+  },
+  {
+    "path": "tests/godot/round_celebration_flow_tests.gd",
+    "bytes": 33114,
+    "sha256": "6835449eb5bcdbb45165ffc6ef74381a64e32b8836d74cdb31789f25d262152b"
+  },
+  {
+    "path": "tests/godot/round_celebration_tests.gd",
+    "bytes": 23041,
+    "sha256": "7ea449627524aef059bbedeacbaa9947221dba629f7ed5e972fca0c0ed04734c"
+  },
+  {
+    "path": "tests/godot/run_tests.gd",
+    "bytes": 70918,
+    "sha256": "4294744e169aa452efb6b64fb041c05a7513214dbf72a05c2e9e1b39a224048f"
+  },
+  {
+    "path": "tests/godot/scroll_momentum_tests.gd",
+    "bytes": 15198,
+    "sha256": "721596f82573753b90de931c72bc0bd6af9243e656547a0aee7bb4f83619137c"
+  },
+  {
+    "path": "tests/godot/scrollbar_visibility_tests.gd",
+    "bytes": 7907,
+    "sha256": "ce06e56b4fae9c51c685fdeb04aca7f3e6086cb2615c5a063a1bd13bd520a7fb"
+  },
+  {
+    "path": "tests/godot/settlement_modal_tests.gd",
+    "bytes": 17723,
+    "sha256": "9c6dd8a06387382bc9f8624199e254a91fc9c8b61198ecd3427a8b1c5c1bde70"
+  },
+  {
+    "path": "tests/godot/steady_match_tests.gd",
+    "bytes": 16893,
+    "sha256": "9cf4ec4f075d70d763329480424565800e3ae06198c1749aa16d21765298cf9c"
+  },
+  {
+    "path": "tests/godot/theme_review_tests.gd",
+    "bytes": 16361,
+    "sha256": "959d3e0c4b7afd108c997a82f66bb054971db3bd0d33a2063680f90b5e35f1e4"
+  },
+  {
+    "path": "tests/godot/three_mode_tests.gd",
+    "bytes": 7961,
+    "sha256": "203a310008f3e8a65964c3d7e598f4327a47803852f638b0abe07236bc1debd5"
+  },
+  {
+    "path": "tests/godot/ui_audio_flow_tests.gd",
+    "bytes": 50879,
+    "sha256": "5a888776aa227f590da79627fb3e94072e7b02d144f4a7b6c6ed517a626d9580"
+  },
+  {
+    "path": "tests/godot/ui_click_tests.gd",
+    "bytes": 11618,
+    "sha256": "74652512086b82cc9924bbc9696c53e571df08fbdbf8595a96e6344eaaca8ef8"
+  },
+  {
+    "path": "tests/godot/ui_recovery_tests.gd",
+    "bytes": 17206,
+    "sha256": "4cf84e2a67e9dcf1c038be7f08e260956177a81c2d7d9c37acda19348566ecc3"
+  },
+  {
+    "path": "tests/godot/verify_web_pack.gd",
+    "bytes": 33079,
+    "sha256": "13f7daee68c99caa6159478876d79070ba3f89f96c5a8f3d3c946becc2fe1df0"
+  },
+  {
+    "path": "tests/godot/vocabulary_art_tests.gd",
+    "bytes": 2745,
+    "sha256": "946fa668cde2291a6d9ed0f82278605ad8efb14d29ef3c29197b7dc5d944b336"
+  },
+  {
+    "path": "tests/godot/vocabulary_layout_tests.gd",
+    "bytes": 5576,
+    "sha256": "31e85059e07efe599482c45c8eba073917c6507cf0d31c775b43a56fa22b98a8"
+  },
+  {
+    "path": "tests/godot/vocabulary_loader_tests.gd",
+    "bytes": 10440,
+    "sha256": "93d483a2aa1561746147861e431c026fef1267fe4e4825527ee0ca9a90f125d2"
+  },
+  {
+    "path": "tests/godot/vocabulary_loading_flow_tests.gd",
+    "bytes": 17661,
+    "sha256": "43df3d8bc1ad3c402821c8679930c9da415017d292899635713b1fd61c653d83"
+  },
+  {
+    "path": "tests/godot/voice_model_tests.gd",
+    "bytes": 22399,
+    "sha256": "cd43f2be13bfec73c32f39f4856e17ceb5849aff6e3af232ce5a76f69c596f31"
+  },
+  {
+    "path": "tests/godot/voice_pop_audio_tests.gd",
+    "bytes": 10603,
+    "sha256": "f251a96a2e416eda199c5e622758f476ffb88dcf8d217b18ea89ea30ff881384"
+  },
+  {
+    "path": "tests/godot/voice_pop_model_tests.gd",
+    "bytes": 46473,
+    "sha256": "70af02657d6b9f74c4590406af2c9bb5c157f7530759a0d31718d504465cc0b1"
+  },
+  {
+    "path": "tests/godot/voice_pop_reward_tests.gd",
+    "bytes": 20070,
+    "sha256": "8c29de9db81d88bfa7c06617af1ac0e46bc1bddb99d47f08fc8389b2b202d8fd"
+  },
+  {
+    "path": "tests/godot/voice_pop_rewards_visual_review.gd",
+    "bytes": 3315,
+    "sha256": "74c8d6fdcfff71bad797fd01893e57b18925cad90ca45a906c10150ab45b8dbf"
+  },
+  {
+    "path": "tests/godot/voice_pop_scene_tests.gd",
+    "bytes": 48482,
+    "sha256": "285647162e78ad4ecbc2c0b5ce24242228ab50dde3bbc53dec1419ae6a31d5c6"
+  },
+  {
+    "path": "tests/godot/voice_pop_slice_tests.gd",
+    "bytes": 20981,
+    "sha256": "430603a76cd7fa0f44030cfddd575d84559ed5f9bf229ecff0d9d67c019ce576"
+  },
+  {
+    "path": "tests/godot/word_jelly_authored_drag_tests.gd",
+    "bytes": 8477,
+    "sha256": "5302c027d421ccb599c1b211b9fc0cf3c60183b1e598a3f77a870f8b408ff5ca"
+  },
+  {
+    "path": "tests/godot/word_jelly_flow_tests.gd",
+    "bytes": 40491,
+    "sha256": "5fd92f91235736d82d6361361e25e4e7b1adb3403910e38ffe43dbc493f3d265"
+  },
+  {
+    "path": "tests/godot/word_jelly_merge_speech_tests.gd",
+    "bytes": 15747,
+    "sha256": "62d56727dbb2e28b1cc50082650b67b391da70f0d50f2e6c14a176b4e55133c7"
+  },
+  {
+    "path": "tests/godot/word_jelly_model_tests.gd",
+    "bytes": 235962,
+    "sha256": "18039bfa15888221ec9bc15396e195b9f48d7f87b20e3186518c4bda2f0d1aae"
+  },
+  {
+    "path": "tests/godot/word_jelly_morphology_tests.gd",
+    "bytes": 34225,
+    "sha256": "3fe8fdaa8a5976c3bc5e35f70c6910fa5e9356e2268e5c7fa2dd1a1cadefa1d8"
+  },
+  {
+    "path": "tests/godot/word_jelly_morphology_view_tests.gd",
+    "bytes": 7144,
+    "sha256": "be81122243f170b48cd19f44041840d8b923ce95dccaefe3e682783ea96e6351"
+  },
+  {
+    "path": "tests/godot/word_jelly_powerup_button_tests.gd",
+    "bytes": 5833,
+    "sha256": "68601a89575cac225d236b596e1a29dea16e8d8bf9b53d9d6dfbf0fd1e9935a6"
+  },
+  {
+    "path": "tests/godot/word_jelly_powerup_flow_tests.gd",
+    "bytes": 30832,
+    "sha256": "49b10f8ffb8fbc205924365318b560da3da7740ca12dac3672868601c5e43f59"
+  },
+  {
+    "path": "tests/godot/word_jelly_view_tests.gd",
+    "bytes": 162972,
+    "sha256": "7224b3ebda99f4d262f9e959c76668e0b3895501575d0188fbd187373f57215f"
+  },
+  {
+    "path": "tests/godot/word_jelly_word_reveal_tests.gd",
+    "bytes": 13873,
+    "sha256": "3e4e381390752acdbc07ce5f8d165675ff8c48182f78d8f5bcd54c3dcf944b12"
+  },
+  {
+    "path": "tests/godot/word_motion_tests.gd",
+    "bytes": 20046,
+    "sha256": "ca57696ef53ee4aab260ed3b1303cd19a621d3702967fab654772afeb69d5b2e"
+  },
+  {
+    "path": "tests/godot/word_sampler_tests.gd",
+    "bytes": 8658,
+    "sha256": "bef8a1a7cc780e7e41ef1ebe3a3b4020387cc79d1be4400d66bb814a62be8c1f"
+  },
+  {
+    "path": "tools/run-godot.cjs",
+    "bytes": 1228,
+    "sha256": "a411f937acd304761e0ac9f6513f45e0f2a6aa886856e3b32a537a04ff5189be"
+  }
+]

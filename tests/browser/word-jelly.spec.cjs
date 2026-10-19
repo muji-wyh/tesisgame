@@ -4,13 +4,19 @@ const { openGame, openModeMenu, chooseMode, metrics, tap, rendered, enterGame, o
 const { recordingTiming, expectRecording } = require('./bundled-audio.cjs');
 const { collectionCoins } = require('./word-jelly-rewards.cjs');
 const vocabulary = require('../../words.json');
+const morphology = Array.from({ length: 10 }, (_, index) =>
+  require(`../../data/vocabulary/morphology/age-${String(index + 3).padStart(2, '0')}.json`).entries).flat();
+const analyses = new Map(morphology.map(entry => [entry.analysis.id, entry.analysis]));
+const reviewed = new Map(morphology.map(entry => [entry.id, entry]));
+const COMPOSITION_AGE = 8;
 
 const jelly = page => page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
+const previewReady = state => state.upcoming.every((body, index) => !body.id || state.preview.slots[index].visible);
 const wallet = page => page.locator('#coin-status').evaluate(node => JSON.parse(node.dataset.snapshot || '{}'));
 const normalize = text => text.trim().toLowerCase().replace(/\s+/g, ' ');
 const jellyWordsForAge = age => vocabulary.filter(word => word.min_age === age &&
   ['id', 'text', 'image', 'audio'].every(key => typeof word[key] === 'string' && word[key].trim()) &&
-  normalize(word.text).length >= 2);
+  reviewed.get(word.id)?.review.status === 'reviewed');
 const expectRestingPalette = (tile, resting, message) => {
   expect(tile.palette_index, message).toBe(resting.palette_index);
   expect(tile.palette_hue, message).toBeCloseTo(resting.palette_hue, 5);
@@ -25,7 +31,7 @@ async function pressRect(page, rect) {
   await rendered(page);
 }
 
-async function startWordJelly(page, { age = 3, reducedMotion = 'no-preference', preseededGrowth = false } = {}) {
+async function startWordJelly(page, { age = COMPOSITION_AGE, reducedMotion = 'no-preference', preseededGrowth = false } = {}) {
   const earnedAge = age === 3 ? 0 : age - 1;
   if (!preseededGrowth) await page.addInitScript(earnedAge => {
     const key = 'growWithPip.growth.v1';
@@ -41,9 +47,18 @@ async function startWordJelly(page, { age = 3, reducedMotion = 'no-preference', 
   await expect.poll(async () => {
     const state = await jelly(page);
     return state.mode === 'word_jelly' && state.visible && state.phase === 'playing' &&
-      state.tiles?.length >= 18 && state.tiles.every(tile => tile.settled);
-  }, { timeout: 20000, message: 'The real Word Jelly board opens with three rows of settled roots' }).toBe(true);
+      state.authored_morphology && state.tiles?.length > 0 && state.tiles.every(tile => tile.settled);
+  }, { timeout: 20000, message: 'The real Word Jelly board opens with reviewed, settled content' }).toBe(true);
   const opening = await jelly(page);
+  const occupiedArea = opening.tiles.reduce((sum, tile) => sum + tile.width * tile.height, 0);
+  expect(occupiedArea, 'The opening respects its eighteen-cell occupied-area budget').toBeLessThanOrEqual(18);
+  const next = opening.upcoming.find(tile => tile.id);
+  expect(occupiedArea + next.width * next.height,
+    'The next fixed-size body would exceed the opening budget').toBeGreaterThan(18);
+  for (const tile of opening.tiles) {
+    expect(tile.composition?.signature, 'Every displayed body has reviewed composition identity').toBeTruthy();
+    expectSupportedChild(opening, tile);
+  }
   expect(opening.tiles.every(tile => tile.focused === false),
     'Pointer entry does not give any starter jelly an unsolicited keyboard focus ring').toBe(true);
   expect(opening.drag.source, 'Pointer entry starts without a held jelly').toBe(-1);
@@ -58,24 +73,63 @@ function center(rect, bounds) {
     y: bounds.y + (rect[1] + rect[3] / 2) * bounds.scale };
 }
 
-function rootsForWord(state, age, count, markedOnly = false, invalidReverse = false) {
-  const words = new Map(jellyWordsForAge(age).map(word => [normalize(word.text), word]));
-  const roots = state.tiles.filter(tile => tile.visible && tile.settled && tile.mass === 1);
-  for (const first of roots) for (const second of roots) {
-    if (first.id === second.id) continue;
-    const prefix = first.text + second.text;
-    if (count === 2 && words.has(normalize(prefix)) && (!markedOnly || first.fragments + second.fragments > 0) &&
-      (!invalidReverse || !words.has(normalize(second.text + first.text))))
-      return { roots: [first, second], word: words.get(normalize(prefix)) };
+function authoredJoin(left, right) {
+  if (!left?.composition || !right?.composition || left.id === right.id) return null;
+  const matches = [];
+  for (const candidate of left.composition.candidates) {
+    const analysis = analyses.get(candidate.analysis_id);
+    if (!analysis) continue;
+    for (const node of analysis.nodes) if (node.left === candidate.node_id &&
+      right.composition.candidates.some(other => other.analysis_id === analysis.id && other.node_id === node.right))
+      matches.push({ analysis, node, complete: analysis.roots.includes(node.id) });
   }
-  return null;
+  if (!matches.length) return null;
+  expect(new Set(matches.map(match => match.node.surface)), 'The reviewed ordered join has one exact output').toHaveProperty('size', 1);
+  return matches.find(match => match.complete) || matches[0];
+}
+
+function suppliedWords(state, age) {
+  const words = new Map(jellyWordsForAge(age).map(word => [word.id, word]));
+  const groups = new Map();
+  for (const tile of state.tiles.filter(tile => tile.visible && tile.settled && tile.mass === 1 && tile.supply_group)) {
+    if (!groups.has(tile.supply_group)) groups.set(tile.supply_group, []);
+    groups.get(tile.supply_group).push(tile);
+  }
+  return [...groups.values()].map(roots => {
+    roots.sort((a, b) => a.supply_part - b.supply_part);
+    const word = words.get(roots[0].source_word_id), analysis = reviewed.get(word?.id)?.analysis;
+    return { roots, word, analysis };
+  }).filter(candidate => candidate.analysis && candidate.roots.length === candidate.analysis.parts.length &&
+    candidate.roots.every((root, index) => root.text === candidate.analysis.parts[index].surface));
+}
+
+function rootsForWord(state, age, count, markedOnly = false, invalidReverse = false) {
+  return suppliedWords(state, age).find(candidate => candidate.roots.length === count &&
+    (!markedOnly || candidate.roots.some(tile => tile.fragments > 0)) &&
+    (!invalidReverse || !authoredJoin(candidate.roots[1], candidate.roots[0]))) || null;
 }
 
 async function availableWord(page, age, count, { markedOnly = false, invalidReverse = false } = {}) {
-  for (let attempt = 0; attempt < 4; attempt++) {
+  for (let attempt = 0; attempt < jellyWordsForAge(age).length; attempt++) {
     await expect.poll(async () => (await jelly(page)).tiles.every(tile => tile.settled)).toBe(true);
     const state = await jelly(page), found = rootsForWord(state, age, count, markedOnly, invalidReverse);
+    const atomic = state.tiles.find(tile => tile.settled && tile.word?.id && !tile.composition.composed);
+    if (atomic) {
+      await pressRect(page, atomic.rect);
+      await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(state.cleared_pairs + 1);
+      await expect.poll(async () => (await jelly(page)).reward_presentation.active).toBe(false);
+      continue;
+    }
     if (found) return found;
+    const other = suppliedWords(state, age).find(candidate => candidate.roots.length !== count ||
+      (markedOnly && candidate.roots.every(tile => tile.fragments === 0)));
+    if (other) {
+      const completed = await completeSuppliedWord(page, other);
+      await pressRect(page, completed.rect);
+      await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(state.cleared_pairs + 1);
+      await expect.poll(async () => (await jelly(page)).reward_presentation.active).toBe(false);
+      continue;
+    }
     expect(state.preview.enabled, 'The ordinary preview can supply another complete word packet').toBe(true);
     await pressRect(page, state.preview.rect);
     await expect.poll(async () => (await jelly(page)).generated_tiles).toBeGreaterThan(state.generated_tiles);
@@ -86,6 +140,8 @@ async function availableWord(page, age, count, { markedOnly = false, invalidReve
 async function merge(page, sourceId, targetId) {
   const before = await jelly(page), bounds = await metrics(page);
   const source = before.tiles.find(tile => tile.id === sourceId), target = before.tiles.find(tile => tile.id === targetId);
+  const authored = authoredJoin(source, target);
+  expect(authored, 'The drag follows a reviewed ordered join').toBeTruthy();
   expect(source?.settled, 'The held jelly is ready').toBe(true);
   expect(target?.settled, 'The destination jelly is ready').toBe(true);
   const from = center(source.rect, bounds), to = center(target.rect, bounds);
@@ -94,7 +150,14 @@ async function merge(page, sourceId, targetId) {
   try {
     await expect.poll(async () => (await jelly(page)).drag.source).toBe(sourceId);
     await page.mouse.move(to.x, to.y, { steps: 12 });
-    await expect.poll(async () => (await jelly(page)).drag.target).toBe(targetId);
+    await expect.poll(async () => {
+      const state = await jelly(page), liveTarget = state.tiles.find(tile => tile.id === targetId);
+      if (!liveTarget?.settled) return false;
+      if (state.drag.target === targetId) return true;
+      const livePoint = center(liveTarget.rect, bounds);
+      await page.mouse.move(livePoint.x, livePoint.y, { steps: 4 });
+      return false;
+    }, { message: 'The held source follows the real target after any support-removal fall' }).toBe(true);
   } finally {
     await page.mouse.up();
   }
@@ -102,7 +165,7 @@ async function merge(page, sourceId, targetId) {
   await expect.poll(async () => {
     const state = await jelly(page);
     result = state.tiles.find(tile => !before.tiles.some(old => old.id === tile.id) &&
-      tile.text === source.text + target.text && tile.mass === source.mass + target.mass);
+      tile.text === authored.node.surface && tile.mass === source.mass + target.mass);
     return state.merged_count === before.merged_count + 1 && Boolean(result?.settled) &&
       before.tiles.filter(tile => tile.id !== sourceId && tile.id !== targetId).every(original =>
         state.tiles.some(tile => tile.id === original.id && tile.settled));
@@ -112,13 +175,15 @@ async function merge(page, sourceId, targetId) {
   expect(after.cleared_pairs, 'Merging does not automatically collect a word').toBe(before.cleared_pairs);
   expect(after.fragment_count, 'Carried fragments are collected only after a valid word is tapped').toBe(before.fragment_count);
   expect(result.fragments).toBe(source.fragments + target.fragments);
+  expect(result.composition.complete).toBe(authored.complete);
+  expect(result.composition.mastery_eligible).toBe(authored.complete);
   expect(result.placement_locked, 'Automatic merging releases any previous manual placement').toBe(false);
   expectSupportedChild(after, result);
   for (const original of before.tiles.filter(tile => tile.id !== sourceId && tile.id !== targetId && tile.settled)) {
     const unchanged = after.tiles.find(tile => tile.id === original.id);
     expect(unchanged, 'Merging preserves every unrelated jelly').toBeTruthy();
-    if (original.placement_locked) {
-      expect([unchanged.width, unchanged.height], 'Merging preserves an unrelated player-chosen footprint')
+    if (original.placement_locked || original.composition) {
+      expect([unchanged.width, unchanged.height], 'Merging preserves every authored and player-chosen footprint')
         .toEqual([original.width, original.height]);
     }
     const expanded = unchanged.width !== original.width || unchanged.height !== original.height;
@@ -141,6 +206,31 @@ async function merge(page, sourceId, targetId) {
   return result;
 }
 
+async function completeSuppliedWord(page, candidate) {
+  const { roots, analysis, word } = candidate;
+  const ready = new Map(analysis.parts.map((part, index) => [part.id, roots[index]]));
+  const visit = async id => {
+    if (ready.has(id)) return ready.get(id);
+    const node = analysis.nodes.find(item => item.id === id);
+    expect(node, 'The completion follows an explicit authored node').toBeTruthy();
+    const left = await visit(node.left), right = await visit(node.right);
+    const result = await merge(page, left.id, right.id);
+    expect(result.text).toBe(node.surface);
+    if (!analysis.roots.includes(id)) {
+      expect(result.word, 'An authored intermediate is not prematurely collectable').toEqual({});
+      expect(result.picture_visible).toBe(false);
+    }
+    ready.set(id, result);
+    return result;
+  };
+  const result = await visit(analysis.roots[0]);
+  expect(result.word.id).toBe(word.id);
+  expect(result.composition.complete).toBe(true);
+  expect(result.composition.mastery_eligible, 'Only manually composed words earn composition mastery')
+    .toBe(analysis.parts.length > 1);
+  return result;
+}
+
 async function rejectMerge(page, sourceId, targetId, { info, label, reducedMotion = 'no-preference', inspectContact } = {}) {
   const before = await jelly(page), bounds = await metrics(page);
   const source = before.tiles.find(tile => tile.id === sourceId), target = before.tiles.find(tile => tile.id === targetId);
@@ -156,6 +246,15 @@ async function rejectMerge(page, sourceId, targetId, { info, label, reducedMotio
   try {
     await expect.poll(async () => (await jelly(page)).drag.source).toBe(sourceId);
     await page.mouse.move(to.x, to.y, { steps: 8 });
+    await expect.poll(async () => {
+      const state = await jelly(page), liveTarget = state.tiles.find(tile => tile.id === targetId);
+      if (!liveTarget?.settled) return false;
+      if (state.drag.target === targetId) return true;
+      const livePoint = center(liveTarget.rect, bounds);
+      livePoint.y -= liveTarget.rect[3] * bounds.scale * 0.34;
+      await page.mouse.move(livePoint.x, livePoint.y, { steps: 4 });
+      return false;
+    }).toBe(true);
     await expect.poll(async () => (await jelly(page)).contact).toMatchObject({ kind: 'touch', source: sourceId, target: targetId });
     held = await jelly(page);
     expect(held.contact.strength, 'An incompatible pair still responds to physical contact').toBeGreaterThan(0);
@@ -310,10 +409,16 @@ function expectSupplyLayout(state, bounds) {
     expect(Math.abs(value - tray[axis]), 'The whole tray remains the manual drop target').toBeLessThan(tolerance);
   expect(state.preview.slots).toHaveLength(6);
   for (const [index, slot] of state.preview.slots.entries()) {
-    expect(slot.visible, `Preview ${index} stays visible`).toBe(true);
+    const body = state.upcoming[index];
+    if (!body.id) {
+      expect(slot.visible, 'Reserved or empty lanes do not display a duplicate body').toBe(false);
+      if (body.reservation) expect(state.upcoming[body.anchor].id).toBe(body.reservation);
+      continue;
+    }
+    expect(slot.visible, `Advertised preview ${index} stays visible`).toBe(true);
     inside(slot.rect, tray, `Preview ${index}`);
-    expect(Math.abs(slot.rect[0] + slot.rect[2] / 2 - (board[0] + (index + 0.5) * board[2] / 6)),
-      `Preview ${index} is centered over its well column`).toBeLessThan(tolerance);
+    expect(Math.abs(slot.rect[0] + slot.rect[2] / 2 - (board[0] + (index + body.width / 2) * board[2] / 6)),
+      `Preview ${index} is centered over its reserved well columns`).toBeLessThan(tolerance);
   }
   const regions = [['well', board], ['supply tray', tray], ['Collect words', collect], ['Action divider', divider],
     ...Object.entries(state.powerup_buttons).map(([kind, button]) => [kind, button.rect])];
@@ -375,7 +480,7 @@ function expectSupplyLayout(state, bounds) {
     expect(rect[3] * scale, `${label} retains a forty-four-pixel target height within viewport rounding`).toBeGreaterThanOrEqual(43.75);
   }
   const bottom = Math.max(...regions.map(([, rect]) => rect[1] + rect[3]));
-  expect(Math.abs(bottom - (area[1] + area[3] - 12 / scale)), 'The game retains twelve-pixel bottom padding').toBeLessThan(tolerance);
+  expect(Math.abs(bottom - (area[1] + area[3] - 6 / scale)), 'The authored board retains six-pixel bottom padding').toBeLessThan(tolerance);
 }
 
 function expectSupportedChild(state, child) {
@@ -392,15 +497,15 @@ function expectSupportedChild(state, child) {
 }
 
 function expectMixedRootPacket(roots, label) {
-  expect(roots, `${label} contains six roots`).toHaveLength(6);
-  expect(new Set(roots.map(root => root.supply_group)).size,
-    `${label} contains parts from several words`).toBeGreaterThan(1);
+  roots = roots.filter(root => root.id);
+  expect(roots.length, `${label} contains genuine supplied bodies`).toBeGreaterThan(0);
   for (const [index, root] of roots.entries()) {
     expect(Number.isInteger(root.supply_group), `${label}: root provenance remains available`).toBe(true);
     expect(root.source_word_id, `${label}: every root retains its vocabulary identity`).toBeTruthy();
-    if (index > 0) expect(root.supply_group,
-      `${label}: parts from the same supplied word have another root between them`)
-      .not.toBe(roots[index - 1].supply_group);
+    const analysis = reviewed.get(root.source_word_id).analysis;
+    expect(root.text, `${label}: the source is an authored part, never a midpoint split`)
+      .toBe(analysis.parts[root.supply_part].surface);
+    expect(root.supply_parts).toBe(analysis.parts.length);
   }
 }
 
@@ -423,7 +528,8 @@ async function observeArrival(page, before) {
     window.wordJellyStaggerFrame = null;
     let capturePending = false;
     let staggerCapturePending = false;
-    const source = before.preview.slots.find(slot => slot.id === before.upcoming[0].id);
+    const firstBody = before.upcoming.find(body => body.id);
+    const source = before.preview.slots.find(slot => slot.id === firstBody.id);
     const capture = key => document.getElementById('canvas').toBlob(blob => {
       if (!blob) return;
       const reader = new FileReader();
@@ -437,7 +543,7 @@ async function observeArrival(page, before) {
       window.wordJellyArrivalTimeline.push({ tiles: tracked, preview: state.preview.slots, time: performance.now() });
       const first = tracked.find(tile => tile.id === source.id);
       const boardPitch = state.board_rect[3] / state.rows;
-      const targetY = state.board_rect[1] + (first?.row + 0.5) * boardPitch;
+      const targetY = state.board_rect[1] + (first?.row + first?.height / 2) * boardPitch;
       const sourceY = source.rect[1] + source.rect[3] / 2;
       const progress = first && (first.rect[1] + first.rect[3] / 2 - sourceY) / (targetY - sourceY);
       if (!capturePending && first && !first.settled && progress > 0.20 && progress < 0.72) {
@@ -464,7 +570,7 @@ async function observeArrival(page, before) {
 async function verifyArrival(page, info, before, label) {
   await expect.poll(async () => {
     const state = await jelly(page);
-    return before.upcoming.every(root => state.tiles.some(tile => tile.id === root.id && tile.settled));
+    return before.upcoming.filter(root => root.id).every(root => state.tiles.some(tile => tile.id === root.id && tile.settled));
   }, { timeout: Math.ceil(before.spawn_interval * 1000) + 12000,
     message: `${label} supply visibly descends and finishes its planted recovery` }).toBe(true);
   const after = await jelly(page);
@@ -472,7 +578,7 @@ async function verifyArrival(page, info, before, label) {
   await info.attach(`word-jelly-${label}-arrival-timeline.json`, {
     body: JSON.stringify({ before: before.preview, roots: before.upcoming, timeline }, null, 2), contentType: 'application/json'
   });
-  for (const root of before.upcoming) {
+  for (const root of before.upcoming.filter(root => root.id)) {
     const source = before.preview.slots.find(slot => slot.id === root.id);
     const target = after.tiles.find(tile => tile.id === root.id);
     const frames = timeline.flatMap(frame => frame.tiles.filter(tile => tile.id === root.id));
@@ -504,30 +610,34 @@ async function verifyArrival(page, info, before, label) {
     expect(target.fragments).toBe(root.fragments);
     expectSupportedChild(after, target);
   }
-  const arrivals = before.upcoming.map((root, slot) => ({
+  const arrivals = before.upcoming.flatMap((root, slot) => root.id ? [{
     ...after.tiles.find(tile => tile.id === root.id), slot, source: before.preview.slots[slot]
-  }));
+  }] : []);
   const delay = root => root.arrival_delay;
-  expect(new Set(arrivals.map(delay)).size, `${label}: all six roots have separate release beats`).toBe(6);
+  for (const root of arrivals) expect(delay(root), 'The advertised lane keeps its authored crossing release beat')
+    .toBeCloseTo([0, 3, 1, 4, 2, 5].indexOf(root.slot) * 0.15, 4);
+  expect(new Set(arrivals.map(delay)).size, `${label}: advertised bodies have separate release beats`).toBe(arrivals.length);
   expect(Math.max(...arrivals.map(delay)) - Math.min(...arrivals.map(delay)),
-    `${label}: the packet spreads across a perceptible release sequence`).toBeGreaterThan(0.55);
+    `${label}: the packet spreads across a perceptible release sequence`).toBeGreaterThanOrEqual((arrivals.length - 1) * 0.15 - 0.001);
   const crossLanePairs = arrivals.flatMap(early => arrivals
     .filter(late => early.slot > late.slot && delay(late) - delay(early) > 0.29)
     .map(late => ({ early, late })));
-  expect(crossLanePairs.length, `${label}: release order crosses the row instead of sweeping left to right`).toBeGreaterThan(0);
+  const expectedCrossLane = arrivals.some(early => arrivals.some(late => early.slot > late.slot &&
+    [0, 3, 1, 4, 2, 5].indexOf(late.slot) - [0, 3, 1, 4, 2, 5].indexOf(early.slot) >= 2));
+  expect(crossLanePairs.length > 0).toBe(expectedCrossLane);
   const pitch = after.board_rect[3] / after.rows;
   const travel = (frame, root) => {
     const tile = frame.tiles.find(tile => tile.id === root.id);
     return tile ? tile.rect[1] + tile.rect[3] / 2 - root.source.rect[1] - root.source.rect[3] / 2 : Number.NaN;
   };
-  expect(timeline.some(frame => crossLanePairs.some(({ early, late }) =>
+  if (crossLanePairs.length) expect(timeline.some(frame => crossLanePairs.some(({ early, late }) =>
     travel(frame, early) > pitch * 0.15 && Math.abs(travel(frame, late)) < 1)),
   `${label}: a later column visibly falls while an earlier column still waits at the tray`).toBe(true);
-  expect(timeline.some(frame => arrivals.some(early => travel(frame, early) > pitch * 0.25 &&
+  if (arrivals.length > 1) expect(timeline.some(frame => arrivals.some(early => travel(frame, early) > pitch * 0.25 &&
     frame.preview[early.slot].visible && frame.preview[early.slot].id !== early.id) &&
     arrivals.some(late => Math.abs(travel(frame, late)) < 1 && !frame.preview[late.slot].visible)),
   `${label}: cleared preview slots refill while other departing roots still wait`).toBe(true);
-  expect(after.generated_tiles).toBe(before.generated_tiles + 6);
+  expect(after.generated_tiles).toBe(before.generated_tiles + arrivals.length);
   expect(after.merged_count).toBe(before.merged_count);
   expect(after.cleared_pairs).toBe(before.cleared_pairs);
   expect(after.collected_coins).toBe(before.collected_coins);
@@ -535,10 +645,12 @@ async function verifyArrival(page, info, before, label) {
     { message: 'The actual browser captures the jellies between the tray and their support' }).toBe(true);
   const encoded = await page.evaluate(() => window.wordJellyArrivalFrame);
   fs.writeFileSync(info.outputPath(`word-jelly-${label}-falling-midpoint.png`), Buffer.from(encoded, 'base64'));
-  await expect.poll(() => page.evaluate(() => Boolean(window.wordJellyStaggerFrame)),
-    { message: 'The browser captures roots falling at visibly different heights' }).toBe(true);
-  const stagger = await page.evaluate(() => window.wordJellyStaggerFrame);
-  fs.writeFileSync(info.outputPath(`word-jelly-${label}-staggered-release.png`), Buffer.from(stagger, 'base64'));
+  if (arrivals.length > 1) {
+    await expect.poll(() => page.evaluate(() => Boolean(window.wordJellyStaggerFrame)),
+      { message: 'The browser captures bodies falling at visibly different heights' }).toBe(true);
+    const stagger = await page.evaluate(() => window.wordJellyStaggerFrame);
+    fs.writeFileSync(info.outputPath(`word-jelly-${label}-staggered-release.png`), Buffer.from(stagger, 'base64'));
+  }
   await capture(page, info, `word-jelly-${label}-landed`);
   await page.evaluate(() => window.wordJellyArrivalObserver.disconnect());
 }
@@ -547,18 +659,12 @@ test('manual and automatic preview packets naturally fall into the well', async 
   test.setTimeout(120000);
   const errors = await startWordJelly(page), manual = await jelly(page);
   expectSupplyLayout(manual, await metrics(page));
-  for (let row = manual.rows - 3; row < manual.rows; row++) {
-    const roots = manual.tiles.filter(tile => tile.row === row).sort((a, b) => a.column - b.column);
-    expectMixedRootPacket(roots, `Starter row ${row}`);
-    expectRootBreathingRoom(roots, manual.board_rect[2] / manual.columns, `Starter row ${row}`);
-  }
+  expectMixedRootPacket(manual.tiles, 'Starter supply');
   expectMixedRootPacket(manual.upcoming, 'Manual supply');
-  expectRootBreathingRoom(manual.preview.slots, manual.board_rect[2] / manual.columns, 'Preview row');
-  expect(manual.preview.slots.filter(slot => slot.visible)).toHaveLength(6);
-  expect(manual.preview.rect[1] + manual.preview.rect[3], 'The supply tray is above the well on every layout')
+  expectRootBreathingRoom(manual.preview.slots.filter(slot => slot.visible), manual.board_rect[2] / manual.columns, 'Preview row');
+  expect(manual.preview.slots.filter(slot => slot.visible)).toHaveLength(manual.upcoming.filter(root => root.id).length);
+  expect(manual.preview.rect[1] + manual.preview.rect[3], 'The supply tray remains above the well')
     .toBeLessThanOrEqual(manual.board_rect[1]);
-  expect(new Set(manual.preview.slots.map(slot => Math.round(slot.rect[1]))).size,
-    'All six visible previews share one horizontal row').toBe(1);
   await capture(page, info, 'word-jelly-supply-before-release');
   await observeArrival(page, manual);
   await pressRect(page, manual.preview.rect);
@@ -572,21 +678,20 @@ test('manual and automatic preview packets naturally fall into the well', async 
 
 test('blocked preview lanes retain their roots while open columns release and refill', async ({ page }, info) => {
   test.setTimeout(180000);
-  const errors = await startWordJelly(page), opening = await jelly(page);
-  const floor = opening.tiles.filter(tile => tile.row === opening.rows - 1 && tile.mass === 1);
-  const found = rootsForWord({ tiles: floor }, 3, 2);
-  expect(found, 'The ordinary starter packet provides a floor word to collect').toBeTruthy();
-  const completed = await merge(page, found.roots[0].id, found.roots[1].id);
+  const errors = await startWordJelly(page, { age: 3 }), opening = await jelly(page);
+  const completed = opening.tiles.find(tile => tile.row + tile.height === opening.rows && tile.word?.id);
+  expect(completed, 'The real atomic cohort provides a complete floor word').toBeTruthy();
   const beforeCollection = await jelly(page);
   await pressRect(page, completed.rect);
   await expect.poll(async () => {
     const state = await jelly(page);
     return state.cleared_pairs === beforeCollection.cleared_pairs + 1 && !state.fusions.length &&
-      state.tiles.every(tile => tile.settled) && state.preview.slots.every(slot => slot.visible);
+      state.tiles.every(tile => tile.settled) && previewReady(state);
   }, { message: 'Collecting the real word leaves its surviving roots settled at uneven heights' }).toBe(true);
 
-  const blockedColumns = state => Array.from({ length: state.columns }, (_, column) => column)
-    .filter(column => state.tiles.some(tile => tile.row === 0 && tile.column <= column && column < tile.column + tile.width));
+  const openAnchors = state => state.upcoming.flatMap((body, column) => body.id && !state.tiles.some(tile =>
+    tile.column < column + body.width && tile.column + tile.width > column && tile.row < body.height) ? [column] : []);
+  const blockedColumns = state => state.upcoming.flatMap((body, column) => body.id && !openAnchors(state).includes(column) ? [column] : []);
   let before = await jelly(page);
   const heights = Array.from({ length: before.columns }, (_, column) =>
     Math.min(before.rows, ...before.tiles.filter(tile => tile.column <= column && column < tile.column + tile.width).map(tile => tile.row)));
@@ -600,14 +705,14 @@ test('blocked preview lanes retain their roots while open columns release and re
     await pressRect(page, previous.preview.rect);
     await expect.poll(async () => {
       const state = await jelly(page);
-      return state.generated_tiles === previous.generated_tiles + previous.columns &&
-        state.tiles.every(tile => tile.settled) && state.preview.slots.every(slot => slot.visible);
+      return state.generated_tiles === previous.generated_tiles + previous.upcoming.filter(body => body.id).length &&
+        state.tiles.every(tile => tile.settled) && previewReady(state);
     }, { message: 'One ordinary manual packet settles before inspecting the next entrance' }).toBe(true);
     before = await jelly(page);
     filling.push({ generated: before.generated_tiles, blocked: blockedColumns(before), elapsed: before.spawn_elapsed });
   }
   const blocked = blockedColumns(before);
-  const open = Array.from({ length: before.columns }, (_, column) => column).filter(column => !blocked.includes(column));
+  const open = openAnchors(before);
   expect(blocked.length, 'Some full columns obstruct their own top entrances').toBeGreaterThan(0);
   expect(open.length, 'The collected word leaves at least one other entrance open').toBeGreaterThan(0);
   expect(before.full_elapsed, 'Mixed entrances do not start the full-board countdown').toBeLessThan(0);
@@ -648,7 +753,7 @@ test('blocked preview lanes retain their roots while open columns release and re
   await expect.poll(async () => {
     const state = await jelly(page);
     return state.generated_tiles > before.generated_tiles && state.tiles.every(tile => tile.settled) &&
-      state.preview.slots.every(slot => slot.visible);
+      previewReady(state);
   }, { message: 'The partial packet lands and only its departing slots finish refilling' }).toBe(true);
   const after = await jelly(page);
   await page.evaluate(() => window.wordJellyLaneObserver.disconnect());
@@ -698,30 +803,27 @@ test('blocked preview lanes retain their roots while open columns release and re
 
 test('collecting a lower word makes the stack above it visibly fall onto support', async ({ page }, info) => {
   test.setTimeout(180000);
-  const errors = await startWordJelly(page), opening = await jelly(page), startingWallet = await wallet(page);
-  const floor = opening.tiles.filter(tile => tile.row === opening.rows - 1 && tile.mass === 1)
-    .sort((a, b) => a.column - b.column);
-  const found = rootsForWord({ tiles: floor }, 3, 2);
-  expect(found, 'The first ordinary supply packet contains a complete word among its dispersed floor roots').toBeTruthy();
-  const { roots, word } = found;
-  let completed = await merge(page, roots[0].id, roots[1].id);
-  expect(completed.word.id).toBe(word.id);
-  const supportedStack = state => {
-    const support = state.tiles.find(tile => tile.id === completed.id);
+  const errors = await startWordJelly(page, { age: 3 }), opening = await jelly(page), startingWallet = await wallet(page);
+  const supportedStack = (state, support) => {
     return state.tiles.filter(tile => tile.mass === 1 && tile.settled && !tile.placement_locked &&
       tile.row + tile.height === support.row && tile.column < support.column + support.width &&
-      tile.column + tile.width > support.column);
+      tile.column + tile.width > support.column && !state.tiles.some(other =>
+        other.id !== support.id && other.id !== tile.id && other.row === support.row &&
+        other.column < tile.column + tile.width && other.column + other.width > tile.column));
   };
-  let before = await jelly(page);
-  // Merging now settles every unsupported body immediately. Use the ordinary
-  // supply to form a real supported stack above the completed word if needed.
-  for (let packet = 0; packet < 2 && !supportedStack(before).length; packet++) {
+  const lowerWord = state => state.tiles.find(tile => tile.word?.id && supportedStack(state, tile).length);
+  let before = opening, completed = lowerWord(before);
+  // A wide bridge can have several real supports. Select a whole word that is
+  // the sole support of an upper body, using ordinary supply when needed.
+  for (let packet = 0; packet < 2 && !completed; packet++) {
     await expect.poll(async () => (await jelly(page)).preview.enabled).toBe(true);
     await pressRect(page, before.preview.rect);
     await expect.poll(async () => (await jelly(page)).tiles.every(tile => tile.settled)).toBe(true);
     before = await jelly(page);
+    completed = lowerWord(before);
   }
-  const stack = supportedStack(before);
+  expect(completed, 'The reviewed whole-word cohort supplies a collectable sole support').toBeTruthy();
+  const stack = supportedStack(before, completed);
   expect(stack.length, 'At least one ordinary upper root rests directly on the word being collected').toBeGreaterThan(0);
   for (const tile of stack) expectSupportedChild(before, tile);
   completed = before.tiles.find(tile => tile.id === completed.id);
@@ -807,12 +909,15 @@ test('collecting a lower word makes the stack above it visibly fall onto support
 });
 
 test('lifting a lower jelly drops its stack while the pointer remains held', async ({ page }, info) => {
-  const errors = await startWordJelly(page), bounds = await metrics(page);
+  const errors = await startWordJelly(page, { age: 3 }), bounds = await metrics(page);
   const before = await jelly(page), startingWallet = await wallet(page);
-  const support = before.tiles.find(tile => tile.row === before.rows - 1 && tile.width === 1 &&
-    before.tiles.some(upper => upper.column === tile.column && upper.row + upper.height === tile.row && upper.width === 1));
-  expect(support, 'The opening board contains a removable lower support').toBeTruthy();
-  const upper = before.tiles.find(tile => tile.column === support.column && tile.row + tile.height === support.row);
+  const above = lower => before.tiles.find(upper => upper.id !== lower.id && upper.row + upper.height === lower.row &&
+    upper.column < lower.column + lower.width && upper.column + upper.width > lower.column &&
+    !before.tiles.some(other => other.id !== lower.id && other.id !== upper.id && other.row === lower.row &&
+      other.column < upper.column + upper.width && other.column + other.width > upper.column));
+  const support = before.tiles.find(tile => above(tile));
+  expect(support, 'The opening contains an authored body with a removable sole support').toBeTruthy();
+  const upper = above(support);
   const from = center(support.rect, bounds);
   const destination = center([before.board_rect[0] + before.board_rect[2] * 0.8,
     before.board_rect[1] + before.board_rect[3] * 0.15, 0, 0], bounds);
@@ -870,7 +975,8 @@ test('lifting a lower jelly drops its stack while the pointer remains held', asy
   for (const original of before.tiles) {
     const restored = after.tiles.find(tile => tile.id === original.id);
     expect(restored).toBeTruthy();
-    for (const field of ['text', 'mass', 'fragments']) expect(restored[field]).toEqual(original[field]);
+    for (const field of ['text', 'mass', 'width', 'height', 'word', 'fragments', 'composition'])
+      expect(restored[field], `Cancellation preserves authored ${field}`).toEqual(original[field]);
   }
   expect((await wallet(page)).balance).toBe(startingWallet.balance);
   expect(errors).toEqual([]);
@@ -880,7 +986,7 @@ test('released roots and merged words fall onto support and keep their contents 
   test.setTimeout(240000);
   const reducedMotion = info.project.use.reducedMotion || 'no-preference';
   const errors = await startWordJelly(page, { reducedMotion }), bounds = await metrics(page);
-  const { roots, word } = await availableWord(page, 3, 2, { markedOnly: true });
+  const { roots, word } = await availableWord(page, COMPOSITION_AGE, 2, { markedOnly: true });
   const opening = await jelly(page), startingWallet = await wallet(page);
   const read = () => page.evaluate(() => JSON.parse(document.getElementById('game-status').dataset.jelly));
   const content = tile => ({ id: tile.id, text: tile.text, mass: tile.mass, parts: tile.parts_count,
@@ -1005,20 +1111,11 @@ test('released roots and merged words fall onto support and keep their contents 
     return moved;
   };
   const join = async (sourceId, targetId) => {
-    const state = await read(), source = state.tiles.find(tile => tile.id === sourceId), target = state.tiles.find(tile => tile.id === targetId);
-    const point = { x: target.rect[0] + target.rect[2] / 2, y: target.rect[1] + target.rect[3] / 2 };
-    await drag(sourceId, point, current => current.drag.target === targetId && !current.placement.visible);
-    await expect.poll(async () => {
-      const current = await read();
-      return current.merged_count === state.merged_count + 1 && current.tiles.some(tile =>
-        !state.tiles.some(old => old.id === tile.id) && tile.text === source.text + target.text && tile.settled);
-    }).toBe(true);
-    const current = await read(), merged = current.tiles.find(tile =>
-      !state.tiles.some(old => old.id === tile.id) && tile.text === source.text + target.text);
-    expect(merged.mass).toBe(source.mass + target.mass);
-    expect(merged.fragments).toBe(source.fragments + target.fragments);
+    // Lifting a real support can move the target before release. The shared
+    // gesture follows its live supported position and validates the authored join.
+    const merged = await merge(page, sourceId, targetId);
     expect(merged.placement_locked, 'A new automatic merge resumes ordinary gravity').toBe(false);
-    expectSupportedChild(current, merged);
+    expectSupportedChild(await read(), merged);
     return merged;
   };
 
@@ -1069,9 +1166,9 @@ test('released roots and merged words fall onto support and keep their contents 
   expect(returned.collected_coins).toBe(opening.collected_coins);
   expect(returned.fragment_count).toBe(opening.fragment_count);
 
-  const words = new Set(vocabulary.filter(item => item.min_age === 3).map(item => normalize(item.text)));
+  const words = new Set(vocabulary.filter(item => item.min_age === COMPOSITION_AGE).map(item => normalize(item.text)));
   const extra = returned.tiles.find(tile => tile.id !== placed.id && tile.mass === 1 && tile.settled &&
-    !words.has(normalize(tile.text + placed.text)));
+    !authoredJoin(tile, placed));
   expect(extra, 'An ordinary unfinished root can join the moved word').toBeTruthy();
   const rejected = await rejectMerge(page, extra.id, placed.id, {
     info, label: 'word-jelly-moved-word-rejects-invalid-append', reducedMotion
@@ -1093,18 +1190,18 @@ test('released roots and merged words fall onto support and keep their contents 
 });
 
 test('word pair colors distinguish exact completion targets and preserve source order', async ({ page }, info) => {
-  const errors = await startWordJelly(page), opening = await jelly(page);
-  const words = new Set(jellyWordsForAge(3).map(word => normalize(word.text)));
+  const errors = await startWordJelly(page);
+  const supplied = await availableWord(page, COMPOSITION_AGE, 2, { invalidReverse: true });
+  const opening = await jelly(page);
+  const words = new Set(jellyWordsForAge(COMPOSITION_AGE).map(word => normalize(word.text)));
   const roots = opening.tiles.filter(tile => tile.mass === 1 && tile.settled && tile.visible);
-  const pair = roots.flatMap(source => roots.map(target => ({ source, target }))).find(({ source, target }) =>
-    source.id !== target.id && source.palette_index === target.palette_index &&
-    words.has(normalize(source.text + target.text)) && !words.has(normalize(target.text + source.text)));
+  const pair = { source: supplied.roots[0], target: supplied.roots[1] };
   expect(pair, 'The real board provides a shared-color word pair with an unambiguous spelling order').toBeTruthy();
   for (const tile of roots) {
     expect(tile.palette_index).toBeGreaterThanOrEqual(0);
     expect(tile.palette_hue).toBeGreaterThanOrEqual(0);
     for (const other of roots.filter(other => other.id > tile.id && other.palette_index === tile.palette_index))
-      expect(words.has(normalize(tile.text + other.text)) || words.has(normalize(other.text + tile.text)),
+      expect(Boolean(authoredJoin(tile, other) || authoredJoin(other, tile)),
         'An unrelated pair cannot share a resting hint color').toBe(true);
   }
   for (const slot of opening.preview.slots.filter(slot => slot.visible)) {
@@ -1118,13 +1215,13 @@ test('word pair colors distinguish exact completion targets and preserve source 
   try {
     await expect.poll(async () => (await jelly(page)).drag.source).toBe(pair.source.id);
     const selected = await jelly(page), source = selected.tiles.find(tile => tile.id === pair.source.id);
-    const validTargets = selected.tiles.filter(tile => tile.id !== source.id && words.has(normalize(source.text + tile.text)));
+    const validTargets = selected.tiles.filter(tile => tile.id !== source.id && authoredJoin(source, tile));
     expect(validTargets.length).toBeGreaterThan(0);
     for (const target of validTargets) {
       expect(target.palette_index).toBe(source.palette_index);
       expect(target.palette_hue).toBeCloseTo(source.palette_hue, 5);
     }
-    for (const target of selected.tiles.filter(tile => tile.id !== source.id && !words.has(normalize(source.text + tile.text))))
+    for (const target of selected.tiles.filter(tile => tile.id !== source.id && !authoredJoin(source, tile)))
       expectRestingPalette(target, opening.tiles.find(tile => tile.id === target.id),
         'An invalid ordered target retains its resting color even if it shares the held source hue');
     await capture(page, info, 'word-jelly-compatible-target-colors');
@@ -1166,7 +1263,7 @@ for (const { layout, viewport, reducedMotion } of [
     await page.setViewportSize(viewport);
     await observeAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 5 });
     const errors = await startWordJelly(page, { reducedMotion });
-    const pair = await availableWord(page, 3, 2, { invalidReverse: true });
+    const pair = await availableWord(page, COMPOSITION_AGE, 2, { invalidReverse: true });
     const opening = await jelly(page), bounds = await metrics(page);
     const audioAvailable = await page.evaluate(() => window.audioObservation.available);
     const playbackIndex = () => page.evaluate(() => window.audioObservation.playbacks.length);
@@ -1177,10 +1274,10 @@ for (const { layout, viewport, reducedMotion } of [
       audioAvailable, opening };
     const evidencePath = info.outputPath('word-jelly-completion-samples.json');
     const retainEvidence = () => fs.writeFileSync(evidencePath, JSON.stringify(evidence, null, 2));
-    const words = new Set(jellyWordsForAge(3).map(word => normalize(word.text)));
+    const words = new Set(jellyWordsForAge(COMPOSITION_AGE).map(word => normalize(word.text)));
     const hintedIds = state => state.tiles.filter(tile => tile.completion_hint).map(tile => tile.id).sort((a, b) => a - b);
     const expectedIds = (state, source) => state.tiles.filter(tile => tile.id !== source.id && tile.settled &&
-      words.has(normalize(source.text + tile.text))).map(tile => tile.id).sort((a, b) => a - b);
+      Boolean(authoredJoin(source, tile))).map(tile => tile.id).sort((a, b) => a - b);
     const expectQuiet = state => {
       expect(hintedIds(state), 'Idle, canceled and paused jellies do not advertise a held prefix').toEqual([]);
       expect(state.contact.kind, 'Contact pressure clears when the gesture ends or pauses').toBe('none');
@@ -1223,7 +1320,7 @@ for (const { layout, viewport, reducedMotion } of [
           const original = opening.tiles.find(item => item.id === tile.id);
           const layout = activeOpening.tiles.find(item => item.id === tile.id);
           if (layout) expect(tile.rect, 'Breathing changes the jelly skin without moving its hit box or text layout').toEqual(layout.rect);
-          if (original && !words.has(normalize(pair.roots[0].text + tile.text)))
+          if (original && !authoredJoin(pair.roots[0], tile))
             expectRestingPalette(tile, original, 'Dragging a prefix leaves all invalid ordered targets in their resting colors');
           expect(tile.completion_scale).toBeGreaterThanOrEqual(1);
           expect(tile.completion_scale).toBeLessThanOrEqual(1.065);
@@ -1330,48 +1427,53 @@ for (const { layout, viewport, reducedMotion } of [
 
 test('six columns build a pictured word and a deliberate tap rolls its rare coins once', async ({ page }, info) => {
   const errors = await startWordJelly(page), opening = await jelly(page), bounds = await metrics(page);
-  expect(opening.tiles).toHaveLength(18);
   expect(opening.columns).toBe(6);
-  const startingRows = [opening.rows - 3, opening.rows - 2, opening.rows - 1];
-  expect([...new Set(opening.tiles.map(tile => tile.row))].sort((a, b) => a - b),
-    'The opening occupies exactly the three bottom rows').toEqual(startingRows);
-  for (const row of startingRows) {
-    expect(opening.tiles.filter(tile => tile.row === row).map(tile => tile.column).sort((a, b) => a - b),
-      'Every opening row fills all six columns').toEqual([0, 1, 2, 3, 4, 5]);
-  }
-  expect([...new Set(opening.tiles.map(tile => tile.column))].sort((a, b) => a - b)).toEqual([0, 1, 2, 3, 4, 5]);
-  expect(new Set(opening.tiles.map(tile => Math.round(tile.rect[0]))).size,
-    'All six columns occupy distinct rendered horizontal positions').toBe(6);
+  const occupied = new Set();
+  for (const tile of opening.tiles) for (let row = tile.row; row < tile.row + tile.height; row++)
+    for (let column = tile.column; column < tile.column + tile.width; column++) {
+      expect(occupied.has(row * opening.columns + column), 'Authored starter footprints do not overlap').toBe(false);
+      occupied.add(row * opening.columns + column);
+    }
+  expect(occupied.size).toBeLessThanOrEqual(18);
   expect(opening.upcoming).toHaveLength(6);
   for (const tile of opening.tiles) {
     expect(tile.mass).toBe(1);
-    expect(tile.picture_visible, 'A standalone root does not pretend to be a completed word').toBe(false);
+    expect(tile.picture_visible, 'Only a reviewed whole word shows its completed picture').toBe(tile.composition.complete);
     expectInside(tile.rect, bounds);
   }
   await capture(page, info, 'word-jelly-six-column-opening');
   const originalViewport = page.viewportSize();
   for (const viewport of [{ width: 1473, height: 1175 }, { width: 768, height: 1024 },
-    { width: 390, height: 844 }, { width: 393, height: 852 }, { width: 568, height: 320 }]) {
+    { width: 390, height: 844 }, { width: 393, height: 852 }]) {
     await page.setViewportSize(viewport);
     await rendered(page);
     await expect(async () => expectSupplyLayout(await jelly(page), await metrics(page)))
       .toPass({ timeout: 5000 });
     if (viewport.width === 393) await capture(page, info, 'word-jelly-header-finish-393x852');
   }
+  await page.setViewportSize({ width: 568, height: 320 });
+  await rendered(page);
+  await expect.poll(async () => (await jelly(page)).layout_paused,
+    { message: 'An undersized landscape viewport pauses instead of shrinking authored text below its reading floor' }).toBe(true);
+  const undersized = await jelly(page);
+  await page.waitForTimeout(250);
+  expect((await jelly(page)).spawn_elapsed, 'The cramped-layout pause preserves the supply clock').toBe(undersized.spawn_elapsed);
+  await capture(page, info, 'word-jelly-landscape-reading-pause');
   await page.setViewportSize(originalViewport);
   await rendered(page);
   await expect(async () => expectSupplyLayout(await jelly(page), await metrics(page)))
     .toPass({ timeout: 5000 });
-  const { roots, word } = await availableWord(page, 3, 2), startingWallet = await wallet(page);
+  const { roots, word } = await availableWord(page, COMPOSITION_AGE, 2), startingWallet = await wallet(page);
   await pressRect(page, roots[0].rect);
   await page.waitForTimeout(500);
   expect((await jelly(page)).tiles.some(tile => tile.id === roots[0].id), 'Tapping an unfinished root leaves it on the board').toBe(true);
   expect((await wallet(page)).balance).toBe(startingWallet.balance);
   const merged = await merge(page, roots[0].id, roots[1].id);
   expect(merged.word.id).toBe(word.id);
-  expect(merged.word.min_age).toBe(3);
+  expect(merged.word.min_age).toBe(COMPOSITION_AGE);
   expect(merged.picture_visible, 'The actual word art appears on the completed jelly').toBe(true);
-  expect(merged.rect[2] * merged.rect[3]).toBeGreaterThan(roots[0].rect[2] * roots[0].rect[3] * 1.5);
+  expect([merged.width, merged.height], 'The completed body uses its measured authored footprint')
+    .toEqual([merged.preferred_width, merged.preferred_height]);
   expect((await wallet(page)).balance, 'A word can remain on the board without spending its reward').toBe(startingWallet.balance);
   await capture(page, info, 'word-jelly-valid-pictured-word');
   await openModeMenu(page);
@@ -1396,8 +1498,7 @@ test('six columns build a pictured word and a deliberate tap rolls its rare coin
   expect(collected.tiles.some(tile => tile.id === merged.id)).toBe(false);
   expect(collected.fragment_count).toBe(before.fragment_count + merged.fragments);
   await openModeMenu(page);
-  const match = (await metrics(page)).library.controls.find(item => item.name === 'Mode_match');
-  await pressRect(page, match.rect);
+  await chooseMode(page, 'match');
   await expect.poll(async () => (await metrics(page)).library.current).toBe('match');
   expect((await wallet(page)).balance, 'Leaving the mode never pays the collected word again').toBe(startingWallet.balance + earnedCoins);
   await page.reload();
@@ -1408,7 +1509,9 @@ test('six columns build a pictured word and a deliberate tap rolls its rare coin
 
 test('collect button grows with completed words and collects a rhythmic batch once', async ({ page }, info) => {
   test.setTimeout(240000);
-  const errors = await startWordJelly(page), initial = await jelly(page), bounds = await metrics(page);
+  const errors = await startWordJelly(page);
+  await availableWord(page, COMPOSITION_AGE, 2, { markedOnly: true });
+  const initial = await jelly(page), bounds = await metrics(page);
   expect(initial.collect_button.visible).toBe(true);
   expect(initial.collect_button.enabled).toBe(false);
   expect(initial.collect_button.count).toBe(0);
@@ -1417,7 +1520,7 @@ test('collect button grows with completed words and collects a rhythmic batch on
   const collectedIds = [];
   const stages = [initial.collect_button];
   for (let count = 1; count <= 3; count++) {
-    const { roots } = await availableWord(page, 3, 2, { markedOnly: count === 1 });
+    const { roots } = await availableWord(page, COMPOSITION_AGE, 2, { markedOnly: count === 1 });
     const merged = await merge(page, roots[0].id, roots[1].id);
     collectedIds.push(merged.id);
     await expect.poll(async () => (await jelly(page)).collect_button.count).toBe(count);
@@ -1566,25 +1669,22 @@ test('collect button grows with completed words and collects a rhythmic batch on
 
 test('collected words reveal their picture and spelling above the bottom-anchored game with one pronunciation', async ({ page, browserName }, info) => {
   await observeAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 4 });
-  const errors = await startWordJelly(page), opening = await jelly(page), bounds = await metrics(page);
+  const errors = await startWordJelly(page, { age: 3 }), opening = await jelly(page), bounds = await metrics(page);
   const scale = Math.max(2 / 3, bounds.scale), area = opening.playfield_rect;
   const gameBottom = Math.max(...[opening.board_rect, opening.collect_button.rect, opening.loot.progress.rect,
     ...Object.values(opening.powerup_buttons).map(button => button.rect)]
     .map(rect => rect[1] + rect[3]));
-  expect(Math.abs(gameBottom - (area[1] + area[3] - 12 / scale)) * bounds.scale,
+  expect(Math.abs(gameBottom - (area[1] + area[3] - 6 / scale)) * bounds.scale,
     'The board and collection controls retain their bottom padding within a quarter rendered pixel')
     .toBeLessThan(0.25);
   expect(opening.preview.rect[1] + opening.preview.rect[3], 'The full supply tray remains above the board')
     .toBeLessThanOrEqual(opening.board_rect[1]);
   expect(opening.word_reveal.visible).toBe(false);
   await capture(page, info, 'word-jelly-bottom-anchored-opening');
-  const supportedWords = state => rootsForWord({ ...state, tiles: state.tiles.filter(tile => tile.row + tile.height === state.rows) }, 3, 2);
-  const first = supportedWords(await jelly(page));
-  expect(first, 'A floor-supported word is available for the first collection').toBeTruthy();
-  const firstMerged = await merge(page, first.roots[0].id, first.roots[1].id);
-  const second = supportedWords(await jelly(page));
-  expect(second, 'The initial board supplies another word for rapid successive collection').toBeTruthy();
-  const secondMerged = await merge(page, second.roots[0].id, second.roots[1].id);
+  const grounded = opening.tiles.filter(tile => tile.word?.id && tile.row + tile.height === opening.rows);
+  expect(grounded.length, 'The atomic cohort supplies two independently floor-supported complete words').toBeGreaterThanOrEqual(2);
+  const firstMerged = grounded[0], secondMerged = grounded[1];
+  const first = { word: firstMerged.word }, second = { word: secondMerged.word };
   expect(second.word.id).not.toBe(first.word.id);
   await page.exposeFunction('saveWordRevealFrame', (id, encoded) =>
     fs.writeFileSync(info.outputPath(`word-jelly-reveal-${id}.png`), Buffer.from(encoded, 'base64')));
@@ -1684,22 +1784,17 @@ test('collected words reveal their picture and spelling above the bottom-anchore
   expect(errors).toEqual([]);
 });
 
-test('only forward dictionary words merge while rejected pairs separate without loss or duplicate feedback', async ({ page }, info) => {
+test('only reviewed ordered joins merge while rejected pairs separate without loss or duplicate feedback', async ({ page }, info) => {
   test.setTimeout(180000);
   const reducedMotion = info.project.use.reducedMotion || 'no-preference';
   await observeAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 5, trackSourceLifecycle: true });
   const errors = await startWordJelly(page, { reducedMotion });
+  const pair = await availableWord(page, COMPOSITION_AGE, 2, { invalidReverse: true });
   const opening = await jelly(page), startingWallet = await wallet(page);
-  const words = new Set(jellyWordsForAge(3).map(word => normalize(word.text)));
-  // Mastery only changes sampling odds. Exercise the actual supply, using two
-  // floor-supported roots so lifting either one cannot move its destination.
-  const pair = rootsForWord({ ...opening, tiles: opening.tiles.filter(tile => tile.row + tile.height === opening.rows) },
-    3, 2, false, true);
-  expect(pair, 'The real opening supplies a current-age word whose reverse order is invalid').toBeTruthy();
   const { roots, word } = pair;
-  expect(roots.map(root => root.text).join('')).toBe(word.text);
-  expect(word.min_age).toBe(3);
-  expect(words.has(normalize(roots[1].text + roots[0].text))).toBe(false);
+  expect(authoredJoin(roots[0], roots[1]).node.surface).toBe(word.text);
+  expect(word.min_age).toBe(COMPOSITION_AGE);
+  expect(authoredJoin(roots[1], roots[0])).toBeNull();
   const negativePath = 'assets/imported-audio/pair-feedback/wrong.wav';
   const negativeTiming = recordingTiming(negativePath);
   const audioAvailable = await page.evaluate(() => window.audioObservation.available);
@@ -1755,13 +1850,20 @@ test('only forward dictionary words merge while rejected pairs separate without 
   };
 
   await attempt(roots[1].id, roots[0].id, 'word-jelly-reversed-word-rejection');
-  const state = await jelly(page);
-  const marked = state.tiles.filter(tile => tile.fragments > 0 && tile.mass === 1 && tile.settled);
-  const unrelated = marked.flatMap(source => marked.map(target => ({ source, target }))).find(({ source, target }) =>
-    source.id !== target.id && source.row === state.rows - 1 && target.row < source.row &&
-    !words.has(normalize(source.text + target.text)) &&
-    !words.has(normalize(target.text + source.text)));
-  expect(unrelated, 'The real three-row supply offers unrelated marked bodies for a second rejected release').toBeTruthy();
+  let unrelated;
+  for (let packet = 0; packet < 4; packet++) {
+    await expect.poll(async () => (await jelly(page)).tiles.every(tile => tile.settled)).toBe(true);
+    const state = await jelly(page);
+    const marked = state.tiles.filter(tile => tile.fragments === 1 && tile.mass === 1 && tile.settled)
+      .sort((a, b) => b.row - a.row);
+    unrelated = marked.flatMap(source => marked.map(target => ({ source, target }))).find(({ source, target }) =>
+      source.id !== target.id && !authoredJoin(source, target) && !authoredJoin(target, source));
+    if (unrelated) break;
+    expect(state.preview.enabled, 'Normal supply can provide another marked body without consuming either reviewed root').toBe(true);
+    await pressRect(page, state.preview.rect);
+    await expect.poll(async () => (await jelly(page)).generated_tiles).toBeGreaterThan(state.generated_tiles);
+  }
+  expect(unrelated, 'The real supply offers unrelated marked bodies for a second rejected release').toBeTruthy();
   const nonword = await attempt(unrelated.source.id, unrelated.target.id, 'word-jelly-unrelated-marked-rejection');
   expect(nonword.after.tiles.filter(tile => [unrelated.source.id, unrelated.target.id].includes(tile.id))
     .reduce((sum, tile) => sum + tile.fragments, 0)).toBe(2);
@@ -1770,7 +1872,7 @@ test('only forward dictionary words merge while rejected pairs separate without 
   const completed = await merge(page, roots[0].id, roots[1].id);
   expect(completed.text).toBe(word.text);
   expect(completed.word.id).toBe(word.id);
-  expect(completed.word.min_age).toBe(3);
+  expect(completed.word.min_age).toBe(COMPOSITION_AGE);
   expect(completed.picture_visible).toBe(true);
   expect(completed.fragments).toBe(roots[0].fragments + roots[1].fragments);
   expect(completed.fragment_badges).toBe(Math.min(2, completed.fragments));
@@ -1797,43 +1899,7 @@ test('only forward dictionary words merge while rejected pairs separate without 
 test('ordinary collected fragments synthesize a chest and then celebrate its upgrade', async ({ page }, info) => {
   test.skip(!['desktop-chromium', 'iphone-webkit'].includes(info.project.name), 'The complete milestone route covers desktop and phone renderers.');
   test.setTimeout(300000);
-  const errors = await startWordJelly(page, { reducedMotion: 'no-preference' });
-  const mergeForMilestone = async (sourceId, targetId) => {
-    const before = await jelly(page), bounds = await metrics(page);
-    const source = before.tiles.find(tile => tile.id === sourceId);
-    const targetText = before.tiles.find(tile => tile.id === targetId).text;
-    const from = center(source.rect, bounds);
-    await page.mouse.move(from.x, from.y);
-    await page.mouse.down();
-    try {
-      await expect.poll(async () => (await jelly(page)).drag.source).toBe(sourceId);
-      // Lifting a supporting jelly can make its destination fall. Aim at the
-      // live settled body instead of the pre-lift rectangle on a moving board.
-      await expect.poll(async () => {
-        const target = (await jelly(page)).tiles.find(tile => tile.id === targetId);
-        return Boolean(target?.settled);
-      }).toBe(true);
-      await expect.poll(async () => {
-        const state = await jelly(page), target = state.tiles.find(tile => tile.id === targetId);
-        expect(target, 'The real destination remains on the board during the lift').toBeTruthy();
-        if (state.drag.target === targetId) return true;
-        const to = center(target.rect, bounds);
-        await page.mouse.move(to.x, to.y, { steps: 6 });
-        return false;
-      }, { message: 'The pointer follows the settled destination before releasing the pair' }).toBe(true);
-    } finally {
-      await page.mouse.up();
-    }
-    let completed;
-    await expect.poll(async () => {
-      const state = await jelly(page);
-      completed = state.tiles.find(tile => !before.tiles.some(old => old.id === tile.id) &&
-        tile.text === source.text + targetText && tile.word?.id);
-      return state.merged_count === before.merged_count + 1 && Boolean(completed?.settled) &&
-        state.tiles.every(tile => tile.settled);
-    }, { message: 'The ordinary merge settles before its word is collected for a milestone' }).toBe(true);
-    return completed;
-  };
+  const errors = await startWordJelly(page, { age: 3, reducedMotion: 'no-preference' });
   await page.exposeFunction('saveWordJellyFlight', (key, encoded) => {
     fs.writeFileSync(info.outputPath(`word-jelly-chest-${key}.png`), Buffer.from(encoded, 'base64'));
   });
@@ -1893,14 +1959,14 @@ test('ordinary collected fragments synthesize a chest and then celebrate its upg
     }, { message: 'The previous milestone finishes before the next deliberate word' }).toBe(true);
     const state = await jelly(page);
     if (state.fragment_count >= 9) break;
-    const found = rootsForWord(state, 3, 2, true) || rootsForWord(state, 3, 2);
+    const found = rootsForWord(state, 3, 1, true) || rootsForWord(state, 3, 1);
     if (!found) {
       expect(state.preview.enabled, 'Real supply remains available while building the chest').toBe(true);
       await pressRect(page, state.preview.rect);
       await expect.poll(async () => (await jelly(page)).generated_tiles).toBeGreaterThan(state.generated_tiles);
       continue;
     }
-    const completed = await mergeForMilestone(found.roots[0].id, found.roots[1].id);
+    const completed = await completeSuppliedWord(page, found);
     await pressRect(page, completed.rect);
     await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(state.cleared_pairs + 1);
     const after = await jelly(page);
@@ -2035,80 +2101,101 @@ test('ordinary collected fragments synthesize a chest and then celebrate its upg
   expect(errors).toEqual([]);
 });
 
-test('older-age words remain completable from two blocks and roll the same rare collection reward', async ({ page }, info) => {
-  test.setTimeout(300000);
-  await seedGrowth(page, 12);
-  const errors = await startWordJelly(page, { age: 12, reducedMotion: 'reduce', preseededGrowth: true });
-  const currentWords = new Map(jellyWordsForAge(12).map(word => [word.id, word]));
-  const suppliedPairs = state => {
-    const groups = new Map();
-    for (const tile of state.tiles.filter(tile => tile.visible && tile.settled && tile.mass === 1)) {
-      if (!groups.has(tile.supply_group)) groups.set(tile.supply_group, []);
-      groups.get(tile.supply_group).push(tile);
-    }
-    return [...groups.values()].filter(roots => roots.length === 2).map(roots => {
-      roots.sort((a, b) => a.supply_part - b.supply_part);
-      return { roots, word: currentWords.get(roots[0].source_word_id) };
-    }).filter(pair => pair.word && pair.roots.map(root => root.text).join('') === pair.word.text)
-      .sort((a, b) => b.word.text.length - a.word.text.length);
-  };
+
+for (const { age, parts, minimumLength } of [
+  { age: 3, parts: 1, minimumLength: 2 },
+  { age: 12, parts: 2, minimumLength: 10 },
+  { age: 12, parts: 3, minimumLength: 10 }
+]) test('reviewed age ' + age + ' words use ' + parts + ' authored parts with readable labels and the same rare reward', async ({ page }, info) => {
+  test.setTimeout(600000);
+  await seedGrowth(page, age);
+  const errors = await startWordJelly(page, { age, reducedMotion: 'reduce', preseededGrowth: true });
+  const sampled = [], visited = new Set();
   let selected;
-  // Use the longest naturally supplied word. If needed, clear short words and
-  // request the next packet through normal controls, keeping room for arrivals.
-  for (let packet = 0; packet < Math.ceil(currentWords.size / 3); packet++) {
-    await expect.poll(async () => (await jelly(page)).tiles.every(tile => tile.settled)).toBe(true);
-    selected = suppliedPairs(await jelly(page)).find(pair => pair.word.text.length >= 10);
-    if (selected) break;
-    for (let cleared = 0; cleared < 3; cleared++) {
+  // Advance through genuine current-age supply. Clear whole words and complete
+  // other reviewed graphs through normal pointer controls to keep room.
+  for (let turn = 0; turn < jellyWordsForAge(age).length * 5; turn++) {
+    await expect.poll(async () => {
       const state = await jelly(page);
-      const short = suppliedPairs(state).find(pair => pair.word.text.length < 10);
-      expect(short, 'The ordinary supply has a complete short word to clear before requesting more').toBeTruthy();
-      const completed = await merge(page, short.roots[0].id, short.roots[1].id);
+      return !state.reward_presentation.active && !state.fusions.length && state.tiles.every(tile => tile.settled);
+    }).toBe(true);
+    const state = await jelly(page), supplied = suppliedWords(state, age);
+    selected = supplied.find(candidate => candidate.roots.length === parts && candidate.word.text.length >= minimumLength);
+    if (selected) break;
+    const other = supplied.find(candidate => candidate.roots.length === 1) || supplied[0];
+    if (other) {
+      const completed = await completeSuppliedWord(page, other);
+      sampled.push({ id: other.word.id, parts: other.analysis.parts.length, text: completed.text });
+      visited.add(other.word.id);
       await pressRect(page, completed.rect);
       await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(state.cleared_pairs + 1);
-      await expect.poll(async () => (await jelly(page)).tiles.every(tile => tile.settled)).toBe(true);
+      continue;
     }
-    const state = await jelly(page);
-    expect(state.preview.enabled, 'Clearing three words leaves room for the next ordinary packet').toBe(true);
+    expect(state.preview.enabled, 'The normal supply can release missing parts into the available space').toBe(true);
     await pressRect(page, state.preview.rect);
     await expect.poll(async () => (await jelly(page)).generated_tiles).toBeGreaterThan(state.generated_tiles);
   }
-  expect(selected, 'Normal current-age supply includes a long word for full-label coverage').toBeTruthy();
-  const { word, roots } = selected;
-  expect(word.min_age).toBe(12);
-  expect(word.text.length, 'The label test exercises at least ten letters instead of an arbitrary short word').toBeGreaterThanOrEqual(10);
-  expect(roots, 'A long current-age word arrives as exactly two completable blocks').toHaveLength(2);
-  expect(roots.map(root => root.text).join('')).toBe(word.text);
-  const labelEvidence = { roots };
-  const retainLabels = () => fs.writeFileSync(info.outputPath('word-jelly-current-age-two-block-labels.json'),
-    JSON.stringify(labelEvidence, null, 2));
+  expect(selected, 'The real current-age supply reaches the reviewed part-count case').toBeTruthy();
+  const { word, roots, analysis } = selected;
+  expect(word.min_age).toBe(age);
+  expect(roots).toHaveLength(parts);
+  expect(roots.map(root => root.text)).toEqual(analysis.parts.map(part => part.surface));
+  expect(roots.map(root => root.composition.canonical_id)).toEqual(analysis.parts.map(part => part.canonical_id));
+  const labelEvidence = { age, parts, sampled, roots, analysis };
+  const save = () => fs.writeFileSync(info.outputPath('word-jelly-reviewed-morphology-labels.json'), JSON.stringify(labelEvidence, null, 2));
   const expectCompleteLabel = tile => {
-    expect(tile.label_text, 'The rendered label contains the complete spelling').toBe(tile.text);
-    expect(tile.label_line_count).toBeGreaterThan(0);
-    expect(tile.label_visible_line_count, 'Every shaped spelling line is visible').toBeGreaterThanOrEqual(tile.label_line_count);
-    expect(tile.label_line_height).toBeGreaterThan(0);
-    expect(tile.label_line_count * tile.label_line_height, 'Actual shaped line heights fit the label')
-      .toBeLessThanOrEqual(tile.label_height + 0.1);
+    expect(tile.label_text.replace(/\n/g, ''), 'Authored line breaks preserve every spelling character').toBe(tile.text);
+    expect(tile.label_font_pixels, 'The label never shrinks below the sixteen-pixel reading floor').toBeGreaterThanOrEqual(16);
+    if (tile.requires_read) {
+      expect(tile.read_available, 'An oversized spelling exposes its deliberate Read control').toBe(true);
+    } else {
+      expect(tile.read_available).toBe(false);
+      expect(tile.label_line_count).toBeGreaterThan(0);
+      expect(tile.label_visible_line_count, 'Every approved spelling line is visible').toBeGreaterThanOrEqual(tile.label_line_count);
+      expect(tile.label_line_count * tile.label_line_height, 'The measured text lines fit the body').toBeLessThanOrEqual(tile.label_height + 0.1);
+    }
   };
-  retainLabels();
   roots.forEach(expectCompleteLabel);
-  await capture(page, info, 'word-jelly-current-age-two-block-roots');
-  const startingWallet = await wallet(page);
-  const completed = await merge(page, roots[0].id, roots[1].id);
+  save();
+  await capture(page, info, 'word-jelly-reviewed-source-parts');
+  const beforeMerge = await jelly(page), startingWallet = await wallet(page);
+  const completed = await completeSuppliedWord(page, selected);
   labelEvidence.completed = completed;
-  retainLabels();
+  save();
   expectCompleteLabel(completed);
-  expect(completed.mass).toBe(2);
+  expect(completed.mass).toBe(parts);
+  expect((await jelly(page)).merged_count).toBe(beforeMerge.merged_count + parts - 1);
   expect(completed.coins).toBe(50);
-  expect(completed.word.id).toBe(word.id);
-  expect(completed.word.min_age).toBe(12);
+  expect(completed.coin_drop_chance).toBe(0.01);
   expect(completed.picture_visible).toBe(true);
   expectInside(completed.rect, await metrics(page));
-  await capture(page, info, 'word-jelly-current-age-two-block-word');
-  const before = await jelly(page);
-  await pressRect(page, completed.rect);
+  if (parts === 3) {
+    expect(analysis.nodes.some(node => {
+      const left = analysis.parts.find(part => part.id === node.left) || analysis.nodes.find(part => part.id === node.left);
+      const right = analysis.parts.find(part => part.id === node.right) || analysis.nodes.find(part => part.id === node.right);
+      return left.surface + right.surface !== node.surface;
+    }), 'The three-part browser route exercises a real authored spelling change').toBe(true);
+  }
+  const footprint = [completed.width, completed.height];
+  const originalViewport = page.viewportSize();
+  for (const viewport of [{ width: 1366, height: 768 }, { width: 390, height: 844 }, { width: 393, height: 852 }]) {
+    await page.setViewportSize(viewport);
+    await rendered(page);
+    const current = (await jelly(page)).tiles.find(tile => tile.id === completed.id);
+    expect([current.width, current.height], 'Viewport changes preserve the measured logical footprint').toEqual(footprint);
+    expectCompleteLabel(current);
+    expectInside(current.rect, await metrics(page));
+  }
+  await page.setViewportSize(originalViewport);
+  await rendered(page);
+  await capture(page, info, 'word-jelly-reviewed-complete-word');
+  const before = await jelly(page), live = before.tiles.find(tile => tile.id === completed.id);
+  await pressRect(page, live.rect);
   await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(before.cleared_pairs + 1);
-  const earnedCoins = collectionCoins(await jelly(page), before, [completed]);
+  const after = await jelly(page);
+  expect(after.fragment_count).toBe(before.fragment_count + completed.fragments);
+  expect(after.tiles.some(tile => tile.id === completed.id)).toBe(false);
+  const earnedCoins = collectionCoins(after, before, [completed]);
   await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + earnedCoins);
   expect(errors).toEqual([]);
 });

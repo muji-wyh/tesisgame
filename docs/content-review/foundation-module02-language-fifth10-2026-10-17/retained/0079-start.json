@@ -1,0 +1,7 @@
+{
+  "schema": 1,
+  "started_at": "2026-10-16T22:38:23.6904158Z",
+  "method": "Independent PowerShell raw-file hashes, JSON equality and literal source inspection only",
+  "project_or_proposal_code_executed": false,
+  "tests_or_native_executed": false
+}

@@ -1,0 +1,1335 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.hr_recruitment.module10.01",
+      "text": "The business partner and line manager will discuss workforce planning.",
+      "meaning": "Identify participants and the topic of a people-planning discussion.",
+      "context": "Arranging a planning meeting.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "business",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "partner",
+          "start": 13,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 21,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "line",
+          "start": 25,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "manager",
+          "start": 30,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "will",
+          "start": 38,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "discuss",
+          "start": 43,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": "workforce",
+          "start": 51,
+          "end": 60
+        },
+        {
+          "index": 9,
+          "text": "planning",
+          "start": 61,
+          "end": 69
+        },
+        {
+          "index": 10,
+          "text": ".",
+          "start": 69,
+          "end": 70
+        }
+      ],
+      "focus_lexeme_ids": [
+        "business-partner.hr-role-working-with-business-leaders-on-people-needs.n",
+        "line-manager.person-with-direct-management-responsibility-for-worker.n",
+        "workforce-planning.planning-for-people-and-capabilities-needed-for-work.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-onet-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module10.02",
+      "text": "The case owner is the point of contact for the next follow-up.",
+      "meaning": "Clarify responsibility for further communication.",
+      "context": "Providing a clear contact route.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "case",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "owner",
+          "start": 9,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "is",
+          "start": 15,
+          "end": 17
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 18,
+          "end": 21
+        },
+        {
+          "index": 5,
+          "text": "point",
+          "start": 22,
+          "end": 27
+        },
+        {
+          "index": 6,
+          "text": "of",
+          "start": 28,
+          "end": 30
+        },
+        {
+          "index": 7,
+          "text": "contact",
+          "start": 31,
+          "end": 38
+        },
+        {
+          "index": 8,
+          "text": "for",
+          "start": 39,
+          "end": 42
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 43,
+          "end": 46
+        },
+        {
+          "index": 10,
+          "text": "next",
+          "start": 47,
+          "end": 51
+        },
+        {
+          "index": 11,
+          "text": "follow-up",
+          "start": 52,
+          "end": 61
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 61,
+          "end": 62
+        }
+      ],
+      "focus_lexeme_ids": [
+        "case-owner.person-assigned-responsibility-for-coordinating-case.n",
+        "point-of-contact.designated-person-or-route-for-communication.n",
+        "follow-up.later-progress-action.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-onet-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module10.03",
+      "text": "The case note explains the case status and the proposed case closure.",
+      "meaning": "Refer someone to the record of current case handling.",
+      "context": "Reviewing a case without assuming all concerns are resolved.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "case",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "note",
+          "start": 9,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "explains",
+          "start": 14,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 23,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "case",
+          "start": 27,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "status",
+          "start": 32,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 39,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 43,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "proposed",
+          "start": 47,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": "case",
+          "start": 56,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": "closure",
+          "start": 61,
+          "end": 68
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 68,
+          "end": 69
+        }
+      ],
+      "focus_lexeme_ids": [
+        "case-note.recorded-information-about-specific-case.n",
+        "case-status.recorded-stage-or-condition-of-case.n",
+        "case-closure.recorded-ending-of-case-handling-process.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-onet-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module10.04",
+      "text": "Please confirm the review date, effective date, and notice period in the written arrangements.",
+      "meaning": "Ask for clarification of distinct dates and periods.",
+      "context": "Reviewing a proposed employment change.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "confirm",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "review",
+          "start": 19,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "date",
+          "start": 26,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 30,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "effective",
+          "start": 32,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "date",
+          "start": 42,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 46,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "notice",
+          "start": 52,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": "period",
+          "start": 59,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "in",
+          "start": 66,
+          "end": 68
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 69,
+          "end": 72
+        },
+        {
+          "index": 14,
+          "text": "written",
+          "start": 73,
+          "end": 80
+        },
+        {
+          "index": 15,
+          "text": "arrangements",
+          "start": 81,
+          "end": 93
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 93,
+          "end": 94
+        }
+      ],
+      "focus_lexeme_ids": [
+        "review-date.date-set-for-reconsidering-matter.n",
+        "effective-date.date-from-which-arrangement-or-change-applies.n",
+        "notice-period.period-between-formal-notice-and-end-of-arrangement.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-onet-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module10.05",
+      "text": "The resignation letter begins the discussion of offboarding and the exit interview.",
+      "meaning": "Explain the communication topics following a resignation.",
+      "context": "Coordinating a departure without inventing mandatory procedures.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "resignation",
+          "start": 4,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "letter",
+          "start": 16,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "begins",
+          "start": 23,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "discussion",
+          "start": 34,
+          "end": 44
+        },
+        {
+          "index": 6,
+          "text": "of",
+          "start": 45,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "offboarding",
+          "start": 48,
+          "end": 59
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 10,
+          "text": "exit",
+          "start": 68,
+          "end": 72
+        },
+        {
+          "index": 11,
+          "text": "interview",
+          "start": 73,
+          "end": 82
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 82,
+          "end": 83
+        }
+      ],
+      "focus_lexeme_ids": [
+        "resignation-letter.letter-stating-intention-to-leave-job.n",
+        "offboarding.process-of-managing-persons-departure-from-organization.n",
+        "exit-interview.discussion-about-persons-experience-when-leaving-organization.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-onet-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module10.06",
+      "text": "Who will explain final pay and coordinate the equipment return?",
+      "meaning": "Ask which teams handle departure arrangements.",
+      "context": "Clarifying responsibilities when a colleague leaves.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Who",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "will",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "explain",
+          "start": 9,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "final",
+          "start": 17,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "pay",
+          "start": 23,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "coordinate",
+          "start": 31,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "equipment",
+          "start": 46,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "return",
+          "start": 56,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "?",
+          "start": 62,
+          "end": 63
+        }
+      ],
+      "focus_lexeme_ids": [
+        "final-pay.pay-due-in-connection-with-end-of-employment.n",
+        "equipment-return.return-of-issued-work-equipment.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-onet-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module10.07",
+      "text": "The secondment and redeployment options need their own agreed terms.",
+      "meaning": "Distinguish two kinds of work reassignment.",
+      "context": "Discussing possible arrangements without promising placement.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "secondment",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "redeployment",
+          "start": 19,
+          "end": 31
+        },
+        {
+          "index": 4,
+          "text": "options",
+          "start": 32,
+          "end": 39
+        },
+        {
+          "index": 5,
+          "text": "need",
+          "start": 40,
+          "end": 44
+        },
+        {
+          "index": 6,
+          "text": "their",
+          "start": 45,
+          "end": 50
+        },
+        {
+          "index": 7,
+          "text": "own",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": "agreed",
+          "start": 55,
+          "end": 61
+        },
+        {
+          "index": 9,
+          "text": "terms",
+          "start": 62,
+          "end": 67
+        },
+        {
+          "index": 10,
+          "text": ".",
+          "start": 67,
+          "end": 68
+        }
+      ],
+      "focus_lexeme_ids": [
+        "secondment.temporary-assignment-to-another-role-or-organization.n",
+        "redeployment.reassignment-of-person-to-different-work.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-onet-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module10.08",
+      "text": "The promotion letter, transfer letter, and contract renewal record different changes.",
+      "meaning": "Distinguish documents used for employment changes.",
+      "context": "Checking the correct document for a situation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "promotion",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "letter",
+          "start": 14,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 20,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "transfer",
+          "start": 22,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "letter",
+          "start": 31,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 37,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 39,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "contract",
+          "start": 43,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "renewal",
+          "start": 52,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "record",
+          "start": 60,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": "different",
+          "start": 67,
+          "end": 76
+        },
+        {
+          "index": 12,
+          "text": "changes",
+          "start": 77,
+          "end": 84
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 84,
+          "end": 85
+        }
+      ],
+      "focus_lexeme_ids": [
+        "promotion-letter.letter-recording-move-to-higher-work-position.n",
+        "transfer-letter.letter-recording-change-of-role-team-or-work-location.n",
+        "contract-renewal.continuation-or-replacement-of-contract-for-further-period.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-onet-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module10.09",
+      "text": "The consultation meeting and employee forum provide ways to hear employee voice.",
+      "meaning": "Describe routes for staff to express views.",
+      "context": "Planning a workplace discussion.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "consultation",
+          "start": 4,
+          "end": 16
+        },
+        {
+          "index": 2,
+          "text": "meeting",
+          "start": 17,
+          "end": 24
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 25,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "employee",
+          "start": 29,
+          "end": 37
+        },
+        {
+          "index": 5,
+          "text": "forum",
+          "start": 38,
+          "end": 43
+        },
+        {
+          "index": 6,
+          "text": "provide",
+          "start": 44,
+          "end": 51
+        },
+        {
+          "index": 7,
+          "text": "ways",
+          "start": 52,
+          "end": 56
+        },
+        {
+          "index": 8,
+          "text": "to",
+          "start": 57,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "hear",
+          "start": 60,
+          "end": 64
+        },
+        {
+          "index": 10,
+          "text": "employee",
+          "start": 65,
+          "end": 73
+        },
+        {
+          "index": 11,
+          "text": "voice",
+          "start": 74,
+          "end": 79
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 79,
+          "end": 80
+        }
+      ],
+      "focus_lexeme_ids": [
+        "consultation-meeting.meeting-to-seek-views-or-information-about-matter.n",
+        "employee-forum.group-or-meeting-for-employee-discussion-and-views.n",
+        "employee-voice.ways-employees-express-views-and-influence-work-matters.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-onet-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module10.10",
+      "text": "The management report includes the staffing forecast and recruitment update.",
+      "meaning": "Identify information used in a planning report.",
+      "context": "Preparing an evidence-based discussion.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "management",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "report",
+          "start": 15,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "includes",
+          "start": 22,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "staffing",
+          "start": 35,
+          "end": 43
+        },
+        {
+          "index": 6,
+          "text": "forecast",
+          "start": 44,
+          "end": 52
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 8,
+          "text": "recruitment",
+          "start": 57,
+          "end": 68
+        },
+        {
+          "index": 9,
+          "text": "update",
+          "start": 69,
+          "end": 75
+        },
+        {
+          "index": 10,
+          "text": ".",
+          "start": 75,
+          "end": 76
+        }
+      ],
+      "focus_lexeme_ids": [
+        "management-report.report-prepared-to-support-management-understanding-or-decisions.n",
+        "staffing-forecast.estimate-of-future-workforce-requirements-or-availability.n",
+        "recruitment-update.current-information-about-hiring-progress.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-onet-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

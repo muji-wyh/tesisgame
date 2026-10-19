@@ -1,0 +1,183 @@
+{
+  "schema": 1,
+  "observed_at": "2026-10-16T20:21:47.534Z",
+  "preparation": {
+    "path": "build/professional-english/domain-runtime-web-fixture-r02/attempt-001/preparation.json",
+    "bytes": 89182,
+    "sha256": "76aac84c86b920fc988d34e5545ccf7b304a8a73b6fbf760ef1093889c4828ef"
+  },
+  "failed_export": {
+    "path": "build/professional-english/domain-runtime-web-fixture-r02/attempt-001/export-receipt.json",
+    "bytes": 1692,
+    "sha256": "808f87b7c958508cd6a3fa0e16e81e90d6811d8537220b082fb00453c7c4681a"
+  },
+  "expected_count": 390,
+  "actual_count": 422,
+  "added": [
+    {
+      "path": "assets/audio/bgm/spring.wav.import",
+      "bytes": 528,
+      "sha256": "a0d2e81fba9667faa817860e4488ad68ae0f9d76bf87e97839e6b5a645783184"
+    },
+    {
+      "path": "assets/images/professional-previews/accounting-finance.png.import",
+      "bytes": 1030,
+      "sha256": "5dca4ee7e838d04c907f0a1c0cc13abbb445b4a8cb2005e04ba0c3b8bec1b848"
+    },
+    {
+      "path": "assets/images/professional-previews/caregiving.png.import",
+      "bytes": 1006,
+      "sha256": "25f103e1f5e1272c66184a0d5bebdec768538ee07f30f7bd28559bdfbb2ad408"
+    },
+    {
+      "path": "assets/images/professional-previews/cleaning-facilities.png.import",
+      "bytes": 1032,
+      "sha256": "794df710737c057f9437c7b463d8caca01c5385430ba4e8cc039b82c3646f8ac"
+    },
+    {
+      "path": "assets/images/professional-previews/clinical-medicine.png.import",
+      "bytes": 1026,
+      "sha256": "077dd0df7f8ac3f5f931ec2db8eecfd19660405d0ab57fb47aab1365b134e879"
+    },
+    {
+      "path": "assets/images/professional-previews/construction-trades.png.import",
+      "bytes": 1033,
+      "sha256": "09fe76bba581ea10528b13bc2416eb7b24f624cde4db228424725e792ecc354e"
+    },
+    {
+      "path": "assets/images/professional-previews/customer-support.png.import",
+      "bytes": 1023,
+      "sha256": "4222d55c1010afa35c04d6840d0c66bbdfbaca1b8f245e95dd654ce13311e51c"
+    },
+    {
+      "path": "assets/images/professional-previews/education-childcare.png.import",
+      "bytes": 1033,
+      "sha256": "992feec7a8a0552f3377f018c85ef02639a7ac1891af2874967a41aaa919e328"
+    },
+    {
+      "path": "assets/images/professional-previews/food-service.png.import",
+      "bytes": 1012,
+      "sha256": "fb19af62589b65fc4bea0d2074617bdb4927df226e5be25463bd4214de08d0ce"
+    },
+    {
+      "path": "assets/images/professional-previews/hospitality-tourism.png.import",
+      "bytes": 1033,
+      "sha256": "f92e429876f6be9cee7ea72d82c14c2f5119c73b1ff070b9f381748f32f360a4"
+    },
+    {
+      "path": "assets/images/professional-previews/hr-recruitment.png.import",
+      "bytes": 1018,
+      "sha256": "90888f0970290c28aff167e3dec99dc9659b6ab1f2c6b3aea157503a725064a1"
+    },
+    {
+      "path": "assets/images/professional-previews/it-support.png.import",
+      "bytes": 1006,
+      "sha256": "e06d9ad3fc91d57f6eb3fa7df351ff0d7eac324a9fe48336227157653c324da7"
+    },
+    {
+      "path": "assets/images/professional-previews/legal-paralegal.png.import",
+      "bytes": 1021,
+      "sha256": "53c7b9d3c77f0cf7fe34d61caff7237ed37a5a7d507bb18470a6231da715dc58"
+    },
+    {
+      "path": "assets/images/professional-previews/manufacturing-maintenance.png.import",
+      "bytes": 1051,
+      "sha256": "e09c3cb7de7a74c38c5d3d807cff29c3f179ab616761ef65487f448db7f907e5"
+    },
+    {
+      "path": "assets/images/professional-previews/nursing.png.import",
+      "bytes": 997,
+      "sha256": "4402b2cc2b03fd3080265f450ab80b211830abeeb7561818e74e31d5feb88e8b"
+    },
+    {
+      "path": "assets/images/professional-previews/office-admin.png.import",
+      "bytes": 1011,
+      "sha256": "17c84d9a0977aca224a046e1cec2d6cb9f6bf5f1a217279e9015387ec9708b78"
+    },
+    {
+      "path": "assets/images/professional-previews/retail.png.import",
+      "bytes": 993,
+      "sha256": "ac6b803d713b0d5c0bed1ad8640fdf22ccf53f37b06669c8548d73671b2a97ad"
+    },
+    {
+      "path": "assets/images/professional-previews/sales-marketing.png.import",
+      "bytes": 1021,
+      "sha256": "5b3dc253c2689d1bfc1a4fd2273798d125d95f92d3c49334c65f0265bebe3c94"
+    },
+    {
+      "path": "assets/images/professional-previews/software-data.png.import",
+      "bytes": 1014,
+      "sha256": "767645c8dd6b0c46a9890913af1db9df4babfd4c59940f9745a7f21bf0b14a61"
+    },
+    {
+      "path": "assets/images/professional-previews/transport-delivery.png.import",
+      "bytes": 1030,
+      "sha256": "b65050e3b8761fc5ccdaa1d042dc69d047dc9f64e78401bf1105691d17271457"
+    },
+    {
+      "path": "assets/images/professional-previews/warehouse-logistics.png.import",
+      "bytes": 1033,
+      "sha256": "9c60eda2e86f4942668a422b9a0691a664fd87691d1d6880c375ab51f63729c6"
+    },
+    {
+      "path": "professional-media/202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76.png.import",
+      "bytes": 1151,
+      "sha256": "d0893453d8e856359b5ca0f87c1f14cd1c4853323803e3fa5a8dd57bafe6fd89"
+    },
+    {
+      "path": "professional-media/3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3.wav.import",
+      "bytes": 705,
+      "sha256": "cc3c1f3d251ba7fb271de5c325f9e00913417db62dbfd206ce2eae642e3a6661"
+    },
+    {
+      "path": "professional-media/3ac2473ca471d66026d60577db7f4c874dfbc2848cc859bc8b137d582b312714.png.import",
+      "bytes": 1150,
+      "sha256": "c4c26082b4621ba3807a500571b96877badcbdd024a0023f5e6b1ad58e01ea25"
+    },
+    {
+      "path": "professional-media/41acd015cae790a0fb5242364776d2b52daa675450cf0b4f54da1a4d2c3c64f5.png.import",
+      "bytes": 1151,
+      "sha256": "01334a7c45497d90a9f3ee45c995b9c19cfbfad5e4f0a9d184f4e6fb665ed857"
+    },
+    {
+      "path": "professional-media/65da9fe84c071420a9755e31b80b1f81cfe38277cba55210930c2289ee30e973.png.import",
+      "bytes": 1150,
+      "sha256": "b65dda7cf498658aa8f852abdae444ebd29de53cf62a9fb371449d493db7d7f2"
+    },
+    {
+      "path": "professional-media/712103b48aec2ae2a8a8b1b7365d6ae652e3887de1cb11a313c389de552c6ed9.png.import",
+      "bytes": 1151,
+      "sha256": "e75c5c8751d59b286ed19f3433481ce9f2fc5ebf7fd4240b2d363b74e283ad64"
+    },
+    {
+      "path": "professional-media/8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8.png.import",
+      "bytes": 1151,
+      "sha256": "9e214b39f183450576cc28038becaf6c271ee273a0e42bac9d8b7b209a108a52"
+    },
+    {
+      "path": "professional-media/afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c.png.import",
+      "bytes": 1150,
+      "sha256": "2beb929c78ee0cb7df98cf8a01f43402bac6c31162e9d183ade8fe6331119942"
+    },
+    {
+      "path": "professional-media/b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae.png.import",
+      "bytes": 1151,
+      "sha256": "747bf8e9a11ba0d36371600234910b3855da7cc231a2c9144db76aa210d9b59f"
+    },
+    {
+      "path": "professional-media/eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe.png.import",
+      "bytes": 1150,
+      "sha256": "9ebe97311c4b3f7329c4460ffd136cc55f00ca027ff05487d88752c90ef02cd6"
+    },
+    {
+      "path": "scripts/game_audio.gd.uid",
+      "bytes": 20,
+      "sha256": "1b884382c77e714b140bd13b70020a52ae38a91520c32261fafa2f24b2a4361d"
+    }
+  ],
+  "modified": [],
+  "removed": [],
+  "cause": "Godot imported the retained audit source because the isolated project build directory had no .gdignore. The added files are 31 .import sidecars and one .gd.uid; no original file changed.",
+  "export_dispatched": false,
+  "browser_dispatched": false
+}

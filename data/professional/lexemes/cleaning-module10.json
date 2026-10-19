@@ -1,0 +1,1974 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "cleaner.person-whose-work-involves-cleaning.n",
+      "text": "cleaner",
+      "display_text": "cleaner",
+      "pos": "noun",
+      "definition": "A person whose work involves cleaning buildings or other places.",
+      "example": "The cleaner reports the damaged dispenser.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "cleaner"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A friendly adult cleaning worker with organized inactive equipment in a bright workplace, without stereotypes.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "cleaner.person-whose-work-involves-cleaning.n.analysis.v1",
+        "lexeme_id": "cleaner.person-whose-work-involves-cleaning.n",
+        "text": "cleaner",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, compounds, affixes, and word boundaries. Reconstruction is not linguistic approval. Lexicalization, intact bases, semantic transparency, and deeper analysis require qualified review. No syllable, letter-length, or automatic boundary splitting. Null means unauthored, not atomic.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.clean",
+            "type": "stem",
+            "canonical": "clean",
+            "surface": "clean"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.er.suffix",
+            "type": "suffix",
+            "canonical": "er",
+            "surface": "er"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "cleaner",
+            "rule": "suffix_attachment"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Cleaning & Facilities communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not chemical mixing, equipment operation, repair, lifting, electrical, pest-treatment, waste-classification, medical, or emergency instruction. Local requirements and qualified responsibilities remain context-specific. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "caretaker.person-responsible-for-routine-care-of-premises.n",
+      "text": "caretaker",
+      "display_text": "caretaker",
+      "pos": "noun",
+      "definition": "A person responsible for routine care and oversight of premises under the local arrangements.",
+      "example": "The caretaker knows the building access schedule.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "caretaker"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A welcoming building caretaker checking a fictional facilities list near an entrance.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "caretaker.person-responsible-for-routine-care-of-premises.n.analysis.v1",
+        "lexeme_id": "caretaker.person-responsible-for-routine-care-of-premises.n",
+        "text": "caretaker",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, compounds, affixes, and word boundaries. Reconstruction is not linguistic approval. Lexicalization, intact bases, semantic transparency, and deeper analysis require qualified review. No syllable, letter-length, or automatic boundary splitting. Null means unauthored, not atomic.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.care",
+            "type": "stem",
+            "canonical": "care",
+            "surface": "care"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.take",
+            "type": "stem",
+            "canonical": "take",
+            "surface": "tak"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.er.suffix",
+            "type": "suffix",
+            "canonical": "er",
+            "surface": "er"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "taker",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "caretaker",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Cleaning & Facilities communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not chemical mixing, equipment operation, repair, lifting, electrical, pest-treatment, waste-classification, medical, or emergency instruction. Local requirements and qualified responsibilities remain context-specific. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "housekeeper.person-carrying-out-or-organizing-household-or-guest-room-upkeep.n",
+      "text": "housekeeper",
+      "display_text": "housekeeper",
+      "pos": "noun",
+      "definition": "A person who carries out or organizes household or guest-room upkeep.",
+      "example": "The housekeeper coordinates the linen request.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "housekeeper"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A professional housekeeper coordinating folded linen and room information in a welcoming setting.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "housekeeper.person-carrying-out-or-organizing-household-or-guest-room-upkeep.n.analysis.v1",
+        "lexeme_id": "housekeeper.person-carrying-out-or-organizing-household-or-guest-room-upkeep.n",
+        "text": "housekeeper",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, compounds, affixes, and word boundaries. Reconstruction is not linguistic approval. Lexicalization, intact bases, semantic transparency, and deeper analysis require qualified review. No syllable, letter-length, or automatic boundary splitting. Null means unauthored, not atomic.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.house",
+            "type": "stem",
+            "canonical": "house",
+            "surface": "house"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.keep",
+            "type": "stem",
+            "canonical": "keep",
+            "surface": "keep"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.er.suffix",
+            "type": "suffix",
+            "canonical": "er",
+            "surface": "er"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "keeper",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "housekeeper",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Cleaning & Facilities communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not chemical mixing, equipment operation, repair, lifting, electrical, pest-treatment, waste-classification, medical, or emergency instruction. Local requirements and qualified responsibilities remain context-specific. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "facilities-manager.person-managing-buildings-and-supporting-services.n",
+      "text": "facilities manager",
+      "display_text": "facilities manager",
+      "pos": "noun",
+      "definition": "A person who manages buildings and the supporting services needed for their use.",
+      "example": "The facilities manager reviews the service arrangements.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "facilities manager"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A facilities manager discussing an original building plan and service records with colleagues.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "facilities-manager.person-managing-buildings-and-supporting-services.n.analysis.v1",
+        "lexeme_id": "facilities-manager.person-managing-buildings-and-supporting-services.n",
+        "text": "facilities manager",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, compounds, affixes, and word boundaries. Reconstruction is not linguistic approval. Lexicalization, intact bases, semantic transparency, and deeper analysis require qualified review. No syllable, letter-length, or automatic boundary splitting. Null means unauthored, not atomic.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.facility",
+            "type": "stem",
+            "canonical": "facility",
+            "surface": "faciliti"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.es.suffix",
+            "type": "suffix",
+            "canonical": "es",
+            "surface": "es"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.manage",
+            "type": "stem",
+            "canonical": "manage",
+            "surface": "manag"
+          },
+          {
+            "id": "p4",
+            "canonical_id": "affix.er.suffix",
+            "type": "suffix",
+            "canonical": "er",
+            "surface": "er"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "facilities",
+            "rule": "y_to_i_before_plural_es"
+          },
+          {
+            "id": "n2",
+            "left": "p3",
+            "right": "p4",
+            "surface": "manager",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n3",
+            "left": "n1",
+            "right": "n2",
+            "surface": "facilities manager",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n3"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Cleaning & Facilities communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not chemical mixing, equipment operation, repair, lifting, electrical, pest-treatment, waste-classification, medical, or emergency instruction. Local requirements and qualified responsibilities remain context-specific. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "building-manager.person-overseeing-operation-of-building.n",
+      "text": "building manager",
+      "display_text": "building manager",
+      "pos": "noun",
+      "definition": "A person who oversees the operation of a building under assigned responsibilities.",
+      "example": "The building manager confirms the service access arrangements.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "building manager"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A building manager reviewing access and occupancy information at a welcoming building reception.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "building-manager.person-overseeing-operation-of-building.n.analysis.v1",
+        "lexeme_id": "building-manager.person-overseeing-operation-of-building.n",
+        "text": "building manager",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, compounds, affixes, and word boundaries. Reconstruction is not linguistic approval. Lexicalization, intact bases, semantic transparency, and deeper analysis require qualified review. No syllable, letter-length, or automatic boundary splitting. Null means unauthored, not atomic.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.build",
+            "type": "stem",
+            "canonical": "build",
+            "surface": "build"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.manage",
+            "type": "stem",
+            "canonical": "manage",
+            "surface": "manag"
+          },
+          {
+            "id": "p4",
+            "canonical_id": "affix.er.suffix",
+            "type": "suffix",
+            "canonical": "er",
+            "surface": "er"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "building",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p3",
+            "right": "p4",
+            "surface": "manager",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n3",
+            "left": "n1",
+            "right": "n2",
+            "surface": "building manager",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n3"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Cleaning & Facilities communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not chemical mixing, equipment operation, repair, lifting, electrical, pest-treatment, waste-classification, medical, or emergency instruction. Local requirements and qualified responsibilities remain context-specific. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "security-officer.person-assigned-to-security-duties.n",
+      "text": "security officer",
+      "display_text": "security officer",
+      "pos": "noun",
+      "definition": "A person assigned to security duties under the relevant arrangements.",
+      "example": "The security officer receives the access concern.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "security officer"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A calm approachable security officer at a public-building desk, without weapons or confrontation.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "security-officer.person-assigned-to-security-duties.n.analysis.v1",
+        "lexeme_id": "security-officer.person-assigned-to-security-duties.n",
+        "text": "security officer",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, compounds, affixes, and word boundaries. Reconstruction is not linguistic approval. Lexicalization, intact bases, semantic transparency, and deeper analysis require qualified review. No syllable, letter-length, or automatic boundary splitting. Null means unauthored, not atomic.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.security",
+            "type": "stem",
+            "canonical": "security",
+            "surface": "security"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.officer",
+            "type": "stem",
+            "canonical": "officer",
+            "surface": "officer"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "security officer",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Cleaning & Facilities communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not chemical mixing, equipment operation, repair, lifting, electrical, pest-treatment, waste-classification, medical, or emergency instruction. Local requirements and qualified responsibilities remain context-specific. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "groundskeeper.person-maintaining-outdoor-grounds.n",
+      "text": "groundskeeper",
+      "display_text": "groundskeeper",
+      "pos": "noun",
+      "definition": "A person whose work involves maintaining outdoor grounds.",
+      "example": "The groundskeeper reports the damaged path edge.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "groundskeeper"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A friendly grounds worker reviewing a garden path with parked tools and no operating demonstration.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "groundskeeper.person-maintaining-outdoor-grounds.n.analysis.v1",
+        "lexeme_id": "groundskeeper.person-maintaining-outdoor-grounds.n",
+        "text": "groundskeeper",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, compounds, affixes, and word boundaries. Reconstruction is not linguistic approval. Lexicalization, intact bases, semantic transparency, and deeper analysis require qualified review. No syllable, letter-length, or automatic boundary splitting. Null means unauthored, not atomic.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.ground",
+            "type": "stem",
+            "canonical": "ground",
+            "surface": "ground"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.s.suffix",
+            "type": "suffix",
+            "canonical": "s",
+            "surface": "s"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.keep",
+            "type": "stem",
+            "canonical": "keep",
+            "surface": "keep"
+          },
+          {
+            "id": "p4",
+            "canonical_id": "affix.er.suffix",
+            "type": "suffix",
+            "canonical": "er",
+            "surface": "er"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "grounds",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p3",
+            "right": "p4",
+            "surface": "keeper",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n3",
+            "left": "n1",
+            "right": "n2",
+            "surface": "groundskeeper",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n3"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Cleaning & Facilities communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not chemical mixing, equipment operation, repair, lifting, electrical, pest-treatment, waste-classification, medical, or emergency instruction. Local requirements and qualified responsibilities remain context-specific. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "pest-control-contractor.contracted-provider-of-pest-management-services.n",
+      "text": "pest control contractor",
+      "display_text": "pest control contractor",
+      "pos": "noun",
+      "definition": "A contracted provider of pest-management services.",
+      "example": "The pest control contractor receives the reported observation.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "pest control contractor"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A professional contractor reviewing a fictional inspection note, without pests, chemicals, or treatment actions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "pest-control-contractor.contracted-provider-of-pest-management-services.n.analysis.v1",
+        "lexeme_id": "pest-control-contractor.contracted-provider-of-pest-management-services.n",
+        "text": "pest control contractor",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, compounds, affixes, and word boundaries. Reconstruction is not linguistic approval. Lexicalization, intact bases, semantic transparency, and deeper analysis require qualified review. No syllable, letter-length, or automatic boundary splitting. Null means unauthored, not atomic.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.pest",
+            "type": "stem",
+            "canonical": "pest",
+            "surface": "pest"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.control",
+            "type": "stem",
+            "canonical": "control",
+            "surface": "control"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.contract",
+            "type": "stem",
+            "canonical": "contract",
+            "surface": "contract"
+          },
+          {
+            "id": "p4",
+            "canonical_id": "affix.or.suffix",
+            "type": "suffix",
+            "canonical": "or",
+            "surface": "or"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "pest control",
+            "rule": "word_boundary"
+          },
+          {
+            "id": "n2",
+            "left": "p3",
+            "right": "p4",
+            "surface": "contractor",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n3",
+            "left": "n1",
+            "right": "n2",
+            "surface": "pest control contractor",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n3"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Cleaning & Facilities communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not chemical mixing, equipment operation, repair, lifting, electrical, pest-treatment, waste-classification, medical, or emergency instruction. Local requirements and qualified responsibilities remain context-specific. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "waste-contractor.contracted-provider-of-waste-services.n",
+      "text": "waste contractor",
+      "display_text": "waste contractor",
+      "pos": "noun",
+      "definition": "A contracted provider of waste collection or related services.",
+      "example": "The waste contractor confirms the revised collection appointment.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "waste contractor"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A waste-service representative discussing a fictional collection plan beside closed containers.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "waste-contractor.contracted-provider-of-waste-services.n.analysis.v1",
+        "lexeme_id": "waste-contractor.contracted-provider-of-waste-services.n",
+        "text": "waste contractor",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, compounds, affixes, and word boundaries. Reconstruction is not linguistic approval. Lexicalization, intact bases, semantic transparency, and deeper analysis require qualified review. No syllable, letter-length, or automatic boundary splitting. Null means unauthored, not atomic.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.waste",
+            "type": "stem",
+            "canonical": "waste",
+            "surface": "waste"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.contract",
+            "type": "stem",
+            "canonical": "contract",
+            "surface": "contract"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.or.suffix",
+            "type": "suffix",
+            "canonical": "or",
+            "surface": "or"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "contractor",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "waste contractor",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Cleaning & Facilities communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not chemical mixing, equipment operation, repair, lifting, electrical, pest-treatment, waste-classification, medical, or emergency instruction. Local requirements and qualified responsibilities remain context-specific. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "laundry-attendant.worker-supporting-laundry-operations.n",
+      "text": "laundry attendant",
+      "display_text": "laundry attendant",
+      "pos": "noun",
+      "definition": "A worker who supports laundry operations and related records.",
+      "example": "The laundry attendant checks the linen request.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "laundry attendant"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A laundry worker with neatly sorted textiles and inactive machines in a bright service area.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "laundry-attendant.worker-supporting-laundry-operations.n.analysis.v1",
+        "lexeme_id": "laundry-attendant.worker-supporting-laundry-operations.n",
+        "text": "laundry attendant",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, compounds, affixes, and word boundaries. Reconstruction is not linguistic approval. Lexicalization, intact bases, semantic transparency, and deeper analysis require qualified review. No syllable, letter-length, or automatic boundary splitting. Null means unauthored, not atomic.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.laundry",
+            "type": "stem",
+            "canonical": "laundry",
+            "surface": "laundry"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.attendant",
+            "type": "stem",
+            "canonical": "attendant",
+            "surface": "attendant"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "laundry attendant",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Cleaning & Facilities communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not chemical mixing, equipment operation, repair, lifting, electrical, pest-treatment, waste-classification, medical, or emergency instruction. Local requirements and qualified responsibilities remain context-specific. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "service-coverage.scope-of-places-times-or-work-included-in-service.n",
+      "text": "service coverage",
+      "display_text": "service coverage",
+      "pos": "noun",
+      "definition": "The scope of places, times, or work included in a service arrangement.",
+      "example": "The service coverage excludes the closed wing this week.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "service coverage"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original agreement and building plan highlighting included areas and times, without universal obligations.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "service-coverage.scope-of-places-times-or-work-included-in-service.n.analysis.v1",
+        "lexeme_id": "service-coverage.scope-of-places-times-or-work-included-in-service.n",
+        "text": "service coverage",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, compounds, affixes, and word boundaries. Reconstruction is not linguistic approval. Lexicalization, intact bases, semantic transparency, and deeper analysis require qualified review. No syllable, letter-length, or automatic boundary splitting. Null means unauthored, not atomic.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.service",
+            "type": "stem",
+            "canonical": "service",
+            "surface": "service"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.coverage",
+            "type": "stem",
+            "canonical": "coverage",
+            "surface": "coverage"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "service coverage",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Cleaning & Facilities communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not chemical mixing, equipment operation, repair, lifting, electrical, pest-treatment, waste-classification, medical, or emergency instruction. Local requirements and qualified responsibilities remain context-specific. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "estimated-completion-time.forecast-time-when-work-is-expected-to-finish.n",
+      "text": "estimated completion time",
+      "display_text": "estimated completion time",
+      "pos": "noun",
+      "definition": "A forecast of when work is expected to finish, subject to the stated information and assumptions.",
+      "example": "The estimated completion time is awaiting confirmation.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "estimated completion time"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original task timeline with an explicitly estimated finish marker, distinct from a guaranteed deadline.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "estimated-completion-time.forecast-time-when-work-is-expected-to-finish.n.analysis.v1",
+        "lexeme_id": "estimated-completion-time.forecast-time-when-work-is-expected-to-finish.n",
+        "text": "estimated completion time",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, compounds, affixes, and word boundaries. Reconstruction is not linguistic approval. Lexicalization, intact bases, semantic transparency, and deeper analysis require qualified review. No syllable, letter-length, or automatic boundary splitting. Null means unauthored, not atomic.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.estimate",
+            "type": "stem",
+            "canonical": "estimate",
+            "surface": "estimat"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ed.suffix",
+            "type": "suffix",
+            "canonical": "ed",
+            "surface": "ed"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.complete",
+            "type": "stem",
+            "canonical": "complete",
+            "surface": "complet"
+          },
+          {
+            "id": "p4",
+            "canonical_id": "affix.ion.suffix",
+            "type": "suffix",
+            "canonical": "ion",
+            "surface": "ion"
+          },
+          {
+            "id": "p5",
+            "canonical_id": "morph.time",
+            "type": "stem",
+            "canonical": "time",
+            "surface": "time"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "estimated",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "p3",
+            "right": "p4",
+            "surface": "completion",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n3",
+            "left": "n1",
+            "right": "n2",
+            "surface": "estimated completion",
+            "rule": "word_boundary"
+          },
+          {
+            "id": "n4",
+            "left": "n3",
+            "right": "p5",
+            "surface": "estimated completion time",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n4"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Cleaning & Facilities communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not chemical mixing, equipment operation, repair, lifting, electrical, pest-treatment, waste-classification, medical, or emergency instruction. Local requirements and qualified responsibilities remain context-specific. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "service-review.discussion-or-examination-of-service-performance-and-arrangements.n",
+      "text": "service review",
+      "display_text": "service review",
+      "pos": "noun",
+      "definition": "A discussion or examination of service performance and arrangements.",
+      "example": "The service review considers the recent feedback.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "service review"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A small team discussing original service records and fictional feedback at a table.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "service-review.discussion-or-examination-of-service-performance-and-arrangements.n.analysis.v1",
+        "lexeme_id": "service-review.discussion-or-examination-of-service-performance-and-arrangements.n",
+        "text": "service review",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, compounds, affixes, and word boundaries. Reconstruction is not linguistic approval. Lexicalization, intact bases, semantic transparency, and deeper analysis require qualified review. No syllable, letter-length, or automatic boundary splitting. Null means unauthored, not atomic.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.service",
+            "type": "stem",
+            "canonical": "service",
+            "surface": "service"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.review",
+            "type": "stem",
+            "canonical": "review",
+            "surface": "review"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "service review",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-paralegals",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-lawyers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Cleaning & Facilities communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not chemical mixing, equipment operation, repair, lifting, electrical, pest-treatment, waste-classification, medical, or emergency instruction. Local requirements and qualified responsibilities remain context-specific. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "compliment.expression-of-praise-or-appreciation.n",
+      "text": "compliment",
+      "display_text": "compliment",
+      "pos": "noun",
+      "definition": "An expression of praise or appreciation.",
+      "example": "The client sent a compliment about the team's helpfulness.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "compliment"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional thank-you message beside a welcoming team interaction, without scores or guaranteed satisfaction.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Cleaning & Facilities communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not chemical mixing, equipment operation, repair, lifting, electrical, pest-treatment, waste-classification, medical, or emergency instruction. Local requirements and qualified responsibilities remain context-specific. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "service-improvement.change-intended-to-make-service-better.n",
+      "text": "service improvement",
+      "display_text": "service improvement",
+      "pos": "noun",
+      "definition": "A change intended to make a service better against stated aims.",
+      "example": "The action plan describes a proposed service improvement.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "service improvement"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original before-and-proposed-after service plan with one clear change awaiting review.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "service-improvement.change-intended-to-make-service-better.n.analysis.v1",
+        "lexeme_id": "service-improvement.change-intended-to-make-service-better.n",
+        "text": "service improvement",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit draft of modern teaching units, compounds, affixes, and word boundaries. Reconstruction is not linguistic approval. Lexicalization, intact bases, semantic transparency, and deeper analysis require qualified review. No syllable, letter-length, or automatic boundary splitting. Null means unauthored, not atomic.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.service",
+            "type": "stem",
+            "canonical": "service",
+            "surface": "service"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.improve",
+            "type": "stem",
+            "canonical": "improve",
+            "surface": "improve"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.ment.suffix",
+            "type": "suffix",
+            "canonical": "ment",
+            "surface": "ment"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "improvement",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "service improvement",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Cleaning & Facilities communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not chemical mixing, equipment operation, repair, lifting, electrical, pest-treatment, waste-classification, medical, or emergency instruction. Local requirements and qualified responsibilities remain context-specific. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    }
+  ]
+}

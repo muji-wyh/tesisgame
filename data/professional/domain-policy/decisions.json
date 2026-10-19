@@ -1,0 +1,6 @@
+{
+  "schema_version": 1,
+  "policy_version": "ordinary-lexical-v3",
+  "context_boundary": "containing-modules-v1",
+  "entries": []
+}

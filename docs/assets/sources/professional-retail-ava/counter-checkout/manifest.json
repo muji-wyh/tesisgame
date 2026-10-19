@@ -1,0 +1,11 @@
+{
+  "edgeTtsVersion": "7.3.1",
+  "profile": {
+    "voice": "en-US-AvaNeural",
+    "rate": "-15%",
+    "pitch": "+8Hz",
+    "volume": "+0%"
+  },
+  "cacheDirectory": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\retail-audio-review\\counter-checkout-acquired-r01\\source-mp3",
+  "requests": []
+}

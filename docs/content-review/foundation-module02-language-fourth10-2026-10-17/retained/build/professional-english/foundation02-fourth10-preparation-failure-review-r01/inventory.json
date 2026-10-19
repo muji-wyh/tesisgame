@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "status": "frozen_independent_failed_preparation_diagnosis",
+  "recorded_at": "2026-10-16T21:10:29.7403279Z",
+  "reviewer": "Codex recover_delivery",
+  "exact_history_id_groups": 50,
+  "exact_whole_donor_rows": 51,
+  "unchanged_input_count": 803,
+  "artifacts": [
+    {
+      "path": "capture-evidence.cjs",
+      "bytes": 13323,
+      "raw_sha256": "8336334da3974e154ab675d047229937b7ee55957ce5e0e83cd27241df90ea93"
+    },
+    {
+      "path": "donor-review.json",
+      "bytes": 46063,
+      "raw_sha256": "9a667e75ecc75b10664b976159f8ff6a4cef945d40a9ed246d64337285b3dd40"
+    },
+    {
+      "path": "input-measurements.json",
+      "bytes": 557725,
+      "raw_sha256": "39b873062082a44f3068fe50f77e1bbca2f41bae45732e1e3ea11d72aadcb8c8"
+    },
+    {
+      "path": "preservation-measurements.json",
+      "bytes": 13962,
+      "raw_sha256": "0e1c48304f2b5c149e71300f2efdb0bb13d2c538e0812ce266d156af0d0a68fb"
+    },
+    {
+      "path": "README.md",
+      "bytes": 1967,
+      "raw_sha256": "8c6c711dbbde0b624c4fe424f6d531c3778584064f2da272486eed4ed05e5e31"
+    },
+    {
+      "path": "review.json",
+      "bytes": 2328,
+      "raw_sha256": "128db76183e79166b9bb766d1b7fb1390b0fb1f1b378a41b215cb3a238a3e328"
+    },
+    {
+      "path": "strict-assertion-recommendation.md",
+      "bytes": 3531,
+      "raw_sha256": "fc55933b0ec624645784ff1467f0b0efc0e495ff820eb4ff1d5e73bef2ca5d45"
+    }
+  ],
+  "self_excluded": true,
+  "project_code_imported": false,
+  "old_prepare_or_transform_callbacks_invoked": false,
+  "syntax_or_project_tests_dispatched": false,
+  "preparation_dispatched": false,
+  "native_dispatched": false,
+  "production_modified": false
+}

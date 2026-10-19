@@ -1,0 +1,107 @@
+{
+  "schema": 1,
+  "status": "changes_requested_before_projected_validator_dispatch",
+  "reviewer": "/root/recover_delivery",
+  "reviewed_source_author": "/root",
+  "scope": "Raw-source review of the separate projected validator. No actual preparation input or afterimage is selected or accepted.",
+  "independence_disclosure": {
+    "reviewer_authored_preparation_and_binding_helper": true,
+    "reviewer_authored_reviewed_validator": false,
+    "independent_scope": "The separately root-authored projected validator source.",
+    "actual_binding_and_preparation_acceptance_owners": [
+      "/root",
+      "/root/morph_review"
+    ],
+    "corroborating_source_reviewer": "/root/recover_delivery/guard_assertion_review"
+  },
+  "source_inventory": {
+    "path": "build/professional-english/foundation02-fifth10-projected-validation-r01/source-inventory.json",
+    "bytes": 647,
+    "raw_sha256": "7c8cac3503731eb7b51902d2b3f6460c5a191808446b43018e088433439eab5a"
+  },
+  "runner": {
+    "path": "build/professional-english/foundation02-fifth10-projected-validation-r01/run.cjs",
+    "bytes": 10884,
+    "raw_sha256": "1e0002f9c9afa0bb95607e4e4d37ea725c0b46092fba445c72a79b007cdb0a9c"
+  },
+  "evidence": {
+    "inputs": {
+      "path": "build/professional-english/foundation02-fifth10-projected-validator-independent-review-r01/inputs.json",
+      "bytes": 2674,
+      "raw_sha256": "7bf780ede00ebb06665498f1c9869fb7ee7210a083d82df4e790c61646f423d6"
+    },
+    "inspection": {
+      "path": "build/professional-english/foundation02-fifth10-projected-validator-independent-review-r01/inspection.json",
+      "bytes": 3776,
+      "raw_sha256": "2426be07bcb2b3322f7bd240a01c28a234e6d40b0f8e2cb1a7eea6241268db62"
+    }
+  },
+  "findings": [
+    {
+      "id": "F01",
+      "priority": "P2",
+      "classification": "deterministic_execution_blocker_if_retained_callback_is_reached",
+      "title": "Expose the retained schema-copy operation through the checked overlay",
+      "file": "build/professional-english/foundation02-fifth10-projected-validation-r01/run.cjs",
+      "line": 83,
+      "related_lines": [
+        88,
+        89,
+        114
+      ],
+      "trigger_file": "tests/professional-content.test.cjs",
+      "trigger_line": 1421,
+      "observation": "The filesystem overrides include copyFileSync but omit cpSync. The existing local Home previews callback calls fs.cpSync(root schemas, temporary schemas, {recursive:true}). Frozen preparation test-transforms.cjs retains this callback and does not replace the copy call.",
+      "impact": "When that callback reaches the call, the proxy rejects property access with Unsupported filesystem operation: cpSync. The validator cannot complete the required 263 callbacks and records a failed attempt. This is a static source consequence, not an observed run.",
+      "required_change": "Author a fresh validator revision with a bounded recursive copy for the required schema-directory use. Read each copied file through observedRead, validate every destination through writable, and reject source or destination links. Preserve the shared overlay and temporary-root write limits; do not expose unrestricted native recursive copy.",
+      "blocks_source_acceptance_for_dispatch": true
+    }
+  ],
+  "source_observations": {
+    "shared_overlay_and_local_modules": "Lines 90-103 keep a runner-owned module cache and recursively compile every in-root local .cjs/.js dependency using observedRead and the same projectedRequire. Native resolution chooses a path but does not load that local module. The inspected dependency graph has no native local-loader fallback.",
+    "artifact_target_and_schema_checks": "Lines 36-57 check receipt status, every listed artifact byte length/hash, actual binding hash, target count and exact target paths, exact bound absence paths, duplicate overlay keys, target containment, afterimage lengths/hashes, current replacement hashes and absent additions, plus six replacements. Receipt artifacts and target-plan fields match the frozen preparation's emitted formats. Lines 105-109 load the actual schema-aware validator and require the projected registry hash, zero errors, and exact audit summary. The future concrete input still must bind the complete actual artifact set and independent afterimage acceptance as required by the proposal README; this source review does not supply or accept them.",
+    "callback_counts": {
+      "content_raw_declarations": 174,
+      "content_loop_expansion": "Two declarations run for each of ten course IDs at content-test lines 255-282, adding eighteen registrations beyond the raw declaration count.",
+      "baseline_callbacks": {
+        "content": 192,
+        "morphology": 38,
+        "media": 25,
+        "total": 255
+      },
+      "frozen_transform_appends": {
+        "content": 5,
+        "morphology": 2,
+        "media": 1
+      },
+      "expected_projected_callbacks": {
+        "content": 197,
+        "morphology": 40,
+        "media": 26,
+        "total": 263
+      },
+      "runner_enforcement": "Each file count and the aggregate count must match the concrete input. Returned thenables reject; no callback result is claimed by this review."
+    },
+    "temporary_writes": "Lines 32-34 and 86-88 allow supported filesystem writes only under roots created with the two established prefixes directly below os.tmpdir(). Normal path traversal resolves outside and rejects. Existing fixtures do not create links. The known failing fixture uses try/finally to remove its temporary root.",
+    "trusted_code_boundary": "The runner uses vm.compileFunction in the host context and lexical temporary-path containment. It is instrumentation for reviewed trusted source, not hostile-code isolation: host globals remain available, the web media dependency assigns its documented global export, and injected filesystem links are outside the current fixture assumptions. These are limitations rather than demonstrated bypasses in the inspected source graph.",
+    "failure_and_postchecks": "The first load, audit, or callback exception is captured as failure. Source, concrete input, protected files, required absences and observed current-file hashes are rechecked after success or failure. A successful path also requires all generated temporary roots removed; failed receipts report remaining roots. The fixed attempt-001 output is exclusive and consumed attempts cannot be replayed."
+  },
+  "method": {
+    "raw_text_json_and_hash_inspection_only": true,
+    "inspected_input_files": 13,
+    "all_original_pins_rechecked_unchanged": true,
+    "source_modules_imported": false,
+    "syntax_checks_run": false,
+    "source_vm_tests_or_native_execution": false,
+    "actual_preparation_inputs_inspected": false,
+    "production_mutated": false
+  },
+  "decision": {
+    "validator_source_accepted_for_dispatch": false,
+    "validator_execution_accepted": false,
+    "actual_binding_accepted": false,
+    "preparation_execution_accepted": false,
+    "afterimages_accepted": false,
+    "next_step": "Preserve r01 and obtain independent source review of a fresh validator revision correcting F01. Actual preparation and afterimage acceptance remain separate prerequisites."
+  }
+}

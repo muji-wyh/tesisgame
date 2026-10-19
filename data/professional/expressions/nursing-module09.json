@@ -1,0 +1,1711 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.nursing.module09.01",
+      "text": "The electronic health record links the patient identifier and medical record number within this system.",
+      "meaning": "Describe record identity without using real identifiers.",
+      "context": "A team reviews a fictional interface.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "electronic",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "health",
+          "start": 15,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "record",
+          "start": 22,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "links",
+          "start": 29,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 35,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "patient",
+          "start": 39,
+          "end": 46
+        },
+        {
+          "index": 7,
+          "text": "identifier",
+          "start": 47,
+          "end": 57
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 9,
+          "text": "medical",
+          "start": 62,
+          "end": 69
+        },
+        {
+          "index": 10,
+          "text": "record",
+          "start": 70,
+          "end": 76
+        },
+        {
+          "index": 11,
+          "text": "number",
+          "start": 77,
+          "end": 83
+        },
+        {
+          "index": 12,
+          "text": "within",
+          "start": 84,
+          "end": 90
+        },
+        {
+          "index": 13,
+          "text": "this",
+          "start": 91,
+          "end": 95
+        },
+        {
+          "index": 14,
+          "text": "system",
+          "start": 96,
+          "end": 102
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 102,
+          "end": 103
+        }
+      ],
+      "focus_lexeme_ids": [
+        "electronic-health-record.digital-health-information-record.n",
+        "patient-identifier.person-linking-healthcare-value.n",
+        "medical-record-number.health-record-identifying-number.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module09.02",
+      "text": "Please confirm the preferred name, legal name, date of birth, and contact details using the approved process.",
+      "meaning": "Request accurate information respectfully.",
+      "context": "A fictional registration conversation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "confirm",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "preferred",
+          "start": 19,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "name",
+          "start": 29,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 33,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "legal",
+          "start": 35,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "name",
+          "start": 41,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 45,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "date",
+          "start": 47,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "of",
+          "start": 52,
+          "end": 54
+        },
+        {
+          "index": 11,
+          "text": "birth",
+          "start": 55,
+          "end": 60
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 60,
+          "end": 61
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 14,
+          "text": "contact",
+          "start": 66,
+          "end": 73
+        },
+        {
+          "index": 15,
+          "text": "details",
+          "start": 74,
+          "end": 81
+        },
+        {
+          "index": 16,
+          "text": "using",
+          "start": 82,
+          "end": 87
+        },
+        {
+          "index": 17,
+          "text": "the",
+          "start": 88,
+          "end": 91
+        },
+        {
+          "index": 18,
+          "text": "approved",
+          "start": 92,
+          "end": 100
+        },
+        {
+          "index": 19,
+          "text": "process",
+          "start": 101,
+          "end": 108
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 108,
+          "end": 109
+        }
+      ],
+      "focus_lexeme_ids": [
+        "preferred-name.person-chosen-address-name.n",
+        "legal-name.officially-recorded-person-name.n",
+        "date-of-birth.birth-calendar-date.n",
+        "contact-details.communication-contact-information.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module09.03",
+      "text": "The allergy alert, medication list, prescription, and medication administration record need qualified review.",
+      "meaning": "Identify medicine-related records requiring verification.",
+      "context": "A team reviews fictional information.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "allergy",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "alert",
+          "start": 12,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 17,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "medication",
+          "start": 19,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "list",
+          "start": 30,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 34,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "prescription",
+          "start": 36,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 48,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "medication",
+          "start": 54,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "administration",
+          "start": 65,
+          "end": 79
+        },
+        {
+          "index": 12,
+          "text": "record",
+          "start": 80,
+          "end": 86
+        },
+        {
+          "index": 13,
+          "text": "need",
+          "start": 87,
+          "end": 91
+        },
+        {
+          "index": 14,
+          "text": "qualified",
+          "start": 92,
+          "end": 101
+        },
+        {
+          "index": 15,
+          "text": "review",
+          "start": 102,
+          "end": 108
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 108,
+          "end": 109
+        }
+      ],
+      "focus_lexeme_ids": [
+        "allergy-alert.recorded-allergy-warning.n",
+        "medication-list.recorded-medicine-inventory.n",
+        "prescription.authorized-treatment-order.n",
+        "medication-administration-record.medicine-giving-documentation.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module09.04",
+      "text": "The observation chart, fluid balance chart, pain assessment scale, and risk screening form have different purposes.",
+      "meaning": "Distinguish documentation tools.",
+      "context": "A learner reviews the local record system.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "observation",
+          "start": 4,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "chart",
+          "start": 16,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 21,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "fluid",
+          "start": 23,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "balance",
+          "start": 29,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "chart",
+          "start": 37,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 42,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "pain",
+          "start": 44,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "assessment",
+          "start": 49,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "scale",
+          "start": 60,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 65,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 67,
+          "end": 70
+        },
+        {
+          "index": 13,
+          "text": "risk",
+          "start": 71,
+          "end": 75
+        },
+        {
+          "index": 14,
+          "text": "screening",
+          "start": 76,
+          "end": 85
+        },
+        {
+          "index": 15,
+          "text": "form",
+          "start": 86,
+          "end": 90
+        },
+        {
+          "index": 16,
+          "text": "have",
+          "start": 91,
+          "end": 95
+        },
+        {
+          "index": 17,
+          "text": "different",
+          "start": 96,
+          "end": 105
+        },
+        {
+          "index": 18,
+          "text": "purposes",
+          "start": 106,
+          "end": 114
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 114,
+          "end": 115
+        }
+      ],
+      "focus_lexeme_ids": [
+        "observation-chart.clinical-measurement-record.n",
+        "fluid-balance-chart.fluid-intake-output-record.n",
+        "pain-assessment-scale.structured-pain-description-tool.n",
+        "risk-screening-form.initial-risk-check-document.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module09.05",
+      "text": "The consent form records the discussion, and the specimen label and laboratory request identify the sample and investigation.",
+      "meaning": "Describe the purpose of several documents.",
+      "context": "A team checks fictional documentation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "consent",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "form",
+          "start": 12,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "records",
+          "start": 17,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 25,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "discussion",
+          "start": 29,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 39,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "specimen",
+          "start": 49,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "label",
+          "start": 58,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": "laboratory",
+          "start": 68,
+          "end": 78
+        },
+        {
+          "index": 13,
+          "text": "request",
+          "start": 79,
+          "end": 86
+        },
+        {
+          "index": 14,
+          "text": "identify",
+          "start": 87,
+          "end": 95
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 96,
+          "end": 99
+        },
+        {
+          "index": 16,
+          "text": "sample",
+          "start": 100,
+          "end": 106
+        },
+        {
+          "index": 17,
+          "text": "and",
+          "start": 107,
+          "end": 110
+        },
+        {
+          "index": 18,
+          "text": "investigation",
+          "start": 111,
+          "end": 124
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 124,
+          "end": 125
+        }
+      ],
+      "focus_lexeme_ids": [
+        "consent-form.agreement-documentation-form.n",
+        "specimen-label.sample-identification-label.n",
+        "laboratory-request.lab-investigation-request.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module09.06",
+      "text": "Ask the responsible clinician to explain the laboratory result, reference interval, critical result notification, and imaging report.",
+      "meaning": "Request qualified interpretation.",
+      "context": "A patient asks about unfamiliar report terms.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Ask",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "responsible",
+          "start": 8,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "clinician",
+          "start": 20,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": "to",
+          "start": 30,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "explain",
+          "start": 33,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "laboratory",
+          "start": 45,
+          "end": 55
+        },
+        {
+          "index": 8,
+          "text": "result",
+          "start": 56,
+          "end": 62
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 62,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "reference",
+          "start": 64,
+          "end": 73
+        },
+        {
+          "index": 11,
+          "text": "interval",
+          "start": 74,
+          "end": 82
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 82,
+          "end": 83
+        },
+        {
+          "index": 13,
+          "text": "critical",
+          "start": 84,
+          "end": 92
+        },
+        {
+          "index": 14,
+          "text": "result",
+          "start": 93,
+          "end": 99
+        },
+        {
+          "index": 15,
+          "text": "notification",
+          "start": 100,
+          "end": 112
+        },
+        {
+          "index": 16,
+          "text": ",",
+          "start": 112,
+          "end": 113
+        },
+        {
+          "index": 17,
+          "text": "and",
+          "start": 114,
+          "end": 117
+        },
+        {
+          "index": 18,
+          "text": "imaging",
+          "start": 118,
+          "end": 125
+        },
+        {
+          "index": 19,
+          "text": "report",
+          "start": 126,
+          "end": 132
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 132,
+          "end": 133
+        }
+      ],
+      "focus_lexeme_ids": [
+        "laboratory-result.lab-investigation-output.n",
+        "reference-interval.laboratory-comparison-range.n",
+        "critical-result.result-requiring-urgent-communication.n",
+        "imaging-report.diagnostic-image-interpretation-record.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module09.07",
+      "text": "The admission record, transfer record, referral form, and discharge instruction support communication across services.",
+      "meaning": "Describe records used during care transitions.",
+      "context": "A team reviews a fictional care episode.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "admission",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "record",
+          "start": 14,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 20,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "transfer",
+          "start": 22,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "record",
+          "start": 31,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 37,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "referral",
+          "start": 39,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "form",
+          "start": 48,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 52,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": "discharge",
+          "start": 58,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": "instruction",
+          "start": 68,
+          "end": 79
+        },
+        {
+          "index": 13,
+          "text": "support",
+          "start": 80,
+          "end": 87
+        },
+        {
+          "index": 14,
+          "text": "communication",
+          "start": 88,
+          "end": 101
+        },
+        {
+          "index": 15,
+          "text": "across",
+          "start": 102,
+          "end": 108
+        },
+        {
+          "index": 16,
+          "text": "services",
+          "start": 109,
+          "end": 117
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 117,
+          "end": 118
+        }
+      ],
+      "focus_lexeme_ids": [
+        "admission-record.care-entry-administrative-record.n",
+        "transfer-record.care-move-record.n",
+        "referral-form.professional-referral-request-form.n",
+        "discharge-instruction.post-care-direction.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module09.08",
+      "text": "Check the care pathway, clinical guideline, protocol, policy, and documentation standard for their scope and current version.",
+      "meaning": "Ask for the applicable documents to be identified.",
+      "context": "A team prepares a terminology review.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Check",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "care",
+          "start": 10,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "pathway",
+          "start": 15,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 22,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "clinical",
+          "start": 24,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "guideline",
+          "start": 33,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 42,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "protocol",
+          "start": 44,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 52,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "policy",
+          "start": 54,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 60,
+          "end": 61
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 13,
+          "text": "documentation",
+          "start": 66,
+          "end": 79
+        },
+        {
+          "index": 14,
+          "text": "standard",
+          "start": 80,
+          "end": 88
+        },
+        {
+          "index": 15,
+          "text": "for",
+          "start": 89,
+          "end": 92
+        },
+        {
+          "index": 16,
+          "text": "their",
+          "start": 93,
+          "end": 98
+        },
+        {
+          "index": 17,
+          "text": "scope",
+          "start": 99,
+          "end": 104
+        },
+        {
+          "index": 18,
+          "text": "and",
+          "start": 105,
+          "end": 108
+        },
+        {
+          "index": 19,
+          "text": "current",
+          "start": 109,
+          "end": 116
+        },
+        {
+          "index": 20,
+          "text": "version",
+          "start": 117,
+          "end": 124
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 124,
+          "end": 125
+        }
+      ],
+      "focus_lexeme_ids": [
+        "care-pathway.organized-care-process-description.n",
+        "clinical-guideline.evidence-informed-care-guidance.n",
+        "protocol.specified-clinical-process.n",
+        "policy.organizational-rule-or-position.n",
+        "documentation-standard.recording-quality-requirement.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module09.09",
+      "text": "The version history, timestamp, electronic signature, correction entry, and audit trail help explain the record's history.",
+      "meaning": "Describe information about record changes.",
+      "context": "A fictional documentation review.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "version",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "history",
+          "start": 12,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 19,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "timestamp",
+          "start": 21,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 30,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "electronic",
+          "start": 32,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "signature",
+          "start": 43,
+          "end": 52
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 52,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "correction",
+          "start": 54,
+          "end": 64
+        },
+        {
+          "index": 10,
+          "text": "entry",
+          "start": 65,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 70,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 72,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": "audit",
+          "start": 76,
+          "end": 81
+        },
+        {
+          "index": 14,
+          "text": "trail",
+          "start": 82,
+          "end": 87
+        },
+        {
+          "index": 15,
+          "text": "help",
+          "start": 88,
+          "end": 92
+        },
+        {
+          "index": 16,
+          "text": "explain",
+          "start": 93,
+          "end": 100
+        },
+        {
+          "index": 17,
+          "text": "the",
+          "start": 101,
+          "end": 104
+        },
+        {
+          "index": 18,
+          "text": "record's",
+          "start": 105,
+          "end": 113
+        },
+        {
+          "index": 19,
+          "text": "history",
+          "start": 114,
+          "end": 121
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 121,
+          "end": 122
+        }
+      ],
+      "focus_lexeme_ids": [
+        "version-history.record-of-document-changes.n",
+        "timestamp.recorded-event-time.n",
+        "electronic-signature.digital-signing-information.n",
+        "correction-entry.record-amendment-entry.n",
+        "audit-trail.recorded-change-history.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module09.10",
+      "text": "The patient portal uses a user account, while the service controls the access log and data privacy arrangements.",
+      "meaning": "Describe a digital service at a high level.",
+      "context": "A staff member explains an invented portal.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "patient",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "portal",
+          "start": 12,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "uses",
+          "start": 19,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "a",
+          "start": 24,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "user",
+          "start": 26,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "account",
+          "start": 31,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 38,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "while",
+          "start": 40,
+          "end": 45
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 46,
+          "end": 49
+        },
+        {
+          "index": 10,
+          "text": "service",
+          "start": 50,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": "controls",
+          "start": 58,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 67,
+          "end": 70
+        },
+        {
+          "index": 13,
+          "text": "access",
+          "start": 71,
+          "end": 77
+        },
+        {
+          "index": 14,
+          "text": "log",
+          "start": 78,
+          "end": 81
+        },
+        {
+          "index": 15,
+          "text": "and",
+          "start": 82,
+          "end": 85
+        },
+        {
+          "index": 16,
+          "text": "data",
+          "start": 86,
+          "end": 90
+        },
+        {
+          "index": 17,
+          "text": "privacy",
+          "start": 91,
+          "end": 98
+        },
+        {
+          "index": 18,
+          "text": "arrangements",
+          "start": 99,
+          "end": 111
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 111,
+          "end": 112
+        }
+      ],
+      "focus_lexeme_ids": [
+        "patient-portal.patient-facing-digital-service.n",
+        "user-account.personal-system-profile.n",
+        "access-log.system-entry-record.n",
+        "data-privacy.personal-information-protection.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    }
+  ]
+}

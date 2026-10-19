@@ -1,0 +1,3800 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "raw-material.material-used-as-input-to-manufacturing.n",
+      "text": "raw material",
+      "display_text": "raw material",
+      "pos": "noun",
+      "definition": "A material used as an input to a manufacturing process.",
+      "example": "The raw material has a supplier batch reference.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "raw material"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Recognizable raw manufacturing material beside a later production stage, with its input role clear.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "raw-material.material-used-as-input-to-manufacturing.n.analysis.v1",
+        "lexeme_id": "raw-material.material-used-as-input-to-manufacturing.n",
+        "text": "raw material",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.raw",
+            "type": "stem",
+            "canonical": "raw",
+            "surface": "raw"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.material",
+            "type": "stem",
+            "canonical": "material",
+            "surface": "material"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "raw material",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "workpiece.item-being-worked-on-during-manufacture.n",
+      "text": "workpiece",
+      "display_text": "workpiece",
+      "pos": "noun",
+      "definition": "An item on which a manufacturing operation is being carried out.",
+      "example": "The workpiece identifier is missing from the inspection record.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "workpiece"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clearly identified partly machined component in an inactive workholding setup, emphasizing the item being worked on.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "workpiece.item-being-worked-on-during-manufacture.n.analysis.v1",
+        "lexeme_id": "workpiece.item-being-worked-on-during-manufacture.n",
+        "text": "workpiece",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.work",
+            "type": "stem",
+            "canonical": "work",
+            "surface": "work"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.piece",
+            "type": "stem",
+            "canonical": "piece",
+            "surface": "piece"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "workpiece",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "blank.unfinished-piece-prepared-for-further-shaping.n",
+      "text": "blank",
+      "display_text": "blank",
+      "pos": "noun",
+      "definition": "An unfinished piece prepared for further forming or machining.",
+      "example": "The blank will be reviewed against the material requirement.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "blank"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A real cut metal blank beside a later finished part, with the unfinished piece visually distinguished.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "casting.object-produced-by-pouring-and-solidifying-material-in-mold.n",
+      "text": "casting",
+      "display_text": "casting",
+      "pos": "noun",
+      "definition": "An object produced by pouring material into a mold and allowing it to solidify.",
+      "example": "The casting has a separate inspection reference.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "casting"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A real metal casting with characteristic molded form and a separate finished component, without pouring instructions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "casting.object-produced-by-pouring-and-solidifying-material-in-mold.n.analysis.v1",
+        "lexeme_id": "casting.object-produced-by-pouring-and-solidifying-material-in-mold.n",
+        "text": "casting",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.cast",
+            "type": "stem",
+            "canonical": "cast",
+            "surface": "cast"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "casting",
+            "rule": "suffix_attachment"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "forging.metal-part-shaped-by-compressive-force.n",
+      "text": "forging",
+      "display_text": "forging",
+      "pos": "noun",
+      "definition": "A metal part produced by shaping solid metal under compressive force, such as pressing or hammering.",
+      "example": "The forging is awaiting dimensional inspection.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "forging"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A real forged metal part with its characteristic shape visible, beside a finished example for context.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "forging.metal-part-shaped-by-compressive-force.n.analysis.v1",
+        "lexeme_id": "forging.metal-part-shaped-by-compressive-force.n",
+        "text": "forging",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.forge",
+            "type": "stem",
+            "canonical": "forge",
+            "surface": "forg"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "forging",
+            "rule": "drop_final_e_before_suffix"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "billet.solid-semi-finished-metal-stock-for-further-processing.n",
+      "text": "billet",
+      "display_text": "billet",
+      "pos": "noun",
+      "definition": "A solid semi-finished length of metal stock used for further processing.",
+      "example": "The billet batch is recorded on the production order.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "billet"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Industrial metal billets stored in an orderly designated area, clearly showing their solid stock form.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "sheet-metal.metal-formed-into-thin-flat-pieces.n",
+      "text": "sheet metal",
+      "display_text": "sheet metal",
+      "pos": "noun",
+      "definition": "Metal formed into thin flat pieces.",
+      "example": "The sheet metal thickness is specified on the drawing.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "sheet metal"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A stack of real metal sheets with protected edges and a separate formed sheet component.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "sheet-metal.metal-formed-into-thin-flat-pieces.n.analysis.v1",
+        "lexeme_id": "sheet-metal.metal-formed-into-thin-flat-pieces.n",
+        "text": "sheet metal",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.sheet",
+            "type": "stem",
+            "canonical": "sheet",
+            "surface": "sheet"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.metal",
+            "type": "stem",
+            "canonical": "metal",
+            "surface": "metal"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "sheet metal",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "steel.iron-based-alloy-containing-carbon.n",
+      "text": "steel",
+      "display_text": "steel",
+      "pos": "noun",
+      "definition": "An iron-based alloy containing carbon and possibly other elements.",
+      "example": "The steel grade is listed on the material certificate.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "steel"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Real steel stock and a material identifier; do not suggest that visual appearance alone proves its grade.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "steel.iron-based-alloy-containing-carbon.n.analysis.v1",
+        "lexeme_id": "steel.iron-based-alloy-containing-carbon.n",
+        "text": "steel",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.steel",
+            "type": "atomic",
+            "canonical": "steel",
+            "surface": "steel"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "aluminum.lightweight-metal-used-in-manufactured-products.n",
+      "text": "aluminum",
+      "display_text": "aluminum",
+      "pos": "noun",
+      "definition": "A lightweight metallic element used in many manufactured products and alloys.",
+      "example": "The aluminum housing has a separate part number.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "aluminum",
+        "aluminium"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A real aluminum housing and stock sample with an identifying material label, not a visual claim of composition.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "copper.reddish-metal-with-high-electrical-and-thermal-conductivity.n",
+      "text": "copper",
+      "display_text": "copper",
+      "pos": "noun",
+      "definition": "A reddish metallic element with high electrical and thermal conductivity.",
+      "example": "The copper material reference appears on the drawing.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "copper"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A real copper strip and conductor sample, with no exposed energized equipment.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "brass.alloy-mainly-of-copper-and-zinc.n",
+      "text": "brass",
+      "display_text": "brass",
+      "pos": "noun",
+      "definition": "An alloy made mainly from copper and zinc.",
+      "example": "The brass fitting has a supplier reference.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "brass"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A real brass fitting and stock sample beside a material label, without claiming composition from color alone.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "brass.alloy-mainly-of-copper-and-zinc.n.analysis.v1",
+        "lexeme_id": "brass.alloy-mainly-of-copper-and-zinc.n",
+        "text": "brass",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.brass",
+            "type": "atomic",
+            "canonical": "brass",
+            "surface": "brass"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "alloy.metallic-material-combining-elements.n",
+      "text": "alloy",
+      "display_text": "alloy",
+      "pos": "noun",
+      "definition": "A metallic material made by combining two or more elements, at least one of which is a metal.",
+      "example": "The alloy designation is incomplete on this record.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "alloy"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Several real alloy stock samples with composition labels, showing that alloy describes material composition rather than one appearance.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "rubber.elastic-material-used-in-seals-tires-and-other-products.n",
+      "text": "rubber",
+      "display_text": "rubber",
+      "pos": "noun",
+      "definition": "An elastic material, natural or synthetic, used in products such as seals and tires.",
+      "example": "The rubber compound must match the specified material reference.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "rubber"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A real rubber sheet and molded component shown flexed in a material demonstration, without compatibility claims.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "composite-material.material-combining-distinct-constituents.n",
+      "text": "composite material",
+      "display_text": "composite material",
+      "pos": "noun",
+      "definition": "A material combining distinct constituents to obtain a useful set of properties.",
+      "example": "The composite material requires its own inspection requirements.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "composite material"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A real composite laminate sample with a visible cross-section and constituent layers, without inferred performance claims.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "composite-material.material-combining-distinct-constituents.n.analysis.v1",
+        "lexeme_id": "composite-material.material-combining-distinct-constituents.n",
+        "text": "composite material",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.composite",
+            "type": "stem",
+            "canonical": "composite",
+            "surface": "composite"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.material",
+            "type": "stem",
+            "canonical": "material",
+            "surface": "material"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "composite material",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "lubricant.substance-used-to-reduce-friction-and-wear.n",
+      "text": "lubricant",
+      "display_text": "lubricant",
+      "pos": "noun",
+      "definition": "A substance used to reduce friction and wear between contacting surfaces.",
+      "example": "The lubricant reference is missing from the work order.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "lubricant"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A labeled industrial lubricant container and a separate bearing model, without suggesting an application quantity or compatibility.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "grease.semisolid-lubricant.n",
+      "text": "grease",
+      "display_text": "grease",
+      "pos": "noun",
+      "definition": "A semisolid lubricant made from a base fluid and a thickener, often with additives.",
+      "example": "The grease product code has changed.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "grease"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A small real sample of industrial grease beside its labeled container, with no operational recommendation.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "coolant.fluid-used-to-remove-heat.n",
+      "text": "coolant",
+      "display_text": "coolant",
+      "pos": "noun",
+      "definition": "A fluid used to remove heat from equipment or a process.",
+      "example": "The coolant condition is part of the review.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "coolant"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An identified coolant reservoir and a real labeled sample container, without filling or mixing instructions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "coolant.fluid-used-to-remove-heat.n.analysis.v1",
+        "lexeme_id": "coolant.fluid-used-to-remove-heat.n",
+        "text": "coolant",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.cool",
+            "type": "stem",
+            "canonical": "cool",
+            "surface": "cool"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ant.suffix",
+            "type": "suffix",
+            "canonical": "ant",
+            "surface": "ant"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "coolant",
+            "rule": "suffix_attachment"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "cutting-fluid.fluid-used-during-machining-for-cooling-or-lubrication.n",
+      "text": "cutting fluid",
+      "display_text": "cutting fluid",
+      "pos": "noun",
+      "definition": "A fluid used during machining for functions such as cooling or lubrication.",
+      "example": "The cutting fluid is identified in the process documentation.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "cutting fluid"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A labeled cutting-fluid product beside an inactive machining setup, without concentration or handling instructions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "cutting-fluid.fluid-used-during-machining-for-cooling-or-lubrication.n.analysis.v1",
+        "lexeme_id": "cutting-fluid.fluid-used-during-machining-for-cooling-or-lubrication.n",
+        "text": "cutting fluid",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.cutting",
+            "type": "stem",
+            "canonical": "cutting",
+            "surface": "cutting"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.fluid",
+            "type": "stem",
+            "canonical": "fluid",
+            "surface": "fluid"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "cutting fluid",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "bearing.component-supporting-relative-motion-between-parts.n",
+      "text": "bearing",
+      "display_text": "bearing",
+      "pos": "noun",
+      "definition": "A component that supports relative motion between parts while controlling their position.",
+      "example": "The bearing has a separate replacement reference.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "bearing"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A real rolling-element bearing and a plain bearing shown as recognizable examples, not only a diagram.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "shaft.elongated-machine-part-transmitting-motion-or-supporting-rotation.n",
+      "text": "shaft",
+      "display_text": "shaft",
+      "pos": "noun",
+      "definition": "An elongated machine part that transmits motion or supports rotating components.",
+      "example": "The shaft drawing has a revised diameter.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "shaft"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A real machined shaft with its shoulders and journals visible on a supported bench.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "shaft.elongated-machine-part-transmitting-motion-or-supporting-rotation.n.analysis.v1",
+        "lexeme_id": "shaft.elongated-machine-part-transmitting-motion-or-supporting-rotation.n",
+        "text": "shaft",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.shaft",
+            "type": "atomic",
+            "canonical": "shaft",
+            "surface": "shaft"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "gear.toothed-component-transmitting-motion.n",
+      "text": "gear",
+      "display_text": "gear",
+      "pos": "noun",
+      "definition": "A toothed component that transmits motion by engaging with another toothed component.",
+      "example": "The gear tooth damage is recorded for review.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "gear"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two real gears arranged in visible engagement on an inactive demonstration model.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "gear.toothed-component-transmitting-motion.n.analysis.v1",
+        "lexeme_id": "gear.toothed-component-transmitting-motion.n",
+        "text": "gear",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.gear",
+            "type": "atomic",
+            "canonical": "gear",
+            "surface": "gear"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "pulley.grooved-wheel-guiding-rope-or-transmitting-belt-motion.n",
+      "text": "pulley",
+      "display_text": "pulley",
+      "pos": "noun",
+      "definition": "A wheel with a groove or rim used to guide a rope or transmit motion through a belt.",
+      "example": "The pulley reference is listed with the drive components.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "pulley"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A real belt pulley with its groove clearly visible beside a matching inactive drive model.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "drive-belt.flexible-band-transmitting-motion-between-pulleys.n",
+      "text": "drive belt",
+      "display_text": "drive belt",
+      "pos": "noun",
+      "definition": "A flexible band used to transmit motion between pulleys.",
+      "example": "The drive belt has a separate inspection entry.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "drive belt"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A real drive belt and two pulleys on an inactive model, showing the transmission relationship without tension-setting instructions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "drive-belt.flexible-band-transmitting-motion-between-pulleys.n.analysis.v1",
+        "lexeme_id": "drive-belt.flexible-band-transmitting-motion-between-pulleys.n",
+        "text": "drive belt",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.drive",
+            "type": "stem",
+            "canonical": "drive",
+            "surface": "drive"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.belt",
+            "type": "stem",
+            "canonical": "belt",
+            "surface": "belt"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "drive belt",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "chain.series-of-connected-links-used-for-motion-or-loads.n",
+      "text": "chain",
+      "display_text": "chain",
+      "pos": "noun",
+      "definition": "A series of connected links used for purposes such as transmitting motion or supporting a load.",
+      "example": "The chain type is specified in the component list.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "chain"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A real industrial roller chain with connected links visible, separate from active machinery or suspended loads.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "chain.series-of-connected-links-used-for-motion-or-loads.n.analysis.v1",
+        "lexeme_id": "chain.series-of-connected-links-used-for-motion-or-loads.n",
+        "text": "chain",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.chain",
+            "type": "atomic",
+            "canonical": "chain",
+            "surface": "chain"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "sprocket.toothed-wheel-engaging-with-chain.n",
+      "text": "sprocket",
+      "display_text": "sprocket",
+      "pos": "noun",
+      "definition": "A toothed wheel that engages with a chain to transmit motion.",
+      "example": "The sprocket is included in the drive inspection.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "sprocket"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A real sprocket beside a matching section of chain on an inactive bench display.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "coupling.component-joining-shafts-to-transmit-motion.n",
+      "text": "coupling",
+      "display_text": "coupling",
+      "pos": "noun",
+      "definition": "A component that joins shafts to transmit motion between them.",
+      "example": "The coupling identification is missing from the repair record.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "coupling"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A real shaft coupling connecting two supported shafts in an inactive demonstration assembly.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "coupling.component-joining-shafts-to-transmit-motion.n.analysis.v1",
+        "lexeme_id": "coupling.component-joining-shafts-to-transmit-motion.n",
+        "text": "coupling",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.couple",
+            "type": "stem",
+            "canonical": "couple",
+            "surface": "coupl"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "coupling",
+            "rule": "drop_final_e_before_suffix"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "mechanical-seal.sealing-device-at-moving-equipment-interface.n",
+      "text": "mechanical seal",
+      "display_text": "mechanical seal",
+      "pos": "noun",
+      "definition": "A device that limits fluid leakage at an interface involving a moving equipment part, such as a rotating shaft.",
+      "example": "The mechanical seal reference is on the pump drawing.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "mechanical seal"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A real pump mechanical seal assembly with stationary and rotating elements distinguishable in a separate display.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "mechanical-seal.sealing-device-at-moving-equipment-interface.n.analysis.v1",
+        "lexeme_id": "mechanical-seal.sealing-device-at-moving-equipment-interface.n",
+        "text": "mechanical seal",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.mechanical",
+            "type": "stem",
+            "canonical": "mechanical",
+            "surface": "mechanical"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.seal",
+            "type": "stem",
+            "canonical": "seal",
+            "surface": "seal"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "mechanical seal",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "gasket.sealing-piece-between-mating-surfaces.n",
+      "text": "gasket",
+      "display_text": "gasket",
+      "pos": "noun",
+      "definition": "A piece of material placed between mating surfaces to help prevent leakage.",
+      "example": "The gasket specification needs confirmation.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "gasket"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A real gasket beside two separated flange faces, without a tightening or fitting sequence.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "o-ring.ring-shaped-seal-with-round-cross-section.n",
+      "text": "O-ring",
+      "display_text": "O-ring",
+      "pos": "noun",
+      "definition": "A ring-shaped seal with a round cross-section.",
+      "example": "The O-ring material code is listed in the parts record.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "O-ring",
+        "o-ring"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A real O-ring beside a clearly separate cross-section model, showing its circular section without installation instructions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "o-ring.ring-shaped-seal-with-round-cross-section.n.analysis.v1",
+        "lexeme_id": "o-ring.ring-shaped-seal-with-round-cross-section.n",
+        "text": "O-ring",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.o",
+            "type": "stem",
+            "canonical": "O",
+            "surface": "O"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.ring",
+            "type": "stem",
+            "canonical": "ring",
+            "surface": "ring"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "O-ring",
+            "rule": "hyphenated_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "nozzle.outlet-shaping-or-directing-fluid-flow.n",
+      "text": "nozzle",
+      "display_text": "nozzle",
+      "pos": "noun",
+      "definition": "An outlet designed to shape or direct the flow of a liquid or gas.",
+      "example": "The nozzle part number is unclear.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "nozzle"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A real industrial nozzle with outlet geometry visible, disconnected from pressure or heat sources.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "spring.elastic-component-storing-and-releasing-mechanical-energy.n",
+      "text": "spring",
+      "display_text": "spring",
+      "pos": "noun",
+      "definition": "An elastic component that stores and releases mechanical energy when deformed.",
+      "example": "The spring is identified in the assembly drawing.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "spring"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A real unloaded coil spring beside a separate unloaded leaf-spring example, without compression or release instructions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "spring.elastic-component-storing-and-releasing-mechanical-energy.n.analysis.v1",
+        "lexeme_id": "spring.elastic-component-storing-and-releasing-mechanical-energy.n",
+        "text": "spring",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.spring",
+            "type": "atomic",
+            "canonical": "spring",
+            "surface": "spring"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "piston.moving-component-fitting-within-cylinder.n",
+      "text": "piston",
+      "display_text": "piston",
+      "pos": "noun",
+      "definition": "A moving component that fits within a cylinder and transfers force to or from a fluid.",
+      "example": "The piston surface needs specialist assessment.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "piston"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A real piston outside its cylinder on a display bench, showing its fit relationship without disassembly instructions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "cylinder.chamber-in-which-piston-moves.n",
+      "text": "cylinder",
+      "display_text": "cylinder",
+      "pos": "noun",
+      "definition": "A chamber in which a piston moves, as part of an engine, pump, or actuator.",
+      "example": "The cylinder reference appears in the maintenance manual.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "cylinder"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A separate cutaway model showing a piston within its cylinder, clearly labeled as a model rather than an operating device.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "rivet.fastener-secured-by-forming-its-end.n",
+      "text": "rivet",
+      "display_text": "rivet",
+      "pos": "noun",
+      "definition": "A fastener secured by forming its end after it passes through the parts being joined.",
+      "example": "The rivet type is specified on the drawing.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "rivet"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Real uninstalled and installed rivets shown side by side in a sample joint, without an installation sequence.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "fuse.protective-device-interrupting-excess-current-by-melting-element.n",
+      "text": "fuse",
+      "display_text": "fuse",
+      "pos": "noun",
+      "definition": "A protective device that interrupts excessive current by melting a designed element.",
+      "example": "The fuse reference has been referred to the electrical team.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "fuse"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Real disconnected fuse examples with identification markings, without rating selection or replacement directions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "relay.electrically-operated-switching-device.n",
+      "text": "relay",
+      "display_text": "relay",
+      "pos": "noun",
+      "definition": "An electrically operated switching device.",
+      "example": "The relay identifier appears in the control documentation.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "relay"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A real disconnected industrial relay with a transparent example showing its contacts, without wiring instructions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "sensor.device-detecting-physical-condition-or-quantity.n",
+      "text": "sensor",
+      "display_text": "sensor",
+      "pos": "noun",
+      "definition": "A device that detects a physical condition or quantity and provides a corresponding signal.",
+      "example": "The sensor reading is included in the fault report.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "sensor"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A real industrial proximity sensor beside its identified target on an inactive model, without diagnostic settings.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "filter.device-removing-unwanted-material-from-fluid.n",
+      "text": "filter",
+      "display_text": "filter",
+      "pos": "noun",
+      "definition": "A device that removes unwanted material from a liquid or gas passing through it.",
+      "example": "The filter identification is missing from the service report.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "filter"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A real industrial filter cartridge and housing shown separately, with the fluid-filter meaning clear and no replacement sequence.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Manufacturing & Maintenance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not machine training, a work method, a process setting, a machining program, an equipment authorization, a repair or calibration method, an energy-control or restart procedure, a safety determination, or a legal approval. Roles, inspection criteria, control limits, maintenance intervals, release authority, and terminology depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    }
+  ]
+}

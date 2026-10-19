@@ -1,0 +1,18 @@
+{
+  "label": "professional_scene_modes_disposal-runtime",
+  "command": [
+    "godot",
+    "--headless",
+    "--path",
+    "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+    "--script",
+    "res://tests/godot/professional_scene_modes_disposal_tests.gd"
+  ],
+  "started_at": "2026-10-16T19:53:14.548Z",
+  "finished_at": "2026-10-16T19:53:45.526Z",
+  "exit_code": 1,
+  "signal": null,
+  "error": null,
+  "log_sha256": "a4a06716d42fb191d16bda7c29a778e157132456146e952d14107c93176f8c0b",
+  "ok": false
+}

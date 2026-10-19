@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "status": "fifth10_mutable_delivery_scaffold_completed_from_frozen_fourth10",
+  "reference_files_raw_sha256": {
+    "build/professional-english/foundation-module01-language-review/fourth10/delivery-r01/delivery-lib.cjs": "533ee94d21e8b9779b8e4187bd5701c70871a350bc9c6f0c8efa30eadb3716ee",
+    "build/professional-english/foundation-module01-language-review/fourth10/delivery-r01/prepare-delivery.cjs": "1f9b6e45a4139c5e00bbe60a483ac3f18019625aeda4a1d0b90719998b7d96e1",
+    "build/professional-english/foundation-module01-language-review/fourth10/delivery-r01/dry-run.cjs": "4252cb126ccceab1dc6143104912c6d6790b9dd44ff4fadfd499f5e42f660009",
+    "build/professional-english/foundation-module01-language-review/fourth10/delivery-r01/bind-current-baseline.cjs": "a13d5d68123d95fe8ddc0804e6fef97b6659c4f3e69f590f06aa5c546ab568a2",
+    "build/professional-english/foundation-module01-language-review/fourth10/delivery-r01/integrate-reviewed.cjs": "0eef7e3c7e47c8ff753274c93f8c87bd1ac2666e8e00e83630c4ad6cec6d42a6",
+    "build/professional-english/foundation-module01-language-review/fourth10/delivery-r01/update-persisted-tests.cjs": "557445a701d0525c72cba985af461cf43b273886d0a61cc8c0cd6c640f2b7af2",
+    "build/professional-english/foundation-module01-language-review/fourth10/delivery-r01/guarded-transaction.cjs": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6",
+    "build/professional-english/foundation-module01-language-review/fourth10/delivery-r01/transaction-plan.cjs": "dca101335d6c1f9bdc379f566c1d048e094638371e720f7afde2398ca1ab1ea2",
+    "build/professional-english/foundation-module01-language-review/fourth10/delivery-r01/helper-origin.json": "27d5dd2d62ed8cfdae225489fc059a2cb774122a42c7343e7257886ccfc73a3a",
+    "build/professional-english/foundation-module01-language-review/fourth10/delivery-r01/persisted-test-transforms.cjs": "82f4ce7babdeb65a5954619a0a972a01eb5643cdc7dca74eded6ba17b6ccf656",
+    "build/professional-english/foundation-module01-language-review/fourth10/delivery-r01/preparation-receipt.json": "b67f1b5a4050eaabf81102d0a05aa3756f2f8f24a41bc40fc361e2ddd33f533a",
+    "build/professional-english/foundation-module01-language-review/fourth10/delivery-r01/artifact-inventory.json": "85858e40dd223d3cbcafb77093c72f42faaba040e35d3a31af3fb58a692515cd"
+  },
+  "helper": {
+    "helper_source": "build/professional-english/retail-module03-morphology-review/fifth10/serializer-review-r01/guarded-transaction.cjs",
+    "helper_raw_sha256": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6",
+    "helper_validation": {
+      "path": "build/professional-english/retail-module03-morphology-review/fifth10/serializer-review-r01/validation-attempt-XE9O6l/receipt.json",
+      "raw_sha256": "abd19b9952fe3085ef8cab5b87e430ef442780ed05f3a9a2105f909f968a9bae",
+      "tests": 20,
+      "pass": 20,
+      "fail": 0
+    },
+    "adapter_source": "build/professional-english/retail-term-art-review/counter-r01/delivery-r02/transaction-plan.cjs",
+    "adapter_raw_sha256": "dca101335d6c1f9bdc379f566c1d048e094638371e720f7afde2398ca1ab1ea2",
+    "adapter_validation": {
+      "path": "build/professional-english/retail-term-art-review/counter-r01/delivery-r02/adapter-tests-r02/result.json",
+      "raw_sha256": "61764fb1c4587e19d88a27d9494988539a17336cf0687baa792fc5e214c0a38d",
+      "assertions": 32,
+      "failures": 0
+    },
+    "scope": "Byte-identical reused guarded helper and plan adapter. Earlier scratch fault-test receipts remain evidence; this Foundation language package performs no native run or rerun of those fixtures.",
+    "copied_origin_record": {
+      "path": "build/professional-english/retail-audio-review/counter-checkout-acquired-r01/delivery-r01/helper-origin.json",
+      "raw_sha256": "ca9fc913ac187268813e900f55e3748e4317944a29ed43f0578aa3ce18dc012d"
+    }
+  },
+  "adaptations": [
+    "Original root acceptance is retained exactly. Successful current validation and test/native pins are finalized in delivery-settings.cjs only after approved Retail audio integration and its validation.",
+    "Twelve total expression holds, prior supervisor/attendance full entries and excluded attendance-only sources remain protected.",
+    "Byte-identical validated guarded helper and transaction adapter. Content and shared-test transactions remain root-owned.",
+    "Current cash-register media history and strict historical reversals must remain exact.",
+    "Continuation source crosscheck covers all ten original/candidate English entries and eleven fresh selected dictionary passages. Existing frozen evidence remains unchanged.",
+    "Pure shared-test transforms add exact candidate/source/context assertions and strict fifth10-to-earlier-history reversals while preserving later approved-audio helpers."
+  ],
+  "production_mutated": false,
+  "shared_tests_mutated": false,
+  "native_runtime_executed": false,
+  "baseline_bound": false
+}

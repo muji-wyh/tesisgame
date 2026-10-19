@@ -1,0 +1,66 @@
+{
+  "schema": 1,
+  "patches": [
+    {
+      "file": "tests/professional-content.test.cjs",
+      "before_sha256": "34a1ad2c48df656b665e522ee5dc1046fe1beb88a3e76e3d3aba88102eed6c54",
+      "after_sha256": "83ccbe17e57bcd9ee8216f1416de68abcaae8ca79c54e493eaf0007d6e74440e",
+      "edits": [
+        {
+          "before": "function beforeFoundationFifthLanguage(entry) {",
+          "after": "const supervisorLanguageRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/foundation-module01-supervisor-language-2026-10-16.json'), 'utf8'));\nfunction beforeSupervisorLanguage(entry) {\n  const patch = supervisorLanguageRecord.patches.find(item => item.id === entry.id);\n  if (!patch) return entry;\n  // Historical snapshots can already contain the exact held entry. Both states remain fully checked.\n  if (require('node:util').isDeepStrictEqual(entry, patch.before)) return structuredClone(patch.before);\n  assert.deepEqual(entry, patch.after, entry.id + ': exact later independently reviewed supervisor language delta');\n  return structuredClone(patch.before);\n}\nfunction beforeFoundationFifthLanguage(entry) {\n  entry = beforeSupervisorLanguage(entry);",
+          "count": 1
+        },
+        {
+          "before": "...foundationFifthLanguageRecord.patches].map(item => item.id)",
+          "after": "...foundationFifthLanguageRecord.patches, ...supervisorLanguageRecord.patches].map(item => item.id)",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(result.summary.reviewed_lexemes, 110);",
+          "after": "assert.equal(result.summary.reviewed_lexemes, 111);",
+          "count": 1
+        },
+        {
+          "before": "test('Foundation supervisor hold and editorial difficulty distinctions remain explicit'",
+          "after": "test('Foundation historical supervisor hold and editorial difficulty distinctions remain explicit'",
+          "count": 1
+        },
+        {
+          "before": "assert.deepEqual(source.lexemes.find(item=>item.id===held.id),held.value);",
+          "after": "assert.deepEqual(beforeSupervisorLanguage(source.lexemes.find(item=>item.id===held.id)),held.value);",
+          "count": 1
+        },
+        {
+          "before": "assert.deepEqual(source.lexemes.find(e=>e.id===held.id),held.value);",
+          "after": "assert.deepEqual(beforeSupervisorLanguage(source.lexemes.find(e=>e.id===held.id)),held.value);",
+          "count": 1
+        },
+        {
+          "before": "assert.deepEqual(source.lexemes.find(e => e.id === held.id), held.value);",
+          "after": "assert.deepEqual(beforeSupervisorLanguage(source.lexemes.find(e => e.id === held.id)), held.value);",
+          "count": 1
+        },
+        {
+          "before": "assert.deepEqual(source.lexemes.find(e => e.id === row.entry.id), row.entry); assert.equal(hash(row.entry), row.json_sha256);",
+          "after": "assert.deepEqual(beforeSupervisorLanguage(source.lexemes.find(e => e.id === row.entry.id)), row.entry); assert.equal(hash(row.entry), row.json_sha256);",
+          "count": 1
+        }
+      ],
+      "appended_tests": 3
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "before_sha256": "86773940915510679915fc173ae4c377d397b28fc8bb2f93d600d9a3bd77b73e",
+      "after_sha256": "445ace67e25d2be472f58e41eb507cc2e96ca15a61f815d8a4583fe80c28650f",
+      "edits": [
+        {
+          "before": "function beforeFoundationFifthLanguage(entry) {",
+          "after": "const supervisorLanguageRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/foundation-module01-supervisor-language-2026-10-16.json'), 'utf8'));\nfunction beforeSupervisorLanguage(entry) {\n  const patch = supervisorLanguageRecord.patches.find(item => item.id === entry.id);\n  if (!patch) return entry;\n  // Historical snapshots can already contain the exact held entry. Both states remain fully checked.\n  if (require('node:util').isDeepStrictEqual(entry, patch.before)) return structuredClone(patch.before);\n  assert.deepEqual(entry, patch.after, entry.id + ': exact later independently reviewed supervisor language delta');\n  return structuredClone(patch.before);\n}\nfunction beforeFoundationFifthLanguage(entry) {\n  entry = beforeSupervisorLanguage(entry);",
+          "count": 1
+        }
+      ],
+      "appended_tests": 1
+    }
+  ]
+}

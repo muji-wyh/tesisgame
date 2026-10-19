@@ -1,0 +1,358 @@
+{
+  "id": "shopping-bag.goods-carrier.n",
+  "before": {
+    "id": "shopping-bag.goods-carrier.n",
+    "text": "shopping bag",
+    "display_text": "shopping bag",
+    "pos": "noun",
+    "definition": "A bag used to carry purchased items.",
+    "example": "Would you like a shopping bag for these items?",
+    "difficulty": "A2",
+    "accepted_forms": [
+      "shopping bag"
+    ],
+    "regions": [
+      "general"
+    ],
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "jelly",
+      "word_jelly"
+    ],
+    "media": {
+      "image": {
+        "status": "pending",
+        "path": null,
+        "sha256": null,
+        "source": null,
+        "creator": null,
+        "license": null,
+        "acquisition_status": "not_started",
+        "review": {
+          "status": "pending"
+        },
+        "brief": "Show a reusable fabric shopping bag upright with two handles and a few purchased items peeking above the opening. Make the flexible sides and carrying handles clearly distinct from a rigid shopping basket. Reject a backpack, paper-only carrier definition, wheeled trolley, or decorative gift bag that obscures the intended shopping use.",
+        "picture_suitable": true,
+        "available_animations": [],
+        "adaptations": []
+      },
+      "audio": {
+        "status": "integrated",
+        "path": "res://professional-media/6c7d2ac0e733214faf920a4a0781d0458b6b891a92aa07b7ab433b501d19de72.wav",
+        "sha256": "6c7d2ac0e733214faf920a4a0781d0458b6b891a92aa07b7ab433b501d19de72",
+        "source": "res://docs/assets/sources/professional-retail-ava/bag-wrap/listening-approval-2026-10-16.json",
+        "creator": "Microsoft Ava Neural; original project term text",
+        "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact shopping bag and gift wrap samples approved in the continuation chat; see bag-wrap listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      }
+    },
+    "morphology": {
+      "schema": 1,
+      "id": "professional.shopping-bag.goods-carrier.n.morphology.retail03.fifth10.proposal.v1",
+      "lexeme_id": "shopping-bag.goods-carrier.n",
+      "text": "shopping bag",
+      "kind": "phrase",
+      "parts": [
+        {
+          "id": "p1",
+          "canonical_id": "morph.shop",
+          "canonical": "shop",
+          "type": "stem",
+          "surface": "shop",
+          "break_offsets": []
+        },
+        {
+          "id": "p2",
+          "canonical_id": "english.affix.ing.activity",
+          "canonical": "-ing",
+          "type": "suffix",
+          "surface": "ing",
+          "break_offsets": []
+        },
+        {
+          "id": "p3",
+          "canonical_id": "growth.bag",
+          "canonical": "bag",
+          "type": "word",
+          "surface": "bag",
+          "break_offsets": []
+        }
+      ],
+      "nodes": [
+        {
+          "id": "shopping",
+          "left": "p1",
+          "right": "p2",
+          "surface": "shopping",
+          "rule": "authored-shop-plus-activity-ing-double-final-p",
+          "break_offsets": []
+        },
+        {
+          "id": "whole",
+          "left": "shopping",
+          "right": "p3",
+          "surface": "shopping bag",
+          "rule": "preserve-word-boundary",
+          "break_offsets": [
+            9
+          ]
+        }
+      ],
+      "roots": [
+        "whole"
+      ],
+      "review": {
+        "status": "reviewed",
+        "draft_author": "Codex retail_content (AI source consultation; not human or specialist approval)",
+        "notes": "Use the same reviewed shop and activity -ing relationship as shopping basket/cart, with explicit doubled p, followed by the actual reviewed Growth container bag. Shopping is the nominal buying activity used as a modifier. Generic and result-noun endings remain distinct. The carrier can be reusable; no narrower carrier-bag alternative is added.",
+        "references": [
+          "https://www.dictionary.com/browse/shop",
+          "https://www.dictionary.com/browse/shopping",
+          "https://www.dictionary.com/browse/ing",
+          "https://www.dictionary.com/browse/bag"
+        ],
+        "source_record_ids": [
+          "retail03-morph-fifth10-dcom-shop",
+          "retail03-morph-fifth10-dcom-shopping",
+          "retail03-morph-fifth10-dcom-ing",
+          "retail03-morph-fifth10-dcom-bag"
+        ],
+        "independent_review": "completed_exact_graph_and_selected_canonical_family_review",
+        "reviewer": "Codex root (independent AI morphology review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16",
+        "acceptance_record": "data/professional/provenance/retail-module03-morphology-fifth10-2026-10-16.json"
+      }
+    },
+    "review": {
+      "status": "reviewed",
+      "language": "reviewed",
+      "domain": "not_required",
+      "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+      "reviewed_at": "2026-10-16"
+    },
+    "references": [
+      {
+        "source_id": "bls-cashiers",
+        "status": "pending_term_check",
+        "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+      },
+      {
+        "source_id": "retail03-ox-shopping-bag",
+        "status": "verified",
+        "scope": "Selected passage consulted: Noun senses 1 and 2. The broad sense includes reusable bags. British carrier bag corresponds specifically to the paper/plastic purchase-bag sense. Selected lexical sense and explicitly stated alternatives only. Unrelated word-of-the-day level labels do not rate this term. No media acquired. This editorial proposal does not approve language, morphology, domain practice, or media."
+      }
+    ],
+    "editorial_notes": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the broad purchased-goods carrier, including the current reusable bag example in the art brief. Retain shopping bag. Carrier bag is not added globally because the consulted British alternative corresponds specifically to the paper/plastic sense, narrower than this reusable-bag depiction. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Domain review is not required for the current memberships. Independent AI morphology review was completed on 2026-10-16 for this exact graph at the documented modern-stem depth; this is not human or subject-matter approval. Picture suitability and word-image production remain pending. The exact Ava word recording has user listening approval and is integrated. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready."
+  },
+  "after": {
+    "id": "shopping-bag.goods-carrier.n",
+    "text": "shopping bag",
+    "display_text": "shopping bag",
+    "pos": "noun",
+    "definition": "A bag used to carry purchased items.",
+    "example": "Would you like a shopping bag for these items?",
+    "difficulty": "A2",
+    "accepted_forms": [
+      "shopping bag"
+    ],
+    "regions": [
+      "general"
+    ],
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "jelly",
+      "word_jelly"
+    ],
+    "media": {
+      "image": {
+        "status": "integrated",
+        "path": "res://professional-media/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png",
+        "sha256": "f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+        "source": "res://docs/assets/sources/shopping-bag-additional-leads-2026-10-17/source-record.json",
+        "creator": "Vijay Verma (@realvjy)",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex root independent AI scoped carrier picture and brief review; see docs/assets/sources/shopping-bag-candidate-review-2026-10-17/visual-review.json",
+          "reviewed_at": "2026-10-17"
+        },
+        "brief": "Show a plain open retail shopping bag upright in a three-quarter view, with a tall solid-sided body, two separate loop handles and a visible opening. Preserve the inspected 3dicons dynamic color source. Keep the tall solid body and paired loops visually distinct from the accepted squat slotted shopping basket. Exclude wheels, backpack straps, a closed top, a bow, a gift tag, tissue paper and gift-specific decoration. The illustration does not narrow the definition to a particular material or require visible contents.",
+        "picture_suitable": true,
+        "available_animations": [],
+        "adaptations": [
+          "Original acquired 3dicons v1 Bag dynamic-angle color PNG; no redraw, recolor, added contents or changed material.",
+          "Alpha-bounds crop with a 16-source-pixel margin, followed by a Lanczos resize to a maximum of 512 pixels.",
+          "Exact accepted 414 by 512 transparent PNG retained without further conversion; no source model or animation was acquired."
+        ]
+      },
+      "audio": {
+        "status": "integrated",
+        "path": "res://professional-media/6c7d2ac0e733214faf920a4a0781d0458b6b891a92aa07b7ab433b501d19de72.wav",
+        "sha256": "6c7d2ac0e733214faf920a4a0781d0458b6b891a92aa07b7ab433b501d19de72",
+        "source": "res://docs/assets/sources/professional-retail-ava/bag-wrap/listening-approval-2026-10-16.json",
+        "creator": "Microsoft Ava Neural; original project term text",
+        "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact shopping bag and gift wrap samples approved in the continuation chat; see bag-wrap listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      }
+    },
+    "morphology": {
+      "schema": 1,
+      "id": "professional.shopping-bag.goods-carrier.n.morphology.retail03.fifth10.proposal.v1",
+      "lexeme_id": "shopping-bag.goods-carrier.n",
+      "text": "shopping bag",
+      "kind": "phrase",
+      "parts": [
+        {
+          "id": "p1",
+          "canonical_id": "morph.shop",
+          "canonical": "shop",
+          "type": "stem",
+          "surface": "shop",
+          "break_offsets": []
+        },
+        {
+          "id": "p2",
+          "canonical_id": "english.affix.ing.activity",
+          "canonical": "-ing",
+          "type": "suffix",
+          "surface": "ing",
+          "break_offsets": []
+        },
+        {
+          "id": "p3",
+          "canonical_id": "growth.bag",
+          "canonical": "bag",
+          "type": "word",
+          "surface": "bag",
+          "break_offsets": []
+        }
+      ],
+      "nodes": [
+        {
+          "id": "shopping",
+          "left": "p1",
+          "right": "p2",
+          "surface": "shopping",
+          "rule": "authored-shop-plus-activity-ing-double-final-p",
+          "break_offsets": []
+        },
+        {
+          "id": "whole",
+          "left": "shopping",
+          "right": "p3",
+          "surface": "shopping bag",
+          "rule": "preserve-word-boundary",
+          "break_offsets": [
+            9
+          ]
+        }
+      ],
+      "roots": [
+        "whole"
+      ],
+      "review": {
+        "status": "reviewed",
+        "draft_author": "Codex retail_content (AI source consultation; not human or specialist approval)",
+        "notes": "Use the same reviewed shop and activity -ing relationship as shopping basket/cart, with explicit doubled p, followed by the actual reviewed Growth container bag. Shopping is the nominal buying activity used as a modifier. Generic and result-noun endings remain distinct. The carrier can be reusable; no narrower carrier-bag alternative is added.",
+        "references": [
+          "https://www.dictionary.com/browse/shop",
+          "https://www.dictionary.com/browse/shopping",
+          "https://www.dictionary.com/browse/ing",
+          "https://www.dictionary.com/browse/bag"
+        ],
+        "source_record_ids": [
+          "retail03-morph-fifth10-dcom-shop",
+          "retail03-morph-fifth10-dcom-shopping",
+          "retail03-morph-fifth10-dcom-ing",
+          "retail03-morph-fifth10-dcom-bag"
+        ],
+        "independent_review": "completed_exact_graph_and_selected_canonical_family_review",
+        "reviewer": "Codex root (independent AI morphology review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16",
+        "acceptance_record": "data/professional/provenance/retail-module03-morphology-fifth10-2026-10-16.json"
+      }
+    },
+    "review": {
+      "status": "reviewed",
+      "language": "reviewed",
+      "domain": "not_required",
+      "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+      "reviewed_at": "2026-10-16"
+    },
+    "references": [
+      {
+        "source_id": "bls-cashiers",
+        "status": "pending_term_check",
+        "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+      },
+      {
+        "source_id": "retail03-ox-shopping-bag",
+        "status": "verified",
+        "scope": "Selected passage consulted: Noun senses 1 and 2. The broad sense includes reusable bags. British carrier bag corresponds specifically to the paper/plastic purchase-bag sense. Selected lexical sense and explicitly stated alternatives only. Unrelated word-of-the-day level labels do not rate this term. No media acquired. This editorial proposal does not approve language, morphology, domain practice, or media."
+      }
+    ],
+    "editorial_notes": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the broad purchased-goods carrier, including reusable bags; the accepted illustration does not specify material or require visible contents. Retain shopping bag. Carrier bag is not added globally because the consulted British alternative corresponds specifically to the paper/plastic sense, narrower than the selected broad purchased-goods-carrier sense. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Domain review is not required for the current memberships. Independent AI morphology review was completed on 2026-10-16 for this exact graph at the documented modern-stem depth; this is not human or subject-matter approval. The shopping-bag image has completed scoped carrier picture review. The accepted plain open bag brief replaces the original fabric, flexible-side and visible-purchases requirements, which are not depicted. Empty gift bags may share this form; intended shopping use is supplied by context. The original brief and its mismatch remain in retained provenance. The exact Ava word recording has user listening approval and is integrated. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready."
+  },
+  "before_sha256": "ba96e5d4ba9911b68ddb630d3413cac52d155a3d27c7452aaee97ba5284f7e07",
+  "after_sha256": "25300b5f9d78a6327c16c27143f1aeddd9dba1c41bdd4e42c20f30d36148cc85",
+  "protected_fields_sha256": "091cb33bb94c158215dc8db8c4198482b0c2f991ce4b964786321d5114c51d69",
+  "note_change": {
+    "kind": "three_exact_single_occurrence_replacements",
+    "replacements": [
+      {
+        "before": "Retain the broad purchased-goods carrier, including the current reusable bag example in the art brief.",
+        "after": "Retain the broad purchased-goods carrier, including reusable bags; the accepted illustration does not specify material or require visible contents."
+      },
+      {
+        "before": "Carrier bag is not added globally because the consulted British alternative corresponds specifically to the paper/plastic sense, narrower than this reusable-bag depiction.",
+        "after": "Carrier bag is not added globally because the consulted British alternative corresponds specifically to the paper/plastic sense, narrower than the selected broad purchased-goods-carrier sense."
+      },
+      {
+        "before": "Picture suitability and word-image production remain pending.",
+        "after": "The shopping-bag image has completed scoped carrier picture review. The accepted plain open bag brief replaces the original fabric, flexible-side and visible-purchases requirements, which are not depicted. Empty gift bags may share this form; intended shopping use is supplied by context. The original brief and its mismatch remain in retained provenance."
+      }
+    ]
+  },
+  "resource": {
+    "id": "sha256:f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+    "sha256": "f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+    "path": "professional-media/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png",
+    "kind": "image",
+    "format": "png",
+    "compressed_bytes": 135843,
+    "decoded_bytes": 1695744,
+    "width": 414,
+    "height": 512
+  }
+}

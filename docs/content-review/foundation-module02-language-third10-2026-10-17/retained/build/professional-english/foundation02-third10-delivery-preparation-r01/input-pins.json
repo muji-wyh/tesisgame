@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "status": "author_source_pins_not_validation_or_delivery",
+  "repository_root": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame",
+  "registry_json_sha256": "f470936fc3bff7ff619b3af057a20cf5e05034013bbf08948e380847228dc4c5",
+  "hash_convention": "Raw file SHA256; parsed values use UTF-8 JSON.stringify preserving key order.",
+  "source_manifest": {
+    "path": "docs/content-review/foundation-module02-language-third10-research-2026-10-17/context-screen.json",
+    "raw_sha256": "ca6775e8ac2a10fad0ef761a73004956873c97866cff138e08879ee2fe044c0c",
+    "property": "source_file_hashes",
+    "expected_count": 353,
+    "assert_every_current_file_before_preparation_and_delivery": true
+  },
+  "historical_input_pathlist": {
+    "path": "docs/qa/continuation-r33/continuation-validation-r33.json",
+    "raw_sha256": "ff6360732e3b4fe90a919670ffa6c796470fdc91d13f8e1717df959b990ead4d",
+    "property": "after_input_sha256",
+    "expected_count": 680,
+    "use": "Paths only for fresh before/after source measurement. Historical success is not transferred to changed current runtime inputs."
+  },
+  "files": [
+    {"path":"data/professional/lexemes/foundation-module02.json","raw_sha256":"03953236a30d636a7d6db0f0f921d076910886e1f2f1834730ba1302b5b0ac41"},
+    {"path":"data/professional/sources.json","raw_sha256":"148f9191f91891a564bb79dbce428c60b3b4b1a07e1374135cc0d6a0619165b9"},
+    {"path":"tests/professional-content.test.cjs","raw_sha256":"64d754533e5b7aa329ab4c044bce454e7c641fa6afe0257e7f76134586c67fa7"},
+    {"path":"tests/professional-retail-morphology.test.cjs","raw_sha256":"c7bc3e1448ee006c6441c9cf1eb0fb3be875efc9c762f1a78d9c0c478a62135f"},
+    {"path":"tests/godot/professional_retail_morphology_tests.gd","raw_sha256":"7cd10db267b373fea44ac287924ef67de0d47fa13d4a5c4e2c299afaeea6008c"},
+    {"path":"tools/validate-professional-content.cjs","raw_sha256":"a59598faf3ee917a738fe2c2dfc661ad03b7d6c325e7a3a2dc02a093e6e736cd"},
+    {"path":"docs/content-review/foundation-module02-language-third10-research-2026-10-17/inventory.json","raw_sha256":"22300622a4d3497aae3622d555a950577b0322a784c3ea64f1e5a77c762123c6"},
+    {"path":"docs/content-review/foundation-module02-language-third10-research-2026-10-17/candidate-ledger.json","raw_sha256":"939bfedea01a17bce2bf97b29dcc607d29423a8622b855107e73b4402b2fa026"},
+    {"path":"docs/content-review/foundation-module02-language-third10-research-2026-10-17/source-index.json","raw_sha256":"3aa44ebf382d9e71d9ca3064b4f77c928c1c39603fba58781d6b266104287d46"},
+    {"path":"docs/content-review/foundation-module02-language-third10-research-2026-10-17/assembly-attempt-r02.json","raw_sha256":"fe0932d4dd61c5a66357b922ed16c96e580372ca5fd7452b34b923519c908c2e"},
+    {"path":"docs/content-review/foundation-module02-language-third10-independent-review-2026-10-17/review.json","raw_sha256":"2aaac3d8672600001faa104594a221ed1d079caf9723cc5495d1172de7fb0c4d"},
+    {"path":"docs/content-review/foundation-module02-language-third10-independent-review-2026-10-17/inventory.json","raw_sha256":"02b1b7e1c7c31d24a8a0bd401c6ef8bbceee14a1c2b673fd68d06b92a297b8b6"},
+    {"path":"build/professional-english/foundation-module01-language-review/fifth10/delivery-r01/guarded-transaction.cjs","raw_sha256":"1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6"},
+    {"path":"build/professional-english/retail-module03-morphology-review/fifth10/serializer-review-r01/validation-attempt-XE9O6l/receipt.json","raw_sha256":"abd19b9952fe3085ef8cab5b87e430ef442780ed05f3a9a2105f909f968a9bae"}
+  ],
+  "must_remain_absent": [
+    "data/professional/provenance/foundation-module02-language-third10-2026-10-17.json",
+    "docs/content-review/foundation-module02-language-third10-2026-10-17",
+    "build/professional-english/transactions/foundation02-third10-language-r01"
+  ],
+  "historical_mechanism": {
+    "directory": "docs/content-review/foundation-module02-language-second10-2026-10-17",
+    "status": "committed_immutable_reference_only_never_replay",
+    "preparation_receipt_sha256": "9523482f6e7c511ba093fb52ba19f17de4e32d37306e6cd503b96951456557ef",
+    "binding_sha256": "2710e773bf4744b782a3801a687726c4a14c547084e8217311e886189b31f15c",
+    "technical_review_sha256": "b4f3388910b7afc67c6f5eef6ce318debb79ce216b93c7dd11ecec4f3c192ef4"
+  },
+  "validation_boundary": "These pins are not a successful execution receipt. R33 is historical and cannot certify changed runtime inputs. Root must create fresh scoped validation or an independently reviewed exact dependency-transfer record before delivery."
+}

@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "status": "root_input_authoring_assertion_failed_no_candidate_dispatch",
+  "expected_new_refs": 20,
+  "actual_new_refs": 23,
+  "error": "23 !== 20 at stdin line14; additional resource dependencies require inspection.",
+  "candidate_source_written": false,
+  "candidate_input_written": false,
+  "recorded_at": "2026-10-16T22:22:20.798Z"
+}

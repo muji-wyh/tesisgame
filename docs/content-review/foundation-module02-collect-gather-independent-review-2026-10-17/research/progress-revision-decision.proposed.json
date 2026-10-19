@@ -1,0 +1,140 @@
+{
+  "schema": 1,
+  "status": "required_future_activation_guard_proposed_not_implemented",
+  "collect_sense_id": "collect.gather.v",
+  "proposed_expression_id": "expr.foundation.module02.08",
+  "canonical_gather_identity_retained": true,
+  "saved_records_may_be_assumed_absent": false,
+  "current_revision_observed": "professional-v1",
+  "required_before_repaired_expression_activation": "Choose and independently review a fresh curriculum/requirements revision unequal to professional-v1, then bind the repaired expression content and actual accepted release under that revision.",
+  "reason": "Professional expression completions are indexed by course/module/requirements_revision. Requirement fingerprints include expression IDs but not text. Changing this text under the old ID and revision would not itself prevent old completion from satisfying the materially changed requirement.",
+  "future_coordinated_revision_scope": "The current validator requires course.curriculum_revision to equal catalog.curriculum_revision and each module.requirements_revision to equal its course revision. A revision-only release under the current contract must coordinate catalog, all 20 courses and their 200 module requirements, plus any generated manifests and compiled policies. Changing only the 20 Module02 requirement strings would violate that contract.",
+  "changed_requirement_namespaces": [
+    {
+      "course_id": "accounting_finance",
+      "module_id": "module02",
+      "old_requirements_revision": "professional-v1",
+      "new_requirements_revision": null
+    },
+    {
+      "course_id": "caregiving",
+      "module_id": "module02",
+      "old_requirements_revision": "professional-v1",
+      "new_requirements_revision": null
+    },
+    {
+      "course_id": "cleaning_facilities",
+      "module_id": "module02",
+      "old_requirements_revision": "professional-v1",
+      "new_requirements_revision": null
+    },
+    {
+      "course_id": "clinical_medicine",
+      "module_id": "module02",
+      "old_requirements_revision": "professional-v1",
+      "new_requirements_revision": null
+    },
+    {
+      "course_id": "construction_trades",
+      "module_id": "module02",
+      "old_requirements_revision": "professional-v1",
+      "new_requirements_revision": null
+    },
+    {
+      "course_id": "customer_support",
+      "module_id": "module02",
+      "old_requirements_revision": "professional-v1",
+      "new_requirements_revision": null
+    },
+    {
+      "course_id": "education_childcare",
+      "module_id": "module02",
+      "old_requirements_revision": "professional-v1",
+      "new_requirements_revision": null
+    },
+    {
+      "course_id": "food_service",
+      "module_id": "module02",
+      "old_requirements_revision": "professional-v1",
+      "new_requirements_revision": null
+    },
+    {
+      "course_id": "hospitality_tourism",
+      "module_id": "module02",
+      "old_requirements_revision": "professional-v1",
+      "new_requirements_revision": null
+    },
+    {
+      "course_id": "hr_recruitment",
+      "module_id": "module02",
+      "old_requirements_revision": "professional-v1",
+      "new_requirements_revision": null
+    },
+    {
+      "course_id": "it_support",
+      "module_id": "module02",
+      "old_requirements_revision": "professional-v1",
+      "new_requirements_revision": null
+    },
+    {
+      "course_id": "legal_paralegal",
+      "module_id": "module02",
+      "old_requirements_revision": "professional-v1",
+      "new_requirements_revision": null
+    },
+    {
+      "course_id": "manufacturing_maintenance",
+      "module_id": "module02",
+      "old_requirements_revision": "professional-v1",
+      "new_requirements_revision": null
+    },
+    {
+      "course_id": "nursing",
+      "module_id": "module02",
+      "old_requirements_revision": "professional-v1",
+      "new_requirements_revision": null
+    },
+    {
+      "course_id": "office_admin",
+      "module_id": "module02",
+      "old_requirements_revision": "professional-v1",
+      "new_requirements_revision": null
+    },
+    {
+      "course_id": "retail",
+      "module_id": "module02",
+      "old_requirements_revision": "professional-v1",
+      "new_requirements_revision": null
+    },
+    {
+      "course_id": "sales_marketing",
+      "module_id": "module02",
+      "old_requirements_revision": "professional-v1",
+      "new_requirements_revision": null
+    },
+    {
+      "course_id": "software_data",
+      "module_id": "module02",
+      "old_requirements_revision": "professional-v1",
+      "new_requirements_revision": null
+    },
+    {
+      "course_id": "transport_delivery",
+      "module_id": "module02",
+      "old_requirements_revision": "professional-v1",
+      "new_requirements_revision": null
+    },
+    {
+      "course_id": "warehouse_logistics",
+      "module_id": "module02",
+      "old_requirements_revision": "professional-v1",
+      "new_requirements_revision": null
+    }
+  ],
+  "proposed_completion_policy": "Keep old saved requirements, expression flags and completion receipts untouched in their old namespace. Do not copy, alias, merge or infer old expression completion into the new namespace. The repaired expression must be answered correctly and unassisted under the new requirements before its completion can count there.",
+  "canonical_skill_policy": "Retain existing collect.gather.v skill history without automatic rename, alias, deletion or a new earned flag. This repair is not evidence of mastery. Any evidence from the former pickup assessment remains semantically questionable; do not certify it as gathering evidence. If such saved records exist, review their provenance separately before claiming valid gathering mastery. Current aggregate skill storage does not identify the exact older expression text.",
+  "draft_state_limit": "All 20 affected modules are draft/unready, so no release revision or saved progress is modified by this research packet. Draft status does not prove that no saved experimental or imported history exists and does not waive the new-revision requirement before activation.",
+  "current_production_revision_changes": [],
+  "current_saved_progress_changes": [],
+  "implementation_and_independent_review_required": true
+}

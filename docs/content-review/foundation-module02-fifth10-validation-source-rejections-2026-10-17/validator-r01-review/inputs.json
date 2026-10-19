@@ -1,0 +1,71 @@
+{
+  "schema": 1,
+  "status": "raw_source_and_json_inspection_pins",
+  "files": [
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/prepare.cjs",
+      "bytes": 7472,
+      "raw_sha256": "0d736bb531a7ab9dbe767e78015881a5d994f057958bd1b53ad17a28bc97fcf1"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/test-transforms.cjs",
+      "bytes": 27566,
+      "raw_sha256": "e2812802f2146bfe63fcb346db6ee49c2dc1523176d1d28ce03255d34deafd37"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-projected-validation-r01/README.md",
+      "bytes": 1946,
+      "raw_sha256": "3943496f22cfaf558c849ecd3e9a81b8479c71403e390c633475209e23e0507b"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-projected-validation-r01/input.template.json",
+      "bytes": 595,
+      "raw_sha256": "d7ab762c3cad3fe2f0e734610f3a56a88f694ec3f022cef16a0b208f2e2af2ec"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-projected-validation-r01/run.cjs",
+      "bytes": 10884,
+      "raw_sha256": "1e0002f9c9afa0bb95607e4e4d37ea725c0b46092fba445c72a79b007cdb0a9c"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-projected-validation-r01/source-inventory.json",
+      "bytes": 647,
+      "raw_sha256": "7c8cac3503731eb7b51902d2b3f6460c5a191808446b43018e088433439eab5a"
+    },
+    {
+      "path": "tests/professional-content.test.cjs",
+      "bytes": 347272,
+      "raw_sha256": "0519ea34d948fa75bddc1e29cbfc70f97e7667a4495a947719fbd9ac36cabe28"
+    },
+    {
+      "path": "tests/professional-retail-media.test.cjs",
+      "bytes": 52548,
+      "raw_sha256": "6a278d2dd88941a51e2b4b401af8e21893156c72fcb40a8e05ea7dd63e6e8ef7"
+    },
+    {
+      "path": "tests/professional-retail-morphology.test.cjs",
+      "bytes": 89132,
+      "raw_sha256": "8280c7159fc3852cc9c5c80c6a17f0b3963ad8e66f5803adbcabe3d798702a29"
+    },
+    {
+      "path": "tools/professional-picture-pools.cjs",
+      "bytes": 3496,
+      "raw_sha256": "ca37e39c0987fb4d2738fec4b951bc2646464c36aa8acd9827173542e08e3629"
+    },
+    {
+      "path": "tools/validate-professional-content.cjs",
+      "bytes": 31243,
+      "raw_sha256": "a59598faf3ee917a738fe2c2dfc661ad03b7d6c325e7a3a2dc02a093e6e736cd"
+    },
+    {
+      "path": "tools/validate-theme-motion.cjs",
+      "bytes": 2288,
+      "raw_sha256": "bb2a9c07829a3b60616c663662875ba0cdbdf6af9fe9b607517ebf89ff721b04"
+    },
+    {
+      "path": "web/professional-media.js",
+      "bytes": 11851,
+      "raw_sha256": "db9ac8f3aeaaafb8f1ac411a56d56f0bfd6d8ad2862348868d42666d3021630a"
+    }
+  ]
+}

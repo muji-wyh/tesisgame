@@ -1,0 +1,502 @@
+{
+  "status": "immutable_candidate_contrasts_not_approval",
+  "objects": [
+    {
+      "resource": "res://data/professional/lexemes/foundation-module02.json",
+      "entry": {
+        "id": "broken.not-working.adj",
+        "text": "broken",
+        "display_text": "broken",
+        "pos": "adjective",
+        "definition": "Damaged or unable to work as intended.",
+        "example": "The handle on this case is broken.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "broken"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A case with a visibly detached handle.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "broken.not-working.adj.analysis.v1",
+          "lexeme_id": "broken.not-working.adj",
+          "text": "broken",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "The dictionary identifies the participial relationship to break. The authored brok + en surfaces preserve the irregular vowel alternation and participial ending; do not apply this spelling transformation to unrelated verbs. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/broken"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.break",
+              "type": "stem",
+              "canonical": "break",
+              "surface": "brok"
+            },
+            {
+              "id": "p2",
+              "canonical_id": "affix.en.suffix",
+              "type": "suffix",
+              "canonical": "en",
+              "surface": "en"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "broken",
+              "rule": "irregular_participle_break_to_brok_before_en"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-broken",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "disposition": "Preserve unchanged. A spelling fragment or plausible derivative link is not approval of this lexical meaning, whole graph or specialist context."
+    },
+    {
+      "resource": "res://data/professional/lexemes/retail-module09.json",
+      "entry": {
+        "id": "form.structured-information-document.n",
+        "text": "form",
+        "display_text": "form",
+        "pos": "noun",
+        "definition": "A document or interface with spaces for requested information.",
+        "example": "The customer completed the collection form.",
+        "difficulty": "B1",
+        "accepted_forms": [
+          "form"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A blank fictional collection form with clear sections.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "form.structured-information-document.n.analysis.v1",
+          "lexeme_id": "form.structured-information-document.n",
+          "text": "form",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Explicitly authored modern morphological candidate; language and boundary review remain pending. Named spelling rules describe this graph only.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical": "form",
+              "surface": "form",
+              "type": "atomic",
+              "canonical_id": "morph.form"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "shopify-inventory",
+            "status": "pending_term_check",
+            "scope": "Context source only. Original definition, usage, image suitability, and morphology require term-level review."
+          },
+          {
+            "source_id": "bls-food-service",
+            "status": "pending_term_check",
+            "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+          },
+          {
+            "source_id": "onet-customer-service",
+            "status": "pending_term_check",
+            "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+          },
+          {
+            "source_id": "onet-office-admin",
+            "status": "pending_term_check",
+            "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+          },
+          {
+            "source_id": "onet-shipping-receiving-clerks",
+            "status": "pending_term_check",
+            "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+          },
+          {
+            "source_id": "onet-hotel-desk-clerks",
+            "status": "pending_term_check",
+            "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+          },
+          {
+            "source_id": "transport-ups-tracking-status",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "transport-gps-overview",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          }
+        ],
+        "editorial_notes": "Original draft definition, example, and sense-specific picture brief. No language, subject, morphological, or visual approval is claimed."
+      },
+      "disposition": "Preserve unchanged. A spelling fragment or plausible derivative link is not approval of this lexical meaning, whole graph or specialist context."
+    },
+    {
+      "resource": "res://data/professional/lexemes/clinical-module07.json",
+      "entry": {
+        "id": "inconclusive.not-supporting-clear-conclusion-from-test.a",
+        "text": "inconclusive",
+        "display_text": "inconclusive",
+        "pos": "adjective",
+        "definition": "Not supporting a clear conclusion from the test or assessment.",
+        "example": "The report describes the result as inconclusive.",
+        "difficulty": "B1",
+        "accepted_forms": [
+          "inconclusive"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A result report clearly indicating uncertainty without presenting a next-step treatment rule.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "inconclusive.not-supporting-clear-conclusion-from-test.a.analysis.v1",
+          "lexeme_id": "inconclusive.not-supporting-clear-conclusion-from-test.a",
+          "text": "inconclusive",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+            "references": [
+              "clinical-medline-word-parts"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "affix.in.prefix",
+              "type": "prefix",
+              "canonical": "in",
+              "surface": "in"
+            },
+            {
+              "id": "p2",
+              "canonical_id": "morph.conclusive",
+              "type": "stem",
+              "canonical": "conclusive",
+              "surface": "conclusive"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "inconclusive",
+              "rule": "prefix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "clinical-medline-lab-results",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "clinical-medline-imaging",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "clinical-ahrq-diagnosis-education",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "clinical-medline-word-parts",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          }
+        ],
+        "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+      },
+      "disposition": "Preserve unchanged. A spelling fragment or plausible derivative link is not approval of this lexical meaning, whole graph or specialist context."
+    },
+    {
+      "resource": "res://data/professional/lexemes/clinical-module08.json",
+      "entry": {
+        "id": "informed.having-relevant-information-and-understanding-for-decision.a",
+        "text": "informed",
+        "display_text": "informed",
+        "pos": "adjective",
+        "definition": "Having relevant information and understanding for the decision being considered.",
+        "example": "The discussion aimed to support an informed choice.",
+        "difficulty": "B2",
+        "accepted_forms": [
+          "informed"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A person reviewing clear information and asking questions, without equating a signed form with understanding.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": null,
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "clinical-gmc-patient-communication",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "clinical-gmc-consent-principles",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "clinical-nhs-consent-overview",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "clinical-gmc-team-records",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "clinical-ahrq-diagnosis-education",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          }
+        ],
+        "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+      },
+      "disposition": "Preserve unchanged. A spelling fragment or plausible derivative link is not approval of this lexical meaning, whole graph or specialist context."
+    }
+  ]
+}

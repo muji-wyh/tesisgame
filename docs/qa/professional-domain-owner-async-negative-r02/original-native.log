@@ -1,0 +1,5 @@
+Godot failed (exit 1):
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+NEGATIVE OWNER CHECKS 214 FAILURES 1
+FAIL: unavailable-mode: failed replacement cannot return predecessor success

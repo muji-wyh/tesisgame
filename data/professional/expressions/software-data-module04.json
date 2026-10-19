@@ -1,0 +1,1531 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.software_data.module04.01",
+      "text": "The software application reads the source code from the project folder.",
+      "meaning": "Identify the application and the text it reads.",
+      "context": "A developer describes a source-analysis tool.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "software",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "application",
+          "start": 13,
+          "end": 24
+        },
+        {
+          "index": 3,
+          "text": "reads",
+          "start": 25,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "source",
+          "start": 35,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "code",
+          "start": 42,
+          "end": 46
+        },
+        {
+          "index": 7,
+          "text": "from",
+          "start": 47,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "project",
+          "start": 56,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "folder",
+          "start": 64,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 70,
+          "end": 71
+        }
+      ],
+      "focus_lexeme_ids": [
+        "software.computer-instructions.n",
+        "application.task-oriented-software.n",
+        "source-code.human-readable-program-text.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module04.02",
+      "text": "Please check the syntax before changing the algorithm in this program.",
+      "meaning": "Ask for a language-structure check before revising the steps.",
+      "context": "Two developers review a program.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "check",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "syntax",
+          "start": 17,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "before",
+          "start": 24,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "changing",
+          "start": 31,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "algorithm",
+          "start": 44,
+          "end": 53
+        },
+        {
+          "index": 8,
+          "text": "in",
+          "start": 54,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "this",
+          "start": 57,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": "program",
+          "start": 62,
+          "end": 69
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 69,
+          "end": 70
+        }
+      ],
+      "focus_lexeme_ids": [
+        "syntax.language-structure-rules.n",
+        "algorithm.problem-solving-steps.n",
+        "program.executable-instructions.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module04.03",
+      "text": "Within this scope, the variable holds a string, while the constant has an integer data type and appears in the expression.",
+      "meaning": "Describe names, types, and an expression in a program.",
+      "context": "A reviewer explains a small section of code.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Within",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "this",
+          "start": 7,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "scope",
+          "start": 12,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 17,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 5,
+          "text": "variable",
+          "start": 23,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "holds",
+          "start": 32,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "a",
+          "start": 38,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "string",
+          "start": 40,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 46,
+          "end": 47
+        },
+        {
+          "index": 10,
+          "text": "while",
+          "start": 48,
+          "end": 53
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 12,
+          "text": "constant",
+          "start": 58,
+          "end": 66
+        },
+        {
+          "index": 13,
+          "text": "has",
+          "start": 67,
+          "end": 70
+        },
+        {
+          "index": 14,
+          "text": "an",
+          "start": 71,
+          "end": 73
+        },
+        {
+          "index": 15,
+          "text": "integer",
+          "start": 74,
+          "end": 81
+        },
+        {
+          "index": 16,
+          "text": "data",
+          "start": 82,
+          "end": 86
+        },
+        {
+          "index": 17,
+          "text": "type",
+          "start": 87,
+          "end": 91
+        },
+        {
+          "index": 18,
+          "text": "and",
+          "start": 92,
+          "end": 95
+        },
+        {
+          "index": 19,
+          "text": "appears",
+          "start": 96,
+          "end": 103
+        },
+        {
+          "index": 20,
+          "text": "in",
+          "start": 104,
+          "end": 106
+        },
+        {
+          "index": 21,
+          "text": "the",
+          "start": 107,
+          "end": 110
+        },
+        {
+          "index": 22,
+          "text": "expression",
+          "start": 111,
+          "end": 121
+        },
+        {
+          "index": 23,
+          "text": ".",
+          "start": 121,
+          "end": 122
+        }
+      ],
+      "focus_lexeme_ids": [
+        "variable.named-changeable-value.n",
+        "string.character-sequence.n",
+        "constant.fixed-program-value.n",
+        "integer.whole-number-value.n",
+        "data-type.value-category.n",
+        "scope.name-visibility-region.n",
+        "expression.evaluated-code-combination.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module04.04",
+      "text": "The function has one parameter and receives one argument for each call.",
+      "meaning": "Distinguish a declared input from a supplied value.",
+      "context": "A developer explains a callable operation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "function",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "has",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "one",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "parameter",
+          "start": 21,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "receives",
+          "start": 35,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "one",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "argument",
+          "start": 48,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "for",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": "each",
+          "start": 61,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": "call",
+          "start": 66,
+          "end": 70
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 70,
+          "end": 71
+        }
+      ],
+      "focus_lexeme_ids": [
+        "function.callable-program-operation.n",
+        "parameter.function-input-name.n",
+        "argument.supplied-call-value.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module04.05",
+      "text": "This method of the class returns a Boolean return value when called on the object.",
+      "meaning": "Describe a method and the value it returns.",
+      "context": "A developer explains the behavior of an object.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "This",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "method",
+          "start": 5,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "of",
+          "start": 12,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "class",
+          "start": 19,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "returns",
+          "start": 25,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "a",
+          "start": 33,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "Boolean",
+          "start": 35,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "return",
+          "start": 43,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": "value",
+          "start": 50,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": "when",
+          "start": 56,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": "called",
+          "start": 61,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": "on",
+          "start": 68,
+          "end": 70
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 14,
+          "text": "object",
+          "start": 75,
+          "end": 81
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 81,
+          "end": 82
+        }
+      ],
+      "focus_lexeme_ids": [
+        "method.object-associated-function.n",
+        "boolean.two-valued-logic-type.n",
+        "return-value.function-result.n",
+        "object.program-entity-with-properties.n",
+        "class.object-type-definition.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module04.06",
+      "text": "The loop evaluates the condition and updates the list and array.",
+      "meaning": "Describe a repeated operation and the collections it changes.",
+      "context": "A developer explains a data-processing step.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "loop",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "evaluates",
+          "start": 9,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "condition",
+          "start": 23,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 33,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "updates",
+          "start": 37,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "list",
+          "start": 49,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "array",
+          "start": 58,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 63,
+          "end": 64
+        }
+      ],
+      "focus_lexeme_ids": [
+        "loop.repeated-code-structure.n",
+        "condition.evaluated-decision-test.n",
+        "list.ordered-collection.n",
+        "array.indexed-value-collection.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module04.07",
+      "text": "The module uses a library from this package as a dependency.",
+      "meaning": "Describe relationships between reusable software components.",
+      "context": "A developer reviews a project's required code.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "module",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "uses",
+          "start": 11,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 16,
+          "end": 17
+        },
+        {
+          "index": 4,
+          "text": "library",
+          "start": 18,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "from",
+          "start": 26,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "this",
+          "start": 31,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "package",
+          "start": 36,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "as",
+          "start": 44,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "a",
+          "start": 47,
+          "end": 48
+        },
+        {
+          "index": 10,
+          "text": "dependency",
+          "start": 49,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 59,
+          "end": 60
+        }
+      ],
+      "focus_lexeme_ids": [
+        "module.organized-code-unit.n",
+        "library.reusable-code-collection.n",
+        "package.distributed-software-unit.n",
+        "dependency.required-software-component.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module04.08",
+      "text": "The API exposes an interface whose endpoint receives a request and sends a response using the agreed protocol.",
+      "meaning": "Describe how software components communicate.",
+      "context": "A team reviews an API contract.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "API",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "exposes",
+          "start": 8,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "an",
+          "start": 16,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "interface",
+          "start": 19,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "whose",
+          "start": 29,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "endpoint",
+          "start": 35,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "receives",
+          "start": 44,
+          "end": 52
+        },
+        {
+          "index": 8,
+          "text": "a",
+          "start": 53,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "request",
+          "start": 55,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": "sends",
+          "start": 67,
+          "end": 72
+        },
+        {
+          "index": 12,
+          "text": "a",
+          "start": 73,
+          "end": 74
+        },
+        {
+          "index": 13,
+          "text": "response",
+          "start": 75,
+          "end": 83
+        },
+        {
+          "index": 14,
+          "text": "using",
+          "start": 84,
+          "end": 89
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 90,
+          "end": 93
+        },
+        {
+          "index": 16,
+          "text": "agreed",
+          "start": 94,
+          "end": 100
+        },
+        {
+          "index": 17,
+          "text": "protocol",
+          "start": 101,
+          "end": 109
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 109,
+          "end": 110
+        }
+      ],
+      "focus_lexeme_ids": [
+        "api.software-interaction-contract.n",
+        "endpoint.service-access-location.n",
+        "request.service-operation-message.n",
+        "response.service-reply-message.n",
+        "protocol.communication-rules.n",
+        "interface.interaction-contract.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module04.09",
+      "text": "The event triggers an operation represented by a promise, and the callback handles its result.",
+      "meaning": "Describe an asynchronous interaction in a fictional program.",
+      "context": "Two developers discuss a completion handler.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "event",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "triggers",
+          "start": 10,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "an",
+          "start": 19,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "operation",
+          "start": 22,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "represented",
+          "start": 32,
+          "end": 43
+        },
+        {
+          "index": 6,
+          "text": "by",
+          "start": 44,
+          "end": 46
+        },
+        {
+          "index": 7,
+          "text": "a",
+          "start": 47,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "promise",
+          "start": 49,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 56,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "callback",
+          "start": 66,
+          "end": 74
+        },
+        {
+          "index": 13,
+          "text": "handles",
+          "start": 75,
+          "end": 82
+        },
+        {
+          "index": 14,
+          "text": "its",
+          "start": 83,
+          "end": 86
+        },
+        {
+          "index": 15,
+          "text": "result",
+          "start": 87,
+          "end": 93
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 93,
+          "end": 94
+        }
+      ],
+      "focus_lexeme_ids": [
+        "event.observable-software-occurrence.n",
+        "promise.future-result-object.n",
+        "callback.supplied-handler-function.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module04.10",
+      "text": "The process uses a thread, buffer, cache, and queue; its memory includes a heap and a stack whose newest item is removed first.",
+      "meaning": "Distinguish runtime resources and a last-in, first-out collection.",
+      "context": "A developer describes the runtime structures used by a process.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "process",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "uses",
+          "start": 12,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 17,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "thread",
+          "start": 19,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 25,
+          "end": 26
+        },
+        {
+          "index": 6,
+          "text": "buffer",
+          "start": 27,
+          "end": 33
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 33,
+          "end": 34
+        },
+        {
+          "index": 8,
+          "text": "cache",
+          "start": 35,
+          "end": 40
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 40,
+          "end": 41
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 11,
+          "text": "queue",
+          "start": 46,
+          "end": 51
+        },
+        {
+          "index": 12,
+          "text": ";",
+          "start": 51,
+          "end": 52
+        },
+        {
+          "index": 13,
+          "text": "its",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 14,
+          "text": "memory",
+          "start": 57,
+          "end": 63
+        },
+        {
+          "index": 15,
+          "text": "includes",
+          "start": 64,
+          "end": 72
+        },
+        {
+          "index": 16,
+          "text": "a",
+          "start": 73,
+          "end": 74
+        },
+        {
+          "index": 17,
+          "text": "heap",
+          "start": 75,
+          "end": 79
+        },
+        {
+          "index": 18,
+          "text": "and",
+          "start": 80,
+          "end": 83
+        },
+        {
+          "index": 19,
+          "text": "a",
+          "start": 84,
+          "end": 85
+        },
+        {
+          "index": 20,
+          "text": "stack",
+          "start": 86,
+          "end": 91
+        },
+        {
+          "index": 21,
+          "text": "whose",
+          "start": 92,
+          "end": 97
+        },
+        {
+          "index": 22,
+          "text": "newest",
+          "start": 98,
+          "end": 104
+        },
+        {
+          "index": 23,
+          "text": "item",
+          "start": 105,
+          "end": 109
+        },
+        {
+          "index": 24,
+          "text": "is",
+          "start": 110,
+          "end": 112
+        },
+        {
+          "index": 25,
+          "text": "removed",
+          "start": 113,
+          "end": 120
+        },
+        {
+          "index": 26,
+          "text": "first",
+          "start": 121,
+          "end": 126
+        },
+        {
+          "index": 27,
+          "text": ".",
+          "start": 126,
+          "end": 127
+        }
+      ],
+      "focus_lexeme_ids": [
+        "process.running-program-instance.n",
+        "thread.execution-sequence.n",
+        "buffer.temporary-data-area.n",
+        "cache.reusable-result-store.n",
+        "queue.ordered-waiting-structure.n",
+        "memory.working-data-storage.n",
+        "heap.dynamic-allocation-memory.n",
+        "stack.last-in-first-out-structure.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "mdn-glossary",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    }
+  ]
+}

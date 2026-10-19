@@ -1,0 +1,23 @@
+{
+  "audit": "passed",
+  "courses": 20,
+  "modules": 200,
+  "themes": 21,
+  "unique_lexemes": 4939,
+  "vocabulary_memberships": 10000,
+  "vocabulary_memberships_target": 10000,
+  "vocabulary_memberships_remaining": 0,
+  "expressions": 1620,
+  "expression_memberships": 2000,
+  "expression_memberships_target": 2000,
+  "expression_memberships_remaining": 0,
+  "ready_modules": 0,
+  "reviewed_lexemes": 148,
+  "morphology_authored": 4045,
+  "morphology_reviewed": 89,
+  "integrated_word_images": 8,
+  "integrated_word_audio": 12,
+  "release_ready": false,
+  "errors": 0,
+  "warnings": 29396
+}

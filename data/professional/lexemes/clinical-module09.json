@@ -1,0 +1,397 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "problem-list.maintained-list-of-relevant-health-problems.n",
+      "text": "problem list",
+      "display_text": "problem list",
+      "pos": "noun",
+      "definition": "A maintained list of health problems relevant to a person's care.",
+      "example": "The clinician reviewed the problem list for accuracy.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "problem list"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional health record separating current and historical problems without patient identifiers.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "problem-list.maintained-list-of-relevant-health-problems.n.analysis.v1",
+        "lexeme_id": "problem-list.maintained-list-of-relevant-health-problems.n",
+        "text": "problem list",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.problem",
+            "type": "stem",
+            "canonical": "problem",
+            "surface": "problem"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.list",
+            "type": "stem",
+            "canonical": "list",
+            "surface": "list"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "problem list",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-gmc-team-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-lab-results",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "diagnostic-code.classification-code-representing-health-condition-or-related-concept.n",
+      "text": "diagnostic code",
+      "display_text": "diagnostic code",
+      "pos": "noun",
+      "definition": "A code representing a health condition or related concept within a specified classification system.",
+      "example": "The diagnostic code was checked against the documented assessment.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "diagnostic code"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional record showing a named classification system and code field, without suggesting that coding establishes diagnosis.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "diagnostic-code.classification-code-representing-health-condition-or-related-concept.n.analysis.v1",
+        "lexeme_id": "diagnostic-code.classification-code-representing-health-condition-or-related-concept.n",
+        "text": "diagnostic code",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.diagnostic",
+            "type": "stem",
+            "canonical": "diagnostic",
+            "surface": "diagnostic"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.code",
+            "type": "stem",
+            "canonical": "code",
+            "surface": "code"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "diagnostic code",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-gmc-team-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-lab-results",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "clinical-decision-support.information-or-tools-supporting-clinical-decisions.n",
+      "text": "clinical decision support",
+      "display_text": "clinical decision support",
+      "pos": "noun",
+      "definition": "Information or tools designed to support clinical decisions in a defined context.",
+      "example": "The clinician considered the clinical decision support alert alongside the patient information.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "clinical decision support"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional clinical alert reviewed by a clinician, without automatic treatment selection or authority claims.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "clinical-decision-support.information-or-tools-supporting-clinical-decisions.n.analysis.v1",
+        "lexeme_id": "clinical-decision-support.information-or-tools-supporting-clinical-decisions.n",
+        "text": "clinical decision support",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.clinical",
+            "type": "stem",
+            "canonical": "clinical",
+            "surface": "clinical"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.decision",
+            "type": "stem",
+            "canonical": "decision",
+            "surface": "decision"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.support",
+            "type": "stem",
+            "canonical": "support",
+            "surface": "support"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "clinical decision",
+            "rule": "word_boundary"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "clinical decision support",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-gmc-team-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-lab-results",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    }
+  ]
+}

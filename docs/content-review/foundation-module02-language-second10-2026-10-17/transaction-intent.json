@@ -1,0 +1,289 @@
+{
+  "schema": 1,
+  "status": "root_authorized_plan_ready_for_guarded_commit",
+  "binding_raw_sha256": "2710e773bf4744b782a3801a687726c4a14c547084e8217311e886189b31f15c",
+  "plan_sha256": "670c5ba51d2e7e72baa95435893dd59017a46fe2786342eaeffe08fc81a9b480",
+  "descriptor": {
+    "schema": 1,
+    "repository_root": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+    "allowed_paths": [
+      "data/professional/lexemes/foundation-module02.json",
+      "data/professional/provenance/foundation-module02-language-second10-2026-10-17.json",
+      "data/professional/sources.json",
+      "docs/content-review/foundation-module02-language-second10-2026-10-17/accepted-language.json",
+      "docs/content-review/foundation-module02-language-second10-2026-10-17/baseline-config.json",
+      "docs/content-review/foundation-module02-language-second10-2026-10-17/binding.json",
+      "docs/content-review/foundation-module02-language-second10-2026-10-17/deliver.cjs",
+      "docs/content-review/foundation-module02-language-second10-2026-10-17/delivery-lib.cjs",
+      "docs/content-review/foundation-module02-language-second10-2026-10-17/execution-start.json",
+      "docs/content-review/foundation-module02-language-second10-2026-10-17/HANDOFF.md",
+      "docs/content-review/foundation-module02-language-second10-2026-10-17/preparation-attempt-001.json",
+      "docs/content-review/foundation-module02-language-second10-2026-10-17/preparation-receipt.json",
+      "docs/content-review/foundation-module02-language-second10-2026-10-17/prepare.cjs",
+      "docs/content-review/foundation-module02-language-second10-2026-10-17/professional_retail_morphology_tests.gd.after",
+      "docs/content-review/foundation-module02-language-second10-2026-10-17/professional_retail_morphology_tests.gd.before",
+      "docs/content-review/foundation-module02-language-second10-2026-10-17/professional-content.test.cjs.after",
+      "docs/content-review/foundation-module02-language-second10-2026-10-17/professional-content.test.cjs.before",
+      "docs/content-review/foundation-module02-language-second10-2026-10-17/professional-retail-morphology.test.cjs.after",
+      "docs/content-review/foundation-module02-language-second10-2026-10-17/professional-retail-morphology.test.cjs.before",
+      "docs/content-review/foundation-module02-language-second10-2026-10-17/scratch-validation.json",
+      "docs/content-review/foundation-module02-language-second10-2026-10-17/technical-review.json",
+      "docs/content-review/foundation-module02-language-second10-2026-10-17/test-patches.json",
+      "docs/content-review/foundation-module02-language-second10-2026-10-17/test-transforms.cjs",
+      "tests/godot/professional_retail_morphology_tests.gd",
+      "tests/professional-content.test.cjs",
+      "tests/professional-retail-morphology.test.cjs"
+    ],
+    "entries": [
+      {
+        "path": "data/professional/lexemes/foundation-module02.json",
+        "before": {
+          "bytes": 190473,
+          "sha256": "25d9847a7156f3c654d4592b8393660b7032f4e3f20eec63801e73369696be69"
+        },
+        "after": {
+          "bytes": 220456,
+          "sha256": "03953236a30d636a7d6db0f0f921d076910886e1f2f1834730ba1302b5b0ac41"
+        },
+        "noop": false
+      },
+      {
+        "path": "data/professional/sources.json",
+        "before": {
+          "bytes": 723047,
+          "sha256": "59e4689eb30e5707b4407ffa3d3e7ec61ac4133f5a25e307a15a57bf6fa3e04b"
+        },
+        "after": {
+          "bytes": 745572,
+          "sha256": "148f9191f91891a564bb79dbce428c60b3b4b1a07e1374135cc0d6a0619165b9"
+        },
+        "noop": false
+      },
+      {
+        "path": "docs/content-review/foundation-module02-language-second10-2026-10-17/delivery-lib.cjs",
+        "before": null,
+        "after": {
+          "bytes": 14913,
+          "sha256": "a094e1b7f81f8259f1a00b2e37b3b5daae589ba7a7c6ac1970040ab7d6e54fbb"
+        },
+        "noop": false
+      },
+      {
+        "path": "docs/content-review/foundation-module02-language-second10-2026-10-17/test-transforms.cjs",
+        "before": null,
+        "after": {
+          "bytes": 20296,
+          "sha256": "65e236565b29148ab220a4ce7ac7ff3894f06e2f8ef20c64c8855713a593450b"
+        },
+        "noop": false
+      },
+      {
+        "path": "docs/content-review/foundation-module02-language-second10-2026-10-17/prepare.cjs",
+        "before": null,
+        "after": {
+          "bytes": 8211,
+          "sha256": "b81f3f19fae42219cac0e5e00aade2bb1af56e37ddb5d0edf4b2800307f9218f"
+        },
+        "noop": false
+      },
+      {
+        "path": "docs/content-review/foundation-module02-language-second10-2026-10-17/deliver.cjs",
+        "before": null,
+        "after": {
+          "bytes": 7576,
+          "sha256": "4f6a713d84c65650e17fa82161a718e238ef1cf001903e7f43f9deaf7f24f483"
+        },
+        "noop": false
+      },
+      {
+        "path": "docs/content-review/foundation-module02-language-second10-2026-10-17/baseline-config.json",
+        "before": null,
+        "after": {
+          "bytes": 4388,
+          "sha256": "d3eb180e31c07370640cc1ac3b60f7fe5d7a71aa17b66219bb3637d9efb8d665"
+        },
+        "noop": false
+      },
+      {
+        "path": "docs/content-review/foundation-module02-language-second10-2026-10-17/HANDOFF.md",
+        "before": null,
+        "after": {
+          "bytes": 4303,
+          "sha256": "f18ef9ef4e3a5ce106c34cecc625327a2e985933b8a6c21d3ac7bd9c7647888f"
+        },
+        "noop": false
+      },
+      {
+        "path": "docs/content-review/foundation-module02-language-second10-2026-10-17/execution-start.json",
+        "before": null,
+        "after": {
+          "bytes": 1583,
+          "sha256": "19da19b632871145fc09609bacb5b0339b6aad0bc51d4a4172b5eef44e490b0e"
+        },
+        "noop": false
+      },
+      {
+        "path": "docs/content-review/foundation-module02-language-second10-2026-10-17/accepted-language.json",
+        "before": null,
+        "after": {
+          "bytes": 855457,
+          "sha256": "56e569369ac8b9f3b7f3c7e789c61302e62777b774950f89f5b971f277ea145b"
+        },
+        "noop": false
+      },
+      {
+        "path": "docs/content-review/foundation-module02-language-second10-2026-10-17/professional-content.test.cjs.before",
+        "before": null,
+        "after": {
+          "bytes": 308743,
+          "sha256": "471f1eee4c01ffd0a0f9a43db0692311774afd5996ba29f5865d4674ec38ab19"
+        },
+        "noop": false
+      },
+      {
+        "path": "docs/content-review/foundation-module02-language-second10-2026-10-17/professional-content.test.cjs.after",
+        "before": null,
+        "after": {
+          "bytes": 321015,
+          "sha256": "64d754533e5b7aa329ab4c044bce454e7c641fa6afe0257e7f76134586c67fa7"
+        },
+        "noop": false
+      },
+      {
+        "path": "docs/content-review/foundation-module02-language-second10-2026-10-17/professional-retail-morphology.test.cjs.before",
+        "before": null,
+        "after": {
+          "bytes": 81619,
+          "sha256": "47474805af1db61c9a2bc944395f5790a5853c73420b02f29563559b2b1a4459"
+        },
+        "noop": false
+      },
+      {
+        "path": "docs/content-review/foundation-module02-language-second10-2026-10-17/professional-retail-morphology.test.cjs.after",
+        "before": null,
+        "after": {
+          "bytes": 83238,
+          "sha256": "c7bc3e1448ee006c6441c9cf1eb0fb3be875efc9c762f1a78d9c0c478a62135f"
+        },
+        "noop": false
+      },
+      {
+        "path": "docs/content-review/foundation-module02-language-second10-2026-10-17/professional_retail_morphology_tests.gd.before",
+        "before": null,
+        "after": {
+          "bytes": 102246,
+          "sha256": "f0bd041c0c50413b9f0b399df1abb89aea7d66062c5f4ad5fcbc30290e4208f1"
+        },
+        "noop": false
+      },
+      {
+        "path": "docs/content-review/foundation-module02-language-second10-2026-10-17/professional_retail_morphology_tests.gd.after",
+        "before": null,
+        "after": {
+          "bytes": 107018,
+          "sha256": "7cd10db267b373fea44ac287924ef67de0d47fa13d4a5c4e2c299afaeea6008c"
+        },
+        "noop": false
+      },
+      {
+        "path": "docs/content-review/foundation-module02-language-second10-2026-10-17/test-patches.json",
+        "before": null,
+        "after": {
+          "bytes": 6058,
+          "sha256": "ee5fb84bdecfec9ed39d74e58261a86f6267ae3c4f6b6ddd032b73a7b769ec58"
+        },
+        "noop": false
+      },
+      {
+        "path": "docs/content-review/foundation-module02-language-second10-2026-10-17/scratch-validation.json",
+        "before": null,
+        "after": {
+          "bytes": 45033,
+          "sha256": "68de87e2247416021574954de26a32ce7f42d1fe336eeadb7b816bbf7ba768e6"
+        },
+        "noop": false
+      },
+      {
+        "path": "docs/content-review/foundation-module02-language-second10-2026-10-17/binding.json",
+        "before": null,
+        "after": {
+          "bytes": 90168,
+          "sha256": "2710e773bf4744b782a3801a687726c4a14c547084e8217311e886189b31f15c"
+        },
+        "noop": false
+      },
+      {
+        "path": "docs/content-review/foundation-module02-language-second10-2026-10-17/preparation-receipt.json",
+        "before": null,
+        "after": {
+          "bytes": 4536,
+          "sha256": "9523482f6e7c511ba093fb52ba19f17de4e32d37306e6cd503b96951456557ef"
+        },
+        "noop": false
+      },
+      {
+        "path": "docs/content-review/foundation-module02-language-second10-2026-10-17/preparation-attempt-001.json",
+        "before": null,
+        "after": {
+          "bytes": 2456,
+          "sha256": "98c87b5b983f88c6c51db921feda73069ceb4b147212aaabd22cea7421e8351c"
+        },
+        "noop": false
+      },
+      {
+        "path": "docs/content-review/foundation-module02-language-second10-2026-10-17/technical-review.json",
+        "before": null,
+        "after": {
+          "bytes": 14242,
+          "sha256": "b4f3388910b7afc67c6f5eef6ce318debb79ce216b93c7dd11ecec4f3c192ef4"
+        },
+        "noop": false
+      },
+      {
+        "path": "data/professional/provenance/foundation-module02-language-second10-2026-10-17.json",
+        "before": null,
+        "after": {
+          "bytes": 866140,
+          "sha256": "7b2c674a5249ef8c59afc2ab9e620cd2ed8d4e6a55704a231ca53f00005cd4fc"
+        },
+        "noop": false
+      },
+      {
+        "path": "tests/professional-content.test.cjs",
+        "before": {
+          "bytes": 308743,
+          "sha256": "471f1eee4c01ffd0a0f9a43db0692311774afd5996ba29f5865d4674ec38ab19"
+        },
+        "after": {
+          "bytes": 321015,
+          "sha256": "64d754533e5b7aa329ab4c044bce454e7c641fa6afe0257e7f76134586c67fa7"
+        },
+        "noop": false
+      },
+      {
+        "path": "tests/professional-retail-morphology.test.cjs",
+        "before": {
+          "bytes": 81619,
+          "sha256": "47474805af1db61c9a2bc944395f5790a5853c73420b02f29563559b2b1a4459"
+        },
+        "after": {
+          "bytes": 83238,
+          "sha256": "c7bc3e1448ee006c6441c9cf1eb0fb3be875efc9c762f1a78d9c0c478a62135f"
+        },
+        "noop": false
+      },
+      {
+        "path": "tests/godot/professional_retail_morphology_tests.gd",
+        "before": {
+          "bytes": 102246,
+          "sha256": "f0bd041c0c50413b9f0b399df1abb89aea7d66062c5f4ad5fcbc30290e4208f1"
+        },
+        "after": {
+          "bytes": 107018,
+          "sha256": "7cd10db267b373fea44ac287924ef67de0d47fa13d4a5c4e2c299afaeea6008c"
+        },
+        "noop": false
+      }
+    ]
+  }
+}

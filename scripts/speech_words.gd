@@ -108,6 +108,7 @@ const SPECIAL_PLURALS: Dictionary = {
 	"goose": ["geese"], "wolf": ["wolves"], "hoof": ["hooves", "hoofs"], "half": ["halves"]
 }
 static var _word_form_cache: Dictionary = {}
+static var _token_pattern_cache: Dictionary = {}
 
 
 static func normalize_text(text: String, accepted_forms: Array = []) -> String:
@@ -123,13 +124,48 @@ static func normalize_text(text: String, accepted_forms: Array = []) -> String:
 
 
 static func tokens(text: String, accepted_forms: Array = ["yoyo", "yoyos"]) -> Array[String]:
-	var pattern := RegEx.new()
 	# Keep Unicode letters, numbers and possessives intact. "bare2", "bared",
 	# "bear's" and "bare\u00e9" must not turn into a hit for bear.
-	pattern.compile("[\\p{L}\\p{N}_]+(?:['\u2019][\\p{L}\\p{N}_]+)*")
+	var key: String = JSON.stringify(accepted_forms)
+	var pattern: RegEx = _token_pattern_cache.get(key)
+	if pattern == null:
+		pattern = _token_pattern(accepted_forms)
+		if _token_pattern_cache.size() >= 128:
+			_token_pattern_cache.erase(_token_pattern_cache.keys()[0])
+		_token_pattern_cache[key] = pattern
 	var result: Array[String] = []
 	for token in pattern.search_all(normalize_text(text, accepted_forms)):
 		result.append(token.get_string())
+	return result
+
+
+static func _token_pattern(accepted_forms: Array) -> RegEx:
+	var pattern := RegEx.new()
+	var literal_forms: Array[String] = []
+	for form in accepted_forms:
+		if form is String and not form.strip_edges().is_empty() and not literal_forms.has(form.to_lower()):
+			literal_forms.append(form.to_lower())
+	literal_forms.sort_custom(func(left: String, right: String) -> bool: return left.length() > right.length())
+	var alternatives: Array[String] = []
+	for form in literal_forms:
+		alternatives.append(_regex_literal(form))
+	var ordinary: String = "[\\p{L}\\p{N}_]+(?:['\u2019][\\p{L}\\p{N}_]+)*"
+	# Longest authored terms consume the whole span, including genuine spaces,
+	# punctuation, or digits. Do not split USB-C into unrelated U/S/B/C targets.
+	var boundary: String = "[\\p{L}\\p{N}_'’+-]"
+	var expression: String = ordinary
+	if not alternatives.is_empty():
+		expression = "(?<!" + boundary + ")(?:" + "|".join(alternatives) + ")(?!" + boundary + ")|" + ordinary
+	pattern.compile(expression)
+	return pattern
+
+
+static func _regex_literal(value: String) -> String:
+	var result: String = ""
+	for character in value:
+		if character in "\\.^$|?*+()[]{}":
+			result += "\\"
+		result += character
 	return result
 
 
@@ -162,6 +198,14 @@ static func browser_lexicon(words: Array) -> Dictionary:
 
 
 static func word_forms(word: Dictionary, include_plurals: bool = false) -> Array[String]:
+	if word.get("track") == "professional":
+		var authored: Array[String] = []
+		for value in [word.text] + word.get("accepted_forms", []):
+			if value is String:
+				var form: String = value.strip_edges().to_lower()
+				if not form.is_empty() and not authored.has(form):
+					authored.append(form)
+		return authored
 	# Old four-field fixtures remain nouns; authored actions and descriptions
 	# keep their exact word instead of receiving invented noun endings.
 	var text: String = str(word.text).strip_edges().to_lower()
@@ -176,7 +220,15 @@ static func words_conflict(first: Dictionary, second: Dictionary) -> bool:
 	if compounds_conflict(str(first.text), str(second.text)):
 		return true
 	var second_forms: Array[String] = word_forms(second)
-	return word_forms(first).any(func(form: String) -> bool: return second_forms.has(form))
+	var first_forms: Array[String] = word_forms(first)
+	if first_forms.any(func(form: String) -> bool: return second_forms.has(form)):
+		return true
+	if first.get("track") == "professional" or second.get("track") == "professional":
+		for first_form in first_forms:
+			for second_form in second_forms:
+				if tokens(first_form, [second_form]).has(second_form) or tokens(second_form, [first_form]).has(first_form):
+					return true
+	return false
 
 
 static func forms(noun: String, include_plurals: bool = false) -> Array[String]:

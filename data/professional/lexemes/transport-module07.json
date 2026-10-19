@@ -1,0 +1,1295 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "collection-point.agreed-place-for-goods-to-be-picked-up.n",
+      "text": "collection point",
+      "display_text": "collection point",
+      "pos": "noun",
+      "definition": "An agreed place where goods are picked up for transport.",
+      "example": "The collection point is the supplier's reception desk.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "collection point"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional supplier reception marked as the agreed pickup location.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "collection-point.agreed-place-for-goods-to-be-picked-up.n.analysis.v1",
+        "lexeme_id": "collection-point.agreed-place-for-goods-to-be-picked-up.n",
+        "text": "collection point",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.collection",
+            "type": "stem",
+            "canonical": "collection",
+            "surface": "collection"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.point",
+            "type": "stem",
+            "canonical": "point",
+            "surface": "point"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "collection point",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-usps-redelivery",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-support",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Transport & Delivery communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not driver training, a handling procedure, a legal rule, a load calculation, an emergency procedure, or a carrier service guarantee. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "delivery-point.agreed-place-for-goods-handover-at-destination.n",
+      "text": "delivery point",
+      "display_text": "delivery point",
+      "pos": "noun",
+      "definition": "The agreed place where goods are handed over or left under a delivery arrangement.",
+      "example": "Please confirm the delivery point within the building.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "delivery point"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional building plan identifying the agreed goods handover point.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "delivery-point.agreed-place-for-goods-handover-at-destination.n.analysis.v1",
+        "lexeme_id": "delivery-point.agreed-place-for-goods-handover-at-destination.n",
+        "text": "delivery point",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.delivery",
+            "type": "stem",
+            "canonical": "delivery",
+            "surface": "delivery"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.point",
+            "type": "stem",
+            "canonical": "point",
+            "surface": "point"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "delivery point",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-usps-redelivery",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-support",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Transport & Delivery communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not driver training, a handling procedure, a legal rule, a load calculation, an emergency procedure, or a carrier service guarantee. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "parcel-locker.secure-compartment-for-parcel-collection-or-delivery.n",
+      "text": "parcel locker",
+      "display_text": "parcel locker",
+      "pos": "noun",
+      "definition": "A lockable compartment used for leaving or collecting parcels under a service's arrangements.",
+      "example": "The recipient selected an available parcel locker.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "parcel locker"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A bank of unbranded parcel lockers with one parcel compartment visible and no access codes.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "parcel-locker.secure-compartment-for-parcel-collection-or-delivery.n.analysis.v1",
+        "lexeme_id": "parcel-locker.secure-compartment-for-parcel-collection-or-delivery.n",
+        "text": "parcel locker",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.parcel",
+            "type": "stem",
+            "canonical": "parcel",
+            "surface": "parcel"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.locker",
+            "type": "stem",
+            "canonical": "locker",
+            "surface": "locker"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "parcel locker",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-usps-redelivery",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-support",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Transport & Delivery communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not driver training, a handling procedure, a legal rule, a load calculation, an emergency procedure, or a carrier service guarantee. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "delivery-instruction.direction-about-how-arranged-delivery-should-be-handled.n",
+      "text": "delivery instruction",
+      "display_text": "delivery instruction",
+      "pos": "noun",
+      "definition": "Information about the agreed handling of a delivery at its destination.",
+      "example": "The delivery instruction refers the driver to the reception team.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "delivery instruction"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional delivery record with a clear destination-handling note and no private access data.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "delivery-instruction.direction-about-how-arranged-delivery-should-be-handled.n.analysis.v1",
+        "lexeme_id": "delivery-instruction.direction-about-how-arranged-delivery-should-be-handled.n",
+        "text": "delivery instruction",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.delivery",
+            "type": "stem",
+            "canonical": "delivery",
+            "surface": "delivery"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.instruction",
+            "type": "stem",
+            "canonical": "instruction",
+            "surface": "instruction"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "delivery instruction",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-usps-redelivery",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-support",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Transport & Delivery communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not driver training, a handling procedure, a legal rule, a load calculation, an emergency procedure, or a carrier service guarantee. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "collection-receipt.record-acknowledging-goods-pickup.n",
+      "text": "collection receipt",
+      "display_text": "collection receipt",
+      "pos": "noun",
+      "definition": "A record acknowledging that goods were picked up for transport.",
+      "example": "The collection receipt lists the goods picked up.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "collection receipt"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional pickup receipt linked to identified cartons, distinct from a payment receipt and without real recipient data.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "collection-receipt.record-acknowledging-goods-pickup.n.analysis.v1",
+        "lexeme_id": "collection-receipt.record-acknowledging-goods-pickup.n",
+        "text": "collection receipt",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.collection",
+            "type": "stem",
+            "canonical": "collection",
+            "surface": "collection"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.receipt",
+            "type": "stem",
+            "canonical": "receipt",
+            "surface": "receipt"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "collection receipt",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-usps-redelivery",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-support",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Transport & Delivery communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not driver training, a handling procedure, a legal rule, a load calculation, an emergency procedure, or a carrier service guarantee. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "refused-delivery.delivery-that-recipient-declines-to-accept.n",
+      "text": "refused delivery",
+      "display_text": "refused delivery",
+      "pos": "noun",
+      "definition": "A delivery that the intended recipient declines to accept.",
+      "example": "The refused delivery is awaiting the next authorized action.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "refused delivery"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A respectful delivery conversation followed by a fictional refusal status record.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "refused-delivery.delivery-that-recipient-declines-to-accept.n.analysis.v1",
+        "lexeme_id": "refused-delivery.delivery-that-recipient-declines-to-accept.n",
+        "text": "refused delivery",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.refused",
+            "type": "stem",
+            "canonical": "refused",
+            "surface": "refused"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.delivery",
+            "type": "stem",
+            "canonical": "delivery",
+            "surface": "delivery"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "refused delivery",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-usps-redelivery",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-support",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Transport & Delivery communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not driver training, a handling procedure, a legal rule, a load calculation, an emergency procedure, or a carrier service guarantee. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "redelivery.another-delivery-attempt-after-earlier-attempt.n",
+      "text": "redelivery",
+      "display_text": "redelivery",
+      "pos": "noun",
+      "definition": "Another attempt to deliver an item after an earlier attempt.",
+      "example": "The recipient has asked about redelivery options.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "redelivery"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional failed-attempt record connected to a later proposed delivery appointment.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "redelivery.another-delivery-attempt-after-earlier-attempt.n.analysis.v1",
+        "lexeme_id": "redelivery.another-delivery-attempt-after-earlier-attempt.n",
+        "text": "redelivery",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "affix.re.prefix",
+            "type": "prefix",
+            "canonical": "re",
+            "surface": "re"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.delivery",
+            "type": "stem",
+            "canonical": "delivery",
+            "surface": "delivery"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "redelivery",
+            "rule": "prefix_attachment"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-usps-redelivery",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-support",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Transport & Delivery communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not driver training, a handling procedure, a legal rule, a load calculation, an emergency procedure, or a carrier service guarantee. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "delivery-notice.message-recording-delivery-attempt-or-next-step.n",
+      "text": "delivery notice",
+      "display_text": "delivery notice",
+      "pos": "noun",
+      "definition": "A message that records a delivery attempt or explains an available next step.",
+      "example": "The delivery notice includes the service contact details.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "delivery notice"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional delivery notice with invented references and no real recipient data.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "delivery-notice.message-recording-delivery-attempt-or-next-step.n.analysis.v1",
+        "lexeme_id": "delivery-notice.message-recording-delivery-attempt-or-next-step.n",
+        "text": "delivery notice",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.delivery",
+            "type": "stem",
+            "canonical": "delivery",
+            "surface": "delivery"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.notice",
+            "type": "stem",
+            "canonical": "notice",
+            "surface": "notice"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "delivery notice",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-usps-redelivery",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-support",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Transport & Delivery communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not driver training, a handling procedure, a legal rule, a load calculation, an emergency procedure, or a carrier service guarantee. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "delivery-photograph.image-recording-delivery-event.n",
+      "text": "delivery photograph",
+      "display_text": "delivery photograph",
+      "pos": "noun",
+      "definition": "A photograph recorded as part of a delivery event under the relevant service's arrangements.",
+      "example": "The delivery photograph is available in the approved system.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "delivery photograph"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional delivery record containing a parcel photograph, with no faces, private home details, or claim that the photo proves identity or acceptance.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "delivery-photograph.image-recording-delivery-event.n.analysis.v1",
+        "lexeme_id": "delivery-photograph.image-recording-delivery-event.n",
+        "text": "delivery photograph",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.delivery",
+            "type": "stem",
+            "canonical": "delivery",
+            "surface": "delivery"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.photograph",
+            "type": "stem",
+            "canonical": "photograph",
+            "surface": "photograph"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "delivery photograph",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-usps-redelivery",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-support",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Transport & Delivery communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not driver training, a handling procedure, a legal rule, a load calculation, an emergency procedure, or a carrier service guarantee. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "contactless-delivery.delivery-arrangement-without-close-personal-contact.n",
+      "text": "contactless delivery",
+      "display_text": "contactless delivery",
+      "pos": "noun",
+      "definition": "A delivery arrangement designed to avoid close personal contact during handover.",
+      "example": "The customer asked which contactless delivery options are available.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "contactless delivery"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clearly agreed delivery handover with physical distance and no assumption that signatures or authorization are waived.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "contactless-delivery.delivery-arrangement-without-close-personal-contact.n.analysis.v1",
+        "lexeme_id": "contactless-delivery.delivery-arrangement-without-close-personal-contact.n",
+        "text": "contactless delivery",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.contactless",
+            "type": "stem",
+            "canonical": "contactless",
+            "surface": "contactless"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.delivery",
+            "type": "stem",
+            "canonical": "delivery",
+            "surface": "delivery"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "contactless delivery",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-usps-redelivery",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-support",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Transport & Delivery communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not driver training, a handling procedure, a legal rule, a load calculation, an emergency procedure, or a carrier service guarantee. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    }
+  ]
+}

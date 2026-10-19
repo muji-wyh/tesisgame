@@ -1,0 +1,121 @@
+{
+  "schema": 1,
+  "status": "source_accepted_pending_actual_binding_and_root_guard_validation",
+  "reviewer": "/root/morph_review",
+  "roles": {
+    "preparation_author": "/root/recover_delivery",
+    "inherited_preparation_author": "/root/runtime_recovery",
+    "dispatcher": "/root",
+    "independent_reviewer": "/root/morph_review"
+  },
+  "source_inventory": {
+    "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/source-inventory.json",
+    "bytes": 3279,
+    "raw_sha256": "2f4033d3edfeb6eacc78657e9c215ef8718bd3ceb275c94f4c6168e68d2c6ee3"
+  },
+  "binding_source_sha256": "022fc186186ade95d6d58908932db5520652f39a1417255c3c5080a4e4841f1b",
+  "source_only_inspection_completed": true,
+  "source_design_accepted": true,
+  "actual_binding": null,
+  "preparation_execution_accepted": false,
+  "projected_afterimages_accepted": false,
+  "findings": [],
+  "resolved_prior_findings": [
+    {
+      "id": "F01",
+      "status": "resolved_in_reviewed_source_actual_persisted_binding_pending",
+      "lines": [96, 104, 115, 120, 123],
+      "assessment": "The explicit fourth-ten branch uses the genuine nested result and accepted fixed receipt hashes. The bag branch uses its genuine top-level state, plan, prepared and complete target manifest, and rejects an invented nested result. The observed actual bag receipt has exactly this schema. Persisted source/input hashes, actual args-based commands, audit/tests and null postcheck_error match the raw root wrapper schema. A future actual persisted input and success receipt still require independent binding review; none is accepted by this source review."
+    },
+    {
+      "id": "F02",
+      "status": "resolved_in_reviewed_source_guard_execution_pending",
+      "lines": [40, 174, 189, 190, 191],
+      "assessment": "The reviewer must be a nonempty, unpadded canonical /root/<agent_name> identity, distinct from recover_delivery, inherited runtime_recovery and root dispatcher. Root input and binding fix those author/dispatcher roles. Acceptance reviewer and all roles must exactly match binding, and complete binding/inventory pins must match the root input. Missing, empty, padded, author-self, inherited-author, dispatcher and role-mismatch guard cases are specified but remain unexecuted."
+    },
+    {
+      "id": "F03",
+      "status": "resolved_in_reviewed_source_actual_binding_pending",
+      "lines": [60, 69, 79, 83, 85, 90, 125, 126, 135, 144],
+      "assessment": "Mandatory checks link selected committed-state and prepared raw hashes to each commit, committed-state prepared identity to the same journal, and the independently serialized prepared plan to both prepared and commit identities. Full plan/prepared/state manifests agree, with the bag receipt manifest checked explicitly. Durable state/prepared copies require byte-equal originals and exact explicit copy mappings. Complete installed bag pins must equal the authoritative manifest, including paths, byte lengths and afterimage hashes, and all current bytes are rehashed. Persisted input must name the exact original committed state and selected commit and include every committed target afterimage. Caller success_assertions supplement these mandatory checks."
+    }
+  ],
+  "preserved_content_and_transformations": {
+    "all_r03_inventory_members_verified": 17,
+    "r02_members_preserved_byte_exact": [
+      "accepted-contract.json",
+      "context-contract.json",
+      "donor-row-contract.json",
+      "projection.cjs",
+      "test-transforms.cjs",
+      "prepare.cjs",
+      "CALL-GRAPH.md",
+      "author-observations.json"
+    ],
+    "prior_source_members_rehashed": 13,
+    "prior_review_input_files_rehashed": 74,
+    "prior_rejection_and_inventory_copies_exact": true,
+    "accepted_entries": 8,
+    "consulted_only_sources": 16,
+    "whole_entry_holds": 6,
+    "full_donor_rows": 50,
+    "scope": "The r02 content/chronology/anchor assessment remains applicable to these exact preserved bytes. Four definitions, one example and five difficulty changes remain the accepted delta. The new binding owns the r03 directory; unchanged prepare and projection resolve output and accepted contracts through B.own. No transform was executed and no current test preimage was selected for preparation."
+  },
+  "actual_predecessor_observations": {
+    "fourth10": {
+      "committed_receipt": {
+        "path": "docs/content-review/foundation-module02-language-fourth10-2026-10-17/commit-receipt.json",
+        "raw_sha256": "96fff4c1ac94147e99efcb8f18ff07711a5c2e53729fa07695d7d2296ae037f8"
+      },
+      "persisted_receipt_sha256": "f25fbeb4fa8fafe08b0431653a5a9171d8369581aed104faad3e0161bbaf40f7",
+      "targets": 133,
+      "actual_ordered_linked_states": 268,
+      "prepared_sha256": "45cd8e892cc69577d5403aac5a5ffc1a34d7a7374e59a296440a573f52a8f1b8",
+      "plan_sha256": "e43a7c5c40facfefc4874669d85aa404cc0a47ea8979645306768dfff491eab1",
+      "committed_state_sha256": "93c800d4ed9c94c47932d0f2b807d4d13e4a0c1330bcc5ed1cf8882a235a48b1",
+      "current_fourth10_target_bytes_required_unchanged": false,
+      "path_requirement": "The persisted receipt names this durable commit path. Binding must select that exact path, not merely the byte-identical original build receipt. Historical fourth-ten current tests legitimately differ after bag integration."
+    },
+    "shopping_bag": {
+      "committed_receipt": {
+        "path": "build/professional-english/shopping-bag-root-commit-r01/execution-r01/receipt.json",
+        "raw_sha256": "b5b263fda99813d9c45564d5fdc35a8b437f5a3a91ec60b06eb1b00e45ddb681"
+      },
+      "targets": 153,
+      "all_current_target_bytes_matched": true,
+      "actual_ordered_linked_states": 308,
+      "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+      "plan_sha256": "28c763178d2247e7e1fdce7290fa11799d8cce05709d3da696e2f7aeec9dfeb6",
+      "committed_state_sha256": "6734fefae6c4989100f37ae06bf8c910ce3cb4eeacad69cd335eb626381e4150",
+      "persisted_source": {
+        "path": "build/professional-english/shopping-bag-persisted-validation-r01/invoke.cjs",
+        "raw_sha256": "c25cafb5332e391eeb76d59a51e5f317199504a2c112b7fdfca2e7a52435221f"
+      },
+      "actual_persisted_input_selected": false,
+      "actual_persisted_success_selected": false
+    },
+    "journal_review_boundary": "The independent raw JSON capture checked both complete actual hash-linked ordered state chains. The reviewed source gate itself rechecks receipt/prepared/plan/terminal-manifest linkage and latest-state identity; it does not independently replay every historical transition. Exact actual binding and any additional chain evidence remain root-owned follow-up work. No transaction helper or journal verifier was imported by this review."
+  },
+  "static_capture": {
+    "script": "capture.cjs",
+    "script_sha256": "c10039773736e354633dc23ef3fdb47edabcef126249d0d70435dd0c44db1e00",
+    "inspection": "capture-attempt-r01/inspection.json",
+    "inspection_sha256": "ed2345aaf00d7d7692c8d4df1290f11068ec5ba7a3b244b821c05a79f9bef0a4",
+    "inputs": "capture-attempt-r01/inputs.json",
+    "inputs_sha256": "17aea2abfd392b52eef106a038de11768000effa80f4c0e153323ebc81f17448",
+    "comparisons_passed": 2686,
+    "comparisons_failed": 0,
+    "measured_inputs": 838,
+    "all_measured_inputs_rehashed_unchanged": true,
+    "literal_source_contracts": 31,
+    "guard_cases_specified_not_executed": 29,
+    "replay_allowed": false
+  },
+  "limitations": [
+    "This is source-design acceptance only. The actual post-bag persisted baseline, exact complete input/retained/absence/target sets, actual projected counts and current source anchors still require independent review in a separate binding acceptance.",
+    "No reviewed source/project module was imported, and no syntax check, guard case, preparation, transformation, validator, test callback, native process, browser, build or transaction was dispatched. The only executed capture was independent built-in raw-file/JSON/hash/literal inspection.",
+    "The twenty-nine guard cases remain authored specifications. Root must preserve applicable positive and negative gate evidence before the one-shot preparation, without editing frozen sources, historical receipts or consumed attempts.",
+    "No new language, morphology, media, expression, specialist, participant, ready-module or release acceptance is provided. All previous failed attempts and snapshots remain unchanged."
+  ],
+  "required_next_step": "After actual bag persisted success, root may capture a separate complete actual binding for independent review. Only a subsequent exact source-and-binding acceptance may set preparation_execution_accepted true. Preserve this source-only review and consumed capture unchanged."
+}

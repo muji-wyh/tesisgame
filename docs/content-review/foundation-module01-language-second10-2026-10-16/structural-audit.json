@@ -1,0 +1,63 @@
+{
+  "schema": 1,
+  "status": "author_structural_and_preservation_checks_passed_not_independent_acceptance",
+  "date": "2026-10-16",
+  "production_mutated": false,
+  "shared_tests_mutated": false,
+  "native_runtime_executed": false,
+  "selected_entries": 10,
+  "substantively_amended_candidates": 4,
+  "metadata_only_candidates": 6,
+  "proposed_definition_changes": 3,
+  "proposed_example_changes": 0,
+  "proposed_difficulty_changes": 2,
+  "difficulty_proposals": {
+    "trainee": "B2",
+    "appointment": "B1"
+  },
+  "explicit_difficulty_holds": {
+    "contact": {
+      "observed": "B1+",
+      "stored_unaccepted": "A2"
+    },
+    "shift": {
+      "observed": [
+        "B1",
+        "B2"
+      ],
+      "stored_unaccepted": "A2"
+    }
+  },
+  "coordinator_spelling_hold": "Observed co-ordinator not added to preserved accepted_forms",
+  "all_language_gates_pending": true,
+  "all_other_gates_exact": true,
+  "source_consultations": 13,
+  "failed_accesses_excluded": 4,
+  "additive_source_records": 13,
+  "all20course_second10_identical": true,
+  "selected_memberships": 200,
+  "protected_unique_entries": 163,
+  "protected_expressions": 118,
+  "scoped_expression_uses": 114,
+  "scoped_expression_memberships": 266,
+  "selected_focus_expressions": 6,
+  "unresolved_contact_routes": 2,
+  "unresolved_supplier_scope_contexts": 2,
+  "physical_contact_exclusions": 3,
+  "financial_schedule_expression_exclusions": 1,
+  "meeting_point_exclusions": 1,
+  "hearing_link_binding_holds": 1,
+  "protected_modules": 108,
+  "protected_existing_sources": 133,
+  "protected_growth_files": 10,
+  "candidate_schema_errors": 0,
+  "scope_guards_passed": 1893,
+  "scoped_production_records_unchanged": true,
+  "global_registry_changed_during_preparation": false,
+  "global_registry_hashes_informational": true,
+  "preimages_json_sha256": "374e9b75aa44fca2b1b6f5f2d64ecb523f49c36d1b345c8576548e435507a324",
+  "source_ledger_json_sha256": "e9f97e97014ffc915d8a9d37030d8911e7ce72d729bca154848acc7e925e40ee",
+  "expression_review_json_sha256": "6612249e4f0bdb113d1ac4a850184319475040ad8410d8c1a0d1c12e652504f0",
+  "language_ledger_json_sha256": "459a4f18ee76f142e1191d3c39df6bdf81344f6cef701d8121107c6b0bd52fa8",
+  "prepare_script_raw_sha256": "5c00e396117d8ef73d6800a3793eeb093345f005de5a13e16f526ff8647de32c"
+}

@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "status": "raw_json_static_observations_only_not_project_validation",
+  "observed_at": "2026-10-16T22:05:47.8390896Z",
+  "candidate_observations": [
+    {
+      "lexeme_id": "ensure.make-certain.v",
+      "analysis_id": "ensure.make-certain.v.analysis.proposal.morphology.v1",
+      "kind": "morphological",
+      "parts": 2,
+      "nodes": 1,
+      "pending": true,
+      "reviewer_unset": true,
+      "date_unset": true,
+      "ordered_surface_text": "ensure",
+      "ordered_surface_exact": true,
+      "root_surface_exact": true,
+      "no_authored_breaks": true,
+      "candidate_canonical_ids": [
+        "english.affix.en.causative",
+        "english.stem.sure.certain"
+      ]
+    },
+    {
+      "lexeme_id": "inform.give-information.v",
+      "analysis_id": "inform.give-information.v.analysis.proposal.morphology.v1",
+      "kind": "atomic",
+      "parts": 1,
+      "nodes": 0,
+      "pending": true,
+      "reviewer_unset": true,
+      "date_unset": true,
+      "ordered_surface_text": "inform",
+      "ordered_surface_exact": true,
+      "root_surface_exact": true,
+      "no_authored_breaks": true,
+      "candidate_canonical_ids": [
+        "english.atomic.inform.give-information"
+      ]
+    },
+    {
+      "lexeme_id": "collect.gather.v",
+      "analysis_id": "collect.gather.v.analysis.proposal.morphology.v1",
+      "kind": "atomic",
+      "parts": 1,
+      "nodes": 0,
+      "pending": true,
+      "reviewer_unset": true,
+      "date_unset": true,
+      "ordered_surface_text": "collect",
+      "ordered_surface_exact": true,
+      "root_surface_exact": true,
+      "no_authored_breaks": true,
+      "candidate_canonical_ids": [
+        "english.atomic.collect.gather"
+      ]
+    }
+  ],
+  "measured_inputs": 184,
+  "input_drift": [],
+  "protected_additional_context_count": 4,
+  "pending_status_preserved": true,
+  "immutable_corpus_is_live_baseline": false,
+  "project_imports": false,
+  "schema_validator_executed": false,
+  "tests_dispatched": false,
+  "native_runs": false,
+  "production_changed": false,
+  "shared_tests_changed": false,
+  "clinical_context_changed": false,
+  "save_or_wallet_access": false,
+  "final_binding": "UNBOUND"
+}

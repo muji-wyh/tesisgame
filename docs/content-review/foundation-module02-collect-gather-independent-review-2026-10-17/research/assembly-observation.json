@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "status": "proposal_artifacts_assembled_only",
+  "source_file": "author-proposal.cjs",
+  "lexeme_before_json_sha256": "177f9fc35b0d348ddcc3cdf60c43dd5119d145acfe781d17c2b988e1b6d77981",
+  "lexeme_after_json_sha256": "7e192777256f224040f45d70c4421e1eb2dc15234b82f712a1af1e585d48f004",
+  "expression_before_json_sha256": "f3cc73cccd14dbbe07ccf7c14632119e81107907529721fb626c8c914eb5e6d3",
+  "expression_after_json_sha256": "df463c8f619cda04d38d32014f640e6cc721f7d7b24e1ab2fac4dc76b9775d54",
+  "current_target_and_expression_still_match_preimages": true,
+  "source_additions_proposed": 2,
+  "token_count": 18,
+  "memberships_preserved": 20,
+  "expression_memberships_preserved": 20,
+  "whole_entry_hold_released": false,
+  "independent_acceptance": false,
+  "production_writes": [],
+  "project_serializer_test_native_browser_dispatches": []
+}

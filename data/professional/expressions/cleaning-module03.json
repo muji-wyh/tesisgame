@@ -1,0 +1,1597 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.cleaning_facilities.module03.01",
+      "text": "The broom and dustpan belong on the equipment rack, but the sponge is missing.",
+      "meaning": "Identify ordinary tools and their recorded storage place.",
+      "context": "Checking a fictional equipment list.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "broom",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 10,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "dustpan",
+          "start": 14,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "belong",
+          "start": 22,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "on",
+          "start": 29,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "equipment",
+          "start": 36,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "rack",
+          "start": 46,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 50,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "but",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 12,
+          "text": "sponge",
+          "start": 60,
+          "end": 66
+        },
+        {
+          "index": 13,
+          "text": "is",
+          "start": 67,
+          "end": 69
+        },
+        {
+          "index": 14,
+          "text": "missing",
+          "start": 70,
+          "end": 77
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 77,
+          "end": 78
+        }
+      ],
+      "focus_lexeme_ids": [
+        "broom.long-handled-tool-for-sweeping.n",
+        "dustpan.shallow-pan-for-collecting-swept-material.n",
+        "sponge.porous-absorbent-material-or-cleaning-item.n",
+        "equipment-rack.framework-for-organizing-equipment.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-onet-janitors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module03.02",
+      "text": "Could you identify the squeegee, duster, and scrubbing brush on this supply list?",
+      "meaning": "Clarify the names of different cleaning tools.",
+      "context": "Reviewing a supply request.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Could",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "you",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "identify",
+          "start": 10,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "squeegee",
+          "start": 23,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 31,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "duster",
+          "start": 33,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 39,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 9,
+          "text": "scrubbing",
+          "start": 45,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "brush",
+          "start": 55,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": "on",
+          "start": 61,
+          "end": 63
+        },
+        {
+          "index": 12,
+          "text": "this",
+          "start": 64,
+          "end": 68
+        },
+        {
+          "index": 13,
+          "text": "supply",
+          "start": 69,
+          "end": 75
+        },
+        {
+          "index": 14,
+          "text": "list",
+          "start": 76,
+          "end": 80
+        },
+        {
+          "index": 15,
+          "text": "?",
+          "start": 80,
+          "end": 81
+        }
+      ],
+      "focus_lexeme_ids": [
+        "squeegee.tool-with-blade-for-removing-liquid-from-surface.n",
+        "duster.tool-or-cloth-for-removing-dust.n",
+        "scrubbing-brush.stiff-bristled-brush-for-cleaning.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-onet-janitors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module03.03",
+      "text": "The mop and bucket are recorded separately from the wringer and replacement mop head.",
+      "meaning": "Distinguish a complete tool, container, mechanism, and component.",
+      "context": "Checking equipment records.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "mop",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 8,
+          "end": 11
+        },
+        {
+          "index": 3,
+          "text": "bucket",
+          "start": 12,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "are",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 5,
+          "text": "recorded",
+          "start": 23,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "separately",
+          "start": 32,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "from",
+          "start": 43,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "wringer",
+          "start": 52,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "replacement",
+          "start": 64,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": "mop",
+          "start": 76,
+          "end": 79
+        },
+        {
+          "index": 13,
+          "text": "head",
+          "start": 80,
+          "end": 84
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 84,
+          "end": 85
+        }
+      ],
+      "focus_lexeme_ids": [
+        "mop.floor-tool.n",
+        "bucket.open-topped-container-with-carrying-handle.n",
+        "wringer.device-for-squeezing-liquid-from-fabric-or-mop.n",
+        "mop-head.working-absorbent-part-of-mop.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-onet-janitors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module03.04",
+      "text": "The laundry basket is in the laundry room, and the linen cart has a separate storage bay.",
+      "meaning": "Locate containers used for laundry work.",
+      "context": "Discussing supply locations.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "laundry",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "basket",
+          "start": 12,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "is",
+          "start": 19,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "in",
+          "start": 22,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 25,
+          "end": 28
+        },
+        {
+          "index": 6,
+          "text": "laundry",
+          "start": 29,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": "room",
+          "start": 37,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 41,
+          "end": 42
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 43,
+          "end": 46
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 11,
+          "text": "linen",
+          "start": 51,
+          "end": 56
+        },
+        {
+          "index": 12,
+          "text": "cart",
+          "start": 57,
+          "end": 61
+        },
+        {
+          "index": 13,
+          "text": "has",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 14,
+          "text": "a",
+          "start": 66,
+          "end": 67
+        },
+        {
+          "index": 15,
+          "text": "separate",
+          "start": 68,
+          "end": 76
+        },
+        {
+          "index": 16,
+          "text": "storage",
+          "start": 77,
+          "end": 84
+        },
+        {
+          "index": 17,
+          "text": "bay",
+          "start": 85,
+          "end": 88
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 88,
+          "end": 89
+        }
+      ],
+      "focus_lexeme_ids": [
+        "laundry-basket.clothes-collection-container.n",
+        "laundry-room.room-with-laundry-work-facilities.n",
+        "linen-cart.wheeled-cart-for-transporting-linen.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-onet-janitors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module03.05",
+      "text": "Please confirm access to the corridor, stairwell, and entrance before the service appointment.",
+      "meaning": "Clarify access arrangements for shared building spaces.",
+      "context": "Planning a service visit.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "confirm",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "access",
+          "start": 15,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "to",
+          "start": 22,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 25,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "corridor",
+          "start": 29,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 37,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "stairwell",
+          "start": 39,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 48,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "entrance",
+          "start": 54,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "before",
+          "start": 63,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 13,
+          "text": "service",
+          "start": 74,
+          "end": 81
+        },
+        {
+          "index": 14,
+          "text": "appointment",
+          "start": 82,
+          "end": 93
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 93,
+          "end": 94
+        }
+      ],
+      "focus_lexeme_ids": [
+        "corridor.passage-connecting-rooms-or-building-areas.n",
+        "stairwell.space-containing-building-stairs.n",
+        "entrance.way-in.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-onet-janitors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module03.06",
+      "text": "The restroom and changing room are occupied, so the team needs a revised service window.",
+      "meaning": "Explain why access arrangements need review.",
+      "context": "Coordinating room access.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "restroom",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "changing",
+          "start": 17,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "room",
+          "start": 26,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "are",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "occupied",
+          "start": 35,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 43,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "so",
+          "start": 45,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "team",
+          "start": 52,
+          "end": 56
+        },
+        {
+          "index": 11,
+          "text": "needs",
+          "start": 57,
+          "end": 62
+        },
+        {
+          "index": 12,
+          "text": "a",
+          "start": 63,
+          "end": 64
+        },
+        {
+          "index": 13,
+          "text": "revised",
+          "start": 65,
+          "end": 72
+        },
+        {
+          "index": 14,
+          "text": "service",
+          "start": 73,
+          "end": 80
+        },
+        {
+          "index": 15,
+          "text": "window",
+          "start": 81,
+          "end": 87
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 87,
+          "end": 88
+        }
+      ],
+      "focus_lexeme_ids": [
+        "restroom.room-containing-toilet-and-washing-facilities.n",
+        "changing-room.room-for-changing-clothes.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-onet-janitors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module03.07",
+      "text": "The floor scrubber and floor polisher are unavailable; the vacuum cleaner is waiting for inspection.",
+      "meaning": "Distinguish three types of cleaning equipment.",
+      "context": "Reviewing equipment availability.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "floor",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "scrubber",
+          "start": 10,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "floor",
+          "start": 23,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "polisher",
+          "start": 29,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "are",
+          "start": 38,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "unavailable",
+          "start": 42,
+          "end": 53
+        },
+        {
+          "index": 8,
+          "text": ";",
+          "start": 53,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 55,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "vacuum",
+          "start": 59,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": "cleaner",
+          "start": 66,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": "is",
+          "start": 74,
+          "end": 76
+        },
+        {
+          "index": 13,
+          "text": "waiting",
+          "start": 77,
+          "end": 84
+        },
+        {
+          "index": 14,
+          "text": "for",
+          "start": 85,
+          "end": 88
+        },
+        {
+          "index": 15,
+          "text": "inspection",
+          "start": 89,
+          "end": 99
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 99,
+          "end": 100
+        }
+      ],
+      "focus_lexeme_ids": [
+        "floor-scrubber.machine-for-scrubbing-floors.n",
+        "floor-polisher.machine-for-polishing-floor-surfaces.n",
+        "vacuum-cleaner.suction-cleaning-appliance.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-onet-janitors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module03.08",
+      "text": "The spray bottle label is damaged, and the soap dispenser and paper towel dispenser need attention.",
+      "meaning": "Report equipment and label concerns without selecting a remedy.",
+      "context": "Passing on observed issues.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "spray",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "bottle",
+          "start": 10,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "label",
+          "start": 17,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "is",
+          "start": 23,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "damaged",
+          "start": 26,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 33,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 35,
+          "end": 38
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 39,
+          "end": 42
+        },
+        {
+          "index": 9,
+          "text": "soap",
+          "start": 43,
+          "end": 47
+        },
+        {
+          "index": 10,
+          "text": "dispenser",
+          "start": 48,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 12,
+          "text": "paper",
+          "start": 62,
+          "end": 67
+        },
+        {
+          "index": 13,
+          "text": "towel",
+          "start": 68,
+          "end": 73
+        },
+        {
+          "index": 14,
+          "text": "dispenser",
+          "start": 74,
+          "end": 83
+        },
+        {
+          "index": 15,
+          "text": "need",
+          "start": 84,
+          "end": 88
+        },
+        {
+          "index": 16,
+          "text": "attention",
+          "start": 89,
+          "end": 98
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 98,
+          "end": 99
+        }
+      ],
+      "focus_lexeme_ids": [
+        "spray-bottle.bottle-dispensing-liquid-as-spray.n",
+        "soap-dispenser.device-releasing-portions-of-soap.n",
+        "paper-towel-dispenser.device-holding-and-presenting-paper-towels.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-onet-janitors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module03.09",
+      "text": "The hose, stepladder, and extension lead require the relevant authorization before any planned use.",
+      "meaning": "Discuss scope and authorization for equipment.",
+      "context": "Clarifying a work assignment.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "hose",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": ",",
+          "start": 8,
+          "end": 9
+        },
+        {
+          "index": 3,
+          "text": "stepladder",
+          "start": 10,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 20,
+          "end": 21
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 22,
+          "end": 25
+        },
+        {
+          "index": 6,
+          "text": "extension",
+          "start": 26,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "lead",
+          "start": 36,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": "require",
+          "start": 41,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 10,
+          "text": "relevant",
+          "start": 53,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": "authorization",
+          "start": 62,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": "before",
+          "start": 76,
+          "end": 82
+        },
+        {
+          "index": 13,
+          "text": "any",
+          "start": 83,
+          "end": 86
+        },
+        {
+          "index": 14,
+          "text": "planned",
+          "start": 87,
+          "end": 94
+        },
+        {
+          "index": 15,
+          "text": "use",
+          "start": 95,
+          "end": 98
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 98,
+          "end": 99
+        }
+      ],
+      "focus_lexeme_ids": [
+        "hose.flexible-tube-carrying-fluid.n",
+        "stepladder.self-supporting-ladder-with-hinged-sides.n",
+        "extension-lead.electrical-cable-extending-reach.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-onet-janitors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module03.10",
+      "text": "The barrier and warning sign are listed in the work area plan, alongside the service lift arrangements.",
+      "meaning": "Identify access-related resources in a plan.",
+      "context": "Reviewing site arrangements.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "barrier",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 12,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "warning",
+          "start": 16,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "sign",
+          "start": 24,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "are",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "listed",
+          "start": 33,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "in",
+          "start": 40,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 43,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "work",
+          "start": 47,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "area",
+          "start": 52,
+          "end": 56
+        },
+        {
+          "index": 11,
+          "text": "plan",
+          "start": 57,
+          "end": 61
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 61,
+          "end": 62
+        },
+        {
+          "index": 13,
+          "text": "alongside",
+          "start": 63,
+          "end": 72
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 73,
+          "end": 76
+        },
+        {
+          "index": 15,
+          "text": "service",
+          "start": 77,
+          "end": 84
+        },
+        {
+          "index": 16,
+          "text": "lift",
+          "start": 85,
+          "end": 89
+        },
+        {
+          "index": 17,
+          "text": "arrangements",
+          "start": 90,
+          "end": 102
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 102,
+          "end": 103
+        }
+      ],
+      "focus_lexeme_ids": [
+        "barrier.physical-obstacle-controlling-access-or-separating-areas.n",
+        "warning-sign.sign-drawing-attention-to-hazard-or-condition.n",
+        "work-area.space-assigned-to-particular-work.n",
+        "service-lift.lift-used-for-building-service-transport.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-onet-janitors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "status": "frozen_independent_reviewer_projection_pending_delivery",
+  "artifacts": [
+    {
+      "path": "capture-review.cjs",
+      "bytes": 11959,
+      "raw_sha256": "15b900e93beddea17ec0be622e9cc6e581fa1c72e27ca42c8f406f6c00503501"
+    },
+    {
+      "path": "review.json",
+      "bytes": 11062,
+      "raw_sha256": "40c8fc463662a6b242c18dcf2bc15fc8d1112c12b002b065ed07048d5bbfc1d8"
+    },
+    {
+      "path": "accepted-lexical-fields.json",
+      "bytes": 384,
+      "raw_sha256": "cff01586a76f824f0ce455c1a4a4883ff38ceacf0b3a4b6ec17a6d907d26f2c2"
+    },
+    {
+      "path": "accepted-expression-fields.json",
+      "bytes": 2579,
+      "raw_sha256": "a1ecc58cf5be02675f1a7951588df1fe6142798b9db19621d6764937a733e1f4"
+    },
+    {
+      "path": "input-measurement.json",
+      "bytes": 133328,
+      "raw_sha256": "b2adfbd0960762839948d67f2c2da192c63013616d9cfaee7bf4f50caccd82f4"
+    }
+  ],
+  "self_excluded": true
+}

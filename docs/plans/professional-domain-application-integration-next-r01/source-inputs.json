@@ -1,0 +1,422 @@
+{
+  "schema_version": 1,
+  "kind": "static_proposal_reference_inventory",
+  "created_at": "2026-10-16T18:31:10.8877170Z",
+  "workspace": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame",
+  "status": "static_read_only_reference_capture",
+  "source_files": [
+    {
+      "path": "build/professional-english/retail-module03-morphology-review/domain-policy-compiled-release-r02/tools/audit.cjs",
+      "bytes": 20217,
+      "sha256": "5f644934a8d36774ac9f7b6372e5dca770c83a82f8ee07aeb74d0b0272b20374"
+    },
+    {
+      "path": "build/professional-english/retail-module03-morphology-review/domain-policy-compiled-release-r02/tools/compiler.cjs",
+      "bytes": 5449,
+      "sha256": "7ef08750485d70c5e6c5d1999a873785569ca32156fdb87193262acf5c0aab22"
+    },
+    {
+      "path": "build/professional-english/retail-module03-morphology-review/domain-policy-compiled-release-r02/tools/contract.cjs",
+      "bytes": 2885,
+      "sha256": "f06668c864707212b839d94220b21222aef93e8c469d5b444e76baf4f348a01c"
+    },
+    {
+      "path": "build/professional-english/retail-module03-morphology-review/domain-policy-compiled-release-r02/tools/release-gates.cjs",
+      "bytes": 3965,
+      "sha256": "54f86d8909a5e60c13cce2213d9c2d0c2b4a7401ccad14460f72963b25e8882c"
+    },
+    {
+      "path": "build/professional-english/retail-module03-morphology-review/domain-policy-compiled-release-r02/tools/snapshot.cjs",
+      "bytes": 5107,
+      "sha256": "584c01b3bd39e9ca351d12def05a154b25205dcdd9672d8cc2f8b14af8f76621"
+    },
+    {
+      "path": "build/professional-english/retail-module03-morphology-review/domain-policy-production-integration-r01/LATER-GATES.md",
+      "bytes": 10675,
+      "sha256": "bc1207a5b4b7adc3675880492983b9ffa70b4704d8b776f55a1621871371fb2c"
+    },
+    {
+      "path": "build/professional-english/runtime-continuation-2026-10-17-r01/attempts/attempt-002/project/candidate_owner.gd",
+      "bytes": 16162,
+      "sha256": "5ca565b95bad3702c4592acb0b6c34a3c786abd1bba20b66bd1951e5f0a93a50"
+    },
+    {
+      "path": "build/professional-english/runtime-continuation-2026-10-17-r01/attempts/attempt-002/project/fixture_catalog.gd",
+      "bytes": 1239,
+      "sha256": "8c9ff2d6104d61cba3f97e3ebbe9a478d798d1a5047167fc7e3dac4b98585ad8"
+    },
+    {
+      "path": "build/professional-english/runtime-continuation-2026-10-17-r01/README.md",
+      "bytes": 6483,
+      "sha256": "868d96801526ee830931916bc0f61820c9940db5ccead73b2fdd0f19f353369c"
+    },
+    {
+      "path": "build/professional-english/runtime-continuation-2026-10-17-r02/README.md",
+      "bytes": 6115,
+      "sha256": "4f7ac6a3dd5b6510410e7e404c173bd502d6f25774cfac46c1b4d65653f354ae"
+    },
+    {
+      "path": "data/professional/catalog.json",
+      "bytes": 33329,
+      "sha256": "ff39f26ad1a6868dcb6ce96e6f2c007f0c9dcbe2eafee906c8ee9360af99e544"
+    },
+    {
+      "path": "data/professional/courses/accounting_finance.json",
+      "bytes": 47335,
+      "sha256": "fe76b0cd1c49ae318591fcbe9ce41281f1397bc0551a6bd323dd5e7c76b5379d"
+    },
+    {
+      "path": "data/professional/courses/caregiving.json",
+      "bytes": 37152,
+      "sha256": "df3cac47b0b0167fd539e64675528a8f17a210a6863f16e2e3307ccd0a760c18"
+    },
+    {
+      "path": "data/professional/courses/cleaning_facilities.json",
+      "bytes": 46123,
+      "sha256": "092c5e21555e2f5062c6b012de2f5a3b7c7505553033336e01bdec50cee46034"
+    },
+    {
+      "path": "data/professional/courses/clinical_medicine.json",
+      "bytes": 41705,
+      "sha256": "ce4f29e27391cda08bb3b7ab36f4c0624fbf421459d64782c5dda5a31759fe4c"
+    },
+    {
+      "path": "data/professional/courses/construction_trades.json",
+      "bytes": 44282,
+      "sha256": "b49ebf7090f641bd9d6528df4ca18d9372452d13d285d73782fd487b64f83291"
+    },
+    {
+      "path": "data/professional/courses/customer_support.json",
+      "bytes": 39761,
+      "sha256": "9dfe879d18ff6e77f780a56d4aa5af8ff213e262e973196b3e6db967ccb06cb7"
+    },
+    {
+      "path": "data/professional/courses/education_childcare.json",
+      "bytes": 44728,
+      "sha256": "b82356a3acd11d197d9743b84e2f16df09cb994db3062722332895fda45f494b"
+    },
+    {
+      "path": "data/professional/courses/food_service.json",
+      "bytes": 35078,
+      "sha256": "e2f44772648f061d706913a9dc097f2f5575155f31f63ddc580edb52deb9aaf8"
+    },
+    {
+      "path": "data/professional/courses/hospitality_tourism.json",
+      "bytes": 42934,
+      "sha256": "9cad8ff14fc30d7f93ea7815954e437d140570e9e6ce8ed754052e3089a1c873"
+    },
+    {
+      "path": "data/professional/courses/hr_recruitment.json",
+      "bytes": 45787,
+      "sha256": "454b8f5a2396367fa001be0bbca61b1fd24d5f2ca1b0eaedc6e5db2830288d35"
+    },
+    {
+      "path": "data/professional/courses/it_support.json",
+      "bytes": 42350,
+      "sha256": "0e76705b1698a01c14834114ccd629f24b65de36603b5030f462d6d673987eb7"
+    },
+    {
+      "path": "data/professional/courses/legal_paralegal.json",
+      "bytes": 49295,
+      "sha256": "9e981d2b04559c340a51bbc35314a8500acc8f97f92a664d63e9f82b8e7c010b"
+    },
+    {
+      "path": "data/professional/courses/manufacturing_maintenance.json",
+      "bytes": 49134,
+      "sha256": "4e2a3f89219d8a882ca5c4abfcce7286b67024c0ebdb6c2ce928e2491b4d7f6d"
+    },
+    {
+      "path": "data/professional/courses/nursing.json",
+      "bytes": 34930,
+      "sha256": "6198c2f5bddf30a96754e3272ad8512573ae6981e77a8c34a69ab2bcf21d3af3"
+    },
+    {
+      "path": "data/professional/courses/office_admin.json",
+      "bytes": 40237,
+      "sha256": "d13c4a75f4824d767f8c40fa59d71154cb8bc950e6f74b526afc511d9b744d49"
+    },
+    {
+      "path": "data/professional/courses/retail.json",
+      "bytes": 31222,
+      "sha256": "7124ef1d09da0c47f1d5fb2945bfebbe49e5f180f5fbdcd66fe73991ea7d4c61"
+    },
+    {
+      "path": "data/professional/courses/sales_marketing.json",
+      "bytes": 46192,
+      "sha256": "57fc012d0fe5b3f88c1d90695841b3647a0a90676378beb2cd2915189c502f7e"
+    },
+    {
+      "path": "data/professional/courses/software_data.json",
+      "bytes": 33982,
+      "sha256": "54156b9ac460f600cbb6f9645bab75d0488913ac4e4c772645a3679cf25beda0"
+    },
+    {
+      "path": "data/professional/courses/transport_delivery.json",
+      "bytes": 43037,
+      "sha256": "ed60050415a70a3efdd6b7df4112e92819d9b994cdca25257804c1ad5a878926"
+    },
+    {
+      "path": "data/professional/courses/warehouse_logistics.json",
+      "bytes": 41108,
+      "sha256": "dbf5c7eaa4fe2c5f4f91bd96955b418ed96fb96a6ae3a0c7f52fba2760372428"
+    },
+    {
+      "path": "export_presets.cfg",
+      "bytes": 2367,
+      "sha256": "503cee1412047d04e39c08851e8ade519393489ea72749967aec3b3db2c82461"
+    },
+    {
+      "path": "scripts/game_library.gd",
+      "bytes": 36259,
+      "sha256": "f0c08cb22e61c2df4cb9bd77bf4984a603672f51c882eb2758173eeff3636c8d"
+    },
+    {
+      "path": "scripts/game_ui.gd",
+      "bytes": 228843,
+      "sha256": "d35434106c012299a17076ae96d59cba2cb325dec43f7abbaf14825d3874e3c1"
+    },
+    {
+      "path": "scripts/learning_content_resolver.gd",
+      "bytes": 17119,
+      "sha256": "d491e2641ee37c201cdb7f132cb472e6f4f18fa31a367bd5d9aa75d0aacedad3"
+    },
+    {
+      "path": "scripts/learning_context.gd",
+      "bytes": 2446,
+      "sha256": "f7099fa50517a593b2adc95a52566905b3b27b0dde010ed4c834ab96ff3497e5"
+    },
+    {
+      "path": "scripts/learning_path_selector.gd",
+      "bytes": 20855,
+      "sha256": "930145d368aca58bfd73d076d44047d51f37c06f13758d7a4a38f4a8b7eaf141"
+    },
+    {
+      "path": "scripts/learning_theme_motion.gd",
+      "bytes": 2700,
+      "sha256": "8509e2445381d990cbda4281f9e0b13049d6b58b1f4b07380b704e726f6eb80d"
+    },
+    {
+      "path": "scripts/professional_catalog.gd",
+      "bytes": 7177,
+      "sha256": "89865c3e86d2140d6b495461632a4a16ecf6eb1bd03e0d2ce4902cce33eeb15e"
+    },
+    {
+      "path": "scripts/professional_media_access.gd",
+      "bytes": 3639,
+      "sha256": "ad4350579562aec2d49c72c0ccfd72c54df162992fe8e30604504b52aef30025"
+    },
+    {
+      "path": "scripts/professional_media_loader.gd",
+      "bytes": 7369,
+      "sha256": "d9d348d665b443300009f7490dbcb613a73eff58f9e91d6e70e364c9c76e7390"
+    },
+    {
+      "path": "scripts/professional_media_manifest.gd",
+      "bytes": 14605,
+      "sha256": "a6b41f99f97c2b537837ebf457d04e7f9189bf82325ff258747d4e1db7943a1c"
+    },
+    {
+      "path": "scripts/professional_play.gd",
+      "bytes": 7234,
+      "sha256": "348431e211ca691aa873e201d8a5688e3e8f1cc63bc2fda6b8851b3c41a22db0"
+    },
+    {
+      "path": "scripts/professional_round_loader.gd",
+      "bytes": 2882,
+      "sha256": "527a87862bf27dd731f68800c756502543f8899528e8cee1cf96a0b3fa4d27ed"
+    },
+    {
+      "path": "scripts/professional_session.gd",
+      "bytes": 13663,
+      "sha256": "a6d5115d6e65a74c97cd129be4a3613358295566ac2065d046ac440560be8616"
+    },
+    {
+      "path": "tests/godot/professional_application_flow_tests.gd",
+      "bytes": 12586,
+      "sha256": "f3d08d9cf2ffc5c8b2f3b55abedada7b5fa5a831cb3bd51728e209788184709a"
+    },
+    {
+      "path": "tests/godot/professional_play_tests.gd",
+      "bytes": 13576,
+      "sha256": "c6fea401bb2eea0e0399aec939ec5e84f0c31e308a5bdc4554dc25acecb9c7f6"
+    },
+    {
+      "path": "tests/godot/professional_round_loader_tests.gd",
+      "bytes": 7386,
+      "sha256": "c44a68982bd35ecb36c8a4a8fbdd6a11db2ea298222b95310d47b5b8ef3799d3"
+    },
+    {
+      "path": "tests/godot/professional_view_teardown_tests.gd",
+      "bytes": 3312,
+      "sha256": "8bbb0d26a15e2c0e4226f4f779597540d0e868afe0bbd3846313645ebeb6d05a"
+    },
+    {
+      "path": "tests/godot/verify_web_pack.gd",
+      "bytes": 31232,
+      "sha256": "08310c66ef2888f3914a15c9f8298243499402cd80241da49815d7775bd82e62"
+    },
+    {
+      "path": "tools/build-web.cjs",
+      "bytes": 4179,
+      "sha256": "16d9b267d76ed319bfae8164d2b3a26d13696f042edd44ffaf8256fb76d1f766"
+    },
+    {
+      "path": "tools/web-build-receipt.cjs",
+      "bytes": 11554,
+      "sha256": "e563403dd81314a31a4b72a18a326952b99a15b752cdcbc7b82037c9b6f7c6ad"
+    }
+  ],
+  "source_file_count": 52,
+  "observed_absences": [
+    "data/professional/domain-policy",
+    "tools/professional-domain",
+    "scripts/professional_domain_owner.gd",
+    "scripts/professional_domain_catalog.gd",
+    "scripts/professional_domain_release.gd"
+  ],
+  "course_metadata_observation": [
+    {
+      "path": "data/professional/courses/accounting_finance.json",
+      "id": "accounting_finance",
+      "modules": 10,
+      "ready": 0,
+      "draft": 10
+    },
+    {
+      "path": "data/professional/courses/caregiving.json",
+      "id": "caregiving",
+      "modules": 10,
+      "ready": 0,
+      "draft": 10
+    },
+    {
+      "path": "data/professional/courses/cleaning_facilities.json",
+      "id": "cleaning_facilities",
+      "modules": 10,
+      "ready": 0,
+      "draft": 10
+    },
+    {
+      "path": "data/professional/courses/clinical_medicine.json",
+      "id": "clinical_medicine",
+      "modules": 10,
+      "ready": 0,
+      "draft": 10
+    },
+    {
+      "path": "data/professional/courses/construction_trades.json",
+      "id": "construction_trades",
+      "modules": 10,
+      "ready": 0,
+      "draft": 10
+    },
+    {
+      "path": "data/professional/courses/customer_support.json",
+      "id": "customer_support",
+      "modules": 10,
+      "ready": 0,
+      "draft": 10
+    },
+    {
+      "path": "data/professional/courses/education_childcare.json",
+      "id": "education_childcare",
+      "modules": 10,
+      "ready": 0,
+      "draft": 10
+    },
+    {
+      "path": "data/professional/courses/food_service.json",
+      "id": "food_service",
+      "modules": 10,
+      "ready": 0,
+      "draft": 10
+    },
+    {
+      "path": "data/professional/courses/hospitality_tourism.json",
+      "id": "hospitality_tourism",
+      "modules": 10,
+      "ready": 0,
+      "draft": 10
+    },
+    {
+      "path": "data/professional/courses/hr_recruitment.json",
+      "id": "hr_recruitment",
+      "modules": 10,
+      "ready": 0,
+      "draft": 10
+    },
+    {
+      "path": "data/professional/courses/it_support.json",
+      "id": "it_support",
+      "modules": 10,
+      "ready": 0,
+      "draft": 10
+    },
+    {
+      "path": "data/professional/courses/legal_paralegal.json",
+      "id": "legal_paralegal",
+      "modules": 10,
+      "ready": 0,
+      "draft": 10
+    },
+    {
+      "path": "data/professional/courses/manufacturing_maintenance.json",
+      "id": "manufacturing_maintenance",
+      "modules": 10,
+      "ready": 0,
+      "draft": 10
+    },
+    {
+      "path": "data/professional/courses/nursing.json",
+      "id": "nursing",
+      "modules": 10,
+      "ready": 0,
+      "draft": 10
+    },
+    {
+      "path": "data/professional/courses/office_admin.json",
+      "id": "office_admin",
+      "modules": 10,
+      "ready": 0,
+      "draft": 10
+    },
+    {
+      "path": "data/professional/courses/retail.json",
+      "id": "retail",
+      "modules": 10,
+      "ready": 0,
+      "draft": 10
+    },
+    {
+      "path": "data/professional/courses/sales_marketing.json",
+      "id": "sales_marketing",
+      "modules": 10,
+      "ready": 0,
+      "draft": 10
+    },
+    {
+      "path": "data/professional/courses/software_data.json",
+      "id": "software_data",
+      "modules": 10,
+      "ready": 0,
+      "draft": 10
+    },
+    {
+      "path": "data/professional/courses/transport_delivery.json",
+      "id": "transport_delivery",
+      "modules": 10,
+      "ready": 0,
+      "draft": 10
+    },
+    {
+      "path": "data/professional/courses/warehouse_logistics.json",
+      "id": "warehouse_logistics",
+      "modules": 10,
+      "ready": 0,
+      "draft": 10
+    }
+  ],
+  "complete_source_audit": false,
+  "test_execution": false,
+  "production_changes": false
+}

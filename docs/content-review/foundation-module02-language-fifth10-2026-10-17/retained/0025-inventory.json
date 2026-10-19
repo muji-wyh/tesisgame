@@ -1,0 +1,58 @@
+{
+  "schema": 1,
+  "status": "frozen_unexecuted_preparation_outline_final_baseline_unbound",
+  "files": [
+    {
+      "path": "BASELINE-REQUIREMENTS.md",
+      "bytes": 6928,
+      "raw_sha256": "5f40fe7a9051db62de6f4af7b71796f64334473c1ce810a5d8b21ceaceccea76"
+    },
+    {
+      "path": "CALL-GRAPH.md",
+      "bytes": 4384,
+      "raw_sha256": "73ad93b4732e58dae8926546c880f8f7e9b17444856978dfd20ba987b33a3197"
+    },
+    {
+      "path": "README.md",
+      "bytes": 3421,
+      "raw_sha256": "eaeef80d9ead0b78641a9646ef84300c95788a8f573dc1030a3a7a3a8046d150"
+    },
+    {
+      "path": "accepted-contract.json",
+      "bytes": 414984,
+      "raw_sha256": "e930b6e65c44daa4ab27b44523241edc41e10942d92b25f2254f47073acd2235"
+    },
+    {
+      "path": "actual-baseline-binding.template.json",
+      "bytes": 973,
+      "raw_sha256": "ae81d41faddb1d19f8f411b2f3e9fcc9e7957568e7ed15ffcdd6b065c41a627a"
+    },
+    {
+      "path": "donor-row-contract.json",
+      "bytes": 224067,
+      "raw_sha256": "119814498724b14dd5d272a005ecdcc19f646651d321dd78dcafef0fe1c3d638"
+    },
+    {
+      "path": "input-observations.json",
+      "bytes": 34597,
+      "raw_sha256": "d7070bc679d38df172f7c47937d9c91d17b62c67e60f599f03057328fc9d59ad"
+    },
+    {
+      "path": "prepare-outline.cjs",
+      "bytes": 5663,
+      "raw_sha256": "9cbb12d1cd88ccfcac7b915608dfb75a0833369fb896479214fd7bfe19c4f942"
+    },
+    {
+      "path": "test-transform-outline.cjs",
+      "bytes": 6558,
+      "raw_sha256": "ee063c2fbc0a09a1f4d4b5e0cf90a33f24220ea4235ad8e20c8802039b3fe3e3"
+    }
+  ],
+  "immutable_input_files_observed": 92,
+  "baseline_bound": false,
+  "preparation_source_executed": false,
+  "transform_source_executed": false,
+  "project_or_test_or_syntax_or_native_executed": false,
+  "production_or_shared_tests_written": false,
+  "inventory_self_excluded": true
+}

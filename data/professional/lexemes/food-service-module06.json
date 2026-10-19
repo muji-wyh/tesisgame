@@ -1,0 +1,3147 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "guest.hospitality-customer.n",
+      "text": "guest",
+      "display_text": "guest",
+      "pos": "noun",
+      "definition": "A person welcomed as a customer or visitor in a hospitality setting.",
+      "example": "The guest asked about the menu.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "guest"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A welcoming restaurant interaction with an adult customer.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "guest.hospitality-customer.n.analysis.v1",
+        "lexeme_id": "guest.hospitality-customer.n",
+        "text": "guest",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.guest",
+            "type": "atomic",
+            "canonical": "guest",
+            "surface": "guest"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "reservation.advance-service-booking.n",
+      "text": "reservation",
+      "display_text": "reservation",
+      "pos": "noun",
+      "definition": "An arrangement made in advance to hold a table or other service.",
+      "example": "The host confirmed the reservation details.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "reservation"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional table-booking entry being checked with a guest.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "reservation.advance-service-booking.n.analysis.v1",
+        "lexeme_id": "reservation.advance-service-booking.n",
+        "text": "reservation",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.reserve",
+            "type": "stem",
+            "canonical": "reserve",
+            "surface": "reserv"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ation.suffix",
+            "type": "suffix",
+            "canonical": "ation",
+            "surface": "ation"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "reservation",
+            "rule": "drop_final_e_before_suffix"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "w3c-accessible-events",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "party-size.number-in-dining-group.n",
+      "text": "party size",
+      "display_text": "party size",
+      "pos": "noun",
+      "definition": "The number of people in a group arriving or booked to dine together.",
+      "example": "The host asked for the party size.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "party size"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A host confirming the number in a dining group.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "party-size.number-in-dining-group.n.analysis.v1",
+        "lexeme_id": "party-size.number-in-dining-group.n",
+        "text": "party size",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.party",
+            "type": "stem",
+            "canonical": "party",
+            "surface": "party"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.size",
+            "type": "stem",
+            "canonical": "size",
+            "surface": "size"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "party size",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "booking-reference.reservation-identifying-code.n",
+      "text": "booking reference",
+      "display_text": "booking reference",
+      "pos": "noun",
+      "definition": "A code or number used to identify a booking.",
+      "example": "The guest provided the booking reference.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "booking reference"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional reservation identifier with no real customer data.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "booking-reference.reservation-identifying-code.n.analysis.v1",
+        "lexeme_id": "booking-reference.reservation-identifying-code.n",
+        "text": "booking reference",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.book",
+            "type": "stem",
+            "canonical": "book",
+            "surface": "book"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.reference",
+            "type": "stem",
+            "canonical": "reference",
+            "surface": "reference"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "booking",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "booking reference",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "w3c-accessible-events",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "onet-shipping-receiving-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-usps-redelivery",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-ups-tracking-support",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "table-number.dining-table-identifier.n",
+      "text": "table number",
+      "display_text": "table number",
+      "pos": "noun",
+      "definition": "A number used to identify a table in a dining establishment.",
+      "example": "The server checked the table number on the order.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "table number"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A discreet table identifier beside a fictional order.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "table-number.dining-table-identifier.n.analysis.v1",
+        "lexeme_id": "table-number.dining-table-identifier.n",
+        "text": "table number",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.table",
+            "type": "stem",
+            "canonical": "table",
+            "surface": "table"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.number",
+            "type": "stem",
+            "canonical": "number",
+            "surface": "number"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "table number",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "seat.place-for-one-person-to-sit.n",
+      "text": "seat",
+      "display_text": "seat",
+      "pos": "noun",
+      "definition": "A place intended for one person to sit.",
+      "example": "The host asked which seat suited the guest.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "seat"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A welcoming dining place with a clear seat.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "seat.place-for-one-person-to-sit.n.analysis.v1",
+        "lexeme_id": "seat.place-for-one-person-to-sit.n",
+        "text": "seat",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.seat",
+            "type": "atomic",
+            "canonical": "seat",
+            "surface": "seat"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "table-setting.arranged-dining-place-items.n",
+      "text": "table setting",
+      "display_text": "table setting",
+      "pos": "noun",
+      "definition": "The arrangement of plates, cutlery, and related items at a dining place.",
+      "example": "The server checked the table setting.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "table setting"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clear dining place arrangement on a table.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "table-setting.arranged-dining-place-items.n.analysis.v1",
+        "lexeme_id": "table-setting.arranged-dining-place-items.n",
+        "text": "table setting",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.table",
+            "type": "stem",
+            "canonical": "table",
+            "surface": "table"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.set",
+            "type": "stem",
+            "canonical": "set",
+            "surface": "sett"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "setting",
+            "rule": "double_final_consonant_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "table setting",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "course.stage-of-a-meal.n",
+      "text": "course",
+      "display_text": "course",
+      "pos": "noun",
+      "definition": "A dish or group of dishes served as one stage of a meal.",
+      "example": "The guest asked which course would come next.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "course"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A menu showing separate meal stages.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "course.stage-of-a-meal.n.analysis.v1",
+        "lexeme_id": "course.stage-of-a-meal.n",
+        "text": "course",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.course",
+            "type": "atomic",
+            "canonical": "course",
+            "surface": "course"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "appetizer.small-dish-before-main-course.n",
+      "text": "appetizer",
+      "display_text": "appetizer",
+      "pos": "noun",
+      "definition": "A relatively small dish usually served before a main course.",
+      "example": "The guest asked about the appetizer.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "appetizer",
+        "appetiser",
+        "starter"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A small first-course dish with a menu label.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "main-course.principal-meal-course.n",
+      "text": "main course",
+      "display_text": "main course",
+      "pos": "noun",
+      "definition": "The principal dish or stage of a meal.",
+      "example": "The server confirmed the main course order.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "main course"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A principal meal dish with a clear menu label.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "main-course.principal-meal-course.n.analysis.v1",
+        "lexeme_id": "main-course.principal-meal-course.n",
+        "text": "main course",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.main",
+            "type": "stem",
+            "canonical": "main",
+            "surface": "main"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.course",
+            "type": "atomic",
+            "canonical": "course",
+            "surface": "course"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "main course",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "dessert.sweet-meal-course.n",
+      "text": "dessert",
+      "display_text": "dessert",
+      "pos": "noun",
+      "definition": "A sweet dish commonly served at the end of a meal.",
+      "example": "The guest asked for the dessert menu.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "dessert"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A recognizable dessert displayed with its name.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "professional.dessert.sweet-meal-course.n.morphology.v1",
+        "lexeme_id": "dessert.sweet-meal-course.n",
+        "text": "dessert",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.dessert",
+            "canonical": "dessert",
+            "surface": "dessert",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Pending Professional English review. Explicit sense comparison: Both nouns name the sweet course served after a meal. The source whole-form meal-course identity matches exactly. Inherited Growth rationale: The after-meal food noun is one borrowed base, not a de reversal of a sert action. The Growth AI editorial status is not transferred. External sources listed here are inherited repository records, not newly consulted in this pass.",
+          "references": [
+            "https://openlibrary-repo.ecampusontario.ca/jspui/bitstream/123456789/497/6/Essentials-of-Linguistics-1539375829.html"
+          ],
+          "provenance": {
+            "corpus": "Growth",
+            "file": "data/vocabulary/morphology/age-08.json",
+            "entry_id": "dessert",
+            "analysis_id": "growth.dessert.analysis.v1",
+            "analysis_sha256": "f25b4497f0b2076ef8241716f6b777b98e2a0524c449d9bd9073e9e2c0e34ed4",
+            "source_review_status": "reviewed"
+          },
+          "source_consultation": "inherited_repository_record_not_newly_consulted_in_this_pass"
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "side-dish.dish-accompanying-main-dish.n",
+      "text": "side dish",
+      "display_text": "side dish",
+      "pos": "noun",
+      "definition": "A smaller dish served alongside a main dish.",
+      "example": "The guest asked which side dish was included.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "side dish"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A main dish with a separate smaller accompaniment.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "side-dish.dish-accompanying-main-dish.n.analysis.v1",
+        "lexeme_id": "side-dish.dish-accompanying-main-dish.n",
+        "text": "side dish",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.side",
+            "type": "stem",
+            "canonical": "side",
+            "surface": "side"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.dish",
+            "type": "stem",
+            "canonical": "dish",
+            "surface": "dish"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "side dish",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "special.featured-menu-item.n",
+      "text": "special",
+      "display_text": "special",
+      "pos": "noun",
+      "definition": "A food or drink item featured separately or for a limited period.",
+      "example": "The server checked whether the special was still available.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "special"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional daily-special menu card.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "special.featured-menu-item.n.analysis.v1",
+        "lexeme_id": "special.featured-menu-item.n",
+        "text": "special",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.special",
+            "type": "atomic",
+            "canonical": "special",
+            "surface": "special"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "set-menu.fixed-selection-meal-menu.n",
+      "text": "set menu",
+      "display_text": "set menu",
+      "pos": "noun",
+      "definition": "A menu offering a defined combination of dishes, often for one stated price.",
+      "example": "The guest asked what the set menu included.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "set menu"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional fixed-selection menu with clearly grouped courses.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "set-menu.fixed-selection-meal-menu.n.analysis.v1",
+        "lexeme_id": "set-menu.fixed-selection-meal-menu.n",
+        "text": "set menu",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.set",
+            "type": "stem",
+            "canonical": "set",
+            "surface": "set"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.menu",
+            "type": "stem",
+            "canonical": "menu",
+            "surface": "menu"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "set menu",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "a-la-carte.separately-selected-menu-items.a",
+      "text": "a la carte",
+      "display_text": "a la carte",
+      "pos": "adjective",
+      "definition": "Describing menu items chosen and usually priced separately.",
+      "example": "The host explained the a la carte options.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "a la carte",
+        "à la carte"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A menu with individually listed dishes and fictional prices.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "buffet.self-selection-food-service.n",
+      "text": "buffet",
+      "display_text": "buffet",
+      "pos": "noun",
+      "definition": "A service arrangement in which guests choose from food displayed in a shared serving area.",
+      "example": "The guest asked how the buffet service worked.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "buffet"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A welcoming buffet layout without food-handling instructions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "takeaway.food-for-eating-elsewhere.n",
+      "text": "takeaway",
+      "display_text": "takeaway",
+      "pos": "noun",
+      "definition": "Prepared food ordered to be eaten away from the place where it is supplied.",
+      "example": "The guest asked whether takeaway was available.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "takeaway",
+        "takeout"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clearly labeled takeout bag with closed food containers.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "takeaway.food-for-eating-elsewhere.n.analysis.v1",
+        "lexeme_id": "takeaway.food-for-eating-elsewhere.n",
+        "text": "takeaway",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.take",
+            "type": "stem",
+            "canonical": "take",
+            "surface": "take"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.away",
+            "type": "stem",
+            "canonical": "away",
+            "surface": "away"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "takeaway",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "dine-in.consumed-on-the-premises.a",
+      "text": "dine-in",
+      "display_text": "dine-in",
+      "pos": "adjective",
+      "definition": "Describing food or service intended to be enjoyed at the establishment.",
+      "example": "The worker confirmed that the order was dine-in.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "dine-in"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A guest seated at a restaurant table with a fictional order label.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "dine-in.consumed-on-the-premises.a.analysis.v1",
+        "lexeme_id": "dine-in.consumed-on-the-premises.a",
+        "text": "dine-in",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.dine",
+            "type": "stem",
+            "canonical": "dine",
+            "surface": "dine"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.in",
+            "type": "stem",
+            "canonical": "in",
+            "surface": "in"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "dine-in",
+            "rule": "hyphenated_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "delivery-order.order-to-be-brought-to-recipient.n",
+      "text": "delivery order",
+      "display_text": "delivery order",
+      "pos": "noun",
+      "definition": "An order intended to be taken to the customer at another location.",
+      "example": "The worker checked the delivery order details.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "delivery order"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A closed delivery bag beside a fictional order record.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "delivery-order.order-to-be-brought-to-recipient.n.analysis.v1",
+        "lexeme_id": "delivery-order.order-to-be-brought-to-recipient.n",
+        "text": "delivery order",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.delivery",
+            "type": "stem",
+            "canonical": "delivery",
+            "surface": "delivery"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.order",
+            "type": "stem",
+            "canonical": "order",
+            "surface": "order"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "delivery order",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "order.customer-food-request.n",
+      "text": "order",
+      "display_text": "order",
+      "pos": "noun",
+      "definition": "A customer's request for specified food or drinks.",
+      "example": "The server repeated the order for confirmation.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "order"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A server checking a fictional meal request with a guest.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "customization.requested-item-adjustment.n",
+      "text": "customization",
+      "display_text": "customization",
+      "pos": "noun",
+      "definition": "An adjustment requested to an item or service, subject to what can be provided.",
+      "example": "The worker checked whether the customization was possible.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "customization",
+        "customisation"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional order note being checked with the kitchen.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "customization.requested-item-adjustment.n.analysis.v1",
+        "lexeme_id": "customization.requested-item-adjustment.n",
+        "text": "customization",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.customize",
+            "type": "stem",
+            "canonical": "customize",
+            "surface": "customiz"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ation.suffix",
+            "type": "suffix",
+            "canonical": "ation",
+            "surface": "ation"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "customization",
+            "rule": "drop_final_e_before_suffix"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "substitution.replacement-of-one-item-with-another.n",
+      "text": "substitution",
+      "display_text": "substitution",
+      "pos": "noun",
+      "definition": "The use of one item in place of another.",
+      "example": "The server asked whether a substitution could be offered.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "substitution"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two labeled menu options being discussed without allergen guarantees.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "substitution.replacement-of-one-item-with-another.n.analysis.v1",
+        "lexeme_id": "substitution.replacement-of-one-item-with-another.n",
+        "text": "substitution",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.substitute",
+            "type": "stem",
+            "canonical": "substitute",
+            "surface": "substitut"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ion.suffix",
+            "type": "suffix",
+            "canonical": "ion",
+            "surface": "ion"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "substitution",
+            "rule": "drop_final_e_before_suffix"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "extra.additional-requested-item.n",
+      "text": "extra",
+      "display_text": "extra",
+      "pos": "noun",
+      "definition": "An additional item requested beyond what is normally included.",
+      "example": "The guest asked whether the extra had a separate price.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "extra"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A menu option showing an optional additional item.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "extra.additional-requested-item.n.analysis.v1",
+        "lexeme_id": "extra.additional-requested-item.n",
+        "text": "extra",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.extra",
+            "type": "atomic",
+            "canonical": "extra",
+            "surface": "extra"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "omission.leaving-out-an-item.n",
+      "text": "omission",
+      "display_text": "omission",
+      "pos": "noun",
+      "definition": "The act of leaving an item out.",
+      "example": "The server recorded the requested omission and checked it with the kitchen.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "omission"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional order note specifying an item to leave out.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-irs-recordkeeping",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-aasb-information-quality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "complaint.expression-of-dissatisfaction.n",
+      "text": "complaint",
+      "display_text": "complaint",
+      "pos": "noun",
+      "definition": "A statement that something is unsatisfactory or has gone wrong.",
+      "example": "The manager listened to the guest's complaint.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "complaint"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A calm service conversation with an attentive manager.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "hr-onet-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-ico-employment-index",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-ftc-advertising-basics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-asa-misleading-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "apology.expression-of-regret.n",
+      "text": "apology",
+      "display_text": "apology",
+      "pos": "noun",
+      "definition": "An expression of regret for an error, inconvenience, or harm.",
+      "example": "The server offered an apology for the delay.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "apology"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A respectful conversation acknowledging a service problem.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "bill.request-for-payment-detail.n",
+      "text": "bill",
+      "display_text": "bill",
+      "pos": "noun",
+      "definition": "A statement of charges requesting payment for goods or services.",
+      "example": "The guest asked for the bill.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "bill",
+        "check"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional itemized restaurant bill without real payment details.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "bill.request-for-payment-detail.n.analysis.v1",
+        "lexeme_id": "bill.request-for-payment-detail.n",
+        "text": "bill",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.bill",
+            "type": "atomic",
+            "canonical": "bill",
+            "surface": "bill"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "no-show.booked-person-not-arriving.n",
+      "text": "no-show",
+      "display_text": "no-show",
+      "pos": "noun",
+      "definition": "A person or booking that does not arrive as arranged, according to the establishment's definition.",
+      "example": "The host checked the record before marking a no-show.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "no-show"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional reservation status shown without penalty claims.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "no-show.booked-person-not-arriving.n.analysis.v1",
+        "lexeme_id": "no-show.booked-person-not-arriving.n",
+        "text": "no-show",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.no",
+            "type": "stem",
+            "canonical": "no",
+            "surface": "no"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.show",
+            "type": "stem",
+            "canonical": "show",
+            "surface": "show"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "no-show",
+            "rule": "hyphenated_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "walk-in.customer-without-advance-booking.n",
+      "text": "walk-in",
+      "display_text": "walk-in",
+      "pos": "noun",
+      "definition": "A customer who arrives without an advance booking.",
+      "example": "The host asked whether a table was available for the walk-in.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "walk-in"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A host welcoming an unbooked guest.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "walk-in.customer-without-advance-booking.n.analysis.v1",
+        "lexeme_id": "walk-in.customer-without-advance-booking.n",
+        "text": "walk-in",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.walk",
+            "type": "stem",
+            "canonical": "walk",
+            "surface": "walk"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.in",
+            "type": "stem",
+            "canonical": "in",
+            "surface": "in"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "walk-in",
+            "rule": "hyphenated_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "cover.one-diner-in-service-count.n",
+      "text": "cover",
+      "display_text": "cover",
+      "pos": "noun",
+      "definition": "One diner counted for service planning or reporting in restaurant usage.",
+      "example": "The manager explained what one cover meant in the report.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "cover"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional service-count report with a diner symbol.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "cover.one-diner-in-service-count.n.analysis.v1",
+        "lexeme_id": "cover.one-diner-in-service-count.n",
+        "text": "cover",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.cover",
+            "type": "atomic",
+            "canonical": "cover",
+            "surface": "cover"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    }
+  ]
+}

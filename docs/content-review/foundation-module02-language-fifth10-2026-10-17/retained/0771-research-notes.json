@@ -1,0 +1,483 @@
+{
+  "schema": 1,
+  "status": "draft_author_research_pending_independent_acceptance",
+  "author": "Codex recover_delivery research author; not an independent language approver",
+  "consulted_on": "2026-10-17",
+  "timezone": "Asia/Shanghai",
+  "method": "Original Oxford and Collins publisher pages freshly opened through the web connector. Oxford sense attributes were separately retrieved and hashed without retaining publisher bodies. Authored summaries, definitions and examples are distinct from literal level observations.",
+  "failed_accesses": [
+    {
+      "url": "https://dictionary.cambridge.org/dictionary/english/unsafe",
+      "result": "Web connector internal error; no usable selected-sense evidence.",
+      "http_status": null,
+      "raw_body_sha256": null,
+      "supports_proposal": false
+    },
+    {
+      "url": "https://dictionary.cambridge.org/dictionary/english/hazard",
+      "result": "Web connector internal error; no usable selected-sense evidence.",
+      "http_status": null,
+      "raw_body_sha256": null,
+      "supports_proposal": false
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/incident",
+      "result": "Initial web connector internal error. The corrected incident_1 URL was separately consulted successfully.",
+      "http_status": null,
+      "raw_body_sha256": null,
+      "supports_proposal": false
+    }
+  ],
+  "excluded_consultations": [
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/concern_1",
+      "result": "The opened page was the verb. It was excluded from noun support; concern_2 was subsequently consulted.",
+      "selected_sense_support": false,
+      "http_status": null,
+      "raw_body_sha256": null
+    }
+  ],
+  "global_limits": [
+    "Evidence only. No production content, review gate, reference, note, expression, source registry or runtime is changed.",
+    "All proposals require a separate independent decision. No human, specialist, expression, morphology, media, module or release acceptance is claimed.",
+    "Difficulty is an editorial teaching proposal. Literal Oxford cefr and fkcefr attributes, missing labels, Collins B1+ values and disagreements remain explicit.",
+    "Whole-entry hazard, collect, notify, postpone and verify holds remain exact. All 17 inherited expression holds and every containing Foundation02 expression remain exact.",
+    "Source consultation is not an asset license or acquisition. No publisher definitions, examples, exercises, illustrations, audio or page bodies are imported.",
+    "Third10 and fourth10 proposals remain unintegrated. Complete retains its existing pending, unapproved form-image brief mismatch."
+  ],
+  "entries": [
+    {
+      "term": "broken",
+      "id": "broken.not-working.adj",
+      "disposition": "proposed",
+      "proposed_fields": {
+        "definition": "Damaged or unable to work as intended.",
+        "example": "The handle on this case is broken.",
+        "difficulty": "A2"
+      },
+      "selected_sense": "The adjective for a damaged or nonfunctioning object, illustrated by a case handle.",
+      "language_rationale": "Retain the original concise definition and concrete handle example. They fit the selected object sense without importing promise, relationship or emotional meanings.",
+      "difficulty_rationale": "Retain editorial A2 on Oxford selected adjective sense 1 cefr a2. Collins A2 belongs to its past-participle cross-reference, not to a separately graded adjective; the relevant British adjective senses show no level.",
+      "hold_reason": null,
+      "excluded_scope": "Broken promises, relationships, interrupted sleep or lines, limited language proficiency and a demoralized person are separate. Break as a verb and its other inflections are not accepted through this adjective.",
+      "context_boundary": "Foundation02.06 retains report/fault/replace and its exact pending expression. Broken seals, glass and a broken link are distinct context uses; this research creates no bindings or content approval for them.",
+      "proposed_note": "Retain the original object adjective and editorial A2. No expression, morphology or asset gate is accepted.",
+      "sources": [
+        {
+          "kind": "oxford",
+          "suffix": "broken_1",
+          "sense_ids": [
+            "broken_sng_1"
+          ],
+          "selected_section": "Adjective sense 1, rendered lines 108-125",
+          "rendered_selected_level": "A2",
+          "rendered_label_scope": "Health problems topic attached to selected sense 1",
+          "summary": "The selected adjective describes a damaged object or one unable to function.",
+          "regional_register": "No selected regional restriction or explicit register label observed.",
+          "other_sense_boundary": "The page separately lists promises and relationships, interruption, uneven lines, language and emotional senses."
+        },
+        {
+          "kind": "collins",
+          "suffix": "broken",
+          "sense_ids": [],
+          "selected_section": "British dictionary adjective sense 2, lines 289-293, and sense 7, lines 321-324",
+          "rendered_selected_level": null,
+          "rendered_label_scope": null,
+          "other_observed_labels": [
+            {
+              "literal": "A2",
+              "scope": "COBUILD past-participle cross-reference, lines 222-224; not selected adjective level evidence"
+            }
+          ],
+          "summary": "The relevant British adjective senses cover objects divided by breakage and objects that do not work.",
+          "regional_register": "British dictionary section; no selected usage restriction observed.",
+          "other_sense_boundary": "The COBUILD A2 label is attached to the participle cross-reference. Other adjective meanings are outside the selected object sense."
+        }
+      ]
+    },
+    {
+      "term": "urgent",
+      "id": "urgent.needing-prompt-attention.adj",
+      "disposition": "proposed",
+      "proposed_fields": {
+        "definition": "Needing attention or action without delay.",
+        "example": "This message is urgent because the delivery leaves shortly.",
+        "difficulty": "B2"
+      },
+      "selected_sense": "A matter needing prompt attention or action, in an ordinary delivery-message context.",
+      "language_rationale": "The original revision replaces very soon with without delay to express the selected need for prompt action. Retain the original delivery-message example.",
+      "difficulty_rationale": "Propose editorial B2 from Oxford selected sense 1 cefr b2. Collins labels its selected sense B1+ literally. The difference remains explicit; this is not a consensus claim or a conversion of B1+.",
+      "hold_reason": null,
+      "excluded_scope": "An insistent voice or expression is a separate sense. Clinical urgency, triage thresholds and response-time duties are not established by this ordinary message example.",
+      "context_boundary": "Foundation02.05 remains exact and pending with concern, solution and unintegrated resolve. Caregiving07.04 concerns urgent medical assessment; lexical consultation does not approve that clinical claim or bind this lexeme there.",
+      "proposed_note": "Proposed original wording and editorial B2 for prompt attention. Collins B1+ is preserved as a distinct observed label.",
+      "sources": [
+        {
+          "kind": "oxford",
+          "suffix": "urgent",
+          "sense_ids": [
+            "urgent_sng_1"
+          ],
+          "selected_section": "Adjective sense 1, rendered lines 105-118",
+          "rendered_selected_level": null,
+          "rendered_label_scope": null,
+          "summary": "The selected adjective concerns something requiring immediate attention or action.",
+          "regional_register": "No selected regional restriction or explicit register label observed.",
+          "other_sense_boundary": "Voice or manner expressing strong insistence is a separate sense. Unrelated Word of the Day/footer B2 is not selected-sense evidence."
+        },
+        {
+          "kind": "collins",
+          "suffix": "urgent",
+          "sense_ids": [],
+          "selected_section": "COBUILD adjective sense 1, rendered lines 222-230",
+          "rendered_selected_level": "B1+",
+          "rendered_label_scope": "Selected needing-prompt-action sense",
+          "summary": "The selected use calls for immediate dealing with a matter.",
+          "regional_register": "No selected regional restriction or explicit register label observed.",
+          "other_sense_boundary": "A voice or manner communicating urgency is distinct from a matter that needs attention."
+        }
+      ]
+    },
+    {
+      "term": "unclear",
+      "id": "unclear.not-understandable.adj",
+      "disposition": "proposed",
+      "proposed_fields": {
+        "definition": "Difficult to understand or not stated precisely.",
+        "example": "The instructions are unclear about the start time.",
+        "difficulty": "B1"
+      },
+      "selected_sense": "Wording or information that is not expressed clearly enough to understand precisely.",
+      "language_rationale": "Retain the original wording and start-time example. They describe unclear information rather than declaring that a person lacks understanding.",
+      "difficulty_rationale": "Propose editorial B1 on Oxford selected sense 1 cefr b1 and its selected B1 topic. Collins COBUILD unknown-or-uncertain sense 1 is B2 and its broader British ambiguous/not-definite definition is ungraded. Their scopes and labels are not collapsed.",
+      "hold_reason": null,
+      "excluded_scope": "A person unsure about something is a separate sense. Clear, clearly, clarify and clarification remain distinct forms and identities; no inference about morphology or language teaching is accepted.",
+      "context_boundary": "No selected focus expression currently binds this entry. OfficeAdmin05.07 is an inherited whole-expression hold; retail use-by-date and commercial-relationship contexts remain unscored and pending.",
+      "proposed_note": "Retain the original information adjective with editorial B1; preserve Collins B2 and the separate person-uncertainty sense.",
+      "sources": [
+        {
+          "kind": "oxford",
+          "suffix": "unclear",
+          "sense_ids": [
+            "unclear_sng_1"
+          ],
+          "selected_section": "Adjective sense 1, rendered lines 113-118",
+          "rendered_selected_level": "B1",
+          "rendered_label_scope": "Topic label attached to selected information/wording sense",
+          "summary": "The selected sense concerns something that is not clear or definite enough to understand.",
+          "regional_register": "No selected regional restriction or explicit register label observed.",
+          "other_sense_boundary": "A person who is uncertain or does not understand is a separate sense."
+        },
+        {
+          "kind": "collins",
+          "suffix": "unclear",
+          "sense_ids": [],
+          "selected_section": "COBUILD sense 1, lines 222-232; British dictionary definition, lines 276-280",
+          "rendered_selected_level": "B2",
+          "rendered_label_scope": "COBUILD unknown-or-uncertain situation sense 1, related but not an exact separate wording label",
+          "summary": "COBUILD discusses an unknown or uncertain situation. The British definition also supports an ambiguous or indefinite meaning without a separate level.",
+          "regional_register": "No selected regional restriction observed; the ungraded British section is kept distinct.",
+          "other_sense_boundary": "COBUILD person-not-understanding sense 2 is also B2 but is not the selected instruction wording."
+        }
+      ]
+    },
+    {
+      "term": "safe",
+      "id": "safe.free-from-unacceptable-danger.adj",
+      "disposition": "proposed",
+      "proposed_fields": {
+        "definition": "Unlikely to cause harm or put someone in danger.",
+        "example": "The team asked whether the route was safe to use.",
+        "difficulty": "A2"
+      },
+      "selected_sense": "A thing, route or activity unlikely to cause harm, as a question about using a route.",
+      "language_rationale": "The authored definition selects the route-not-causing-harm sense and removes the unestablished unacceptable-risk criterion and the separate protected-person sense. The original question example does not guarantee a route is safe.",
+      "difficulty_rationale": "Retain editorial A2 on Oxford selected sense 2 cefr a2 and Collins physical-danger sense 1 A2. The lexical label does not establish a professional safety threshold.",
+      "hold_reason": null,
+      "excluded_scope": "Protected or unharmed people, secure possessions, reliable predictions, lack of controversy and the safe container noun are distinct. This is not a risk-acceptance standard, route assessment or guarantee.",
+      "context_boundary": "Foundation02.09 remains exact with its domain gate pending. Hospitality room safe and accounting safe are container nouns, not instances of this adjective. Safely, safety and safeguards remain separate.",
+      "proposed_note": "Proposed original route/object adjective definition with editorial A2; all safety-domain judgments remain pending.",
+      "sources": [
+        {
+          "kind": "oxford",
+          "suffix": "safe_1",
+          "sense_ids": [
+            "safe_sng_2"
+          ],
+          "selected_section": "Adjective sense 2, rendered lines 146-161",
+          "rendered_selected_level": null,
+          "rendered_label_scope": null,
+          "summary": "Selected sense 2 concerns a thing or activity that does not put someone in danger or cause harm.",
+          "regional_register": "No selected regional restriction or explicit register label observed.",
+          "other_sense_boundary": "Protected-from-harm sense 1 and other adjective senses are separate; the container noun is not on the selected adjective scope."
+        },
+        {
+          "kind": "collins",
+          "suffix": "safe",
+          "sense_ids": [],
+          "selected_section": "COBUILD physical-danger adjective sense 1, rendered lines 224-234",
+          "rendered_selected_level": "A2",
+          "rendered_label_scope": "Selected thing/activity free-from-physical-danger sense",
+          "summary": "The selected adjective describes an activity or thing that does not expose people to physical harm.",
+          "regional_register": "No selected regional restriction or explicit register label observed.",
+          "other_sense_boundary": "Separate protected, unharmed, place and journey uses do not license a safety assessment; noun container uses remain distinct."
+        }
+      ]
+    },
+    {
+      "term": "unsafe",
+      "id": "unsafe.presenting-danger.adj",
+      "disposition": "proposed",
+      "proposed_fields": {
+        "definition": "Presenting a risk of harm in the situation.",
+        "example": "The worker reported an unsafe storage area.",
+        "difficulty": "B1"
+      },
+      "selected_sense": "A thing, place or activity that may cause harm, illustrated by a reported storage area.",
+      "language_rationale": "Retain the original definition and reported-area example. They fit the dangerous-place sense without approving an inspection or defining the conditions that make an area unsafe.",
+      "difficulty_rationale": "Propose B1 only as an editorial teaching judgment for the concrete dangerous-place adjective in a simple report. Oxford selected sense 1 has neither cefr nor fkcefr, and Collins displays no selected level. Cambridge was inaccessible. There is no observed publisher certification for B1; the independent reviewer may hold this proposal if a direct level source is required.",
+      "hold_reason": null,
+      "excluded_scope": "A person exposed to danger and the British legal meaning of an unsafe conviction are separate. No threshold, hazard evaluation, work instruction or morphology approval follows from the proposal.",
+      "context_boundary": "Foundation02.09 remains exact and domain pending with safe and procedure. This is the sole selected surface/focus expression. No additional scored binding is proposed.",
+      "proposed_note": "Retain the original dangerous-place wording and propose editorial B1 without a publisher-level claim. Domain review remains pending.",
+      "sources": [
+        {
+          "kind": "oxford",
+          "suffix": "unsafe",
+          "sense_ids": [
+            "unsafe_sng_1"
+          ],
+          "selected_section": "Adjective thing/place/activity sense 1, rendered lines 103-106",
+          "rendered_selected_level": null,
+          "rendered_label_scope": null,
+          "summary": "The selected sense concerns things, places or activities that may harm people.",
+          "regional_register": "No selected regional restriction or explicit register label observed.",
+          "other_sense_boundary": "People in danger and British legal unsafe convictions are separate. No selected cefr or fkcefr attribute was observed."
+        },
+        {
+          "kind": "collins",
+          "suffix": "unsafe",
+          "sense_ids": [],
+          "selected_section": "COBUILD adjective sense 1, rendered lines 222-230",
+          "rendered_selected_level": null,
+          "rendered_label_scope": null,
+          "summary": "The selected adjective covers a place, thing or activity likely to endanger someone.",
+          "regional_register": "No selected regional restriction or explicit register label observed.",
+          "other_sense_boundary": "Person-at-risk and legal conviction senses are separate; the selected dangerous-thing sense displays no level."
+        }
+      ]
+    },
+    {
+      "term": "hazard",
+      "id": "hazard.possible-harm.n",
+      "disposition": "hold",
+      "proposed_fields": null,
+      "selected_sense": "A dangerous thing or situation with potential to cause harm, currently illustrated by a trip hazard.",
+      "language_rationale": "The existing meaning and trip-hazard example have ordinary lexical support, but the entire entry remains on hold. No content or review field is projected for acceptance.",
+      "difficulty_rationale": "Oxford selected noun has no cefr attribute and literal fkcefr c1, with a rendered Danger C1 topic. Collins selected noun has no observed level. The current A2 draft is not accepted, and the C1 evidence is not clamped to B2 or treated as lower-level support.",
+      "hold_reason": "Whole-entry hold: the consulted selected-sense level evidence is C1, so there is no supported lower-level Foundation projection. The entire current A2 entry stays exact as an unapproved draft pending a separate decision on scope and level.",
+      "excluded_scope": "Hazard as a verb, hazard a guess, gambling or golf meanings, occupational classifications and actual risk controls are not accepted.",
+      "context_boundary": "Foundation02.10 remains exact, pending and unapproved with incident and report. All trip, slip, choking, electrical and pictogram compounds remain separate specialist contexts with no new bindings or procedures approved.",
+      "proposed_note": "Whole-entry hold; preserve the original entry unchanged. Record literal Oxford fkcefr c1 and C1 topic without lowering them.",
+      "sources": [
+        {
+          "kind": "oxford",
+          "suffix": "hazard_1",
+          "sense_ids": [
+            "hazard_sng_1"
+          ],
+          "selected_section": "Dangerous-thing noun, rendered lines 105-120",
+          "rendered_selected_level": "C1",
+          "rendered_label_scope": "Danger topic attached to selected noun",
+          "summary": "The selected noun denotes something dangerous that can cause injury or damage.",
+          "regional_register": "No selected regional restriction or explicit register label observed.",
+          "other_sense_boundary": "Verb and specialist compound meanings do not provide a lower level for this noun. Literal fkcefr c1 remains distinct from absent cefr."
+        },
+        {
+          "kind": "collins",
+          "suffix": "hazard",
+          "sense_ids": [],
+          "selected_section": "COBUILD noun sense 1, rendered lines 224-232",
+          "rendered_selected_level": null,
+          "rendered_label_scope": null,
+          "summary": "The selected noun covers a dangerous thing or situation with a risk of harm.",
+          "regional_register": "No selected regional restriction or explicit register label observed.",
+          "other_sense_boundary": "Verb, golf and chance-related meanings are separate. No selected level was observed."
+        }
+      ]
+    },
+    {
+      "term": "incident",
+      "id": "incident.workplace-event.n",
+      "disposition": "proposed",
+      "proposed_fields": {
+        "definition": "An event at work, especially one that is unusual or causes a problem.",
+        "example": "The supervisor recorded the incident after speaking with the team.",
+        "difficulty": "B2"
+      },
+      "selected_sense": "An individual event, narrowed by this lexeme to the workplace and often unusual or problematic.",
+      "language_rationale": "The authored definition removes the unsupported universal requirement for attention or recording. The original example reports a supervisor recording one event; it does not define a recording duty.",
+      "difficulty_rationale": "Propose editorial B2 on Oxford ordinary-event sense 1 cefr b2 and Collins selected noun B2. Collins formal register is preserved.",
+      "hold_reason": null,
+      "excluded_scope": "A violent event and a diplomatic clash are separately described senses. Incident forms, IT incident response and domain-specific reporting classifications or duties are not approved by the ordinary event meaning.",
+      "context_boundary": "Foundation02.10 remains exact with the hazard whole-entry hold and its domain gate pending. Eleven external incident uses include form compounds and IT/service response contexts; none gains a selected binding or reporting approval.",
+      "proposed_note": "Propose original workplace-event definition and editorial B2; retain the narrative recording example without creating a duty.",
+      "sources": [
+        {
+          "kind": "oxford",
+          "suffix": "incident_1",
+          "sense_ids": [
+            "incident_sng_1"
+          ],
+          "selected_section": "Ordinary-event noun sense 1, rendered lines 105-122",
+          "rendered_selected_level": null,
+          "rendered_label_scope": null,
+          "summary": "The selected noun identifies an event, commonly unusual, unpleasant or significant in a sequence.",
+          "regional_register": "No explicit register or regional label observed on selected sense 1.",
+          "other_sense_boundary": "Serious or violent events and diplomatic clashes are separate B2 senses; those meanings are not merged into this workplace definition."
+        },
+        {
+          "kind": "collins",
+          "suffix": "incident",
+          "sense_ids": [],
+          "selected_section": "COBUILD noun, rendered lines 224-237",
+          "rendered_selected_level": "B2",
+          "rendered_label_scope": "Selected event noun",
+          "summary": "The selected noun describes a particular event, commonly one that is unusual or unpleasant.",
+          "regional_register": "Formal is explicitly displayed for the selected use.",
+          "other_sense_boundary": "Particular event wording does not impose recording or escalation obligations."
+        }
+      ]
+    },
+    {
+      "term": "concern",
+      "id": "concern.worrying-matter.n",
+      "disposition": "proposed",
+      "proposed_fields": {
+        "definition": "A matter that worries someone.",
+        "example": "I have a concern about the delivery address.",
+        "difficulty": "B2"
+      },
+      "selected_sense": "A countable matter or situation that causes worry.",
+      "language_rationale": "The original revision removes the separate needs-attention/priority meaning and selects a worrying matter. Retain the original delivery-address example.",
+      "difficulty_rationale": "Propose editorial B2 on Collins exact countable worrying-fact/situation sense 3 B2. Oxford worry sense 1 cefr b2 is related noun evidence; its important-matter sense 3 is separate and is not silently substituted for the exact countable sense.",
+      "hold_reason": null,
+      "excluded_scope": "The verb meaning is about, concern for another person, a responsibility or priority, a company and going concern are separate. Safeguarding, security and clinical compounds need their own context decisions.",
+      "context_boundary": "Foundation02.05 remains exact and pending. Many surface concerns are verbs meaning is about; the other external uses span ordinary worries and specialist concerns. No selected noun binding, specialist meaning or reporting practice is added.",
+      "proposed_note": "Proposed original countable worrying-matter definition and editorial B2. Oxford related emotional noun evidence and Collins exact countable evidence remain distinguishable.",
+      "sources": [
+        {
+          "kind": "oxford",
+          "suffix": "concern_2",
+          "sense_ids": [
+            "concern_sng_6"
+          ],
+          "selected_section": "Related noun worry sense 1, rendered lines 108-138; separate important-matter sense 3",
+          "rendered_selected_level": null,
+          "rendered_label_scope": null,
+          "evidence_scope": "Related worry noun, not an exact independent label for the selected countable worrying fact",
+          "summary": "Noun sense 1 supports the state or feeling of worry. The selected countable worrying matter is evidenced more directly by Collins sense 3.",
+          "regional_register": "No selected regional restriction or explicit register label observed.",
+          "other_sense_boundary": "Oxford important-matter sense 3 concern_sng_8 is separately B2; care for someone, company and going concern remain distinct. The initial concern_1 verb page is excluded."
+        },
+        {
+          "kind": "collins",
+          "suffix": "concern",
+          "sense_ids": [],
+          "selected_section": "COBUILD countable noun sense 3, rendered lines 261-268",
+          "rendered_selected_level": "B2",
+          "rendered_label_scope": "Exact countable worrying fact or situation sense",
+          "summary": "The selected countable noun names a fact or situation that worries people.",
+          "regional_register": "No selected regional restriction or explicit register label observed.",
+          "other_sense_boundary": "Worry as an emotion, protective interest, responsibility and business meanings are separate; verb concerns does not bind this noun."
+        }
+      ]
+    },
+    {
+      "term": "solution",
+      "id": "solution.problem-answer.n",
+      "disposition": "proposed",
+      "proposed_fields": {
+        "definition": "A way to deal with a problem successfully.",
+        "example": "The team agreed on a practical solution.",
+        "difficulty": "A2"
+      },
+      "selected_sense": "A successful way of dealing with a problem.",
+      "language_rationale": "Retain the original definition and practical-team-response example. They select a response to a problem and avoid the chemical mixture sense.",
+      "difficulty_rationale": "Retain editorial A2 on Oxford selected problem-response sense 1 cefr a2. Collins selected sense 1 is B1+ literally. The different publisher labels remain explicit.",
+      "hold_reason": null,
+      "excluded_scope": "A puzzle or mathematical answer is separately listed, and a dissolved chemical mixture is a different sense. Solving derivatives and cleaning-solution compounds are not accepted through this entry.",
+      "context_boundary": "Foundation02.05 stays exact and pending. Retail08.01, FoodService08.05 and CleaningFacilities06.06 use cleaning solution in the mixture sense. EducationChildcare05.06 is a related problem-solving use but remains unscored for this selected entry.",
+      "proposed_note": "Retain original problem-response wording and editorial A2 while preserving Collins B1+. No chemical solution or expression gate is accepted.",
+      "sources": [
+        {
+          "kind": "oxford",
+          "suffix": "solution",
+          "sense_ids": [
+            "solution_sng_1"
+          ],
+          "selected_section": "Problem-response noun sense 1, rendered lines 105-124",
+          "rendered_selected_level": null,
+          "rendered_label_scope": null,
+          "summary": "The selected noun names a way to solve a problem or handle a difficult situation.",
+          "regional_register": "No selected regional restriction or explicit register label observed.",
+          "other_sense_boundary": "Puzzle answer sense 2 is A2; chemical mixture sense 3 is B2. Neither expands the selected problem-response scope."
+        },
+        {
+          "kind": "collins",
+          "suffix": "solution",
+          "sense_ids": [],
+          "selected_section": "COBUILD noun sense 1, rendered lines 224-231",
+          "rendered_selected_level": "B1+",
+          "rendered_label_scope": "Selected way-to-deal-with-a-problem sense",
+          "summary": "The selected noun refers to a way of dealing successfully with a problem.",
+          "regional_register": "No selected regional restriction or explicit register label observed.",
+          "other_sense_boundary": "Answers to puzzles and chemical mixtures are separate uses; B1+ is retained literally."
+        }
+      ]
+    },
+    {
+      "term": "procedure",
+      "id": "procedure.agreed-method.n",
+      "disposition": "proposed",
+      "proposed_fields": {
+        "definition": "An established way of carrying out an activity.",
+        "example": "We followed the procedure for requesting replacement equipment.",
+        "difficulty": "B2"
+      },
+      "selected_sense": "An established method for doing something, illustrated by requesting equipment.",
+      "language_rationale": "Retain the original definition. The authored example uses follow a procedure directly instead of making procedure mean a document that explains a method.",
+      "difficulty_rationale": "Propose editorial B2 on Oxford selected established-method sense 1 cefr b2 with its B2 Scientific research topic, and Collins general-method B2.",
+      "hold_reason": null,
+      "excluded_scope": "A formal law or business process, medical operation, computing procedure and particular occupational methods are not accepted as the same reviewed teaching scope.",
+      "context_boundary": "Foundation02.09 remains exact and domain pending. Isolation, lockout/tagout, housekeeping methods and treatment procedure remain specialist contexts. No actual method, safety arrangement or medical action is approved.",
+      "proposed_note": "Retain established-method definition, propose original follow-the-procedure example and editorial B2. Specialist methods and all domain gates remain pending.",
+      "sources": [
+        {
+          "kind": "oxford",
+          "suffix": "procedure",
+          "sense_ids": [
+            "procedure_sng_1"
+          ],
+          "selected_section": "Established-method noun sense 1, rendered lines 105-126",
+          "rendered_selected_level": "B2",
+          "rendered_label_scope": "Scientific research topic attached to selected method sense",
+          "summary": "The selected noun describes the usual or established way to carry out something.",
+          "regional_register": "No selected regional restriction or explicit register label observed.",
+          "other_sense_boundary": "Formal law/business process sense 2 has no selected level recorded here; medical operation sense 3 is B2 and remains separate."
+        },
+        {
+          "kind": "collins",
+          "suffix": "procedure",
+          "sense_ids": [],
+          "selected_section": "COBUILD general-method noun, rendered lines 224-235",
+          "rendered_selected_level": "B2",
+          "rendered_label_scope": "Selected method noun",
+          "summary": "The selected noun names a way of doing something, often an established method.",
+          "regional_register": "No selected regional restriction or explicit register label observed.",
+          "other_sense_boundary": "Medical and legal contexts in examples do not grant acceptance of those actions, methods or requirements."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+'use strict';
+const fs = require('node:fs');
+const path = require('node:path');
+const L = require('./verify.cjs');
+const verifier = 'build/professional-english/continuation-baseline-r32-composite-r02/verify.cjs';
+const builder = 'build/professional-english/continuation-baseline-r32-composite-r02/build-baseline.cjs';
+const result = L.verifyCurrent();
+const baseline = {...result.baseline, recorded_at: new Date().toISOString(), verifier: {path: verifier, raw_sha256: L.raw(verifier)}, builder: {path: builder, raw_sha256: L.raw(builder)}};
+fs.writeFileSync(path.join(L.root, L.baselineFile), JSON.stringify(baseline, null, 2) + '\n', {flag: 'wx'});
+const sha = L.raw(L.baselineFile);
+L.verifyBaseline(L.baselineFile, sha);
+console.log(JSON.stringify({path: L.baselineFile, sha256: sha, inputs: baseline.current_input_count, new_test_execution: false, full_combined_validation_of_current_state: false, registry: baseline.current_registry_sha256}));

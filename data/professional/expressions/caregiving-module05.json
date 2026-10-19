@@ -1,0 +1,1948 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.caregiving.module05.01",
+      "text": "How can I support you to wash, bathe, or dress while you choose what to do yourself?",
+      "meaning": "Ask how to support a person's chosen personal activities.",
+      "context": "A person directs the help they receive.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "How",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "can",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "I",
+          "start": 8,
+          "end": 9
+        },
+        {
+          "index": 3,
+          "text": "support",
+          "start": 10,
+          "end": 17
+        },
+        {
+          "index": 4,
+          "text": "you",
+          "start": 18,
+          "end": 21
+        },
+        {
+          "index": 5,
+          "text": "to",
+          "start": 22,
+          "end": 24
+        },
+        {
+          "index": 6,
+          "text": "wash",
+          "start": 25,
+          "end": 29
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 29,
+          "end": 30
+        },
+        {
+          "index": 8,
+          "text": "bathe",
+          "start": 31,
+          "end": 36
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 36,
+          "end": 37
+        },
+        {
+          "index": 10,
+          "text": "or",
+          "start": 38,
+          "end": 40
+        },
+        {
+          "index": 11,
+          "text": "dress",
+          "start": 41,
+          "end": 46
+        },
+        {
+          "index": 12,
+          "text": "while",
+          "start": 47,
+          "end": 52
+        },
+        {
+          "index": 13,
+          "text": "you",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 14,
+          "text": "choose",
+          "start": 57,
+          "end": 63
+        },
+        {
+          "index": 15,
+          "text": "what",
+          "start": 64,
+          "end": 68
+        },
+        {
+          "index": 16,
+          "text": "to",
+          "start": 69,
+          "end": 71
+        },
+        {
+          "index": 17,
+          "text": "do",
+          "start": 72,
+          "end": 74
+        },
+        {
+          "index": 18,
+          "text": "yourself",
+          "start": 75,
+          "end": 83
+        },
+        {
+          "index": 19,
+          "text": "?",
+          "start": 83,
+          "end": 84
+        }
+      ],
+      "focus_lexeme_ids": [
+        "support.help-person-manage.v",
+        "dress.put-clothes-on.v",
+        "choose.select-preferred-option.v",
+        "wash.clean-with-liquid.v",
+        "bathe.wash-body-in-bath-or-water.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-home-personal-care",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module05.02",
+      "text": "I will listen to understand how to comfort and encourage you, and we can pause whenever you want.",
+      "meaning": "Offer emotional support without pressure.",
+      "context": "A person can pause a conversation or activity.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "I",
+          "start": 0,
+          "end": 1
+        },
+        {
+          "index": 1,
+          "text": "will",
+          "start": 2,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "listen",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "to",
+          "start": 14,
+          "end": 16
+        },
+        {
+          "index": 4,
+          "text": "understand",
+          "start": 17,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "how",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "to",
+          "start": 32,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "comfort",
+          "start": 35,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 43,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "encourage",
+          "start": 47,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "you",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 60,
+          "end": 61
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 13,
+          "text": "we",
+          "start": 66,
+          "end": 68
+        },
+        {
+          "index": 14,
+          "text": "can",
+          "start": 69,
+          "end": 72
+        },
+        {
+          "index": 15,
+          "text": "pause",
+          "start": 73,
+          "end": 78
+        },
+        {
+          "index": 16,
+          "text": "whenever",
+          "start": 79,
+          "end": 87
+        },
+        {
+          "index": 17,
+          "text": "you",
+          "start": 88,
+          "end": 91
+        },
+        {
+          "index": 18,
+          "text": "want",
+          "start": 92,
+          "end": 96
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 96,
+          "end": 97
+        }
+      ],
+      "focus_lexeme_ids": [
+        "listen.attend-to-spoken-information.v",
+        "pause.stop-briefly.v",
+        "comfort.ease-distress.v",
+        "encourage.offer-support-for-chosen-action.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-home-personal-care",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module05.03",
+      "text": "Please identify and describe the concern, tell me what to record, and ask the professional to inspect the equipment and review your care information.",
+      "meaning": "Record a concern and request professional review.",
+      "context": "A person reports an equipment concern relevant to their care.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "identify",
+          "start": 7,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "describe",
+          "start": 20,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "concern",
+          "start": 33,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 40,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "tell",
+          "start": 42,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "me",
+          "start": 47,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": "what",
+          "start": 50,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "to",
+          "start": 55,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": "record",
+          "start": 58,
+          "end": 64
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 64,
+          "end": 65
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 14,
+          "text": "ask",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 74,
+          "end": 77
+        },
+        {
+          "index": 16,
+          "text": "professional",
+          "start": 78,
+          "end": 90
+        },
+        {
+          "index": 17,
+          "text": "to",
+          "start": 91,
+          "end": 93
+        },
+        {
+          "index": 18,
+          "text": "inspect",
+          "start": 94,
+          "end": 101
+        },
+        {
+          "index": 19,
+          "text": "the",
+          "start": 102,
+          "end": 105
+        },
+        {
+          "index": 20,
+          "text": "equipment",
+          "start": 106,
+          "end": 115
+        },
+        {
+          "index": 21,
+          "text": "and",
+          "start": 116,
+          "end": 119
+        },
+        {
+          "index": 22,
+          "text": "review",
+          "start": 120,
+          "end": 126
+        },
+        {
+          "index": 23,
+          "text": "your",
+          "start": 127,
+          "end": 131
+        },
+        {
+          "index": 24,
+          "text": "care",
+          "start": 132,
+          "end": 136
+        },
+        {
+          "index": 25,
+          "text": "information",
+          "start": 137,
+          "end": 148
+        },
+        {
+          "index": 26,
+          "text": ".",
+          "start": 148,
+          "end": 149
+        }
+      ],
+      "focus_lexeme_ids": [
+        "describe.give-details-in-words.v",
+        "record.store-observed-information.v",
+        "identify.establish-identity-or-nature.v",
+        "inspect.examine-visually.v",
+        "review.reconsider-care-information.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-home-personal-care",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module05.04",
+      "text": "Would you like to dry, iron, and fold the laundry together, or have me hang the wet clothes?",
+      "meaning": "Ask about preferred help with laundry.",
+      "context": "A person chooses how household tasks are shared.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Would",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "you",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "like",
+          "start": 10,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "to",
+          "start": 15,
+          "end": 17
+        },
+        {
+          "index": 4,
+          "text": "dry",
+          "start": 18,
+          "end": 21
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 21,
+          "end": 22
+        },
+        {
+          "index": 6,
+          "text": "iron",
+          "start": 23,
+          "end": 27
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 27,
+          "end": 28
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 9,
+          "text": "fold",
+          "start": 33,
+          "end": 37
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 38,
+          "end": 41
+        },
+        {
+          "index": 11,
+          "text": "laundry",
+          "start": 42,
+          "end": 49
+        },
+        {
+          "index": 12,
+          "text": "together",
+          "start": 50,
+          "end": 58
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 58,
+          "end": 59
+        },
+        {
+          "index": 14,
+          "text": "or",
+          "start": 60,
+          "end": 62
+        },
+        {
+          "index": 15,
+          "text": "have",
+          "start": 63,
+          "end": 67
+        },
+        {
+          "index": 16,
+          "text": "me",
+          "start": 68,
+          "end": 70
+        },
+        {
+          "index": 17,
+          "text": "hang",
+          "start": 71,
+          "end": 75
+        },
+        {
+          "index": 18,
+          "text": "the",
+          "start": 76,
+          "end": 79
+        },
+        {
+          "index": 19,
+          "text": "wet",
+          "start": 80,
+          "end": 83
+        },
+        {
+          "index": 20,
+          "text": "clothes",
+          "start": 84,
+          "end": 91
+        },
+        {
+          "index": 21,
+          "text": "?",
+          "start": 91,
+          "end": 92
+        }
+      ],
+      "focus_lexeme_ids": [
+        "fold.bend-cloth-neatly.v",
+        "hang.suspend-item.v",
+        "dry.remove-moisture.v",
+        "iron.smooth-fabric-with-heated-tool.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-home-personal-care",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module05.05",
+      "text": "Would you like me to tidy the room, sweep or vacuum the floor, and then clean and rinse the bucket before I mop?",
+      "meaning": "Agree on household cleaning tasks.",
+      "context": "A person chooses which ordinary household tasks they want completed.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Would",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "you",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "like",
+          "start": 10,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "me",
+          "start": 15,
+          "end": 17
+        },
+        {
+          "index": 4,
+          "text": "to",
+          "start": 18,
+          "end": 20
+        },
+        {
+          "index": 5,
+          "text": "tidy",
+          "start": 21,
+          "end": 25
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 7,
+          "text": "room",
+          "start": 30,
+          "end": 34
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 34,
+          "end": 35
+        },
+        {
+          "index": 9,
+          "text": "sweep",
+          "start": 36,
+          "end": 41
+        },
+        {
+          "index": 10,
+          "text": "or",
+          "start": 42,
+          "end": 44
+        },
+        {
+          "index": 11,
+          "text": "vacuum",
+          "start": 45,
+          "end": 51
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 13,
+          "text": "floor",
+          "start": 56,
+          "end": 61
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 61,
+          "end": 62
+        },
+        {
+          "index": 15,
+          "text": "and",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 16,
+          "text": "then",
+          "start": 67,
+          "end": 71
+        },
+        {
+          "index": 17,
+          "text": "clean",
+          "start": 72,
+          "end": 77
+        },
+        {
+          "index": 18,
+          "text": "and",
+          "start": 78,
+          "end": 81
+        },
+        {
+          "index": 19,
+          "text": "rinse",
+          "start": 82,
+          "end": 87
+        },
+        {
+          "index": 20,
+          "text": "the",
+          "start": 88,
+          "end": 91
+        },
+        {
+          "index": 21,
+          "text": "bucket",
+          "start": 92,
+          "end": 98
+        },
+        {
+          "index": 22,
+          "text": "before",
+          "start": 99,
+          "end": 105
+        },
+        {
+          "index": 23,
+          "text": "I",
+          "start": 106,
+          "end": 107
+        },
+        {
+          "index": 24,
+          "text": "mop",
+          "start": 108,
+          "end": 111
+        },
+        {
+          "index": 25,
+          "text": "?",
+          "start": 111,
+          "end": 112
+        }
+      ],
+      "focus_lexeme_ids": [
+        "tidy.put-things-in-order.v",
+        "sweep.clean-with-broom.v",
+        "vacuum.clean-by-suction.v",
+        "clean.remove-dirt-or-unwanted-material.v",
+        "rinse.remove-residue-with-liquid.v",
+        "mop.clean-floor-with-mop.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-home-personal-care",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module05.06",
+      "text": "Please tell me what to peel, chop, stir, and cook, which drink to pour, and when to serve it.",
+      "meaning": "Ask about meal preparation preferences.",
+      "context": "A person directs the preparation and serving of their meal.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "tell",
+          "start": 7,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "me",
+          "start": 12,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "what",
+          "start": 15,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "to",
+          "start": 20,
+          "end": 22
+        },
+        {
+          "index": 5,
+          "text": "peel",
+          "start": 23,
+          "end": 27
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 27,
+          "end": 28
+        },
+        {
+          "index": 7,
+          "text": "chop",
+          "start": 29,
+          "end": 33
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 33,
+          "end": 34
+        },
+        {
+          "index": 9,
+          "text": "stir",
+          "start": 35,
+          "end": 39
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 39,
+          "end": 40
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 12,
+          "text": "cook",
+          "start": 45,
+          "end": 49
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 49,
+          "end": 50
+        },
+        {
+          "index": 14,
+          "text": "which",
+          "start": 51,
+          "end": 56
+        },
+        {
+          "index": 15,
+          "text": "drink",
+          "start": 57,
+          "end": 62
+        },
+        {
+          "index": 16,
+          "text": "to",
+          "start": 63,
+          "end": 65
+        },
+        {
+          "index": 17,
+          "text": "pour",
+          "start": 66,
+          "end": 70
+        },
+        {
+          "index": 18,
+          "text": ",",
+          "start": 70,
+          "end": 71
+        },
+        {
+          "index": 19,
+          "text": "and",
+          "start": 72,
+          "end": 75
+        },
+        {
+          "index": 20,
+          "text": "when",
+          "start": 76,
+          "end": 80
+        },
+        {
+          "index": 21,
+          "text": "to",
+          "start": 81,
+          "end": 83
+        },
+        {
+          "index": 22,
+          "text": "serve",
+          "start": 84,
+          "end": 89
+        },
+        {
+          "index": 23,
+          "text": "it",
+          "start": 90,
+          "end": 92
+        },
+        {
+          "index": 24,
+          "text": ".",
+          "start": 92,
+          "end": 93
+        }
+      ],
+      "focus_lexeme_ids": [
+        "cook.prepare-food-with-heat.v",
+        "serve.provide-food-or-drink.v",
+        "peel.remove-outer-food-skin.v",
+        "chop.cut-food-into-pieces.v",
+        "stir.mix-with-circular-motion.v",
+        "pour.make-liquid-flow-from-container.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-home-personal-care",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module05.07",
+      "text": "If you choose to walk there, I can accompany you; you may decline the invitation or choose somewhere to sit or stand.",
+      "meaning": "Offer company while respecting movement and participation choices.",
+      "context": "A person decides whether to attend an activity.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "If",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "you",
+          "start": 3,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "choose",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "to",
+          "start": 14,
+          "end": 16
+        },
+        {
+          "index": 4,
+          "text": "walk",
+          "start": 17,
+          "end": 21
+        },
+        {
+          "index": 5,
+          "text": "there",
+          "start": 22,
+          "end": 27
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 27,
+          "end": 28
+        },
+        {
+          "index": 7,
+          "text": "I",
+          "start": 29,
+          "end": 30
+        },
+        {
+          "index": 8,
+          "text": "can",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 9,
+          "text": "accompany",
+          "start": 35,
+          "end": 44
+        },
+        {
+          "index": 10,
+          "text": "you",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 11,
+          "text": ";",
+          "start": 48,
+          "end": 49
+        },
+        {
+          "index": 12,
+          "text": "you",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 13,
+          "text": "may",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 14,
+          "text": "decline",
+          "start": 58,
+          "end": 65
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 16,
+          "text": "invitation",
+          "start": 70,
+          "end": 80
+        },
+        {
+          "index": 17,
+          "text": "or",
+          "start": 81,
+          "end": 83
+        },
+        {
+          "index": 18,
+          "text": "choose",
+          "start": 84,
+          "end": 90
+        },
+        {
+          "index": 19,
+          "text": "somewhere",
+          "start": 91,
+          "end": 100
+        },
+        {
+          "index": 20,
+          "text": "to",
+          "start": 101,
+          "end": 103
+        },
+        {
+          "index": 21,
+          "text": "sit",
+          "start": 104,
+          "end": 107
+        },
+        {
+          "index": 22,
+          "text": "or",
+          "start": 108,
+          "end": 110
+        },
+        {
+          "index": 23,
+          "text": "stand",
+          "start": 111,
+          "end": 116
+        },
+        {
+          "index": 24,
+          "text": ".",
+          "start": 116,
+          "end": 117
+        }
+      ],
+      "focus_lexeme_ids": [
+        "accompany.go-with-person.v",
+        "decline.refuse-transaction.v",
+        "walk.move-by-stepping.v",
+        "sit.take-seated-position.v",
+        "stand.be-upright-on-feet.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-home-personal-care",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module05.08",
+      "text": "Please clarify my role before I lift anything or help someone transfer or reposition; I need guidance from the responsible professional.",
+      "meaning": "Seek role-specific guidance before movement support.",
+      "context": "A worker asks the responsible professional about their assigned role.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "clarify",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "my",
+          "start": 15,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "role",
+          "start": 18,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "before",
+          "start": 23,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "I",
+          "start": 30,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "lift",
+          "start": 32,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": "anything",
+          "start": 37,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "or",
+          "start": 46,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "help",
+          "start": 49,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "someone",
+          "start": 54,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": "transfer",
+          "start": 62,
+          "end": 70
+        },
+        {
+          "index": 12,
+          "text": "or",
+          "start": 71,
+          "end": 73
+        },
+        {
+          "index": 13,
+          "text": "reposition",
+          "start": 74,
+          "end": 84
+        },
+        {
+          "index": 14,
+          "text": ";",
+          "start": 84,
+          "end": 85
+        },
+        {
+          "index": 15,
+          "text": "I",
+          "start": 86,
+          "end": 87
+        },
+        {
+          "index": 16,
+          "text": "need",
+          "start": 88,
+          "end": 92
+        },
+        {
+          "index": 17,
+          "text": "guidance",
+          "start": 93,
+          "end": 101
+        },
+        {
+          "index": 18,
+          "text": "from",
+          "start": 102,
+          "end": 106
+        },
+        {
+          "index": 19,
+          "text": "the",
+          "start": 107,
+          "end": 110
+        },
+        {
+          "index": 20,
+          "text": "responsible",
+          "start": 111,
+          "end": 122
+        },
+        {
+          "index": 21,
+          "text": "professional",
+          "start": 123,
+          "end": 135
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 135,
+          "end": 136
+        }
+      ],
+      "focus_lexeme_ids": [
+        "transfer.move-person-between-places.v",
+        "reposition.change-body-placement.v",
+        "lift.raise-item.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-home-personal-care",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module05.09",
+      "text": "May I prompt you about your chosen time to brush or comb your hair, shave, eat, or drink?",
+      "meaning": "Ask permission to give reminders for chosen daily activities.",
+      "context": "A person decides whether reminders would be helpful.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "May",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "I",
+          "start": 4,
+          "end": 5
+        },
+        {
+          "index": 2,
+          "text": "prompt",
+          "start": 6,
+          "end": 12
+        },
+        {
+          "index": 3,
+          "text": "you",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 4,
+          "text": "about",
+          "start": 17,
+          "end": 22
+        },
+        {
+          "index": 5,
+          "text": "your",
+          "start": 23,
+          "end": 27
+        },
+        {
+          "index": 6,
+          "text": "chosen",
+          "start": 28,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "time",
+          "start": 35,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "to",
+          "start": 40,
+          "end": 42
+        },
+        {
+          "index": 9,
+          "text": "brush",
+          "start": 43,
+          "end": 48
+        },
+        {
+          "index": 10,
+          "text": "or",
+          "start": 49,
+          "end": 51
+        },
+        {
+          "index": 11,
+          "text": "comb",
+          "start": 52,
+          "end": 56
+        },
+        {
+          "index": 12,
+          "text": "your",
+          "start": 57,
+          "end": 61
+        },
+        {
+          "index": 13,
+          "text": "hair",
+          "start": 62,
+          "end": 66
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 66,
+          "end": 67
+        },
+        {
+          "index": 15,
+          "text": "shave",
+          "start": 68,
+          "end": 73
+        },
+        {
+          "index": 16,
+          "text": ",",
+          "start": 73,
+          "end": 74
+        },
+        {
+          "index": 17,
+          "text": "eat",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 18,
+          "text": ",",
+          "start": 78,
+          "end": 79
+        },
+        {
+          "index": 19,
+          "text": "or",
+          "start": 80,
+          "end": 82
+        },
+        {
+          "index": 20,
+          "text": "drink",
+          "start": 83,
+          "end": 88
+        },
+        {
+          "index": 21,
+          "text": "?",
+          "start": 88,
+          "end": 89
+        }
+      ],
+      "focus_lexeme_ids": [
+        "prompt.offer-reminder-or-cue.v",
+        "brush.use-brush-on-surface.v",
+        "comb.arrange-hair-with-comb.v",
+        "shave.remove-hair-with-razor.v",
+        "eat.consume-food.v",
+        "drink.take-fluid-by-mouth.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-home-personal-care",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module05.10",
+      "text": "Please observe and describe any change in how the person can rest or sleep, and refer the concern to the responsible professional.",
+      "meaning": "Report changes in rest and sleep for professional assessment.",
+      "context": "A worker communicates observations without deciding treatment.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "observe",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "describe",
+          "start": 19,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "any",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "change",
+          "start": 32,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "in",
+          "start": 39,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "how",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 46,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": "person",
+          "start": 50,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "can",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": "rest",
+          "start": 61,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "or",
+          "start": 66,
+          "end": 68
+        },
+        {
+          "index": 13,
+          "text": "sleep",
+          "start": 69,
+          "end": 74
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 74,
+          "end": 75
+        },
+        {
+          "index": 15,
+          "text": "and",
+          "start": 76,
+          "end": 79
+        },
+        {
+          "index": 16,
+          "text": "refer",
+          "start": 80,
+          "end": 85
+        },
+        {
+          "index": 17,
+          "text": "the",
+          "start": 86,
+          "end": 89
+        },
+        {
+          "index": 18,
+          "text": "concern",
+          "start": 90,
+          "end": 97
+        },
+        {
+          "index": 19,
+          "text": "to",
+          "start": 98,
+          "end": 100
+        },
+        {
+          "index": 20,
+          "text": "the",
+          "start": 101,
+          "end": 104
+        },
+        {
+          "index": 21,
+          "text": "responsible",
+          "start": 105,
+          "end": 116
+        },
+        {
+          "index": 22,
+          "text": "professional",
+          "start": 117,
+          "end": 129
+        },
+        {
+          "index": 23,
+          "text": ".",
+          "start": 129,
+          "end": 130
+        }
+      ],
+      "focus_lexeme_ids": [
+        "observe.notice-care-information.v",
+        "describe.give-details-in-words.v",
+        "refer.direct-for-professional-assessment.v",
+        "rest.pause-activity-for-recovery.v",
+        "sleep.enter-sleep-state.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-home-personal-care",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1280 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.hr_recruitment.module07.01",
+      "text": "The induction introduces the buddy and explains the onboarding plan.",
+      "meaning": "Describe the first introduction and longer support process.",
+      "context": "Welcoming a new employee.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "induction",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "introduces",
+          "start": 14,
+          "end": 24
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 25,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "buddy",
+          "start": 29,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 35,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "explains",
+          "start": 39,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "onboarding",
+          "start": 52,
+          "end": 62
+        },
+        {
+          "index": 9,
+          "text": "plan",
+          "start": 63,
+          "end": 67
+        },
+        {
+          "index": 10,
+          "text": ".",
+          "start": 67,
+          "end": 68
+        }
+      ],
+      "focus_lexeme_ids": [
+        "induction.introduction-to-workplace-and-role.n",
+        "buddy.colleague-assigned-to-offer-informal-new-starter-support.n",
+        "onboarding.process-of-helping-person-join-and-settle-into-organization.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-training-development",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module07.02",
+      "text": "The webinar and workshop cover different learning activities.",
+      "meaning": "Distinguish two planned learning formats.",
+      "context": "Choosing suitable workplace learning activities.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "webinar",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 12,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "workshop",
+          "start": 16,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "cover",
+          "start": 25,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "different",
+          "start": 31,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "learning",
+          "start": 41,
+          "end": 49
+        },
+        {
+          "index": 7,
+          "text": "activities",
+          "start": 50,
+          "end": 60
+        },
+        {
+          "index": 8,
+          "text": ".",
+          "start": 60,
+          "end": 61
+        }
+      ],
+      "focus_lexeme_ids": [
+        "webinar.seminar-or-presentation-delivered-online.n",
+        "workshop.participatory-session-for-practice-or-joint-work.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-training-development",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module07.03",
+      "text": "The wellbeing session includes information about the employee assistance program.",
+      "meaning": "Describe where support information is discussed.",
+      "context": "Explaining available information without promising a service outcome.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "wellbeing",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "session",
+          "start": 14,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "includes",
+          "start": 22,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": "information",
+          "start": 31,
+          "end": 42
+        },
+        {
+          "index": 5,
+          "text": "about",
+          "start": 43,
+          "end": 48
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 7,
+          "text": "employee",
+          "start": 53,
+          "end": 61
+        },
+        {
+          "index": 8,
+          "text": "assistance",
+          "start": 62,
+          "end": 72
+        },
+        {
+          "index": 9,
+          "text": "program",
+          "start": 73,
+          "end": 80
+        },
+        {
+          "index": 10,
+          "text": ".",
+          "start": 80,
+          "end": 81
+        }
+      ],
+      "focus_lexeme_ids": [
+        "wellbeing.overall-state-of-doing-well.n",
+        "employee-assistance-program.employer-arranged-confidential-support-service.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-training-development",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module07.04",
+      "text": "The employee handbook and code of conduct are included in the welcome pack.",
+      "meaning": "Identify introductory workplace documents.",
+      "context": "Helping a new colleague locate information.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "employee",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "handbook",
+          "start": 13,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 22,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "code",
+          "start": 26,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "of",
+          "start": 31,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "conduct",
+          "start": 34,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "are",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "included",
+          "start": 46,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "in",
+          "start": 55,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": "welcome",
+          "start": 62,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": "pack",
+          "start": 70,
+          "end": 74
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 74,
+          "end": 75
+        }
+      ],
+      "focus_lexeme_ids": [
+        "employee-handbook.guide-to-organizations-workplace-policies-and-information.n",
+        "code-of-conduct.documented-expectations-for-professional-behavior.n",
+        "welcome-pack.collection-of-information-for-person-joining-organization.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-training-development",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module07.05",
+      "text": "Please confirm the equipment allocation, account setup, and payroll setup status.",
+      "meaning": "Request readiness information from the responsible teams.",
+      "context": "Coordinating a new starter's arrangements.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "confirm",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "equipment",
+          "start": 19,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "allocation",
+          "start": 29,
+          "end": 39
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 39,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "account",
+          "start": 41,
+          "end": 48
+        },
+        {
+          "index": 7,
+          "text": "setup",
+          "start": 49,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 54,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "payroll",
+          "start": 60,
+          "end": 67
+        },
+        {
+          "index": 11,
+          "text": "setup",
+          "start": 68,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": "status",
+          "start": 74,
+          "end": 80
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 80,
+          "end": 81
+        }
+      ],
+      "focus_lexeme_ids": [
+        "equipment-allocation.assignment-of-work-equipment-to-person-or-role.n",
+        "account-setup.process-of-preparing-user-account.n",
+        "payroll-setup.preparation-of-records-for-processing-employees-pay.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-training-development",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module07.06",
+      "text": "The training needs analysis identifies a skills gap and informs the training plan.",
+      "meaning": "Explain how learning needs connect to a plan.",
+      "context": "Reviewing development priorities.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "training",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "needs",
+          "start": 13,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "analysis",
+          "start": 19,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "identifies",
+          "start": 28,
+          "end": 38
+        },
+        {
+          "index": 5,
+          "text": "a",
+          "start": 39,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "skills",
+          "start": 41,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "gap",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "informs",
+          "start": 56,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 11,
+          "text": "training",
+          "start": 68,
+          "end": 76
+        },
+        {
+          "index": 12,
+          "text": "plan",
+          "start": 77,
+          "end": 81
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 81,
+          "end": 82
+        }
+      ],
+      "focus_lexeme_ids": [
+        "training-needs-analysis.review-to-identify-what-training-is-needed.n",
+        "skills-gap.difference-between-needed-and-available-skills.n",
+        "training-plan.plan-for-organized-learning-activities.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-training-development",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module07.07",
+      "text": "The mentoring program and job shadowing support the development plan.",
+      "meaning": "Explain how two activities contribute to development.",
+      "context": "Discussing agreed learning support.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "mentoring",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "program",
+          "start": 14,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 22,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "job",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "shadowing",
+          "start": 30,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "support",
+          "start": 40,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "development",
+          "start": 52,
+          "end": 63
+        },
+        {
+          "index": 9,
+          "text": "plan",
+          "start": 64,
+          "end": 68
+        },
+        {
+          "index": 10,
+          "text": ".",
+          "start": 68,
+          "end": 69
+        }
+      ],
+      "focus_lexeme_ids": [
+        "mentoring-program.organized-arrangement-for-mentors-to-support-development.n",
+        "job-shadowing.learning-by-observing-someones-work.n",
+        "development-plan.plan-for-building-persons-capabilities-and-progress.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-training-development",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module07.08",
+      "text": "The performance review includes peer feedback and self-assessment.",
+      "meaning": "Identify sources used in a development discussion.",
+      "context": "Preparing for a work review.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "performance",
+          "start": 4,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "review",
+          "start": 16,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "includes",
+          "start": 23,
+          "end": 31
+        },
+        {
+          "index": 4,
+          "text": "peer",
+          "start": 32,
+          "end": 36
+        },
+        {
+          "index": 5,
+          "text": "feedback",
+          "start": 37,
+          "end": 45
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 46,
+          "end": 49
+        },
+        {
+          "index": 7,
+          "text": "self-assessment",
+          "start": 50,
+          "end": 65
+        },
+        {
+          "index": 8,
+          "text": ".",
+          "start": 65,
+          "end": 66
+        }
+      ],
+      "focus_lexeme_ids": [
+        "performance-review.structured-discussion-of-work-performance-and-development.n",
+        "peer-feedback.feedback-from-fellow-learner-or-colleague.n",
+        "self-assessment.reflection-on-own-work-against-purpose-or-criteria.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-training-development",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module07.09",
+      "text": "The completion certificate and learning record do not replace the training evaluation.",
+      "meaning": "Distinguish completion evidence from evaluation.",
+      "context": "Discussing how a learning activity is reviewed.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "completion",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "certificate",
+          "start": 15,
+          "end": 26
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": "learning",
+          "start": 31,
+          "end": 39
+        },
+        {
+          "index": 5,
+          "text": "record",
+          "start": 40,
+          "end": 46
+        },
+        {
+          "index": 6,
+          "text": "do",
+          "start": 47,
+          "end": 49
+        },
+        {
+          "index": 7,
+          "text": "not",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 8,
+          "text": "replace",
+          "start": 54,
+          "end": 61
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 10,
+          "text": "training",
+          "start": 66,
+          "end": 74
+        },
+        {
+          "index": 11,
+          "text": "evaluation",
+          "start": 75,
+          "end": 85
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 85,
+          "end": 86
+        }
+      ],
+      "focus_lexeme_ids": [
+        "completion-certificate.document-confirming-completion-of-stated-activity.n",
+        "learning-record.record-of-learning-activities-or-achievements.n",
+        "training-evaluation.review-of-training-experience-or-results.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-training-development",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module07.10",
+      "text": "The return-to-work meeting can discuss the work pattern and relevant support.",
+      "meaning": "Describe topics for a planned return discussion.",
+      "context": "Coordinating support after an absence.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "return-to-work",
+          "start": 4,
+          "end": 18
+        },
+        {
+          "index": 2,
+          "text": "meeting",
+          "start": 19,
+          "end": 26
+        },
+        {
+          "index": 3,
+          "text": "can",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": "discuss",
+          "start": 31,
+          "end": 38
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 39,
+          "end": 42
+        },
+        {
+          "index": 6,
+          "text": "work",
+          "start": 43,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "pattern",
+          "start": 48,
+          "end": 55
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "relevant",
+          "start": 60,
+          "end": 68
+        },
+        {
+          "index": 10,
+          "text": "support",
+          "start": 69,
+          "end": 76
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 76,
+          "end": 77
+        }
+      ],
+      "focus_lexeme_ids": [
+        "return-to-work-meeting.discussion-about-resuming-work-after-absence.n",
+        "work-pattern.arrangement-of-working-times-or-activities.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-training-development",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1698 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.cleaning_facilities.module04.01",
+      "text": "The detergent, sanitizer, disinfectant, and soap have different stated uses; please confirm the correct product information.",
+      "meaning": "Distinguish product categories without prescribing use.",
+      "context": "Reviewing product descriptions.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "detergent",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": ",",
+          "start": 13,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "sanitizer",
+          "start": 15,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 24,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "disinfectant",
+          "start": 26,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 38,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "soap",
+          "start": 44,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "have",
+          "start": 49,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "different",
+          "start": 54,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "stated",
+          "start": 64,
+          "end": 70
+        },
+        {
+          "index": 12,
+          "text": "uses",
+          "start": 71,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": ";",
+          "start": 75,
+          "end": 76
+        },
+        {
+          "index": 14,
+          "text": "please",
+          "start": 77,
+          "end": 83
+        },
+        {
+          "index": 15,
+          "text": "confirm",
+          "start": 84,
+          "end": 91
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 92,
+          "end": 95
+        },
+        {
+          "index": 17,
+          "text": "correct",
+          "start": 96,
+          "end": 103
+        },
+        {
+          "index": 18,
+          "text": "product",
+          "start": 104,
+          "end": 111
+        },
+        {
+          "index": 19,
+          "text": "information",
+          "start": 112,
+          "end": 123
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 123,
+          "end": 124
+        }
+      ],
+      "focus_lexeme_ids": [
+        "detergent.substance-formulated-for-removing-dirt-and-grease.n",
+        "sanitizer.product-intended-to-reduce-microorganisms-to-specified-level.n",
+        "disinfectant.microbe-reducing-product.n",
+        "soap.washing-cleaning-substance.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-cdc-home-definitions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module04.02",
+      "text": "The concentrate and ready-to-use product have different labels, and the client has asked about fragrance.",
+      "meaning": "Clarify product form and a scent-related request.",
+      "context": "Discussing a supply query.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "concentrate",
+          "start": 4,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "ready-to-use",
+          "start": 20,
+          "end": 32
+        },
+        {
+          "index": 4,
+          "text": "product",
+          "start": 33,
+          "end": 40
+        },
+        {
+          "index": 5,
+          "text": "have",
+          "start": 41,
+          "end": 45
+        },
+        {
+          "index": 6,
+          "text": "different",
+          "start": 46,
+          "end": 55
+        },
+        {
+          "index": 7,
+          "text": "labels",
+          "start": 56,
+          "end": 62
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 62,
+          "end": 63
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 68,
+          "end": 71
+        },
+        {
+          "index": 11,
+          "text": "client",
+          "start": 72,
+          "end": 78
+        },
+        {
+          "index": 12,
+          "text": "has",
+          "start": 79,
+          "end": 82
+        },
+        {
+          "index": 13,
+          "text": "asked",
+          "start": 83,
+          "end": 88
+        },
+        {
+          "index": 14,
+          "text": "about",
+          "start": 89,
+          "end": 94
+        },
+        {
+          "index": 15,
+          "text": "fragrance",
+          "start": 95,
+          "end": 104
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 104,
+          "end": 105
+        }
+      ],
+      "focus_lexeme_ids": [
+        "concentrate.product-supplied-with-high-proportion-of-active-material.n",
+        "ready-to-use-product.product-supplied-in-form-intended-for-direct-stated-use.n",
+        "fragrance.noticeable-pleasant-smell-or-scent.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-cdc-home-definitions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module04.03",
+      "text": "The carpet has a stain, the rug has dirt and dust, and the mirror has a smudge.",
+      "meaning": "Describe visible marks on different surfaces.",
+      "context": "Reporting room observations.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "carpet",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "has",
+          "start": 11,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 15,
+          "end": 16
+        },
+        {
+          "index": 4,
+          "text": "stain",
+          "start": 17,
+          "end": 22
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 22,
+          "end": 23
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 7,
+          "text": "rug",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 8,
+          "text": "has",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 9,
+          "text": "dirt",
+          "start": 36,
+          "end": 40
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 11,
+          "text": "dust",
+          "start": 45,
+          "end": 49
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 49,
+          "end": 50
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 55,
+          "end": 58
+        },
+        {
+          "index": 15,
+          "text": "mirror",
+          "start": 59,
+          "end": 65
+        },
+        {
+          "index": 16,
+          "text": "has",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 17,
+          "text": "a",
+          "start": 70,
+          "end": 71
+        },
+        {
+          "index": 18,
+          "text": "smudge",
+          "start": 72,
+          "end": 78
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 78,
+          "end": 79
+        }
+      ],
+      "focus_lexeme_ids": [
+        "carpet.textile-covering-fitted-over-floor.n",
+        "stain.discolored-mark-that-remains-on-material.n",
+        "rug.movable-piece-of-textile-floor-covering.n",
+        "dirt.unwanted-soiling-material-on-surface.n",
+        "dust.fine-solid-particles-in-air-or-on-surfaces.n",
+        "mirror.surface-reflecting-visible-image.n",
+        "smudge.blurred-or-smeared-mark-on-surface.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-cdc-home-definitions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module04.04",
+      "text": "The report mentions residue and grease near the worktop, with limescale around the faucet.",
+      "meaning": "Describe observed material without deciding a cleaning method.",
+      "context": "Writing a condition report.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "report",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "mentions",
+          "start": 11,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "residue",
+          "start": 20,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "grease",
+          "start": 32,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "near",
+          "start": 39,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "worktop",
+          "start": 48,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 55,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "with",
+          "start": 57,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": "limescale",
+          "start": 62,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "around",
+          "start": 72,
+          "end": 78
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 79,
+          "end": 82
+        },
+        {
+          "index": 14,
+          "text": "faucet",
+          "start": 83,
+          "end": 89
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 89,
+          "end": 90
+        }
+      ],
+      "focus_lexeme_ids": [
+        "residue.material-left-after-process-or-removal.n",
+        "grease.unwanted-oily-or-fatty-soiling-on-surface.n",
+        "worktop.horizontal-surface-used-for-practical-work.n",
+        "limescale.hard-mineral-deposit-left-by-water.n",
+        "faucet.device-controlling-flow-from-water-pipe.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-cdc-home-definitions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module04.05",
+      "text": "The upholstery and porcelain need accurate material information; the glass and ceramic samples are labeled separately.",
+      "meaning": "Distinguish materials before requesting qualified guidance.",
+      "context": "Reviewing surface information.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "upholstery",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "porcelain",
+          "start": 19,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "need",
+          "start": 29,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "accurate",
+          "start": 34,
+          "end": 42
+        },
+        {
+          "index": 6,
+          "text": "material",
+          "start": 43,
+          "end": 51
+        },
+        {
+          "index": 7,
+          "text": "information",
+          "start": 52,
+          "end": 63
+        },
+        {
+          "index": 8,
+          "text": ";",
+          "start": 63,
+          "end": 64
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 10,
+          "text": "glass",
+          "start": 69,
+          "end": 74
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 12,
+          "text": "ceramic",
+          "start": 79,
+          "end": 86
+        },
+        {
+          "index": 13,
+          "text": "samples",
+          "start": 87,
+          "end": 94
+        },
+        {
+          "index": 14,
+          "text": "are",
+          "start": 95,
+          "end": 98
+        },
+        {
+          "index": 15,
+          "text": "labeled",
+          "start": 99,
+          "end": 106
+        },
+        {
+          "index": 16,
+          "text": "separately",
+          "start": 107,
+          "end": 117
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 117,
+          "end": 118
+        }
+      ],
+      "focus_lexeme_ids": [
+        "upholstery.padding-and-covering-on-furniture.n",
+        "porcelain.hard-fine-ceramic-material-fired-at-high-temperature.n",
+        "glass.transparent-hard-material.n",
+        "ceramic.fired-clay-material.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-cdc-home-definitions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module04.06",
+      "text": "The toilet, urinal, shower, and bathtub appear on the fixture list, along with the drain.",
+      "meaning": "Identify fixed sanitary fixtures and drainage.",
+      "context": "Checking the room inventory.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "toilet",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": ",",
+          "start": 10,
+          "end": 11
+        },
+        {
+          "index": 3,
+          "text": "urinal",
+          "start": 12,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 18,
+          "end": 19
+        },
+        {
+          "index": 5,
+          "text": "shower",
+          "start": 20,
+          "end": 26
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 26,
+          "end": 27
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 8,
+          "text": "bathtub",
+          "start": 32,
+          "end": 39
+        },
+        {
+          "index": 9,
+          "text": "appear",
+          "start": 40,
+          "end": 46
+        },
+        {
+          "index": 10,
+          "text": "on",
+          "start": 47,
+          "end": 49
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 12,
+          "text": "fixture",
+          "start": 54,
+          "end": 61
+        },
+        {
+          "index": 13,
+          "text": "list",
+          "start": 62,
+          "end": 66
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 66,
+          "end": 67
+        },
+        {
+          "index": 15,
+          "text": "along",
+          "start": 68,
+          "end": 73
+        },
+        {
+          "index": 16,
+          "text": "with",
+          "start": 74,
+          "end": 78
+        },
+        {
+          "index": 17,
+          "text": "the",
+          "start": 79,
+          "end": 82
+        },
+        {
+          "index": 18,
+          "text": "drain",
+          "start": 83,
+          "end": 88
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 88,
+          "end": 89
+        }
+      ],
+      "focus_lexeme_ids": [
+        "toilet.fixed-sanitary-fixture-for-receiving-human-waste.n",
+        "urinal.fixed-sanitary-fixture-for-urination.n",
+        "shower.fixture-delivering-spray-of-water-for-washing-body.n",
+        "bathtub.large-container-installed-for-bathing.n",
+        "drain.opening-or-channel-carrying-away-waste-water.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-cdc-home-definitions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module04.07",
+      "text": "The odor and suspected mold have been reported, while ordinary litter is recorded as a separate observation.",
+      "meaning": "Report observations without diagnosing their cause.",
+      "context": "Preparing a factual issue note.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "odor",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 9,
+          "end": 12
+        },
+        {
+          "index": 3,
+          "text": "suspected",
+          "start": 13,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "mold",
+          "start": 23,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "have",
+          "start": 28,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "been",
+          "start": 33,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "reported",
+          "start": 38,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 46,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": "while",
+          "start": 48,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "ordinary",
+          "start": 54,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "litter",
+          "start": 63,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": "is",
+          "start": 70,
+          "end": 72
+        },
+        {
+          "index": 13,
+          "text": "recorded",
+          "start": 73,
+          "end": 81
+        },
+        {
+          "index": 14,
+          "text": "as",
+          "start": 82,
+          "end": 84
+        },
+        {
+          "index": 15,
+          "text": "a",
+          "start": 85,
+          "end": 86
+        },
+        {
+          "index": 16,
+          "text": "separate",
+          "start": 87,
+          "end": 95
+        },
+        {
+          "index": 17,
+          "text": "observation",
+          "start": 96,
+          "end": 107
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 107,
+          "end": 108
+        }
+      ],
+      "focus_lexeme_ids": [
+        "odor.noticeable-smell.n",
+        "mold.fungal-growth-on-damp-material.n",
+        "litter.small-discarded-items-left-in-public-or-shared-place.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-cdc-home-definitions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module04.08",
+      "text": "The paper towel, toilet paper, and facial tissue have different stock codes from the hand sanitizer.",
+      "meaning": "Distinguish paper supplies and a hand product.",
+      "context": "Checking a supply request.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "paper",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "towel",
+          "start": 10,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 15,
+          "end": 16
+        },
+        {
+          "index": 4,
+          "text": "toilet",
+          "start": 17,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "paper",
+          "start": 24,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 29,
+          "end": 30
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 8,
+          "text": "facial",
+          "start": 35,
+          "end": 41
+        },
+        {
+          "index": 9,
+          "text": "tissue",
+          "start": 42,
+          "end": 48
+        },
+        {
+          "index": 10,
+          "text": "have",
+          "start": 49,
+          "end": 53
+        },
+        {
+          "index": 11,
+          "text": "different",
+          "start": 54,
+          "end": 63
+        },
+        {
+          "index": 12,
+          "text": "stock",
+          "start": 64,
+          "end": 69
+        },
+        {
+          "index": 13,
+          "text": "codes",
+          "start": 70,
+          "end": 75
+        },
+        {
+          "index": 14,
+          "text": "from",
+          "start": 76,
+          "end": 80
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 81,
+          "end": 84
+        },
+        {
+          "index": 16,
+          "text": "hand",
+          "start": 85,
+          "end": 89
+        },
+        {
+          "index": 17,
+          "text": "sanitizer",
+          "start": 90,
+          "end": 99
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 99,
+          "end": 100
+        }
+      ],
+      "focus_lexeme_ids": [
+        "paper-towel.absorbent-paper-sheet-for-drying-or-wiping.n",
+        "toilet-paper.soft-paper-used-for-personal-toileting-hygiene.n",
+        "facial-tissue.soft-disposable-paper-for-wiping-face-or-nose.n",
+        "hand-sanitizer.cleaning-product.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-cdc-home-definitions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module04.09",
+      "text": "The tile and grout are listed separately from the sealant and wood in the surface record.",
+      "meaning": "Distinguish building materials and related components.",
+      "context": "Reviewing material descriptions.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "tile",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 9,
+          "end": 12
+        },
+        {
+          "index": 3,
+          "text": "grout",
+          "start": 13,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "are",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 5,
+          "text": "listed",
+          "start": 23,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "separately",
+          "start": 30,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "from",
+          "start": 41,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 46,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": "sealant",
+          "start": 50,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": "wood",
+          "start": 62,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "in",
+          "start": 67,
+          "end": 69
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 14,
+          "text": "surface",
+          "start": 74,
+          "end": 81
+        },
+        {
+          "index": 15,
+          "text": "record",
+          "start": 82,
+          "end": 88
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 88,
+          "end": 89
+        }
+      ],
+      "focus_lexeme_ids": [
+        "tile.thin-unit-used-to-cover-building-surface.n",
+        "grout.material-used-to-fill-joints-or-voids.n",
+        "sealant.material-used-to-close-gaps-against-passage.n",
+        "wood.tree-material.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-cdc-home-definitions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module04.10",
+      "text": "The sink and handrail have separate entries; the label on each cleaning product must remain readable.",
+      "meaning": "Identify fixtures and product-information needs.",
+      "context": "Reviewing an inspection record.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "sink",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 9,
+          "end": 12
+        },
+        {
+          "index": 3,
+          "text": "handrail",
+          "start": 13,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "have",
+          "start": 22,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "separate",
+          "start": 27,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "entries",
+          "start": 36,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": ";",
+          "start": 43,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "label",
+          "start": 49,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "on",
+          "start": 55,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": "each",
+          "start": 58,
+          "end": 62
+        },
+        {
+          "index": 12,
+          "text": "cleaning",
+          "start": 63,
+          "end": 71
+        },
+        {
+          "index": 13,
+          "text": "product",
+          "start": 72,
+          "end": 79
+        },
+        {
+          "index": 14,
+          "text": "must",
+          "start": 80,
+          "end": 84
+        },
+        {
+          "index": 15,
+          "text": "remain",
+          "start": 85,
+          "end": 91
+        },
+        {
+          "index": 16,
+          "text": "readable",
+          "start": 92,
+          "end": 100
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 100,
+          "end": 101
+        }
+      ],
+      "focus_lexeme_ids": [
+        "sink.washing-basin-with-drain.n",
+        "handrail.support-rail-along-route.n",
+        "label.attached-information-marker.n",
+        "cleaning-product.substance-or-preparation-intended-for-cleaning.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-cdc-home-definitions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

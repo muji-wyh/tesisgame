@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "status": "frozen_projected_validator_source_accepted_actual_inputs_pending",
+  "reviewer": "/root/recover_delivery",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 1959,
+      "raw_sha256": "357c7e888d81e47b9e08ae2adc3759154e982e884ed8afc0c386cc3f40b4b01a"
+    },
+    {
+      "path": "inputs.json",
+      "bytes": 7379,
+      "raw_sha256": "540a929179dc8ec2084dde912e684e962b7fcaf85a68184869d6d1b2a6a251ad"
+    },
+    {
+      "path": "inspection.json",
+      "bytes": 3549,
+      "raw_sha256": "13d901d0d16c23dcc6c0d3d02459c3717d01b5604b8785fc768e5d1c5781392d"
+    },
+    {
+      "path": "review.json",
+      "bytes": 6595,
+      "raw_sha256": "5a40193f3f81ad1f2a4e80067703543d030df608ac1fa74197be936fa54d7603"
+    }
+  ],
+  "original_inputs_rechecked_unchanged": 31,
+  "schema_listing_rechecked_unchanged": true,
+  "validator_source_accepted": true,
+  "actual_concrete_input_accepted": false,
+  "validator_execution_accepted": false,
+  "actual_binding_accepted": false,
+  "preparation_execution_accepted": false,
+  "afterimages_accepted": false,
+  "source_or_vm_executed": false,
+  "production_mutated": false,
+  "inventory_self_excluded": true
+}

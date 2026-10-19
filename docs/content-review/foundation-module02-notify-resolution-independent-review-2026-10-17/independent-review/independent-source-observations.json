@@ -1,0 +1,98 @@
+{
+  "schema": 1,
+  "status": "independent_fresh_source_consultation",
+  "reviewer": "Codex runtime_recovery",
+  "date_local": "2026-10-17",
+  "sources": [
+    {
+      "id": "I-O-inform",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/inform",
+      "mode": "Fresh rendered source inspection and separate fresh raw HTML retrieval",
+      "observation": "The selected recipient-information meaning supports recipient-of/about and clause constructions, including the example's conditional clause. The rendered selected topic is B2. Fresh inform_sng_1 contains cefr=b2. The self-informing and influence senses are separate; historical origin is not a modern teaching decomposition.",
+      "selected_level": "B2",
+      "raw": {
+        "retrieved_at": "2026-10-16T21:51:50.9650632Z",
+        "http_status": 200,
+        "decoded_utf8_bytes": 85025,
+        "decoded_utf8_sha256": "28ab8542a619c0f24c9072c81460da9ae4583dd44ed1850b57fbb63c37d19dd0",
+        "selected_tag": "<li class=\"sense\" ox3000=\"y\" htag=\"li\" cefr=\"b2\" sensenum=\"1\" id=\"inform_sng_1\" hclass=\"sense\">"
+      }
+    },
+    {
+      "id": "I-O-notify",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/notify",
+      "mode": "Fresh rendered source inspection and separate fresh raw HTML retrieval",
+      "observation": "The selected notify sense concerns formally or officially telling someone. Fresh notify_sng_1 contains fkcefr=c1. Retain the prior whole-entry hold; this review does not approve its A2 field or lower C1 to B2. The rendered footer B2 belongs to another headword.",
+      "selected_level": "C1",
+      "raw": {
+        "retrieved_at": "2026-10-16T21:51:51.3606414Z",
+        "http_status": 200,
+        "decoded_utf8_bytes": 79106,
+        "decoded_utf8_sha256": "80de39a3198f2a802bb9c2fad210505edd7af895138be9dfe53e9956d67aa845",
+        "selected_tag": "<li class=\"sense\" htag=\"li\" id=\"notify_sng_1\" fkox5000=\"y\" hclass=\"sense\" fkcefr=\"c1\">"
+      }
+    },
+    {
+      "id": "I-C-inform",
+      "url": "https://www.collinsdictionary.com/dictionary/english/inform",
+      "mode": "Fresh rendered source inspection",
+      "observation": "The first COBUILD recipient-information sense explicitly displays B1+. Recipient/of/that patterns support the bounded proposal. Inform-on and influence/permeation meanings are separate. No raw-page hash is asserted.",
+      "selected_level": "B1+"
+    },
+    {
+      "id": "I-P-inform",
+      "url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/cefrj-vocabulary-profile-1.5.csv",
+      "mode": "Fresh raw CSV retrieval and exact headword/POS row search",
+      "observation": "The exact inform verb row is B1 at physical line 3499. No exact notify verb row was found. This supports headword/POS placement only; absence does not establish a notify level.",
+      "selected_level": "B1",
+      "raw": {
+        "retrieved_at": "2026-10-16T21:51:51.6711588Z",
+        "http_status": 200,
+        "decoded_utf8_bytes": 233214,
+        "decoded_utf8_sha256": "b0dd3c635f1c9a4fdf1490c7e5b7c48e8bbe55b652ad0c9860a95f98e10ae498",
+        "selected_row": "inform,verb,B1,,,",
+        "physical_line": 3499
+      }
+    },
+    {
+      "id": "I-P-terms",
+      "url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/README.md",
+      "mode": "Fresh rendered source inspection",
+      "observation": "The CEFR-J vocabulary/grammar data may be used for research and commercial purposes without a fee if properly cited; copyright is Tono Laboratory at TUFS. Citation: The CEFR-J Wordlist Version 1.5, compiled by Yukio Tono, Tokyo University of Foreign Studies. The separate Octanove CC BY-SA terms do not apply to this selected file."
+    },
+    {
+      "id": "I-O-contact",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/contact_2",
+      "mode": "Fresh rendered selected sense inspection",
+      "observation": "The communication verb directly takes the person or organization contacted. This fits contact the supplier in the phrase. The rendered topic shows B1; this inspection does not reopen the already accepted editorial A2 contact placement or report that topic label as A2."
+    },
+    {
+      "id": "I-O-confirm",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/confirm",
+      "mode": "Fresh rendered sense 2 inspection",
+      "observation": "The arrangement sense makes an agreement or arrangement definite or official; the rendered discussion/agreement topic is B2. A delivery time in the stated coordination context fits this selected sense. The truth/evidence sense is separate."
+    },
+    {
+      "id": "I-O-delay",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/delay_1",
+      "mode": "Fresh rendered sense 1 inspection",
+      "observation": "The countable/uncountable period-of-waiting sense caused by slowness or lateness fits any delay in this delivery request. This inspection does not infer a selected level from an unrelated footer or accept the separate act-of-delaying sense."
+    }
+  ],
+  "prior_root_observations": {
+    "path": "build/professional-english/foundation02-notify-root-source-observations-r01/observations.json",
+    "sha256": "b39bb2bd04c6df009fc820e2b3db14dcec77c28213921e1265c1d3ab2f1da4dd",
+    "role": "Read as separate corroborating evidence; not represented as this reviewer's own fresh consultation."
+  },
+  "limits": {
+    "raw_hash_representation": "SHA256 of UTF-8 encoding of Invoke-WebRequest decoded Content, not original network bytes. Full bodies were not retained. Dynamic dictionary hashes may differ from author captures without changing selected tags.",
+    "oxford_wordlist": "Author row observation read but not freshly replicated by this reviewer; acceptance does not depend on URL query parameters.",
+    "cambridge_and_evp": "Author retrieval failures remain failures; no evidence inferred or consultation claimed by this reviewer.",
+    "acquired_artwork": false,
+    "acquired_recordings": false,
+    "pronunciation_played": false,
+    "full_publisher_bodies_saved": false,
+    "publisher_examples_imported": false,
+    "redistribution_license_obtained": false
+  }
+}

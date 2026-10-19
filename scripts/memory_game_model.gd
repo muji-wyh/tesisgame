@@ -3,6 +3,7 @@ extends RefCounted
 const Data = preload("res://scripts/game_data.gd")
 const Economy = preload("res://scripts/coin_economy.gd")
 const SpeechWords = preload("res://scripts/speech_words.gd")
+const LearningWord = preload("res://scripts/learning_word.gd")
 const FIRST_PEEK_SECONDS: float = 10.0
 const REPEAT_PEEK_SECONDS: float = 5.0
 
@@ -31,7 +32,13 @@ func reset(words: Array, seed_value: int = -1) -> bool:
 			# Data.load_all replaces original images with these verified runtime overrides.
 			if word.get("image") == "assets/imported-unity/" + word.id + ".png":
 				word.image = "assets/images/words/" + word.id + ".png"
-	error = Data.validate_words(validated)
+	if LearningWord.same_track(words, "professional"):
+		error = "" if words.all(func(word: Dictionary) -> bool: return LearningWord.professional(word, "memory")) \
+			else "Memory needs five eligible pictured terms."
+	elif LearningWord.same_track(words, "growth"):
+		error = Data.validate_words(validated)
+	else:
+		error = "Memory needs words from the selected learning path."
 	if not error.is_empty():
 		return false
 	for index in range(words.size()):

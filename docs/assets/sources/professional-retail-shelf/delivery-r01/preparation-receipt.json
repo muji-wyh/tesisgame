@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "date": "2026-10-16",
+  "status": "scratch_serializer_prepared_and_read_only_dry_run_passed",
+  "production_writes": false,
+  "native_run": false,
+  "serializer_raw_sha256": "db7a14087ab40f02ae4b9b83a25dee18e78ad8fb98a29b6e110601942b8f550f",
+  "preimages_raw_sha256": "1557b239cd08f9394b651ac7dd633d0c83feebd8305d08646bf44fea4c0e3ad7",
+  "handoff_raw_sha256": "b3b9bb446cc39a21eb965e49fd43d6526e0aac841a5d74072afe38b62374e1ca",
+  "dry_run_log_raw_sha256": "1cd27c91d2281fa642af651829f7b0277263b072e686d18dca1ead25c9ae370e",
+  "result": {
+    "dry_run": true,
+    "checks": 2499,
+    "image_sha256": "bddc3c2dd3b889c785195a572b95a33455c047e097e927232c735b3b43a24f04",
+    "before_registry_sha256": "c7c233c64853defbb11ced8611072e51dc958c30df701f2fa7026797996b9ead",
+    "proposed_registry_sha256": "c9985a19748020c0ef1cb7aa8ac2b70619eaaef1c67106c16bbe3a7ec7433d51",
+    "baseline_registry_sha256": "a0fb575567d11457d151b6f8d91d26104d92271d7e26562ede6018df48845aa6",
+    "fourth10_traversed": true,
+    "successful_r06_verified": true,
+    "integration_ready": true,
+    "required_baseline": "build/professional-english/continuation-validation-r06.json",
+    "later_test_observations": [
+      {
+        "path": "tests/godot/professional_approved_audio_tests.gd",
+        "r06_raw_sha256": "40a5ce5b812bd1c68e7d0a59d479507207be85f116545ca7d5da5c6a2c444a75",
+        "current_raw_sha256": "deaf920372743f106edff7aa1a9df1750e7117dac1afe08e5d03f09774131e54",
+        "changed": true,
+        "coverage": "Authorized later test edit; awaits R07. R06 is historical evidence only."
+      },
+      {
+        "path": "tests/godot/professional_retail_morphology_tests.gd",
+        "r06_raw_sha256": "2af42d93ea3297f35d1ecc4d0577ed6c5ac76f09b99f02bd8c02837cff094e20",
+        "current_raw_sha256": "2af42d93ea3297f35d1ecc4d0577ed6c5ac76f09b99f02bd8c02837cff094e20",
+        "changed": false,
+        "coverage": "Exact R06 bytes retained."
+      },
+      {
+        "path": "tests/professional-content.test.cjs",
+        "r06_raw_sha256": "f19c55116eefe1b076ab133a919c8d4468d53f81e5f6a279a3885366582a1ad5",
+        "current_raw_sha256": "f19c55116eefe1b076ab133a919c8d4468d53f81e5f6a279a3885366582a1ad5",
+        "changed": false,
+        "coverage": "Exact R06 bytes retained."
+      },
+      {
+        "path": "tests/professional-retail-media.test.cjs",
+        "r06_raw_sha256": "3bd1e7bfd8da07abcca1c5c5be8282bc3e664edf7a4c359103ac32af7ae09aea",
+        "current_raw_sha256": "b3b5f4639db08e16b3f8764b418d05c36d32fb4b60964dd09b214a0fab9096ce",
+        "changed": true,
+        "coverage": "Authorized later test edit; awaits R07. R06 is historical evidence only."
+      },
+      {
+        "path": "tests/professional-retail-morphology.test.cjs",
+        "r06_raw_sha256": "5d9fc72505dab943d122d83341ecab28c39bd126ef92aedb9dd6f1665ff76fd8",
+        "current_raw_sha256": "5d9fc72505dab943d122d83341ecab28c39bd126ef92aedb9dd6f1665ff76fd8",
+        "changed": false,
+        "coverage": "Exact R06 bytes retained."
+      }
+    ],
+    "later_test_boundary": "Only the five explicitly root-authorized test paths may differ from R06. Record exact old/current hashes and await R07 for changed tests; all current measured files are guarded against concurrent edits.",
+    "resource": {
+      "id": "sha256:bddc3c2dd3b889c785195a572b95a33455c047e097e927232c735b3b43a24f04",
+      "sha256": "bddc3c2dd3b889c785195a572b95a33455c047e097e927232c735b3b43a24f04",
+      "path": "professional-media/bddc3c2dd3b889c785195a572b95a33455c047e097e927232c735b3b43a24f04.png",
+      "kind": "image",
+      "format": "png",
+      "compressed_bytes": 56729,
+      "decoded_bytes": 1265664,
+      "width": 512,
+      "height": 309
+    },
+    "serializer_raw_sha256": "db7a14087ab40f02ae4b9b83a25dee18e78ad8fb98a29b6e110601942b8f550f",
+    "root_image_review_raw_sha256": "ada7ad8dee8f16143e4c18b193651fd08260e5766bf735a389cf39c10a0d58ad",
+    "author_receipt_raw_sha256": "d20283010366f4f1dc293882c323a30102fbceea9c40e9e5e19cd0b0ca70f341"
+  },
+  "registry_before_sha256": "c7c233c64853defbb11ced8611072e51dc958c30df701f2fa7026797996b9ead",
+  "registry_after_sha256": "c7c233c64853defbb11ced8611072e51dc958c30df701f2fa7026797996b9ead"
+}

@@ -1,0 +1,205 @@
+{
+  "schema": 1,
+  "status": "accepted_exact_coordinated_language_projection_pending_delivery_and_revision",
+  "reviewer": "Codex root independent AI language and context reviewer; not human or subject-matter approval",
+  "recorded_at": "2026-10-16T21:21:37.674Z",
+  "proposal_inventory": {
+    "path": "build/professional-english/foundation02-collect-gather-repair-r01/inventory.json",
+    "bytes": 3206,
+    "raw_sha256": "c298c66e6fdf8f1708bbe3f0ab04abe978cc0f74b35f1b0b3890a79a531946bc"
+  },
+  "proposal_lexeme_json_sha256": "7e192777256f224040f45d70c4421e1eb2dc15234b82f712a1af1e585d48f004",
+  "proposal_expression_json_sha256": "df463c8f619cda04d38d32014f640e6cc721f7d7b24e1ab2fac4dc76b9775d54",
+  "accepted_lexical_fields": {
+    "definition": "To bring items from several people or places into one group.",
+    "example": "Please collect one completed form from each team.",
+    "difficulty": "B1"
+  },
+  "accepted_lexical_fields_json_sha256": "517f17e07905c9788a5ea5cb706ae62be0a0d44cecbe093a19484d60fe9668c8",
+  "accepted_expression_fields": {
+    "text": "Could you assist me while I collect one form from each team and return the borrowed key?",
+    "meaning": "Ask a colleague to help gather forms from several teams and give a borrowed key back.",
+    "context": "A worker gathers one fictional workshop form from each of three teams and gives a borrowed meeting-room key back to reception.",
+    "tokens": [
+      {
+        "index": 0,
+        "text": "Could",
+        "start": 0,
+        "end": 5
+      },
+      {
+        "index": 1,
+        "text": "you",
+        "start": 6,
+        "end": 9
+      },
+      {
+        "index": 2,
+        "text": "assist",
+        "start": 10,
+        "end": 16
+      },
+      {
+        "index": 3,
+        "text": "me",
+        "start": 17,
+        "end": 19
+      },
+      {
+        "index": 4,
+        "text": "while",
+        "start": 20,
+        "end": 25
+      },
+      {
+        "index": 5,
+        "text": "I",
+        "start": 26,
+        "end": 27
+      },
+      {
+        "index": 6,
+        "text": "collect",
+        "start": 28,
+        "end": 35
+      },
+      {
+        "index": 7,
+        "text": "one",
+        "start": 36,
+        "end": 39
+      },
+      {
+        "index": 8,
+        "text": "form",
+        "start": 40,
+        "end": 44
+      },
+      {
+        "index": 9,
+        "text": "from",
+        "start": 45,
+        "end": 49
+      },
+      {
+        "index": 10,
+        "text": "each",
+        "start": 50,
+        "end": 54
+      },
+      {
+        "index": 11,
+        "text": "team",
+        "start": 55,
+        "end": 59
+      },
+      {
+        "index": 12,
+        "text": "and",
+        "start": 60,
+        "end": 63
+      },
+      {
+        "index": 13,
+        "text": "return",
+        "start": 64,
+        "end": 70
+      },
+      {
+        "index": 14,
+        "text": "the",
+        "start": 71,
+        "end": 74
+      },
+      {
+        "index": 15,
+        "text": "borrowed",
+        "start": 75,
+        "end": 83
+      },
+      {
+        "index": 16,
+        "text": "key",
+        "start": 84,
+        "end": 87
+      },
+      {
+        "index": 17,
+        "text": "?",
+        "start": 87,
+        "end": 88
+      }
+    ],
+    "focus_lexeme_ids": [
+      "assist.help.v",
+      "collect.gather.v",
+      "return.send-back.v"
+    ]
+  },
+  "accepted_expression_fields_json_sha256": "e68a80b3ea19fecf0a1d5cc020ab4cec654deb1459f0bcbac8c79572efccced4",
+  "decisions": [
+    "Accept the bounded physical-item gathering definition and forms-from-each-team example: they consistently exclude fetching a preassembled reception bundle.",
+    "Accept editorial B1 for this teaching item. Fresh Collins gathering B1 supports it; Oxford author HTML A2 remains distinct and was not independently fetched. The fresh Oxford rendered view confirms the gathering sense but does not expose its selected CEFR attribute. No footer level is used.",
+    "Accept the exact courteous request, its meaning/context and all eighteen tokens. Assist is formal but natural with a person; borrowed key disambiguates giving a borrowed object back. The coordinated actions are ordinary fictional errands and introduce no specialist procedure.",
+    "Retain all three canonical focus IDs. No identity rename, alias or mastery transfer is approved. Four unscored information/privacy uses, pickup/payment compounds and shared pending morphology are separate.",
+    "Accept the pending picture brief as an accurate sourcing direction only. A single still may not show multiple origins clearly; inherited picture_suitable true and declared picture modes receive no visual or exercise acceptance.",
+    "Accept the proposed fresh requirements/curriculum namespace guard as a necessary future activation condition. Current ID-only requirements cannot detect same-ID wording changes. Keep every old completion and canonical skill record; copy none into the new expression-completion namespace.",
+    "The proposed metadata remains author-stage pending wording. A later delivery must separately review its exact final reviewer/status/reference/note delta and preserve historical holds through strict afterimage reversal."
+  ],
+  "fresh_rendered_sources": [
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/collect_1",
+      "tool_reference": "turn231808view0",
+      "selected_sense": "bring together, sense 1",
+      "observation": "The transitive gathering sense and object-from-source pattern support the selected physical forms example.",
+      "selected_rendered_level": null,
+      "author_html_a2_independently_refetched": false
+    },
+    {
+      "url": "https://www.collinsdictionary.com/dictionary/english/collect",
+      "tool_reference": "turn231808view1",
+      "selected_sense": "COBUILD sense 1",
+      "selected_rendered_level": "B1",
+      "observation": "Gathering from several sources is distinct from sense 3 pickup A2 and its regional guidance."
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/assist_1",
+      "tool_reference": "turn473952view0",
+      "selected_sense": "sense 1",
+      "observation": "Formal person-helping use and assist somebody pattern support the local phrase."
+    },
+    {
+      "url": "https://www.collinsdictionary.com/dictionary/english/return",
+      "tool_reference": "turn473952view1",
+      "selected_sense": "COBUILD sense 3",
+      "selected_rendered_level": "A2",
+      "observation": "Borrowed-object give-back use is distinct from purchased-item returns and movement back."
+    }
+  ],
+  "source_limits": "Fresh rendered consultations only. No independent raw-HTML retrieval, stored full publisher bodies, copied publisher definitions/examples, acquired media, or psychometric certification. Author direct HTTP metadata and failed retrievals remain historical proposal evidence.",
+  "checks": {
+    "proposal_payload_files": 19,
+    "lexemes": 4939,
+    "expressions": 1620,
+    "lexeme_memberships": 20,
+    "expression_memberships": 20,
+    "assessed_expressions": 1,
+    "unscored_literal_context_uses": 4,
+    "related_identity_snapshots": 51,
+    "neighbor_snapshots": 2,
+    "tokens": 18,
+    "protected_lexeme_and_expression_fields_exact": true,
+    "pending_gates_unchanged": true
+  },
+  "future_activation_blockers": [
+    "Fresh coordinated curriculum/requirements revision with non-transfer behavior still needs implementation and verification.",
+    "If canonical gather history was earned through the old pickup phrase, its semantic provenance needs separate review before valid gathering mastery is claimed.",
+    "Exact final source/test/registry rebase and historical reversals remain pending.",
+    "Images, audio, morphology, exercise reachability, module and release acceptance remain pending."
+  ],
+  "source_inspection_limit": "Progress consequences were checked by reading current source. No saved-data inspection, runtime scenario, project test or migration was dispatched.",
+  "production_mutated": false,
+  "holds_released_in_production": false,
+  "tests_or_native_dispatched": false,
+  "full_entry_release_accepted": false
+}

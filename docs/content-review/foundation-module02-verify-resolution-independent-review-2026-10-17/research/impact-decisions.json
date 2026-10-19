@@ -1,0 +1,334 @@
+{
+  "status": "proposed_scope_not_applied",
+  "recommendation": "Retain verify hold now; submit the exact new ensure candidate for independent language and curriculum review.",
+  "coverage": "Swap one distinct target in each of 20 Module02 lists; no additional term or expression count is claimed. The live duplicate scan found no ensure/insure/assure headword, display or accepted-form match.",
+  "discarded_shortcuts": [
+    "Relabelling verify A2/B2 lacks selected lower-level evidence.",
+    "Replacing verify with check duplicates an existing Module02 member and an existing focus in the same expression.",
+    "Confirm is already in Module02 and its accepted arrangement sense is different.",
+    "Double-check adds repeat-checking meaning and lacks inspected level evidence in this packet.",
+    "Compare and other existing action entries require their own coverage and duplicate analysis rather than an automatic synonym swap."
+  ],
+  "neighboring_entries": [
+    {
+      "id": "correct.put-right.v",
+      "snapshot_sha256": "0b5e199a41bbf929b3d37bdf6da56603fbb09e03a9bb796f968c5a6899c2b557",
+      "observed_review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex recover_delivery, separate from the attendance_review research author",
+        "reviewed_at": "2026-10-17"
+      },
+      "change": "none; snapshot only; rebase to actual fourth-ten delivery before expression acceptance"
+    },
+    {
+      "id": "error.mistake.n",
+      "snapshot_sha256": "7514df83cb0ac37ce167bbef07ae9e23d040adcee65a7d905ea01223da6ed63a",
+      "observed_review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "change": "none; snapshot only; rebase to actual fourth-ten delivery before expression acceptance"
+    },
+    {
+      "id": "check.examine.v",
+      "snapshot_sha256": "122fd00272a5a183226db9c9c07f0b2ab13cef997aec6ce8670bfcbb10b8be3e",
+      "observed_review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex root independent AI language review; not human or subject-matter approval",
+        "reviewed_at": "2026-10-16"
+      },
+      "change": "none; snapshot only; rebase to actual fourth-ten delivery before expression acceptance"
+    },
+    {
+      "id": "submit.send-for-consideration.v",
+      "snapshot_sha256": "038741f5b1ef9768262a06de00e2e984b6224a83e492b52b59f3d502bd86ccaa",
+      "observed_review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "change": "none; snapshot only; rebase to actual fourth-ten delivery before expression acceptance"
+    }
+  ],
+  "other_expression_uses": [
+    {
+      "file": "data/professional/expressions/foundation-module01.json",
+      "id": "expr.foundation.module01.10",
+      "exact_object_sha256": "c1742076917fc4a8085d894d5edbf3ff0912638995504403b359a9d157c9c1a7",
+      "matched_fields": [
+        "meaning"
+      ],
+      "direct_verify_focus": false,
+      "action": "Preserve exact current object. Queue contextual level/readability review; no bulk verify-to-ensure substitution or specialist approval. A surface occurrence does not bind this old canonical skill."
+    },
+    {
+      "file": "data/professional/expressions/software-data-module09.json",
+      "id": "expr.software_data.module09.08",
+      "exact_object_sha256": "4cad28098638fe89536ab33214143163e3b8a21c13dd180d37b56efea3a5db5d",
+      "matched_fields": [
+        "meaning"
+      ],
+      "direct_verify_focus": false,
+      "action": "Preserve exact current object. Queue contextual level/readability review; no bulk verify-to-ensure substitution or specialist approval. A surface occurrence does not bind this old canonical skill."
+    },
+    {
+      "file": "data/professional/expressions/caregiving-module09.json",
+      "id": "expr.caregiving.module09.01",
+      "exact_object_sha256": "866703fd5b39a808b6b78497e66e3bf9023a2d82167de6bf2dad19611460fbcb",
+      "matched_fields": [
+        "meaning"
+      ],
+      "direct_verify_focus": false,
+      "action": "Preserve exact current object. Queue contextual level/readability review; no bulk verify-to-ensure substitution or specialist approval. A surface occurrence does not bind this old canonical skill."
+    },
+    {
+      "file": "data/professional/expressions/customer-support-module04.json",
+      "id": "expr.customer_support.module04.01",
+      "exact_object_sha256": "e4bc9e9050d821bb768a74605b4d79d1e99569b897aa1aea56d3b102a12e1fdf",
+      "matched_fields": [
+        "meaning"
+      ],
+      "direct_verify_focus": false,
+      "action": "Preserve exact current object. Queue contextual level/readability review; no bulk verify-to-ensure substitution or specialist approval. A surface occurrence does not bind this old canonical skill."
+    },
+    {
+      "file": "data/professional/expressions/customer-support-module04.json",
+      "id": "expr.customer_support.module04.02",
+      "exact_object_sha256": "a1d5b9b3a3d34d4be85c80eac11edebdfebdfc8a09d99a0d6327ade70414cc84",
+      "matched_fields": [
+        "meaning"
+      ],
+      "direct_verify_focus": false,
+      "action": "Preserve exact current object. Queue contextual level/readability review; no bulk verify-to-ensure substitution or specialist approval. A surface occurrence does not bind this old canonical skill."
+    },
+    {
+      "file": "data/professional/expressions/customer-support-module04.json",
+      "id": "expr.customer_support.module04.10",
+      "exact_object_sha256": "3c9fcafbc1e1ed40a51a804010d89567d055592c2c3368a6b9309de7ca2b9ee4",
+      "matched_fields": [
+        "text"
+      ],
+      "direct_verify_focus": false,
+      "action": "Preserve exact current object. Queue contextual level/readability review; no bulk verify-to-ensure substitution or specialist approval. A surface occurrence does not bind this old canonical skill."
+    },
+    {
+      "file": "data/professional/expressions/customer-support-module05.json",
+      "id": "expr.customer_support.module05.07",
+      "exact_object_sha256": "76b88faadbd384f4e641807656924275ca56c9fe6eed732e8cc07982a414c9d4",
+      "matched_fields": [
+        "context"
+      ],
+      "direct_verify_focus": false,
+      "action": "Preserve exact current object. Queue contextual level/readability review; no bulk verify-to-ensure substitution or specialist approval. A surface occurrence does not bind this old canonical skill."
+    },
+    {
+      "file": "data/professional/expressions/customer-support-module07.json",
+      "id": "expr.customer_support.module07.08",
+      "exact_object_sha256": "0a38463bfd52d25680849405bf15a98fb53ab40029e6b89f20115da28d5240a3",
+      "matched_fields": [
+        "text"
+      ],
+      "direct_verify_focus": false,
+      "action": "Preserve exact current object. Queue contextual level/readability review; no bulk verify-to-ensure substitution or specialist approval. A surface occurrence does not bind this old canonical skill."
+    },
+    {
+      "file": "data/professional/expressions/customer-support-module08.json",
+      "id": "expr.customer_support.module08.04",
+      "exact_object_sha256": "86263c4a7ed17b4a1d0432fdda55af3b9ff57c497b4c9cea3e8d35497f2c37ae",
+      "matched_fields": [
+        "text"
+      ],
+      "direct_verify_focus": false,
+      "action": "Preserve exact current object. Queue contextual level/readability review; no bulk verify-to-ensure substitution or specialist approval. A surface occurrence does not bind this old canonical skill."
+    },
+    {
+      "file": "data/professional/expressions/customer-support-module09.json",
+      "id": "expr.customer_support.module09.04",
+      "exact_object_sha256": "c4269c7d546f1418254431f4cb0021d34317714d8ab44c2705a4149699b07377",
+      "matched_fields": [
+        "text"
+      ],
+      "direct_verify_focus": false,
+      "action": "Preserve exact current object. Queue contextual level/readability review; no bulk verify-to-ensure substitution or specialist approval. A surface occurrence does not bind this old canonical skill."
+    },
+    {
+      "file": "data/professional/expressions/customer-support-module09.json",
+      "id": "expr.customer_support.module09.09",
+      "exact_object_sha256": "2b72ad7b7a94ff84ed55fc9e098c8cb8f09549c4315bb900cf62e48eb3dba40b",
+      "matched_fields": [
+        "context"
+      ],
+      "direct_verify_focus": false,
+      "action": "Preserve exact current object. Queue contextual level/readability review; no bulk verify-to-ensure substitution or specialist approval. A surface occurrence does not bind this old canonical skill."
+    },
+    {
+      "file": "data/professional/expressions/customer-support-module09.json",
+      "id": "expr.customer_support.module09.10",
+      "exact_object_sha256": "f014a9c440e0e35fc1da7cb98acbb49bbf18132fe20c9aa10cb8b1c56a8813f0",
+      "matched_fields": [
+        "context"
+      ],
+      "direct_verify_focus": false,
+      "action": "Preserve exact current object. Queue contextual level/readability review; no bulk verify-to-ensure substitution or specialist approval. A surface occurrence does not bind this old canonical skill."
+    },
+    {
+      "file": "data/professional/expressions/office-admin-module08.json",
+      "id": "expr.office_admin.module08.05",
+      "exact_object_sha256": "465d0f1a3c024822db36e7d22d835efd17539eaa6cd1a8b787d62fc95ffb3f11",
+      "matched_fields": [
+        "text"
+      ],
+      "direct_verify_focus": false,
+      "action": "Preserve exact current object. Queue contextual level/readability review; no bulk verify-to-ensure substitution or specialist approval. A surface occurrence does not bind this old canonical skill."
+    },
+    {
+      "file": "data/professional/expressions/office-admin-module08.json",
+      "id": "expr.office_admin.module08.08",
+      "exact_object_sha256": "dc8a6ededced0290b12ecfe7c66f95e1e0936e4efe28f4680eaa5da024ba8810",
+      "matched_fields": [
+        "text"
+      ],
+      "direct_verify_focus": false,
+      "action": "Preserve exact current object. Queue contextual level/readability review; no bulk verify-to-ensure substitution or specialist approval. A surface occurrence does not bind this old canonical skill."
+    },
+    {
+      "file": "data/professional/expressions/hospitality-module07.json",
+      "id": "expr.hospitality_tourism.module07.01",
+      "exact_object_sha256": "8acc83e3a33062a7b63b9ae2b61eca384728cc3a87ced33fd245f68981169aac",
+      "matched_fields": [
+        "context"
+      ],
+      "direct_verify_focus": false,
+      "action": "Preserve exact current object. Queue contextual level/readability review; no bulk verify-to-ensure substitution or specialist approval. A surface occurrence does not bind this old canonical skill."
+    },
+    {
+      "file": "data/professional/expressions/hospitality-module07.json",
+      "id": "expr.hospitality_tourism.module07.06",
+      "exact_object_sha256": "7429b295e4fc3290f3e699f106d10ab580db35a68ed7cb187d1c56a29951cad2",
+      "matched_fields": [
+        "context"
+      ],
+      "direct_verify_focus": false,
+      "action": "Preserve exact current object. Queue contextual level/readability review; no bulk verify-to-ensure substitution or specialist approval. A surface occurrence does not bind this old canonical skill."
+    },
+    {
+      "file": "data/professional/expressions/hospitality-module09.json",
+      "id": "expr.hospitality_tourism.module09.04",
+      "exact_object_sha256": "1ba5f05aafb412b923a84cf221f283cb2f12b8b921ddb384bbb440a2960d6396",
+      "matched_fields": [
+        "context"
+      ],
+      "direct_verify_focus": false,
+      "action": "Preserve exact current object. Queue contextual level/readability review; no bulk verify-to-ensure substitution or specialist approval. A surface occurrence does not bind this old canonical skill."
+    },
+    {
+      "file": "data/professional/expressions/hospitality-module09.json",
+      "id": "expr.hospitality_tourism.module09.07",
+      "exact_object_sha256": "5d3e72c8f5f21f43189348dcc379f1412eb070e309845896a54d7ea45619327d",
+      "matched_fields": [
+        "meaning"
+      ],
+      "direct_verify_focus": false,
+      "action": "Preserve exact current object. Queue contextual level/readability review; no bulk verify-to-ensure substitution or specialist approval. A surface occurrence does not bind this old canonical skill."
+    },
+    {
+      "file": "data/professional/expressions/it-support-module09.json",
+      "id": "expr.it_support.module09.03",
+      "exact_object_sha256": "573c8bc9aa2a8e49230399130fefb0f64a14822e198f2b38d5a061fe82ea7c28",
+      "matched_fields": [
+        "text"
+      ],
+      "direct_verify_focus": false,
+      "action": "Preserve exact current object. Queue contextual level/readability review; no bulk verify-to-ensure substitution or specialist approval. A surface occurrence does not bind this old canonical skill."
+    },
+    {
+      "file": "data/professional/expressions/it-support-module10.json",
+      "id": "expr.it_support.module10.10",
+      "exact_object_sha256": "5eaf8b5598cd587ef095ea8d282019ae47551c6c8ef14409dd2894da00c8ee21",
+      "matched_fields": [
+        "text"
+      ],
+      "direct_verify_focus": false,
+      "action": "Preserve exact current object. Queue contextual level/readability review; no bulk verify-to-ensure substitution or specialist approval. A surface occurrence does not bind this old canonical skill."
+    },
+    {
+      "file": "data/professional/expressions/construction-module07.json",
+      "id": "expr.construction_trades.module07.09",
+      "exact_object_sha256": "74ed897a8d5571fc5b9b460a9b35ec62b0b946df74e69e6dc18d66c3c6dc8dba",
+      "matched_fields": [
+        "context"
+      ],
+      "direct_verify_focus": false,
+      "action": "Preserve exact current object. Queue contextual level/readability review; no bulk verify-to-ensure substitution or specialist approval. A surface occurrence does not bind this old canonical skill."
+    },
+    {
+      "file": "data/professional/expressions/sales-module08.json",
+      "id": "expr.sales_marketing.module08.10",
+      "exact_object_sha256": "d42881ce9bf7958d746678483f2f72dd9dae02087e7ac0bc937295b3a198d1de",
+      "matched_fields": [
+        "text"
+      ],
+      "direct_verify_focus": false,
+      "action": "Preserve exact current object. Queue contextual level/readability review; no bulk verify-to-ensure substitution or specialist approval. A surface occurrence does not bind this old canonical skill."
+    },
+    {
+      "file": "data/professional/expressions/legal-module06.json",
+      "id": "expr.legal_paralegal.module06.02",
+      "exact_object_sha256": "01156c8077127078df52dfac4e3a58fa1ebd4892f7cf55013216d6b391b70edc",
+      "matched_fields": [
+        "meaning"
+      ],
+      "direct_verify_focus": false,
+      "action": "Preserve exact current object. Queue contextual level/readability review; no bulk verify-to-ensure substitution or specialist approval. A surface occurrence does not bind this old canonical skill."
+    },
+    {
+      "file": "data/professional/expressions/legal-module07.json",
+      "id": "expr.legal_paralegal.module07.07",
+      "exact_object_sha256": "62b810e72abc956243e7cb6afd13b3b27969bb741312ed5948d387bd50512b4a",
+      "matched_fields": [
+        "text"
+      ],
+      "direct_verify_focus": false,
+      "action": "Preserve exact current object. Queue contextual level/readability review; no bulk verify-to-ensure substitution or specialist approval. A surface occurrence does not bind this old canonical skill."
+    },
+    {
+      "file": "data/professional/expressions/legal-module09.json",
+      "id": "expr.legal_paralegal.module09.09",
+      "exact_object_sha256": "1cb1be7bbd5e7e8c90f06abe9ac32b7438975a605f28ed172ba3336f9522bdd9",
+      "matched_fields": [
+        "text"
+      ],
+      "direct_verify_focus": false,
+      "action": "Preserve exact current object. Queue contextual level/readability review; no bulk verify-to-ensure substitution or specialist approval. A surface occurrence does not bind this old canonical skill."
+    }
+  ],
+  "other_lexical_uses": "All retained lexical verify inflections and related verification/insurance/assurance identities require their own level and domain decisions. This proposal resolves only one assessed foundation slot if accepted; it does not certify every expression or description as A2-B2.",
+  "ensure_context_uses": "Existing unscored ensure occurrences are retained in context.json as a boundary inventory. They neither reserve the new canonical identity nor prove that every such occurrence has the selected outcome meaning.",
+  "morphology": "Null in the new candidate records unauthored morphology. Do not carry over veri + fy or declare ensure atomic without linguistic review. Word Jelly remains a draft mode declaration with no usable analysis.",
+  "media": "Both new word and changed expression retain pending Ava Sweet audio. No prior per-term approval transfers. The picture brief is newly authored and unaccepted; picture_suitable remains false. No sources, creators or licenses are fabricated.",
+  "gates": {
+    "verify_language_hold": "unchanged",
+    "new_word_language": "pending",
+    "new_word_overall": "pending",
+    "full_expression": "pending",
+    "curriculum_replacement": "pending",
+    "regional_variant": "pending",
+    "morphology": "unauthored",
+    "word_image": "pending_not_acquired",
+    "word_audio": "pending_not_acquired",
+    "expression_audio": "pending_not_acquired",
+    "visual_acceptance": "none",
+    "listening_acceptance": "none",
+    "module_ready": false,
+    "release": false
+  }
+}

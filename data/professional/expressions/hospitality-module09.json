@@ -1,0 +1,1580 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.hospitality_tourism.module09.01",
+      "text": "The dashboard shows different booking details from the property management system and central reservation system.",
+      "meaning": "Compare booking information from two systems on a summary display.",
+      "context": "A worker reports inconsistent records.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "dashboard",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "shows",
+          "start": 14,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "different",
+          "start": 20,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": "booking",
+          "start": 30,
+          "end": 37
+        },
+        {
+          "index": 5,
+          "text": "details",
+          "start": 38,
+          "end": 45
+        },
+        {
+          "index": 6,
+          "text": "from",
+          "start": 46,
+          "end": 50
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": "property",
+          "start": 55,
+          "end": 63
+        },
+        {
+          "index": 9,
+          "text": "management",
+          "start": 64,
+          "end": 74
+        },
+        {
+          "index": 10,
+          "text": "system",
+          "start": 75,
+          "end": 81
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 82,
+          "end": 85
+        },
+        {
+          "index": 12,
+          "text": "central",
+          "start": 86,
+          "end": 93
+        },
+        {
+          "index": 13,
+          "text": "reservation",
+          "start": 94,
+          "end": 105
+        },
+        {
+          "index": 14,
+          "text": "system",
+          "start": 106,
+          "end": 112
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 112,
+          "end": 113
+        }
+      ],
+      "focus_lexeme_ids": [
+        "property-management-system.software-coordinating-accommodation-operations.n",
+        "central-reservation-system.system-coordinating-reservations-across-sales-points.n",
+        "dashboard.information-display.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module09.02",
+      "text": "Ask the systems contact whether the channel manager and booking engine have received the approved update.",
+      "meaning": "Refer distribution and reservation-software questions to the responsible role.",
+      "context": "Reviewing an online booking issue.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Ask",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "systems",
+          "start": 8,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "contact",
+          "start": 16,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "whether",
+          "start": 24,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "channel",
+          "start": 36,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "manager",
+          "start": 44,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "booking",
+          "start": 56,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "engine",
+          "start": 64,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": "have",
+          "start": 71,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": "received",
+          "start": 76,
+          "end": 84
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 85,
+          "end": 88
+        },
+        {
+          "index": 14,
+          "text": "approved",
+          "start": 89,
+          "end": 97
+        },
+        {
+          "index": 15,
+          "text": "update",
+          "start": 98,
+          "end": 104
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 104,
+          "end": 105
+        }
+      ],
+      "focus_lexeme_ids": [
+        "channel-manager.software-coordinating-room-sales-across-booking-channels.n",
+        "booking-engine.software-supporting-online-reservation-creation.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module09.03",
+      "text": "Check the purpose and permission level before changing a guest profile field on this form.",
+      "meaning": "Check authorized access before editing a specific entry space.",
+      "context": "A worker reviews the purpose and scope of an update.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Check",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "purpose",
+          "start": 10,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 18,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "permission",
+          "start": 22,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "level",
+          "start": 33,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "before",
+          "start": 39,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "changing",
+          "start": 46,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": "a",
+          "start": 55,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "guest",
+          "start": 57,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "profile",
+          "start": 63,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": "field",
+          "start": 71,
+          "end": 76
+        },
+        {
+          "index": 12,
+          "text": "on",
+          "start": 77,
+          "end": 79
+        },
+        {
+          "index": 13,
+          "text": "this",
+          "start": 80,
+          "end": 84
+        },
+        {
+          "index": 14,
+          "text": "form",
+          "start": 85,
+          "end": 89
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 89,
+          "end": 90
+        }
+      ],
+      "focus_lexeme_ids": [
+        "guest-profile.record-of-guest-information-for-defined-service-purpose.n",
+        "permission-level.access-scope.n",
+        "field.data-entry-space.n",
+        "form.structured-information-document.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module09.04",
+      "text": "The arrival list and departure list need confirmed amendments; check the row, column, and cell before changing the spreadsheet.",
+      "meaning": "Locate the correct spreadsheet position for a confirmed amendment.",
+      "context": "A worker verifies which record and field to update.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "arrival",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "list",
+          "start": 12,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "departure",
+          "start": 21,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "list",
+          "start": 31,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "need",
+          "start": 36,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "confirmed",
+          "start": 41,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": "amendments",
+          "start": 51,
+          "end": 61
+        },
+        {
+          "index": 9,
+          "text": ";",
+          "start": 61,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "check",
+          "start": 63,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 69,
+          "end": 72
+        },
+        {
+          "index": 12,
+          "text": "row",
+          "start": 73,
+          "end": 76
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 76,
+          "end": 77
+        },
+        {
+          "index": 14,
+          "text": "column",
+          "start": 78,
+          "end": 84
+        },
+        {
+          "index": 15,
+          "text": ",",
+          "start": 84,
+          "end": 85
+        },
+        {
+          "index": 16,
+          "text": "and",
+          "start": 86,
+          "end": 89
+        },
+        {
+          "index": 17,
+          "text": "cell",
+          "start": 90,
+          "end": 94
+        },
+        {
+          "index": 18,
+          "text": "before",
+          "start": 95,
+          "end": 101
+        },
+        {
+          "index": 19,
+          "text": "changing",
+          "start": 102,
+          "end": 110
+        },
+        {
+          "index": 20,
+          "text": "the",
+          "start": 111,
+          "end": 114
+        },
+        {
+          "index": 21,
+          "text": "spreadsheet",
+          "start": 115,
+          "end": 126
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 126,
+          "end": 127
+        }
+      ],
+      "focus_lexeme_ids": [
+        "arrival-list.record-of-guests-or-bookings-expected-to-arrive.n",
+        "departure-list.record-of-guests-or-bookings-expected-to-leave.n",
+        "row.table-record.n",
+        "column.table-field.n",
+        "cell.single-spreadsheet-space.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module09.05",
+      "text": "Room status and housekeeping status describe different information in this record; confirm both under the local workflow.",
+      "meaning": "Distinguish two recorded room conditions.",
+      "context": "A worker checks the applicable local process.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Room",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "status",
+          "start": 5,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 12,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "housekeeping",
+          "start": 16,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "status",
+          "start": 29,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": "describe",
+          "start": 36,
+          "end": 44
+        },
+        {
+          "index": 6,
+          "text": "different",
+          "start": 45,
+          "end": 54
+        },
+        {
+          "index": 7,
+          "text": "information",
+          "start": 55,
+          "end": 66
+        },
+        {
+          "index": 8,
+          "text": "in",
+          "start": 67,
+          "end": 69
+        },
+        {
+          "index": 9,
+          "text": "this",
+          "start": 70,
+          "end": 74
+        },
+        {
+          "index": 10,
+          "text": "record",
+          "start": 75,
+          "end": 81
+        },
+        {
+          "index": 11,
+          "text": ";",
+          "start": 81,
+          "end": 82
+        },
+        {
+          "index": 12,
+          "text": "confirm",
+          "start": 83,
+          "end": 90
+        },
+        {
+          "index": 13,
+          "text": "both",
+          "start": 91,
+          "end": 95
+        },
+        {
+          "index": 14,
+          "text": "under",
+          "start": 96,
+          "end": 101
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 102,
+          "end": 105
+        },
+        {
+          "index": 16,
+          "text": "local",
+          "start": 106,
+          "end": 111
+        },
+        {
+          "index": 17,
+          "text": "workflow",
+          "start": 112,
+          "end": 120
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 120,
+          "end": 121
+        }
+      ],
+      "focus_lexeme_ids": [
+        "room-status.recorded-state-of-guest-room.n",
+        "housekeeping-status.recorded-stage-of-room-cleaning-or-inspection.n",
+        "record.stored-information-entry.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "ada-lodging-low-vision",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module09.06",
+      "text": "The maintenance request document identifies the reported fault and relevant reference number.",
+      "meaning": "Identify the recorded request and its reference.",
+      "context": "A worker checks the document associated with a reported fault.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "maintenance",
+          "start": 4,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "request",
+          "start": 16,
+          "end": 23
+        },
+        {
+          "index": 3,
+          "text": "document",
+          "start": 24,
+          "end": 32
+        },
+        {
+          "index": 4,
+          "text": "identifies",
+          "start": 33,
+          "end": 43
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 6,
+          "text": "reported",
+          "start": 48,
+          "end": 56
+        },
+        {
+          "index": 7,
+          "text": "fault",
+          "start": 57,
+          "end": 62
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 9,
+          "text": "relevant",
+          "start": 67,
+          "end": 75
+        },
+        {
+          "index": 10,
+          "text": "reference",
+          "start": 76,
+          "end": 85
+        },
+        {
+          "index": 11,
+          "text": "number",
+          "start": 86,
+          "end": 92
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 92,
+          "end": 93
+        }
+      ],
+      "focus_lexeme_ids": [
+        "maintenance-request.request-for-facility-or-equipment-attention.n",
+        "reference-number.record-reference-code.n",
+        "document.recorded-information-item.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module09.07",
+      "text": "Open the occupancy report tab, choose the date filter from the menu, and confirm the measurement basis and period.",
+      "meaning": "Use report controls and verify how the figures are measured.",
+      "context": "A worker reviews a software interface without assuming figures are directly comparable.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Open",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 5,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "occupancy",
+          "start": 9,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "report",
+          "start": 19,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "tab",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 29,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "choose",
+          "start": 31,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 38,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": "date",
+          "start": 42,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "filter",
+          "start": 47,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "from",
+          "start": 54,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 59,
+          "end": 62
+        },
+        {
+          "index": 12,
+          "text": "menu",
+          "start": 63,
+          "end": 67
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 67,
+          "end": 68
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 69,
+          "end": 72
+        },
+        {
+          "index": 15,
+          "text": "confirm",
+          "start": 73,
+          "end": 80
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 81,
+          "end": 84
+        },
+        {
+          "index": 17,
+          "text": "measurement",
+          "start": 85,
+          "end": 96
+        },
+        {
+          "index": 18,
+          "text": "basis",
+          "start": 97,
+          "end": 102
+        },
+        {
+          "index": 19,
+          "text": "and",
+          "start": 103,
+          "end": 106
+        },
+        {
+          "index": 20,
+          "text": "period",
+          "start": 107,
+          "end": 113
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 113,
+          "end": 114
+        }
+      ],
+      "focus_lexeme_ids": [
+        "occupancy-report.record-summarizing-accommodation-use-on-stated-basis.n",
+        "tab.interface-page-selector.n",
+        "filter.result-limiting-control.n",
+        "menu.interface-command-list.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module09.08",
+      "text": "Check the rate code and availability calendar before confirming the proposed booking amendment.",
+      "meaning": "Compare pricing and availability before a reservation change.",
+      "context": "Reviewing an amendment request.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Check",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "rate",
+          "start": 10,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "code",
+          "start": 15,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 20,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "availability",
+          "start": 24,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "calendar",
+          "start": 37,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "before",
+          "start": 46,
+          "end": 52
+        },
+        {
+          "index": 8,
+          "text": "confirming",
+          "start": 53,
+          "end": 63
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 10,
+          "text": "proposed",
+          "start": 68,
+          "end": 76
+        },
+        {
+          "index": 11,
+          "text": "booking",
+          "start": 77,
+          "end": 84
+        },
+        {
+          "index": 12,
+          "text": "amendment",
+          "start": 85,
+          "end": 94
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 94,
+          "end": 95
+        }
+      ],
+      "focus_lexeme_ids": [
+        "rate-code.identifier-for-accommodation-pricing-arrangement.n",
+        "availability-calendar.calendar-showing-bookable-resources-over-time.n",
+        "booking-amendment.change-to-reservation-details-under-agreed-process.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module09.09",
+      "text": "The night audit query has been referred to the authorized accounting contact.",
+      "meaning": "Identify the appropriate role for a period-end records issue.",
+      "context": "Following up a hotel-account query.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "night",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "audit",
+          "start": 10,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "query",
+          "start": 16,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "has",
+          "start": 22,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "been",
+          "start": 26,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "referred",
+          "start": 31,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "to",
+          "start": 40,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 43,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "authorized",
+          "start": 47,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "accounting",
+          "start": 58,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": "contact",
+          "start": 69,
+          "end": 76
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 76,
+          "end": 77
+        }
+      ],
+      "focus_lexeme_ids": [
+        "night-audit.period-end-check-of-accommodation-transactions-and-records.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module09.10",
+      "text": "Do not share a password in a message; use the approved support button to report a user account problem.",
+      "meaning": "Keep authentication information out of routine guest-service messages.",
+      "context": "Responding to an account-access issue.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Do",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "not",
+          "start": 3,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "share",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 13,
+          "end": 14
+        },
+        {
+          "index": 4,
+          "text": "password",
+          "start": 15,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "in",
+          "start": 24,
+          "end": 26
+        },
+        {
+          "index": 6,
+          "text": "a",
+          "start": 27,
+          "end": 28
+        },
+        {
+          "index": 7,
+          "text": "message",
+          "start": 29,
+          "end": 36
+        },
+        {
+          "index": 8,
+          "text": ";",
+          "start": 36,
+          "end": 37
+        },
+        {
+          "index": 9,
+          "text": "use",
+          "start": 38,
+          "end": 41
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 11,
+          "text": "approved",
+          "start": 46,
+          "end": 54
+        },
+        {
+          "index": 12,
+          "text": "support",
+          "start": 55,
+          "end": 62
+        },
+        {
+          "index": 13,
+          "text": "button",
+          "start": 63,
+          "end": 69
+        },
+        {
+          "index": 14,
+          "text": "to",
+          "start": 70,
+          "end": 72
+        },
+        {
+          "index": 15,
+          "text": "report",
+          "start": 73,
+          "end": 79
+        },
+        {
+          "index": 16,
+          "text": "a",
+          "start": 80,
+          "end": 81
+        },
+        {
+          "index": 17,
+          "text": "user",
+          "start": 82,
+          "end": 86
+        },
+        {
+          "index": 18,
+          "text": "account",
+          "start": 87,
+          "end": 94
+        },
+        {
+          "index": 19,
+          "text": "problem",
+          "start": 95,
+          "end": 102
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 102,
+          "end": 103
+        }
+      ],
+      "focus_lexeme_ids": [
+        "password.secret-access-string.n",
+        "user-account.personal-system-profile.n",
+        "button.interface-action-control.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "ftc-tech-support-scams",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    }
+  ]
+}

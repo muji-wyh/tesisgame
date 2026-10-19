@@ -1,0 +1,75 @@
+{
+  "schema": 1,
+  "status": "acquired_static_source_with_size_study_pending_independent_brief_and_native_review",
+  "review_date_local": "2026-10-17",
+  "sense_id": "shopping-bag.goods-carrier.n",
+  "source": {
+    "title": "Bag",
+    "collection": "3dicons v1",
+    "variant": "dynamic angle / color / 2400 x 2400 PNG",
+    "url": "https://3dicons.co/icons/f71a3e-bag?angle=dynamic",
+    "creator": "Vijay Verma (@realvjy)",
+    "publisher": "3dicons / Overlayz Studio",
+    "license": "CC0 1.0 Universal",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "license_evidence": [
+      "source-evidence/icon-page.html",
+      "source-evidence/library-v1-license-page.html",
+      "source-evidence/CC0-1.0-legalcode.txt",
+      "source-evidence/retrievals.json"
+    ],
+    "attribution_obligation": "No attribution requirement under CC0; retain creator and source for provenance and do not imply endorsement.",
+    "source_preview_url": "https://bvconuycpdvgzbvbkijl.supabase.co/storage/v1/object/public/sizes/f71a3e-bag/dynamic/400/color.webp",
+    "preview_inspection": "Visually inspected the original live source-page preview before acquisition; then inspected the actual downloaded PNG. No source-model or animation inspection is claimed.",
+    "acquisition_method": "Official source page: color, dynamic, 2400x2400, Download current. No login, purchase or new license-acceptance prompt.",
+    "acquisition_verification": "Browser download-event wait timed out. The newly created exact filename was found in the local Downloads directory, its host metadata was checked, and its bytes were copied without alteration to acquired/. Dimensions and visual content matched the requested source variant.",
+    "download_host_metadata": "https://3dicons.co/",
+    "direct_png_download_url": null
+  },
+  "acquired_files": [
+    {
+      "path": "acquired/3dicons-bag-dynamic-color.png",
+      "bytes": 2963534,
+      "sha256": "93065262e9028397705eb2ddcaf985942eb3ae81abf21dc5187e331ea5e004da",
+      "width": 2400,
+      "height": 2400,
+      "mode": "RGBA",
+      "frames": 1,
+      "status": "original_source_png_acquired_not_integrated"
+    }
+  ],
+  "animation": {
+    "available_animations": [],
+    "acquired_media": "One static PNG frame, no layers or animation frames.",
+    "source_model_choices_observed": ["fbx", "blend"],
+    "source_models_acquired": false,
+    "source_model_rigging_and_animation_status": "unknown"
+  },
+  "converted_study": {
+    "path": "size-study/bag-crop-512-study.png",
+    "sha256": "f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+    "width": 414,
+    "height": 512,
+    "compressed_bytes": 135843,
+    "decoded_bytes": 1695744,
+    "adaptations": ["Crop alpha bounds with a 16-source-pixel margin.", "Lanczos resize to maximum 512 pixels."],
+    "status": "image_only_size_study_not_accepted_or_integrated"
+  },
+  "review": {
+    "reviewer": "Codex recover_delivery source research agent; not independent production acceptance",
+    "source_viewed": true,
+    "downloaded_image_viewed": true,
+    "size_comparison_viewed": true,
+    "current_brief_matched": false,
+    "brief_mismatch": "Empty, smooth rigid-looking bag; reusable fabric, flexible sides and purchased items are not demonstrated.",
+    "semantic_recommendation": "Consider a separately documented plain open retail-bag brief for the already-approved broad purchased-goods-carrier definition. Fabric and visible contents are not semantically necessary. Paired loop handles and a tall solid body are distinct from the accepted squat slotted basket at simulated minimum size.",
+    "gift_bag_limit": "No bow, tag, tissue or branding makes the source specifically gift-oriented. A generic empty carrier cannot prove intended shopping use absolutely.",
+    "native_wordcard_inspected": false,
+    "production_delivery_verified": false,
+    "participant_recognition_study": false,
+    "accepted": false
+  },
+  "production_changes": [],
+  "native_test_or_build_dispatches": [],
+  "prior_evidence_modified": false
+}

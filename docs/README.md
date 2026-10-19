@@ -13,6 +13,7 @@ commands, asset counts, and measurements may no longer describe the game.
 | [Curriculum research](vocabulary/growth-curriculum.md) | ESL sequence, editorial age cohorts, vocabulary coverage, and sources | `words.json`, `phrases.json` |
 | [Voice Pop treasure](voice-pop-treasure.md) | Score milestones, persistent chest batches, and the shared animated chest catalog | `scripts/pop_reward_state.gd`, `scripts/pop_reward_room.gd`, `scripts/chest_model_view.gd` |
 | [Development and deployment](development.md) | Build, hosting, embedding, and validation | `package.json`, `tools/build-web.cjs`, `tools/deploy-web.ps1` |
+| [Professional English plans](plans/README.md) | Development specification, implementation checkpoint, and workspace consolidation | `data/professional/`, `scripts/learning_context.gd` |
 | [Performance assessment](performance.md) | Reproducible rendered workloads, paired comparisons, acceptance criteria, and measurement limits | `tools/benchmark-performance.cjs`, `tests/performance/main_scene_benchmark.gd` |
 | [Speech matching](voice-matching.md) | Homophones, interim stability, target binding, local experiment | `scripts/speech_words.gd`, `scripts/voice_pop_model.gd`, `web/shell.html` |
 | [Voice Pop slices](voice-pop-slice-feedback.md) | Cut presentation, audio integration, original release evidence | `scripts/voice_pop_slice.gd`, `scripts/game_audio.gd` |

@@ -1,0 +1,1088 @@
+{
+  "date": "2026-10-16",
+  "status": "frozen_selected_candidate_pending_exact_independent_root_acceptance",
+  "reviewer": "Codex retail_register_art (AI source and author visual review; not independent production acceptance)",
+  "sense_id": "checkout.payment-area.n",
+  "definition": "The place in a store where purchases are paid for.",
+  "example": "A second checkout is open near the entrance.",
+  "approved_brief": "Show a complete staffed checkout lane: customer side, short goods belt or counter, and a register, with a shopper presenting purchases. Frame the lane as one place while the equipment stays subordinate. Reject a close-up of a register alone, a help desk, or a hotel reception. No readable payment credentials or brand marks.",
+  "sources": [
+    {
+      "id": "mini-market",
+      "version": "1.0",
+      "source": "https://kenney.nl/assets/mini-market",
+      "creator": "Kenney",
+      "additional_credits": [
+        "Fleur Keijsers",
+        "Guus Vermeulen"
+      ],
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "acquisition_status": "Already acquired in local Kenney All-in-1 3.7.0 library; exact originals copied into this scratch revision only.",
+      "record": {
+        "path": "source-record.json",
+        "bytes": 45893,
+        "sha256": "ea4f1e66fb38f55ea908a6d52c69bbddea86ae62dceaf232d6b22bc62f59fe91"
+      },
+      "available_animations": "See exact model animation names and durations in source-record.json",
+      "integration_status": "Acquired source retained in scratch; final PNG not integrated."
+    },
+    {
+      "id": "mini-characters",
+      "version": "1.0",
+      "source": "https://kenney.nl/assets/mini-characters",
+      "creator": "Kenney",
+      "additional_credits": [],
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "acquisition_status": "Already acquired in local Kenney All-in-1 3.7.0 library; exact originals copied into this scratch revision only.",
+      "record": {
+        "path": "source-record.json",
+        "bytes": 45893,
+        "sha256": "ea4f1e66fb38f55ea908a6d52c69bbddea86ae62dceaf232d6b22bc62f59fe91"
+      },
+      "available_animations": "See exact model animation names and durations in source-record.json",
+      "integration_status": "Acquired source retained in scratch; final PNG not integrated."
+    },
+    {
+      "id": "food-kit",
+      "version": "2.0",
+      "source": "https://kenney.nl/assets/food-kit",
+      "creator": "Kenney",
+      "additional_credits": [],
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "acquisition_status": "Already acquired in local Kenney All-in-1 3.7.0 library; exact originals copied into this scratch revision only.",
+      "record": {
+        "path": "source-record.json",
+        "bytes": 45893,
+        "sha256": "ea4f1e66fb38f55ea908a6d52c69bbddea86ae62dceaf232d6b22bc62f59fe91"
+      },
+      "available_animations": "See exact model animation names and durations in source-record.json",
+      "integration_status": "Acquired source retained in scratch; final PNG not integrated."
+    }
+  ],
+  "source_integrity": {
+    "complete_selected_models": 5,
+    "selected_source_models": [
+      {
+        "geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+        "hidden_source_nodes": [],
+        "root_position": [
+          0,
+          0,
+          0
+        ],
+        "root_uniform_scale": 1,
+        "root_yaw_degrees": 0,
+        "sha256": "155f2eb666dea3a931d133a4953379898c8adb4b827ab60b86cae07235b9b598",
+        "source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/original/cash-register.glb",
+        "source_pose": {}
+      },
+      {
+        "geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+        "hidden_source_nodes": [],
+        "root_position": [
+          0.230000004172325,
+          0,
+          -0.330000013113022
+        ],
+        "root_uniform_scale": 1,
+        "root_yaw_degrees": 0,
+        "sha256": "8774b93a5ff11af146176505035cc351d37a8a69ad0b1fde612bba9c8ffa84cc",
+        "source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/original/character-employee.glb",
+        "source_pose": {
+          "clip": "idle",
+          "seconds": 0,
+          "source_animation_only": true
+        }
+      },
+      {
+        "geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+        "hidden_source_nodes": [],
+        "root_position": [
+          -0.75,
+          0,
+          0
+        ],
+        "root_uniform_scale": 1,
+        "root_yaw_degrees": 90,
+        "sha256": "2288438e7baf9acc91a870c82dc00d66710bb486592cfc3474ef8ed93a03863a",
+        "source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/mini-characters/original/character-female-b.glb",
+        "source_pose": {
+          "clip": "interact-right",
+          "seconds": 0.333,
+          "source_animation_only": true
+        }
+      },
+      {
+        "geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+        "hidden_source_nodes": [],
+        "root_position": [
+          -0.25,
+          0.25,
+          -0.129999995231628
+        ],
+        "root_uniform_scale": 0.32,
+        "root_yaw_degrees": -12,
+        "sha256": "b63a5081c6edbda7ba8172e6a776f222e781f886a011a887789b2fde42095d04",
+        "source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/food-kit/original/carton.glb",
+        "source_pose": {}
+      },
+      {
+        "geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+        "hidden_source_nodes": [],
+        "root_position": [
+          -0.239999994635582,
+          0.25,
+          0.129999995231628
+        ],
+        "root_uniform_scale": 0.55,
+        "root_yaw_degrees": 20,
+        "sha256": "2a80ab65d5bc2cb4f2bca1e8176cbb591849a288596d4b2e76e411338761a526",
+        "source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/food-kit/original/apple.glb",
+        "source_pose": {}
+      }
+    ],
+    "retained_complete_models": 6,
+    "retained_source_files": 24,
+    "source_pose_review": {
+      "path": "source-pose-review.json",
+      "bytes": 3001,
+      "sha256": "e42735517811a7bed07721cdd9d1143510e01b2d9bb7e90d0f0777cc2af95ec5"
+    },
+    "source_probe_receipt": {
+      "path": "sources-native-receipt.json",
+      "bytes": 987,
+      "sha256": "b815d58fff38a1b16a1a52b56d322a538bc23605939302f3e692a1a254abf78e"
+    },
+    "original_and_retained_source_comparisons_unchanged": 48,
+    "geometry_materials_textures_skins_and_child_bind_transforms": "Preserved. Character poses use only sampled original included animation clips.",
+    "unused_retained_model": "Mini Market floor.glb is retained as rejected-variant evidence and is absent from the selected composition."
+  },
+  "selected_candidate": {
+    "name": "compact-three-quarter",
+    "file": {
+      "path": "composition-probe/compact-three-quarter/checkout.png",
+      "bytes": 148338,
+      "sha256": "eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe"
+    },
+    "size": [
+      512,
+      393
+    ],
+    "decoded_cpu_gpu_bytes": 1609728,
+    "rgba_pixel_sha256": "15cf24c616d3741e7b4fceb39994322eb2548a76c1183fb32951115f723776ad",
+    "available_animations": [],
+    "source_instances": [
+      {
+        "geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+        "hidden_source_nodes": [],
+        "root_position": [
+          0,
+          0,
+          0
+        ],
+        "root_uniform_scale": 1,
+        "root_yaw_degrees": 0,
+        "sha256": "155f2eb666dea3a931d133a4953379898c8adb4b827ab60b86cae07235b9b598",
+        "source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/original/cash-register.glb",
+        "source_pose": {}
+      },
+      {
+        "geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+        "hidden_source_nodes": [],
+        "root_position": [
+          0.230000004172325,
+          0,
+          -0.330000013113022
+        ],
+        "root_uniform_scale": 1,
+        "root_yaw_degrees": 0,
+        "sha256": "8774b93a5ff11af146176505035cc351d37a8a69ad0b1fde612bba9c8ffa84cc",
+        "source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/original/character-employee.glb",
+        "source_pose": {
+          "clip": "idle",
+          "seconds": 0,
+          "source_animation_only": true
+        }
+      },
+      {
+        "geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+        "hidden_source_nodes": [],
+        "root_position": [
+          -0.75,
+          0,
+          0
+        ],
+        "root_uniform_scale": 1,
+        "root_yaw_degrees": 90,
+        "sha256": "2288438e7baf9acc91a870c82dc00d66710bb486592cfc3474ef8ed93a03863a",
+        "source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/mini-characters/original/character-female-b.glb",
+        "source_pose": {
+          "clip": "interact-right",
+          "seconds": 0.333,
+          "source_animation_only": true
+        }
+      },
+      {
+        "geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+        "hidden_source_nodes": [],
+        "root_position": [
+          -0.25,
+          0.25,
+          -0.129999995231628
+        ],
+        "root_uniform_scale": 0.32,
+        "root_yaw_degrees": -12,
+        "sha256": "b63a5081c6edbda7ba8172e6a776f222e781f886a011a887789b2fde42095d04",
+        "source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/food-kit/original/carton.glb",
+        "source_pose": {}
+      },
+      {
+        "geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+        "hidden_source_nodes": [],
+        "root_position": [
+          -0.239999994635582,
+          0.25,
+          0.129999995231628
+        ],
+        "root_uniform_scale": 0.55,
+        "root_yaw_degrees": 20,
+        "sha256": "2a80ab65d5bc2cb4f2bca1e8176cbb591849a288596d4b2e76e411338761a526",
+        "source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/food-kit/original/apple.glb",
+        "source_pose": {}
+      }
+    ],
+    "camera": {
+      "orthographic_size": 1.9,
+      "position": [
+        3,
+        2.70000004768372,
+        4
+      ],
+      "target": [
+        -0.16,
+        0.25,
+        -0.1
+      ]
+    },
+    "lighting": {
+      "ambient_energy": 0.18,
+      "directional_energy": 0.38,
+      "directional_rotation": [
+        -50,
+        -35,
+        0
+      ]
+    },
+    "raw_size": [
+      768,
+      768
+    ],
+    "crop": [
+      55,
+      120,
+      641,
+      492
+    ],
+    "postprocessing": "16 pixel alpha-bound margin and proportional Lanczos downscale only; no paintover or substitute art.",
+    "rendering_script": {
+      "path": "probe-composition.gd",
+      "bytes": 11965,
+      "sha256": "a86a91e175f0434f11c70826eefd579ca7ea04450a3696e1665c9e5e6f543558"
+    },
+    "card_crops": [
+      {
+        "path": "composition-probe/compact-three-quarter/match-unmatched.png",
+        "sha256": "1e933fdd8d0722062fbec79a2575d140fbc71ccd4985be0569598a29d22e6a3c",
+        "rgba_pixel_sha256": "db313fb22f9d513c7c34c4e7a9c82ba18659ec6adaf3fbc60b98d5c52bfe5a0a",
+        "dimensions": [
+          126,
+          72
+        ],
+        "bytes": 6544
+      },
+      {
+        "path": "composition-probe/compact-three-quarter/match-matched.png",
+        "sha256": "1570b960d76632b267a981f02989aa612faf00b5f40acc3407d545e879d0ca8d",
+        "rgba_pixel_sha256": "ef8c023efc87327514236af6eb9cb41d3c9a4d4c981c990a68e7709bc71aa798",
+        "dimensions": [
+          126,
+          72
+        ],
+        "bytes": 7015
+      },
+      {
+        "path": "composition-probe/compact-three-quarter/memory-unmatched.png",
+        "sha256": "92015c89686b11c09643329ae676b45f2609fc21daeddf7cfb7034b0fcb7703f",
+        "rgba_pixel_sha256": "13ed929adf7dfb658590b4141d28e8d395c8c2cf2e1e0b800b8c4f194109a9c0",
+        "dimensions": [
+          144,
+          74
+        ],
+        "bytes": 6536
+      },
+      {
+        "path": "composition-probe/compact-three-quarter/memory-matched.png",
+        "sha256": "39246a9c3ba7900f42b8c9edc162b71acd10c5355aaebacc97c5baf5594b2a65",
+        "rgba_pixel_sha256": "c9c5f252c9dcb22c89c77dc82bd713afc5a77a9de84bb3bb164a0807d5079f09",
+        "dimensions": [
+          144,
+          74
+        ],
+        "bytes": 6752
+      }
+    ],
+    "card_measurements": [
+      {
+        "badge_visible": false,
+        "card_size": [
+          126,
+          72
+        ],
+        "image_render_size": [
+          67.7455470737913,
+          52
+        ],
+        "picture_alpha": 1,
+        "picture_size": [
+          102,
+          52
+        ],
+        "state": "match-unmatched",
+        "texture_delivery": "Direct scratch ImageTexture assigned to the real WordCard; not the production Loader/cache delivery."
+      },
+      {
+        "badge_visible": true,
+        "card_size": [
+          126,
+          72
+        ],
+        "image_render_size": [
+          67.7455470737913,
+          52
+        ],
+        "picture_alpha": 0.680000007152557,
+        "picture_size": [
+          102,
+          52
+        ],
+        "state": "match-matched",
+        "texture_delivery": "Direct scratch ImageTexture assigned to the real WordCard; not the production Loader/cache delivery."
+      },
+      {
+        "badge_visible": false,
+        "card_size": [
+          144,
+          74
+        ],
+        "image_render_size": [
+          70.3511450381679,
+          54
+        ],
+        "picture_alpha": 1,
+        "picture_size": [
+          120,
+          54
+        ],
+        "state": "memory-unmatched",
+        "texture_delivery": "Direct scratch ImageTexture assigned to the real WordCard; not the production Loader/cache delivery."
+      },
+      {
+        "badge_visible": true,
+        "card_size": [
+          144,
+          74
+        ],
+        "image_render_size": [
+          70.3511450381679,
+          54
+        ],
+        "picture_alpha": 0.680000007152557,
+        "picture_size": [
+          120,
+          54
+        ],
+        "state": "memory-matched",
+        "texture_delivery": "Direct scratch ImageTexture assigned to the real WordCard; not the production Loader/cache delivery."
+      }
+    ],
+    "production_integration": false,
+    "independent_acceptance": null
+  },
+  "native_validation": {
+    "selected_candidate": {
+      "checks": 18,
+      "failures": 0,
+      "successful_checks": [
+        {
+          "check": "compact-three-quarter: transparent background",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: complete scene in viewport",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: match-unmatched card size",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: match-unmatched picture size",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: match-unmatched badge",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: match-unmatched picture alpha",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: match-matched card size",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: match-matched picture size",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: match-matched badge",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: match-matched picture alpha",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: memory-unmatched card size",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: memory-unmatched picture size",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: memory-unmatched badge",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: memory-unmatched picture alpha",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: memory-matched card size",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: memory-matched picture size",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: memory-matched badge",
+          "passed": true
+        },
+        {
+          "check": "compact-three-quarter: memory-matched picture alpha",
+          "passed": true
+        }
+      ]
+    },
+    "aggregate": {
+      "ok": false,
+      "checks": 72,
+      "failures": 2,
+      "failed_checks": [
+        {
+          "check": "tiled-three-quarter: complete scene in viewport",
+          "passed": false
+        },
+        {
+          "check": "tiled-high: complete scene in viewport",
+          "passed": false
+        }
+      ],
+      "receipt": {
+        "path": "composition-native-receipt.json",
+        "bytes": 3181,
+        "sha256": "b8154c6b339b32e42c75b83f8c0eea89bb24e8af6c72056280b8cef72d7e312d"
+      },
+      "report": {
+        "path": "composition-probe/report.json",
+        "bytes": 31982,
+        "sha256": "dd8a7045eb9fbc1bb7352fcdb38c7f6d8568b2af516566b86c555c6afec65e07"
+      },
+      "log": {
+        "path": "composition-native.log",
+        "bytes": 2131,
+        "sha256": "59a08bca0f3e4355c5de7995cb653be907399a7d6fbb780db11fbac30fe71bfb"
+      },
+      "reason": "Both tiled variants clip the complete floor at the viewport sides. The aggregate failed and remains failed; selected-candidate success is bounded to compact-three-quarter only."
+    },
+    "unchanged_production_file_guards": 658,
+    "unchanged_source_comparisons": 48,
+    "guard_error": null,
+    "delivery_boundary": "The four card captures use direct scratch ImageTexture on the actual WordCard. Production Loader/cache/pixel delivery is not yet verified."
+  },
+  "author_visual_findings": {
+    "ranked_review": {
+      "path": "ranked-composition-review.json",
+      "bytes": 6753,
+      "sha256": "ecbf3bf6efe2263633d97e374654b40af4a97a9d79f8d9affaf568fcc69e1b68"
+    },
+    "meaning": {
+      "selected_meaning": "The place in a store where purchases are paid for.",
+      "place_not_lone_object": "One whole belt-and-terminal station connects a shopper presenting groceries with an employee on the staff side.",
+      "counter_distinction": "The accepted counter image is a broad surface and parcel; this image adds payment equipment, grocery presentation and staff/customer roles.",
+      "cash_register_distinction": "The station and interaction are the subject; no claim that the isolated machine has visible physical keys or a drawer base.",
+      "exclusions": "No hotel/reception cues, readable words, brand marks, payment credentials, detached device close-up, invented geometry or replacement materials."
+    },
+    "selected_findings": {
+      "rank": 1,
+      "name": "compact-three-quarter",
+      "decision": "recommend_as_final_candidate_basis",
+      "reason": "Largest and clearest useful checkout group among the technically intact probes. Shopper on the goods side and green-uniformed employee behind the terminal frame a single station. The dark belt, terminal, carton and apple remain visible. No observed body/station penetration or implausible hand contact in this view. The real matched badge remains to the right of the group.",
+      "limits": "At Match the fitted image is 67.75x52 within the 102x52 picture area. Grocery details are small; recognition depends on the whole interaction and equipment together. Matched alpha reduces contrast. This is scoped visual judgment, not a measured recognition study."
+    },
+    "inspection": {
+      "full_composition_images": 4,
+      "native_word_card_contacts": 4,
+      "card_states_per_composition": 4,
+      "method": "Viewed every 512px composition and every actual 704x250 native WordCard contact, then compared all four full composition images and contacts together."
+    },
+    "scope": "Scoped AI visual judgment only; no human, domain, curriculum, recognition-study or module-readiness claim."
+  },
+  "production_content_written_by_this_task": false,
+  "production_media_status_at_packaging": "Checkout image pending; exact user-approved Ava word recording remains integrated and unchanged.",
+  "render_dependencies": [
+    {
+      "path": "scripts/word_card.gd",
+      "sha256": "ddb3f7ef5b1910086e0418e476ceee4f551aa2e048bed6993005bdbd0402a3bf"
+    },
+    {
+      "path": "scripts/game_data.gd",
+      "sha256": "7dc8a8e151e2e0af27ea1733d3d7835cc9611002c9b88da6915983a6b5f3df9a"
+    },
+    {
+      "path": "scripts/ui_style.gd",
+      "sha256": "5991ec95ba399174d3f207f6a16d3fdd4e614938093c1cb42a6a7768b5de9221"
+    },
+    {
+      "path": "scripts/professional_catalog.gd",
+      "sha256": "89865c3e86d2140d6b495461632a4a16ecf6eb1bd03e0d2ce4902cce33eeb15e"
+    },
+    {
+      "path": "tools/run-godot.cjs",
+      "sha256": "a411f937acd304761e0ac9f6513f45e0f2a6aa886856e3b32a537a04ff5189be"
+    }
+  ],
+  "evidence_files": [
+    {
+      "path": "composition-decision.json",
+      "bytes": 3866,
+      "sha256": "3ad6642a2a0c9d67545cc9802419892a4efd60baa50d3892a596d31326deb6d8"
+    },
+    {
+      "path": "composition-native-receipt.json",
+      "bytes": 3181,
+      "sha256": "b8154c6b339b32e42c75b83f8c0eea89bb24e8af6c72056280b8cef72d7e312d"
+    },
+    {
+      "path": "composition-native.log",
+      "bytes": 2131,
+      "sha256": "59a08bca0f3e4355c5de7995cb653be907399a7d6fbb780db11fbac30fe71bfb"
+    },
+    {
+      "path": "composition-probe/all-native-word-card-contacts.png",
+      "bytes": 193382,
+      "sha256": "959329374efbd88dac8ea6a47ec07a0f9cb5fccaf2f4603674018fd7f2a44f63"
+    },
+    {
+      "path": "composition-probe/compact-high/actual-word-card-contact-3x.png",
+      "bytes": 72606,
+      "sha256": "8c60fd6bef6ddd400bf1ffa246b1ef6f661b2c4014e927b4cae81c7bd53c8ae7"
+    },
+    {
+      "path": "composition-probe/compact-high/actual-word-card-contact.png",
+      "bytes": 51946,
+      "sha256": "50afbb155c9c0e40db14e5e0f2a2cea77679fe271d9f4e21641ec3ed542848cf"
+    },
+    {
+      "path": "composition-probe/compact-high/checkout.png",
+      "bytes": 155079,
+      "sha256": "5eee948ef6a77ecbce79e0b745c204f9c4952ea27b0895a27efd61ed29b1259e"
+    },
+    {
+      "path": "composition-probe/compact-high/match-matched.png",
+      "bytes": 6531,
+      "sha256": "fba9ce435045df8095c52a3147896d48d87c8a77c400d8c610fb00792206a48a"
+    },
+    {
+      "path": "composition-probe/compact-high/match-unmatched.png",
+      "bytes": 6028,
+      "sha256": "c1712d7a94d644763fb01dcb943e9c40da08d81190ef03fed8ae699ef9cb6c39"
+    },
+    {
+      "path": "composition-probe/compact-high/memory-matched.png",
+      "bytes": 6336,
+      "sha256": "b9e24b0c8ff66580976c2dd34eea20a2a015121c67a68675b941aa55db449037"
+    },
+    {
+      "path": "composition-probe/compact-high/memory-unmatched.png",
+      "bytes": 6026,
+      "sha256": "4ebe6d8749ebed97fad9b3ff951687a3d5035072b85de6fa929e2291dd35b27c"
+    },
+    {
+      "path": "composition-probe/compact-high/render-raw.png",
+      "bytes": 148425,
+      "sha256": "12a5a98ae586c2fc46d8255543e04967d7a01336d3a1f636361cb64d0fae5dc5"
+    },
+    {
+      "path": "composition-probe/compact-three-quarter/actual-word-card-contact-3x.png",
+      "bytes": 75386,
+      "sha256": "d27e228fbe1a8b82736920c7adeafb900ad21ef4a0b6d8cc970780908aab809f"
+    },
+    {
+      "path": "composition-probe/compact-three-quarter/actual-word-card-contact.png",
+      "bytes": 54178,
+      "sha256": "821159d2c220c06b276a7b87c8abc108931bda2fa20ebf78a6cae21493264a7d"
+    },
+    {
+      "path": "composition-probe/compact-three-quarter/checkout.png",
+      "bytes": 148338,
+      "sha256": "eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe"
+    },
+    {
+      "path": "composition-probe/compact-three-quarter/match-matched.png",
+      "bytes": 7015,
+      "sha256": "1570b960d76632b267a981f02989aa612faf00b5f40acc3407d545e879d0ca8d"
+    },
+    {
+      "path": "composition-probe/compact-three-quarter/match-unmatched.png",
+      "bytes": 6544,
+      "sha256": "1e933fdd8d0722062fbec79a2575d140fbc71ccd4985be0569598a29d22e6a3c"
+    },
+    {
+      "path": "composition-probe/compact-three-quarter/memory-matched.png",
+      "bytes": 6752,
+      "sha256": "39246a9c3ba7900f42b8c9edc162b71acd10c5355aaebacc97c5baf5594b2a65"
+    },
+    {
+      "path": "composition-probe/compact-three-quarter/memory-unmatched.png",
+      "bytes": 6536,
+      "sha256": "92015c89686b11c09643329ae676b45f2609fc21daeddf7cfb7034b0fcb7703f"
+    },
+    {
+      "path": "composition-probe/compact-three-quarter/render-raw.png",
+      "bytes": 131482,
+      "sha256": "f8373f45fc444cb830efb3d577406a940d20f88fa6c1ba4dd01fec1963e44f3f"
+    },
+    {
+      "path": "composition-probe/composition-contact.png",
+      "bytes": 481825,
+      "sha256": "5b3a240212962953d425d67687a7905ae24c1ca8ef80cfbb2637eb247e430d4a"
+    },
+    {
+      "path": "composition-probe/report.json",
+      "bytes": 31982,
+      "sha256": "dd8a7045eb9fbc1bb7352fcdb38c7f6d8568b2af516566b86c555c6afec65e07"
+    },
+    {
+      "path": "composition-probe/tiled-high/actual-word-card-contact-3x.png",
+      "bytes": 74089,
+      "sha256": "5beb98dcd9550000a7ede1a97408c56ca221b3c705fda42b9f6232cefbc5b84c"
+    },
+    {
+      "path": "composition-probe/tiled-high/actual-word-card-contact.png",
+      "bytes": 53071,
+      "sha256": "71ff9e9e85c70b6ecf620353e17ad55e98c7fba7d278d23c5eaf855285857234"
+    },
+    {
+      "path": "composition-probe/tiled-high/checkout.png",
+      "bytes": 119164,
+      "sha256": "7f5c9f4d14a4d96a5b8c4be2ea9598159fa0a423699d35a90bbeea5b8c4485f7"
+    },
+    {
+      "path": "composition-probe/tiled-high/match-matched.png",
+      "bytes": 6915,
+      "sha256": "2db292eea6be30d2e625788ed57197736ae50297958e3c0d6674d2d31803d600"
+    },
+    {
+      "path": "composition-probe/tiled-high/match-unmatched.png",
+      "bytes": 6331,
+      "sha256": "ba4f0d06463da25d7723d6b4c4d36590d13075f50bf7ea92fd70e9b63cc53eab"
+    },
+    {
+      "path": "composition-probe/tiled-high/memory-matched.png",
+      "bytes": 6723,
+      "sha256": "b99fd49c931d7ca494b298cc34acd7390a43ef7d21a361d163e284ff2e602ca5"
+    },
+    {
+      "path": "composition-probe/tiled-high/memory-unmatched.png",
+      "bytes": 6371,
+      "sha256": "f35cba627369db96d58dbe01f183d58c86142c3998fc7e1d2047e981755aafff"
+    },
+    {
+      "path": "composition-probe/tiled-high/render-raw.png",
+      "bytes": 143413,
+      "sha256": "c3d63c9267e44320db2f0ec9d1fb21b8d93d3b334648394e0fa74b653c3f79d6"
+    },
+    {
+      "path": "composition-probe/tiled-three-quarter/actual-word-card-contact-3x.png",
+      "bytes": 77093,
+      "sha256": "6e5c864aa58561896cef68524c3b96e88405ea5e59f22a571c2f92e33fc88bae"
+    },
+    {
+      "path": "composition-probe/tiled-three-quarter/actual-word-card-contact.png",
+      "bytes": 55473,
+      "sha256": "06ca43fbf8e7f99d8b20c1452bcb601880c210f7680f509c88243fbb541fb2e4"
+    },
+    {
+      "path": "composition-probe/tiled-three-quarter/checkout.png",
+      "bytes": 105674,
+      "sha256": "800826e687ba79a70ae9414708980d7ae5d224689c8d7970142081cae8b1db4a"
+    },
+    {
+      "path": "composition-probe/tiled-three-quarter/match-matched.png",
+      "bytes": 7368,
+      "sha256": "2f3f0356dff570d293d320572cfaeb98cc65d44bae94d60d65b44ff214e307d6"
+    },
+    {
+      "path": "composition-probe/tiled-three-quarter/match-unmatched.png",
+      "bytes": 6878,
+      "sha256": "f942c3e9dd8d18ee3f285b1fce30387baca7775d9e7262954d2041885854f4d9"
+    },
+    {
+      "path": "composition-probe/tiled-three-quarter/memory-matched.png",
+      "bytes": 7260,
+      "sha256": "965076587ba42387455666c740ed59548613bc042c42864e555cac109900ed7f"
+    },
+    {
+      "path": "composition-probe/tiled-three-quarter/memory-unmatched.png",
+      "bytes": 6951,
+      "sha256": "78e700e508dfb0a3e1eaf2ac5d4673e43c6fd9cd35e324b7cc92ba5707f44b22"
+    },
+    {
+      "path": "composition-probe/tiled-three-quarter/render-raw.png",
+      "bytes": 118433,
+      "sha256": "23c2389096efe0e26ec77848cc5b285394d03e91f1b664775830ac1d07e73ac9"
+    },
+    {
+      "path": "freeze-selection-attempt-r01.json",
+      "bytes": 439,
+      "sha256": "9a100570c317529e14c7ac35dce8b3ec2a5f476d5ac20e303431b81dc009b6ca"
+    },
+    {
+      "path": "freeze-selection-r02.cjs",
+      "bytes": 5402,
+      "sha256": "0b081049c25e3f3e79906748beabc09b1406198e92749ce12eb941c0fd9fbdcb"
+    },
+    {
+      "path": "freeze-selection.cjs",
+      "bytes": 5405,
+      "sha256": "e6b1fccf89445e95003666f29815d83ff8f35403cd0651d4ffc1a0bdbd6f7f5d"
+    },
+    {
+      "path": "inspect-sources.gd",
+      "bytes": 6540,
+      "sha256": "1a94177d1c8e3064977fb461724a634e739861c25ffb7de13c63a4de55cd2f08"
+    },
+    {
+      "path": "make-composition-contacts.py",
+      "bytes": 1530,
+      "sha256": "aa3dbdbdf39c54c9797efb47bd8f2ff56b2fd0543f467b023c3a3c1af3b15f8e"
+    },
+    {
+      "path": "make-source-contact.py",
+      "bytes": 1619,
+      "sha256": "da7292332bf9cad58e42a76ab8cb68a4d68556c51b18d38349cde64a3b7187dc"
+    },
+    {
+      "path": "preparation-receipt.json",
+      "bytes": 1011,
+      "sha256": "09df1fd1c66b2f353972690a5396cc29b5f304d8cf3fa7ba7276ae45bad6b319"
+    },
+    {
+      "path": "prepare-sources.cjs",
+      "bytes": 10587,
+      "sha256": "9e6d58dd6a0ea3549b10d913960725f5990478980d328c1001b300042f4abd92"
+    },
+    {
+      "path": "probe-composition.gd",
+      "bytes": 11965,
+      "sha256": "a86a91e175f0434f11c70826eefd579ca7ea04450a3696e1665c9e5e6f543558"
+    },
+    {
+      "path": "ranked-composition-review.json",
+      "bytes": 6753,
+      "sha256": "ecbf3bf6efe2263633d97e374654b40af4a97a9d79f8d9affaf568fcc69e1b68"
+    },
+    {
+      "path": "README.md",
+      "bytes": 3206,
+      "sha256": "7840cc9d9cbcd7144920b1c44343db7c043a541f29ed75022b4a0a9edada8f3b"
+    },
+    {
+      "path": "record-composition-review.py",
+      "bytes": 5149,
+      "sha256": "159c394799faa0ba50bd7cc05691f8c1dc86629643c1d5fce4679eebe1d36885"
+    },
+    {
+      "path": "run-native-probe.cjs",
+      "bytes": 4202,
+      "sha256": "2aeeed51a81e3691c32c85d44e511b0939a38abaffd00f12f4e06048b6d7a30b"
+    },
+    {
+      "path": "source-coordinate-evidence.json",
+      "bytes": 935,
+      "sha256": "c560b9e8ba2097c089f4a57ae0a10e50b0ce702c64f0e83537f773f9c3ff387f"
+    },
+    {
+      "path": "source-inspection/contact.png",
+      "bytes": 521304,
+      "sha256": "2e89249292d24907e8577228d9d3708c0b82455ae422373115d9385de44b9d27"
+    },
+    {
+      "path": "source-inspection/food-kit--apple-front.png",
+      "bytes": 36848,
+      "sha256": "baf860236a820722eb0f981162eda05089ea92f541bbc0b623568fe161364a77"
+    },
+    {
+      "path": "source-inspection/food-kit--carton-front.png",
+      "bytes": 13073,
+      "sha256": "6266f47ea4d689596dc82e9e8160c117e3925d63932138469462432d951cf5e7"
+    },
+    {
+      "path": "source-inspection/mini-characters--character-female-b-idle-start.png",
+      "bytes": 61899,
+      "sha256": "9cefa4cd414918cbecc3e310084e81463d52fc63448c6d4ef76149c2a8c3e531"
+    },
+    {
+      "path": "source-inspection/mini-characters--character-female-b-interact-end.png",
+      "bytes": 62165,
+      "sha256": "953cd968e83512bb43494305776cdb45bd5fa05beaee0a75a2135b0ef7edffe1"
+    },
+    {
+      "path": "source-inspection/mini-characters--character-female-b-interact-middle-side.png",
+      "bytes": 58216,
+      "sha256": "fe55851259f8b3a95b4c1929a564a42ed6efd7971b2fed7cf42a911ddc2c70e2"
+    },
+    {
+      "path": "source-inspection/mini-characters--character-female-b-interact-middle.png",
+      "bytes": 62223,
+      "sha256": "7c075fc8b5fd13b25dbf5e1852f6b75f04c541794e71a022e11839332748f87c"
+    },
+    {
+      "path": "source-inspection/mini-characters--character-female-b-interact-start.png",
+      "bytes": 61899,
+      "sha256": "9cefa4cd414918cbecc3e310084e81463d52fc63448c6d4ef76149c2a8c3e531"
+    },
+    {
+      "path": "source-inspection/mini-characters--character-female-b-static.png",
+      "bytes": 59493,
+      "sha256": "b85082a09496d385d79ba0a4e47b22b7b3b3a845b526f0a070de2438a70c0393"
+    },
+    {
+      "path": "source-inspection/mini-market--cash-register-front.png",
+      "bytes": 34117,
+      "sha256": "37f59f32f5d8d195cd77108785e30edd10b761ce149ace9f530a512a9d772982"
+    },
+    {
+      "path": "source-inspection/mini-market--cash-register-high.png",
+      "bytes": 38788,
+      "sha256": "7f6999d7144b509a16508c54f958ed2db33bd962f82f6028788fc950045b4609"
+    },
+    {
+      "path": "source-inspection/mini-market--cash-register-rear.png",
+      "bytes": 25070,
+      "sha256": "4b96a5329b2e7de7df00b891bb9c0d6b21165c8f6371b79e4fbe39f25313daaf"
+    },
+    {
+      "path": "source-inspection/mini-market--character-employee-idle-start.png",
+      "bytes": 50874,
+      "sha256": "6ec21b262e2280cd1c55923769389b25e33d1fe02eaddbce1d0c9bfd56375d69"
+    },
+    {
+      "path": "source-inspection/mini-market--character-employee-interact-end.png",
+      "bytes": 51831,
+      "sha256": "9300ca026e0907a0ae7b7322b5b02f0bcefd87d2b89fa042909116717511fc00"
+    },
+    {
+      "path": "source-inspection/mini-market--character-employee-interact-middle-side.png",
+      "bytes": 45417,
+      "sha256": "cd9d8003deea6ace9d432161f859b8e76498efdd328211ca66058bbcc089abc4"
+    },
+    {
+      "path": "source-inspection/mini-market--character-employee-interact-middle.png",
+      "bytes": 50888,
+      "sha256": "f63475c69607178dc23fd14c15f43437af566339923abf98120801beae7ff60b"
+    },
+    {
+      "path": "source-inspection/mini-market--character-employee-interact-start.png",
+      "bytes": 50874,
+      "sha256": "6ec21b262e2280cd1c55923769389b25e33d1fe02eaddbce1d0c9bfd56375d69"
+    },
+    {
+      "path": "source-inspection/mini-market--character-employee-static.png",
+      "bytes": 47219,
+      "sha256": "077bb573358cd658276f2f977581e8113b62bcccd106c6a0b462cfd6a24d003f"
+    },
+    {
+      "path": "source-inspection/mini-market--floor-front.png",
+      "bytes": 9580,
+      "sha256": "40861966b56cf29186fd19865bd05eeb0458e3c32f79ba65e9b268bb79a7383f"
+    },
+    {
+      "path": "source-inspection/report.json",
+      "bytes": 20174,
+      "sha256": "c7ce7596f86dd9195beeeba97628f337ca3942f720053695ac078e339f35ebda"
+    },
+    {
+      "path": "source-pose-review-proposal.json",
+      "bytes": 2445,
+      "sha256": "ee6bc84dc016b3aef9ca09c4689d5004fef721d0750618ed0bfa65b37253c4aa"
+    },
+    {
+      "path": "source-pose-review.json",
+      "bytes": 3001,
+      "sha256": "e42735517811a7bed07721cdd9d1143510e01b2d9bb7e90d0f0777cc2af95ec5"
+    },
+    {
+      "path": "source-record.json",
+      "bytes": 45893,
+      "sha256": "ea4f1e66fb38f55ea908a6d52c69bbddea86ae62dceaf232d6b22bc62f59fe91"
+    },
+    {
+      "path": "source/food-kit/License.txt",
+      "bytes": 711,
+      "sha256": "32a081c2035dd4db47d850c83244da048165f0e53d71c076b76c1afc0590bc7f"
+    },
+    {
+      "path": "source/food-kit/original/apple.glb",
+      "bytes": 14376,
+      "sha256": "2a80ab65d5bc2cb4f2bca1e8176cbb591849a288596d4b2e76e411338761a526"
+    },
+    {
+      "path": "source/food-kit/original/carton.glb",
+      "bytes": 9352,
+      "sha256": "b63a5081c6edbda7ba8172e6a776f222e781f886a011a887789b2fde42095d04"
+    },
+    {
+      "path": "source/food-kit/original/Textures/colormap.png",
+      "bytes": 10715,
+      "sha256": "75baf74d9483a0fc56ac21ceba346fbe16fc24a2a1bf0524c53e6bbe802e1153"
+    },
+    {
+      "path": "source/food-kit/Overview.html",
+      "bytes": 29848,
+      "sha256": "361722dd387f8986c08ea216567713f405b1be9b029a63f4e7781fefa8790183"
+    },
+    {
+      "path": "source/food-kit/previews/apple.png",
+      "bytes": 1808,
+      "sha256": "1fa189f9f6e88750743c93e97e548d70a3765c7fb2446edd5ed6355ffabb3259"
+    },
+    {
+      "path": "source/food-kit/previews/carton.png",
+      "bytes": 1518,
+      "sha256": "6d3cd2d4a8a00858628cdc045d293ea3a058959d7230c50358eee12dbba2918d"
+    },
+    {
+      "path": "source/mini-characters/License.txt",
+      "bytes": 718,
+      "sha256": "28358ae5accc85b572eb42507956afc8beae05acb4648bb9026a5714d421b785"
+    },
+    {
+      "path": "source/mini-characters/original/character-female-b.glb",
+      "bytes": 252140,
+      "sha256": "2288438e7baf9acc91a870c82dc00d66710bb486592cfc3474ef8ed93a03863a"
+    },
+    {
+      "path": "source/mini-characters/original/Textures/colormap.png",
+      "bytes": 8706,
+      "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e"
+    },
+    {
+      "path": "source/mini-characters/Overview.html",
+      "bytes": 7690,
+      "sha256": "d27bd2bca14e3c581938375f210ff3f7b671c08bb047083b2401cb91542b6d36"
+    },
+    {
+      "path": "source/mini-characters/previews/character-female-b.png",
+      "bytes": 1820,
+      "sha256": "db299b4ab11a3f038cbd961b62f93cb67677d3e1a9b4cd12577978120f5f9ea6"
+    },
+    {
+      "path": "source/mini-characters/previews/Preview.png",
+      "bytes": 106511,
+      "sha256": "ed425bf02d6a2de2bc44adc0ba52996b0cdb7b99d98859ea60b038958790f256"
+    },
+    {
+      "path": "source/mini-market/License.txt",
+      "bytes": 767,
+      "sha256": "5ee4df809330c05896f223c97f250cc1bdc13b46a370eb464533c85c94146070"
+    },
+    {
+      "path": "source/mini-market/original/cash-register.glb",
+      "bytes": 20332,
+      "sha256": "155f2eb666dea3a931d133a4953379898c8adb4b827ab60b86cae07235b9b598"
+    },
+    {
+      "path": "source/mini-market/original/character-employee.glb",
+      "bytes": 215836,
+      "sha256": "8774b93a5ff11af146176505035cc351d37a8a69ad0b1fde612bba9c8ffa84cc"
+    },
+    {
+      "path": "source/mini-market/original/floor.glb",
+      "bytes": 3928,
+      "sha256": "b18da447e10ae1afb327c90bc316590c780c68b04097a038f3fbb26fd28ca0f8"
+    },
+    {
+      "path": "source/mini-market/original/Textures/colormap.png",
+      "bytes": 8706,
+      "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e"
+    },
+    {
+      "path": "source/mini-market/Overview.html",
+      "bytes": 6652,
+      "sha256": "58dee631a02b854f1b511d6184302f06647ac908ad560039ad3c4d0aad1011c8"
+    },
+    {
+      "path": "source/mini-market/previews/cash-register.png",
+      "bytes": 1569,
+      "sha256": "db169c7da59d220e24e55081ff75bc44b768bf9fb8caa9b1ff8e9a20aee20258"
+    },
+    {
+      "path": "source/mini-market/previews/character-employee.png",
+      "bytes": 1802,
+      "sha256": "10bdce51445eadd07de6c0584d09dc50cdb6c98a2336567eb7074c296a42a902"
+    },
+    {
+      "path": "source/mini-market/previews/floor.png",
+      "bytes": 870,
+      "sha256": "16e529175af85f5a372b80779a1e15fd081d8a0b0f4d9fa0e513b16bb297e4e0"
+    },
+    {
+      "path": "source/mini-market/previews/Preview.png",
+      "bytes": 99231,
+      "sha256": "db0bc243ed956e21ab55915c794130ca4cfda8ed181d27f856444fdcb7f7e5f7"
+    },
+    {
+      "path": "source/mini-market/previews/Sample.png",
+      "bytes": 113281,
+      "sha256": "77e54d04afde778892f0e2a7ab548b6daaa6b7922a8fcd4bee97b9b9c1dd094b"
+    },
+    {
+      "path": "sources-native-receipt.json",
+      "bytes": 987,
+      "sha256": "b815d58fff38a1b16a1a52b56d322a538bc23605939302f3e692a1a254abf78e"
+    },
+    {
+      "path": "sources-native.log",
+      "bytes": 546,
+      "sha256": "e895a50201c572e6002561d37bd85900b287b5cba8a716402bb25262e8cf1773"
+    }
+  ]
+}

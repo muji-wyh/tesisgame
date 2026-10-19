@@ -1,0 +1,2119 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "chef.professional-kitchen-cook.n",
+      "text": "chef",
+      "display_text": "chef",
+      "pos": "noun",
+      "definition": "A professional cook, often with responsibility for planning or skilled food preparation.",
+      "example": "The chef explained the menu change.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "chef"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A friendly professional chef discussing a menu with colleagues.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "chef.professional-kitchen-cook.n.analysis.v1",
+        "lexeme_id": "chef.professional-kitchen-cook.n",
+        "text": "chef",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.chef",
+            "type": "atomic",
+            "canonical": "chef",
+            "surface": "chef"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-chefs",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "head-chef.kitchen-leading-chef.n",
+      "text": "head chef",
+      "display_text": "head chef",
+      "pos": "noun",
+      "definition": "The chef with overall responsibility for a kitchen's food work, under the establishment's arrangements.",
+      "example": "The head chef confirmed the work allocation.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "head chef"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A kitchen lead coordinating a calm team briefing.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "head-chef.kitchen-leading-chef.n.analysis.v1",
+        "lexeme_id": "head-chef.kitchen-leading-chef.n",
+        "text": "head chef",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.head",
+            "type": "stem",
+            "canonical": "head",
+            "surface": "head"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.chef",
+            "type": "atomic",
+            "canonical": "chef",
+            "surface": "chef"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "head chef",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-chefs",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "sous-chef.deputy-kitchen-chef.n",
+      "text": "sous chef",
+      "display_text": "sous chef",
+      "pos": "noun",
+      "definition": "A chef who assists the head chef and may take charge in their absence.",
+      "example": "The sous chef clarified the preparation priorities.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "sous chef"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A deputy chef discussing assigned work with colleagues.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-chefs",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "cook.person-preparing-cooked-food.n",
+      "text": "cook",
+      "display_text": "cook",
+      "pos": "noun",
+      "definition": "A person whose work includes preparing and cooking food.",
+      "example": "The cook asked about the revised recipe.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "cook"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An adult cook reviewing a recipe with a supervisor.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "cook.person-preparing-cooked-food.n.analysis.v1",
+        "lexeme_id": "cook.person-preparing-cooked-food.n",
+        "text": "cook",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.cook",
+            "type": "atomic",
+            "canonical": "cook",
+            "surface": "cook"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-chefs",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "line-cook.assigned-cooking-station-worker.n",
+      "text": "line cook",
+      "display_text": "line cook",
+      "pos": "noun",
+      "definition": "A cook assigned to a particular station or part of food preparation during service.",
+      "example": "The line cook reported that the order needed clarification.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "line cook"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A cook at a labeled but inactive station.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "line-cook.assigned-cooking-station-worker.n.analysis.v1",
+        "lexeme_id": "line-cook.assigned-cooking-station-worker.n",
+        "text": "line cook",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.line",
+            "type": "stem",
+            "canonical": "line",
+            "surface": "line"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.cook",
+            "type": "atomic",
+            "canonical": "cook",
+            "surface": "cook"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "line cook",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-chefs",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "prep-cook.advance-food-preparation-worker.n",
+      "text": "prep cook",
+      "display_text": "prep cook",
+      "pos": "noun",
+      "definition": "A cook whose work focuses on preparing ingredients or food before service.",
+      "example": "The prep cook checked the preparation list.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "prep cook"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A worker reviewing assigned advance preparation tasks.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "prep-cook.advance-food-preparation-worker.n.analysis.v1",
+        "lexeme_id": "prep-cook.advance-food-preparation-worker.n",
+        "text": "prep cook",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.prep",
+            "type": "stem",
+            "canonical": "prep",
+            "surface": "prep"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.cook",
+            "type": "atomic",
+            "canonical": "cook",
+            "surface": "cook"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "prep cook",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-chefs",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "pastry-chef.pastry-and-dessert-specialist.n",
+      "text": "pastry chef",
+      "display_text": "pastry chef",
+      "pos": "noun",
+      "definition": "A chef specializing in pastries, desserts, or related baked foods.",
+      "example": "The pastry chef confirmed the dessert description.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "pastry chef"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A pastry specialist discussing a clearly labeled dessert.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "pastry-chef.pastry-and-dessert-specialist.n.analysis.v1",
+        "lexeme_id": "pastry-chef.pastry-and-dessert-specialist.n",
+        "text": "pastry chef",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.pastry",
+            "type": "stem",
+            "canonical": "pastry",
+            "surface": "pastry"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.chef",
+            "type": "atomic",
+            "canonical": "chef",
+            "surface": "chef"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "pastry chef",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-chefs",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "baker.bread-and-baked-food-maker.n",
+      "text": "baker",
+      "display_text": "baker",
+      "pos": "noun",
+      "definition": "A person who makes bread or other baked foods as work.",
+      "example": "The baker checked the flour delivery.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "baker"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A baker beside finished bread and a supply record.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "baker.bread-and-baked-food-maker.n.analysis.v1",
+        "lexeme_id": "baker.bread-and-baked-food-maker.n",
+        "text": "baker",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.bake",
+            "type": "stem",
+            "canonical": "bake",
+            "surface": "bak"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.er.suffix",
+            "type": "suffix",
+            "canonical": "er",
+            "surface": "er"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "baker",
+            "rule": "drop_final_e_before_suffix"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-chefs",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "barista.coffee-service-specialist.n",
+      "text": "barista",
+      "display_text": "barista",
+      "pos": "noun",
+      "definition": "A person who prepares and serves coffee and related drinks.",
+      "example": "The barista checked the drink order.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "barista"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A friendly coffee-service worker at an unbranded machine.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-chefs",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired. Use inclusive adult role artwork. Alcohol-related service rules vary by jurisdiction; this vocabulary does not authorize service to any person."
+    },
+    {
+      "id": "bartender.bar-drink-service-worker.n",
+      "text": "bartender",
+      "display_text": "bartender",
+      "pos": "noun",
+      "definition": "A person who prepares or serves drinks at a bar within the applicable service rules.",
+      "example": "The bartender asked the supervisor to clarify the service policy.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "bartender"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An adult worker discussing service rules at a welcoming bar counter.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "bartender.bar-drink-service-worker.n.analysis.v1",
+        "lexeme_id": "bartender.bar-drink-service-worker.n",
+        "text": "bartender",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.bar",
+            "type": "stem",
+            "canonical": "bar",
+            "surface": "bar"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.tend",
+            "type": "stem",
+            "canonical": "tend",
+            "surface": "tend"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.er.suffix",
+            "type": "suffix",
+            "canonical": "er",
+            "surface": "er"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "tender",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "bartender",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-chefs",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired. Use inclusive adult role artwork. Alcohol-related service rules vary by jurisdiction; this vocabulary does not authorize service to any person."
+    },
+    {
+      "id": "server.food-and-drink-service-worker.n",
+      "text": "server",
+      "display_text": "server",
+      "pos": "noun",
+      "definition": "A worker who takes orders or serves food and drinks to guests.",
+      "example": "The server confirmed the table number.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "server"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An adult server checking a fictional guest order.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "server.food-and-drink-service-worker.n.analysis.v1",
+        "lexeme_id": "server.food-and-drink-service-worker.n",
+        "text": "server",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.serve",
+            "type": "stem",
+            "canonical": "serve",
+            "surface": "serv"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.er.suffix",
+            "type": "suffix",
+            "canonical": "er",
+            "surface": "er"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "server",
+            "rule": "drop_final_e_before_suffix"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-chefs",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired. Use inclusive adult role artwork. Alcohol-related service rules vary by jurisdiction; this vocabulary does not authorize service to any person."
+    },
+    {
+      "id": "host.guest-welcoming-seating-worker.n",
+      "text": "host",
+      "display_text": "host",
+      "pos": "noun",
+      "definition": "A worker who welcomes guests and coordinates seating or reservations.",
+      "example": "The host checked the available tables.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "host"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A welcoming restaurant host with a fictional booking display.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "host.guest-welcoming-seating-worker.n.analysis.v1",
+        "lexeme_id": "host.guest-welcoming-seating-worker.n",
+        "text": "host",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.host",
+            "type": "atomic",
+            "canonical": "host",
+            "surface": "host"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-chefs",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired. Use inclusive adult role artwork. Alcohol-related service rules vary by jurisdiction; this vocabulary does not authorize service to any person."
+    },
+    {
+      "id": "food-runner.prepared-order-delivery-worker.n",
+      "text": "food runner",
+      "display_text": "food runner",
+      "pos": "noun",
+      "definition": "A worker who carries prepared food from the kitchen to the appropriate service location.",
+      "example": "The food runner confirmed where the order should go.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "food runner"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A worker checking the destination of a covered prepared order.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "food-runner.prepared-order-delivery-worker.n.analysis.v1",
+        "lexeme_id": "food-runner.prepared-order-delivery-worker.n",
+        "text": "food runner",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.food",
+            "type": "stem",
+            "canonical": "food",
+            "surface": "food"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.run",
+            "type": "stem",
+            "canonical": "run",
+            "surface": "runn"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.er.suffix",
+            "type": "suffix",
+            "canonical": "er",
+            "surface": "er"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "runner",
+            "rule": "double_final_consonant_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "food runner",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-chefs",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "busser.dining-table-clearing-worker.n",
+      "text": "busser",
+      "display_text": "busser",
+      "pos": "noun",
+      "definition": "A worker who clears and resets dining tables, especially in US usage.",
+      "example": "The busser checked which tables were ready to reset.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "busser"
+      ],
+      "regions": [
+        "US"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An adult worker reviewing table readiness without handling instructions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-chefs",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "dishwasher.dish-washing-worker.n",
+      "text": "dishwasher",
+      "display_text": "dishwasher",
+      "pos": "noun",
+      "definition": "A worker whose duties include washing dishes and related kitchen items.",
+      "example": "The dishwasher asked about the equipment fault.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "dishwasher"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An adult dishwashing worker reporting a machine concern.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "dishwasher.dish-washing-worker.n.analysis.v1",
+        "lexeme_id": "dishwasher.dish-washing-worker.n",
+        "text": "dishwasher",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.dish",
+            "type": "stem",
+            "canonical": "dish",
+            "surface": "dish"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.wash",
+            "type": "stem",
+            "canonical": "wash",
+            "surface": "wash"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.er.suffix",
+            "type": "suffix",
+            "canonical": "er",
+            "surface": "er"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "washer",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "dishwasher",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-chefs",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "kitchen-porter.kitchen-support-worker.n",
+      "text": "kitchen porter",
+      "display_text": "kitchen porter",
+      "pos": "noun",
+      "definition": "A worker who supports kitchen operations with tasks such as washing and general upkeep, especially in UK usage.",
+      "example": "The kitchen porter confirmed the assigned duties.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "kitchen porter"
+      ],
+      "regions": [
+        "UK"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An adult kitchen-support worker in a team briefing.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "kitchen-porter.kitchen-support-worker.n.analysis.v1",
+        "lexeme_id": "kitchen-porter.kitchen-support-worker.n",
+        "text": "kitchen porter",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.kitchen",
+            "type": "stem",
+            "canonical": "kitchen",
+            "surface": "kitchen"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.porter",
+            "type": "stem",
+            "canonical": "porter",
+            "surface": "porter"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "kitchen porter",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-chefs",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "catering.food-service-for-event-or-client.n",
+      "text": "catering",
+      "display_text": "catering",
+      "pos": "noun",
+      "definition": "Providing prepared food and related service for an event or client.",
+      "example": "The manager confirmed the catering arrangements.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "catering"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A team discussing a fictional catered event.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "catering.food-service-for-event-or-client.n.analysis.v1",
+        "lexeme_id": "catering.food-service-for-event-or-client.n",
+        "text": "catering",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.cater",
+            "type": "stem",
+            "canonical": "cater",
+            "surface": "cater"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "catering",
+            "rule": "suffix_attachment"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-chefs",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "w3c-accessible-events",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "banquet.formal-group-meal.n",
+      "text": "banquet",
+      "display_text": "banquet",
+      "pos": "noun",
+      "definition": "A formal meal for a group, often connected with an event.",
+      "example": "The coordinator reviewed the banquet plan.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "banquet"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A welcoming formal group-dining setting without real event details.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-chefs",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "front-of-house.guest-facing-hospitality-operations.n",
+      "text": "front of house",
+      "display_text": "front of house",
+      "pos": "noun",
+      "definition": "The guest-facing areas and service work of a hospitality establishment.",
+      "example": "The manager asked front of house to confirm the guest's request.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "front of house"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A guest-service team coordinating at a reception area.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "front-of-house.guest-facing-hospitality-operations.n.analysis.v1",
+        "lexeme_id": "front-of-house.guest-facing-hospitality-operations.n",
+        "text": "front of house",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.front",
+            "type": "stem",
+            "canonical": "front",
+            "surface": "front"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.of",
+            "type": "stem",
+            "canonical": "of",
+            "surface": "of"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.house",
+            "type": "stem",
+            "canonical": "house",
+            "surface": "house"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "front of",
+            "rule": "word_boundary"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "front of house",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-chefs",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "back-of-house.behind-service-hospitality-operations.n",
+      "text": "back of house",
+      "display_text": "back of house",
+      "pos": "noun",
+      "definition": "The support areas and work behind the guest-facing service of an establishment.",
+      "example": "The team clarified who in back of house would receive the message.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "back of house"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A kitchen and service-support team in a calm discussion.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "back-of-house.behind-service-hospitality-operations.n.analysis.v1",
+        "lexeme_id": "back-of-house.behind-service-hospitality-operations.n",
+        "text": "back of house",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.back",
+            "type": "stem",
+            "canonical": "back",
+            "surface": "back"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.of",
+            "type": "stem",
+            "canonical": "of",
+            "surface": "of"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.house",
+            "type": "stem",
+            "canonical": "house",
+            "surface": "house"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "back of",
+            "rule": "word_boundary"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "back of house",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-chefs",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    }
+  ]
+}

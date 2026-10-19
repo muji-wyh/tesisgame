@@ -1,0 +1,85 @@
+{
+  "schema": 1,
+  "status": "independent_exact_diff_review_no_static_blocker",
+  "reviewer": "Codex disposal_test_review",
+  "authors": [
+    "Codex recover_delivery",
+    "Codex root"
+  ],
+  "reviewed_at": "2026-10-16T20:37:10.1767380Z",
+  "proposal_inventory": {
+    "path": "build/professional-english/foundation02-third10-commit-proposal-r02/author-inventory.json",
+    "sha256": "174d4f9e7b1570a6199361f5fd3ab8e750e9bf3619ca0080b22653d1ba52bd35"
+  },
+  "reviewed_files": [
+    {
+      "path": "build/professional-english/foundation02-third10-commit-proposal-r02/INPUTS.md",
+      "sha256": "f737e4cfcc3596d746eea48dcc819998c87d81e49c1eb84d2124f292f12b9081",
+      "bytes": 7967,
+      "unchanged_from_r01": false
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-proposal-r02/commit.cjs",
+      "sha256": "20ff01bea2ea5027abbe7d02459a9e6caf24e74ea85d22e678bc813545476824",
+      "bytes": 8705,
+      "unchanged_from_r01": true
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-proposal-r02/committed-evidence.test.cjs",
+      "sha256": "7b3bb20de53ac5cc50f3632ae7f5a6e945abfaabe91ab76a762b78be8fd5219a",
+      "bytes": 477,
+      "unchanged_from_r01": true
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-proposal-r02/evidence-contract.cjs",
+      "sha256": "6ab049a0544a0b5cc6e2db711bbdc91b6c84f9ec4ef68846c9180b355504e18c",
+      "bytes": 21458,
+      "unchanged_from_r01": false
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-proposal-r02/root-commit-input.example.json",
+      "sha256": "809ed1296b0221fad47fc8cc1383d87bb07f4c703fb0e34a39ee0cecb48c353c",
+      "bytes": 1259,
+      "unchanged_from_r01": false
+    }
+  ],
+  "exact_contract_diff": [
+    "C.own names the fresh r02 proposal directory.",
+    "C.guard_cases requires the three reproduced r01 diagnostics in addition to the fifteen original guards.",
+    "Reviewer must be a string, must contain non-whitespace text, and trimmed case-normalized identity must not equal either proposal author.",
+    "Postcommit transaction_plan_sha256 must equal the verified transaction intent plan hash.",
+    "Both source witness arrays must exactly equal six ordered source refs derived from the retained bundle, including the proposal inventory itself."
+  ],
+  "other_differences": [
+    "INPUTS.md changes the example entrypoint to r02 and documents the measured failures and narrow correction.",
+    "The root input example selects the r02 inventory.",
+    "The author inventory binds the fresh sources, identifies both author contributions and retains predecessor/failure refs."
+  ],
+  "unchanged_logic": [
+    "The commit entrypoint is byte-identical.",
+    "The persisted test body is byte-identical.",
+    "Prepared binding, five before/after replacements, source projection, test transformations, helper, transaction destination, baseline and candidate evidence inputs are unchanged by this revision."
+  ],
+  "prior_failure": {
+    "path": "build/professional-english/foundation02-third10-commit-review-r01/execution-foundation02-third10-commit-proposal-r01/result.json",
+    "sha256": "cb83dc13933486d7ce6c7d9a78ea37dc490609281bb2f50800bcc42ec7b6663d",
+    "cases": 18,
+    "passed": 15,
+    "failed": [
+      "missing_reviewer_rejected",
+      "empty_reviewer_rejected",
+      "empty_source_witness_rejected"
+    ],
+    "real_files_compared": 701,
+    "real_files_unchanged": true
+  },
+  "approval_status": "Await separate completed r02 probe evidence and independent assessment.",
+  "execution_by_reviewer": false,
+  "production_mutated_by_reviewer": false,
+  "static_limits": [
+    "The normalized exact author-name checks enforce the explicit caller identity contract; they do not authenticate a person or prove identities for arbitrary aliases.",
+    "The three reproduced regressions require successful new probes; no r01 failure is relabeled as passing.",
+    "The added post-plan comparison and normalized author exclusions are source-reviewed; this packet does not claim separate new negative executions for them.",
+    "The concrete generated target families cannot introduce ancestor-file overlap from the retained regular-file source tree. The general helper still accepts absent overlap during planning and rejects it during memory-only execution with recovery-required evidence."
+  ]
+}

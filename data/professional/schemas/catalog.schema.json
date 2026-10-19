@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "catalog.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "curriculum_revision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "selection_basis": {
+      "type": "string",
+      "minLength": 1
+    },
+    "vocabulary_target_per_course": {
+      "const": 500
+    },
+    "expression_target_per_course": {
+      "const": 100
+    },
+    "growth_theme_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_.-]*$"
+    },
+    "themes": {
+      "$ref": "common.schema.json#/$defs/resource_path"
+    },
+    "sources": {
+      "$ref": "common.schema.json#/$defs/resource_path"
+    },
+    "lexeme_files": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "common.schema.json#/$defs/resource_path"
+      }
+    },
+    "expression_files": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "common.schema.json#/$defs/resource_path"
+      }
+    },
+    "courses": {
+      "type": "array",
+      "minItems": 20,
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_.-]*$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "theme_id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_.-]*$"
+          },
+          "manifest": {
+            "$ref": "common.schema.json#/$defs/resource_path"
+          },
+          "catalog_order": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20
+          },
+          "workflows": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "audience": {
+            "type": "string",
+            "minLength": 1
+          },
+          "difficulty_range": {
+            "const": [
+              "A2",
+              "B1",
+              "B2"
+            ]
+          },
+          "status": {
+            "enum": [
+              "draft",
+              "ready"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "description",
+          "theme_id",
+          "manifest",
+          "catalog_order",
+          "workflows",
+          "audience",
+          "difficulty_range",
+          "status"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "curriculum_revision",
+    "title",
+    "description",
+    "selection_basis",
+    "vocabulary_target_per_course",
+    "expression_target_per_course",
+    "growth_theme_id",
+    "themes",
+    "sources",
+    "lexeme_files",
+    "expression_files",
+    "courses"
+  ],
+  "additionalProperties": false
+}

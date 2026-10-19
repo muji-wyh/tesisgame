@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "status": "accepted_for_one_root_owned_fifth10_scratch_preparation",
+  "reviewer": "/root/morph_review",
+  "roles": {
+    "preparation_author": "/root/recover_delivery",
+    "inherited_preparation_author": "/root/runtime_recovery",
+    "dispatcher": "/root",
+    "independent_reviewer": "/root/morph_review"
+  },
+  "source_inventory": {
+    "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/source-inventory.json",
+    "bytes": 3279,
+    "raw_sha256": "2f4033d3edfeb6eacc78657e9c215ef8718bd3ceb275c94f4c6168e68d2c6ee3"
+  },
+  "actual_binding": {
+    "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+    "bytes": 3187477,
+    "raw_sha256": "7323bcb1baac6ea85817169bcc90325f9b54d587b19d4895ca3106ee7af0e015"
+  },
+  "preparation_execution_accepted": true,
+  "source_design_accepted": true,
+  "actual_binding_accepted": true,
+  "reviewed_at": "2026-10-16T23:20:17.455Z",
+  "findings": [],
+  "prior_source_acceptance": {
+    "path": "build/professional-english/foundation02-fifth10-preparation-independent-review-r03/review.json",
+    "bytes": 8770,
+    "raw_sha256": "5c0472fb71d342262c6c8fcac064b4befef14f95408a5a7ee0aed296eeb8a583"
+  },
+  "helper_source_acceptance": {
+    "path": "build/professional-english/foundation02-fifth10-root-binding-independent-review-r02/review.json",
+    "bytes": 8919,
+    "raw_sha256": "43173b9061e326e27a60e87d54f5d0c72527b14e70c6df6c490a456f0eb53c78"
+  },
+  "root_capture_input": {
+    "path": "build/professional-english/foundation02-fifth10-root-capture-r02/input.json",
+    "bytes": 11856,
+    "raw_sha256": "9e6dd6fd5afa6f230dc79331bfbb94cf2b5c81d622aee4758c6ea466d7a01c1c"
+  },
+  "capture_receipt": {
+    "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/capture-receipt.json",
+    "bytes": 2168,
+    "raw_sha256": "76a258ee372ea2b20c38d0cc6a6d17eda26f9992512bda6c4391672a2dd950fe"
+  },
+  "independent_inspection": {
+    "source": {
+      "path": "build/professional-english/foundation02-fifth10-actual-binding-independent-review-r01/inspect-actual-binding.cjs",
+      "bytes": 33907,
+      "raw_sha256": "f7ccd27ac0a99b463c47a3a2f21b1f2b7cbac8a65804e33c7eac50f011db19f5"
+    },
+    "result": {
+      "path": "build/professional-english/foundation02-fifth10-actual-binding-independent-review-r01/inspection-r01/inspection.json",
+      "bytes": 5477,
+      "raw_sha256": "6d0e4e6b9d9207c73ce0fbc938930dd0be8034d035b9e1193f744a0e828ac6f5"
+    },
+    "inputs": {
+      "path": "build/professional-english/foundation02-fifth10-actual-binding-independent-review-r01/inspection-r01/inputs.json",
+      "bytes": 2597499,
+      "raw_sha256": "f64a409f7d796f81c3deda17d171bff76596f114bf297e4670dda71ecc45f9ea"
+    },
+    "comparisons_passed": 102484,
+    "comparisons_failed": 0,
+    "observed_inputs": 12447,
+    "all_observed_inputs_rehashed_at_end": true
+  },
+  "accepted_measurements": {
+    "binding_inputs": 12443,
+    "independent_input_set": 12443,
+    "input_bytes": 1119263216,
+    "inherited_union": 12230,
+    "inherited_overlap": 89,
+    "inherited_evidence_only": 490,
+    "retained_sources": 812,
+    "additions": 817,
+    "targets": 823,
+    "deferred_targets": 3,
+    "registry_before_sha256": "dcfe28d7c7c6048206b740459a65ce9b482ba2768d388b0b29d7ab31174ed1a0",
+    "registry_after_sha256": "709b2621940b4698af615ed9c4b9a679006bfc83a877cc6f7d0f29517a3b2fd3",
+    "counts": {
+      "before": {
+        "reviewed_status": 148,
+        "reviewed_language": 335,
+        "foundation02_language": 36,
+        "sources": 949,
+        "lexemes": 4939,
+        "expressions": 1620,
+        "images": 9,
+        "audio": 12,
+        "ready_modules": 0
+      },
+      "after": {
+        "reviewed_status": 156,
+        "reviewed_language": 343,
+        "foundation02_language": 44,
+        "sources": 965,
+        "lexemes": 4939,
+        "expressions": 1620,
+        "images": 9,
+        "audio": 12,
+        "ready_modules": 0
+      }
+    },
+    "content_delta": {
+      "definition": 4,
+      "example": 1,
+      "difficulty": 5
+    },
+    "whole_entry_holds": 6,
+    "donor_rows": 50,
+    "anchor_checks": 18,
+    "predecessors": {
+      "fourth10": {
+        "committed_receipt": {
+          "path": "docs/content-review/foundation-module02-language-fourth10-2026-10-17/commit-receipt.json",
+          "bytes": 2685,
+          "raw_sha256": "96fff4c1ac94147e99efcb8f18ff07711a5c2e53729fa07695d7d2296ae037f8"
+        },
+        "persisted_receipt": {
+          "path": "build/professional-english/foundation02-fourth10-persisted-validation-r01/attempt-001/receipt.json",
+          "bytes": 2818,
+          "raw_sha256": "f25fbeb4fa8fafe08b0431653a5a9171d8369581aed104faad3e0161bbaf40f7"
+        },
+        "prepared": {
+          "path": "build/professional-english/transactions/foundation02-fourth10-language-r01/prepared.json",
+          "bytes": 134456,
+          "raw_sha256": "45cd8e892cc69577d5403aac5a5ffc1a34d7a7374e59a296440a573f52a8f1b8"
+        },
+        "committed_state": {
+          "path": "build/professional-english/transactions/foundation02-fourth10-language-r01/states/000268-committed.json",
+          "bytes": 43202,
+          "raw_sha256": "93c800d4ed9c94c47932d0f2b807d4d13e4a0c1330bcc5ed1cf8882a235a48b1"
+        },
+        "plan_sha256": "e43a7c5c40facfefc4874669d85aa404cc0a47ea8979645306768dfff491eab1",
+        "targets": 133,
+        "linked_states": 268,
+        "all_bag_targets_current": null
+      },
+      "shopping_bag": {
+        "committed_receipt": {
+          "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/receipt.json",
+          "bytes": 59877,
+          "raw_sha256": "b5b263fda99813d9c45564d5fdc35a8b437f5a3a91ec60b06eb1b00e45ddb681"
+        },
+        "persisted_receipt": {
+          "path": "docs/qa/professional-shopping-bag-r01/persisted/attempt-001/receipt.json",
+          "bytes": 2187,
+          "raw_sha256": "2b5675bdee6517924e260bb05e97b239d7838cd822f67ca6c35566a18833b5a9"
+        },
+        "prepared": {
+          "path": "build/professional-english/transactions/shopping-bag-image-r01/prepared.json",
+          "bytes": 147774,
+          "raw_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a"
+        },
+        "committed_state": {
+          "path": "build/professional-english/transactions/shopping-bag-image-r01/states/000308-committed.json",
+          "bytes": 47518,
+          "raw_sha256": "6734fefae6c4989100f37ae06bf8c910ce3cb4eeacad69cd335eb626381e4150"
+        },
+        "plan_sha256": "28c763178d2247e7e1fdce7290fa11799d8cce05709d3da696e2f7aeec9dfeb6",
+        "targets": 153,
+        "linked_states": 308,
+        "all_bag_targets_current": true
+      }
+    }
+  },
+  "execution_boundary": {
+    "acceptance_scope": "One root-owned frozen-r03 scratch preparation against this exact binding, after separately retained required root guard evidence and exact authorized root input.",
+    "root_guard_evidence_reviewed": false,
+    "root_guard_evidence_still_required": true,
+    "root_preparation_input_reviewed": false,
+    "preparation_executed": false,
+    "transforms_executed": false,
+    "projected_afterimages_accepted": false,
+    "syntax_or_project_or_native_tests_executed": false,
+    "commit_accepted": false,
+    "persisted_fifth10_accepted": false,
+    "production_mutated": false
+  },
+  "preserved_prior_failures": {
+    "bag_persisted_r01": "8680e417f593aa1e04225e258b9390e1cb944c7d91cf378288ff19011de2204d",
+    "bag_failure_copy_receipt": "12ab287773dca29de5c0372ac538e688939a35df51c6cfc984db55b2267282fb",
+    "helper_r01_rejection": "1583da74f8140e7d749b0c251fe805ecacfd412841ac0ddb9a7f2a3332081ebd"
+  },
+  "limits": [
+    "Static raw-file and JSON evidence only; no helper, preparation, projection, validator or project module was imported.",
+    "Root owns guard, syntax, one-shot preparation, generated-output inspection, project/native checks, installation and fresh persisted validation.",
+    "No new language, expression, morphology, specialist, visual, listening, readiness or release acceptance is created.",
+    "All consumed captures, historical failures and frozen sources remain immutable."
+  ]
+}

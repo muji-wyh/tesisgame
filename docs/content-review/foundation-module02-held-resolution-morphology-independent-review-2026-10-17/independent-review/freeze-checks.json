@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "status": "passed_read_only_freeze_checks",
+  "frozen_at": "2026-10-16T22:14:07.2026748Z",
+  "immutable_inputs_exact": 194,
+  "parsed_review_json_files": 9,
+  "drift": [],
+  "final_live_binding": "UNBOUND",
+  "project_execution": false,
+  "production_changed": false
+}

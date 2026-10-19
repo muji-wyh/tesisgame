@@ -1,0 +1,87 @@
+{
+  "schema": 1,
+  "status": "frozen_author_research_pending_independent_acceptance",
+  "recorded_at": "2026-10-16T19:15:43.741Z",
+  "directory": "build/professional-english/foundation-module02-language-review/fourth10-research-r01",
+  "production_mutated": false,
+  "independent_acceptance": false,
+  "registry_json_sha256": "f470936fc3bff7ff619b3af057a20cf5e05034013bbf08948e380847228dc4c5",
+  "executed_source_equality_verified": true,
+  "artifacts": [
+    {
+      "path": "snapshot.cjs",
+      "sha256": "e976e176cc3bb7df80bb966e7dcf62d1bc7ec66162a0e57a3e5f66749a0b4084",
+      "bytes": 7880
+    },
+    {
+      "path": "collect-html-metadata.cjs",
+      "sha256": "89a69381b876d3d59a142d5b50f906a901c341d298e332ae94b36973877250b2",
+      "bytes": 2478
+    },
+    {
+      "path": "collection-start.json",
+      "sha256": "c83d070d5b76b5f6e7fa8e9d983b08b2d0034d5dfb55a6a309ac1d2230f6ed72",
+      "bytes": 601
+    },
+    {
+      "path": "baseline.json",
+      "sha256": "60114b8f8b053c86b8268e3af09b8e20167a0775df218e4f9cd4ae54be713279",
+      "bytes": 1683820
+    },
+    {
+      "path": "oxford-html-metadata.json",
+      "sha256": "23aea9059c824d39d95146ee5de2c7b2351c4ad8d5376e5d56106a6dd91c2ce6",
+      "bytes": 21289
+    },
+    {
+      "path": "research-notes.json",
+      "sha256": "c9b56671be5acaf01eabe3da37077541fb2ffa27857bd7034199fcd18c198f89",
+      "bytes": 32267
+    },
+    {
+      "path": "assemble.cjs",
+      "sha256": "db540287d9333ba9ef68c7ec362b670f03ea077369d798fbd8e2ec2fa2f6a68a",
+      "bytes": 22822
+    },
+    {
+      "path": "assembly-start.json",
+      "sha256": "0ff0d82b3104bf15065ee8f9df6ff5d3f86ef49ca446ec03031f7e3e4d94d165",
+      "bytes": 1842
+    },
+    {
+      "path": "candidate-ledger.json",
+      "sha256": "590e97f018a3fdf2f1190d1405153ba7a144e0230cb6f5195aea182bfcaa3b6f",
+      "bytes": 92687
+    },
+    {
+      "path": "source-index.json",
+      "sha256": "792888bd66618075f88f8b0651ef14d11a4ad9fb23d2bb2444f3ec550dd8b0b4",
+      "bytes": 29473
+    },
+    {
+      "path": "context-screen.json",
+      "sha256": "b971a66810c04151370c4885e8892dd9503f9d5f2fe84b261be552872314afe0",
+      "bytes": 1796486
+    },
+    {
+      "path": "mechanical-checks.json",
+      "sha256": "380b9094e22756422aec2c3e2fbeec70106b6a571933e0a9c80d0f0815d71e6a",
+      "bytes": 1679
+    },
+    {
+      "path": "HANDOFF.md",
+      "sha256": "4e9c0a9bf057be2dc612dc7c0de2253dcd03058af337162bcf0fa25c6011ac0e",
+      "bytes": 2953
+    },
+    {
+      "path": "collection-completion.json",
+      "sha256": "7b3123e8135e755f71843b13caec22a49b847c31ed87be0bb2dc8bced4d1c08e",
+      "bytes": 1230
+    },
+    {
+      "path": "assembly-completion.json",
+      "sha256": "d3e7fd39b4a5f2fcdda8210c87a156d40c1231331b651a1ef4e394a12a7fea76",
+      "bytes": 663
+    }
+  ]
+}

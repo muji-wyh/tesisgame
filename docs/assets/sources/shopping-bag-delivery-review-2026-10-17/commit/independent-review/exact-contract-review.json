@@ -1,0 +1,117 @@
+{
+  "schema": 1,
+  "status": "accepted_exact_shopping_bag_commit_contract",
+  "accepted": true,
+  "reviewer": "Codex runtime_recovery",
+  "contract_sha256": "94d2dd3c166a57f4dc5ec7e456944edf4f131e6769ebce4385b4977414f9ee0b",
+  "recorded_at": "2026-10-16T22:44:17.5073231Z",
+  "contract": {
+    "path": "build/professional-english/shopping-bag-root-commit-r01/contract.json",
+    "bytes": 58680,
+    "sha256": "94d2dd3c166a57f4dc5ec7e456944edf4f131e6769ebce4385b4977414f9ee0b"
+  },
+  "reviewed_draft": {
+    "path": "build/professional-english/shopping-bag-root-commit-r01/input.draft.json",
+    "bytes": 61149,
+    "sha256": "730fa89a0f066d8d7f74193e1cb9e80b61309e4ebaacdd78a629a0c7ff8ae77b"
+  },
+  "target_manifest": {
+    "path": "build/professional-english/shopping-bag-root-commit-r01/target-manifest.json",
+    "bytes": 52694,
+    "sha256": "16c0ace567f602e9ea05cc3d82609bd8387dc6abe3e41bb60ac643edf42505a2"
+  },
+  "source_reviews": [
+    {
+      "path": "build/professional-english/shopping-bag-commit-independent-review-r01/source-review.json",
+      "bytes": 5427,
+      "sha256": "4fdfdd1a4dc4037711c4c6666ed4beec2842da373fb63beb72e84602391cea8b"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-commit-independent-review-r01/guard-wrapper-source-review.json",
+      "bytes": 4518,
+      "sha256": "24fda5acf522c3503ed5011135be5d320632afa8b2b289afde2fe9c79796e29d"
+    }
+  ],
+  "inspections": [
+    {
+      "path": "build/professional-english/shopping-bag-commit-independent-review-r01/exact-contract-data-inspection.json",
+      "bytes": 4155,
+      "sha256": "3fbfbb1a9fbbbe0e58cc8bdf6689f75e1f67dc0c00e4cd89910c0693c8113f93"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-commit-independent-review-r01/exact-contract-target-inspection-r02.json",
+      "bytes": 40147,
+      "sha256": "97281e23663f3a28526d7108a85568aa96416ada8bb8cb10e3e0ed09838e7163"
+    }
+  ],
+  "blocking_findings": [],
+  "accepted_scope": {
+    "operation": "One root-exclusive shopping-bag commit using the exact previously accepted commit source after the exact accepted root guard wrapper succeeds.",
+    "source_sha256": "b522c987354d2e526cc9194b0dd5239b2592b07aa30f4ddd7bd16261e2c3c087",
+    "guard_wrapper_sha256": "af25df7aac66b176586ae39725ad5d89420c1af8c83774b8b050ff9fd4f2e573",
+    "target_count": 153,
+    "replacement_count": 4,
+    "absent_addition_count": 149,
+    "additional_evidence_count": 119,
+    "target_commitment_sha256": "16c0ace567f602e9ea05cc3d82609bd8387dc6abe3e41bb60ac643edf42505a2",
+    "expected_input_count": 11569,
+    "expected_inputs_sha256": "1c8b9be1759c60981de41e563e873ceecb1e7bf0f274dbd66db6cdffe0589a36",
+    "unaffected_input_count": 11565,
+    "candidate_receipt_sha256": "9a5ee12cf7ac2c4f6f6e41e7a05357a365eab570a5da1d4ce2a696143c73c121",
+    "candidate_callbacks": 255,
+    "candidate_callback_counts": {
+      "content": 192,
+      "morphology": 38,
+      "media": 25
+    },
+    "actual_candidate_observed_inputs": 3216,
+    "candidate_command_session": 54597,
+    "candidate_command_exit_code": 0,
+    "candidate_audit_errors": 0,
+    "candidate_audit_warnings": 29395,
+    "ready_modules": 0
+  },
+  "verified": {
+    "contract_encoding_matches_hash": true,
+    "draft_embeds_exact_contract": true,
+    "root_exclusive_token_hash_matches": true,
+    "source_witnesses_rehashed": 9,
+    "required_source_closure_present": true,
+    "all_candidate_receipt_bindings_match": true,
+    "all_candidate_observed_reads_match_pins": true,
+    "union_reconstructed_from_exact_baseline_and_supplements": true,
+    "all_11569_current_input_hashes_and_lengths_match": true,
+    "current_input_bytes_checked": 997346602,
+    "independent_target_reconstruction_matches": true,
+    "all_replacement_preimages_match": true,
+    "all_addition_targets_absent": true,
+    "target_case_ancestor_transaction_evidence_overlaps": 0,
+    "reparse_point_failures": 0,
+    "finalizer_input_and_output_acceptances_match": true,
+    "finalizer_101_retained_mappings_preserved": true,
+    "provenance_128_delivery_and_final_mappings_match": true,
+    "prior_retained_files_checked": 21,
+    "r02_hold_review_explicitly_retained": true,
+    "finalized_actual_success_fields_false_or_null": true,
+    "commit_attempt_journal_lock_and_guard_attempt_absent": true
+  },
+  "conditions": [
+    "Root may fill only the independent_review descriptor in the reviewed draft envelope; the contract and all other reviewed fields remain exact.",
+    "Root owns the exclusive writer window. Dispatch the accepted read-only guard wrapper once and require its actual ok true receipt with all cases passed and no postcheck error before commit.",
+    "Commit once with the exact frozen source and final input hashes. Any failed or consumed guard/commit attempt or existing journal/lock requires preservation and a separate reviewed next action; never replay it.",
+    "This acceptance authorizes the reviewed operation; it does not claim that the guard, commit, loaded registry or fresh persisted verification has already succeeded.",
+    "Preserve actual commit and later persisted results as separate immutable receipts. The final metadata must retain its existing construction-time false/null success fields."
+  ],
+  "execution_by_reviewer": {
+    "raw_json_path_hash_inspection": true,
+    "project_source_imported": false,
+    "syntax_checked": false,
+    "guard_wrapper_executed": false,
+    "memory_probe_executed": false,
+    "project_tests_executed": false,
+    "native_executed": false,
+    "browser_executed": false,
+    "transaction_executed": false,
+    "production_mutated": false
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "reviewer": "root",
+  "time": "2026-10-16T21:06:37.175Z",
+  "source_inputs_unchanged": true,
+  "unique_inputs_checked": 803,
+  "executed_sources_unchanged": true,
+  "failure": "New fourth-ten morphology test expected one donor snapshot; immutable fifth-ten Foundation01 history contains two exact sign.write-name.v snapshots.",
+  "root_read_only_scan": "All 50 ID/history groups equal their exact current entries; only fifth-ten sign has count 2, all other groups count 1.",
+  "no_replay": true,
+  "production_mutated": false,
+  "native_dispatched": false,
+  "retained_scope": "Preparation failed after saving only content-test before/after; no complete preparation receipt, no overall projected-suite pass, no ready-module acceptance.",
+  "next": "Fresh r02 must preserve exact donor multiplicity and compare both full snapshot rows. Independent diagnosis pending."
+}

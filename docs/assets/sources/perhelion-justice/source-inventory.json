@@ -1,0 +1,36 @@
+{
+  "id": "perhelion-justice",
+  "title": "Balanced scale of Justice",
+  "creator": "Perhelion",
+  "source_url": "https://commons.wikimedia.org/wiki/File:Balanced_scale_of_Justice.svg",
+  "download_url": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Balanced_scale_of_Justice.svg",
+  "source_revision": "https://commons.wikimedia.org/w/index.php?title=File:Balanced_scale_of_Justice.svg&oldid=1004741904",
+  "acquired_on": "2026-10-16",
+  "filename": "balanced-scale-of-justice.svg",
+  "bytes": 1966,
+  "sha256": "27dfbd55daa3207f77fd23eb5d1b3645509755af0f1584926adc5f927ec42c70",
+  "source_sha1": "057d6666aea22b232781771624c9da220a5fd379",
+  "license": "CC0-1.0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+  "original_dimensions": [
+    1600,
+    1256
+  ],
+  "acquisition_status": "downloaded_original_source",
+  "review_status": "actual_source_image_inspected",
+  "integration_status": "retained_for_reviewed_static_home_composition",
+  "proposed_use": "Unmodified scales wall illustration in the sourced legal records office. A transparent carrier surface mounts the original art; no frame or generated symbol is added.",
+  "external_dependencies": [],
+  "available_animations": [],
+  "visual_review": {
+    "reviewer": "finish_difficulty",
+    "reviewed_on": "2026-10-16",
+    "basis": "Original SVG rasterized and displayed over white in source-review-white.png.",
+    "notes": "Clear symmetrical black scales with two suspended pans and an ornamental central stand. Used as an unmodified wall illustration within a records-office scene.",
+    "scope": "Source image inspection only. No career composition or production integration approval."
+  },
+  "folder": "perhelion-justice",
+  "source_review": "build/professional-english/remaining-theme-review/source-visual-review.json",
+  "composition_review": "build/professional-english/remaining-theme-review/composition-visual-review.json"
+}

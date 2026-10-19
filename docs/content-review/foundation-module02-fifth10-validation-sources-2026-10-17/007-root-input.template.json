@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "status": "UNBOUND_DO_NOT_EXECUTE",
+  "dispatcher": "/root",
+  "proposal_author": "/root/morph_review",
+  "entrypoint": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/run.cjs",
+  "output": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01",
+  "execute_native": false,
+  "execute_project_node_tests": false,
+  "guards": {
+    "production_writers_yielded": false,
+    "source_and_output_acceptances_complete": false,
+    "isolated_destination_reviewed": false
+  },
+  "source_inventory": null,
+  "independent_source_review": null,
+  "actual_binding": {
+    "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+    "bytes": 3187477,
+    "raw_sha256": "7323bcb1baac6ea85817169bcc90325f9b54d587b19d4895ca3106ee7af0e015"
+  },
+  "preparation": {
+    "receipt": null,
+    "execution_end": null,
+    "target_plan": null,
+    "projection_observation": null,
+    "root_input": null
+  },
+  "independent_afterimage_review": null,
+  "godot_binary": null
+}

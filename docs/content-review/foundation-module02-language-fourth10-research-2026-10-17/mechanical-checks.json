@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "status": "passed_author_static_schema_and_preservation_checks",
+  "recorded_at": "2026-10-16T19:15:42.600Z",
+  "scope": "Author-only evidence consistency, ten candidate schemas, preimage/context/source preservation. Not a broad validation suite, independent language acceptance, build, native test or release check.",
+  "candidate_schema_errors": 0,
+  "candidate_entries": 10,
+  "proposals": 10,
+  "new_holds": 0,
+  "earlier_whole_entry_holds": 4,
+  "entries_with_content_changes": 6,
+  "changed_field_counts": {
+    "definition": 1,
+    "example": 1,
+    "difficulty": 6
+  },
+  "allowed_fields": [
+    "definition",
+    "example",
+    "difficulty"
+  ],
+  "references_added": 0,
+  "review_gate_changes": 0,
+  "source_records_registered": 0,
+  "production_writes": 0,
+  "native_execution": false,
+  "build_execution": false,
+  "source_files_preserved": 355,
+  "registry_json_sha256": "f470936fc3bff7ff619b3af057a20cf5e05034013bbf08948e380847228dc4c5",
+  "production_status": {
+    "language_flag_reviewed": 317,
+    "overall_status_reviewed": 130,
+    "foundation02_language_flag_reviewed": 18,
+    "ready_modules": 0
+  },
+  "context": {
+    "selected_entries": 10,
+    "memberships": 200,
+    "containing_modules": 20,
+    "expressions_scanned": 1620,
+    "surface_hit_expressions": 130,
+    "surface_pairs": 139,
+    "derivative_hit_expressions": 42,
+    "focus_expressions": 4,
+    "related_identities": 63,
+    "inherited_expression_holds": 17,
+    "prior_lexical_holds": 4,
+    "source_files": 355,
+    "containing_module_expressions": 10,
+    "new_expression_acceptances": 0,
+    "new_scored_bindings": 0
+  },
+  "executed_source_hashes_verified": true
+}

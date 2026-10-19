@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "scope": "Root export/receipt integration, before actual Web build. No browser or module acceptance.",
+  "executions": [
+    {
+      "command": "node --test tests/professional-domain-web.test.cjs tests/web-build-receipt.test.cjs tests/web-export.test.cjs",
+      "tests": 65,
+      "pass": 65,
+      "fail": 0,
+      "exit_code": 0,
+      "source_phase": "Before final after-output-audit source rechecks",
+      "retained_output": "node-results-tail.log",
+      "retained_output_scope": "The final streamed output chunk with 60 test lines and the full 65-test summary; the initial five lines are in the original tool session."
+    },
+    {
+      "command": "node --test --test-name-pattern=\"inputs edited while output verification\" tests/web-build-receipt.test.cjs",
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "exit_code": 0,
+      "source_phase": "Creation-side final drift rejection added"
+    },
+    {
+      "command": "node --test --test-name-pattern=\"receipt verification rejects source edits\" tests/web-build-receipt.test.cjs",
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "exit_code": 0,
+      "source_phase": "Verification-side final drift rejection added"
+    }
+  ],
+  "native_parse_checks": [
+    {
+      "script": "res://tests/godot/professional_domain_pack_verifier.gd",
+      "exit_code": 0
+    },
+    {
+      "script": "res://tests/godot/verify_web_pack.gd",
+      "exit_code": 0
+    }
+  ],
+  "files": [
+    {
+      "path": "tools/build-web.cjs",
+      "bytes": 5157,
+      "sha256": "d97d93a3b212898e3779b471d787997ec5bb9a4d51450ada513c16f611084746"
+    },
+    {
+      "path": "tools/web-build-receipt.cjs",
+      "bytes": 12540,
+      "sha256": "9009c11cf93a202458a49ef513bd692f1903e2190172a2eaf88c32f11083058a"
+    },
+    {
+      "path": "tools/professional-domain-web.cjs",
+      "bytes": 5080,
+      "sha256": "863a0555c85e5954296a0dc8238869750fde9be7fd2b66e7514afbdb6f28d71a"
+    },
+    {
+      "path": "tests/professional-domain-web.test.cjs",
+      "bytes": 5465,
+      "sha256": "9ec615f03950723b3c6fd24507168d1a94700e8d638c0031f23e1091c3ff18ee"
+    },
+    {
+      "path": "tests/web-build-receipt.test.cjs",
+      "bytes": 18579,
+      "sha256": "47832330b58d5a39b34ab16f144beb5056d227f8ffcdcb0162e768ccab73d034"
+    },
+    {
+      "path": "tests/godot/verify_web_pack.gd",
+      "bytes": 33079,
+      "sha256": "13f7daee68c99caa6159478876d79070ba3f89f96c5a8f3d3c946becc2fe1df0"
+    },
+    {
+      "path": "tests/godot/professional_domain_pack_verifier.gd",
+      "bytes": 4906,
+      "sha256": "bb3804fb61b3df6ae0a5befdafa2c683a9645504253043559430f267c43ce9a1"
+    },
+    {
+      "path": "export_presets.cfg",
+      "bytes": 2538,
+      "sha256": "fa435e4d27fa90674698ae7a242bd52735ae52a90f148a5bf3f9c015d75b99ff"
+    }
+  ]
+}

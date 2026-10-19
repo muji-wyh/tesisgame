@@ -1,0 +1,23 @@
+{
+  "status": "integrated",
+  "path": "res://professional-media/fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3.png",
+  "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+  "source": "https://kenney.nl/assets/mini-market",
+  "creator": "Kenney; Fleur Keijsers; Guus Vermeulen",
+  "license": "CC0 1.0",
+  "acquisition_status": "integrated",
+  "review": {
+    "status": "reviewed",
+    "reviewer": "Codex source inspection and independent root physical-sense picture review at actual minimum Match and Memory card sizes, including cart/basket comparison",
+    "reviewed_at": "2026-10-16"
+  },
+  "brief": "Show an empty compact rigid retail shopping basket in a three-quarter view, with its raised hand-carry handle and open basket clearly visible at the actual minimum card size. Keep the handheld basket distinct from a wheeled shopping cart. Exclude wheels, fabric sides, a lid, and groceries that obscure the handle or opening. Use the inspected original Mini Market shopping-basket mesh without geometry or material changes.",
+  "picture_suitable": true,
+  "available_animations": [],
+  "adaptations": [
+    "Rendered the acquired Mini Market shopping-basket mesh with its original geometry, materials and external colormap; no model parts, textures or groceries were invented.",
+    "Three-quarter view shades the raised hand-carry handle for contrast against the actual light card surface. The empty basket preserves the handle and opening; the original groceries-in-basket brief and its accepted revision are retained in provenance.",
+    "768 by 768 transparent source render, alpha-bounds crop with a 16-pixel margin, and Lanczos reduction to 512 by 454. The exact accepted PNG is retained without further conversion.",
+    "Independently inspected in actual native WordCard at Match 126 by 72 and Memory 144 by 74, unmatched and matched with the real badge and alpha tint, including side-by-side comparison with the accepted cart. This is agent picture review, not a participant recognition test; see docs/assets/professional-retail-shopping-basket.md for source history and separate delivery verification."
+  ]
+}

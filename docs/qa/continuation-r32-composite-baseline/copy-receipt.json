@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "created_at": "2026-10-16T18:23:57.433Z",
+  "scope": "Exact copies of independently reviewed technical evidence; no new suite execution and no production changes.",
+  "copies": [
+    {
+      "file": "baseline.json",
+      "source": "build/professional-english/continuation-baseline-r32-composite-r02/baseline.json",
+      "sha256": "8d1092228ca051afab40af995d1e1e24da8f0c0af8defbaea18019042d09e54e",
+      "bytes": 90021
+    },
+    {
+      "file": "verify.cjs",
+      "source": "build/professional-english/continuation-baseline-r32-composite-r02/verify.cjs",
+      "sha256": "5f9ce40d0261e7ed6492ecadbdd54ef71f1ff6d1d514dd92f01193dc1df3c4df",
+      "bytes": 9147
+    },
+    {
+      "file": "build-baseline.cjs",
+      "source": "build/professional-english/continuation-baseline-r32-composite-r02/build-baseline.cjs",
+      "sha256": "e9001ada10b2f08f937ac42c3a1b0c57a7f58ad4c3ba74d54f5c498e425312c9",
+      "bytes": 949
+    },
+    {
+      "file": "independent-review.json",
+      "source": "build/professional-english/continuation-baseline-r32-composite-r02-independent-review-r01/review.json",
+      "sha256": "c908c393dfc88398f45c957d02cd9602ea94b917455b7015559c9a6502d968ee",
+      "bytes": 7225
+    },
+    {
+      "file": "r02-preparation-attempt-001.json",
+      "source": "build/professional-english/continuation-baseline-r32-composite-r02/preparation-attempt-001.json",
+      "sha256": "09f5fb053f619e2ae6b763280adfea9d9c9559e3df124b903e02dde0ef16713e",
+      "bytes": 523
+    },
+    {
+      "file": "r01-failure.json",
+      "source": "build/professional-english/continuation-baseline-r32-composite-r01/failure.json",
+      "sha256": "f03900353533e7a30b8bee87858a441a7c52f4ad574c2942c8478d5a73254858",
+      "bytes": 1249
+    }
+  ]
+}

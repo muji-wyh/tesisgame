@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 68,
+  "status": "applying",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "084e383dcc64913423e0d14d6f5076b21e0636a0ffb8845135d841a573167855",
+  "recorded_at": "2026-10-16T22:48:06.221Z",
+  "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/test-delta-plan.md",
+  "work": "work/3e74de2d-83a4-4fe0-be8d-e8c8edb1306a.bin"
+}

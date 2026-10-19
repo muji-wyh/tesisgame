@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "status": "static_input_inventory_frozen_no_implementation_execution",
+  "recorded_at": "2026-10-16T20:52:53.7001650Z",
+  "input_pins_sha256": "d58ea126241c8585d7b8887fa7698520fde2d0134de5f60d9599a19bb92adaa5",
+  "files_measured": 800,
+  "persisted_third10_inputs_exact": 686,
+  "historical_context_files": 355,
+  "exact_historical_file_differences": [
+    {
+      "path": "data/professional/lexemes/foundation-module02.json",
+      "historical_raw_sha256": "03953236a30d636a7d6db0f0f921d076910886e1f2f1834730ba1302b5b0ac41",
+      "current_raw_sha256": "bec08364a841f92351d04cd4c891bbd9d7de6dbf00f9949cc58f18e2551962ad"
+    },
+    {
+      "path": "data/professional/sources.json",
+      "historical_raw_sha256": "148f9191f91891a564bb79dbce428c60b3b4b1a07e1374135cc0d6a0619165b9",
+      "current_raw_sha256": "268caddf5f9acb1d806729200b1edf6ffe4d4dec7a737d1f57d176238500ae58"
+    }
+  ],
+  "root_authorized_commit_receipt_sha256": "e247462f7d41a03b2b00b1dee17314987954d26df82f4b6949ddc2982fbbea35",
+  "root_authorized_persisted_receipt_sha256": "509d64c10012756c7d44d0cdf6fb9b204a3c1cbfe1c4e0e76434ea2af36a33f8",
+  "implementation_imported_or_executed": false,
+  "projected_afterimages_generated": false,
+  "syntax_or_shared_tests_dispatched": false,
+  "native_dispatched": false,
+  "production_mutated": false,
+  "historical_scripts_replayed": false,
+  "method": "PowerShell read-only raw-byte SHA256 measurements, followed only by isolated input-pins.json and this freeze receipt metadata writes."
+}

@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-16",
+  "sense_id": "checkout.payment-area.n",
+  "status": "prepared_for_original_source_and_pose_probe_not_rendered_or_accepted",
+  "selected_meaning": "The place in a store where purchases are paid for.",
+  "exact_brief": "Show a complete staffed checkout lane: customer side, short goods belt or counter, and a register, with a shopper presenting purchases. Frame the lane as one place while the equipment stays subordinate. Reject a close-up of a register alone, a help desk, or a hotel reception. No readable payment credentials or brand marks.",
+  "working_brief": {
+    "audience": "Professional English vocabulary learners using the existing phone-size Match and Memory cards",
+    "action": "Recognize the place in a store where purchases are paid for",
+    "emotion": "Clear, friendly, ordinary retail interaction",
+    "visual_language": "Existing soft low-poly Kenney production sources, original materials, restrained studio lighting, no labels",
+    "target": "Actual Match 126x72 (picture 102x52) and Memory 144x74 (picture 120x54), including the actual badge and matched 0.68 picture alpha"
+  },
+  "diagnosis": "An isolated counter or register cannot establish the payment-area sense. A complete belt-and-terminal station, two clearly related roles, and a few groceries should identify one staffed checkout lane; every subordinate element must remain subordinate at native phone size.",
+  "focal_subject": "One complete checkout station and the space connecting a staff member behind the terminal with a shopper beside the goods belt.",
+  "proposed_composition": [
+    "Use the complete Mini Market cash-register station at its original root scale.",
+    "Place the green-and-white employee behind the terminal and the yellow-top shopper beside the goods belt, facing the same transaction area.",
+    "Place one complete carton and one complete apple on the belt, scaled uniformly to remain groceries rather than focal icons.",
+    "Compare one compact transparent group with one group on four complete original floor tiles; use the floor only if the lane remains legible at card size.",
+    "Sample only the included static, idle or interact-right character clips. Confirm the sampled poses visually before rendering a candidate. No hand-authored joint posing.",
+    "Use a camera that preserves the belt, terminal, both character roles and customer space without hiding faces or purchases. Keep all brand marks and credentials absent."
+  ],
+  "compare_against": {
+    "counter": "Broad customer-serving surface with a small sealed parcel; no payment apparatus or staff/shopper interaction.",
+    "cash_register": "One machine with physical keys and drawer base, excluded from this whole-lane picture.",
+    "checkout": "Whole staffed payment place with store goods and a customer side."
+  },
+  "reject_if": [
+    "The terminal alone dominates.",
+    "The scene reads as a help desk, table, hotel reception, two unrelated characters, or a generic shop.",
+    "Belt/groceries or staff/customer distinction disappear at 102x52.",
+    "The shopper pose floats, intersects the station, or suggests an unrelated action.",
+    "Source floor lowers scale so far that the checkout cannot be recognized.",
+    "Any mesh/material/texture substitution, readable labels, credentials or branding appears."
+  ],
+  "sequence": [
+    "Native original-source and included-pose inspection after root grants a slot.",
+    "Review those rendered sources before authorizing composition probe.",
+    "Run compact and tiled lane compositions, then choose only if actual WordCard states retain the intended sense.",
+    "Independent image review and production handoff remain later steps owned by root."
+  ],
+  "scope": "Scratch preparation only. No production, test, curriculum, language, morphology or readiness edits. No native rendering has run."
+}

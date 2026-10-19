@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "status": "root_authorized_one_shot_fifth10_native_candidate",
+  "dispatcher": "/root",
+  "proposal_author": "/root/morph_review",
+  "entrypoint": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/run.cjs",
+  "output": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01",
+  "execute_native": true,
+  "execute_project_node_tests": false,
+  "guards": {
+    "production_writers_yielded": true,
+    "source_and_output_acceptances_complete": true,
+    "isolated_destination_reviewed": true
+  },
+  "source_inventory": {
+    "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/source-inventory.json",
+    "bytes": 1874,
+    "raw_sha256": "7ee9da67778fe717537c9ae35331a49f334660307a3bef5b330a1e9096387f18"
+  },
+  "independent_source_review": {
+    "path": "build/professional-english/foundation02-fifth10-native-source-root-review-r01/review.json",
+    "bytes": 2435,
+    "raw_sha256": "3e4f9e449568df0daa3aabafa051813291fa9e18083b04b2204a0b9a3ad99384"
+  },
+  "actual_binding": {
+    "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+    "bytes": 3187477,
+    "raw_sha256": "7323bcb1baac6ea85817169bcc90325f9b54d587b19d4895ca3106ee7af0e015"
+  },
+  "preparation": {
+    "receipt": {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/preparation-receipt.json",
+      "bytes": 137807,
+      "raw_sha256": "44074a72a3bed006177725c5d6a0303d80fa3c4cf792a425b08924dce8abdc8d"
+    },
+    "execution_end": {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/execution-end.json",
+      "bytes": 145,
+      "raw_sha256": "e4e00da38bd380589bd77ddfb73afd780b08a34faf73d25ba72d16db0fdfa407"
+    },
+    "target_plan": {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/target-plan.json",
+      "bytes": 376416,
+      "raw_sha256": "cd58e001bfdafac503a8bb9903d2a556afe592d2771244e779d3024b802ab9ac"
+    },
+    "projection_observation": {
+      "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/projection-observation.json",
+      "bytes": 997,
+      "raw_sha256": "8a17f3c1ed0844c749b5b52387a5e5c56ff1e4c9bdfb01f8b170d415d9c17423"
+    },
+    "root_input": {
+      "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+      "bytes": 1191,
+      "raw_sha256": "f8a61b805220a2d6e64788a92960a35bd280af3c45b1f265dbdcf91955b81549"
+    }
+  },
+  "independent_afterimage_review": {
+    "path": "build/professional-english/foundation02-fifth10-afterimage-independent-review-r01/native-review.json",
+    "bytes": 9607,
+    "raw_sha256": "cbfb692c19949c7bd5d138b91343fef429b9f3bd70b11cfb7c810a92f13b1ffc"
+  },
+  "godot_binary": {
+    "path": "C:/Users/yaohuiwang/AppData/Local/Microsoft/WinGet/Packages/GodotEngine.GodotEngine_Microsoft.Winget.Source_8wekyb3d8bbwe/Godot_v4.7-stable_win64.exe",
+    "bytes": 178485256,
+    "raw_sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8"
+  }
+}

@@ -1,0 +1,1163 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "machine-guard.protective-barrier-at-machine-hazard.n",
+      "text": "machine guard",
+      "display_text": "machine guard",
+      "pos": "noun",
+      "definition": "A barrier or protective device intended to restrict access to specified machine hazards.",
+      "example": "Report the damaged machine guard to the responsible team.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "machine guard"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An inactive guarded machine with a fictional inspection record and no operating demonstration.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "machine-guard.protective-barrier-at-machine-hazard.n.analysis.v1",
+        "lexeme_id": "machine-guard.protective-barrier-at-machine-hazard.n",
+        "text": "machine guard",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.machine",
+            "type": "stem",
+            "canonical": "machine",
+            "surface": "machine"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.guard",
+            "type": "stem",
+            "canonical": "guard",
+            "surface": "guard"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "machine guard",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "osha-warehousing",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-quality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "emergency-stop.control-for-stopping-hazardous-machine-operation.n",
+      "text": "emergency stop",
+      "display_text": "emergency stop",
+      "pos": "noun",
+      "definition": "A control intended to stop hazardous machine operation in an emergency under the equipment's design; it does not itself establish isolation of hazardous energy.",
+      "example": "Ask the qualified trainer about this equipment's emergency stop and local emergency arrangements.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "emergency stop"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An inactive machine's clearly identified emergency-stop control without an action sequence or energy-isolation claim.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "emergency-stop.control-for-stopping-hazardous-machine-operation.n.analysis.v1",
+        "lexeme_id": "emergency-stop.control-for-stopping-hazardous-machine-operation.n",
+        "text": "emergency stop",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.emergency",
+            "type": "stem",
+            "canonical": "emergency",
+            "surface": "emergency"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.stop",
+            "type": "stem",
+            "canonical": "stop",
+            "surface": "stop"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "emergency stop",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "osha-warehousing",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "vehicle-lane.route-designated-for-vehicle-movement.n",
+      "text": "vehicle lane",
+      "display_text": "vehicle lane",
+      "pos": "noun",
+      "definition": "A route designated for vehicle movement at a site.",
+      "example": "The visitor needs the site plan showing the vehicle lane and pedestrian routes.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "vehicle lane"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional site plan distinguishing a vehicle lane from separate pedestrian routes without invented dimensions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "vehicle-lane.route-designated-for-vehicle-movement.n.analysis.v1",
+        "lexeme_id": "vehicle-lane.route-designated-for-vehicle-movement.n",
+        "text": "vehicle lane",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.vehicle",
+            "type": "stem",
+            "canonical": "vehicle",
+            "surface": "vehicle"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.lane",
+            "type": "stem",
+            "canonical": "lane",
+            "surface": "lane"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "vehicle lane",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "osha-warehousing",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "hse-warehousing",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "transport-dvsa-walkaround",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "exclusion-zone.area-with-restricted-entry-for-specified-risk.n",
+      "text": "exclusion zone",
+      "display_text": "exclusion zone",
+      "pos": "noun",
+      "definition": "An area where entry is restricted because of an identified risk or activity.",
+      "example": "Ask the site supervisor who may enter the exclusion zone.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "exclusion zone"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional restricted work area with clear boundary signs and no person crossing them.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "exclusion-zone.area-with-restricted-entry-for-specified-risk.n.analysis.v1",
+        "lexeme_id": "exclusion-zone.area-with-restricted-entry-for-specified-risk.n",
+        "text": "exclusion zone",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.exclusion",
+            "type": "stem",
+            "canonical": "exclusion",
+            "surface": "exclusion"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.zone",
+            "type": "stem",
+            "canonical": "zone",
+            "surface": "zone"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "exclusion zone",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "osha-warehousing",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "hse-warehousing",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-dvsa-walkaround",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-highway-code-context",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "load-stability.ability-of-load-to-remain-securely-positioned.n",
+      "text": "load stability",
+      "display_text": "load stability",
+      "pos": "noun",
+      "definition": "The ability of a load to remain securely positioned under the conditions for which it is assessed.",
+      "example": "Refer the question about load stability to the qualified person.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "load stability"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional load-assessment record beside inactive goods without demonstrating or guaranteeing a stable arrangement.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "load-stability.ability-of-load-to-remain-securely-positioned.n.analysis.v1",
+        "lexeme_id": "load-stability.ability-of-load-to-remain-securely-positioned.n",
+        "text": "load stability",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.load",
+            "type": "stem",
+            "canonical": "load",
+            "surface": "load"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.stability",
+            "type": "stem",
+            "canonical": "stability",
+            "surface": "stability"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "load stability",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "osha-warehousing",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "hse-warehousing",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-dvsa-walkaround",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-highway-code-context",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "damaged-racking.storage-rack-system-with-reported-damage.n",
+      "text": "damaged racking",
+      "display_text": "damaged racking",
+      "pos": "noun",
+      "definition": "A storage-rack system with damage that needs assessment under the site's arrangements.",
+      "example": "The damaged racking has been reported for assessment.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "damaged racking"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clearly marked fictional rack-damage report beside an inactive rack without repair instructions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "damaged-racking.storage-rack-system-with-reported-damage.n.analysis.v1",
+        "lexeme_id": "damaged-racking.storage-rack-system-with-reported-damage.n",
+        "text": "damaged racking",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.damage",
+            "type": "stem",
+            "canonical": "damage",
+            "surface": "damag"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ed.suffix",
+            "type": "suffix",
+            "canonical": "ed",
+            "surface": "ed"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.rack",
+            "type": "stem",
+            "canonical": "rack",
+            "surface": "rack"
+          },
+          {
+            "id": "p4",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "damaged",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "p3",
+            "right": "p4",
+            "surface": "racking",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n3",
+            "left": "n1",
+            "right": "n2",
+            "surface": "damaged racking",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n3"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "osha-warehousing",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "hse-warehousing",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "equipment-authorization.permission-for-specified-equipment-activity.n",
+      "text": "equipment authorization",
+      "display_text": "equipment authorization",
+      "pos": "noun",
+      "definition": "Permission granted through the relevant process for a person to carry out a specified equipment activity.",
+      "example": "Confirm the equipment authorization with the responsible supervisor.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "equipment authorization",
+        "equipment authorisation"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional authorization record identifying limited equipment scope without a real credential or promise of competence.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "equipment-authorization.permission-for-specified-equipment-activity.n.analysis.v1",
+        "lexeme_id": "equipment-authorization.permission-for-specified-equipment-activity.n",
+        "text": "equipment authorization",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.equip",
+            "type": "stem",
+            "canonical": "equip",
+            "surface": "equip"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ment.suffix",
+            "type": "suffix",
+            "canonical": "ment",
+            "surface": "ment"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.authorize",
+            "type": "stem",
+            "canonical": "authorize",
+            "surface": "authoriz"
+          },
+          {
+            "id": "p4",
+            "canonical_id": "affix.ation.suffix",
+            "type": "suffix",
+            "canonical": "ation",
+            "surface": "ation"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "equipment",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p3",
+            "right": "p4",
+            "surface": "authorization",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n3",
+            "left": "n1",
+            "right": "n2",
+            "surface": "equipment authorization",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n3"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "osha-warehousing",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "hse-warehousing",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-dvsa-walkaround",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-highway-code-context",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-hse-risk-topics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-osha-hazcom",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "isolation-procedure.specified-process-for-controlling-hazardous-energy.n",
+      "text": "isolation procedure",
+      "display_text": "isolation procedure",
+      "pos": "noun",
+      "definition": "A specified process for isolating and controlling hazardous energy for the work concerned, carried out by authorized qualified people.",
+      "example": "Ask the responsible specialist which isolation procedure applies to the planned work.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "isolation procedure"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional process-reference document with a qualified reviewer; no shutdown or lockout sequence is shown.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "isolation-procedure.specified-process-for-controlling-hazardous-energy.n.analysis.v1",
+        "lexeme_id": "isolation-procedure.specified-process-for-controlling-hazardous-energy.n",
+        "text": "isolation procedure",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.isolation",
+            "type": "stem",
+            "canonical": "isolation",
+            "surface": "isolation"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.procedure",
+            "type": "stem",
+            "canonical": "procedure",
+            "surface": "procedure"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "isolation procedure",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "osha-warehousing",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-hse-risk-topics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-osha-hazcom",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    }
+  ]
+}

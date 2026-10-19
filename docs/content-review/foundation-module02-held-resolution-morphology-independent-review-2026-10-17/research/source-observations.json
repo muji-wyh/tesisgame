@@ -1,0 +1,93 @@
+{
+  "schema": 1,
+  "status": "fresh_author_lexical_consultation_not_independent_morphology_approval",
+  "method": "Fresh rendered web reads. Concise authored paraphrases only; no full publisher pages, dictionary examples, recordings or artwork retained.",
+  "observations": [
+    {
+      "key": "oxford-ensure",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/ensure",
+      "title": "Oxford Advanced Learner's Dictionary: ensure",
+      "publisher": "Oxford University Press",
+      "section": "Selected result/condition sense; Word Origin",
+      "observation": "The current verb concerns making an outcome or condition definite. Its French history is reported as connected to earlier assure forms. That historical relationship alone does not decide a current teaching split."
+    },
+    {
+      "key": "oxford-en-prefix",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/en_1",
+      "title": "Oxford Advanced Learner's Dictionary: en- prefix",
+      "publisher": "Oxford University Press",
+      "section": "Verb-forming prefix, causative sense 2",
+      "observation": "The modern prefix has a causative reading used before an adjective base. Its location/condition sense is separately described. This is the prefix entry, not the -en suffix entry."
+    },
+    {
+      "key": "oxford-sure",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/sure_1",
+      "title": "Oxford Advanced Learner's Dictionary: sure adjective",
+      "publisher": "Oxford University Press",
+      "section": "Result-certainty uses and make sure sense 1",
+      "observation": "The base expresses certainty, including outcomes certain to occur. The make-sure entry distinguishes bringing about a result from checking a fact; the candidate selects the result reading."
+    },
+    {
+      "key": "collins-ensure",
+      "url": "https://www.collinsdictionary.com/dictionary/english/ensure",
+      "title": "Collins dictionaries: ensure",
+      "publisher": "HarperCollins Publishers",
+      "section": "Selected outcome sense and American English word history",
+      "observation": "The whole-word result meaning aligns with the accepted candidate. Word history explicitly links en- with a French predecessor of sure. This corroborates the base boundary while remaining historical evidence."
+    },
+    {
+      "key": "collins-en-prefix",
+      "url": "https://www.collinsdictionary.com/dictionary/english/en",
+      "title": "Collins dictionaries: en- prefix",
+      "publisher": "HarperCollins Publishers",
+      "section": "British English en- 1 causative sense; American English prefix",
+      "observation": "Causative use on adjective/noun bases is current. The entry describes productive English formation modeled on French loans and separately distinguishes the Greek in/within prefix and -en suffix."
+    },
+    {
+      "key": "oxford-inform",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/inform",
+      "title": "Oxford Advanced Learner's Dictionary: inform",
+      "publisher": "Oxford University Press",
+      "section": "Recipient-information sense, verb forms and Word Origin",
+      "observation": "Current giving-information and influence meanings are separate. The forms include informed and informing. Historical development concerns shaping or forming the mind, through an into-prefix and form/shape base; it is not negative in- or a document-form meaning."
+    },
+    {
+      "key": "oxford-informed",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/informed",
+      "title": "Oxford Advanced Learner's Dictionary: informed adjective",
+      "publisher": "Oxford University Press",
+      "section": "Knowledgeable person/state and decision based on understanding",
+      "observation": "The adjective includes having knowledge and a decision grounded in understanding. This supports a plausible family relation to inform while showing why having been told something alone does not settle an informed decision or clinical consent."
+    },
+    {
+      "key": "oxford-collect",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/collect_1",
+      "title": "Oxford Advanced Learner's Dictionary: collect verb",
+      "publisher": "Oxford University Press",
+      "section": "Bring-together sense, distinct take-away sense, verb forms and Word Origin",
+      "observation": "The selected sense brings items together from several sources; pickup is separate. Forms retain collect before inflections. The historical chain passes through Latin collect- and colligere, with together and gather/choose elements."
+    },
+    {
+      "key": "collins-collect",
+      "url": "https://www.collinsdictionary.com/dictionary/english/collect",
+      "title": "Collins dictionaries: collect",
+      "publisher": "HarperCollins Publishers",
+      "section": "Selected gathering sense, verb forms and verb word history",
+      "observation": "Gathering from several people/places is distinct from pickup and payment meanings. Historical analysis describes Latin col-/com-, legere and participial development. The prayer noun and unrelated senses are excluded from the proposal."
+    }
+  ],
+  "excluded_retrievals": [
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/en_2",
+      "observation": "The retrieved page is the -en suffix, not the intended prefix. It is excluded as proof for the ensure prefix; the correct en_1 page was then inspected."
+    },
+    {
+      "url": "https://www.merriam-webster.com/dictionary/collect",
+      "observation": "Current gathering meanings were visible, but the tool's History and Etymology search returned no matching text. No historical inference is drawn from this retrieval."
+    }
+  ],
+  "limits": "Dictionary meanings, forms, productive-prefix descriptions and histories support a research proposal, not a complete formal morphological analysis or evidence that a learning exercise works. No source CEFR label is reinterpreted as morphology difficulty or approval.",
+  "pronunciation_played": false,
+  "media_acquired": false,
+  "publisher_redistribution_license_acquired": false
+}

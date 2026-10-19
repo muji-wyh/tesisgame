@@ -1,0 +1,63 @@
+{
+  "schema": 1,
+  "ok": true,
+  "scope": "Exact installed cash-register image through native Loader, cache lease, Access, WordArt and actual minimum WordCard. All four accepted RGBA crop hashes and complete lease/resource teardown are checked. User-approved Ava audio remains unchanged; no audio playback, mix, playable round or module-readiness claim.",
+  "native_runner": "tools/run-godot.cjs::runGodot",
+  "native_timeout_ms": 60000,
+  "args": [
+    "--path",
+    ".",
+    "--rendering-method",
+    "gl_compatibility",
+    "--audio-driver",
+    "Dummy",
+    "--script",
+    "res://build/professional-english/retail-term-art-review/cash-register-r04/production-delivery-r01/verify-production.gd"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "duration_ms": 8010,
+  "checks": 81,
+  "failures": 0,
+  "registry_before_sha256": "177e2b31352da65df8412e2f681fcfbc0fbf2ba6ed825a9ada749cbeb823ab05",
+  "registry_after_sha256": "177e2b31352da65df8412e2f681fcfbc0fbf2ba6ed825a9ada749cbeb823ab05",
+  "frozen_inputs_raw_sha256": "e90c27c6b16b84ebe856e9baf321ecd0e754c0f62c6d4f44e5e086260683b184",
+  "guarded_files": 971,
+  "guard_error": null,
+  "image_pixels_exact": true,
+  "all_four_crops_pixel_equal": true,
+  "cache_teardown_zero": true,
+  "resource_reference_released": true,
+  "integrated_images": 8,
+  "integrated_audio": 10,
+  "log_raw_sha256": "e01d83793ffe787df693dd3eb06a4ed31638fdc996474f54d9df3fdd93a8cdb2",
+  "report_raw_sha256": "315bd48ae671634d3332edac925c17532a966514ac8516b19b637956bfce5e8f",
+  "artifacts": [
+    {
+      "path": "verification/report.json",
+      "raw_sha256": "315bd48ae671634d3332edac925c17532a966514ac8516b19b637956bfce5e8f"
+    },
+    {
+      "path": "verification/actual-production-word-card-contact.png",
+      "raw_sha256": "a50ab829fad8f48a672fb31b5ed6e26ce07aab69be58c19483d86f915d2f6cf4"
+    },
+    {
+      "path": "verification/match-unmatched.png",
+      "raw_sha256": "dbe7d62c3a1a2060f261fe8bd57ade724da013a66158db6ef0c7c540b0de61cb"
+    },
+    {
+      "path": "verification/match-matched.png",
+      "raw_sha256": "620e636eafd3138e50d22fb8f415ec13e4d136dfa5645222db1bad9ee7708f5a"
+    },
+    {
+      "path": "verification/memory-unmatched.png",
+      "raw_sha256": "061f44ac132a8fb5b9b7cfc5c1bd3cef35c0521dac7f382ea4d77ce9530d147a"
+    },
+    {
+      "path": "verification/memory-matched.png",
+      "raw_sha256": "15f257e70cc015128b8f94d98288bd075a26ea5a93d1c6a7b25f0ab7b79886e3"
+    }
+  ],
+  "production_writes": false
+}

@@ -89,8 +89,9 @@ function removeCached(directory, text) {
 
 test('the generator pins the exact approved, unprocessed Ava preset and Edge TTS client', () => {
   assert.deepEqual(PROFILE, { voice: 'en-US-AvaNeural', rate: '-15%', pitch: '+8Hz', volume: '+0%' });
-  assert.equal(EDGE_TTS_VERSION, '7.2.8');
-  assert.equal(fs.readFileSync(path.join(root, 'tools/voice-requirements.txt'), 'utf8').trim(), 'edge-tts==7.2.8');
+  assert.equal(EDGE_TTS_VERSION, '7.3.1');
+  assert.equal(fs.readFileSync(path.join(root, 'tools/voice-requirements.txt'), 'utf8').trim(), 'edge-tts==7.3.1');
+  assert.ok(fs.readFileSync(path.join(root, 'tools/edge-voice-batch.py'), 'utf8').includes('EDGE_TTS_VERSION = "7.3.1"'));
   assert.equal(speechText('apple'), 'apple.');
   assert.equal(speechText('kite'), 'A kite.');
   assert.equal(speechText("Let's play again!"), "Let's play again!");
@@ -214,7 +215,7 @@ test('the complete batch is validated before publishing audio and its truthful p
   const manifest = manifestFor(directory);
   assert.deepEqual(manifest.profile, PROFILE);
   assert.equal(manifest.provider, 'Microsoft Edge TTS');
-  assert.deepEqual(manifest.client, { name: 'edge-tts', version: '7.2.8' });
+  assert.deepEqual(manifest.client, { name: 'edge-tts', version: '7.3.1' });
   assert.equal(manifest.files.length, count);
   for (const message of messagesFor(directory)) {
     const file = manifest.files.find(file => file.id === message.id);
@@ -224,6 +225,7 @@ test('the complete batch is validated before publishing audio and its truthful p
     assert.equal(file.synthesisText, speechText(message.text));
     assert.equal(file.bytes, bytes.length);
     assert.equal(file.sha256, digest(bytes));
+    assert.deepEqual(file.client, manifest.client);
   }
   assert.deepEqual(fs.readdirSync(path.join(directory, 'build')), ['voice-cache']);
 });
@@ -282,7 +284,7 @@ test('cache keys include every voice setting, the final spoken text, client, and
     assert.notEqual(cacheKey('cat', { ...PROFILE, [key]: value }), original, key);
   }
   assert.deepEqual(cacheIdentity('kite'), {
-    schema: 1, provider: 'Microsoft Edge TTS', edgeTtsVersion: '7.2.8', profile: PROFILE,
+    schema: 1, provider: 'Microsoft Edge TTS', edgeTtsVersion: '7.3.1', profile: PROFILE,
     text: 'A kite.', output: '22050-hz-pcm16-mono-no-effects'
   });
 });
@@ -383,4 +385,36 @@ test('missing-only generation rejects mismatching profile, text, or file hashes 
   await generate(directory);
   fs.writeFileSync(path.join(directory, 'voice-prompts.json'), JSON.stringify({ ...prompts, 'spring-theme': 'A new greeting.' }));
   await assert.rejects(generate(directory, { onlyMissing: true }), /spring-theme.*full generation/);
+});
+
+test('a client update retains documented old audio and records each acquisition client in mixed batches', async t => {
+  const {directory, output} = fixture(t);
+  await generate(directory);
+  const filename = path.join(directory, MANIFEST_PATH);
+  const historical = manifestFor(directory);
+  historical.client.version = '7.2.8';
+  for (const file of historical.files) delete file.client;
+  fs.writeFileSync(filename, JSON.stringify(historical));
+  const missing = historical.files.at(-1);
+  fs.unlinkSync(path.join(directory, missing.path));
+  removeCached(directory, missing.text);
+  const original = new Map(fs.readdirSync(output).map(name => [name, fs.readFileSync(path.join(output, name))]));
+  assert.equal(await generate(directory, {
+    onlyMissing:true,
+    synthesizeBatch:async ({manifest}) => {
+      assert.deepEqual(manifest.requests.map(r => r.id), [missing.id]);
+      assert.equal(manifest.edgeTtsVersion, '7.3.1');
+      await synthesize({manifest});
+    }
+  }), 1);
+  for (const [name, bytes] of original) assert.deepEqual(fs.readFileSync(path.join(output, name)), bytes);
+  const mixed = manifestFor(directory);
+  for (const file of mixed.files) assert.deepEqual(file.client, {name:'edge-tts', version:file.id === missing.id ? '7.3.1' : '7.2.8'});
+  assert.equal(await generate(directory, {onlyMissing:true, synthesizeBatch:() => assert.fail('No replacement of retained recordings')}), 0);
+  for (const invalid of [{name:'another-provider',version:'7.2.8'}, {name:'edge-tts',version:'0.0.0'}]) {
+    const damaged = structuredClone(mixed);
+    damaged.files[0].client = invalid;
+    fs.writeFileSync(filename, JSON.stringify(damaged));
+    await assert.rejects(generate(directory, {onlyMissing:true, synthesizeBatch:() => assert.fail('Reject before synthesis')}), /full generation/);
+  }
 });

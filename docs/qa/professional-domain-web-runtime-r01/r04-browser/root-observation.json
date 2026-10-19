@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "status": "failed_browser_attempt_preserved",
+  "browser_dispatched_once": true,
+  "observations": [
+    "boot:idle"
+  ],
+  "failure": "The real #cold click timed out because the viewport-sized Godot canvas intercepted pointer events over the controls.",
+  "boot_pack_proof_validated": true,
+  "media_requests": 0,
+  "progress_operations": [
+    "load"
+  ],
+  "page_errors": 0,
+  "cold_load_executed": false,
+  "scope": "Boot and its pack proof only; no cold/warm/claim/cancellation/retirement/disposal acceptance.",
+  "followup": "A separately reviewed browser-only shell supplement may reuse the exact immutable successful r04 export. Never replay or modify r04.",
+  "files": [
+    {
+      "source": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/browser/receipt.json",
+      "path": "browser-receipt.json",
+      "bytes": 11630,
+      "sha256": "79e7c9ddb6efff1fbbc17201bc20029fbf92379b138f62d50bb920ad90021e6f"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/browser/console.json",
+      "path": "console.json",
+      "bytes": 1081,
+      "sha256": "718aa474eaeb0782570bb4deffc91996a0ee4929dfd075f70f5fb00f8c57e3ac"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/browser/failure.png",
+      "path": "failure.png",
+      "bytes": 15957,
+      "sha256": "6676f3ef2ee73507f1d8c1e603abf59029e1083a3064d819d4276617a12e2fb9"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-web-root-r04/browser/start.json",
+      "path": "root-start.json",
+      "bytes": 663,
+      "sha256": "808cbdd5d1f4aa9426c5e9bb352726440f3d2b15a310c309ffe5fabbbef7537b"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-web-root-r04/browser/receipt.json",
+      "path": "root-receipt.json",
+      "bytes": 1094,
+      "sha256": "2f6db8e28da3e97ace2fb9730974f22fe2a40e6ac9917e84a0c0016ef702dbf8"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-web-root-r04/browser/execution.log",
+      "path": "root-execution.log",
+      "bytes": 1999,
+      "sha256": "35f4fcdf3bfeab44e144bcda44b2bd199eeff51de79d680f09ba7a17ca0618d1"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-web-fixture-r04/shell.html",
+      "path": "original-shell.html",
+      "bytes": 4646,
+      "sha256": "26ca9e6017a4307dda0033f7a0253f9e188eb4e9617acd1654a330c33c03699d"
+    },
+    {
+      "source": "build/professional-english/domain-runtime-web-fixture-r04/browser.cjs",
+      "path": "original-browser.cjs",
+      "bytes": 10662,
+      "sha256": "275de78a9848f12aea3f4f2fa1536407ab6f19078cfa36e20c2699c57eaf2e87"
+    }
+  ]
+}

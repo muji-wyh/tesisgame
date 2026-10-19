@@ -1,0 +1,1723 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "dimension.physical-measurement.n",
+      "text": "dimension",
+      "display_text": "dimension",
+      "pos": "noun",
+      "definition": "A measurement of an object's size in a particular direction, such as length or width.",
+      "example": "One dimension on the package record is missing.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "dimension"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A carton with separate length, width, and height arrows and fictional measurements, distinct from an analytics category.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "bls-material-movers",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-planning",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-quality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-hse-inspection",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Transport & Delivery communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not driver training, a handling procedure, a legal rule, a load calculation, an emergency procedure, or a carrier service guarantee. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "cargo.goods-carried-by-transport-vehicle.n",
+      "text": "cargo",
+      "display_text": "cargo",
+      "pos": "noun",
+      "definition": "Goods carried by a vehicle, ship, or aircraft.",
+      "example": "The cargo includes cartons and two crates.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "cargo"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An orderly set of goods inside a parked transport vehicle; no load-securing technique is implied.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "cargo.goods-carried-by-transport-vehicle.n.analysis.v1",
+        "lexeme_id": "cargo.goods-carried-by-transport-vehicle.n",
+        "text": "cargo",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.cargo",
+            "type": "atomic",
+            "canonical": "cargo",
+            "surface": "cargo"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Transport & Delivery communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not driver training, a handling procedure, a legal rule, a load calculation, an emergency procedure, or a carrier service guarantee. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "delivery-charge.fee-for-transporting-order-to-recipient.n",
+      "text": "delivery charge",
+      "display_text": "delivery charge",
+      "pos": "noun",
+      "definition": "An amount charged for taking an order to its recipient.",
+      "example": "The delivery charge is shown separately on the invoice.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "delivery charge"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional invoice with the delivery fee separated from the goods price and no real company details.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "delivery-charge.fee-for-transporting-order-to-recipient.n.analysis.v1",
+        "lexeme_id": "delivery-charge.fee-for-transporting-order-to-recipient.n",
+        "text": "delivery charge",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.delivery",
+            "type": "stem",
+            "canonical": "delivery",
+            "surface": "delivery"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.charge",
+            "type": "stem",
+            "canonical": "charge",
+            "surface": "charge"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "delivery charge",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Transport & Delivery communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not driver training, a handling procedure, a legal rule, a load calculation, an emergency procedure, or a carrier service guarantee. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "payload.load-carried-by-vehicle-excluding-vehicle-itself.n",
+      "text": "payload",
+      "display_text": "payload",
+      "pos": "noun",
+      "definition": "The load carried by a vehicle, excluding the vehicle's own weight.",
+      "example": "The planner asked for the payload figure and its stated basis.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "payload"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A comparison of an empty vehicle and its carried load, with no universal weight allowance or formula.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Transport & Delivery communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not driver training, a handling procedure, a legal rule, a load calculation, an emergency procedure, or a carrier service guarantee. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "vehicle-capacity.amount-vehicle-can-carry-under-stated-limits.n",
+      "text": "vehicle capacity",
+      "display_text": "vehicle capacity",
+      "pos": "noun",
+      "definition": "The amount a vehicle can carry under specified weight, volume, or other limits.",
+      "example": "The planner is checking the vehicle capacity for this assignment.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "vehicle capacity"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional vehicle specification displaying distinct weight and volume limits without a universal loading rule.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "vehicle-capacity.amount-vehicle-can-carry-under-stated-limits.n.analysis.v1",
+        "lexeme_id": "vehicle-capacity.amount-vehicle-can-carry-under-stated-limits.n",
+        "text": "vehicle capacity",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.vehicle",
+            "type": "stem",
+            "canonical": "vehicle",
+            "surface": "vehicle"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.capacity",
+            "type": "stem",
+            "canonical": "capacity",
+            "surface": "capacity"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "vehicle capacity",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Transport & Delivery communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not driver training, a handling procedure, a legal rule, a load calculation, an emergency procedure, or a carrier service guarantee. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "load-distribution.arrangement-of-weight-within-vehicle.n",
+      "text": "load distribution",
+      "display_text": "load distribution",
+      "pos": "noun",
+      "definition": "The way the weight of a load is spread within a vehicle.",
+      "example": "The load distribution concern has been referred for assessment.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "load distribution"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A vehicle load diagram marked for professional review, without presenting an approved loading arrangement.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "load-distribution.arrangement-of-weight-within-vehicle.n.analysis.v1",
+        "lexeme_id": "load-distribution.arrangement-of-weight-within-vehicle.n",
+        "text": "load distribution",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.load",
+            "type": "stem",
+            "canonical": "load",
+            "surface": "load"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.distribution",
+            "type": "stem",
+            "canonical": "distribution",
+            "surface": "distribution"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "load distribution",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Transport & Delivery communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not driver training, a handling procedure, a legal rule, a load calculation, an emergency procedure, or a carrier service guarantee. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "delivery-zone.area-covered-by-delivery-service.n",
+      "text": "delivery zone",
+      "display_text": "delivery zone",
+      "pos": "noun",
+      "definition": "An area served by a delivery operation.",
+      "example": "This address is outside the listed delivery zone.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "delivery zone"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional local service map with one clearly bounded delivery area.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "delivery-zone.area-covered-by-delivery-service.n.analysis.v1",
+        "lexeme_id": "delivery-zone.area-covered-by-delivery-service.n",
+        "text": "delivery zone",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.delivery",
+            "type": "stem",
+            "canonical": "delivery",
+            "surface": "delivery"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.zone",
+            "type": "stem",
+            "canonical": "zone",
+            "surface": "zone"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "delivery zone",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Transport & Delivery communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not driver training, a handling procedure, a legal rule, a load calculation, an emergency procedure, or a carrier service guarantee. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "postal-code.code-identifying-postal-area-or-address.n",
+      "text": "postal code",
+      "display_text": "postal code",
+      "pos": "noun",
+      "definition": "A group of letters or numbers used to identify an area or address for mail delivery.",
+      "example": "The postal code does not match the address record.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "postal code",
+        "postcode",
+        "ZIP code"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional address label with its postal code highlighted and all personal data invented.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "postal-code.code-identifying-postal-area-or-address.n.analysis.v1",
+        "lexeme_id": "postal-code.code-identifying-postal-area-or-address.n",
+        "text": "postal code",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.postal",
+            "type": "stem",
+            "canonical": "postal",
+            "surface": "postal"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.code",
+            "type": "stem",
+            "canonical": "code",
+            "surface": "code"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "postal code",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Transport & Delivery communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not driver training, a handling procedure, a legal rule, a load calculation, an emergency procedure, or a carrier service guarantee. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "house-number.number-identifying-building-on-street.n",
+      "text": "house number",
+      "display_text": "house number",
+      "pos": "noun",
+      "definition": "A number used to identify a building on a street.",
+      "example": "The house number is missing from the order.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "house number"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clearly numbered fictional building entrance with neighboring numbers for context.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "house-number.number-identifying-building-on-street.n.analysis.v1",
+        "lexeme_id": "house-number.number-identifying-building-on-street.n",
+        "text": "house number",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.house",
+            "type": "stem",
+            "canonical": "house",
+            "surface": "house"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.number",
+            "type": "stem",
+            "canonical": "number",
+            "surface": "number"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "house number",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Transport & Delivery communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not driver training, a handling procedure, a legal rule, a load calculation, an emergency procedure, or a carrier service guarantee. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "apartment-number.number-identifying-unit-within-building.n",
+      "text": "apartment number",
+      "display_text": "apartment number",
+      "pos": "noun",
+      "definition": "A number that identifies an individual apartment within a building.",
+      "example": "Please confirm the apartment number with the recipient.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "apartment number"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional building directory highlighting one unit number without residents' names.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "apartment-number.number-identifying-unit-within-building.n.analysis.v1",
+        "lexeme_id": "apartment-number.number-identifying-unit-within-building.n",
+        "text": "apartment number",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.apartment",
+            "type": "stem",
+            "canonical": "apartment",
+            "surface": "apartment"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.number",
+            "type": "stem",
+            "canonical": "number",
+            "surface": "number"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "apartment number",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Transport & Delivery communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not driver training, a handling procedure, a legal rule, a load calculation, an emergency procedure, or a carrier service guarantee. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "access-instruction.direction-about-reaching-or-entering-location.n",
+      "text": "access instruction",
+      "display_text": "access instruction",
+      "pos": "noun",
+      "definition": "Information explaining how to reach or enter a location under its access arrangements.",
+      "example": "The access instruction refers drivers to the reception desk.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "access instruction"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional delivery note pointing to reception as an access contact, without codes or credentials.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "access-instruction.direction-about-reaching-or-entering-location.n.analysis.v1",
+        "lexeme_id": "access-instruction.direction-about-reaching-or-entering-location.n",
+        "text": "access instruction",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.access",
+            "type": "stem",
+            "canonical": "access",
+            "surface": "access"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.instruction",
+            "type": "stem",
+            "canonical": "instruction",
+            "surface": "instruction"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "access instruction",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Transport & Delivery communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not driver training, a handling procedure, a legal rule, a load calculation, an emergency procedure, or a carrier service guarantee. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "perishable-goods.goods-likely-to-spoil-without-suitable-conditions.n",
+      "text": "perishable goods",
+      "display_text": "perishable goods",
+      "pos": "noun",
+      "definition": "Goods that can spoil if they are not kept under suitable conditions.",
+      "example": "The shipment is recorded as perishable goods.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "perishable goods"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Clearly identified food goods beside their actual handling documentation, without invented temperatures or storage methods.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "perishable-goods.goods-likely-to-spoil-without-suitable-conditions.n.analysis.v1",
+        "lexeme_id": "perishable-goods.goods-likely-to-spoil-without-suitable-conditions.n",
+        "text": "perishable goods",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.perishable",
+            "type": "stem",
+            "canonical": "perishable",
+            "surface": "perishable"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.goods",
+            "type": "stem",
+            "canonical": "goods",
+            "surface": "goods"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "perishable goods",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Transport & Delivery communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not driver training, a handling procedure, a legal rule, a load calculation, an emergency procedure, or a carrier service guarantee. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "fragile.easily-broken-or-damaged.a",
+      "text": "fragile",
+      "display_text": "fragile",
+      "pos": "adjective",
+      "definition": "Easily broken or damaged.",
+      "example": "The item is marked fragile.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "fragile"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A delicate glass item in protective packaging, with the risk of breakage clear and no broken shards.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Transport & Delivery communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not driver training, a handling procedure, a legal rule, a load calculation, an emergency procedure, or a carrier service guarantee. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "upright.in-vertical-position-with-top-uppermost.a",
+      "text": "upright",
+      "display_text": "upright",
+      "pos": "adjective",
+      "definition": "In a vertical position with the top facing upward.",
+      "example": "The handling note says the package must remain upright.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "upright"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two views of the same marked carton contrasting top-up and sideways positions; contextual learning image only.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Transport & Delivery communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not driver training, a handling procedure, a legal rule, a load calculation, an emergency procedure, or a carrier service guarantee. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "oversized.larger-than-stated-size-limit.a",
+      "text": "oversized",
+      "display_text": "oversized",
+      "pos": "adjective",
+      "definition": "Larger than a stated normal size or size limit.",
+      "example": "The carrier has classified the item as oversized.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "oversized"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A parcel compared with a fictional carrier size guide whose limits are explicitly illustrative.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Transport & Delivery communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not driver training, a handling procedure, a legal rule, a load calculation, an emergency procedure, or a carrier service guarantee. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "temperature-sensitive.affected-by-changes-in-temperature.a",
+      "text": "temperature-sensitive",
+      "display_text": "temperature-sensitive",
+      "pos": "adjective",
+      "definition": "Likely to be affected by changes in temperature.",
+      "example": "The order contains temperature-sensitive goods.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "temperature-sensitive"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A shipment beside a temperature-monitoring record, with no product-specific limits asserted.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "temperature-sensitive.affected-by-changes-in-temperature.a.analysis.v1",
+        "lexeme_id": "temperature-sensitive.affected-by-changes-in-temperature.a",
+        "text": "temperature-sensitive",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.temperature",
+            "type": "stem",
+            "canonical": "temperature",
+            "surface": "temperature"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.sensitive",
+            "type": "stem",
+            "canonical": "sensitive",
+            "surface": "sensitive"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "temperature-sensitive",
+            "rule": "hyphenated_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Transport & Delivery communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not driver training, a handling procedure, a legal rule, a load calculation, an emergency procedure, or a carrier service guarantee. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    }
+  ]
+}

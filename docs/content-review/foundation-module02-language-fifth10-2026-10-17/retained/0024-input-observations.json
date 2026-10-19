@@ -1,0 +1,861 @@
+{
+  "schema": 1,
+  "status": "source_only_observations_final_baseline_unbound",
+  "recorded_at": "2026-10-16T22:18:19.021Z",
+  "verification": {
+    "proposal_inventory_members": 6,
+    "independent_review_inventory_members": 7,
+    "accepted_proposal_evidence_and_history_pins": 39,
+    "accepted_bag_author_inventory_members": 21,
+    "complete_donor_rows": 50,
+    "donor_groups_with_multiplicity_one": 50,
+    "pre_post_observed_inputs_exact": true
+  },
+  "actual_fourth10_observation": {
+    "actual_commit_confirmed": true,
+    "actual_persisted_validation_confirmed": true,
+    "committed_receipt": {
+      "path": "docs/content-review/foundation-module02-language-fourth10-2026-10-17/commit-receipt.json",
+      "bytes": 2685,
+      "raw_sha256": "96fff4c1ac94147e99efcb8f18ff07711a5c2e53729fa07695d7d2296ae037f8",
+      "success_assertions": [
+        {
+          "keys": [
+            "status"
+          ],
+          "expected": "committed"
+        },
+        {
+          "keys": [
+            "result",
+            "status"
+          ],
+          "expected": "committed"
+        },
+        {
+          "keys": [
+            "result",
+            "committed"
+          ],
+          "expected": true
+        },
+        {
+          "keys": [
+            "registry_after_sha256"
+          ],
+          "expected": "9a9b3c8665ce920fcddd584456e4ca47b8c365d8d2c43daacb9ea908c540ee1c"
+        }
+      ]
+    },
+    "committed_journal": {
+      "path": "build/professional-english/transactions/foundation02-fourth10-language-r01/states/000268-committed.json",
+      "bytes": 43202,
+      "raw_sha256": "93c800d4ed9c94c47932d0f2b807d4d13e4a0c1330bcc5ed1cf8882a235a48b1",
+      "success_assertions": [
+        {
+          "keys": [
+            "status"
+          ],
+          "expected": "committed"
+        },
+        {
+          "keys": [
+            "sequence"
+          ],
+          "expected": 268
+        },
+        {
+          "keys": [
+            "prepared_sha256"
+          ],
+          "expected": "45cd8e892cc69577d5403aac5a5ffc1a34d7a7374e59a296440a573f52a8f1b8"
+        }
+      ]
+    },
+    "persisted_validation_receipt": {
+      "path": "build/professional-english/foundation02-fourth10-persisted-validation-r01/attempt-001/receipt.json",
+      "bytes": 2818,
+      "raw_sha256": "f25fbeb4fa8fafe08b0431653a5a9171d8369581aed104faad3e0161bbaf40f7",
+      "success_assertions": [
+        {
+          "keys": [
+            "ok"
+          ],
+          "expected": true
+        },
+        {
+          "keys": [
+            "error"
+          ],
+          "expected": null
+        },
+        {
+          "keys": [
+            "checked_inputs"
+          ],
+          "expected": 865
+        },
+        {
+          "keys": [
+            "commands",
+            0,
+            "exit_code"
+          ],
+          "expected": 0
+        },
+        {
+          "keys": [
+            "commands",
+            0,
+            "signal"
+          ],
+          "expected": null
+        },
+        {
+          "keys": [
+            "commands",
+            0,
+            "error"
+          ],
+          "expected": null
+        },
+        {
+          "keys": [
+            "commands",
+            1,
+            "exit_code"
+          ],
+          "expected": 0
+        },
+        {
+          "keys": [
+            "commands",
+            1,
+            "signal"
+          ],
+          "expected": null
+        },
+        {
+          "keys": [
+            "commands",
+            1,
+            "error"
+          ],
+          "expected": null
+        },
+        {
+          "keys": [
+            "commands",
+            2,
+            "exit_code"
+          ],
+          "expected": 0
+        },
+        {
+          "keys": [
+            "commands",
+            2,
+            "signal"
+          ],
+          "expected": null
+        },
+        {
+          "keys": [
+            "commands",
+            2,
+            "error"
+          ],
+          "expected": null
+        },
+        {
+          "keys": [
+            "commands",
+            3,
+            "exit_code"
+          ],
+          "expected": 0
+        },
+        {
+          "keys": [
+            "commands",
+            3,
+            "signal"
+          ],
+          "expected": null
+        },
+        {
+          "keys": [
+            "commands",
+            3,
+            "error"
+          ],
+          "expected": null
+        }
+      ]
+    }
+  },
+  "accepted_bag_source_scope": {
+    "planned_targets": 34,
+    "accepted_source_only": true,
+    "actual_bag_commit_receipt_selected": false,
+    "actual_bag_persisted_receipt_selected": false
+  },
+  "observed_tests": [
+    {
+      "path": "tests/professional-content.test.cjs",
+      "bytes": 346365,
+      "raw_sha256": "7620d4196914eb136f7ee4375eb1c13bafb0f509cfacb9859794210b14ebfa86",
+      "final_binding": false,
+      "has_bag_helper": false
+    },
+    {
+      "path": "tests/professional-retail-morphology.test.cjs",
+      "bytes": 88429,
+      "raw_sha256": "b5bfe27b11fccbdf4f399588e77eb730018228c65446404f9f9c8c545e0119c6",
+      "final_binding": false,
+      "has_bag_helper": false
+    },
+    {
+      "path": "tests/professional-retail-media.test.cjs",
+      "bytes": 43354,
+      "raw_sha256": "c7c21856950d7e2a73ae4dc311de15d1a8adebacc6b62b708e0f08308d8901a4",
+      "final_binding": false,
+      "has_bag_helper": false
+    },
+    {
+      "path": "tests/godot/professional_retail_morphology_tests.gd",
+      "bytes": 114792,
+      "raw_sha256": "db277170d8bc7285204b86784ba2f118cae8f01fa8311eb7ac55f5953cd039a0",
+      "final_binding": false,
+      "has_bag_helper": false
+    }
+  ],
+  "bag_history_observation": {
+    "aggregate_content_boundaries": 14,
+    "common_foundation_helper_contains_bag_reversal": false,
+    "new_fifth_media_preservation_boundary_required": true,
+    "bag_present_in_46_fifth_related_ids": false
+  },
+  "files": [
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-proposal-r01/inventory.json",
+      "bytes": 1436,
+      "raw_sha256": "0e806ef501bbd9e90b1a026857292f13c40e96a5a53906a2ec476800f8b71db9",
+      "role": "immutable_accepted_proposal"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-proposal-r01/proposal.json",
+      "bytes": 426549,
+      "raw_sha256": "b72ae6d5f52531e828c5ef819cc4ae34e6a940010a6bebf58d502968d04d6067",
+      "role": "immutable_accepted_proposal_member",
+      "roles": [
+        "immutable_accepted_proposal_member",
+        "immutable_accepted_proposal"
+      ]
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-proposal-r01/context-preservation.json",
+      "bytes": 1751439,
+      "raw_sha256": "5cf815fb77ebdc45325063e40eb2b1940718e721ed18f46f347277689dd2993a",
+      "role": "immutable_accepted_proposal_member",
+      "roles": [
+        "immutable_accepted_proposal_member",
+        "immutable_context_contract"
+      ]
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-proposal-r01/history-preservation.json",
+      "bytes": 414426,
+      "raw_sha256": "7078897f88e9db12c282e55fcb28dc9e6ffb5619c059b0aaa246aa1a5724355b",
+      "role": "immutable_accepted_proposal_member",
+      "roles": [
+        "immutable_accepted_proposal_member",
+        "immutable_history_contract"
+      ]
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-proposal-r01/evidence-pins.json",
+      "bytes": 9936,
+      "raw_sha256": "209d5439582e7da4bd7b909819de7427d15bd248f2fbd4debcb6e5a3c8ed8ce5",
+      "role": "immutable_accepted_proposal_member",
+      "roles": [
+        "immutable_accepted_proposal_member",
+        "immutable_evidence_pin_list"
+      ]
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-proposal-r01/static-observations.json",
+      "bytes": 1566,
+      "raw_sha256": "0357af64195dfbf5ba85a9255afce9626ba28f1413012ad0290db3a969f954fe",
+      "role": "immutable_accepted_proposal_member"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-delivery-proposal-r01/HANDOFF.md",
+      "bytes": 6995,
+      "raw_sha256": "ed005b593489932be6e27de91d8c6e6240ee58fa775014701423e2a13cb810bb",
+      "role": "immutable_accepted_proposal_member"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-proposal-review-r01/inventory.json",
+      "bytes": 1245,
+      "raw_sha256": "b357729273451d34436cb6ea3ec4f81b943594f9c875938c6d83400f4b6c2ebf",
+      "role": "immutable_independent_acceptance"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-proposal-review-r01/README.md",
+      "bytes": 3722,
+      "raw_sha256": "b4ffa30bddf1723718ffa25a1e01e1a1f652164449e6f320ddf24878682deddc",
+      "role": "immutable_independent_acceptance_member"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-proposal-review-r01/capture-start.json",
+      "bytes": 276,
+      "raw_sha256": "c792384c1ad9f293b4c1a4ffd6affe0e8c7117135b188731124dbb10ceae222b",
+      "role": "immutable_independent_acceptance_member"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-proposal-review-r01/capture.cjs",
+      "bytes": 36142,
+      "raw_sha256": "651ba393c6bdccb93b21f0f4f256031449c1b0ea601ead03a25266dfcf00a34f",
+      "role": "immutable_independent_acceptance_member"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-proposal-review-r01/input-audit.json",
+      "bytes": 113000,
+      "raw_sha256": "c7cc948d879745960c8faa6440c0464b0fe882e8769c1eabd9ca95c47201d28b",
+      "role": "immutable_independent_acceptance_member"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-proposal-review-r01/inspection.json",
+      "bytes": 791764,
+      "raw_sha256": "a563b2959dfae97a7fdc8b612b970158c1ed87e7b7cd64a0050682d1049dd9b2",
+      "role": "immutable_independent_acceptance_member"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-proposal-review-r01/review.json",
+      "bytes": 9776,
+      "raw_sha256": "65a00b7d353ade569cfd5fa129c95451dbc1aaf506baeef62cf4b95f44155d0a",
+      "role": "immutable_independent_acceptance_member",
+      "roles": [
+        "immutable_independent_acceptance_member",
+        "immutable_independent_acceptance"
+      ]
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-proposal-review-r01/source-review.json",
+      "bytes": 15131,
+      "raw_sha256": "ca061dbe755f41aa2a615d8c9fae19e0901c780fd181f303bb9b69ff7688fa08",
+      "role": "immutable_independent_acceptance_member",
+      "roles": [
+        "immutable_independent_acceptance_member",
+        "immutable_literal_source_limits"
+      ]
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/HANDOFF.md",
+      "bytes": 3557,
+      "raw_sha256": "316e153be9ed3e3185af29d0a2aee319457fc745f232c283e18699b18c7a5963",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/assemble-evidence.cjs",
+      "bytes": 50063,
+      "raw_sha256": "9c512a2a8dbceb32d5436f33b9e2181a5de81dec1d8b11a7f2ff0efa108c1730",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/assembly-result.json",
+      "bytes": 2064,
+      "raw_sha256": "4aedc1440ebc4620dfe4def1a4c168fe353fb176c01c85432b165d0ca2639487",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/assembly-start.json",
+      "bytes": 278,
+      "raw_sha256": "972506ece89a4dcdd6d25ae7bc32227b0038120a58e76382dc6813f6a8732651",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/baseline.json",
+      "bytes": 1608311,
+      "raw_sha256": "59c33da6c2a31ac2ea3f67bed20966e32f174030c07b16600d13b6f46e3f73e5",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/candidate-ledger.json",
+      "bytes": 98840,
+      "raw_sha256": "171ce3798449f6915be6079f713e2e4c9211cf12d9e98e6945aad249efe9a5e1",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/capture-completion.json",
+      "bytes": 730,
+      "raw_sha256": "6dcae1e10f4e8b4699e0835d6df45baff4b3f9c0f7c9f894889d2cfd1db42907",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/capture-observations.cjs",
+      "bytes": 8821,
+      "raw_sha256": "7a7b227efc5f648ec3d59ea9f846fa48023ea1529cfd2eb079e61d05268811ff",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/capture-start.json",
+      "bytes": 218,
+      "raw_sha256": "058ae44664a558b94e56b5514202b5985b07ad8d759ed6b0e3f90b98ac8f7c61",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/collect-html-metadata.cjs",
+      "bytes": 2980,
+      "raw_sha256": "1d7a1ae71d3defd14b34fb9c772fd918a0ee22ef14ac488b41bf561ab6d39b4b",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/collection-start.json",
+      "bytes": 946,
+      "raw_sha256": "19c12838fd74a5a5d062c4a2bdcc14f92a2c8ddbb42247fb64b4c9d17665a047",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/context-screen.json",
+      "bytes": 1737430,
+      "raw_sha256": "b0be816fd3836b7ee321a715286aae0459c7b775ac69993b4a0d5ba6dfab2c52",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/original-foundation-module02.json",
+      "bytes": 220456,
+      "raw_sha256": "03953236a30d636a7d6db0f0f921d076910886e1f2f1834730ba1302b5b0ac41",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/oxford-html-metadata.json",
+      "bytes": 22094,
+      "raw_sha256": "bdfe7ef9db4a4c753e6188b82c6b836c7c5b877147d462c55227445057172543",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/research-notes.json",
+      "bytes": 32413,
+      "raw_sha256": "7bd12efb9568d6d50b68a1ddf62c86b149cc29c65321b1c959150fcddcb8d639",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/source-index.json",
+      "bytes": 33947,
+      "raw_sha256": "a52cbdcd9c83c7c1a21b5ae1416d8f1bdbf07cba76e35b89f5edfbd259746b15",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/inventory.json",
+      "bytes": 2903,
+      "raw_sha256": "d605cd61042c2f7532090a4aa838b791ad822f800165afe2ad7081624ea4300b",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-research-2026-10-17/root-copy-receipt.json",
+      "bytes": 3023,
+      "raw_sha256": "7d327fd3a8c4f50d37a31e39894951d69e801045d688bb7054c20ec36334b226",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/README.md",
+      "bytes": 4211,
+      "raw_sha256": "c6b4562629e7964032fe61fe269c85b6a85e688373e9a83e30adf8285babf923",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/assemble-independent-review.cjs",
+      "bytes": 45810,
+      "raw_sha256": "8ca8d1dd88f9833272d66d4d69879a4ba54ca85903baaff3309ec96a477e4ae1",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/assembly-result.json",
+      "bytes": 1202,
+      "raw_sha256": "fb94a6c37a89dc3b793b3c166b17d395f317884969d93295fecaaa4b23b0cd36",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/assembly-start.json",
+      "bytes": 296,
+      "raw_sha256": "29808ea081c4ec7171e42fd30139f469d07b945331b10cbec8cf85b300fba03d",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/context-review.json",
+      "bytes": 465569,
+      "raw_sha256": "44e3d928da7a4fc06db061c9090480d9182ae2f24698d3d4de7caab4e9549037",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/input-audit.json",
+      "bytes": 197057,
+      "raw_sha256": "5033253372dc4cb1834355d7d94e372ac70740b94a949d044171db575be59200",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/review-ledger.json",
+      "bytes": 80788,
+      "raw_sha256": "92c5b326565f95d9dacb8c11f8ca6684b5c39200b4ebcae57f3108a3c7a720b1",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/source-observations.json",
+      "bytes": 40272,
+      "raw_sha256": "db1c2b165a7696e7ae9e5292ceb51de0de8db6e57b85fe63b424a499504b6562",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/inventory.json",
+      "bytes": 1572,
+      "raw_sha256": "34cf5ea6b3406f6618b298c432f9e9c47d2c01fe9b2eabdb6a5e3566f28263f0",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/root-copy-receipt.json",
+      "bytes": 1755,
+      "raw_sha256": "c7527db2f3cb893a5fbaa3156b1d679122d56637134c2734750d61b79621302b",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/foundation-module02.json.after",
+      "bytes": 372196,
+      "raw_sha256": "9f698ae9b2572d279709b521e6b7d490ffe3d05b1a8ed362add36e07fd4accbc",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/sources.json.after",
+      "bytes": 869470,
+      "raw_sha256": "310be48d81d29917146db162b26d9927007b68ed12380df4a113458d2de7b330",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/accepted-language.json",
+      "bytes": 2337675,
+      "raw_sha256": "51d6569514875bc8bceeaa149cef44f7863d28d0e523e4557472909607efeece",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/preparation-receipt.json",
+      "bytes": 226840,
+      "raw_sha256": "b6f797200a9c856b189dfcc3bf1dc20e65a8b9aac361b62bd3959ae460311f4d",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-prepared-output-review-r02/binding.json",
+      "bytes": 235896,
+      "raw_sha256": "dbacf79ca796410664a1a6af9a577172c93234109b3c33c326ba669a5394dc21",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-prepared-output-review-r02/review.json",
+      "bytes": 3355,
+      "raw_sha256": "38806f472694084563690f5218ff6af70c3338b3837d79d63c0a9bf3d04d0276",
+      "role": "immutable_evidence_or_history_input"
+    },
+    {
+      "path": "data/professional/provenance/foundation-module01-language-first10-2026-10-16.json",
+      "bytes": 3197142,
+      "raw_sha256": "c6c6083fe03324ac5ea5d1e7c5ec7cf2bad92559616d8437ce32d572fe1b3d92",
+      "role": "immutable_evidence_or_history_input",
+      "roles": [
+        "immutable_evidence_or_history_input",
+        "complete_historical_donor_source"
+      ]
+    },
+    {
+      "path": "data/professional/provenance/foundation-module01-language-second10-2026-10-16.json",
+      "bytes": 2755242,
+      "raw_sha256": "528267cabf4ef12daa9977da23267131c3b69d223f76d1a4a83fcac9ba9973e7",
+      "role": "immutable_evidence_or_history_input",
+      "roles": [
+        "immutable_evidence_or_history_input",
+        "complete_historical_donor_source"
+      ]
+    },
+    {
+      "path": "data/professional/provenance/foundation-module01-language-third10-2026-10-16.json",
+      "bytes": 2367179,
+      "raw_sha256": "d821f85146ef5e5e14ee5b4cee9ce129d0c6652f683090bc44fb7af14d6d14f1",
+      "role": "immutable_evidence_or_history_input",
+      "roles": [
+        "immutable_evidence_or_history_input",
+        "complete_historical_donor_source"
+      ]
+    },
+    {
+      "path": "data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json",
+      "bytes": 2216910,
+      "raw_sha256": "8ab99dbd7a7ea692401c594259986328d43e04e676557c51d15aa675fc7bf83b",
+      "role": "immutable_evidence_or_history_input",
+      "roles": [
+        "immutable_evidence_or_history_input",
+        "complete_historical_donor_source"
+      ]
+    },
+    {
+      "path": "data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json",
+      "bytes": 3209077,
+      "raw_sha256": "ccd4ab160b89efbc21289c51fd576933d7da19734567ee986656b4462ad06083",
+      "role": "immutable_evidence_or_history_input",
+      "roles": [
+        "immutable_evidence_or_history_input",
+        "complete_historical_donor_source"
+      ]
+    },
+    {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/author-inventory.json",
+      "bytes": 3842,
+      "raw_sha256": "411183ccbbae70f854d5a1c2d5cb929d2c0f423a45e728ac49bcdf9c67ebae70",
+      "role": "accepted_bag_source_reference_only"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/CALL-GRAPH.md",
+      "bytes": 4735,
+      "raw_sha256": "3f2dfd713551f1f613aea2314060e6396af03a7d31b7ea1e0b528ee2dd4c9895",
+      "role": "accepted_bag_source_reference_only_member"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/README.md",
+      "bytes": 6490,
+      "raw_sha256": "eb8d24e061c4de42b6855b891abdcdac4d0648a8ea5b799f1e7ce3497df97341",
+      "role": "accepted_bag_source_reference_only_member"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/TRANSACTION.md",
+      "bytes": 8530,
+      "raw_sha256": "2a8cd346cdc921809b5249b5a6ed7de4676c3e6326dcbc1bdd4449617210937d",
+      "role": "accepted_bag_source_reference_only_member"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/actual-baseline-binding.json",
+      "bytes": 1066218,
+      "raw_sha256": "1506caf881745539b971881e978e5a5f60fc8de8640066169953f6ee45417da6",
+      "role": "accepted_bag_source_reference_only_member",
+      "roles": [
+        "accepted_bag_source_reference_only_member",
+        "historical_pre_bag_binding_reference_only"
+      ]
+    },
+    {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/actual-baseline-binding.template.json",
+      "bytes": 1296,
+      "raw_sha256": "ffc634dea77443f1e716b1e13588c6b54a560e4e8f1c79f6e024f5320e60b8dd",
+      "role": "accepted_bag_source_reference_only_member"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/author-final-binding-r02.cjs",
+      "bytes": 18014,
+      "raw_sha256": "88852307fca1e7011fca0d6692ab639053520e939275e5edab864c91b1864f86",
+      "role": "accepted_bag_source_reference_only_member"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/author-final-binding-r03.cjs",
+      "bytes": 18091,
+      "raw_sha256": "7752c72b792a237bee5e55194b142d2346f9dcbac45d1ea7b1aa073a70c1330a",
+      "role": "accepted_bag_source_reference_only_member"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/author-final-binding.cjs",
+      "bytes": 17952,
+      "raw_sha256": "d5a2a00ca9be2afb26f3b0b09525088e86ab1cebf56f4b0191beed775c227d11",
+      "role": "accepted_bag_source_reference_only_member"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/authoring-failure-r01.json",
+      "bytes": 821,
+      "raw_sha256": "98104062825e4bd656df249bd8a430cce204150383da072b833b678ad99ffee2",
+      "role": "accepted_bag_source_reference_only_member"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/authoring-failure-r02.json",
+      "bytes": 1038,
+      "raw_sha256": "953502d4c18d05f3d20e37d274533672239acf4f0bb59b9772e931e65528c4a1",
+      "role": "accepted_bag_source_reference_only_member"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/before-final-binding/CALL-GRAPH.md",
+      "bytes": 4647,
+      "raw_sha256": "e3153c70f50a20f34de6cfd1f4e70c7ca247f1c969f8580484fd85d857b1f6e8",
+      "role": "accepted_bag_source_reference_only_member"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/before-final-binding/README.md",
+      "bytes": 3764,
+      "raw_sha256": "392edee62ba4e1491e3a78d964c955d35d1c15a67db09728f4770b9100a21dc8",
+      "role": "accepted_bag_source_reference_only_member"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/before-final-binding/TRANSACTION.md",
+      "bytes": 7811,
+      "raw_sha256": "1e995292f284bb94d361e58f6c46ffabb5c6f19b94bd21e903805d1745456d65",
+      "role": "accepted_bag_source_reference_only_member"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/before-final-binding/actual-baseline-binding.template.json",
+      "bytes": 1296,
+      "raw_sha256": "ffc634dea77443f1e716b1e13588c6b54a560e4e8f1c79f6e024f5320e60b8dd",
+      "role": "accepted_bag_source_reference_only_member"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/before-final-binding/inventory.json",
+      "bytes": 1149,
+      "raw_sha256": "9be28421c62debef7e8e7d83c96e1322dec4067d152eefdc95012a5525f59b1b",
+      "role": "accepted_bag_source_reference_only_member"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/before-final-binding/prepare.cjs",
+      "bytes": 13736,
+      "raw_sha256": "43df78cfc9bc34320bbade08f993c3bd4ed5f2d81be8213ed0a11c42a38f6da2",
+      "role": "accepted_bag_source_reference_only_member"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/before-final-binding/test-transforms.cjs",
+      "bytes": 12710,
+      "raw_sha256": "a7762bbac0e687baf26aa784d7c0fb9533d834b309406ae98759b88aa5b619a7",
+      "role": "accepted_bag_source_reference_only_member"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/prepare.cjs",
+      "bytes": 16395,
+      "raw_sha256": "7bd4b4399ba9dd3eb1f7900c0b0522f717dd783246731fca3543d9965e4f2c46",
+      "role": "accepted_bag_source_reference_only_member"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/retained-evidence-allowlist.json",
+      "bytes": 6763,
+      "raw_sha256": "9a95872e5824dbfb6a6399745a5a4ba34e6c74de9c87dd7290376513bfbe9c5d",
+      "role": "accepted_bag_source_reference_only_member"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/retained-evidence-pins.json",
+      "bytes": 9521,
+      "raw_sha256": "907007cf33ba0556deea402b9251f5a9fda0ff793e1faf787857cc36497f6e4d",
+      "role": "accepted_bag_source_reference_only_member"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/test-transforms.cjs",
+      "bytes": 12710,
+      "raw_sha256": "a7762bbac0e687baf26aa784d7c0fb9533d834b309406ae98759b88aa5b619a7",
+      "role": "accepted_bag_source_reference_only_member"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-preparation-source-review-r02/final-source-review.json",
+      "bytes": 7382,
+      "raw_sha256": "52425b72e4f13b010e047f9ac4a7ec4342aa15fd8a1c6f9aa00506b0c1384814",
+      "role": "accepted_bag_final_source_review_only"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-fourth10-2026-10-17/commit-receipt.json",
+      "bytes": 2685,
+      "raw_sha256": "96fff4c1ac94147e99efcb8f18ff07711a5c2e53729fa07695d7d2296ae037f8",
+      "role": "actual_fourth10_history_observed_not_fifth_binding"
+    },
+    {
+      "path": "build/professional-english/transactions/foundation02-fourth10-language-r01/states/000268-committed.json",
+      "bytes": 43202,
+      "raw_sha256": "93c800d4ed9c94c47932d0f2b807d4d13e4a0c1330bcc5ed1cf8882a235a48b1",
+      "role": "actual_fourth10_history_observed_not_fifth_binding"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-persisted-validation-r01/attempt-001/receipt.json",
+      "bytes": 2818,
+      "raw_sha256": "f25fbeb4fa8fafe08b0431653a5a9171d8369581aed104faad3e0161bbaf40f7",
+      "role": "actual_fourth10_history_observed_not_fifth_binding",
+      "roles": [
+        "actual_fourth10_history_observed_not_fifth_binding"
+      ]
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-persisted-validation-r01/attempt-001/command-1.log",
+      "bytes": 591,
+      "raw_sha256": "ae490723b3003afdf5acb56d9d1d2523220eaff867fbd91a26fab1b06dd02757",
+      "role": "fourth10_persisted_command_log_reference"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-persisted-validation-r01/attempt-001/command-2.log",
+      "bytes": 24787,
+      "raw_sha256": "b3f3a6a6f56ce381a742951e4cff7d2266eb7de55e8fc52054d2d5cc7dbeed07",
+      "role": "fourth10_persisted_command_log_reference"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-persisted-validation-r01/attempt-001/command-3.log",
+      "bytes": 130,
+      "raw_sha256": "c04bf5168c4951be761afab31633b5a6d5e4fdb537a8a4f81c74f259bdfb09a2",
+      "role": "fourth10_persisted_command_log_reference"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-persisted-validation-r01/attempt-001/command-4.log",
+      "bytes": 241,
+      "raw_sha256": "4a8a7d0fc0ef12f47710cf805557f896c6ad96529ce1cdd2f30cc40a0ac97023",
+      "role": "fourth10_persisted_command_log_reference"
+    },
+    {
+      "path": "tests/professional-content.test.cjs",
+      "bytes": 346365,
+      "raw_sha256": "7620d4196914eb136f7ee4375eb1c13bafb0f509cfacb9859794210b14ebfa86",
+      "role": "unbound_live_source_observation_not_final_test_preimage"
+    },
+    {
+      "path": "tests/professional-retail-morphology.test.cjs",
+      "bytes": 88429,
+      "raw_sha256": "b5bfe27b11fccbdf4f399588e77eb730018228c65446404f9f9c8c545e0119c6",
+      "role": "unbound_live_source_observation_not_final_test_preimage"
+    },
+    {
+      "path": "tests/professional-retail-media.test.cjs",
+      "bytes": 43354,
+      "raw_sha256": "c7c21856950d7e2a73ae4dc311de15d1a8adebacc6b62b708e0f08308d8901a4",
+      "role": "unbound_live_source_observation_not_final_test_preimage"
+    },
+    {
+      "path": "tests/godot/professional_retail_morphology_tests.gd",
+      "bytes": 114792,
+      "raw_sha256": "db277170d8bc7285204b86784ba2f118cae8f01fa8311eb7ac55f5953cd039a0",
+      "role": "unbound_live_source_observation_not_final_test_preimage"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/test-transforms.cjs",
+      "bytes": 23426,
+      "raw_sha256": "7886b3c0d03766f2f0a3f460e6e2cbf391384338fe747f8defa2ce308d1d4dc9",
+      "role": "historical_transform_source_read_only_never_executed"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/professional-content.test.cjs.after",
+      "bytes": 346365,
+      "raw_sha256": "7620d4196914eb136f7ee4375eb1c13bafb0f509cfacb9859794210b14ebfa86",
+      "role": "accepted_fourth10_afterimage_reference_only"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/professional-retail-morphology.test.cjs.after",
+      "bytes": 88429,
+      "raw_sha256": "b5bfe27b11fccbdf4f399588e77eb730018228c65446404f9f9c8c545e0119c6",
+      "role": "accepted_fourth10_afterimage_reference_only"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/professional_retail_morphology_tests.gd.after",
+      "bytes": 114792,
+      "raw_sha256": "db277170d8bc7285204b86784ba2f118cae8f01fa8311eb7ac55f5953cd039a0",
+      "role": "accepted_fourth10_afterimage_reference_only"
+    }
+  ],
+  "baseline": {
+    "bound": false,
+    "final_registry_before_sha256": null,
+    "final_registry_after_sha256": null,
+    "final_counts": null,
+    "final_test_bindings": null
+  },
+  "execution": {
+    "built_in_file_hash_and_json_observations_only": true,
+    "project_or_proposed_source_imported": false,
+    "preparation_dispatched": false,
+    "syntax_checks_run": false,
+    "tests_run": false,
+    "native_browser_build_probe_run": false,
+    "production_or_shared_tests_written": false,
+    "output_directory_only": "build/professional-english/foundation02-fifth10-delivery-preparation-r01"
+  }
+}

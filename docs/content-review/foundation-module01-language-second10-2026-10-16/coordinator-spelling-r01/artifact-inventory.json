@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "status": "write_once_variant_inventory",
+  "files": [
+    {
+      "name": "HANDOFF.md",
+      "raw_sha256": "5530d7e572f65bbce61ef9a34e39e5be552c040fdf8b410f98ba29e94221294b"
+    },
+    {
+      "name": "prepare-variant.cjs",
+      "raw_sha256": "5e872140705fb5be82b19fc2d1ae6e8ca53acc1b0ba6a482e0c16833bcb5bc91"
+    },
+    {
+      "name": "variant-proposal.json",
+      "raw_sha256": "4bb9d2f31a6711f5d3a1c7f8fb4eff2b50f54fbc67cb4333d7ea266f711a2be2",
+      "json_sha256": "66f576cd9e7b273de97450ee6afe79a565cb383b9db79cf8d22b88e2cd655371"
+    },
+    {
+      "name": "machine-audit.json",
+      "raw_sha256": "ec2ae1ef455dea4e80484ccb463903b53147d2ac628d07fdae339641ce2507f0",
+      "json_sha256": "0edfe70da446185f6c4b7df7f0c854b3ee87aef64f819393f4332ebda035dd2f"
+    }
+  ],
+  "inventory_excludes_itself": true
+}

@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 16,
+  "status": "applying",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "e3fd7dcc450f0fde9162efe60d663f31b5d7e56318e80d8e469b5d43bf8b3c6d",
+  "recorded_at": "2026-10-16T22:48:02.299Z",
+  "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/actual-baseline-binding.json",
+  "work": "work/5b9a5df1-1960-4b13-b9b8-3474699a50d5.bin"
+}

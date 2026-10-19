@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "review_date_local": "2026-10-17",
+  "scope": "Additional source discovery and preview review only. No files from these leads were acquired or integrated.",
+  "leads": [
+    {
+      "title": "Shopping Bag",
+      "creator": "NoLagHere",
+      "source": "https://sketchfab.com/3d-models/shopping-bag-cce3843714f74f85858a325f29ec6991",
+      "license": "Creative Commons Attribution 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "license_observed_on_original_page": true,
+      "preview_inspected": true,
+      "acquisition_status": "not_acquired_login_required",
+      "observation": "Default rendered source view shows a teal bag with a red heart and surrounding yellow stars. It has thin pale loop handles and only a narrow visible top opening. The decoration is more gift-like and the cavity less clear than the selected 3dicons lead.",
+      "access_check": "Clicking Download 3D Model displayed Log in to Sketchfab. No credentials were entered and no access bypass was attempted.",
+      "animation_status": "Unknown; no source model acquired and no animation inspected. Generic viewer controls are not proof of clips.",
+      "recommendation": "Do not prioritize over the legally acquired plain open-bag source."
+    },
+    {
+      "title": "Shopping Bag // 3D Pixel Icon",
+      "creator": "Visual.app publisher; no individual artist confirmed on inspected page",
+      "source": "https://visual.app/assets/illustrations/3d-pixel-icons/shopping-bag-3d-pixel-icon",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_observed_on_original_page": true,
+      "preview_inspected": true,
+      "acquisition_status": "not_acquired",
+      "observation": "Black-and-white blocky outlined bag; no open cavity is visible. Its pixel-outline language does not match the current shaded toy props.",
+      "available_formats_observed": ["SVG 1024x1024", "transparent PNG 2048x2048"],
+      "animation_status": "Static illustration choices only; no animation demonstrated.",
+      "recommendation": "Reject for this game picture."
+    },
+    {
+      "title": "SHOPPING BAGS",
+      "creator": "mfb64, as identified by discovery result; not reverified on disabled original page",
+      "source": "https://sketchfab.com/3d-models/shopping-bags-19b43e6c44a94ad3a0c9ad112d158ce3",
+      "license": "unverified",
+      "preview_inspected": false,
+      "acquisition_status": "not_acquired_source_disabled",
+      "observation": "The original live page displayed that the model had been disabled. Search-result download wording is stale evidence, not current availability.",
+      "animation_status": "unknown",
+      "recommendation": "Unavailable; do not promote or use a mirror as a claimed original acquisition."
+    },
+    {
+      "title": "Bag",
+      "creator": "Kenney",
+      "source": "https://poly.pizza/m/fLNcjJnsJi",
+      "license": "Public Domain (CC0), as shown by original-page text returned by web retrieval",
+      "preview_inspected": false,
+      "acquisition_status": "not_acquired",
+      "observation": "Original-page text lists OBJ/GLTF and carton/container/packaging tags. Live preview access reached a Cloudflare verification page, which was not solved. No visual suitability claim follows from tags.",
+      "animation_status": "unknown",
+      "recommendation": "Uninspected discovery lead, not an accepted shopping bag."
+    },
+    {
+      "title": "Bag Open",
+      "creator": "Quaternius",
+      "source": "https://poly.pizza/m/rJuZexcuhU",
+      "license": "Public Domain (CC0), as shown by original-page text returned by web retrieval",
+      "preview_inspected": false,
+      "acquisition_status": "not_acquired",
+      "observation": "Original-page text lists FBX/GLTF and sack/grain tags. No visual inspection or download occurred; the tags suggest a different container sense but do not establish its actual appearance.",
+      "animation_status": "unknown",
+      "recommendation": "Uninspected discovery lead; a sack would not satisfy the handled retail-bag brief."
+    }
+  ]
+}

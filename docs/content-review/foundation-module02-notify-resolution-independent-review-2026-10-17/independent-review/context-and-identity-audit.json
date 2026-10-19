@@ -1,0 +1,292 @@
+{
+  "status": "independent_bounded_context_review_of_frozen_author_evidence",
+  "context_files": [
+    {
+      "file": "lexical-contexts.json",
+      "count": 15,
+      "ids": [
+        "notify.inform.v",
+        "estimate.informed-work-approximation.n",
+        "informed-consent.informed-voluntary-care-agreement.n",
+        "outage-notice.message-informing-users-of-service-unavailability.n",
+        "estimate.make-informed-approximation.v",
+        "formative-assessment.assessment-used-to-inform-ongoing-learning.n",
+        "training-needs-analysis.review-to-identify-what-training-is-needed.n",
+        "defects-liability-period.contract-defined-period-for-notifying-or-addressing-defects.n",
+        "predictive-maintenance.maintenance-informed-by-predictions-of-equipment-condition.n",
+        "lessons-learned.insights-from-experience-for-future-work.n",
+        "market-research.systematic-collection-and-analysis-of-market-information.n",
+        "screening-test.test-used-to-identify-possible-condition-before-symptoms.n",
+        "informed.having-relevant-information-and-understanding-for-decision.a",
+        "debit-note.document-notifying-debit-adjustment-or-additional-amount.n",
+        "notice-of-appeal.document-formally-notifying-intention-to-appeal.n"
+      ],
+      "source_sha256": "275428d3c6050e7f7196dff1df49bc67fba6ca0d570a027a8c453c21b713287b"
+    },
+    {
+      "file": "expression-contexts.json",
+      "count": 16,
+      "ids": [
+        "expr.foundation.module02.02",
+        "expr.retail.module08.10",
+        "expr.software_data.module08.06",
+        "expr.nursing.module07.09",
+        "expr.hospitality_tourism.module06.06",
+        "expr.transport_delivery.module10.06",
+        "expr.education_childcare.module06.09",
+        "expr.education_childcare.module06.10",
+        "expr.education_childcare.module08.09",
+        "expr.education_childcare.module09.02",
+        "expr.education_childcare.module10.08",
+        "expr.hr_recruitment.module07.06",
+        "expr.hr_recruitment.module09.07",
+        "expr.cleaning_facilities.module10.09",
+        "expr.clinical_medicine.module07.07",
+        "expr.clinical_medicine.module08.02"
+      ],
+      "source_sha256": "706deb97b6232b7f9f3bda24f9f624c529473245eab3fb3ea27ed570fae5cb12"
+    },
+    {
+      "file": "related-headword-contexts.json",
+      "count": 76,
+      "ids": [
+        "contact.helpful-person.n",
+        "update.current-information.n",
+        "report.give-information.v",
+        "notify.inform.v",
+        "contact.communicate-with.v",
+        "notification.system-alert-message.n",
+        "sales-report.sales-summary.n",
+        "inventory-report.stock-summary.n",
+        "end-of-day-report.daily-closing-summary.n",
+        "closed-loop-communication.message-confirmation-cycle.n",
+        "emergency-contact.person-to-contact-in-emergency.n",
+        "contact-precautions.contact-transmission-control-measures.n",
+        "contact-details.communication-contact-information.n",
+        "allergy-alert.recorded-allergy-warning.n",
+        "imaging-report.diagnostic-image-interpretation-record.n",
+        "communication-aid.tool-supporting-expression-or-understanding.n",
+        "communication-passport.personal-communication-support-profile.n",
+        "communication-book.shared-written-message-record.n",
+        "contact-center.multi-channel-customer-service-operation.n",
+        "preferred-contact-method.chosen-way-to-receive-contact.n",
+        "recording-notice.information-that-interaction-may-be-recorded.n",
+        "contact-record.stored-contact-identification-and-reachability-details.n",
+        "first-contact-resolution.resolution-during-initial-contact-measure.n",
+        "report.organized-account-of-findings.n",
+        "finance-contact.designated-person-for-finance-queries.n",
+        "advance-shipping-notice.message-describing-goods-before-they-arrive.n",
+        "equipment-defect-report.record-of-reported-equipment-fault.n",
+        "visitor-information-center.service-place-providing-local-visitor-information.n",
+        "occupancy-report.record-summarizing-accommodation-use-on-stated-basis.n",
+        "delivery-notice.message-recording-delivery-attempt-or-next-step.n",
+        "damage-report.record-describing-observed-harm-to-item-or-vehicle.n",
+        "diagnostic-report.record-of-information-collected-to-investigate-problem.n",
+        "crash-report.record-of-unexpected-program-or-system-failure.n",
+        "security-alert.notification-of-potential-security-event.n",
+        "system-information.details-describing-computing-system.n",
+        "notification-area.interface-region-showing-status-and-alert-controls.n",
+        "contact-channel.means-used-for-support-communication.n",
+        "outage-notice.message-informing-users-of-service-unavailability.n",
+        "daily-report.summary-of-events-during-day.n",
+        "progress-report.summary-of-development-toward-learning-goals.n",
+        "report-card.periodic-formal-school-performance-report.n",
+        "student-information-system.system-managing-student-administrative-records.n",
+        "sensitive-information.information-needing-particular-care-in-handling.n",
+        "human-resources-information-system.digital-system-for-managing-workforce-records-and-processes.n",
+        "recruitment-report.account-of-recruitment-activity-and-results.n",
+        "headcount-report.report-of-number-of-people-in-defined-groups.n",
+        "privacy-notice.information-explaining-how-personal-data-is-used.n",
+        "point-of-contact.designated-person-or-route-for-communication.n",
+        "notice-period.period-between-formal-notice-and-end-of-arrangement.n",
+        "recruitment-update.current-information-about-hiring-progress.n",
+        "policy-update.change-or-new-information-about-organizational-policy.n",
+        "change-communication.communication-explaining-proposed-or-agreed-change.n",
+        "management-report.report-prepared-to-support-management-understanding-or-decisions.n",
+        "inspection-report.record-of-inspection-findings.n",
+        "test-report.record-of-test-method-conditions-and-results.n",
+        "request-for-information.formal-request-clarifying-project-information.n",
+        "change-notice.notice-communicating-proposed-or-recorded-change.n",
+        "building-information-model.digital-representation-of-built-asset-and-associated-information.n",
+        "clash-report.record-of-identified-conflicts-between-design-elements.n",
+        "progress-report.record-describing-progress-against-planned-work.n",
+        "contact-time.time-product-remains-in-contact-under-stated-conditions.n",
+        "out-of-service-notice.notice-stating-equipment-or-place-is-unavailable.n",
+        "nonconformance-report.record-of-failure-to-meet-specified-requirement.n",
+        "outdated-information.information-no-longer-current.n",
+        "correction-notice.message-identifying-and-correcting-earlier-error.n",
+        "campaign-report.record-summarizing-campaign-activity-and-results.n",
+        "contact-preference.persons-stated-choice-about-how-to-be-contacted.n",
+        "aging-report.report-grouping-outstanding-amounts-by-age.n",
+        "exception-report.report-listing-items-outside-defined-conditions.n",
+        "payroll-report.report-summarizing-employee-pay-and-related-amounts.n",
+        "annual-report.report-on-organizations-activities-and-results-for-year.n",
+        "law-report.published-account-of-judicial-decision.n",
+        "hearing-notice.notice-giving-information-about-scheduled-hearing.n",
+        "notice-of-appeal.document-formally-notifying-intention-to-appeal.n",
+        "information-barrier.arrangements-limiting-information-flow-between-people-or-teams.n",
+        "expert-report.report-setting-out-specialists-findings-or-opinions.n"
+      ],
+      "source_sha256": "99c6b153af71a9491a42e4f0489f4d5394e02810a5ed86af8b42bf8f1b481e86"
+    }
+  ],
+  "headword_inventory_count": 4939,
+  "exact_inform_headword_or_id_hits": 0,
+  "notify_snapshot_equals_historical_hold": true,
+  "historical_notify_object_sha256": "7aaf8490d372bb3c8490c2824955a59e92c3d3dfe4416cb73d772cc6413a0cdc",
+  "token_slices": [
+    {
+      "index": 0,
+      "text": "Please",
+      "start": 0,
+      "end": 6,
+      "matches_slice": true,
+      "offsets_unchanged": true
+    },
+    {
+      "index": 1,
+      "text": "contact",
+      "start": 7,
+      "end": 14,
+      "matches_slice": true,
+      "offsets_unchanged": true
+    },
+    {
+      "index": 2,
+      "text": "the",
+      "start": 15,
+      "end": 18,
+      "matches_slice": true,
+      "offsets_unchanged": true
+    },
+    {
+      "index": 3,
+      "text": "supplier",
+      "start": 19,
+      "end": 27,
+      "matches_slice": true,
+      "offsets_unchanged": true
+    },
+    {
+      "index": 4,
+      "text": "to",
+      "start": 28,
+      "end": 30,
+      "matches_slice": true,
+      "offsets_unchanged": true
+    },
+    {
+      "index": 5,
+      "text": "confirm",
+      "start": 31,
+      "end": 38,
+      "matches_slice": true,
+      "offsets_unchanged": true
+    },
+    {
+      "index": 6,
+      "text": "the",
+      "start": 39,
+      "end": 42,
+      "matches_slice": true,
+      "offsets_unchanged": true
+    },
+    {
+      "index": 7,
+      "text": "delivery",
+      "start": 43,
+      "end": 51,
+      "matches_slice": true,
+      "offsets_unchanged": true
+    },
+    {
+      "index": 8,
+      "text": "time",
+      "start": 52,
+      "end": 56,
+      "matches_slice": true,
+      "offsets_unchanged": true
+    },
+    {
+      "index": 9,
+      "text": ",",
+      "start": 56,
+      "end": 57,
+      "matches_slice": true,
+      "offsets_unchanged": true
+    },
+    {
+      "index": 10,
+      "text": "and",
+      "start": 58,
+      "end": 61,
+      "matches_slice": true,
+      "offsets_unchanged": true
+    },
+    {
+      "index": 11,
+      "text": "inform",
+      "start": 62,
+      "end": 68,
+      "matches_slice": true,
+      "offsets_unchanged": true
+    },
+    {
+      "index": 12,
+      "text": "us",
+      "start": 69,
+      "end": 71,
+      "matches_slice": true,
+      "offsets_unchanged": true
+    },
+    {
+      "index": 13,
+      "text": "of",
+      "start": 72,
+      "end": 74,
+      "matches_slice": true,
+      "offsets_unchanged": true
+    },
+    {
+      "index": 14,
+      "text": "any",
+      "start": 75,
+      "end": 78,
+      "matches_slice": true,
+      "offsets_unchanged": true
+    },
+    {
+      "index": 15,
+      "text": "delay",
+      "start": 79,
+      "end": 84,
+      "matches_slice": true,
+      "offsets_unchanged": true
+    },
+    {
+      "index": 16,
+      "text": ".",
+      "start": 84,
+      "end": 85,
+      "matches_slice": true,
+      "offsets_unchanged": true
+    }
+  ],
+  "changed_token_indices": [
+    11
+  ],
+  "changed_expression_fields": [
+    "text",
+    "tokens",
+    "focus_lexeme_ids",
+    "references"
+  ],
+  "dispositions": {
+    "selected_ordinary_recipient_information": "The new inform identity is separate from formal notify; report, contact, update, notification and notice identities remain distinct. Overlapping communication situations do not create aliases or mastery transfer.",
+    "influence_contexts": "Keep influence uses in education, software security review, maintenance, HR planning, service review and market research outside this giving-information acceptance. No focus is added.",
+    "clinical_contexts": "Keep informed consent, the distinct informed adjective, screening discussion, clinical expressions and pending morph.inform stem unchanged. No clinical, consent, safety or canonical-family acceptance follows.",
+    "formal_and_specialist_contexts": "Keep legal appeal notice, contract defects period, financial debit note and all seventy-six related headword records unchanged. Dictionary evidence does not approve their specialist meaning or practice.",
+    "unscored_ordinary_contexts": "Hospitality informed-result state, transport informed-recipient verb, outage-notice definition and first-aider passive may overlap in ordinary language but retain original IDs, focus lists and review gates."
+  },
+  "limitations": "The fifteen lexical contexts, sixteen expression contexts and seventy-six related records are a bounded surface/headword scan, not exhaustive semantic-family coverage. Their exact frozen objects are preserved in the author packet; this review does not rewrite or approve them."
+}

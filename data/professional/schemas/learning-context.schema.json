@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "learning-context.schema.json",
+  "type": "object",
+  "properties": {
+    "track": {
+      "enum": [
+        "growth",
+        "professional"
+      ]
+    },
+    "course_id": {
+      "type": "string"
+    },
+    "module_id": {
+      "type": "string"
+    },
+    "curriculum_revision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "mode": {
+      "enum": [
+        "match",
+        "memory",
+        "pop",
+        "phrase",
+        "jelly",
+        "word_jelly"
+      ]
+    }
+  },
+  "required": [
+    "track",
+    "course_id",
+    "module_id",
+    "curriculum_revision",
+    "mode"
+  ],
+  "additionalProperties": false
+}

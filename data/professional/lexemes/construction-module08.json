@@ -1,0 +1,2196 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "hard-hat.protective-headgear-for-specified-workplace-hazards.n",
+      "text": "hard hat",
+      "display_text": "hard hat",
+      "pos": "noun",
+      "definition": "Protective headgear designed for specified workplace hazards.",
+      "example": "The hard hat requirements are stated in the site information.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "hard hat"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An unbranded construction hard hat with a fictional identification record and no universal protection claim.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "hard-hat.protective-headgear-for-specified-workplace-hazards.n.analysis.v1",
+        "lexeme_id": "hard-hat.protective-headgear-for-specified-workplace-hazards.n",
+        "text": "hard hat",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.hard",
+            "type": "stem",
+            "canonical": "hard",
+            "surface": "hard"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.hat",
+            "type": "stem",
+            "canonical": "hat",
+            "surface": "hat"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "hard hat",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Construction & Trades communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not trade training, a work method, an equipment authorization, a load calculation, an electrical or excavation procedure, a safety determination, or a legal approval. Contract terms, roles, permits, and inspection authority depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "safety-glasses.eyewear-protecting-against-specified-workplace-hazards.n",
+      "text": "safety glasses",
+      "display_text": "safety glasses",
+      "pos": "noun",
+      "definition": "Eyewear designed to protect against specified workplace hazards.",
+      "example": "The safety glasses specification needs confirmation for the task.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "safety glasses"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Identified protective eyewear in an equipment display without assuming suitability for every hazard.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "safety-glasses.eyewear-protecting-against-specified-workplace-hazards.n.analysis.v1",
+        "lexeme_id": "safety-glasses.eyewear-protecting-against-specified-workplace-hazards.n",
+        "text": "safety glasses",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.safety",
+            "type": "stem",
+            "canonical": "safety",
+            "surface": "safety"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.glasses",
+            "type": "stem",
+            "canonical": "glasses",
+            "surface": "glasses"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "safety glasses",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Construction & Trades communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not trade training, a work method, an equipment authorization, a load calculation, an electrical or excavation procedure, a safety determination, or a legal approval. Contract terms, roles, permits, and inspection authority depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "hearing-protection.equipment-reducing-exposure-to-sound-at-ear.n",
+      "text": "hearing protection",
+      "display_text": "hearing protection",
+      "pos": "noun",
+      "definition": "Equipment intended to reduce sound exposure at the ear when properly selected and used.",
+      "example": "The hearing protection arrangement is under the responsible team's review.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "hearing protection"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Recognizable hearing-protection equipment with a fictional task-review record, without attenuation advice.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "hearing-protection.equipment-reducing-exposure-to-sound-at-ear.n.analysis.v1",
+        "lexeme_id": "hearing-protection.equipment-reducing-exposure-to-sound-at-ear.n",
+        "text": "hearing protection",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.hearing",
+            "type": "stem",
+            "canonical": "hearing",
+            "surface": "hearing"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.protection",
+            "type": "stem",
+            "canonical": "protection",
+            "surface": "protection"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "hearing protection",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Construction & Trades communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not trade training, a work method, an equipment authorization, a load calculation, an electrical or excavation procedure, a safety determination, or a legal approval. Contract terms, roles, permits, and inspection authority depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "respirator.device-intended-to-reduce-inhalation-of-specified-contaminants.n",
+      "text": "respirator",
+      "display_text": "respirator",
+      "pos": "noun",
+      "definition": "A device intended to reduce the inhalation of specified airborne contaminants under suitable selection and use arrangements.",
+      "example": "The respirator suitability requires qualified review.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "respirator"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A professional respiratory-protection device displayed without fit, filter-selection, or use instructions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Construction & Trades communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not trade training, a work method, an equipment authorization, a load calculation, an electrical or excavation procedure, a safety determination, or a legal approval. Contract terms, roles, permits, and inspection authority depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "dust.fine-solid-particles-in-air-or-on-surfaces.n",
+      "text": "dust",
+      "display_text": "dust",
+      "pos": "noun",
+      "definition": "Fine solid particles that may be suspended in air or settled on surfaces.",
+      "example": "The dust concern has been included in the risk review.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "dust"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A realistic construction surface with visible settled dust, without implying invisible exposure is absent.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-cdc-home-definitions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Construction & Trades communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not trade training, a work method, an equipment authorization, a load calculation, an electrical or excavation procedure, a safety determination, or a legal approval. Contract terms, roles, permits, and inspection authority depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "silica.silicon-dioxide-present-in-rocks-and-materials.n",
+      "text": "silica",
+      "display_text": "silica",
+      "pos": "noun",
+      "definition": "Silicon dioxide, a substance present in many rocks and construction materials.",
+      "example": "The material information identifies a possible silica exposure concern.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "silica"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional material-hazard record beside a recognizable masonry sample, without exposure thresholds.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Construction & Trades communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not trade training, a work method, an equipment authorization, a load calculation, an electrical or excavation procedure, a safety determination, or a legal approval. Contract terms, roles, permits, and inspection authority depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "asbestos.group-of-fibrous-minerals-used-in-some-older-products.n",
+      "text": "asbestos",
+      "display_text": "asbestos",
+      "pos": "noun",
+      "definition": "A group of fibrous minerals used in some products, with serious hazards if harmful fibers are inhaled.",
+      "example": "The suspected asbestos concern has been referred to the responsible specialist.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "asbestos"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional suspect-material report without a visual identification claim or handling demonstration.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-hse-risk-topics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-osha-hazcom",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Construction & Trades communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not trade training, a work method, an equipment authorization, a load calculation, an electrical or excavation procedure, a safety determination, or a legal approval. Contract terms, roles, permits, and inspection authority depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "noise.unwanted-or-potentially-harmful-sound.n",
+      "text": "noise",
+      "display_text": "noise",
+      "pos": "noun",
+      "definition": "Unwanted sound or sound considered in relation to its potential harmful effects.",
+      "example": "The noise concern is included in the work review.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "noise"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional worksite sound-assessment record without an invented safe exposure limit.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-hse-risk-topics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-osha-hazcom",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-quality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-hse-inspection",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-osha-hazardous-energy",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Construction & Trades communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not trade training, a work method, an equipment authorization, a load calculation, an electrical or excavation procedure, a safety determination, or a legal approval. Contract terms, roles, permits, and inspection authority depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "vibration.repeated-oscillating-movement.n",
+      "text": "vibration",
+      "display_text": "vibration",
+      "pos": "noun",
+      "definition": "Repeated oscillating movement of an object or system.",
+      "example": "The vibration assessment is assigned to the responsible team.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "vibration"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional equipment vibration record with no exposure calculation or operational limit.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-hse-risk-topics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-osha-hazcom",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-quality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-hse-inspection",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-osha-hazardous-energy",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Construction & Trades communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not trade training, a work method, an equipment authorization, a load calculation, an electrical or excavation procedure, a safety determination, or a legal approval. Contract terms, roles, permits, and inspection authority depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "working-at-height.work-where-fall-could-cause-injury.n",
+      "text": "working at height",
+      "display_text": "working at height",
+      "pos": "noun",
+      "definition": "Work in a place or situation where a fall could cause injury, as defined by the applicable arrangements.",
+      "example": "The working at height plan needs specialist review.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "working at height"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional elevated-work planning record without demonstrating access or fall-protection procedures.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "working-at-height.work-where-fall-could-cause-injury.n.analysis.v1",
+        "lexeme_id": "working-at-height.work-where-fall-could-cause-injury.n",
+        "text": "working at height",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.working",
+            "type": "stem",
+            "canonical": "working",
+            "surface": "working"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.at",
+            "type": "stem",
+            "canonical": "at",
+            "surface": "at"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.height",
+            "type": "stem",
+            "canonical": "height",
+            "surface": "height"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "working at",
+            "rule": "word_boundary"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "working at height",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-hse-risk-topics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-osha-hazcom",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Construction & Trades communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not trade training, a work method, an equipment authorization, a load calculation, an electrical or excavation procedure, a safety determination, or a legal approval. Contract terms, roles, permits, and inspection authority depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "fall-protection.arrangements-intended-to-prevent-or-limit-harm-from-falls.n",
+      "text": "fall protection",
+      "display_text": "fall protection",
+      "pos": "noun",
+      "definition": "Arrangements intended to prevent falls or limit their consequences under specified conditions.",
+      "example": "The fall protection arrangements require qualified review.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "fall protection"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional work-design review showing collective and personal control categories without equipment selection advice.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "fall-protection.arrangements-intended-to-prevent-or-limit-harm-from-falls.n.analysis.v1",
+        "lexeme_id": "fall-protection.arrangements-intended-to-prevent-or-limit-harm-from-falls.n",
+        "text": "fall protection",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.fall",
+            "type": "stem",
+            "canonical": "fall",
+            "surface": "fall"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.protection",
+            "type": "stem",
+            "canonical": "protection",
+            "surface": "protection"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "fall protection",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Construction & Trades communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not trade training, a work method, an equipment authorization, a load calculation, an electrical or excavation procedure, a safety determination, or a legal approval. Contract terms, roles, permits, and inspection authority depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "confined-space.enclosed-space-subject-to-specific-serious-risk-controls.n",
+      "text": "confined space",
+      "display_text": "confined space",
+      "pos": "noun",
+      "definition": "An enclosed or partly enclosed space identified under applicable rules as presenting specific serious risks and requiring special entry arrangements.",
+      "example": "The confined space classification must be confirmed by the responsible specialist.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "confined space"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional entry-review record for an enclosed space, without entry, rescue, or atmosphere-testing instructions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "confined-space.enclosed-space-subject-to-specific-serious-risk-controls.n.analysis.v1",
+        "lexeme_id": "confined-space.enclosed-space-subject-to-specific-serious-risk-controls.n",
+        "text": "confined space",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.confined",
+            "type": "stem",
+            "canonical": "confined",
+            "surface": "confined"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.space",
+            "type": "stem",
+            "canonical": "space",
+            "surface": "space"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "confined space",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Construction & Trades communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not trade training, a work method, an equipment authorization, a load calculation, an electrical or excavation procedure, a safety determination, or a legal approval. Contract terms, roles, permits, and inspection authority depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "excavation-collapse.failure-of-ground-at-excavated-opening.n",
+      "text": "excavation collapse",
+      "display_text": "excavation collapse",
+      "pos": "noun",
+      "definition": "A failure of the ground forming the sides or surrounding area of an excavation.",
+      "example": "The excavation collapse concern has been reported for urgent specialist assessment.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "excavation collapse"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional concern record with a distant ground-condition image and no entry or stabilization procedure.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "excavation-collapse.failure-of-ground-at-excavated-opening.n.analysis.v1",
+        "lexeme_id": "excavation-collapse.failure-of-ground-at-excavated-opening.n",
+        "text": "excavation collapse",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.excavate",
+            "type": "stem",
+            "canonical": "excavate",
+            "surface": "excavat"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ion.suffix",
+            "type": "suffix",
+            "canonical": "ion",
+            "surface": "ion"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.collapse",
+            "type": "stem",
+            "canonical": "collapse",
+            "surface": "collapse"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "excavation",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "excavation collapse",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Construction & Trades communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not trade training, a work method, an equipment authorization, a load calculation, an electrical or excavation procedure, a safety determination, or a legal approval. Contract terms, roles, permits, and inspection authority depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "hot-work.work-producing-heat-sparks-or-flame-that-may-ignite-material.n",
+      "text": "hot work",
+      "display_text": "hot work",
+      "pos": "noun",
+      "definition": "Work producing heat, sparks, or flame that may ignite material under the applicable definition.",
+      "example": "The hot work authorization status is not yet confirmed.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "hot work"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional controlled-work permit with the activity still pending and no live hot-work demonstration.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "hot-work.work-producing-heat-sparks-or-flame-that-may-ignite-material.n.analysis.v1",
+        "lexeme_id": "hot-work.work-producing-heat-sparks-or-flame-that-may-ignite-material.n",
+        "text": "hot work",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.hot",
+            "type": "stem",
+            "canonical": "hot",
+            "surface": "hot"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.work",
+            "type": "stem",
+            "canonical": "work",
+            "surface": "work"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "hot work",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Construction & Trades communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not trade training, a work method, an equipment authorization, a load calculation, an electrical or excavation procedure, a safety determination, or a legal approval. Contract terms, roles, permits, and inspection authority depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "electrical-hazard.condition-presenting-risk-from-electrical-energy.n",
+      "text": "electrical hazard",
+      "display_text": "electrical hazard",
+      "pos": "noun",
+      "definition": "A condition presenting a risk of harm from electrical energy.",
+      "example": "The electrical hazard has been referred to qualified personnel.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "electrical hazard"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional reported electrical concern with equipment closed and no testing or repair steps.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "electrical-hazard.condition-presenting-risk-from-electrical-energy.n.analysis.v1",
+        "lexeme_id": "electrical-hazard.condition-presenting-risk-from-electrical-energy.n",
+        "text": "electrical hazard",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.electrical",
+            "type": "stem",
+            "canonical": "electrical",
+            "surface": "electrical"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.hazard",
+            "type": "stem",
+            "canonical": "hazard",
+            "surface": "hazard"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "electrical hazard",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-hse-risk-topics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-osha-hazcom",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Construction & Trades communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not trade training, a work method, an equipment authorization, a load calculation, an electrical or excavation procedure, a safety determination, or a legal approval. Contract terms, roles, permits, and inspection authority depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "fire-watch.designated-monitoring-for-fire-related-risks.n",
+      "text": "fire watch",
+      "display_text": "fire watch",
+      "pos": "noun",
+      "definition": "Designated monitoring for fire-related risks during or after specified work.",
+      "example": "The fire watch arrangements are stated in the approved work information.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "fire watch"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional monitoring assignment showing responsibility and scope without a universal duration or response procedure.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "fire-watch.designated-monitoring-for-fire-related-risks.n.analysis.v1",
+        "lexeme_id": "fire-watch.designated-monitoring-for-fire-related-risks.n",
+        "text": "fire watch",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.fire",
+            "type": "stem",
+            "canonical": "fire",
+            "surface": "fire"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.watch",
+            "type": "stem",
+            "canonical": "watch",
+            "surface": "watch"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "fire watch",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Construction & Trades communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not trade training, a work method, an equipment authorization, a load calculation, an electrical or excavation procedure, a safety determination, or a legal approval. Contract terms, roles, permits, and inspection authority depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "nonconformity.failure-to-meet-stated-requirement.n",
+      "text": "nonconformity",
+      "display_text": "nonconformity",
+      "pos": "noun",
+      "definition": "A failure to meet a stated requirement.",
+      "example": "The nonconformity record identifies the unmet specification.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "nonconformity"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional quality record linking an observed result to its stated requirement.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "nonconformity.failure-to-meet-stated-requirement.n.analysis.v1",
+        "lexeme_id": "nonconformity.failure-to-meet-stated-requirement.n",
+        "text": "nonconformity",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "affix.non.prefix",
+            "type": "prefix",
+            "canonical": "non",
+            "surface": "non"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.conformity",
+            "type": "stem",
+            "canonical": "conformity",
+            "surface": "conformity"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "nonconformity",
+            "rule": "prefix_attachment"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-quality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-hse-inspection",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-osha-hazardous-energy",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Construction & Trades communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not trade training, a work method, an equipment authorization, a load calculation, an electrical or excavation procedure, a safety determination, or a legal approval. Contract terms, roles, permits, and inspection authority depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "corrosion.material-deterioration-through-chemical-or-electrochemical-action.n",
+      "text": "corrosion",
+      "display_text": "corrosion",
+      "pos": "noun",
+      "definition": "Deterioration of material through chemical or electrochemical interaction with its environment.",
+      "example": "The corrosion observation needs specialist assessment.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "corrosion"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A realistic corroded component recorded for assessment, without a repair recommendation.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-quality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-hse-inspection",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-osha-hazardous-energy",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Construction & Trades communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not trade training, a work method, an equipment authorization, a load calculation, an electrical or excavation procedure, a safety determination, or a legal approval. Contract terms, roles, permits, and inspection authority depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "crack.narrow-break-or-split-in-material.n",
+      "text": "crack",
+      "display_text": "crack",
+      "pos": "noun",
+      "definition": "A narrow break or split in a material.",
+      "example": "The crack location is marked in the inspection photograph.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "crack"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A realistic visible material crack with a fictional location reference and no structural-safety conclusion.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-hse-induction",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-health-risks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-quality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-hse-inspection",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-osha-hazardous-energy",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Construction & Trades communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not trade training, a work method, an equipment authorization, a load calculation, an electrical or excavation procedure, a safety determination, or a legal approval. Contract terms, roles, permits, and inspection authority depend on applicable arrangements. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    }
+  ]
+}

@@ -1,0 +1,2017 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "family-history.health-information-about-relatives.n",
+      "text": "family history",
+      "display_text": "family history",
+      "pos": "noun",
+      "definition": "Health information about a person's relatives that may be relevant to their care.",
+      "example": "The clinician asked which relatives were included in the family history.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "family history"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A patient and clinician discussing a fictional family health diagram without suggesting inherited certainty.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "family-history.health-information-about-relatives.n.analysis.v1",
+        "lexeme_id": "family-history.health-information-about-relatives.n",
+        "text": "family history",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.family",
+            "type": "stem",
+            "canonical": "family",
+            "surface": "family"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.history",
+            "type": "stem",
+            "canonical": "history",
+            "surface": "history"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "family history",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-patient-communication",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "social-history.information-about-social-circumstances-and-health-related-life-context.n",
+      "text": "social history",
+      "display_text": "social history",
+      "pos": "noun",
+      "definition": "Information about social circumstances and life context relevant to a person's health and care.",
+      "example": "The social history includes the support the person has at home.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "social history"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A respectful consultation about living circumstances, work and support without social stereotypes.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "social-history.information-about-social-circumstances-and-health-related-life-context.n.analysis.v1",
+        "lexeme_id": "social-history.information-about-social-circumstances-and-health-related-life-context.n",
+        "text": "social history",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.social",
+            "type": "stem",
+            "canonical": "social",
+            "surface": "social"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.history",
+            "type": "stem",
+            "canonical": "history",
+            "surface": "history"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "social history",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-patient-communication",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "surgical-history.information-about-previous-operations.n",
+      "text": "surgical history",
+      "display_text": "surgical history",
+      "pos": "noun",
+      "definition": "Information about operations a person has previously undergone.",
+      "example": "The surgical history records the operation and its date.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "surgical history"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clinician reviewing a fictional list of previous operations and dates without graphic surgical imagery.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "surgical-history.information-about-previous-operations.n.analysis.v1",
+        "lexeme_id": "surgical-history.information-about-previous-operations.n",
+        "text": "surgical history",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.surgical",
+            "type": "stem",
+            "canonical": "surgical",
+            "surface": "surgical"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.history",
+            "type": "stem",
+            "canonical": "history",
+            "surface": "history"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "surgical history",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-patient-communication",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "occupational-history.information-about-current-and-previous-work-and-exposures.n",
+      "text": "occupational history",
+      "display_text": "occupational history",
+      "pos": "noun",
+      "definition": "Information about a person's current and previous work, including relevant activities or exposures.",
+      "example": "The occupational history includes work with dust.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "occupational history"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clinician asking about past workplaces and tasks, without inferring disease from occupation alone.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "occupational-history.information-about-current-and-previous-work-and-exposures.n.analysis.v1",
+        "lexeme_id": "occupational-history.information-about-current-and-previous-work-and-exposures.n",
+        "text": "occupational history",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.occupational",
+            "type": "stem",
+            "canonical": "occupational",
+            "surface": "occupational"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.history",
+            "type": "stem",
+            "canonical": "history",
+            "surface": "history"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "occupational history",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-patient-communication",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "travel-history.information-about-relevant-previous-travel.n",
+      "text": "travel history",
+      "display_text": "travel history",
+      "pos": "noun",
+      "definition": "Information about previous travel that may be relevant to the assessment.",
+      "example": "The travel history includes destinations and dates.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "travel history"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A patient describing travel dates and places on a fictional map without stigmatizing any location.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "travel-history.information-about-relevant-previous-travel.n.analysis.v1",
+        "lexeme_id": "travel-history.information-about-relevant-previous-travel.n",
+        "text": "travel history",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.travel",
+            "type": "stem",
+            "canonical": "travel",
+            "surface": "travel"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.history",
+            "type": "stem",
+            "canonical": "history",
+            "surface": "history"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "travel history",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-patient-communication",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "vaccination-history.record-of-vaccinations-previously-received.n",
+      "text": "vaccination history",
+      "display_text": "vaccination history",
+      "pos": "noun",
+      "definition": "Information about vaccinations a person has previously received.",
+      "example": "The vaccination history was checked against the available record.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "vaccination history"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional vaccination record with vaccine names and dates, without prescribing a vaccination schedule.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "vaccination-history.record-of-vaccinations-previously-received.n.analysis.v1",
+        "lexeme_id": "vaccination-history.record-of-vaccinations-previously-received.n",
+        "text": "vaccination history",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.vaccination",
+            "type": "stem",
+            "canonical": "vaccination",
+            "surface": "vaccination"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.history",
+            "type": "stem",
+            "canonical": "history",
+            "surface": "history"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "vaccination history",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-patient-communication",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "review-of-systems.structured-inquiry-about-symptoms-across-body-systems.n",
+      "text": "review of systems",
+      "display_text": "review of systems",
+      "pos": "noun",
+      "definition": "A structured inquiry about symptoms across body systems as part of a clinical history.",
+      "example": "The note records the relevant review of systems.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "review of systems"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clinician discussing several body-system headings with a patient, without presenting a diagnostic checklist as sufficient.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "review-of-systems.structured-inquiry-about-symptoms-across-body-systems.n.analysis.v1",
+        "lexeme_id": "review-of-systems.structured-inquiry-about-symptoms-across-body-systems.n",
+        "text": "review of systems",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.review",
+            "type": "stem",
+            "canonical": "review",
+            "surface": "review"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.of",
+            "type": "stem",
+            "canonical": "of",
+            "surface": "of"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.systems",
+            "type": "stem",
+            "canonical": "systems",
+            "surface": "systems"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "review of",
+            "rule": "word_boundary"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "review of systems",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-patient-communication",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "symptom-duration.length-of-time-symptom-has-been-present.n",
+      "text": "symptom duration",
+      "display_text": "symptom duration",
+      "pos": "noun",
+      "definition": "The length of time a symptom has been present.",
+      "example": "The symptom duration was recorded in the patient's own terms.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "symptom duration"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A timeline marking the reported beginning and current point of a symptom without an invented threshold.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "symptom-duration.length-of-time-symptom-has-been-present.n.analysis.v1",
+        "lexeme_id": "symptom-duration.length-of-time-symptom-has-been-present.n",
+        "text": "symptom duration",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.symptom",
+            "type": "stem",
+            "canonical": "symptom",
+            "surface": "symptom"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.duration",
+            "type": "stem",
+            "canonical": "duration",
+            "surface": "duration"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "symptom duration",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-patient-communication",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "symptom-severity.degree-of-intensity-or-impact-of-symptom.n",
+      "text": "symptom severity",
+      "display_text": "symptom severity",
+      "pos": "noun",
+      "definition": "The degree of intensity or impact of a symptom in the stated assessment.",
+      "example": "The clinician asked how symptom severity affected daily activity.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "symptom severity"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A patient describing the impact of symptoms on an everyday activity, without judging severity by appearance.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "symptom-severity.degree-of-intensity-or-impact-of-symptom.n.analysis.v1",
+        "lexeme_id": "symptom-severity.degree-of-intensity-or-impact-of-symptom.n",
+        "text": "symptom severity",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.symptom",
+            "type": "stem",
+            "canonical": "symptom",
+            "surface": "symptom"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.severity",
+            "type": "stem",
+            "canonical": "severity",
+            "surface": "severity"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "symptom severity",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-patient-communication",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "aggravating-factor.circumstance-associated-with-worsening-symptom.n",
+      "text": "aggravating factor",
+      "display_text": "aggravating factor",
+      "pos": "noun",
+      "definition": "A circumstance associated with a symptom becoming worse.",
+      "example": "The patient identified activity as an aggravating factor.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "aggravating factor"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A patient describing a circumstance linked with worsening symptoms, without asserting a proven cause.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "aggravating-factor.circumstance-associated-with-worsening-symptom.n.analysis.v1",
+        "lexeme_id": "aggravating-factor.circumstance-associated-with-worsening-symptom.n",
+        "text": "aggravating factor",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.aggravating",
+            "type": "stem",
+            "canonical": "aggravating",
+            "surface": "aggravating"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.factor",
+            "type": "stem",
+            "canonical": "factor",
+            "surface": "factor"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "aggravating factor",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-patient-communication",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "relieving-factor.circumstance-associated-with-easing-symptom.n",
+      "text": "relieving factor",
+      "display_text": "relieving factor",
+      "pos": "noun",
+      "definition": "A circumstance associated with a symptom becoming less troublesome.",
+      "example": "The history records the reported relieving factor.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "relieving factor"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clinical history note recording the patient's report of what eases symptoms, without recommending a treatment.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "relieving-factor.circumstance-associated-with-easing-symptom.n.analysis.v1",
+        "lexeme_id": "relieving-factor.circumstance-associated-with-easing-symptom.n",
+        "text": "relieving factor",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.relieving",
+            "type": "stem",
+            "canonical": "relieving",
+            "surface": "relieving"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.factor",
+            "type": "stem",
+            "canonical": "factor",
+            "surface": "factor"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "relieving factor",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-patient-communication",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "radiation.spread-of-pain-from-one-area-to-another.n",
+      "text": "radiation",
+      "display_text": "radiation",
+      "pos": "noun",
+      "definition": "The spread of pain from one body area to another in a clinical description.",
+      "example": "The clinician asked about the radiation of the pain.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "radiation"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A non-graphic body map showing reported pain spreading from one region to another, distinct from ionizing radiation.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-patient-communication",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "smoking-history.information-about-past-and-current-tobacco-smoking.n",
+      "text": "smoking history",
+      "display_text": "smoking history",
+      "pos": "noun",
+      "definition": "Information about past and current tobacco smoking relevant to a person's assessment.",
+      "example": "The clinician discussed the smoking history without judgment.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "smoking history"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A respectful conversation with a fictional smoking-history timeline, without promoting tobacco products.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "smoking-history.information-about-past-and-current-tobacco-smoking.n.analysis.v1",
+        "lexeme_id": "smoking-history.information-about-past-and-current-tobacco-smoking.n",
+        "text": "smoking history",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.smoking",
+            "type": "stem",
+            "canonical": "smoking",
+            "surface": "smoking"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.history",
+            "type": "stem",
+            "canonical": "history",
+            "surface": "history"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "smoking history",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-patient-communication",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "over-the-counter-medicine.medicine-obtainable-without-prescription-under-applicable-rules.n",
+      "text": "over-the-counter medicine",
+      "display_text": "over-the-counter medicine",
+      "pos": "noun",
+      "definition": "A medicine that can be obtained without a prescription under the applicable rules.",
+      "example": "The medication history includes an over-the-counter medicine.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "over-the-counter medicine"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Generic medicine packaging in a medication-history discussion, with no brand endorsement or dosage instructions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "over-the-counter-medicine.medicine-obtainable-without-prescription-under-applicable-rules.n.analysis.v1",
+        "lexeme_id": "over-the-counter-medicine.medicine-obtainable-without-prescription-under-applicable-rules.n",
+        "text": "over-the-counter medicine",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.over",
+            "type": "stem",
+            "canonical": "over",
+            "surface": "over"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.the",
+            "type": "stem",
+            "canonical": "the",
+            "surface": "the"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.counter",
+            "type": "stem",
+            "canonical": "counter",
+            "surface": "counter"
+          },
+          {
+            "id": "p4",
+            "canonical_id": "morph.medicine",
+            "type": "stem",
+            "canonical": "medicine",
+            "surface": "medicine"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "over-the",
+            "rule": "hyphenated_compound"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "over-the-counter",
+            "rule": "hyphenated_compound"
+          },
+          {
+            "id": "n3",
+            "left": "n2",
+            "right": "p4",
+            "surface": "over-the-counter medicine",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n3"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-patient-communication",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "herbal-remedy.plant-derived-preparation-used-for-health-purpose.n",
+      "text": "herbal remedy",
+      "display_text": "herbal remedy",
+      "pos": "noun",
+      "definition": "A preparation made from plant material and used for a health-related purpose.",
+      "example": "The patient reported using a herbal remedy.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "herbal remedy"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A patient discussing a clearly labeled fictional herbal preparation with a clinician, without efficacy or safety claims.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "herbal-remedy.plant-derived-preparation-used-for-health-purpose.n.analysis.v1",
+        "lexeme_id": "herbal-remedy.plant-derived-preparation-used-for-health-purpose.n",
+        "text": "herbal remedy",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.herbal",
+            "type": "stem",
+            "canonical": "herbal",
+            "surface": "herbal"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.remedy",
+            "type": "stem",
+            "canonical": "remedy",
+            "surface": "remedy"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "herbal remedy",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-patient-communication",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "previous-episode.earlier-occurrence-of-symptoms-or-condition.n",
+      "text": "previous episode",
+      "display_text": "previous episode",
+      "pos": "noun",
+      "definition": "An earlier occurrence of the symptoms or condition being discussed.",
+      "example": "The patient described a previous episode last year.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "previous episode"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clinical timeline showing a distinct earlier episode and the current encounter without implying they share a cause.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "previous-episode.earlier-occurrence-of-symptoms-or-condition.n.analysis.v1",
+        "lexeme_id": "previous-episode.earlier-occurrence-of-symptoms-or-condition.n",
+        "text": "previous episode",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.previous",
+            "type": "stem",
+            "canonical": "previous",
+            "surface": "previous"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.episode",
+            "type": "stem",
+            "canonical": "episode",
+            "surface": "episode"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "previous episode",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-patient-communication",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    }
+  ]
+}

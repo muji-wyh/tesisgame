@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "stage": "composition",
+  "ok": false,
+  "scope": "Scratch source/composition probe only. No production, test, curriculum or review-gate writes.",
+  "native_runner": "tools/run-godot.cjs::runGodot",
+  "native_timeout_ms": 60000,
+  "native_args": [
+    "--path",
+    ".",
+    "--rendering-method",
+    "gl_compatibility",
+    "--audio-driver",
+    "Dummy",
+    "--script",
+    "res://build/professional-english/retail-term-art-review/checkout-r01/probe-composition.gd"
+  ],
+  "duration_ms": 6292,
+  "script_sha256": "a86a91e175f0434f11c70826eefd579ca7ea04450a3696e1665c9e5e6f543558",
+  "source_record_sha256": "ea4f1e66fb38f55ea908a6d52c69bbddea86ae62dceaf232d6b22bc62f59fe91",
+  "report_sha256": "dd8a7045eb9fbc1bb7352fcdb38c7f6d8568b2af516566b86c555c6afec65e07",
+  "log_sha256": "59a08bca0f3e4355c5de7995cb653be907399a7d6fbb780db11fbac30fe71bfb",
+  "guarded_production_files": 658,
+  "source_original_and_retained_files": 48,
+  "native_error": "Error: Godot failed (exit 1):\nGodot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org\r\nOpenGL API OpenGL ES 3.0 (ANGLE 2.1.1 git hash: aaebda1c5a40) - Compatibility - Using Device: Google Inc. (Microsoft) - ANGLE (Microsoft, Microsoft Basic Render Driver (0x0000008C) Direct3D11 vs_5_0 ps_5_0, D3D11-10.0.26100.9711)\r\n\r\nCheckout composition probe: 72 checks, 2 failures\r\nWARNING: Your video card drivers seem not to support the required OpenGL 3.3 version, switching to ANGLE.\r\n   at: DisplayServerWindows (platform/windows/display_server_windows.cpp:8059)\r\nERROR: tiled-three-quarter: complete scene in viewport\r\n   at: push_error (core/variant/variant_utility.cpp:1023)\r\n   GDScript backtrace (most recent call first):\r\n       [0] _check (res://build/professional-english/retail-term-art-review/checkout-r01/probe-composition.gd:19)\r\n       [1] _run (res://build/professional-english/retail-term-art-review/checkout-r01/probe-composition.gd:181)\r\nERROR: tiled-high: complete scene in viewport\r\n   at: push_error (core/variant/variant_utility.cpp:1023)\r\n   GDScript backtrace (most recent call first):\r\n       [0] _check (res://build/professional-english/retail-term-art-review/checkout-r01/probe-composition.gd:19)\r\n       [1] _run (res://build/professional-english/retail-term-art-review/checkout-r01/probe-composition.gd:181)\r\n\n    at runGodot (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\tools\\run-godot.cjs:20:11)\n    at Object.<anonymous> (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\retail-term-art-review\\checkout-r01\\run-native-probe.cjs:51:18)\n    at Module._compile (node:internal/modules/cjs/loader:1804:14)\n    at Object..js (node:internal/modules/cjs/loader:1936:10)\n    at Module.load (node:internal/modules/cjs/loader:1525:32)\n    at Module._load (node:internal/modules/cjs/loader:1327:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:328:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)\n    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)\n    at node:internal/main/run_main_module:33:47",
+  "guard_error": null
+}

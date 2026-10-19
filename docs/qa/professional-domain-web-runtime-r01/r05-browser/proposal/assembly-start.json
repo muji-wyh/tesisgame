@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "started_at": "2026-10-16T20:56:11.940Z",
+  "stage": "static_proposal_assembly_only",
+  "source": {
+    "path": "assemble-proposal.cjs",
+    "bytes": 14634,
+    "sha256": "be5cf56b10564bff06a4c731e19094776fc2e6e8400ef59c9784e0a2b1c1710c"
+  },
+  "no_harness_dispatch": true
+}

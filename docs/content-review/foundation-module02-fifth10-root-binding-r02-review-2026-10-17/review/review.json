@@ -1,0 +1,101 @@
+{
+  "schema": 1,
+  "status": "accepted_for_one_root_owned_fifth10_binding_capture",
+  "reviewer": "/root/morph_review",
+  "source_inventory": {
+    "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/source-inventory.json",
+    "bytes": 1826,
+    "raw_sha256": "b52fea9c2181064d024d35a05f599ad3b24897e2402927031f13e449e5a10993"
+  },
+  "helper_source_sha256": "8fdc5aeaa82eba2d6e4b4eea8a6a53b7b3b18e674d842ce7916263fa82cbe620",
+  "source_only_inspection_completed": true,
+  "helper_execution_accepted": true,
+  "actual_binding_accepted": false,
+  "preparation_execution_accepted": false,
+  "findings": [],
+  "acceptance_scope": "The exact reviewed helper may be used for one root-owned built-in source/JSON binding capture after genuine bag persisted r02 success and a concrete root capture input. This is helper-source acceptance only; it does not accept a future actual binding or preparation, run a helper, or predeclare a persisted result.",
+  "resolved_prior_findings": [
+    {
+      "id": "F01",
+      "status": "resolved_in_reviewed_source",
+      "lines": [404, 407, 408, 411, 413],
+      "assessment": "The source now checks expected_inputs hashes only for actual evidence overlaps. Every evidence row is independently added with its sealed hash and retain=true; the existing add gate also rejects conflicting supplemental pins or case-ambiguous paths. The raw sealed JSON has exactly 11,740 expected inputs, 579 evidence records, 89 matching overlaps and 490 evidence-only paths, yielding 12,230 unique inherited paths. Neither original collection was rewritten. The former unconditional subset assertion is absent."
+    }
+  ],
+  "predecessor_revision": {
+    "source": {
+      "path": "build/professional-english/shopping-bag-persisted-validation-r02/invoke.cjs",
+      "bytes": 5916,
+      "raw_sha256": "6e138489e51f4789c1f2fd6a4039aa7e2f1af44ec435ff4309c33e568053bac5"
+    },
+    "input": {
+      "path": "build/professional-english/shopping-bag-persisted-validation-r02/input.json",
+      "bytes": 1808178,
+      "raw_sha256": "a31cd76e3f21b19fc727a5ce735bac6c3d20c9de8a71fe80b70b587c1907b70f"
+    },
+    "source_acceptance": {
+      "path": "build/professional-english/shopping-bag-persisted-independent-review-r02/review.json",
+      "raw_sha256": "4267b52b1feaeb32f03edd54325a6f248fdab37d4fad41a0a4eb3692e6fd6d71"
+    },
+    "required_genuine_original_receipt": "build/professional-english/shopping-bag-persisted-validation-r02/attempt-001/receipt.json",
+    "permitted_exact_durable_receipt": "docs/qa/professional-shopping-bag-r01/persisted/attempt-001/receipt.json",
+    "actual_receipt_selected_by_this_review": null,
+    "assessment": "Exact paths and hashes select the independently accepted r02 wrapper and unchanged sealed input. Raw wrapper comparison confirms only reporter-parser line 72 differs from r01. The original/copy receipt and log pinning remains intact and now requires genuine r02 output. Actual success still requires ok true, null error/postcheck_error, exact two successful commands, audit counts and 255 passing callbacks under the unchanged copied r03 checks."
+  },
+  "preservation_evidence": {
+    "helper_r02_members_verified": 8,
+    "helper_r01_members_preserved": 7,
+    "preparation_r03_members_preserved": 17,
+    "prior_review_raw_inputs_rehashed": 149,
+    "copied_predecessor_registry_projection_section_byte_identical": true,
+    "copied_section_raw_sha256": "20bc694f1718af6ded64d775080d2fa0d0d63034325deab10323187132cce745",
+    "supplemental_pins": 182,
+    "inventory_roots": 13,
+    "inventory_member_rows": 126,
+    "explicit_runtime_paths_unchanged": 961,
+    "failed_r01_copy_pairs_verified": 11,
+    "failed_r01_receipt_sha256": "8680e417f593aa1e04225e258b9390e1cb944c7d91cf378288ff19011de2204d",
+    "failed_r01_copy_receipt_sha256": "12ab287773dca29de5c0372ac538e688939a35df51c6cfc984db55b2267282fb",
+    "prior_helper_review_sha256": "1583da74f8140e7d749b0c251fe805ecacfd412841ac0ddb9a7f2a3332081ebd",
+    "prior_helper_review_inventory_sha256": "9ee41dab3cf3443627efa661180a7850ef119d88f3ced5790dc4fca1aa10ab39",
+    "assessment": "All prior 141 supplemental pins remain exact within the expanded 182-pin supplement. Every member of all thirteen inventories is explicitly retained. The failed receipt must remain ok false with a nonempty error; its copy receipt and eleven source/target pairs are raw-byte equal and both sides are retained. The entire prior helper/rejection inventories and unchanged frozen r03 sources remain mandatory history."
+  },
+  "supported_source_findings": [
+    "The change is limited to the r02 own path, explicit failed-history preservation, the conflict-checked evidence union, the genuine r02 persisted source/input/original receipt selections, and union observation counts. All copied predecessor, identity, registry, context, content, donor and bag-preservation functions remain byte-identical to reviewed r01, which already matched frozen r03 with documented utility substitutions.",
+    "Only four Node built-ins are imported. No reviewed project/preparation module, dynamic evaluation or subprocess dispatch appears. The helper only writes its fixed fresh scratch directory after input, predecessor and destination gates; exclusive file creation and preserved consumed failures remain intact.",
+    "Independent helper-source acceptance remains distinct from actual-binding and preparation acceptance. Author, inherited-author and dispatcher identities remain excluded. The existing r03 review retains null actual binding and false preparation acceptance.",
+    "The helper adds and verifies every expected input, every separately sealed evidence pin and every supplemental record. No conflicting pin can refresh a prior hash. All 961 explicit runtime dependency names are present in the independent metadata union.",
+    "The same raw JSON projection preserves eight accepted complete lexical entries, sixteen consulted sources, six holds, fifty full donor rows, all expression/membership context, and exact delivered bag entry/image. No transformation or project validation is embedded.",
+    "Deterministic shallow retained destinations, exactly six replacements, metadata additions and three deferred artifacts still form the unique target/absence set. Every addition must remain absent; all input bytes and actual predecessors are checked again before capture completion. The helper emits no independent actual-binding approval or preparation root input.",
+    "Twenty-seven negative guard cases are authored specifications only. The unbound template and unselected persisted-result fields remain unusable for execution."
+  ],
+  "static_inspection": {
+    "script": "inspect-source.cjs",
+    "script_sha256": "c20aad550e93b01fd4ca3a80497826866c5f78532f8042fd44258bca72d3f0d9",
+    "inspection": "inspection-r01/inspection.json",
+    "inspection_sha256": "f63deda7bb90c8f9f109bd416c2d256f5ad7bf42f05b0c6fc748e84329b245bc",
+    "inputs": "inspection-r01/inputs.json",
+    "inputs_sha256": "8de01532b7be5da42db7874298968e6c4b656d823f4c5c2d89f6a904dbe62721",
+    "comparisons_passed": 1975,
+    "comparisons_failed": 0,
+    "raw_inputs_measured": 192,
+    "all_measured_inputs_rehashed_unchanged": true,
+    "literal_source_gates": 25,
+    "inherited_full_runtime_bytes_rehashed_by_this_review": false,
+    "helper_or_project_execution": false,
+    "guard_syntax_test_native_browser_or_preparation_execution": false,
+    "actual_binding_created": false,
+    "production_mutated": false,
+    "replay_allowed": false
+  },
+  "conditions": [
+    "Root supplies a concrete, exactly hashed input with this source inventory and acceptance pins, a genuine successful r02 persisted receipt, the three true writer/input/destination guards and separately selected independent actual-binding reviewer.",
+    "Root preserves the entire source inventory, old failed attempts, exact sealed input and source pins. The helper remains one-shot; any changed source or consumed failure requires a fresh revision and independent review.",
+    "Root owns any applicable guard checks and the one capture dispatch. A capture receipt only proves construction/rechecks; the resulting complete actual binding requires separate independent inspection before any r03 preparation acceptance.",
+    "All 12,230 inherited path bytes and the full supplemental union must pass the helper's actual checks at capture. This source review verified closure metadata and 192 source/evidence files, not every inherited runtime byte."
+  ],
+  "limitations": [
+    "No actual bag persisted success is selected or inferred by this review. Source acceptance does not convert the failed r01 receipt into success or guarantee the pending r02 result.",
+    "No new language, morphology, expression, media, specialist, participant, ready-module or release acceptance is provided. No production or shared test content changed."
+  ]
+}

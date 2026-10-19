@@ -1,0 +1,221 @@
+{
+  "schema": 1,
+  "status": "static_diagnosis_and_unexecuted_correction_proposal",
+  "predecessor": {
+    "directory": "build/professional-english/final-claim-after-preflight-r01",
+    "inventory_sha256": "96d02fb46ab915a5c519b9ba3591f7a208b054df5b20d7bd5aa5a62ecf483280",
+    "files": [
+      {
+        "path": "assets.md",
+        "sha256": "c7ff910730f8201cb66fafbcd510f26e2cc09ec93c7d85ec7615bb6afa434aa0",
+        "bytes": 1759
+      },
+      {
+        "path": "inputs.json",
+        "sha256": "9c4c671b5761b93ea87ba749836f0b5e95319e4ef490f34c4c58220fb1bdc996",
+        "bytes": 105874
+      },
+      {
+        "path": "probe_ui.gd",
+        "sha256": "448c0e7685e37ca7671fdfb13a5c053d53edaed182f16b7888ad65ab5488bf7d",
+        "bytes": 1532
+      },
+      {
+        "path": "probe_ui.tscn",
+        "sha256": "fb8f996f5314669d621446588bddc346c827e3297e3eb1c336ca5b6d2a424723",
+        "bytes": 335
+      },
+      {
+        "path": "probe.gd",
+        "sha256": "a10bf54317792565fad77da8f3fccfa0e712a144512944e1c55cacdaedab09e5",
+        "bytes": 20625
+      },
+      {
+        "path": "README.md",
+        "sha256": "e9cb0e6ab7b54345251a1eeaccde9a9fb2a6586798ef0672e3f6eaa4b43dc2fa",
+        "bytes": 6083
+      },
+      {
+        "path": "run-once.cjs",
+        "sha256": "5cc2a53743c0a2425374268215fc4335ae52a0f4c7d0a455e46514fd6312ba3e",
+        "bytes": 5297
+      }
+    ],
+    "retained_attempt_files": [
+      {
+        "path": "attempt-001/check-probe.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "attempt-001/check-probe.stdout.log",
+        "sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d",
+        "bytes": 73
+      },
+      {
+        "path": "attempt-001/check-ui.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "attempt-001/check-ui.stdout.log",
+        "sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d",
+        "bytes": 73
+      },
+      {
+        "path": "attempt-001/native-probe.stderr.log",
+        "sha256": "cf455c196a0b2fa6ba1a72662bac7e353ab5b51050e04aaecf9579d965fe1cc4",
+        "bytes": 55
+      },
+      {
+        "path": "attempt-001/native-probe.stdout.log",
+        "sha256": "87f12009d2eb4ffa4febe52b747a7618dad69f42ce717257c1c08f5de4f3f153",
+        "bytes": 137
+      },
+      {
+        "path": "attempt-001/receipt.json",
+        "sha256": "4d874bfb9ca40419b97cc06a10289bf13cf4f3d99c0b96df7218dfe5bc797eba",
+        "bytes": 5327
+      },
+      {
+        "path": "attempt-001/result.json",
+        "sha256": "e73e1432faa400033fa615028ace448d0f41bdb56d7c85580b2a6155d8d7b612",
+        "bytes": 1255175
+      },
+      {
+        "path": "attempt-001/progress/coins.cfg",
+        "sha256": "3e18eeedbf1a01fcedcf57b80f8e606736673a913796fa77002036f8497b0239",
+        "bytes": 78
+      },
+      {
+        "path": "attempt-001/progress/medals.cfg",
+        "sha256": "c9e9ec3bfa2fd1638248732cfd70633098560b8a42e1d712beee0162c0411dc3",
+        "bytes": 285
+      },
+      {
+        "path": "attempt-001/progress/medals.cfg.previous",
+        "sha256": "45e20e59d3ee57d692b5355d6c5449b7213f554c8abe790dbbda030e1d24489a",
+        "bytes": 295
+      },
+      {
+        "path": "attempt-001/progress/presentation.cfg",
+        "sha256": "edcf99317841374e50879680f38e7751716437804f95cf13a09b94fd7b70b002",
+        "bytes": 46
+      },
+      {
+        "path": "attempt-001/progress/professional.json",
+        "sha256": "fd31a0fe8c55fcd7afc33d32a7d84d4d36e1c828905744dcf3bc84b344cf2f2a",
+        "bytes": 5687
+      }
+    ],
+    "frozen_sources_modified": false
+  },
+  "observed_failure": {
+    "checks": 104,
+    "failures": 1,
+    "assertion": [
+      {
+        "message": "Restoration retains the exact accepted progress",
+        "ok": false
+      }
+    ],
+    "native_exit_code": 1,
+    "result_sha256": "e73e1432faa400033fa615028ace448d0f41bdb56d7c85580b2a6155d8d7b612",
+    "receipt_sha256": "4d874bfb9ca40419b97cc06a10289bf13cf4f3d99c0b96df7218dfe5bc797eba",
+    "result_note": "r01 receipt.result is absent because the runner throws on native exit 1 before extracting the structured result. The retained result.json exists and was independently inspected."
+  },
+  "independent_retained_json_comparison": {
+    "deeply_equal": true,
+    "baseline_canonical_json_sha256": "99366c6b810a75584d9bddf9a98a376d6f6caa7f832e8af79c30c9811fd58495",
+    "restored_canonical_json_sha256": "99366c6b810a75584d9bddf9a98a376d6f6caa7f832e8af79c30c9811fd58495",
+    "baseline_sequence": 1,
+    "restored_sequence": 1,
+    "baseline_skills": {
+      "fixture.sense.14": {
+        "recognition": {
+          "earned": false,
+          "exposures": 1,
+          "streak": 1
+        }
+      }
+    },
+    "restored_skills": {
+      "fixture.sense.14": {
+        "recognition": {
+          "earned": false,
+          "exposures": 1,
+          "streak": 1
+        }
+      }
+    },
+    "method": "Node deep comparison and sorted-key JSON serialization of already retained JSON; no Godot run and no claim to recover lost runtime Variant subtypes."
+  },
+  "code_evidence": [
+    {
+      "path": "scripts/professional_progress.gd",
+      "sha256": "56437fdfb907bc9cfcbeb0b9ba1442f98f6c07aaf21bc81024af9a70838f5c4f",
+      "lines": [
+        28,
+        48
+      ],
+      "finding": "Production canonicalization stringifies dictionary keys and normalizes whole numeric values; its existing comment identifies StringName keys from property assignment versus String keys from parsed JSON."
+    },
+    {
+      "path": "scripts/professional_progress.gd",
+      "lines": [
+        204,
+        232
+      ],
+      "finding": "apply_event returns mutated progress, with integer sequence, exposures and streak assignments."
+    },
+    {
+      "path": "scripts/professional_store.gd",
+      "sha256": "671fe81e308241e976d2307d1dc3ed7544226314b5d12f5e4215754f90197c2f",
+      "lines": [
+        183,
+        225
+      ],
+      "finding": "record returns the in-memory applied progress; load returns state.progress from a fresh native read."
+    },
+    {
+      "path": "scripts/professional_store.gd",
+      "lines": [
+        243,
+        264
+      ],
+      "finding": "Native read parses persisted JSON before returning state."
+    },
+    {
+      "path": "scripts/professional_session.gd",
+      "sha256": "a6d5115d6e65a74c97cd129be4a3613358295566ac2065d046ac440560be8616",
+      "lines": [
+        239,
+        245
+      ],
+      "finding": "Session validates and duplicates returned progress on each relevant response."
+    }
+  ],
+  "diagnosis": "The single raw Dictionary assertion compares an in-memory event result with a later JSON-loaded representation. Retained JSON is structurally identical, and production already defines key/integer canonicalization for persistence. Representation mismatch is the supported explanation to test, not a proven runtime subtype diagnosis from r01.",
+  "correction": "Replace only that progress assertion with equality under existing Progress.canonical. Retain raw equality as a diagnostic and capture every progress dictionary key and leaf value type before JSON serialization. No actual progress mutation is allowed by the canonical comparison.",
+  "diagnostic_limits": [
+    "A passing r02 result is not assumed.",
+    "r01 JSON cannot reveal whether its mismatch came from StringName/String keys, int/float values, or their combination.",
+    "r02 captures type profiles without requiring a particular engine-specific subtype difference.",
+    "All original byte-preservation, model/control/resource/lease identity, context restoration, no-settlement and cleanup assertions remain active."
+  ],
+  "changes": [
+    "New revision paths and probe identifier.",
+    "Preload existing production Progress canonicalizer.",
+    "Capture baseline progress types before replacement.",
+    "Replace one raw session-progress assertion with canonical equality and retain raw/canonical/type diagnostics.",
+    "Add read-only recursive type-profile helper.",
+    "Require the new canonical comparison and nonempty type profiles in the runner success result."
+  ],
+  "inherited_input_count": 559,
+  "inherited_input_drift": 0,
+  "inputs_recaptured": false,
+  "production_or_shared_tests_modified": false,
+  "godot_parser_run": false,
+  "native_probe_run": false,
+  "build_export_or_browser_run": false
+}

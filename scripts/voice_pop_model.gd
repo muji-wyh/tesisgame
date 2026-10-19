@@ -6,6 +6,7 @@ const Data = preload("res://scripts/game_data.gd")
 const SpeechWords = preload("res://scripts/speech_words.gd")
 const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const Sampler = preload("res://scripts/word_sampler.gd")
+const LearningWord = preload("res://scripts/learning_word.gd")
 
 const DURATION: float = 50.0
 const MAX_TARGETS: int = 3
@@ -71,10 +72,13 @@ func configure(words: Array, seed_value: int = -1) -> bool:
 		if not valid:
 			continue
 		var text: String = entry.text.strip_edges().to_lower()
-		if _word_pattern.search(text) == null or seen_ids.has(entry.id) or seen_texts.has(text):
+		var professional: bool = entry.get("track") == "professional"
+		if (not LearningWord.professional(entry, "pop") if professional else _word_pattern.search(text) == null) \
+			or seen_ids.has(entry.id) or seen_texts.has(text):
 			continue
 		var word: Dictionary = entry.duplicate(true)
-		word.text = text
+		if not professional:
+			word.text = text
 		_words.append(word)
 		_aliases[word.id] = SpeechWords.word_forms(word, true)
 		seen_ids[word.id] = true

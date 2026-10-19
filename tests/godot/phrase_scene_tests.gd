@@ -162,13 +162,15 @@ func _run() -> void:
 	await _check_chest_and_new_adventure(app, directory, progress_script)
 	await _check_celebration_interruptions(app)
 	await _check_layout(app, directory)
-	var stopped: Dictionary = view.game.snapshot()
+	var stale_choose: Callable = view._choose.bind(0)
 	await _choose_mode(app, "match")
-	view.option_buttons[0].pressed.emit()
+	var stopped: Dictionary = view.game.snapshot()
+	stale_choose.call()
 	view.action_button.pressed.emit()
 	view.listen_button.pressed.emit()
 	view.finished.emit()
-	check(app._mode_id == "match" and app.model.phase != "won" and view.game.snapshot() == stopped and _pieces(app) == 1,
+	check(app._mode_id == "match" and app.model.phase != "won" and view.game.snapshot() == stopped and _pieces(app) == 1
+		and view.game.questions.is_empty() and view.option_buttons.is_empty(),
 		"Leaving Phrase Builder rejects stale tiles, audio and completion callbacks")
 	await _check_answer_confetti(app)
 	await _finish(app, directory)
@@ -460,7 +462,7 @@ func _check_celebration_interruptions(app) -> void:
 	var view = app._phrase
 	var pieces_before: int = _pieces(app)
 	app.set_reduced_motion(false)
-	for interruption in ["menu", "growth", "background", "hidden", "stop"]:
+	for interruption in ["menu", "growth", "background", "hidden"]:
 		check(app.new_round(73, false, "", "phrase"), "A fresh phrase round starts for celebration interruption: " + interruption)
 		await _settle()
 		_solve(view)
@@ -504,6 +506,13 @@ func _check_celebration_interruptions(app) -> void:
 		view.pip.gameplay_reaction_finished.emit(true)
 		check(view.game.snapshot() == before and _pieces(app) == pieces_before,
 			"A duplicate interrupted completion never advances the resumed phrase")
+	view.stop()
+	var discarded: Dictionary = view.game.snapshot()
+	view.pip.gameplay_reaction_finished.emit(true)
+	app._resume_phrase()
+	check(view.game.snapshot() == discarded and view.game.questions.is_empty() and view.option_buttons.is_empty()
+		and not view.snapshot().celebrating and _pieces(app) == pieces_before,
+		"Permanent stop releases the old board and a late completion or resume cannot revive it")
 	check(app.new_round(91, false, "", "phrase"), "A fresh round starts before checking stale celebration across reconfiguration")
 	await _settle()
 	_solve(view)

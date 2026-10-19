@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 2,
+  "status": "applying",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "42c4d58dd7a63d8013f283bd28f7b5150dc1063aa448b420bd359fec0f1568c4",
+  "recorded_at": "2026-10-16T22:48:01.869Z",
+  "path": "data/professional/lexemes/retail-pilot.json",
+  "work": "work/0ac0da1d-bb4e-42b5-827a-c7919eb039c0.bin"
+}

@@ -1,0 +1,427 @@
+{
+  "schema": 1,
+  "status": "independent_ai_language_review_complete_pending_future_delivery",
+  "reviewer": "Codex recover_delivery independent AI language reviewer; not human or subject-matter approval",
+  "reviewed_on": "2026-10-17",
+  "completed_at_utc": "2026-10-16T18:09:58.694Z",
+  "author": "Codex attendance_review and source/context helpers",
+  "independence": "Reviewer independently opened twenty original publisher pages, independently inspected Oxford selected sense metadata, checked the exact authored candidates and reproduced the context inventory. Reviewer identified a deliver wording issue; the author supplied the separate correction, which was independently rechecked. Reviewer did not author or integrate the candidate package.",
+  "acceptance_scope": "Only the exact selected-sense definition, example and editorial difficulty fields listed below have language acceptance. Projection hashes bind the surrounding unchanged preimage; they do not accept or deploy the whole projected entry. There is no integration preparation or execution, source-registry promotion, review-gate mutation, human/specialist sign-off, expression acceptance, morphology/media approval or release approval.",
+  "reviewed_package": {
+    "path": "build/professional-english/foundation-module02-language-review/second10-continuation-r01",
+    "inventory_sha256": "a40645e1cd6d7011d03b62ba8c6d4a08749f6a95d8e5d287b2beb24d839ed9bf",
+    "artifacts": [
+      {
+        "path": "HANDOFF.md",
+        "bytes": 4745,
+        "sha256": "34e857eb835b261e6c1eb8c4965327130a52e665275ff93bafaa025dc189b9d3"
+      },
+      {
+        "path": "candidate-ledger.json",
+        "bytes": 85848,
+        "sha256": "2e1e09b0d3c602b1da4d163159a8482154df0ce819ba361d2d04a699e44a19ed"
+      },
+      {
+        "path": "context-screen.json",
+        "bytes": 741020,
+        "sha256": "592b2a4f7c7bc37127763a9ebd7b1852e453a89227a8e4f27817e875260ab86e"
+      },
+      {
+        "path": "deliver-correction-r01.json",
+        "bytes": 4478,
+        "sha256": "5b5d09430ef76b504616c1510a6c44ec4ab8b311be5c24d24a9233cca73d38e4"
+      },
+      {
+        "path": "source-index.json",
+        "bytes": 16893,
+        "sha256": "b6b1c07dc6d4d013a002a5a8b1eb63caf3ea8b46a19d7173f65470da558736e5"
+      },
+      {
+        "path": "sources-a.json",
+        "bytes": 12255,
+        "sha256": "9bb428882426366203c57f9846f270790f603de8510fe2807759250a1e3aaf66"
+      },
+      {
+        "path": "sources-b.json",
+        "bytes": 25987,
+        "sha256": "91f8e84c9e6254d6fb32bad84de62b1a99d87c2375b06bc03ebc93b942dac2c9"
+      },
+      {
+        "path": "validation.json",
+        "bytes": 1866,
+        "sha256": "39b23618141950f5cd69bd001f19799befcaf85ee9f0728aab2c5bd4df0ce5a5"
+      }
+    ],
+    "input": {
+      "path": "data/professional/lexemes/foundation-module02.json",
+      "sha256": "25d9847a7156f3c654d4592b8393660b7032f4e3f20eec63801e73369696be69",
+      "hash_basis": "Raw file bytes; entry hashes are SHA256 of UTF-8 JSON.stringify(entry) preserving parsed key order."
+    }
+  },
+  "reviewer_evidence": [
+    {
+      "path": "independent-source-observations.json",
+      "sha256": "846ea1d0d8dc7516ec83783efb70844def057e622f495833ab7672c9db6b4edd"
+    },
+    {
+      "path": "mechanical-checks.json",
+      "sha256": "076f8a4930fa278613377b0cc4d82fccc64a052fcce3ea976aea6388baedb5e8"
+    }
+  ],
+  "summary": {
+    "accepted_proposals": 8,
+    "accepted_original_ledger_proposals": 7,
+    "accepted_corrected_proposals": 1,
+    "unchanged_held_entries": 2,
+    "content_changed_entries": 5,
+    "production_writes": 0,
+    "review_gate_changes": 0,
+    "new_expression_acceptances": 0,
+    "new_scored_bindings": 0
+  },
+  "accepted": [
+    {
+      "id": "complete.finish.v",
+      "status": "independent_ai_language_accepted_pending_future_delivery",
+      "source_artifact": "candidate-ledger.json",
+      "before_entry_json_sha256": "35ae1ddb757d7ace5e0694d5d93f65cde9f7a4bbbe6c4dc20780cb2a9b9a89fe",
+      "accepted_content_projection_json_sha256": "7c4e606480488dcf91d7a01838437e26e9767dff6993573ef425b77749970e0d",
+      "accepted_fields": {
+        "definition": "To bring a piece of work or an activity to its end.",
+        "example": "Please complete the task before the meeting.",
+        "difficulty": "A2"
+      },
+      "accepted_fields_json_sha256": "6f05bc85dcf80495a7078fc33942f04c516deeda28ba80dfe0533250f2f1f3e3",
+      "changed_fields": [
+        "definition",
+        "example"
+      ],
+      "source_ids": [
+        "foundation02-language-second10-oxford-complete",
+        "foundation02-language-second10-collins-complete"
+      ],
+      "selected_source_levels": {
+        "oxford_html": {
+          "sense_element": "complete_sng_6",
+          "attribute": "cefr",
+          "literal": "a1"
+        },
+        "oxford_rendered_topic": null,
+        "collins_rendered": "A2"
+      },
+      "decision": "Accept the exact finishing-work/activity definition and task example at editorial A2. The two publishers separate form filling, so the former merged-sense claim is not accepted. Collins selected A2 supports placement; Oxford selected A1 metadata remains explicit. The unchanged form-image brief and old editorial note are preimages only and require separate scoped resolution before future delivery claims.",
+      "dictionary_or_lesson_level_certification": false,
+      "proposed_editorial_note_text_sha256": "d8dde3d3da094dd78f6e94bbe88957249da6c4e5ad6b22afb3379b109e1757e5",
+      "editorial_note_disposition": "Reviewed as accurate proposed scope limitations only; no review-status, reference or production editorial-note mutation is authorized by this artifact."
+    },
+    {
+      "id": "prepare.make-ready.v",
+      "status": "independent_ai_language_accepted_pending_future_delivery",
+      "source_artifact": "candidate-ledger.json",
+      "before_entry_json_sha256": "516945ceda25b90a71b84dc28c7b3a5878edf614a131c2c9e4eb5aa3abd4b56c",
+      "accepted_content_projection_json_sha256": "516945ceda25b90a71b84dc28c7b3a5878edf614a131c2c9e4eb5aa3abd4b56c",
+      "accepted_fields": {
+        "definition": "To make something ready for an activity or use.",
+        "example": "We need to prepare the room for the visitors.",
+        "difficulty": "A2"
+      },
+      "accepted_fields_json_sha256": "4c8f8ebfd5160956bbb7b34de91e638912ff1f60d2c38efd6dcb1b74d2db8666",
+      "changed_fields": [],
+      "source_ids": [
+        "foundation02-language-second10-oxford-prepare",
+        "foundation02-language-second10-collins-prepare"
+      ],
+      "selected_source_levels": {
+        "oxford_html": {
+          "sense_element": "prepare_sng_1",
+          "attribute": "cefr",
+          "literal": "a1"
+        },
+        "oxford_rendered_topic": null,
+        "collins_rendered": "A2"
+      },
+      "decision": "Accept the unchanged ordinary transitive readying definition and room example at editorial A2. Collins selected A2 and Oxford selected A1 metadata support this bounded placement. Food preparation, chemical manufacture and self-preparation constructions are outside the decision.",
+      "dictionary_or_lesson_level_certification": false,
+      "proposed_editorial_note_text_sha256": "0aa155c369b92c6872ea0b1cb6a2ee1a5201b3d8ba3ac582da611a336d102788",
+      "editorial_note_disposition": "Reviewed as accurate proposed scope limitations only; no review-status, reference or production editorial-note mutation is authorized by this artifact."
+    },
+    {
+      "id": "arrange.organize.v",
+      "status": "independent_ai_language_accepted_pending_future_delivery",
+      "source_artifact": "candidate-ledger.json",
+      "before_entry_json_sha256": "fcf4a671365ff2dd2690d4fdc5eefd4e86067a69b81b94183901b1691a383e7a",
+      "accepted_content_projection_json_sha256": "fcf4a671365ff2dd2690d4fdc5eefd4e86067a69b81b94183901b1691a383e7a",
+      "accepted_fields": {
+        "definition": "To organize the details needed for something to happen.",
+        "example": "I will arrange a meeting with the supplier.",
+        "difficulty": "A2"
+      },
+      "accepted_fields_json_sha256": "8ff731e978517432f725bdae0f1761a53f59b93cd058c2c32fc6d3a821b4a040",
+      "changed_fields": [],
+      "source_ids": [
+        "foundation02-language-second10-oxford-arrange",
+        "foundation02-language-second10-collins-arrange"
+      ],
+      "selected_source_levels": {
+        "oxford_html": {
+          "sense_element": "arrange_sng_1",
+          "attribute": "cefr",
+          "literal": "a2"
+        },
+        "oxford_rendered_topic": null,
+        "collins_rendered": "B1"
+      },
+      "decision": "Accept the unchanged meeting-planning definition/example at editorial A2. Oxford selected A2 metadata supports the placement while Collins selected B1 remains an explicit disagreement. Physical ordering and musical adaptation are excluded; arrange-to/for expression acceptance is not inferred.",
+      "dictionary_or_lesson_level_certification": false,
+      "proposed_editorial_note_text_sha256": "b246d9b3f947491689f341add7ca7276bb025b8da9f865f67d6ac2528fb81294",
+      "editorial_note_disposition": "Reviewed as accurate proposed scope limitations only; no review-status, reference or production editorial-note mutation is authorized by this artifact."
+    },
+    {
+      "id": "deliver.take-to-recipient.v",
+      "status": "independent_ai_language_accepted_pending_future_delivery",
+      "source_artifact": "deliver-correction-r01.json",
+      "before_entry_json_sha256": "050062d35201cd6982446a987dbd3d4e7929fcc75dedfa5044f0ed23602634d0",
+      "accepted_content_projection_json_sha256": "bf7339125c5ec83bd6c1f8170bb68e731fb89d7a8713d36491208677290864ea",
+      "accepted_fields": {
+        "definition": "To take physical items to the person or place they are intended for.",
+        "example": "The courier will deliver the parcel this afternoon.",
+        "difficulty": "B1"
+      },
+      "accepted_fields_json_sha256": "0eb030bb741b55a6341bb0fb1bb1d267d109f078d1fb93482d59a3ae36993f0f",
+      "changed_fields": [
+        "definition",
+        "difficulty"
+      ],
+      "source_ids": [
+        "foundation02-language-second10-oxford-deliver",
+        "foundation02-language-second10-collins-deliver"
+      ],
+      "selected_source_levels": {
+        "oxford_html": {
+          "sense_element": "deliver_sng_1",
+          "attribute": "cefr",
+          "literal": "b1"
+        },
+        "oxford_rendered_topic": "B1",
+        "collins_rendered": "B1"
+      },
+      "decision": "Accept only the separately corrected physical-items definition, retained courier/parcel example and editorial B1. Both selected physical-delivery sources support B1. The corrected plural referent resolves the original mixed singular/plural wording. Information transmission, speech, promised performance and childbirth are excluded.",
+      "dictionary_or_lesson_level_certification": false,
+      "proposed_editorial_note_text_sha256": "b6b10697fe9ffa642e1393ad3921e9c66f620b6664aedb38a9cd26d293f958dc",
+      "editorial_note_disposition": "Reviewed as accurate proposed scope limitations only; no review-status, reference or production editorial-note mutation is authorized by this artifact."
+    },
+    {
+      "id": "replace.put-instead.v",
+      "status": "independent_ai_language_accepted_pending_future_delivery",
+      "source_artifact": "candidate-ledger.json",
+      "before_entry_json_sha256": "e4cd47027e21baa6443d7a46072970981098201015e7bb23bef87d1af7b955d0",
+      "accepted_content_projection_json_sha256": "5cfff40d0004e0d6ae3b25112f2b1d0996305e53b5258c9d33020cf7afb4f276",
+      "accepted_fields": {
+        "definition": "To put a new item in the place of one that is damaged or worn out.",
+        "example": "We need to replace the damaged folder with a new one.",
+        "difficulty": "A2"
+      },
+      "accepted_fields_json_sha256": "ed27432ef1584668a16eec328d4caa3949942cc1573b242e4072d9b51faa936a",
+      "changed_fields": [
+        "definition",
+        "example"
+      ],
+      "source_ids": [
+        "foundation02-language-second10-oxford-replace",
+        "foundation02-language-second10-collins-replace"
+      ],
+      "selected_source_levels": {
+        "oxford_html": {
+          "sense_element": "replace_sng_3",
+          "attribute": "cefr",
+          "literal": "a2"
+        },
+        "oxford_rendered_topic": null,
+        "collins_rendered": "B1"
+      },
+      "decision": "Accept the exact narrowed damaged/worn-item definition and explicit new-folder example at editorial A2. Oxford sense 3 A2 supports the placement, with Collins sense 3 B1 preserved. General substitution is separate, including literal Collins sense 2 B1+; neither that label nor broad entity/service replacement is collapsed into this accepted scope. Same-item putting back is excluded.",
+      "dictionary_or_lesson_level_certification": false,
+      "proposed_editorial_note_text_sha256": "8a38e20c0bc4e7ff732146edc3f926006f55d5b87b78a5ea1bee82c6781901b8",
+      "editorial_note_disposition": "Reviewed as accurate proposed scope limitations only; no review-status, reference or production editorial-note mutation is authorized by this artifact."
+    },
+    {
+      "id": "return.send-back.v",
+      "status": "independent_ai_language_accepted_pending_future_delivery",
+      "source_artifact": "candidate-ledger.json",
+      "before_entry_json_sha256": "e35430fe10bfd7d25ab18afdc95b701bdb1c45e95666e307ec2556620fd91616",
+      "accepted_content_projection_json_sha256": "cff52e793003127f161b79cd7b1ce407044c396cc9f904363b2003c151464c19",
+      "accepted_fields": {
+        "definition": "To give or send a borrowed item back to its owner or the place it came from.",
+        "example": "Please return the borrowed key to reception.",
+        "difficulty": "A2"
+      },
+      "accepted_fields_json_sha256": "64e2e6b91b6cdaa99006b8635fdea1b5fe8d40866a8d2190d21b7ae00ad1c511",
+      "changed_fields": [
+        "definition",
+        "example"
+      ],
+      "source_ids": [
+        "foundation02-language-second10-oxford-return",
+        "foundation02-language-second10-collins-return"
+      ],
+      "selected_source_levels": {
+        "oxford_html": {
+          "sense_element": "return_sng_2",
+          "attribute": "cefr",
+          "literal": "b1"
+        },
+        "oxford_rendered_topic": "B1",
+        "collins_rendered": "A2"
+      },
+      "decision": "Accept the exact borrowed-item give/send-back definition and borrowed-key example at editorial A2. Collins selected borrowed/taken-object A2 supports this bounded candidate while Oxford transitive B1 remains explicit. Do not transfer intransitive A1 or expand to purchased-goods, software, travel, finance or noun-compound senses. The unchanged Foundation key expression receives no inferred borrowed-item acceptance.",
+      "dictionary_or_lesson_level_certification": false,
+      "proposed_editorial_note_text_sha256": "f4b0006464e4cf1b9e967a570e6073fea4c21ec29e1191638ce8dc097c053698",
+      "editorial_note_disposition": "Reviewed as accurate proposed scope limitations only; no review-status, reference or production editorial-note mutation is authorized by this artifact."
+    },
+    {
+      "id": "report.give-information.v",
+      "status": "independent_ai_language_accepted_pending_future_delivery",
+      "source_artifact": "candidate-ledger.json",
+      "before_entry_json_sha256": "e424d69fc0cf62df68c01ca3e630eb0fc993949bbf6061b540c118df5e6891aa",
+      "accepted_content_projection_json_sha256": "564942cf9a8d43f454bf322ae466501331d86099ced2cb221eda3e5d8e3c767d",
+      "accepted_fields": {
+        "definition": "To tell someone about an event, result, or problem.",
+        "example": "Please report the equipment problem to the supervisor.",
+        "difficulty": "A2"
+      },
+      "accepted_fields_json_sha256": "5c5e1972f4895da6e95719875d4fb1b2c52a70dfd3fc4f469a3161eba411681b",
+      "changed_fields": [
+        "definition"
+      ],
+      "source_ids": [
+        "foundation02-language-second10-oxford-report",
+        "foundation02-language-second10-collins-report"
+      ],
+      "selected_source_levels": {
+        "oxford_html": {
+          "sense_element": "report_sng_1",
+          "attribute": "cefr",
+          "literal": "a2"
+        },
+        "oxford_rendered_topic": null,
+        "collins_rendered": "B1"
+      },
+      "decision": "Accept the exact general event/result/problem information definition and unchanged supervisor example at editorial A2. Oxford selected give-information A2 supports this placement; Collins selected B1 remains explicit. Removing the responsible-recipient requirement clarifies the general sense. Report nouns, supervision relationships, news/duty variants and specialist reporting procedures remain outside the decision.",
+      "dictionary_or_lesson_level_certification": false,
+      "proposed_editorial_note_text_sha256": "8d8fe0d8ca66ced1fd47541a31d0a20578df649468c3e3821abf81886641e865",
+      "editorial_note_disposition": "Reviewed as accurate proposed scope limitations only; no review-status, reference or production editorial-note mutation is authorized by this artifact."
+    },
+    {
+      "id": "contact.communicate-with.v",
+      "status": "independent_ai_language_accepted_pending_future_delivery",
+      "source_artifact": "candidate-ledger.json",
+      "before_entry_json_sha256": "9ef44563d213719aaf23232130e745969c0851deacd2c99a552d80b5aa21ffda",
+      "accepted_content_projection_json_sha256": "9ef44563d213719aaf23232130e745969c0851deacd2c99a552d80b5aa21ffda",
+      "accepted_fields": {
+        "definition": "To communicate with a person or organization.",
+        "example": "I will contact the supplier about the missing box.",
+        "difficulty": "A2"
+      },
+      "accepted_fields_json_sha256": "ac7062d3ce5d54721954c3a4ee7b5c669624bba00feb40bb9af31cb43b7e5d00",
+      "changed_fields": [],
+      "source_ids": [
+        "foundation02-language-second10-oxford-contact",
+        "foundation02-language-second10-collins-contact"
+      ],
+      "selected_source_levels": {
+        "oxford_html": {
+          "sense_element": "contact_sng_9",
+          "attribute": "fkcefr",
+          "literal": "b1"
+        },
+        "oxford_rendered_topic": "B1",
+        "collins_rendered": "A2"
+      },
+      "decision": "Accept the unchanged communication definition and direct-object supplier example at editorial A2. Collins selected verb A2 supports this placement while Oxford selected B1 metadata and topic label remain explicit. Noun contact, contact details, physical contact and specialist compounds remain separate.",
+      "dictionary_or_lesson_level_certification": false,
+      "proposed_editorial_note_text_sha256": "3a5fe3b478861d9c6796ef6dd124aed5a940f1c4a1b77ce6ee33b419b24bac68",
+      "editorial_note_disposition": "Reviewed as accurate proposed scope limitations only; no review-status, reference or production editorial-note mutation is authorized by this artifact."
+    }
+  ],
+  "held": [
+    {
+      "id": "collect.gather.v",
+      "status": "held_unchanged",
+      "whole_entry_json_sha256": "177f9fc35b0d348ddcc3cdf60c43dd5119d145acfe781d17c2b988e1b6d77981",
+      "decision": "Preserve the whole draft. Gathering and pickup are separate in both sources. The pickup-focused example/image/expression does not resolve the stable gather ID, and Collins British pickup marking is broader than Oxford person-example marking. No independently supported scope/region decision has resolved the hold.",
+      "reference_or_note_additions": 0,
+      "review_gate_changes": 0
+    },
+    {
+      "id": "notify.inform.v",
+      "status": "held_unchanged",
+      "whole_entry_json_sha256": "7aaf8490d372bb3c8490c2824955a59e92c3d3dfe4416cb73d772cc6413a0cdc",
+      "decision": "Preserve the whole draft. Oxford selected formal-informing fkcefr=c1 is independently confirmed. Collins gives formal register but no selected level; no direct lower-level evidence resolves the current A2 difficulty. Do not clamp C1 to B2.",
+      "reference_or_note_additions": 0,
+      "review_gate_changes": 0
+    }
+  ],
+  "rejected_superseded_candidate": {
+    "id": "deliver.take-to-recipient.v",
+    "content_projection_json_sha256": "642cbae48b421f56383d5aa08f557f987249d6c61ca41e4db907e4259eea85e4",
+    "reason": "Original definition uses singular it after a disjunction including plural goods. Only the exact separate corrected projection is accepted.",
+    "accepted_replacement_json_sha256": "bf7339125c5ec83bd6c1f8170bb68e731fb89d7a8713d36491208677290864ea"
+  },
+  "context_review": {
+    "status": "exact_inventory_verified_no_expression_acceptance",
+    "counts": {
+      "selected_ids": 10,
+      "memberships": 200,
+      "containing_modules": 20,
+      "expressions_scanned": 1620,
+      "unique_text_expression_hits": 245,
+      "lexeme_expression_pairs": 256,
+      "focus_only_without_surface_hits": 0,
+      "existing_focus_expressions": 6,
+      "related_lexical_identities": 66,
+      "inherited_expression_holds": 17,
+      "inherited_hold_hash_mismatches": 0,
+      "expression_acceptances": 0,
+      "new_scored_bindings": 0,
+      "expression_mutations": 0,
+      "gate_mutations": 0
+    },
+    "matching_scope": "Case-insensitive word-boundary exact forms against expression.text ONLY. Existing selected focus IDs are checked separately; none adds a focus-only match. No matching against meaning, context, references, or serialized JSON. Related identities are separately matched against lexeme.text only.",
+    "source_hashes_verified": 354,
+    "existing_focus_ids": [
+      "expr.foundation.module02.02",
+      "expr.foundation.module02.06",
+      "expr.foundation.module02.07",
+      "expr.foundation.module02.08",
+      "expr.foundation.module02.09",
+      "expr.foundation.module02.10"
+    ],
+    "inherited_hold_ids": [
+      "expr.clinical_medicine.module07.05",
+      "expr.customer_support.module03.08",
+      "expr.customer_support.module07.08",
+      "expr.foundation.module01.03",
+      "expr.foundation.module01.06",
+      "expr.foundation.module01.08",
+      "expr.foundation.module02.02",
+      "expr.hospitality_tourism.module05.04",
+      "expr.hospitality_tourism.module09.02",
+      "expr.hospitality_tourism.module09.08",
+      "expr.legal_paralegal.module09.02",
+      "expr.legal_paralegal.module09.08",
+      "expr.office_admin.module05.07",
+      "expr.office_admin.module06.03",
+      "expr.office_admin.module09.01",
+      "expr.sales_marketing.module04.07",
+      "expr.transport_delivery.module09.06"
+    ],
+    "independent_boundaries": "Complete form/field/questionnaire and adjective/participle uses; broader service/document replace; purchased-goods/software/financial/noun return; report nouns and report-to supervision; contact nouns/compounds and every specialist context remain outside the accepted lexical scope. All six selected-focus expressions stay exact, including pending domain on Foundation02.09 and .10. No occurrence is rebound. The 245 expressions and 66 related identities are a screen, not accepted content."
+  },
+  "future_delivery_requirements": [
+    "Retain original ledger, exact separate deliver correction, source-level disagreements and this review together; original deliver projection is unaccepted.",
+    "Any future integration must construct and independently check exact provenance, references, status/notes transitions, guard bindings and technical validation from the then-current baseline. No such delivery package exists here.",
+    "Resolve the contradicted old complete editorial note in any future language metadata; retain its pending form-image mismatch as unapproved until a separate image-scope decision.",
+    "Keep collect and notify as exact whole-entry holds; keep all inherited and new context exclusions, identities, forms, regions, morphology/media/domain gates and memberships unchanged."
+  ],
+  "outstanding_findings_requiring_candidate_repair": []
+}

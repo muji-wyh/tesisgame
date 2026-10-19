@@ -1,0 +1,753 @@
+{
+	"camera": {
+		"orthographic_size": 7.6,
+		"position": [
+			7,
+			7.3,
+			10
+		],
+		"source_render_size": [
+			1024,
+			1024
+		],
+		"target": [
+			0,
+			0.9,
+			0
+		]
+	},
+	"ceiling_support": {
+		"bracket_contact_depth_meters": 0.0425,
+		"bracket_total_depth_meters": 0.085,
+		"contact_gap_meters": 0.00000006484985,
+		"curtain_bracket_max_y": 2.55849993515015,
+		"source": "Kenney floorFull.glb",
+		"treatment": "Five uniformly scaled original source floor panels form a cutaway ceiling strip meeting the back wall; no new primitive geometry",
+		"underside_y": 2.5585
+	},
+	"curtain_motion_adaptation": {
+		"authored_animation": "nursing-curtain-hem-sway",
+		"authored_triangles": 7444,
+		"authored_vertices": 22332,
+		"cloth_simulation": false,
+		"deformation": "Only the lower 45 percent bends in local depth by smoothstep weight times a sine wave; the upper 55 percent and every hardware mesh remain fixed.",
+		"hardware_mesh_count": 29,
+		"maximum_hem_displacement_meters": 0.02,
+		"normal_adaptation": "Apply the inverse transpose of the depth-bend Jacobian to the corrected source normal at each authored vertex, then normalize.",
+		"source_available_animations": [],
+		"source_normal_correction": {
+			"adaptation": "Expanded the original indexed triangles to split cap and side normals. Side normals retain source XZ direction with Y set to zero and renormalized; top and bottom caps use vertical normals.",
+			"cap_triangles": 528,
+			"expanded_vertices": 3180,
+			"node": "Pleated privacy textile",
+			"original_glb_modified": false,
+			"side_triangles": 532,
+			"source_triangles": 1060,
+			"source_vertices": 1256,
+			"unchanged": [
+				"Every triangle vertex position and winding",
+				"Every triangle UV",
+				"Mesh bounds and silhouette",
+				"Source material and embedded texture",
+				"Hardware meshes and transforms"
+			]
+		},
+		"source_side_triangles": 532,
+		"source_total_triangles": 1060,
+		"topology_adaptation": "Clipped each original side triangle into seven horizontal bands, adding only barycentric points on its original plane; preserved original cap triangles. Rest positions and UVs use exact edge interpolation.",
+		"unchanged": [
+			"Original GLB bytes",
+			"All source materials/textures",
+			"Fold cross-sections",
+			"All hardware mesh/transform data",
+			"Entire model transform"
+		],
+		"vertical_fraction_cuts": [
+			0.0,
+			0.075,
+			0.15,
+			0.225,
+			0.3,
+			0.375,
+			0.45,
+			1.0
+		]
+	},
+	"duration_seconds": 8,
+	"frame_count": 16,
+	"frames_per_second": 2,
+	"lighting": {
+		"ambient": 0.3,
+		"exposure": 1.0,
+		"fill": 0.08,
+		"fill_rotation": [
+			-25,
+			135,
+			0
+		],
+		"key": 0.34,
+		"key_rotation": [
+			-50,
+			-35,
+			0
+		],
+		"tonemap": "linear"
+	},
+	"motion_samples": [
+		{
+			"fixed_upper_region_delta_meters": 0.0,
+			"hardware_fixed": true,
+			"maximum_displacement_meters": 0.0,
+			"maximum_side_normal_y": 0.0000240247100009583,
+			"phase": 0.0,
+			"signed_strength": 0.0
+		},
+		{
+			"fixed_upper_region_delta_meters": 0.0,
+			"hardware_fixed": true,
+			"maximum_displacement_meters": 0.0,
+			"maximum_side_normal_y": 0.0000240247100009583,
+			"phase": 0.0,
+			"signed_strength": 0.0
+		},
+		{
+			"fixed_upper_region_delta_meters": 0.0,
+			"hardware_fixed": true,
+			"maximum_displacement_meters": 0.00765366852283478,
+			"maximum_side_normal_y": 0.0114866578951478,
+			"phase": 0.0625,
+			"signed_strength": 0.38268343236509
+		},
+		{
+			"fixed_upper_region_delta_meters": 0.0,
+			"hardware_fixed": true,
+			"maximum_displacement_meters": 0.0141421370208263,
+			"maximum_side_normal_y": 0.0212211981415749,
+			"phase": 0.125,
+			"signed_strength": 0.707106781186547
+		},
+		{
+			"fixed_upper_region_delta_meters": 0.0,
+			"hardware_fixed": true,
+			"maximum_displacement_meters": 0.0184775907546282,
+			"maximum_side_normal_y": 0.0277224183082581,
+			"phase": 0.1875,
+			"signed_strength": 0.923879532511287
+		},
+		{
+			"fixed_upper_region_delta_meters": 0.0,
+			"hardware_fixed": true,
+			"maximum_displacement_meters": 0.0200000032782555,
+			"maximum_side_normal_y": 0.0300045516341925,
+			"phase": 0.25,
+			"signed_strength": 1.0
+		},
+		{
+			"fixed_upper_region_delta_meters": 0.0,
+			"hardware_fixed": true,
+			"maximum_displacement_meters": 0.0184775907546282,
+			"maximum_side_normal_y": 0.0277224183082581,
+			"phase": 0.3125,
+			"signed_strength": 0.923879532511287
+		},
+		{
+			"fixed_upper_region_delta_meters": 0.0,
+			"hardware_fixed": true,
+			"maximum_displacement_meters": 0.0141421370208263,
+			"maximum_side_normal_y": 0.0212211981415749,
+			"phase": 0.375,
+			"signed_strength": 0.707106781186548
+		},
+		{
+			"fixed_upper_region_delta_meters": 0.0,
+			"hardware_fixed": true,
+			"maximum_displacement_meters": 0.00765366852283478,
+			"maximum_side_normal_y": 0.0114866578951478,
+			"phase": 0.4375,
+			"signed_strength": 0.38268343236509
+		},
+		{
+			"fixed_upper_region_delta_meters": 0.0,
+			"hardware_fixed": true,
+			"maximum_displacement_meters": 0.0,
+			"maximum_side_normal_y": 0.0000240247100009583,
+			"phase": 0.5,
+			"signed_strength": 0.0
+		},
+		{
+			"fixed_upper_region_delta_meters": 0.0,
+			"hardware_fixed": true,
+			"maximum_displacement_meters": 0.00765366852283478,
+			"maximum_side_normal_y": 0.0115083428099751,
+			"phase": 0.5625,
+			"signed_strength": -0.38268343236509
+		},
+		{
+			"fixed_upper_region_delta_meters": 0.0,
+			"hardware_fixed": true,
+			"maximum_displacement_meters": 0.0141421370208263,
+			"maximum_side_normal_y": 0.0212428979575634,
+			"phase": 0.625,
+			"signed_strength": -0.707106781186547
+		},
+		{
+			"fixed_upper_region_delta_meters": 0.0,
+			"hardware_fixed": true,
+			"maximum_displacement_meters": 0.0184775907546282,
+			"maximum_side_normal_y": 0.0277441218495369,
+			"phase": 0.6875,
+			"signed_strength": -0.923879532511287
+		},
+		{
+			"fixed_upper_region_delta_meters": 0.0,
+			"hardware_fixed": true,
+			"maximum_displacement_meters": 0.0200000032782555,
+			"maximum_side_normal_y": 0.0300262570381165,
+			"phase": 0.75,
+			"signed_strength": -1.0
+		},
+		{
+			"fixed_upper_region_delta_meters": 0.0,
+			"hardware_fixed": true,
+			"maximum_displacement_meters": 0.0184775907546282,
+			"maximum_side_normal_y": 0.0277441218495369,
+			"phase": 0.8125,
+			"signed_strength": -0.923879532511287
+		},
+		{
+			"fixed_upper_region_delta_meters": 0.0,
+			"hardware_fixed": true,
+			"maximum_displacement_meters": 0.0141421370208263,
+			"maximum_side_normal_y": 0.0212428979575634,
+			"phase": 0.875,
+			"signed_strength": -0.707106781186548
+		},
+		{
+			"fixed_upper_region_delta_meters": 0.0,
+			"hardware_fixed": true,
+			"maximum_displacement_meters": 0.00765366852283478,
+			"maximum_side_normal_y": 0.0115083428099751,
+			"phase": 0.9375,
+			"signed_strength": -0.38268343236509
+		},
+		{
+			"fixed_upper_region_delta_meters": 0.0,
+			"hardware_fixed": true,
+			"maximum_displacement_meters": 0.0,
+			"maximum_side_normal_y": 0.0000240247100009583,
+			"phase": 1.0,
+			"signed_strength": 0.0
+		}
+	],
+	"placements": [
+		{
+			"layer": "environment",
+			"position": [
+				-1.9099999666214,
+				0.0,
+				-0.954999983310699
+			],
+			"scale": [
+				1.9099999666214,
+				1.9099999666214,
+				1.9099999666214
+			],
+			"source": "floor",
+			"yaw": 0.0
+		},
+		{
+			"layer": "environment",
+			"position": [
+				-1.9099999666214,
+				0.0,
+				0.954999983310699
+			],
+			"scale": [
+				1.9099999666214,
+				1.9099999666214,
+				1.9099999666214
+			],
+			"source": "floor",
+			"yaw": 0.0
+		},
+		{
+			"layer": "environment",
+			"position": [
+				0.0,
+				0.0,
+				-0.954999983310699
+			],
+			"scale": [
+				1.9099999666214,
+				1.9099999666214,
+				1.9099999666214
+			],
+			"source": "floor",
+			"yaw": 0.0
+		},
+		{
+			"layer": "environment",
+			"position": [
+				0.0,
+				0.0,
+				0.954999983310699
+			],
+			"scale": [
+				1.9099999666214,
+				1.9099999666214,
+				1.9099999666214
+			],
+			"source": "floor",
+			"yaw": 0.0
+		},
+		{
+			"layer": "environment",
+			"position": [
+				1.9099999666214,
+				0.0,
+				-0.954999983310699
+			],
+			"scale": [
+				1.9099999666214,
+				1.9099999666214,
+				1.9099999666214
+			],
+			"source": "floor",
+			"yaw": 0.0
+		},
+		{
+			"layer": "environment",
+			"position": [
+				1.9099999666214,
+				0.0,
+				0.954999983310699
+			],
+			"scale": [
+				1.9099999666214,
+				1.9099999666214,
+				1.9099999666214
+			],
+			"source": "floor",
+			"yaw": 0.0
+		},
+		{
+			"layer": "environment",
+			"position": [
+				-1.9099999666214,
+				0.0954999998211861,
+				-1.9577499628067
+			],
+			"scale": [
+				1.9099999666214,
+				1.9099999666214,
+				1.9099999666214
+			],
+			"source": "wall",
+			"yaw": 0.0
+		},
+		{
+			"layer": "environment",
+			"position": [
+				0.0,
+				0.0954999998211861,
+				-1.9577499628067
+			],
+			"scale": [
+				1.9099999666214,
+				1.9099999666214,
+				1.9099999666214
+			],
+			"source": "wall",
+			"yaw": 0.0
+		},
+		{
+			"layer": "environment",
+			"position": [
+				1.9099999666214,
+				0.0954999998211861,
+				-1.9577499628067
+			],
+			"scale": [
+				1.9099999666214,
+				1.9099999666214,
+				1.9099999666214
+			],
+			"source": "window",
+			"yaw": 0.0
+		},
+		{
+			"layer": "environment",
+			"position": [
+				-2.91275000572205,
+				0.0954999998211861,
+				-0.954999983310699
+			],
+			"scale": [
+				1.9099999666214,
+				1.9099999666214,
+				1.9099999666214
+			],
+			"source": "wall",
+			"yaw": 90.0
+		},
+		{
+			"layer": "environment",
+			"position": [
+				-2.91275000572205,
+				0.0954999998211861,
+				0.954999983310699
+			],
+			"scale": [
+				1.9099999666214,
+				1.9099999666214,
+				1.9099999666214
+			],
+			"source": "wall",
+			"yaw": 90.0
+		},
+		{
+			"layer": "environment",
+			"position": [
+				-1.01999998092651,
+				2.55850005149841,
+				-1.65499997138977
+			],
+			"scale": [
+				0.509999990463257,
+				0.509999990463257,
+				0.509999990463257
+			],
+			"source": "floor",
+			"yaw": 0.0
+		},
+		{
+			"layer": "environment",
+			"position": [
+				-0.509999990463257,
+				2.55850005149841,
+				-1.65499997138977
+			],
+			"scale": [
+				0.509999990463257,
+				0.509999990463257,
+				0.509999990463257
+			],
+			"source": "floor",
+			"yaw": 0.0
+		},
+		{
+			"layer": "environment",
+			"position": [
+				0.0,
+				2.55850005149841,
+				-1.65499997138977
+			],
+			"scale": [
+				0.509999990463257,
+				0.509999990463257,
+				0.509999990463257
+			],
+			"source": "floor",
+			"yaw": 0.0
+		},
+		{
+			"layer": "environment",
+			"position": [
+				0.509999990463257,
+				2.55850005149841,
+				-1.65499997138977
+			],
+			"scale": [
+				0.509999990463257,
+				0.509999990463257,
+				0.509999990463257
+			],
+			"source": "floor",
+			"yaw": 0.0
+		},
+		{
+			"layer": "environment",
+			"position": [
+				1.01999998092651,
+				2.55850005149841,
+				-1.65499997138977
+			],
+			"scale": [
+				0.509999990463257,
+				0.509999990463257,
+				0.509999990463257
+			],
+			"source": "floor",
+			"yaw": 0.0
+		},
+		{
+			"layer": "environment",
+			"position": [
+				0.0,
+				0.215499997138977,
+				-1.39999997615814
+			],
+			"scale": [
+				1.0,
+				1.0,
+				1.0
+			],
+			"source": "curtain",
+			"yaw": 0.0
+		},
+		{
+			"layer": "environment",
+			"position": [
+				-2.1800000667572,
+				0.0954999998211861,
+				0.0
+			],
+			"scale": [
+				1.0,
+				1.0,
+				1.0
+			],
+			"source": "station",
+			"yaw": -90.0
+		},
+		{
+			"layer": "environment",
+			"position": [
+				2.48000001907349,
+				0.0954999998211861,
+				-1.48000001907349
+			],
+			"scale": [
+				1.5,
+				1.5,
+				1.5
+			],
+			"source": "storage",
+			"yaw": 0.0
+		},
+		{
+			"layer": "props",
+			"position": [
+				0.150000005960464,
+				0.0954999998211861,
+				0.400000005960464
+			],
+			"scale": [
+				1.0,
+				1.0,
+				1.0
+			],
+			"source": "bed",
+			"yaw": 90.0
+		},
+		{
+			"layer": "props",
+			"position": [
+				1.48000001907349,
+				0.0954999998211861,
+				-1.20000004768372
+			],
+			"scale": [
+				2.0,
+				2.0,
+				2.0
+			],
+			"source": "bedside",
+			"yaw": 0.0
+		},
+		{
+			"layer": "props",
+			"position": [
+				1.89999997615814,
+				0.0954999998211861,
+				-0.400000005960464
+			],
+			"scale": [
+				1.75,
+				1.75,
+				1.75
+			],
+			"source": "chair",
+			"yaw": -45.0
+		},
+		{
+			"layer": "props",
+			"position": [
+				1.75,
+				0.0954999998211861,
+				0.800000011920929
+			],
+			"scale": [
+				0.850000023841858,
+				0.850000023841858,
+				0.850000023841858
+			],
+			"source": "cart",
+			"yaw": -15.0
+		},
+		{
+			"layer": "props",
+			"position": [
+				-1.04999995231628,
+				0.0954999998211861,
+				1.29999995231628
+			],
+			"scale": [
+				1.5,
+				1.5,
+				1.5
+			],
+			"source": "wheelchair",
+			"yaw": -20.0
+		}
+	],
+	"renderer": "ANGLE (Microsoft, Microsoft Basic Render Driver (0x0000008C) Direct3D11 vs_5_0 ps_5_0, D3D11-10.0.26100.9711)",
+	"rest_frame": 0,
+	"scope": "Authored lower-hem motion exploration only; no clinical approval, production art integration, readiness change or Home preview replacement.",
+	"sources": {
+		"bed": {
+			"bounds": [
+				-1.10000002384186,
+				0.0,
+				-0.5,
+				2.20000004768372,
+				1.32129299640656,
+				1.0
+			],
+			"path": "res://docs/assets/sources/innerscene-hospital-bed/hospital-bed-raised-backrest.glb",
+			"sha256": "2d66623eaa1162b358d404df5288ce6a29416fc506b50ffd0718d832435c1ab5",
+			"source_animation_count": 0
+		},
+		"bedside": {
+			"bounds": [
+				-0.00999999977648258,
+				0.0,
+				-0.205000013113022,
+				0.265999972820282,
+				0.263199985027313,
+				0.21730001270771
+			],
+			"path": "res://build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/cabinetBedDrawerTable.glb",
+			"sha256": "fec6271639df5aff9f8ac75d6679385eab2abb7c8d2f51abeba3ed689ddb6f0d",
+			"source_animation_count": 0
+		},
+		"cart": {
+			"bounds": [
+				-0.350000023841858,
+				-0.00000000372529029846191,
+				-0.282934308052063,
+				0.855294227600098,
+				0.95308643579483,
+				0.565868616104126
+			],
+			"path": "res://docs/assets/sources/innerscene-medical-supply-cart/medical-supply-cart.glb",
+			"sha256": "ecab70adf0e563f62cd27a1baf21380868c0c0e52a5c1b2e93f5873b1a8c02f6",
+			"source_animation_count": 0
+		},
+		"chair": {
+			"bounds": [
+				0.0,
+				0.0,
+				-0.200000002980232,
+				0.200000002980232,
+				0.46000000834465,
+				0.200000002980232
+			],
+			"path": "res://build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/chairCushion.glb",
+			"sha256": "33544228984857f2cb502b58452fed72157335f9b1caf29e96da5c9094c53fdc",
+			"source_animation_count": 0
+		},
+		"curtain": {
+			"bounds": [
+				-1.16499996185303,
+				0.0,
+				-0.0658383965492249,
+				2.32999992370605,
+				2.34299993515015,
+				0.13167679309845
+			],
+			"path": "res://build/professional-english/nursing-theme-review/acquired/privacy-curtain/privacy-curtain-and-ceiling-track.glb",
+			"sha256": "563b648b94f5f2dc87fa734c22021a1116461ee01733eae359907839ef2d1390",
+			"source_animation_count": 0
+		},
+		"floor": {
+			"bounds": [
+				0.0,
+				0.0,
+				-1.0,
+				1.0,
+				0.0500000007450581,
+				1.0
+			],
+			"path": "res://build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/floorFull.glb",
+			"sha256": "99fc5df646d8dc605d6fe35001fe5b15bb7b269cc5c65f4f7793fbc76ff3d822",
+			"source_animation_count": 0
+		},
+		"station": {
+			"bounds": [
+				-1.79999995231628,
+				0.0,
+				-0.405000001192093,
+				3.59999990463257,
+				1.1175000667572,
+				0.845000028610229
+			],
+			"path": "res://build/professional-english/nursing-theme-review/acquired/nurse-station/nurse-station-with-low-accessible-counter.glb",
+			"sha256": "74ee89a9add892597bcb569ea6080e7c4c85b792768898648f7d91334b79ebf8",
+			"source_animation_count": 0
+		},
+		"storage": {
+			"bounds": [
+				0.0,
+				0.0,
+				-0.25,
+				0.400000005960464,
+				0.849999964237213,
+				0.25
+			],
+			"path": "res://build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/bookcaseClosedDoors.glb",
+			"sha256": "ff33f535acdb1825c0e958a293642b39665adcae0b1317b650e83d2bb687f4e2",
+			"source_animation_count": 0
+		},
+		"wall": {
+			"bounds": [
+				0.0,
+				0.0,
+				-0.0500000007450581,
+				1.0,
+				1.28953170776367,
+				0.0500000007450581
+			],
+			"path": "res://build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/wall.glb",
+			"sha256": "69273d5d623bddfce41d12d4e5eeb5621ea04f1edcbd8f35c00a60c2fd3258b7",
+			"source_animation_count": 0
+		},
+		"wheelchair": {
+			"bounds": [
+				-0.250000029802322,
+				0.00000000124176346982807,
+				-0.364638775587082,
+				0.500000059604645,
+				0.495000034570694,
+				0.582415103912354
+			],
+			"path": "res://build/professional-english/nursing-theme-review/acquired/kenney/Mini Characters/Models/GLB format/wheelchair.glb",
+			"sha256": "cb7b6cbebc7bbe238ae926b26305661eb66e17659fafa8fa0c098f5e7955fabe",
+			"source_animation_count": 0
+		},
+		"window": {
+			"bounds": [
+				0.0,
+				0.0,
+				-0.0695500001311302,
+				1.0,
+				1.28953170776367,
+				0.0891000032424927
+			],
+			"path": "res://build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/wallWindow.glb",
+			"sha256": "166a10fddb8a78d942bc2791186913f7015dfee8501d20efd7a7b8f196fc5c3e",
+			"source_animation_count": 0
+		}
+	},
+	"status": "scratch_authored_motion_pending_independent_review"
+}

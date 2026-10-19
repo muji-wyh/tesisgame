@@ -1,0 +1,1929 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.nursing.module05.01",
+      "text": "The nurse will assess, observe, and monitor the concern, then evaluate the findings and review whether another professional should screen for related risks.",
+      "meaning": "Describe assessment and review responsibilities.",
+      "context": "The team explains how it will consider a reported concern.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "nurse",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "will",
+          "start": 10,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "assess",
+          "start": 15,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 21,
+          "end": 22
+        },
+        {
+          "index": 5,
+          "text": "observe",
+          "start": 23,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 30,
+          "end": 31
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 8,
+          "text": "monitor",
+          "start": 36,
+          "end": 43
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 10,
+          "text": "concern",
+          "start": 48,
+          "end": 55
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 55,
+          "end": 56
+        },
+        {
+          "index": 12,
+          "text": "then",
+          "start": 57,
+          "end": 61
+        },
+        {
+          "index": 13,
+          "text": "evaluate",
+          "start": 62,
+          "end": 70
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 15,
+          "text": "findings",
+          "start": 75,
+          "end": 83
+        },
+        {
+          "index": 16,
+          "text": "and",
+          "start": 84,
+          "end": 87
+        },
+        {
+          "index": 17,
+          "text": "review",
+          "start": 88,
+          "end": 94
+        },
+        {
+          "index": 18,
+          "text": "whether",
+          "start": 95,
+          "end": 102
+        },
+        {
+          "index": 19,
+          "text": "another",
+          "start": 103,
+          "end": 110
+        },
+        {
+          "index": 20,
+          "text": "professional",
+          "start": 111,
+          "end": 123
+        },
+        {
+          "index": 21,
+          "text": "should",
+          "start": 124,
+          "end": 130
+        },
+        {
+          "index": 22,
+          "text": "screen",
+          "start": 131,
+          "end": 137
+        },
+        {
+          "index": 23,
+          "text": "for",
+          "start": 138,
+          "end": 141
+        },
+        {
+          "index": 24,
+          "text": "related",
+          "start": 142,
+          "end": 149
+        },
+        {
+          "index": 25,
+          "text": "risks",
+          "start": 150,
+          "end": 155
+        },
+        {
+          "index": 26,
+          "text": ".",
+          "start": 155,
+          "end": 156
+        }
+      ],
+      "focus_lexeme_ids": [
+        "assess.evaluate-care-information.v",
+        "observe.notice-care-information.v",
+        "monitor.follow-condition-over-time.v",
+        "evaluate.judge-care-information.v",
+        "review.reconsider-care-information.v",
+        "screen.check-for-possible-care-need.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module05.02",
+      "text": "Please document and record the patient's words, ask where to chart the observation, and clarify who may admit or discharge the patient.",
+      "meaning": "Clarify recording tasks and authority over care episodes.",
+      "context": "A worker checks assigned documentation and admission responsibilities.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "document",
+          "start": 7,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "record",
+          "start": 20,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "patient's",
+          "start": 31,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "words",
+          "start": 41,
+          "end": 46
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 46,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "ask",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "where",
+          "start": 52,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "to",
+          "start": 58,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": "chart",
+          "start": 61,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 67,
+          "end": 70
+        },
+        {
+          "index": 13,
+          "text": "observation",
+          "start": 71,
+          "end": 82
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 82,
+          "end": 83
+        },
+        {
+          "index": 15,
+          "text": "and",
+          "start": 84,
+          "end": 87
+        },
+        {
+          "index": 16,
+          "text": "clarify",
+          "start": 88,
+          "end": 95
+        },
+        {
+          "index": 17,
+          "text": "who",
+          "start": 96,
+          "end": 99
+        },
+        {
+          "index": 18,
+          "text": "may",
+          "start": 100,
+          "end": 103
+        },
+        {
+          "index": 19,
+          "text": "admit",
+          "start": 104,
+          "end": 109
+        },
+        {
+          "index": 20,
+          "text": "or",
+          "start": 110,
+          "end": 112
+        },
+        {
+          "index": 21,
+          "text": "discharge",
+          "start": 113,
+          "end": 122
+        },
+        {
+          "index": 22,
+          "text": "the",
+          "start": 123,
+          "end": 126
+        },
+        {
+          "index": 23,
+          "text": "patient",
+          "start": 127,
+          "end": 134
+        },
+        {
+          "index": 24,
+          "text": ".",
+          "start": 134,
+          "end": 135
+        }
+      ],
+      "focus_lexeme_ids": [
+        "document.make-care-record.v",
+        "record.store-observed-information.v",
+        "chart.enter-clinical-record.v",
+        "admit.accept-into-care-service.v",
+        "discharge.end-care-episode.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module05.03",
+      "text": "Please listen while I describe the acute change and chronic condition, and identify anything that needs clarification.",
+      "meaning": "Distinguish a recent change from a longstanding condition.",
+      "context": "A person describes health information without assuming a diagnosis.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "listen",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "while",
+          "start": 14,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "I",
+          "start": 20,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "describe",
+          "start": 22,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "acute",
+          "start": 35,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "change",
+          "start": 41,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "chronic",
+          "start": 52,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "condition",
+          "start": 60,
+          "end": 69
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 69,
+          "end": 70
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 13,
+          "text": "identify",
+          "start": 75,
+          "end": 83
+        },
+        {
+          "index": 14,
+          "text": "anything",
+          "start": 84,
+          "end": 92
+        },
+        {
+          "index": 15,
+          "text": "that",
+          "start": 93,
+          "end": 97
+        },
+        {
+          "index": 16,
+          "text": "needs",
+          "start": 98,
+          "end": 103
+        },
+        {
+          "index": 17,
+          "text": "clarification",
+          "start": 104,
+          "end": 117
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 117,
+          "end": 118
+        }
+      ],
+      "focus_lexeme_ids": [
+        "listen.attend-to-spoken-information.v",
+        "describe.give-details-in-words.v",
+        "identify.establish-identity-or-nature.v",
+        "acute.recent-or-short-course-clinical.a",
+        "chronic.persistent-or-long-course-clinical.a"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module05.04",
+      "text": "We want to reassure, comfort, and support you, and refer any concern beyond our role to the appropriate professional.",
+      "meaning": "Offer support and seek help within role boundaries.",
+      "context": "The team explains how it will respond to concerns.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "We",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "want",
+          "start": 3,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "to",
+          "start": 8,
+          "end": 10
+        },
+        {
+          "index": 3,
+          "text": "reassure",
+          "start": 11,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 19,
+          "end": 20
+        },
+        {
+          "index": 5,
+          "text": "comfort",
+          "start": 21,
+          "end": 28
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 28,
+          "end": 29
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 8,
+          "text": "support",
+          "start": 34,
+          "end": 41
+        },
+        {
+          "index": 9,
+          "text": "you",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 45,
+          "end": 46
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 12,
+          "text": "refer",
+          "start": 51,
+          "end": 56
+        },
+        {
+          "index": 13,
+          "text": "any",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 14,
+          "text": "concern",
+          "start": 61,
+          "end": 68
+        },
+        {
+          "index": 15,
+          "text": "beyond",
+          "start": 69,
+          "end": 75
+        },
+        {
+          "index": 16,
+          "text": "our",
+          "start": 76,
+          "end": 79
+        },
+        {
+          "index": 17,
+          "text": "role",
+          "start": 80,
+          "end": 84
+        },
+        {
+          "index": 18,
+          "text": "to",
+          "start": 85,
+          "end": 87
+        },
+        {
+          "index": 19,
+          "text": "the",
+          "start": 88,
+          "end": 91
+        },
+        {
+          "index": 20,
+          "text": "appropriate",
+          "start": 92,
+          "end": 103
+        },
+        {
+          "index": 21,
+          "text": "professional",
+          "start": 104,
+          "end": 116
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 116,
+          "end": 117
+        }
+      ],
+      "focus_lexeme_ids": [
+        "reassure.support-with-honest-communication.v",
+        "comfort.ease-distress.v",
+        "support.help-person-manage.v",
+        "refer.direct-for-professional-assessment.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module05.05",
+      "text": "The patient asked who would help lift, position, reposition, mobilize, and transfer them under the care plan.",
+      "meaning": "Ask who is responsible for planned movement support.",
+      "context": "A patient asks about assigned care roles.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "patient",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "asked",
+          "start": 12,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "who",
+          "start": 18,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "would",
+          "start": 22,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "help",
+          "start": 28,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "lift",
+          "start": 33,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 37,
+          "end": 38
+        },
+        {
+          "index": 8,
+          "text": "position",
+          "start": 39,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 47,
+          "end": 48
+        },
+        {
+          "index": 10,
+          "text": "reposition",
+          "start": 49,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 59,
+          "end": 60
+        },
+        {
+          "index": 12,
+          "text": "mobilize",
+          "start": 61,
+          "end": 69
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 69,
+          "end": 70
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 15,
+          "text": "transfer",
+          "start": 75,
+          "end": 83
+        },
+        {
+          "index": 16,
+          "text": "them",
+          "start": 84,
+          "end": 88
+        },
+        {
+          "index": 17,
+          "text": "under",
+          "start": 89,
+          "end": 94
+        },
+        {
+          "index": 18,
+          "text": "the",
+          "start": 95,
+          "end": 98
+        },
+        {
+          "index": 19,
+          "text": "care",
+          "start": 99,
+          "end": 103
+        },
+        {
+          "index": 20,
+          "text": "plan",
+          "start": 104,
+          "end": 108
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 108,
+          "end": 109
+        }
+      ],
+      "focus_lexeme_ids": [
+        "position.arrange-body-placement.v",
+        "reposition.change-body-placement.v",
+        "mobilize.support-body-movement.v",
+        "transfer.move-person-between-places.v",
+        "lift.raise-item.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module05.06",
+      "text": "The patient described how it felt to sit, stand, walk, and turn, and asked for help to wash.",
+      "meaning": "Communicate a patient's account and request for help.",
+      "context": "A worker records the person's own description of daily activities.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "patient",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "described",
+          "start": 12,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "how",
+          "start": 22,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "it",
+          "start": 26,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "felt",
+          "start": 29,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "to",
+          "start": 34,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": "sit",
+          "start": 37,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 40,
+          "end": 41
+        },
+        {
+          "index": 9,
+          "text": "stand",
+          "start": 42,
+          "end": 47
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 47,
+          "end": 48
+        },
+        {
+          "index": 11,
+          "text": "walk",
+          "start": 49,
+          "end": 53
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 53,
+          "end": 54
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 55,
+          "end": 58
+        },
+        {
+          "index": 14,
+          "text": "turn",
+          "start": 59,
+          "end": 63
+        },
+        {
+          "index": 15,
+          "text": ",",
+          "start": 63,
+          "end": 64
+        },
+        {
+          "index": 16,
+          "text": "and",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 17,
+          "text": "asked",
+          "start": 69,
+          "end": 74
+        },
+        {
+          "index": 18,
+          "text": "for",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 19,
+          "text": "help",
+          "start": 79,
+          "end": 83
+        },
+        {
+          "index": 20,
+          "text": "to",
+          "start": 84,
+          "end": 86
+        },
+        {
+          "index": 21,
+          "text": "wash",
+          "start": 87,
+          "end": 91
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 91,
+          "end": 92
+        }
+      ],
+      "focus_lexeme_ids": [
+        "sit.take-seated-position.v",
+        "stand.be-upright-on-feet.v",
+        "walk.move-by-stepping.v",
+        "turn.change-body-direction.v",
+        "wash.clean-with-liquid.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module05.07",
+      "text": "The patient reported difficulty when trying to breathe, cough, or swallow.",
+      "meaning": "Relay a reported concern without assigning a diagnosis.",
+      "context": "A fictional communication exercise about symptoms.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "patient",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "reported",
+          "start": 12,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "difficulty",
+          "start": 21,
+          "end": 31
+        },
+        {
+          "index": 4,
+          "text": "when",
+          "start": 32,
+          "end": 36
+        },
+        {
+          "index": 5,
+          "text": "trying",
+          "start": 37,
+          "end": 43
+        },
+        {
+          "index": 6,
+          "text": "to",
+          "start": 44,
+          "end": 46
+        },
+        {
+          "index": 7,
+          "text": "breathe",
+          "start": 47,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 54,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "cough",
+          "start": 56,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 61,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "or",
+          "start": 63,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "swallow",
+          "start": 66,
+          "end": 73
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 73,
+          "end": 74
+        }
+      ],
+      "focus_lexeme_ids": [
+        "breathe.move-air-for-respiration.v",
+        "cough.expel-air-from-airways.v",
+        "swallow.move-material-through-throat.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module05.08",
+      "text": "The nurse asked what the patient could eat or drink, whether they could rinse their mouth, and how they preferred to rest or sleep.",
+      "meaning": "Ask about daily activities and preferences.",
+      "context": "A nurse listens to the patient's account of their needs.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "nurse",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "asked",
+          "start": 10,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "what",
+          "start": 16,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 21,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "patient",
+          "start": 25,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "could",
+          "start": 33,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "eat",
+          "start": 39,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "or",
+          "start": 43,
+          "end": 45
+        },
+        {
+          "index": 9,
+          "text": "drink",
+          "start": 46,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 51,
+          "end": 52
+        },
+        {
+          "index": 11,
+          "text": "whether",
+          "start": 53,
+          "end": 60
+        },
+        {
+          "index": 12,
+          "text": "they",
+          "start": 61,
+          "end": 65
+        },
+        {
+          "index": 13,
+          "text": "could",
+          "start": 66,
+          "end": 71
+        },
+        {
+          "index": 14,
+          "text": "rinse",
+          "start": 72,
+          "end": 77
+        },
+        {
+          "index": 15,
+          "text": "their",
+          "start": 78,
+          "end": 83
+        },
+        {
+          "index": 16,
+          "text": "mouth",
+          "start": 84,
+          "end": 89
+        },
+        {
+          "index": 17,
+          "text": ",",
+          "start": 89,
+          "end": 90
+        },
+        {
+          "index": 18,
+          "text": "and",
+          "start": 91,
+          "end": 94
+        },
+        {
+          "index": 19,
+          "text": "how",
+          "start": 95,
+          "end": 98
+        },
+        {
+          "index": 20,
+          "text": "they",
+          "start": 99,
+          "end": 103
+        },
+        {
+          "index": 21,
+          "text": "preferred",
+          "start": 104,
+          "end": 113
+        },
+        {
+          "index": 22,
+          "text": "to",
+          "start": 114,
+          "end": 116
+        },
+        {
+          "index": 23,
+          "text": "rest",
+          "start": 117,
+          "end": 121
+        },
+        {
+          "index": 24,
+          "text": "or",
+          "start": 122,
+          "end": 124
+        },
+        {
+          "index": 25,
+          "text": "sleep",
+          "start": 125,
+          "end": 130
+        },
+        {
+          "index": 26,
+          "text": ".",
+          "start": 130,
+          "end": 131
+        }
+      ],
+      "focus_lexeme_ids": [
+        "eat.consume-food.v",
+        "drink.take-fluid-by-mouth.v",
+        "rest.pause-activity-for-recovery.v",
+        "sleep.enter-sleep-state.v",
+        "rinse.remove-residue-with-liquid.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module05.09",
+      "text": "Please clarify who may prescribe, dispense, and administer the medicine, and who is trained to clean and disinfect the preparation area.",
+      "meaning": "Clarify distinct medication and environmental responsibilities.",
+      "context": "A worker checks assigned responsibilities under local arrangements.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "clarify",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "who",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "may",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "prescribe",
+          "start": 23,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 32,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "dispense",
+          "start": 34,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 42,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": "administer",
+          "start": 48,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 59,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "medicine",
+          "start": 63,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 71,
+          "end": 72
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 73,
+          "end": 76
+        },
+        {
+          "index": 14,
+          "text": "who",
+          "start": 77,
+          "end": 80
+        },
+        {
+          "index": 15,
+          "text": "is",
+          "start": 81,
+          "end": 83
+        },
+        {
+          "index": 16,
+          "text": "trained",
+          "start": 84,
+          "end": 91
+        },
+        {
+          "index": 17,
+          "text": "to",
+          "start": 92,
+          "end": 94
+        },
+        {
+          "index": 18,
+          "text": "clean",
+          "start": 95,
+          "end": 100
+        },
+        {
+          "index": 19,
+          "text": "and",
+          "start": 101,
+          "end": 104
+        },
+        {
+          "index": 20,
+          "text": "disinfect",
+          "start": 105,
+          "end": 114
+        },
+        {
+          "index": 21,
+          "text": "the",
+          "start": 115,
+          "end": 118
+        },
+        {
+          "index": 22,
+          "text": "preparation",
+          "start": 119,
+          "end": 130
+        },
+        {
+          "index": 23,
+          "text": "area",
+          "start": 131,
+          "end": 135
+        },
+        {
+          "index": 24,
+          "text": ".",
+          "start": 135,
+          "end": 136
+        }
+      ],
+      "focus_lexeme_ids": [
+        "prescribe.authorize-treatment-order.v",
+        "dispense.supply-prepared-medicine.v",
+        "administer.give-authorized-treatment.v",
+        "clean.remove-dirt-or-unwanted-material.v",
+        "disinfect.reduce-specified-microorganisms.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module05.10",
+      "text": "Please explain why you need to examine, inspect, palpate, or auscultate, and who will dress the wound under the agreed plan.",
+      "meaning": "Ask for an explanation of proposed assessment and wound-care actions.",
+      "context": "A patient seeks clarification before agreeing to care.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "explain",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "why",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "you",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "need",
+          "start": 23,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "to",
+          "start": 28,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "examine",
+          "start": 31,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 38,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "inspect",
+          "start": 40,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 47,
+          "end": 48
+        },
+        {
+          "index": 10,
+          "text": "palpate",
+          "start": 49,
+          "end": 56
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 56,
+          "end": 57
+        },
+        {
+          "index": 12,
+          "text": "or",
+          "start": 58,
+          "end": 60
+        },
+        {
+          "index": 13,
+          "text": "auscultate",
+          "start": 61,
+          "end": 71
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 71,
+          "end": 72
+        },
+        {
+          "index": 15,
+          "text": "and",
+          "start": 73,
+          "end": 76
+        },
+        {
+          "index": 16,
+          "text": "who",
+          "start": 77,
+          "end": 80
+        },
+        {
+          "index": 17,
+          "text": "will",
+          "start": 81,
+          "end": 85
+        },
+        {
+          "index": 18,
+          "text": "dress",
+          "start": 86,
+          "end": 91
+        },
+        {
+          "index": 19,
+          "text": "the",
+          "start": 92,
+          "end": 95
+        },
+        {
+          "index": 20,
+          "text": "wound",
+          "start": 96,
+          "end": 101
+        },
+        {
+          "index": 21,
+          "text": "under",
+          "start": 102,
+          "end": 107
+        },
+        {
+          "index": 22,
+          "text": "the",
+          "start": 108,
+          "end": 111
+        },
+        {
+          "index": 23,
+          "text": "agreed",
+          "start": 112,
+          "end": 118
+        },
+        {
+          "index": 24,
+          "text": "plan",
+          "start": 119,
+          "end": 123
+        },
+        {
+          "index": 25,
+          "text": ".",
+          "start": 123,
+          "end": 124
+        }
+      ],
+      "focus_lexeme_ids": [
+        "examine.assess-by-clinical-examination.v",
+        "palpate.assess-through-touch.v",
+        "auscultate.listen-to-body-sounds.v",
+        "inspect.examine-visually.v",
+        "dress.apply-wound-covering.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    }
+  ]
+}

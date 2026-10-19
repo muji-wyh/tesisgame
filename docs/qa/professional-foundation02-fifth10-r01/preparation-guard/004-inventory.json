@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "status": "frozen_accepted_guard_source_only_review",
+  "reviewer": "/root/recover_delivery",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 2245,
+      "raw_sha256": "0807db57f9dc53b62a4915f73f08a10033340a6310827c29457fa959801bfdc9"
+    },
+    {
+      "path": "inputs.json",
+      "bytes": 11582,
+      "raw_sha256": "7791e55a2176791d145616e048508c018972462a06af3466bb697b2046255567"
+    },
+    {
+      "path": "inspection.json",
+      "bytes": 10622,
+      "raw_sha256": "299b43b4d22ab75467c2a164e1c3c13c953a85caf7746544475b80f510c5d471"
+    },
+    {
+      "path": "review.json",
+      "bytes": 6345,
+      "raw_sha256": "422c67a7b90f18689b68f0a152e1a83440c11f9353bea28a56ee43d9b2b7b3bd"
+    }
+  ],
+  "original_inputs_rechecked_unchanged": 49,
+  "guard_source_accepted_for_execution": true,
+  "guard_execution_accepted": false,
+  "actual_binding_accepted": false,
+  "preparation_execution_accepted": false,
+  "source_or_vm_executed": false,
+  "production_mutated": false,
+  "inventory_self_excluded": true
+}

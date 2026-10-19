@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "reviewer": "/root/commit_review",
+  "ok": true,
+  "comparisons_passed": 124403,
+  "findings": [],
+  "error": null,
+  "measurements": {
+    "output_count": 835,
+    "byte_identical_outputs": 829,
+    "changed_outputs": [
+      "execution-end.json",
+      "execution-start.json",
+      "preparation-receipt.json",
+      "professional_retail_morphology_tests.gd.after",
+      "target-plan.json",
+      "test-edit-ledger.json"
+    ],
+    "targets": 823,
+    "retained_files": 815,
+    "replacements": 6,
+    "pending_finalizations": 2,
+    "baseline_files": 12443,
+    "repair_observations": 13292,
+    "accepted_entries": 8,
+    "whole_holds": 6,
+    "whole_donor_rows": 50,
+    "expected_callbacks": 263,
+    "expected_native_checks": 3922
+  },
+  "inputs_rehashed_at_end": 14141,
+  "scope": {
+    "raw_hash_json_text_only": true,
+    "project_or_proposal_imports": false,
+    "project_tests_or_native_execution": false,
+    "production_mutated": false,
+    "candidate_success_accepted": false,
+    "installation_or_persisted_accepted": false
+  },
+  "inspection_history": [
+    {
+      "tool_chunk": "96dfd4",
+      "outcome": "Inspection r01 stopped on reviewer-only manifest order assumption. Original locale order and corrected code-point order differ; exact path sets match. R01 source and failed result preserved. This revision compares keyed paths and exact bytes."
+    },
+    {
+      "tool_chunk": "1fc83f",
+      "outcome": "PowerShell parse error before data reads or writes; corrected read-only listing followed."
+    },
+    {
+      "tool_chunk": "fb81e6",
+      "outcome": "Raw source reconnaissance attempted an uninstalled future provenance destination and received ENOENT; no mutation. Main inspection resolves retained artifacts through the prepared target plan."
+    }
+  ]
+}

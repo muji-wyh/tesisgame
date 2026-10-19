@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "status": "UNBOUND_TEMPLATE_DO_NOT_DISPATCH",
+  "bound": false,
+  "guards": null,
+  "predecessors": {
+    "fourth10": null,
+    "shopping_bag": null
+  },
+  "registry_before_sha256": null,
+  "registry_after_sha256": null,
+  "counts": null,
+  "input_files": null,
+  "retained_files": null,
+  "required_retained_sources": null,
+  "deferred_retained_targets": null,
+  "must_remain_absent": null,
+  "target_paths": null,
+  "reason": "Root must select actual committed and persisted bag success, freshly capture the complete real baseline, and obtain independent source/binding acceptance before this template can be replaced by a separate final binding."
+}

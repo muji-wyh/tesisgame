@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "status": "UNBOUND_UNREVIEWED_DO_NOT_USE",
+  "reviewer": null,
+  "actual_binding": {
+    "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+    "bytes": 3187477,
+    "raw_sha256": "7323bcb1baac6ea85817169bcc90325f9b54d587b19d4895ca3106ee7af0e015"
+  },
+  "preparation": {
+    "receipt": null,
+    "execution_end": null,
+    "target_plan": null,
+    "projection_observation": null,
+    "root_input": null
+  },
+  "preparation_source_inventory": null,
+  "projected_afterimages_accepted": false,
+  "native_candidate_execution_accepted": false,
+  "correction": {
+    "receipt": null,
+    "attempt_end": null,
+    "root_dispatch": null,
+    "output_manifest": null,
+    "source_observations": null
+  }
+}

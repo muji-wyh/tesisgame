@@ -1,0 +1,2781 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "active-listening.attentive-listening-with-understanding-checks.n",
+      "text": "active listening",
+      "display_text": "active listening",
+      "pos": "noun",
+      "definition": "Listening attentively and checking understanding of what a person means.",
+      "example": "The coach highlighted active listening in the call review.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "active listening"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An agent listening with a concise understanding check.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "active-listening.attentive-listening-with-understanding-checks.n.analysis.v1",
+        "lexeme_id": "active-listening.attentive-listening-with-understanding-checks.n",
+        "text": "active listening",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.active",
+            "type": "stem",
+            "canonical": "active",
+            "surface": "active"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.listen",
+            "type": "stem",
+            "canonical": "listen",
+            "surface": "listen"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "listening",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "active listening",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "open-ended-question.question-inviting-expanded-answer.n",
+      "text": "open-ended question",
+      "display_text": "open-ended question",
+      "pos": "noun",
+      "definition": "A question inviting a person to answer in their own words rather than choose a limited response.",
+      "example": "The agent began with an open-ended question.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "open-ended question"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional conversation asking the customer to describe the issue.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "open-ended-question.question-inviting-expanded-answer.n.analysis.v1",
+        "lexeme_id": "open-ended-question.question-inviting-expanded-answer.n",
+        "text": "open-ended question",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.open",
+            "type": "stem",
+            "canonical": "open",
+            "surface": "open"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.end",
+            "type": "stem",
+            "canonical": "end",
+            "surface": "end"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.ed.suffix",
+            "type": "suffix",
+            "canonical": "ed",
+            "surface": "ed"
+          },
+          {
+            "id": "p4",
+            "canonical_id": "morph.question",
+            "type": "stem",
+            "canonical": "question",
+            "surface": "question"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "ended",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "open-ended",
+            "rule": "hyphenated_compound"
+          },
+          {
+            "id": "n3",
+            "left": "n2",
+            "right": "p4",
+            "surface": "open-ended question",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n3"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "education-naeyc-assessment",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-ufli-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-elementary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "closed-question.question-with-limited-response-options.n",
+      "text": "closed question",
+      "display_text": "closed question",
+      "pos": "noun",
+      "definition": "A question that asks for a limited response, such as yes or no or a specific detail.",
+      "example": "The agent used a closed question to confirm one detail.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "closed question"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A short fictional confirmation question with limited answer options.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "closed-question.question-with-limited-response-options.n.analysis.v1",
+        "lexeme_id": "closed-question.question-with-limited-response-options.n",
+        "text": "closed question",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.close",
+            "type": "stem",
+            "canonical": "close",
+            "surface": "clos"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ed.suffix",
+            "type": "suffix",
+            "canonical": "ed",
+            "surface": "ed"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.question",
+            "type": "stem",
+            "canonical": "question",
+            "surface": "question"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "closed",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "closed question",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "probing-question.question-seeking-relevant-further-detail.n",
+      "text": "probing question",
+      "display_text": "probing question",
+      "pos": "noun",
+      "definition": "A question used to obtain further relevant detail about an answer or situation.",
+      "example": "She asked a probing question without seeking unnecessary personal details.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "probing question"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional support conversation clarifying the time an issue occurred.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "probing-question.question-seeking-relevant-further-detail.n.analysis.v1",
+        "lexeme_id": "probing-question.question-seeking-relevant-further-detail.n",
+        "text": "probing question",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.probe",
+            "type": "stem",
+            "canonical": "probe",
+            "surface": "prob"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.question",
+            "type": "stem",
+            "canonical": "question",
+            "surface": "question"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "probing",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "probing question",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "plain-language.clear-language-for-intended-audience.n",
+      "text": "plain language",
+      "display_text": "plain language",
+      "pos": "noun",
+      "definition": "Language chosen and organized so the intended audience can understand and use the information.",
+      "example": "The agent rewrote the explanation in plain language.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "plain language"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clear fictional explanation with familiar words and an obvious next step.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "plain-language.clear-language-for-intended-audience.n.analysis.v1",
+        "lexeme_id": "plain-language.clear-language-for-intended-audience.n",
+        "text": "plain language",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.plain",
+            "type": "stem",
+            "canonical": "plain",
+            "surface": "plain"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.language",
+            "type": "stem",
+            "canonical": "language",
+            "surface": "language"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "plain language",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "w3c-diverse-abilities",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "tone-of-voice.vocal-quality-conveying-attitude.n",
+      "text": "tone of voice",
+      "display_text": "tone of voice",
+      "pos": "noun",
+      "definition": "The way a voice sounds and the attitude it may convey to a listener.",
+      "example": "The coach discussed how the tone of voice could affect the conversation.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "tone of voice"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An attentive conversation with gentle nonjudgmental expression.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "tone-of-voice.vocal-quality-conveying-attitude.n.analysis.v1",
+        "lexeme_id": "tone-of-voice.vocal-quality-conveying-attitude.n",
+        "text": "tone of voice",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.tone",
+            "type": "stem",
+            "canonical": "tone",
+            "surface": "tone"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.of",
+            "type": "stem",
+            "canonical": "of",
+            "surface": "of"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.voice",
+            "type": "stem",
+            "canonical": "voice",
+            "surface": "voice"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "tone of",
+            "rule": "word_boundary"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "tone of voice",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "pace.speed-of-speaking-or-proceeding.n",
+      "text": "pace",
+      "display_text": "pace",
+      "pos": "noun",
+      "definition": "The speed at which someone speaks or an activity proceeds.",
+      "example": "The agent checked whether the pace was comfortable for the customer.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "pace"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A respectful conversation allowing enough response time.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "pace.speed-of-speaking-or-proceeding.n.analysis.v1",
+        "lexeme_id": "pace.speed-of-speaking-or-proceeding.n",
+        "text": "pace",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.pace",
+            "type": "atomic",
+            "canonical": "pace",
+            "surface": "pace"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "pause.brief-break-in-activity-or-speech.n",
+      "text": "pause",
+      "display_text": "pause",
+      "pos": "noun",
+      "definition": "A brief stop in speech or another activity.",
+      "example": "The agent allowed a pause so the customer could respond.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "pause"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional conversation with a clear moment to respond.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "pause.brief-break-in-activity-or-speech.n.analysis.v1",
+        "lexeme_id": "pause.brief-break-in-activity-or-speech.n",
+        "text": "pause",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.pause",
+            "type": "atomic",
+            "canonical": "pause",
+            "surface": "pause"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "misunderstanding.incorrect-understanding-of-meaning.n",
+      "text": "misunderstanding",
+      "display_text": "misunderstanding",
+      "pos": "noun",
+      "definition": "An incorrect understanding of what someone means or what has happened.",
+      "example": "The agent checked the details to resolve a misunderstanding.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "misunderstanding"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two people comparing their understanding of a fictional request.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "misunderstanding.incorrect-understanding-of-meaning.n.analysis.v1",
+        "lexeme_id": "misunderstanding.incorrect-understanding-of-meaning.n",
+        "text": "misunderstanding",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "affix.mis.prefix",
+            "type": "prefix",
+            "canonical": "mis",
+            "surface": "mis"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.understand",
+            "type": "stem",
+            "canonical": "understand",
+            "surface": "understand"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "misunderstand",
+            "rule": "prefix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "misunderstanding",
+            "rule": "suffix_attachment"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "expectation.belief-about-what-will-happen.n",
+      "text": "expectation",
+      "display_text": "expectation",
+      "pos": "noun",
+      "definition": "A belief about what is likely to happen or what a service should provide.",
+      "example": "The agent checked the customer's expectation about the next update.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "expectation"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional conversation distinguishing an expectation from a confirmed commitment.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "inconvenience.difficulty-or-trouble-caused-to-someone.n",
+      "text": "inconvenience",
+      "display_text": "inconvenience",
+      "pos": "noun",
+      "definition": "Difficulty or trouble caused by an interruption, delay, or other problem.",
+      "example": "The agent acknowledged the inconvenience caused by the delay.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "inconvenience"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A respectful service conversation about a delayed arrangement.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "frustration.feeling-when-progress-or-needs-are-blocked.n",
+      "text": "frustration",
+      "display_text": "frustration",
+      "pos": "noun",
+      "definition": "A feeling of annoyance or disappointment when progress or needs are blocked.",
+      "example": "The agent acknowledged the customer's stated frustration.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "frustration"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An attentive agent listening to a mildly frustrated adult without caricature.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "patience.ability-to-allow-time-without-irritation.n",
+      "text": "patience",
+      "display_text": "patience",
+      "pos": "noun",
+      "definition": "The ability to allow time or handle difficulty without becoming irritated.",
+      "example": "The coach praised the agent's patience during the explanation.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "patience"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A calm support interaction with time for the customer to respond.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "courtesy.polite-and-considerate-behavior.n",
+      "text": "courtesy",
+      "display_text": "courtesy",
+      "pos": "noun",
+      "definition": "Polite and considerate behavior toward another person.",
+      "example": "The agent maintained courtesy while explaining the limit.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "courtesy"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A respectful conversation between adults.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "reassurance.honest-support-that-reduces-worry.n",
+      "text": "reassurance",
+      "display_text": "reassurance",
+      "pos": "noun",
+      "definition": "Support or explanation intended to reduce worry without making unfounded promises.",
+      "example": "The agent offered reassurance about the next confirmed step.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "reassurance"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A calm discussion with a clearly stated verified next step.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "reassurance.honest-support-that-reduces-worry.n.analysis.v1",
+        "lexeme_id": "reassurance.honest-support-that-reduces-worry.n",
+        "text": "reassurance",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.reassure",
+            "type": "stem",
+            "canonical": "reassure",
+            "surface": "reassur"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ance.suffix",
+            "type": "suffix",
+            "canonical": "ance",
+            "surface": "ance"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "reassurance",
+            "rule": "drop_final_e_before_suffix"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "acknowledgment.recognition-of-message-or-concern.n",
+      "text": "acknowledgment",
+      "display_text": "acknowledgment",
+      "pos": "noun",
+      "definition": "An indication that a message was received or a concern was recognized.",
+      "example": "The customer received an acknowledgment of the request.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "acknowledgment",
+        "acknowledgement"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional receipt-of-request message without claiming resolution.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "acknowledgment.recognition-of-message-or-concern.n.analysis.v1",
+        "lexeme_id": "acknowledgment.recognition-of-message-or-concern.n",
+        "text": "acknowledgment",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.acknowledge",
+            "type": "stem",
+            "canonical": "acknowledge",
+            "surface": "acknowledg"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ment.suffix",
+            "type": "suffix",
+            "canonical": "ment",
+            "surface": "ment"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "acknowledgment",
+            "rule": "drop_final_e_before_suffix"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "clinical-gmc-team-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-lab-results",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "summary.brief-account-of-main-points.n",
+      "text": "summary",
+      "display_text": "summary",
+      "pos": "noun",
+      "definition": "A brief account of the main points of a discussion or record.",
+      "example": "The agent checked the summary with the customer.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "summary"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A concise fictional recap alongside the source conversation.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "confirmation-message.message-confirming-checked-detail-or-arrangement.n",
+      "text": "confirmation message",
+      "display_text": "confirmation message",
+      "pos": "noun",
+      "definition": "A message stating that a detail or arrangement has been confirmed.",
+      "example": "The agent sent a confirmation message for the agreed callback.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "confirmation message"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional message confirming an agreed time window.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "confirmation-message.message-confirming-checked-detail-or-arrangement.n.analysis.v1",
+        "lexeme_id": "confirmation-message.message-confirming-checked-detail-or-arrangement.n",
+        "text": "confirmation message",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.confirmation",
+            "type": "stem",
+            "canonical": "confirmation",
+            "surface": "confirmation"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.message",
+            "type": "stem",
+            "canonical": "message",
+            "surface": "message"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "confirmation message",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "preferred-contact-method.chosen-way-to-receive-contact.n",
+      "text": "preferred contact method",
+      "display_text": "preferred contact method",
+      "pos": "noun",
+      "definition": "The way a person prefers to be contacted.",
+      "example": "The agent checked the preferred contact method.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "preferred contact method"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A customer choosing between accessible contact options.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "preferred-contact-method.chosen-way-to-receive-contact.n.analysis.v1",
+        "lexeme_id": "preferred-contact-method.chosen-way-to-receive-contact.n",
+        "text": "preferred contact method",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.prefer",
+            "type": "stem",
+            "canonical": "prefer",
+            "surface": "preferr"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ed.suffix",
+            "type": "suffix",
+            "canonical": "ed",
+            "surface": "ed"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.contact",
+            "type": "stem",
+            "canonical": "contact",
+            "surface": "contact"
+          },
+          {
+            "id": "p4",
+            "canonical_id": "morph.method",
+            "type": "stem",
+            "canonical": "method",
+            "surface": "method"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "preferred",
+            "rule": "double_final_consonant_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "preferred contact",
+            "rule": "word_boundary"
+          },
+          {
+            "id": "n3",
+            "left": "n2",
+            "right": "p4",
+            "surface": "preferred contact method",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n3"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "w3c-accessible-events",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "callback-window.agreed-period-for-return-call.n",
+      "text": "callback window",
+      "display_text": "callback window",
+      "pos": "noun",
+      "definition": "A period during which a return phone call is expected or arranged.",
+      "example": "The agent confirmed the callback window and time zone.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "callback window"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional agreed return-call period on a calendar.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "callback-window.agreed-period-for-return-call.n.analysis.v1",
+        "lexeme_id": "callback-window.agreed-period-for-return-call.n",
+        "text": "callback window",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.call",
+            "type": "stem",
+            "canonical": "call",
+            "surface": "call"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.back",
+            "type": "stem",
+            "canonical": "back",
+            "surface": "back"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.window",
+            "type": "stem",
+            "canonical": "window",
+            "surface": "window"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "callback",
+            "rule": "closed_compound"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "callback window",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "alternative-format.different-information-presentation-format.n",
+      "text": "alternative format",
+      "display_text": "alternative format",
+      "pos": "noun",
+      "definition": "A different way of presenting information to meet a person's access or communication needs.",
+      "example": "The customer requested an alternative format for the instructions.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "alternative format"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "The same fictional information available as readable text and audio.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "alternative-format.different-information-presentation-format.n.analysis.v1",
+        "lexeme_id": "alternative-format.different-information-presentation-format.n",
+        "text": "alternative format",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.alternative",
+            "type": "stem",
+            "canonical": "alternative",
+            "surface": "alternative"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.format",
+            "type": "stem",
+            "canonical": "format",
+            "surface": "format"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "alternative format",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "w3c-diverse-abilities",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "w3c-accessible-events",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "language-barrier.communication-difficulty-from-language-difference.n",
+      "text": "language barrier",
+      "display_text": "language barrier",
+      "pos": "noun",
+      "definition": "A difficulty in communication caused by differences in language or language knowledge.",
+      "example": "The agent arranged appropriate help for the language barrier.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "language barrier"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A respectful multilingual support arrangement without stereotypes.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "language-barrier.communication-difficulty-from-language-difference.n.analysis.v1",
+        "lexeme_id": "language-barrier.communication-difficulty-from-language-difference.n",
+        "text": "language barrier",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.language",
+            "type": "stem",
+            "canonical": "language",
+            "surface": "language"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.barrier",
+            "type": "stem",
+            "canonical": "barrier",
+            "surface": "barrier"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "language barrier",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "accessibility-request.request-for-access-support-or-change.n",
+      "text": "accessibility request",
+      "display_text": "accessibility request",
+      "pos": "noun",
+      "definition": "A request for support or a change that helps someone access or use a service.",
+      "example": "The agent recorded the accessibility request in the agreed way.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "accessibility request"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A customer selecting a suitable access support option.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "accessibility-request.request-for-access-support-or-change.n.analysis.v1",
+        "lexeme_id": "accessibility-request.request-for-access-support-or-change.n",
+        "text": "accessibility request",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.accessibility",
+            "type": "stem",
+            "canonical": "accessibility",
+            "surface": "accessibility"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.request",
+            "type": "stem",
+            "canonical": "request",
+            "surface": "request"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "accessibility request",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "w3c-diverse-abilities",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "w3c-accessible-events",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-travel-agents",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "de-escalation.effort-to-reduce-tension-or-conflict.n",
+      "text": "de-escalation",
+      "display_text": "de-escalation",
+      "pos": "noun",
+      "definition": "An effort to reduce tension or conflict while maintaining safety and appropriate boundaries.",
+      "example": "The supervisor discussed de-escalation after a difficult call.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "de-escalation"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A calm team coaching scene with no threatening depiction.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "de-escalation.effort-to-reduce-tension-or-conflict.n.analysis.v1",
+        "lexeme_id": "de-escalation.effort-to-reduce-tension-or-conflict.n",
+        "text": "de-escalation",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "affix.de.prefix",
+            "type": "prefix",
+            "canonical": "de",
+            "surface": "de"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.escalation",
+            "type": "stem",
+            "canonical": "escalation",
+            "surface": "escalation"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "de-escalation",
+            "rule": "hyphenated_prefix"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "education-kcsie-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-dap",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-idea-iep-definition",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "expectation-management.clarifying-realistic-service-expectations.n",
+      "text": "expectation management",
+      "display_text": "expectation management",
+      "pos": "noun",
+      "definition": "Clarifying what can be offered, what remains uncertain, and what will happen next.",
+      "example": "The coach emphasized accurate expectation management.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "expectation management"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional service explanation separating known facts and uncertain timing.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "expectation-management.clarifying-realistic-service-expectations.n.analysis.v1",
+        "lexeme_id": "expectation-management.clarifying-realistic-service-expectations.n",
+        "text": "expectation management",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.expectation",
+            "type": "stem",
+            "canonical": "expectation",
+            "surface": "expectation"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.manage",
+            "type": "stem",
+            "canonical": "manage",
+            "surface": "manage"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.ment.suffix",
+            "type": "suffix",
+            "canonical": "ment",
+            "surface": "ment"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "management",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "expectation management",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    }
+  ]
+}

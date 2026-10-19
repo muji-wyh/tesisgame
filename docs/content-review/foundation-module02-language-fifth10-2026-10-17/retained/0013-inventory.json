@@ -1,0 +1,92 @@
+{
+  "schema": 1,
+  "status": "frozen_author_research_pending_independent_acceptance",
+  "recorded_at": "2026-10-16T20:05:07.566Z",
+  "directory": "build/professional-english/foundation-module02-language-review/fifth10-research-r01",
+  "production_mutated": false,
+  "independent_acceptance": false,
+  "executed_source_equality_verified": true,
+  "inventory_self_hash_excluded": true,
+  "artifacts": [
+    {
+      "path": "HANDOFF.md",
+      "sha256": "316e153be9ed3e3185af29d0a2aee319457fc745f232c283e18699b18c7a5963",
+      "bytes": 3557
+    },
+    {
+      "path": "assemble-evidence.cjs",
+      "sha256": "9c512a2a8dbceb32d5436f33b9e2181a5de81dec1d8b11a7f2ff0efa108c1730",
+      "bytes": 50063
+    },
+    {
+      "path": "assembly-result.json",
+      "sha256": "4aedc1440ebc4620dfe4def1a4c168fe353fb176c01c85432b165d0ca2639487",
+      "bytes": 2064
+    },
+    {
+      "path": "assembly-start.json",
+      "sha256": "972506ece89a4dcdd6d25ae7bc32227b0038120a58e76382dc6813f6a8732651",
+      "bytes": 278
+    },
+    {
+      "path": "baseline.json",
+      "sha256": "59c33da6c2a31ac2ea3f67bed20966e32f174030c07b16600d13b6f46e3f73e5",
+      "bytes": 1608311
+    },
+    {
+      "path": "candidate-ledger.json",
+      "sha256": "171ce3798449f6915be6079f713e2e4c9211cf12d9e98e6945aad249efe9a5e1",
+      "bytes": 98840
+    },
+    {
+      "path": "capture-completion.json",
+      "sha256": "6dcae1e10f4e8b4699e0835d6df45baff4b3f9c0f7c9f894889d2cfd1db42907",
+      "bytes": 730
+    },
+    {
+      "path": "capture-observations.cjs",
+      "sha256": "7a7b227efc5f648ec3d59ea9f846fa48023ea1529cfd2eb079e61d05268811ff",
+      "bytes": 8821
+    },
+    {
+      "path": "capture-start.json",
+      "sha256": "058ae44664a558b94e56b5514202b5985b07ad8d759ed6b0e3f90b98ac8f7c61",
+      "bytes": 218
+    },
+    {
+      "path": "collect-html-metadata.cjs",
+      "sha256": "1d7a1ae71d3defd14b34fb9c772fd918a0ee22ef14ac488b41bf561ab6d39b4b",
+      "bytes": 2980
+    },
+    {
+      "path": "collection-start.json",
+      "sha256": "19c12838fd74a5a5d062c4a2bdcc14f92a2c8ddbb42247fb64b4c9d17665a047",
+      "bytes": 946
+    },
+    {
+      "path": "context-screen.json",
+      "sha256": "b0be816fd3836b7ee321a715286aae0459c7b775ac69993b4a0d5ba6dfab2c52",
+      "bytes": 1737430
+    },
+    {
+      "path": "original-foundation-module02.json",
+      "sha256": "03953236a30d636a7d6db0f0f921d076910886e1f2f1834730ba1302b5b0ac41",
+      "bytes": 220456
+    },
+    {
+      "path": "oxford-html-metadata.json",
+      "sha256": "bdfe7ef9db4a4c753e6188b82c6b836c7c5b877147d462c55227445057172543",
+      "bytes": 22094
+    },
+    {
+      "path": "research-notes.json",
+      "sha256": "7bd12efb9568d6d50b68a1ddf62c86b149cc29c65321b1c959150fcddcb8d639",
+      "bytes": 32413
+    },
+    {
+      "path": "source-index.json",
+      "sha256": "a52cbdcd9c83c7c1a21b5ae1416d8f1bdbf07cba76e35b89f5edfbd259746b15",
+      "bytes": 33947
+    }
+  ]
+}

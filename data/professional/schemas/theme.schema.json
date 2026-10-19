@@ -1,0 +1,208 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "theme.schema.json",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_.-]*$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "track": {
+      "enum": [
+        "growth",
+        "professional"
+      ]
+    },
+    "course_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "enum": [
+        "pending",
+        "ready"
+      ]
+    },
+    "palette": {
+      "type": "object",
+      "properties": {
+        "background": {
+          "type": "string",
+          "pattern": "^#[a-fA-F0-9]{6}$"
+        },
+        "surface": {
+          "type": "string",
+          "pattern": "^#[a-fA-F0-9]{6}$"
+        },
+        "text": {
+          "type": "string",
+          "pattern": "^#[a-fA-F0-9]{6}$"
+        },
+        "accent": {
+          "type": "string",
+          "pattern": "^#[a-fA-F0-9]{6}$"
+        },
+        "light": {
+          "type": "string",
+          "pattern": "^#[a-fA-F0-9]{6}$"
+        },
+        "spark": {
+          "type": "string",
+          "pattern": "^#[a-fA-F0-9]{6}$"
+        }
+      },
+      "required": [
+        "background",
+        "surface",
+        "text",
+        "accent",
+        "light",
+        "spark"
+      ],
+      "additionalProperties": false
+    },
+    "preview": {
+      "$ref": "common.schema.json#/$defs/media"
+    },
+    "art": {
+      "type": "object",
+      "properties": {
+        "environment": {
+          "$ref": "common.schema.json#/$defs/media"
+        },
+        "home": {
+          "$ref": "common.schema.json#/$defs/media"
+        },
+        "props": {
+          "$ref": "common.schema.json#/$defs/media"
+        }
+      },
+      "required": [
+        "environment",
+        "home",
+        "props"
+      ],
+      "additionalProperties": false
+    },
+    "ambient_motion": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "pending",
+            "ready"
+          ]
+        },
+        "brief": {
+          "type": "string",
+          "minLength": 1
+        },
+        "review": {
+          "$ref": "common.schema.json#/$defs/media/properties/review"
+        },
+        "clips": {
+          "type": "array",
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {"$ref": "common.schema.json#/$defs/id"},
+              "image": {"$ref": "common.schema.json#/$defs/media"},
+              "columns": {"type": "integer", "minimum": 1, "maximum": 8},
+              "rows": {"type": "integer", "minimum": 1, "maximum": 8},
+              "frame_count": {"type": "integer", "minimum": 2, "maximum": 64},
+              "rest_frame": {"type": "integer", "minimum": 0, "maximum": 63},
+              "frames_per_second": {"type": "number", "minimum": 0.5, "maximum": 24},
+              "rect": {
+                "type": "array", "minItems": 4, "maxItems": 4,
+                "items": {"type": "number", "minimum": 0, "maximum": 1}
+              }
+            },
+            "required": ["id", "image", "columns", "rows", "frame_count", "rest_frame", "frames_per_second", "rect"],
+            "additionalProperties": false
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "status",
+        "brief",
+        "clips"
+      ],
+      "additionalProperties": false
+    },
+    "audio": {
+      "type": "object",
+      "properties": {
+        "music": {
+          "type": "string",
+          "minLength": 1
+        },
+        "interaction_bank": {
+          "type": "string",
+          "minLength": 1
+        },
+        "chest_sound_theme": {
+          "type": "string",
+          "minLength": 1
+        },
+        "policy": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "music",
+        "interaction_bank",
+        "chest_sound_theme",
+        "policy"
+      ],
+      "additionalProperties": false
+    },
+    "rewards": {
+      "type": "object",
+      "properties": {
+        "legacy_theme_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "chest_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "collection_namespace": {
+          "const": "existing"
+        }
+      },
+      "required": [
+        "legacy_theme_id",
+        "chest_id",
+        "collection_namespace"
+      ],
+      "additionalProperties": false
+    },
+    "transition_ms": {
+      "const": 200
+    }
+  },
+  "required": [
+    "id",
+    "title",
+    "track",
+    "course_id",
+    "status",
+    "palette",
+    "art",
+    "ambient_motion",
+    "audio",
+    "rewards",
+    "transition_ms"
+  ],
+  "additionalProperties": false
+}

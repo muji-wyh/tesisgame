@@ -1,0 +1,242 @@
+{
+  "status": "accepted_full_theme_art_and_native_presentation",
+  "date": "2026-10-16",
+  "reviewer": "Root independent Codex review",
+  "theme_id": "professional_retail",
+  "theme_status": "ready",
+  "ambient_status": "ready",
+  "scope": "Complete sourced Retail theme art and native presentation, based on four-size six-game presentation, all sixteen source/native poses, recorded live timing and production-path lifecycle evidence. No continuous audiovisual playback, browser export, real microphone, curriculum or module approval.",
+  "decision_evidence": [
+    "Independent source sixteen-pose contact and native-phone sixteen-frame contact review",
+    "Independent full-scene and all four target-size actual Main six-game presentation review",
+    "Recorded live native motion timing, reduced-motion rest, hidden pause, crossfade and consumer teardown",
+    "Independent inspection of both new production-path rest images",
+    "Independent inspection of verifier/integration scripts, exact copy/provenance/log/script hashes, 355 protected data files and protected profile fields"
+  ],
+  "excluded_claims": [
+    "Continuous audiovisual playback review",
+    "Audio listening",
+    "Browser/export delivery validation",
+    "Real microphone or speech recognition review",
+    "Linguistic, domain, morphology or term-media approval",
+    "Course or module readiness"
+  ],
+  "only_production_metadata_change": "professional_retail.status: pending -> ready",
+  "preimage_sha256": "0b553a6cc49133c0be63a8b955e1fe1c74f2bb3c55b20eda821c708f21449725",
+  "themes_file": {
+    "file": "data/professional/themes.json",
+    "sha256": "718bae2956226505281d5e8f62406d0b225b12834b00977f401cb517f068f9fd",
+    "bytes": 86469
+  },
+  "profile": {
+    "id": "professional_retail",
+    "title": "Neighborhood Store",
+    "track": "professional",
+    "course_id": "retail",
+    "status": "ready",
+    "palette": {
+      "background": "#F4F5EF",
+      "surface": "#FFFFFF",
+      "text": "#253B35",
+      "accent": "#32695F",
+      "light": "#D9E7DB",
+      "spark": "#E7B56D"
+    },
+    "art": {
+      "environment": {
+        "status": "integrated",
+        "path": "res://professional-media/8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8.png",
+        "sha256": "8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8",
+        "source": "https://kenney.nl/assets/mini-market",
+        "creator": "Kenney; Fleur Keijsers; Guus Vermeulen",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex source/frame/pose visual review; recorded native timing; no continuous playback/listening claim",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Source-rendered Retail environment candidate.",
+        "available_animations": [],
+        "adaptations": [
+          "Original source geometry and materials; fixed orthographic source render.",
+          "Layered from identical renderer captures to retain correct occlusion and shadows.",
+          "Accepted source/frame/pose visual review and recorded native timing; no continuous playback or listening claim. Exact source and integration evidence: docs/assets/professional-retail-theme.md."
+        ]
+      },
+      "home": {
+        "status": "integrated",
+        "path": "res://professional-media/b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae.png",
+        "sha256": "b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae",
+        "source": "https://kenney.nl/assets/mini-market",
+        "creator": "Kenney; Fleur Keijsers; Guus Vermeulen",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex source/frame/pose visual review; recorded native timing; no continuous playback/listening claim",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Byte-for-byte reuse of the accepted static Retail Home preview.",
+        "available_animations": [],
+        "adaptations": [
+          "Exact accepted 512 by 320 local Home image copied to a content-addressed sidecar.",
+          "Accepted source/frame/pose visual review and recorded native timing; no continuous playback or listening claim. Exact source and integration evidence: docs/assets/professional-retail-theme.md."
+        ]
+      },
+      "props": {
+        "status": "integrated",
+        "path": "res://professional-media/afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c.png",
+        "sha256": "afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c",
+        "source": "https://kenney.nl/assets/mini-market",
+        "creator": "Kenney; Fleur Keijsers; Guus Vermeulen",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex source/frame/pose visual review; recorded native timing; no continuous playback/listening claim",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Source-rendered Retail props candidate.",
+        "available_animations": [],
+        "adaptations": [
+          "Original source geometry and materials; fixed orthographic source render.",
+          "Layered from identical renderer captures to retain correct occlusion and shadows.",
+          "Accepted source/frame/pose visual review and recorded native timing; no continuous playback or listening claim. Exact source and integration evidence: docs/assets/professional-retail-theme.md."
+        ]
+      }
+    },
+    "ambient_motion": {
+      "status": "ready",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex source/frame/pose visual review; recorded native timing; no continuous playback/listening claim",
+        "reviewed_at": "2026-10-16"
+      },
+      "brief": "A friendly employee behind checkout uses the acquired source idle at one third of its original speed. Frame zero is the authored reduced-motion resting pose. Accepted source/frame/pose visual review and recorded native timing; no continuous playback or listening claim. Exact source and integration evidence: docs/assets/professional-retail-theme.md.",
+      "clips": [
+        {
+          "id": "retail-employee-idle",
+          "columns": 4,
+          "rows": 4,
+          "frame_count": 16,
+          "rest_frame": 0,
+          "frames_per_second": 4,
+          "rect": [
+            0.5325520833333334,
+            0.42578125,
+            0.2994791666666667,
+            0.23697916666666666
+          ],
+          "image": {
+            "status": "integrated",
+            "path": "res://professional-media/202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76.png",
+            "sha256": "202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76",
+            "source": "https://kenney.nl/assets/mini-market",
+            "creator": "Kenney; Fleur Keijsers; Guus Vermeulen",
+            "license": "CC0 1.0",
+            "acquisition_status": "integrated",
+            "review": {
+              "status": "reviewed",
+              "reviewer": "Codex source/frame/pose visual review; recorded native timing; no continuous playback/listening claim",
+              "reviewed_at": "2026-10-16"
+            },
+            "brief": "Source-rendered Retail motion candidate.",
+            "available_animations": [
+              "idle"
+            ],
+            "adaptations": [
+              "Original source geometry and materials; fixed orthographic source render.",
+              "Original idle sampled into sixteen frames over a four-second cycle.",
+              "Accepted source/frame/pose visual review and recorded native timing; no continuous playback or listening claim. Exact source and integration evidence: docs/assets/professional-retail-theme.md."
+            ]
+          }
+        }
+      ]
+    },
+    "audio": {
+      "music": "res://assets/audio/bgm/spring.wav",
+      "interaction_bank": "res://scripts/game_audio.gd",
+      "chest_sound_theme": "spring",
+      "policy": "Reuse the existing audio cues without changing their recordings or timing."
+    },
+    "rewards": {
+      "legacy_theme_id": "spring",
+      "chest_id": "royal",
+      "collection_namespace": "existing"
+    },
+    "transition_ms": 200,
+    "preview": {
+      "status": "integrated",
+      "path": "res://assets/images/professional-previews/retail.png",
+      "sha256": "b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae",
+      "source": "https://kenney.nl/assets/mini-market",
+      "creator": "Kenney; additional credits: Fleur Keijsers and Guus Vermeulen",
+      "license": "CC0 1.0",
+      "acquisition_status": "integrated",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex visual review (source composition and final phone-scale images)",
+        "reviewed_at": "2026-10-16"
+      },
+      "brief": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending.",
+      "available_animations": [],
+      "adaptations": [
+        "Composed only from acquired source GLB meshes, preserving their geometry and materials.",
+        "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+        "Resized to 512 by 320 using Lanczos filtering; phone review at 296 by 185."
+      ]
+    }
+  },
+  "preserved_integration_receipt": {
+    "file": "build/professional-english/full-theme-review/integration/review-receipt.json",
+    "sha256": "c088d0d47d91318877e15a375bd32d42283fe5c00d52648fc23b9a12b906d6dc",
+    "bytes": 18034
+  },
+  "pending_module_check": {
+    "file": "build/professional-english/full-theme-review/acceptance/pending-modules-report.json",
+    "sha256": "d9d1b1be8c2a369459e35d4b9fece1c2a061dd7d831d957a91a30b77642a6f73",
+    "bytes": 7599
+  },
+  "pending_module_checks": 72,
+  "protected_data_files_unchanged": 355,
+  "protected_theme_fields_unchanged": true,
+  "schema_errors": [],
+  "motion_errors": [],
+  "content_audit": {
+    "ok": true,
+    "errors": 0,
+    "warnings": 30075,
+    "summary": {
+      "courses": 20,
+      "modules": 200,
+      "themes": 21,
+      "unique_lexemes": 4939,
+      "vocabulary_memberships": 10000,
+      "vocabulary_memberships_target": 10000,
+      "vocabulary_memberships_remaining": 0,
+      "expressions": 1620,
+      "expression_memberships": 2000,
+      "expression_memberships_target": 2000,
+      "expression_memberships_remaining": 0,
+      "ready_modules": 0,
+      "reviewed_lexemes": 0,
+      "morphology_authored": 3996,
+      "morphology_reviewed": 0,
+      "integrated_word_images": 0,
+      "integrated_word_audio": 0,
+      "release_ready": false
+    }
+  },
+  "immutable_media_hashes": [
+    "8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8",
+    "b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae",
+    "afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c",
+    "202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76"
+  ],
+  "permanent_document": {
+    "file": "docs/assets/professional-retail-theme.md",
+    "sha256": "77927255da1bd7a8fe3d9ab21e5c736bc52829d56051da0d2753939c157a72f9",
+    "bytes": 4524
+  }
+}

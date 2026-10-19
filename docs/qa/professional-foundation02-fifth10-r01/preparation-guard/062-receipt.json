@@ -1,0 +1,381 @@
+{
+  "schema": 1,
+  "status": "passed_fifth10_binding_memory_guard",
+  "ok": true,
+  "finished_at": "2026-10-16T23:27:27.141Z",
+  "dispatcher": "/root",
+  "guard_source": {
+    "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/guard.cjs",
+    "bytes": 45818,
+    "raw_sha256": "e34fd6419b8904f936d54253360b7a3d60681391624a54385545a9980d4659bf"
+  },
+  "root_guard_input": {
+    "path": "build/professional-english/foundation02-fifth10-root-guard-r02/input.json",
+    "bytes": 2563,
+    "raw_sha256": "38536048d2fbaf3cfb45417d6b40490efb46d400fe83a97bd807fe7ea31f36bc"
+  },
+  "preparation_root_input": {
+    "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+    "bytes": 1191,
+    "raw_sha256": "f8a61b805220a2d6e64788a92960a35bd280af3c45b1f265dbdcf91955b81549"
+  },
+  "actual_capture": {
+    "source_inventory": {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/source-inventory.json",
+      "bytes": 1826,
+      "raw_sha256": "b52fea9c2181064d024d35a05f599ad3b24897e2402927031f13e449e5a10993"
+    },
+    "independent_source_review": {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-independent-review-r02/review.json",
+      "bytes": 8919,
+      "raw_sha256": "43173b9061e326e27a60e87d54f5d0c72527b14e70c6df6c490a456f0eb53c78"
+    },
+    "root_input": {
+      "path": "build/professional-english/foundation02-fifth10-root-capture-r02/input.json",
+      "bytes": 11856,
+      "raw_sha256": "9e6dd6fd5afa6f230dc79331bfbb94cf2b5c81d622aee4758c6ea466d7a01c1c"
+    },
+    "receipt": {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/capture-receipt.json",
+      "bytes": 2168,
+      "raw_sha256": "76a258ee372ea2b20c38d0cc6a6d17eda26f9992512bda6c4391672a2dd950fe"
+    }
+  },
+  "original_actual_binding": {
+    "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+    "bytes": 3187477,
+    "raw_sha256": "7323bcb1baac6ea85817169bcc90325f9b54d587b19d4895ca3106ee7af0e015"
+  },
+  "original_independent_preparation_acceptance": {
+    "path": "build/professional-english/foundation02-fifth10-actual-binding-independent-review-r01/review.json",
+    "bytes": 8270,
+    "raw_sha256": "0dccddda14c35f3c5d90b69aa53623a8f99a91addfcc706ea0400adb3b09cc7c"
+  },
+  "exact_frozen_binding_sha256": "022fc186186ade95d6d58908932db5520652f39a1417255c3c5080a4e4841f1b",
+  "expected_negative_specifications": 29,
+  "covered_negative_specifications": [
+    "changed_installed_file",
+    "changed_journal_copy",
+    "changed_plan_identity",
+    "changed_prepared_identity",
+    "changed_state_hash",
+    "duplicate_installed_target",
+    "extra_installed_target",
+    "later_journal_state",
+    "partial_installed_targets",
+    "partial_prepared_manifest",
+    "persisted_command_failure",
+    "persisted_commit_or_state_mismatch",
+    "persisted_postcheck_failure",
+    "persisted_target_omission",
+    "review_pin_identity_mismatch",
+    "reviewer_current_author",
+    "reviewer_dispatcher",
+    "reviewer_empty",
+    "reviewer_inherited_author",
+    "reviewer_missing",
+    "reviewer_role_mismatch",
+    "reviewer_whitespace",
+    "unbound_journal_copy",
+    "unbound_template",
+    "unrelated_committed_journal",
+    "unused_journal_alias",
+    "wrong_bag_persisted_input",
+    "wrong_bag_receipt_schema",
+    "wrong_installed_bytes_or_hash"
+  ],
+  "completed_cases": 53,
+  "passed_cases": 53,
+  "genuine_positive_passed": true,
+  "exact_copy_positive_passed": true,
+  "protected_file_count": 12471,
+  "protected_files_unchanged": true,
+  "cached_original_bytes_unchanged": true,
+  "error": null,
+  "postcheck_error": null,
+  "cached_mutation_error": null,
+  "artifacts": [
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/start.json",
+      "bytes": 633,
+      "raw_sha256": "e54ca3ac3c316c31b335256f7e72246b6046d56feb7488c614bf5a11ab0cedef"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/protected-inputs.json",
+      "bytes": 2709299,
+      "raw_sha256": "e08e092196663173e1d66e116261f99a2e954ed5c6217b0d698d347c388b9a22"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-001-genuine_baseline.json",
+      "bytes": 1494,
+      "raw_sha256": "cad0cb9da505611a4caf5ca9f8701b5a463dc54f3a3edb170670a0b4041ffc2a"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-002-exact_bound_journal_copies.json",
+      "bytes": 7622,
+      "raw_sha256": "8c85e1a09dcc8842d9feb8b830928caad4195101649ecbfb39edab3504cee6b5"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-003-reviewer_missing.json",
+      "bytes": 4648,
+      "raw_sha256": "cda5a8a7e59cd1d46e019ee3aa5a8b56997f8501671057231c2302a29b605f12"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-004-reviewer_empty.json",
+      "bytes": 4573,
+      "raw_sha256": "a43ef28b1b7e61a46d098da4d6c759be18efa79ea0589a310f3d2f895345bf5c"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-005-reviewer_whitespace_only_spaces.json",
+      "bytes": 4574,
+      "raw_sha256": "3c651a486a59e5ea613ffb04d3280d7d06437cd3cb55ddda076f42ae76b63e69"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-006-reviewer_whitespace_padded.json",
+      "bytes": 4564,
+      "raw_sha256": "05b2b17f1b1673e50b3c97d4510ad43ea0b8d52ae3277b58523e91662f13df78"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-007-reviewer_current_author.json",
+      "bytes": 4642,
+      "raw_sha256": "cbe651ba57ad7d70311358772d3d098aef5a6a505932f5561d9ac5ca5fbb7497"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-008-reviewer_inherited_author.json",
+      "bytes": 4646,
+      "raw_sha256": "e0dc28dc7fcf1c2965153735216680fcbf7ccb9a46b09d8bbba1d17b143b95f6"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-009-reviewer_dispatcher.json",
+      "bytes": 4560,
+      "raw_sha256": "c6e0053bb56805a44beab23eef556a87b59f9ff16b0f989bfd786e94425dd540"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-010-reviewer_role_mismatch.json",
+      "bytes": 4790,
+      "raw_sha256": "a3e59b731936ec7334249f2e6017bc1e091c6a6d6103ecc223243bbb8b7a52a6"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-011-review_pin_identity_binding_path.json",
+      "bytes": 5377,
+      "raw_sha256": "153eadc556a59fd6ac3aab52ce4ed8482ae6c92a5f93576f0c5704b68becbf85"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-012-review_pin_identity_binding_bytes.json",
+      "bytes": 5163,
+      "raw_sha256": "64bf7df586b1c856cc9476c920b6417fc5c08cbfcd51da93f9c5abe45147c4f8"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-013-review_pin_identity_inventory_path.json",
+      "bytes": 5344,
+      "raw_sha256": "b5df00b6fd764c5bb163024e0db4ef08deb9cbee61f28d4e0a1b481f2a8f2d76"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-014-review_pin_identity_inventory_bytes.json",
+      "bytes": 5120,
+      "raw_sha256": "4634cb122ac7175260b132ad7154e1ed943d589fe6e3a23cbe97df1d3f173ab3"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-015-unrelated_committed_journal.json",
+      "bytes": 4864,
+      "raw_sha256": "3a304cd4c05b8ff575b7fc1550d1c7c82ac3ddd96cb0f80e3177cacd6ef5baa0"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-016-changed_state_hash.json",
+      "bytes": 5501,
+      "raw_sha256": "4559ac66a30d76d0c908dfdb87ce2f66f5b3c8f315ea3c5925ce435da2255bfb"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-017-changed_prepared_identity.json",
+      "bytes": 7429,
+      "raw_sha256": "d8d2cc657928ff4d980dc2f270ce81fbbdea3da8185950d0d451b7eb93c8f287"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-018-changed_plan_identity.json",
+      "bytes": 8111,
+      "raw_sha256": "ad966794a94d006568085b732ddc5149bf73504aae3b662bbb8fa0e1eb115755"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-019-changed_plan_receipt_identity.json",
+      "bytes": 8073,
+      "raw_sha256": "5a0297d5c766ee3a99a9aa360a1a6790dbc7deb26efb9ce1d8f930a9530706bf"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-020-partial_prepared_manifest.json",
+      "bytes": 8896,
+      "raw_sha256": "f2202f1eb1524b65d6ec1ce68dbe767fe26b46cd9dfb9a3e7a936c7f2e950b61"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-021-partial_installed_targets.json",
+      "bytes": 6046,
+      "raw_sha256": "8b71c03b170838e57ecd465cdb2fb92e8ec0c2b183bddeb9df4e9365d5716a3c"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-022-extra_installed_target.json",
+      "bytes": 5484,
+      "raw_sha256": "69a3b78cc924fbb91dee0efabc8654c5275d8d18bbe8fab49e4cbf65be545bda"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-023-duplicate_installed_target_exact.json",
+      "bytes": 4655,
+      "raw_sha256": "5ca87e72cb197c6d30f3efdc0cc45ba8b24deb8be77493abad515b264cdbaa01"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-024-duplicate_installed_target_case_alias.json",
+      "bytes": 4665,
+      "raw_sha256": "bc2b387e79f16aa7fb541add8997db7d971f705a025cbf74db91df95db87d0a8"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-025-wrong_installed_bytes.json",
+      "bytes": 5261,
+      "raw_sha256": "4ab9372195517b3c8ead3ef049b5f41f44e048d4affc7843d31645f1603f939a"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-026-wrong_installed_hash.json",
+      "bytes": 5733,
+      "raw_sha256": "8bc3f3073542f4727c44fdd8feff66ec88d4cba1bba2f09c5d38cab697d75ee4"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-027-changed_installed_file.json",
+      "bytes": 5122,
+      "raw_sha256": "af86809a83bdf51aa8f2d2ca60fc679564487a77445f7ef639afe29997bf9ecb"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-028-unbound_journal_copy.json",
+      "bytes": 7577,
+      "raw_sha256": "4c66a617d787d9aa42e9954eacff0c89dca06383285009e54aace0a17dbb2148"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-029-changed_journal_copy.json",
+      "bytes": 9032,
+      "raw_sha256": "0e7b1480a4ce4b079461a93f66a7c8d45f8e97571e6e511ff6e71775d22188a8"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-030-unused_journal_alias.json",
+      "bytes": 5534,
+      "raw_sha256": "36eec0796804a80cae133766c487b769e4844c746bdf776b7ecd109ce7e032ad"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-031-wrong_bag_receipt_schema.json",
+      "bytes": 4841,
+      "raw_sha256": "2e60b2099a954dce2ca17e75370c2190ed1dcd9d26eccd6df69d153d607f9582"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-032-nested_bag_compatibility_receipt.json",
+      "bytes": 6510,
+      "raw_sha256": "12d5e6b678400320f6cc5008086d00dae9a827e85669c17befd9a240b4a8247d"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-033-wrong_bag_persisted_input.json",
+      "bytes": 5542,
+      "raw_sha256": "66cbf284a78ab49f9eec3b152afeacf8ff0984ea3ed919efe42e739eb11415bd"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-034-wrong_bag_persisted_source.json",
+      "bytes": 5531,
+      "raw_sha256": "2f9f2b38d6eb261a6836e6ab7e8a105e856e982c6773a52d91f41f2bc8c145d6"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-035-persisted_commit_mismatch.json",
+      "bytes": 6226,
+      "raw_sha256": "5e644dac4b2f1892ad94357f9c2568642e111787a26f8d11da5ed7aea83c2dcd"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-036-persisted_state_mismatch.json",
+      "bytes": 6145,
+      "raw_sha256": "e19e1d4543d40b62c200dab6dc18b0bb04e75acb1d58a630fe3d438d058efbf4"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-037-persisted_target_omission.json",
+      "bytes": 6235,
+      "raw_sha256": "c9e5202d9bc25779a1975a11f7c982d7cf308b74e266111d60caba5d44953fd9"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-038-persisted_target_changed_hash.json",
+      "bytes": 6357,
+      "raw_sha256": "eb97f318987763ba0c8d94fd794399cd0c5a9b9ecb15e4ac5a6f9f9690c4bb9f"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-039-persisted_command_exit.json",
+      "bytes": 5150,
+      "raw_sha256": "e7478a671b9e7b609b542975438c133ab651edef031d4fe1e97c06d64c84c1ed"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-040-persisted_command_error.json",
+      "bytes": 5245,
+      "raw_sha256": "ec9c1528022e7c7a1787c956abcd608f379fbd95895e526dd934d728776c9838"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-041-persisted_command_signal.json",
+      "bytes": 5173,
+      "raw_sha256": "d145168c96c57dd71424c37571bb1317b32466f62ae3d8fbfaa571162c709c80"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-042-persisted_command_log_mismatch.json",
+      "bytes": 5598,
+      "raw_sha256": "2414099f68667e9b300da6ed80a17492eb196634a3021f8ba806629af6f2593c"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-043-persisted_postcheck_failure.json",
+      "bytes": 5264,
+      "raw_sha256": "13b85c023cbd08740d0767feba4fbe7eb73f79ab05c1a6d88bf7497919455748"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-044-persisted_tests_fail.json",
+      "bytes": 5192,
+      "raw_sha256": "e7a3caffc5ef6dba8c77099227a933ea22e280d658a5d24271a9ac6829b641e9"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-045-persisted_tests_cancelled.json",
+      "bytes": 5202,
+      "raw_sha256": "03f6608e8e990c08332e4a3fe962f4ff35788e7cbcd57b8bab65010712792343"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-046-persisted_tests_skipped.json",
+      "bytes": 5198,
+      "raw_sha256": "5ccd38199f7eec2d43722e74c73903e112f240e5090f35bbeeedbcbe9fa0a088"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-047-later_journal_state_initial.json",
+      "bytes": 4866,
+      "raw_sha256": "ef457ca090f30f23de7984321376d5f827eb37426b4f34f4ad7296831f548f5c"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-048-later_journal_state_recheck.json",
+      "bytes": 2827,
+      "raw_sha256": "3736cc8e6175e4d5034f4ce05bb2272491f21eb91d11483d2edbb6e5277b1cc1"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-049-unbound_root_template.json",
+      "bytes": 3350,
+      "raw_sha256": "2c79cea7680e37d4caf2dd692f5efbec57199cf8fb7320aa122dabdd00c3e5bb"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-050-unbound_binding_template.json",
+      "bytes": 3375,
+      "raw_sha256": "b9fbd1f4cc9ec4f7a319abb21abb3ac348673638b6721c70d378c2ce1dd55480"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-051-malformed_root_hash.json",
+      "bytes": 2548,
+      "raw_sha256": "28650f54498897d523f940e00bb0ebcdd4796ae9d4ec04f56e66b64e9a10cafa"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-052-wrong_root_hash.json",
+      "bytes": 2858,
+      "raw_sha256": "80b623f32701f940eee230887306b957ed2178a847fa4e3872ef41120539735f"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001/case-053-malformed_binding_pin_hash.json",
+      "bytes": 3225,
+      "raw_sha256": "0eed2f7ccc5e4d33e1976a1925e1dd1955b6aef440cfc14a163bd9686b7a71cd"
+    }
+  ],
+  "preparation_executed": false,
+  "projection_executed": false,
+  "test_transform_executed": false,
+  "project_modules_imported": false,
+  "tests_or_native_or_transactions_executed": false,
+  "production_written": false,
+  "boundary": "Only the exact frozen binding source ran in an isolated VM. Fixture mutations and acceptance-pin rebinding were in memory. The real binding and real acceptance remain unchanged. Root may consider actual preparation only after this exact receipt passes and all original pins remain unchanged."
+}

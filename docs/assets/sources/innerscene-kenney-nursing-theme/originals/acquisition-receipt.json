@@ -1,0 +1,211 @@
+{
+  "date": "2026-10-16",
+  "production_mutated": false,
+  "records": [
+    {
+      "id": "privacy-curtain",
+      "source_url": "https://www.innerscene.com/tools/library/3d-parts/privacy-curtain-and-ceiling-track-0353bfbc",
+      "download_url": "https://www.innerscene.com/api/library/privacy-curtain-and-ceiling-track-0353bfbc/download",
+      "creator": "Innerscene",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+      "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "terms_url": "https://www.innerscene.com/tools/library/terms",
+      "terms_sha256": "8643dd0b074ba8296680498bece03e35b23fd5a9299846e03096302f6a02cd76",
+      "source_page_sha256": "2fed1dd78486a9cc4526fcc06e9210d2ac767d4d61bff182895696dcff8f501d",
+      "acquired_on": "2026-10-16",
+      "acquisition_status": "downloaded_from_original_source_for_scratch_review",
+      "filename": "privacy-curtain-and-ceiling-track.glb",
+      "bytes": 330268,
+      "sha256": "563b648b94f5f2dc87fa734c22021a1116461ee01733eae359907839ef2d1390",
+      "asset_metadata": {
+        "generator": "Khronos glTF Blender I/O v5.2.40",
+        "version": "2.0"
+      },
+      "root_extras": {},
+      "mesh_count": 30,
+      "node_count": 31,
+      "vertex_count": 9012,
+      "triangle_count": 10308,
+      "material_count": 3,
+      "image_count": 3,
+      "skin_count": 0,
+      "available_animations": [],
+      "external_dependencies": [],
+      "node_names": [
+        "Ceiling curtain track",
+        "Curtain carrier ring",
+        "Curtain carrier ring.001",
+        "Curtain carrier ring.002",
+        "Curtain carrier ring.003",
+        "Curtain carrier ring.004",
+        "Curtain carrier ring.005",
+        "Curtain carrier ring.006",
+        "Curtain carrier ring.007",
+        "Curtain carrier ring.008",
+        "Curtain carrier ring.009",
+        "Curtain carrier ring.010",
+        "Curtain carrier ring.011",
+        "Curtain carrier ring.012",
+        "Curtain track carrier stem",
+        "Curtain track carrier stem.001",
+        "Curtain track carrier stem.002",
+        "Curtain track carrier stem.003",
+        "Curtain track carrier stem.004",
+        "Curtain track carrier stem.005",
+        "Curtain track carrier stem.006",
+        "Curtain track carrier stem.007",
+        "Curtain track carrier stem.008",
+        "Curtain track carrier stem.009",
+        "Curtain track carrier stem.010",
+        "Curtain track carrier stem.011",
+        "Curtain track carrier stem.012",
+        "Pleated privacy textile",
+        "Track ceiling bracket",
+        "Track ceiling bracket.001",
+        "Privacy curtain and ceiling track"
+      ],
+      "materials": [
+        {
+          "name": "white",
+          "alphaMode": "OPAQUE",
+          "doubleSided": true
+        },
+        {
+          "name": "Seafoam privacy curtain",
+          "alphaMode": "OPAQUE",
+          "doubleSided": true
+        },
+        {
+          "name": "steel",
+          "alphaMode": "OPAQUE",
+          "doubleSided": true
+        }
+      ],
+      "animation_review": "Inventory only. Static separate nodes are not a rig, articulation or usable animation; source geometry and motion suitability still need actual inspection.",
+      "source_preview_status": "Source listing read; promotional previews are not used as artwork.",
+      "integration_status": "not_integrated",
+      "visual_review_status": "pending_actual_source_inspection",
+      "occupational_review": "Illustration source only; no clinical layout, equipment or procedure approval."
+    },
+    {
+      "id": "nurse-station",
+      "source_url": "https://www.innerscene.com/tools/library/3d-parts/nurse-station-with-low-accessible-counter-ef78cf3d",
+      "download_url": "https://www.innerscene.com/api/library/nurse-station-with-low-accessible-counter-ef78cf3d/download",
+      "creator": "Innerscene",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+      "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "terms_url": "https://www.innerscene.com/tools/library/terms",
+      "terms_sha256": "8643dd0b074ba8296680498bece03e35b23fd5a9299846e03096302f6a02cd76",
+      "source_page_sha256": "6a217282a15ad1321dd6274df7cbd97944653af20b42c467280371d37ac4e222",
+      "acquired_on": "2026-10-16",
+      "acquisition_status": "downloaded_from_original_source_for_scratch_review",
+      "filename": "nurse-station-with-low-accessible-counter.glb",
+      "bytes": 700584,
+      "sha256": "74ee89a9add892597bcb569ea6080e7c4c85b792768898648f7d91334b79ebf8",
+      "asset_metadata": {
+        "generator": "Khronos glTF Blender I/O v5.2.40",
+        "version": "2.0"
+      },
+      "root_extras": {},
+      "mesh_count": 43,
+      "node_count": 44,
+      "vertex_count": 14356,
+      "triangle_count": 10028,
+      "material_count": 7,
+      "image_count": 7,
+      "skin_count": 0,
+      "available_animations": [],
+      "external_dependencies": [],
+      "node_names": [
+        "Accessible worktop",
+        "Cabinet back",
+        "Cabinet back.001",
+        "Cabinet horizontal",
+        "Cabinet horizontal.001",
+        "Cabinet horizontal.002",
+        "Cabinet horizontal.003",
+        "Cabinet side",
+        "Cabinet side.001",
+        "Cabinet side.002",
+        "Cabinet side.003",
+        "Desk front modesty panel",
+        "Desk side panel",
+        "Desk side panel.001",
+        "Furniture pull",
+        "Furniture pull.001",
+        "Grounded narrow recessed toe kick",
+        "High counter surface",
+        "Low counter end",
+        "Monitor control",
+        "Monitor control.001",
+        "Monitor control.002",
+        "Monitor control.003",
+        "Monitor control.004",
+        "Monitor control.005",
+        "Monitor housing",
+        "Monitor housing.001",
+        "Monitor screen",
+        "Monitor screen.001",
+        "Monitor stand",
+        "Monitor stand.001",
+        "Monitor support neck",
+        "Monitor support neck.001",
+        "Monitor waveform",
+        "Monitor waveform.001",
+        "Monitor waveform.002",
+        "Monitor waveform.003",
+        "Monitor waveform.004",
+        "Monitor waveform.005",
+        "Staff cabinet door",
+        "Staff cabinet door.001",
+        "Staff work surface",
+        "Transaction counter support rail",
+        "Nurse station with low accessible counter"
+      ],
+      "materials": [
+        {
+          "name": "white",
+          "alphaMode": "OPAQUE",
+          "doubleSided": true
+        },
+        {
+          "name": "wood",
+          "alphaMode": "OPAQUE",
+          "doubleSided": true
+        },
+        {
+          "name": "steel",
+          "alphaMode": "OPAQUE",
+          "doubleSided": true
+        },
+        {
+          "name": "black",
+          "alphaMode": "OPAQUE",
+          "doubleSided": true
+        },
+        {
+          "name": "Warm healthcare polymer",
+          "alphaMode": "OPAQUE",
+          "doubleSided": true
+        },
+        {
+          "name": "Dark display glass",
+          "alphaMode": "OPAQUE",
+          "doubleSided": true
+        },
+        {
+          "name": "Monitor mint trace",
+          "alphaMode": "OPAQUE",
+          "doubleSided": true
+        }
+      ],
+      "animation_review": "Inventory only. Static separate nodes are not a rig, articulation or usable animation; source geometry and motion suitability still need actual inspection.",
+      "source_preview_status": "Source listing read; promotional previews are not used as artwork.",
+      "integration_status": "not_integrated",
+      "visual_review_status": "pending_actual_source_inspection",
+      "occupational_review": "Illustration source only; no clinical layout, equipment or procedure approval."
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "started_at": "2026-10-16T20:49:11.570Z",
+  "root_native_slot": "shopping-bag-candidate-r01",
+  "frozen_inputs_sha256": "ff7f3b93ca1fa060d2440d3b908c9ef80767dcc2a28c0f5e06161a25c4f90564",
+  "preparation_receipt_sha256": "d255e8adbed792f45f0b5d77773e37dc7287f5fec4584c76afac1c20b077e709",
+  "native_args": [
+    "--path",
+    "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+    "--rendering-method",
+    "gl_compatibility",
+    "--audio-driver",
+    "Dummy",
+    "--script",
+    "res://build/professional-english/shopping-bag-candidate-r01/render-and-check.gd"
+  ],
+  "timeout_ms": 60000,
+  "scope": "One native image-only candidate attempt; preserve this marker even if interrupted."
+}

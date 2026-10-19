@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "kind": "projected",
+  "dispatcher": "/root",
+  "observed_at": "2026-10-17T00:18:08.916Z",
+  "session_id": 1155,
+  "command": [
+    "node",
+    "build/professional-english/foundation02-fifth10-projected-validation-r03/run.cjs",
+    "7961b9c2e01a867d64f68ea4dbed83b9e58ff5025b71e8b986b50bc0f7f29f80",
+    "bf9439859335b7dfa72cd7cfd2ca1e48097e683dd2892e6d2307ab51e8ba37b8"
+  ],
+  "cwd": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame",
+  "source": {
+    "path": "build/professional-english/foundation02-fifth10-projected-validation-r03/run.cjs",
+    "bytes": 11683,
+    "raw_sha256": "7961b9c2e01a867d64f68ea4dbed83b9e58ff5025b71e8b986b50bc0f7f29f80"
+  },
+  "input": {
+    "path": "build/professional-english/foundation02-fifth10-projected-validation-r03/input.json",
+    "bytes": 2641582,
+    "raw_sha256": "bf9439859335b7dfa72cd7cfd2ca1e48097e683dd2892e6d2307ab51e8ba37b8"
+  },
+  "start": {
+    "path": "build/professional-english/foundation02-fifth10-projected-validation-r03/attempt-001/start.json",
+    "bytes": 235,
+    "raw_sha256": "696cd6ecb57dfabe36d271a365804dcbdbc38ff352877a1d57bf2421f3ed5abe"
+  },
+  "exit_code": 0,
+  "signal": null,
+  "error": null,
+  "receipt": {
+    "path": "build/professional-english/foundation02-fifth10-projected-validation-r03/attempt-001/receipt.json",
+    "bytes": 472109,
+    "raw_sha256": "ea5d48950c11579f39f12c5c020fe64409db1641951084fe2f3d4a61fb4f5650"
+  },
+  "observation_basis": "Root observed actual tools.write_stdin completion exit_code 0; no signal or tool error was reported. Candidate result checked independently of outer status.",
+  "final_tool_result": {
+    "chunk_id": "43d187",
+    "wall_time_seconds": 0.0000175,
+    "exit_code": 0,
+    "original_token_count": 37,
+    "output": "{\"ok\":true,\"receipt_sha256\":\"ea5d48950c11579f39f12c5c020fe64409db1641951084fe2f3d4a61fb4f5650\",\"callbacks\":263,\"error\":null,\"postcheck_error\":null}\n"
+  },
+  "receipt_summary": {
+    "callbacks": 263,
+    "audit_errors": 0,
+    "audit_warnings": 29382
+  },
+  "actual_installation": false,
+  "persisted_validation": false,
+  "replay_allowed": false
+}

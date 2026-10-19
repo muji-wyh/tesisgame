@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "status": "committed",
+  "finished_at": "2026-10-16T21:56:26.260Z",
+  "root_commit_input_sha256": "550c629c92c5da133348b6eca82b016dfa8426c3ac501fef2de265782c5faee0",
+  "prepared_binding_sha256": "dbacf79ca796410664a1a6af9a577172c93234109b3c33c326ba669a5394dc21",
+  "registry_after_sha256": "9a9b3c8665ce920fcddd584456e4ca47b8c365d8d2c43daacb9ea908c540ee1c",
+  "provenance_sha256": "c1cdb9770166589d5924b8d020ab88e6a4a0fd4e9b14e9abe2aa167f2a8d0d60",
+  "source_files_after": [
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/commit.cjs",
+      "sha256": "d9df7689e7e958036e6f328d91db9a090527fcfea0e00055ba50546b0caf7b61"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/evidence-contract.cjs",
+      "sha256": "85dbf8515a67b479fb6b904ac65b8c6ca1a6477983fa14b17beb06e34b8b2efd"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/committed-evidence.test.cjs",
+      "sha256": "85a70750e79b4c0fe1511a5289cb6b232c4a8511f7478368c7a3c41df26acc9f"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/INPUTS.md",
+      "sha256": "dd11e83f7996cac0b339121a6cd1fe57a9b56b26d46e5e321f664228770072b9"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/root-commit-input.example.json",
+      "sha256": "f6ce26aa9d18382c70791eb21706a59eb2a6eaa9df18773047f84386da2736c5"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/evidence-inputs.json",
+      "sha256": "391c9292b5b9cd1cb30a0a47c968565a41750d4c49e2b30556d61d6bdff83654"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/author-inventory.json",
+      "sha256": "f0043bfeada59d497be43cde8e3d753c0322cfa982c632fa40eae36cd62838d7"
+    }
+  ],
+  "result": {
+    "status": "committed",
+    "committed": true,
+    "planSha256": "e43a7c5c40facfefc4874669d85aa404cc0a47ea8979645306768dfff491eab1",
+    "preparedSha256": "45cd8e892cc69577d5403aac5a5ffc1a34d7a7374e59a296440a573f52a8f1b8",
+    "transactionDir": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\transactions\\foundation02-fourth10-language-r01",
+    "state": {
+      "path": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\transactions\\foundation02-fourth10-language-r01\\states\\000268-committed.json",
+      "sha256": "93c800d4ed9c94c47932d0f2b807d4d13e4a0c1330bcc5ed1cf8882a235a48b1",
+      "status": "committed"
+    }
+  },
+  "persisted_suite_execution_claim": false
+}

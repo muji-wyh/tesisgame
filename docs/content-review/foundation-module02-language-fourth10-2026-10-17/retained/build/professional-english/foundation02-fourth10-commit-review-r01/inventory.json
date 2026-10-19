@@ -1,0 +1,2597 @@
+{
+  "schema": 1,
+  "status": "frozen_independent_static_review_and_unexecuted_probes",
+  "directory": "build/professional-english/foundation02-fourth10-commit-review-r01",
+  "recorded_at": "2026-10-16T21:40:23.773Z",
+  "execution_performed": false,
+  "files": [
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-review-r01/probe.cjs",
+      "sha256": "43cdd6e7c22e13419b98e6fb2c50115db1a363bb34602b537c078211a535948e",
+      "bytes": 23217
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-review-r01/capture-static.cjs",
+      "sha256": "d976e422e2340dbbca0f29d7dc6a794719bc05c43e6f70e38fd35956c7246609",
+      "bytes": 12986
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-review-r01/static-measurements.json",
+      "sha256": "6a803aa5cc72f83518f2b50b1e082cb8625d6c05838c2da33d2ed251bf9d18f0",
+      "bytes": 297745
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-review-r01/static-review.json",
+      "sha256": "172d9cce8cf892b92868d8c710795666ed55155d0d80ce1f6ae6396d699e94d4",
+      "bytes": 5713
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-review-r01/persisted-wrapper-source-review.json",
+      "sha256": "714106792797c12fd32a0736e438ea83918ec10b9cfe6602a4c50bb1e5482809",
+      "bytes": 1353
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-review-r01/README.md",
+      "sha256": "1eac192eda08f47eca9a2ae0946921efeb64822d29ab7c3efc4a74092fcd65a6",
+      "bytes": 1754
+    }
+  ],
+  "inputs": [
+    {
+      "path": "build/professional-english/foundation-module01-language-review/fifth10/delivery-r01/guarded-transaction.cjs",
+      "sha256": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6",
+      "bytes": 21544
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/author-inventory.json",
+      "sha256": "f0043bfeada59d497be43cde8e3d753c0322cfa982c632fa40eae36cd62838d7",
+      "bytes": 1810
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/commit.cjs",
+      "sha256": "d9df7689e7e958036e6f328d91db9a090527fcfea0e00055ba50546b0caf7b61",
+      "bytes": 7978
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/committed-evidence.test.cjs",
+      "sha256": "85a70750e79b4c0fe1511a5289cb6b232c4a8511f7478368c7a3c41df26acc9f",
+      "bytes": 508
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/evidence-contract.cjs",
+      "sha256": "85dbf8515a67b479fb6b904ac65b8c6ca1a6477983fa14b17beb06e34b8b2efd",
+      "bytes": 29420
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/evidence-inputs.json",
+      "sha256": "391c9292b5b9cd1cb30a0a47c968565a41750d4c49e2b30556d61d6bdff83654",
+      "bytes": 4073
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/INPUTS.md",
+      "sha256": "dd11e83f7996cac0b339121a6cd1fe57a9b56b26d46e5e321f664228770072b9",
+      "bytes": 7842
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/root-commit-input.example.json",
+      "sha256": "f6ce26aa9d18382c70791eb21706a59eb2a6eaa9df18773047f84386da2736c5",
+      "bytes": 1632
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/author-coverage-r02.cjs",
+      "sha256": "ca74606235ce905a2d566d62dc84de3c5525dfd9d70f9acd76413eaec9430c6e",
+      "bytes": 3959
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/author-inventory.json",
+      "sha256": "aece2564d2a9f0d6261ba57f8613fc862b5541f5fba01e80bb3f8c8651384ff6",
+      "bytes": 3550
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/author-r02.cjs",
+      "sha256": "5bf19ff7a5ab8628f24a4222c07aa7202d9898e795bfe3ffc396fd66105deb8b",
+      "bytes": 6551
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/coverage-supplement.json",
+      "sha256": "e54a9bcc19f2b34c0d8d875213e3e692d8a7ca643973141b27f9459a0a8625f0",
+      "bytes": 2482
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/accepted-language.json",
+      "sha256": "51d6569514875bc8bceeaa149cef44f7863d28d0e523e4557472909607efeece",
+      "bytes": 2337675
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/execution-end.json",
+      "sha256": "9605da550f97858787f89e651ad5af33180ebadbd11024375efbfcf3ffa0eeb3",
+      "bytes": 2912
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/execution-start.json",
+      "sha256": "698f41ff56d51675c2f1d2ef4e75d899886bd43c2836a675b0ac1c4bffb2c72b",
+      "bytes": 3065
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/foundation-module02.json.after",
+      "sha256": "9f698ae9b2572d279709b521e6b7d490ffe3d05b1a8ed362add36e07fd4accbc",
+      "bytes": 372196
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/foundation-module02.json.before",
+      "sha256": "bec08364a841f92351d04cd4c891bbd9d7de6dbf00f9949cc58f18e2551962ad",
+      "bytes": 267505
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/measured-inputs-before.json",
+      "sha256": "f7b8f677326df79d731eca301f57a7da48cea083a07b85cdf417f30eadc3f506",
+      "bytes": 121462
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/preparation-receipt.json",
+      "sha256": "b6f797200a9c856b189dfcc3bf1dc20e65a8b9aac361b62bd3959ae460311f4d",
+      "bytes": 226840
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/professional_retail_morphology_tests.gd.after",
+      "sha256": "db277170d8bc7285204b86784ba2f118cae8f01fa8311eb7ac55f5953cd039a0",
+      "bytes": 114792
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/professional_retail_morphology_tests.gd.before",
+      "sha256": "226160e3d454d1d19f2bb1c4e81a0c9749dcd354e4a8a71f21799f9ede0eb945",
+      "bytes": 111030
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/professional-content.test.cjs.after",
+      "sha256": "7620d4196914eb136f7ee4375eb1c13bafb0f509cfacb9859794210b14ebfa86",
+      "bytes": 346365
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/professional-content.test.cjs.before",
+      "sha256": "7ed495e35df7d66d646ba8a0090aee32e81b51759e278defc07da71f61e9473b",
+      "bytes": 332257
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/professional-retail-morphology.test.cjs.after",
+      "sha256": "b5bfe27b11fccbdf4f399588e77eb730018228c65446404f9f9c8c545e0119c6",
+      "bytes": 88429
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/professional-retail-morphology.test.cjs.before",
+      "sha256": "04a5d72b3a7c5e3add28ef23e5e1db23fb30bcfd74d79a2e69efd28874c08282",
+      "bytes": 85308
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/projection-checks.json",
+      "sha256": "fd84c2bdc496345c88c446aa85cdd90d950660a663314da151280cc182eebcfc",
+      "bytes": 47220
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/sources.json.after",
+      "sha256": "310be48d81d29917146db162b26d9927007b68ed12380df4a113458d2de7b330",
+      "bytes": 869470
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/sources.json.before",
+      "sha256": "268caddf5f9acb1d806729200b1edf6ffe4d4dec7a737d1f57d176238500ae58",
+      "bytes": 781399
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/test-patches.json",
+      "sha256": "f39ee37d2f9a03bdf48a5f18db512fd66acea88346ba71d0fa1bfa5b4591acec",
+      "bytes": 7985
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/freeze-inputs.cjs",
+      "sha256": "a762a1256495cec9a270e289ffa2d487267359e4a92d7b57fefeb819e498cf42",
+      "bytes": 14047
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/HANDOFF.md",
+      "sha256": "620c9ddd91788662d7227ca7ab79fdf5083735daece06d042f75c95789646e39",
+      "bytes": 5776
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/input-freeze-receipt.json",
+      "sha256": "8b619da5373a9125cfb5338c801294210ea73b3af1f2d3fbb05f1d8133d74828",
+      "bytes": 28854
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/input-pins.json",
+      "sha256": "54982d9d4421d9cb0629167fa8b9644e7b825094882372aeaa34c2381e8ff750",
+      "bytes": 242074
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/prepare.cjs",
+      "sha256": "612d9b98fd62b62492f7140a034ccb29a8c75fb07fc2937fa6b7787e35c98621",
+      "bytes": 9161
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/projection.cjs",
+      "sha256": "c07b67580921610e94425d3f2c01b620203163d7a6ef40be2a4ebe07edf12da9",
+      "bytes": 23650
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/revision-derivation.json",
+      "sha256": "317d94037e9ccd27a6c38feb34bb199fec697d61f0f22ddbb1a4b6b2b181164c",
+      "bytes": 5199
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/test-transforms.cjs",
+      "sha256": "7886b3c0d03766f2f0a3f460e6e2cbf391384338fe747f8defa2ce308d1d4dc9",
+      "bytes": 23426
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/TRANSACTION.md",
+      "sha256": "ceddf90d4066c4a2c6ed806c46e9a6ecc10de5025d37a21c054fc35b7746b052",
+      "bytes": 5763
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/command-1.log",
+      "sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d",
+      "bytes": 73
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/command-2.log",
+      "sha256": "c04bf5168c4951be761afab31633b5a6d5e4fdb537a8a4f81c74f259bdfb09a2",
+      "bytes": 130
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/copied-inputs.json",
+      "sha256": "9c8005d0a81412dc9186cd8ae8f58008a9d8cd855e54edd4d5ab7b70c06dc029",
+      "bytes": 109274
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/catalog.json",
+      "sha256": "ff39f26ad1a6868dcb6ce96e6f2c007f0c9dcbe2eafee906c8ee9360af99e544",
+      "bytes": 33329
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/courses/accounting_finance.json",
+      "sha256": "fe76b0cd1c49ae318591fcbe9ce41281f1397bc0551a6bd323dd5e7c76b5379d",
+      "bytes": 47335
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/courses/caregiving.json",
+      "sha256": "df3cac47b0b0167fd539e64675528a8f17a210a6863f16e2e3307ccd0a760c18",
+      "bytes": 37152
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/courses/cleaning_facilities.json",
+      "sha256": "092c5e21555e2f5062c6b012de2f5a3b7c7505553033336e01bdec50cee46034",
+      "bytes": 46123
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/courses/clinical_medicine.json",
+      "sha256": "ce4f29e27391cda08bb3b7ab36f4c0624fbf421459d64782c5dda5a31759fe4c",
+      "bytes": 41705
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/courses/construction_trades.json",
+      "sha256": "b49ebf7090f641bd9d6528df4ca18d9372452d13d285d73782fd487b64f83291",
+      "bytes": 44282
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/courses/customer_support.json",
+      "sha256": "9dfe879d18ff6e77f780a56d4aa5af8ff213e262e973196b3e6db967ccb06cb7",
+      "bytes": 39761
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/courses/education_childcare.json",
+      "sha256": "b82356a3acd11d197d9743b84e2f16df09cb994db3062722332895fda45f494b",
+      "bytes": 44728
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/courses/food_service.json",
+      "sha256": "e2f44772648f061d706913a9dc097f2f5575155f31f63ddc580edb52deb9aaf8",
+      "bytes": 35078
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/courses/hospitality_tourism.json",
+      "sha256": "9cad8ff14fc30d7f93ea7815954e437d140570e9e6ce8ed754052e3089a1c873",
+      "bytes": 42934
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/courses/hr_recruitment.json",
+      "sha256": "454b8f5a2396367fa001be0bbca61b1fd24d5f2ca1b0eaedc6e5db2830288d35",
+      "bytes": 45787
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/courses/it_support.json",
+      "sha256": "0e76705b1698a01c14834114ccd629f24b65de36603b5030f462d6d673987eb7",
+      "bytes": 42350
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/courses/legal_paralegal.json",
+      "sha256": "9e981d2b04559c340a51bbc35314a8500acc8f97f92a664d63e9f82b8e7c010b",
+      "bytes": 49295
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/courses/manufacturing_maintenance.json",
+      "sha256": "4e2a3f89219d8a882ca5c4abfcce7286b67024c0ebdb6c2ce928e2491b4d7f6d",
+      "bytes": 49134
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/courses/nursing.json",
+      "sha256": "6198c2f5bddf30a96754e3272ad8512573ae6981e77a8c34a69ab2bcf21d3af3",
+      "bytes": 34930
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/courses/office_admin.json",
+      "sha256": "d13c4a75f4824d767f8c40fa59d71154cb8bc950e6f74b526afc511d9b744d49",
+      "bytes": 40237
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/courses/retail.json",
+      "sha256": "7124ef1d09da0c47f1d5fb2945bfebbe49e5f180f5fbdcd66fe73991ea7d4c61",
+      "bytes": 31222
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/courses/sales_marketing.json",
+      "sha256": "57fc012d0fe5b3f88c1d90695841b3647a0a90676378beb2cd2915189c502f7e",
+      "bytes": 46192
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/courses/software_data.json",
+      "sha256": "54156b9ac460f600cbb6f9645bab75d0488913ac4e4c772645a3679cf25beda0",
+      "bytes": 33982
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/courses/transport_delivery.json",
+      "sha256": "ed60050415a70a3efdd6b7df4112e92819d9b994cdca25257804c1ad5a878926",
+      "bytes": 43037
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/courses/warehouse_logistics.json",
+      "sha256": "dbf5c7eaa4fe2c5f4f91bd96955b418ed96fb96a6ae3a0c7f52fba2760372428",
+      "bytes": 41108
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/domain-policy/decisions.json",
+      "sha256": "8f6d7e3e384eb65874338fca54a8d6576fb7903e664c49c52b142857ce407e57",
+      "bytes": 133
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/domain-policy/generated/index.json",
+      "sha256": "21aa9d49135b574f12dcff2fdb2295a3fae329b0a6765ac3a914e90944994ac0",
+      "bytes": 20705
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/domain-policy/generated/release.json",
+      "sha256": "28e8f954bb11e201d685190b295b90117c80ca922b43d6369f55052f71fd200b",
+      "bytes": 954
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/domain-policy/generated/themes.json",
+      "sha256": "2bf6d483cae7b3d38c96945719612a5394a9aa6e2d94d63db9a12b4b55edc669",
+      "bytes": 91201
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/accounting-module03.json",
+      "sha256": "a3fe3a96597de5ad16c3eb7f373d76bb57e8c83b2d9caca9349498c0e9abff0c",
+      "bytes": 37797
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/accounting-module04.json",
+      "sha256": "2794a4a90ceb77625708877b3859bc965a1c0ff86ea51069838128523fc38ffe",
+      "bytes": 44369
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/accounting-module05.json",
+      "sha256": "d3edd7ca64ac0a60a5d54b3dd34a01d243af176d1e2fd2c07a91c0e8114f2367",
+      "bytes": 52031
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/accounting-module06.json",
+      "sha256": "b74731cc160373735228ae6e372a68a328cff40563324feb3114804fec4208de",
+      "bytes": 48472
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/accounting-module07.json",
+      "sha256": "6cf9e226181f94ca79c1d68d09c0d4e3e628696e80d6e10bd6fbf54bde1f2e9f",
+      "bytes": 49421
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/accounting-module08.json",
+      "sha256": "145bbde3828007bbc930e285124a752a0502dffb30d52043a9ee8d5b02a2bb2c",
+      "bytes": 48131
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/accounting-module09.json",
+      "sha256": "ae4e609c275f4a0f40e54050a294987002d1b126324eec22dd6a1f2b02b98143",
+      "bytes": 53135
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/accounting-module10.json",
+      "sha256": "46c9a9c4f7074de560224c56007dac33eff74cb8fdc1681e5ff69a83ecd646dd",
+      "bytes": 52429
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/caregiving-module03.json",
+      "sha256": "fcc8bb6e4b08a97c97fbecd80cbe291f5b47c78aec00606bd31ae1be7c8dbdcf",
+      "bytes": 32214
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/caregiving-module04.json",
+      "sha256": "bad2ef4fa14e53cc25d604219bc566e85773295af8fb229d943ac076c663fd65",
+      "bytes": 37535
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/caregiving-module05.json",
+      "sha256": "83a7b342b219a3844781112fc3090904472b7dca9eeb935425e4cc65302c17fd",
+      "bytes": 43117
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/caregiving-module06.json",
+      "sha256": "7befc46b26fd3ba83c75865c661570daaf338032f3d19756b2ac6b901fc4328f",
+      "bytes": 37441
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/caregiving-module07.json",
+      "sha256": "1d29e325954ee55e2e9109e26cd3c6805264a0a6f815022fcf015903c0d25203",
+      "bytes": 36678
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/caregiving-module08.json",
+      "sha256": "ef0f406fb9810164cc327ed7057d7d6c064084f8dd2aabe4528725d424e7dd16",
+      "bytes": 36458
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/caregiving-module09.json",
+      "sha256": "4a80331e436eba2e79f325a3e30c921c0a22c9b58477492f055e69da00196a44",
+      "bytes": 33158
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/caregiving-module10.json",
+      "sha256": "086ad7b2ca06487940aa587055c8ab27174299fe7c0fab42f2748acb13b5f6b4",
+      "bytes": 34355
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/cleaning-module03.json",
+      "sha256": "d5bf525c8d5ef6a79096261e0e2a429ab7c546afe7f6aeffa2c85ff5a9771534",
+      "bytes": 41387
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/cleaning-module04.json",
+      "sha256": "92a693216e63209d1708a4e27b234b54467bbb28c730f726ce0aef07203079b1",
+      "bytes": 43948
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/cleaning-module05.json",
+      "sha256": "3aa57df3799709ac0a4e9e79191031aeee78130e16e938e92ee927d267b6a8b5",
+      "bytes": 47591
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/cleaning-module06.json",
+      "sha256": "9f8641394291f4b8f8e036524e8d6dfc6a13830ec2972a27e46d03ac7def1ede",
+      "bytes": 53717
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/cleaning-module07.json",
+      "sha256": "c4d32eab82af496ddd292768e988c170b3fc1ac2eece9a6c103e46ee009d8211",
+      "bytes": 39718
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/cleaning-module08.json",
+      "sha256": "ae3639dff5a4ed4f76570e58cfc52a8d7abea8e8e59691baf568061462acbf1e",
+      "bytes": 46404
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/cleaning-module09.json",
+      "sha256": "1abb2002ee1697c65b59c1ea5ddb644415c94b27ffa00a034f9e0094d030986f",
+      "bytes": 46575
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/cleaning-module10.json",
+      "sha256": "fc392429d1d47801659054ab455673ca2d4496422eb68badba5a6cb1c80a2da7",
+      "bytes": 46752
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/clinical-module03.json",
+      "sha256": "70f136de39ac9e2b28e1eded94e42808e64e1f83cbec5aaed96ff27ac29f8786",
+      "bytes": 42992
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/clinical-module04.json",
+      "sha256": "5ecc7d2305e9fd9134babfbbe7d6162a61250b355226ad8d56b4a1e10ae6103d",
+      "bytes": 44473
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/clinical-module05.json",
+      "sha256": "3a66509e22a694e31b80666922af46136f823a664d6b5ee1b3bf8d63df61d6b8",
+      "bytes": 50036
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/clinical-module06.json",
+      "sha256": "080b0f86fcb22324426977f98ef86d7291d1990bd5b43b64fbc4e6997ec1c72d",
+      "bytes": 46598
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/clinical-module07.json",
+      "sha256": "3b09ba45a8dd2abe3bc16aeea2d7a809194aaddfcbb25e2f41783ff6ced3f84a",
+      "bytes": 49878
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/clinical-module08.json",
+      "sha256": "055ff56379a126512195d7ee50038d6437455da4ea3b6cbeabf99fdb2041a0a8",
+      "bytes": 54522
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/clinical-module09.json",
+      "sha256": "f8c69265281e961c778cd0c5a5234fafaba8f33feec931f3983f6faeef75a26d",
+      "bytes": 44044
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/clinical-module10.json",
+      "sha256": "67b3b63e69519f41691714a80e910ca5fc18906aa00bf62c204ef91ec55184bd",
+      "bytes": 48954
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/construction-module03.json",
+      "sha256": "31a96db033fe76e79c8d22d35896bf08f3bbe61a21b493879e86ee6eba4835ed",
+      "bytes": 41947
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/construction-module04.json",
+      "sha256": "901e2842388c022aa5b57edae68f9a31ddea67f30b07df3962184793f78b651d",
+      "bytes": 45262
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/construction-module05.json",
+      "sha256": "bbd45dd4ed9640073a8e6c8a9b8c5ac3bc6303167ba38f352ca50f56d92b6c3d",
+      "bytes": 54003
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/construction-module06.json",
+      "sha256": "9edf59ae9542cb669c6701f4af1e8632050f77283989bcaa61df1d636ef21e82",
+      "bytes": 44096
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/construction-module07.json",
+      "sha256": "0c00152df75175bd177f0ac25b9039ed7ab98b4da5b5eb822672a5ea79ebf5f8",
+      "bytes": 45442
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/construction-module08.json",
+      "sha256": "e5e7be90a303949e511d201c77481e420bb56518c8a1bd999b50d173972ad956",
+      "bytes": 47393
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/construction-module09.json",
+      "sha256": "7028582f49f481039589218c0dfa46c455b7889a9e1d9c412e9f3b99bf0059fb",
+      "bytes": 44688
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/construction-module10.json",
+      "sha256": "5f069186aaf8a60b940cafb9aadf93c5f898a6641521c565bd1cd95b9952a3da",
+      "bytes": 60224
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/customer-support-module03.json",
+      "sha256": "169c49beeaa94ee5502e3f7c0c44f83898bff264af4b0ded09ed134295b1e813",
+      "bytes": 36683
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/customer-support-module04.json",
+      "sha256": "f71389a91cf37c23400ffe04c0b8b4e9032b112e50bc954ac473ea51c13b105f",
+      "bytes": 40074
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/customer-support-module05.json",
+      "sha256": "6b5b667d4859f16f61a80c1efcae934076b71f371370b80c242ab425a0e455f9",
+      "bytes": 44410
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/customer-support-module06.json",
+      "sha256": "1b199855c3955809f4bbb0447c5b82657b1d8fa29aaf930df5df35966c7d415c",
+      "bytes": 38032
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/customer-support-module07.json",
+      "sha256": "a168a0017d3508dc8de4fd424f61a0c9cc517bf5ec64e621bd28ebaee824962b",
+      "bytes": 40493
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/customer-support-module08.json",
+      "sha256": "5c581ebef353cda972c9d3f33893edd9ed8e3ae078fdee361afb8dd535ca5f2f",
+      "bytes": 39988
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/customer-support-module09.json",
+      "sha256": "273bd95dc2014b5e282cb041bba6d026732fde45aea2db9caa8f0e1ad917d28d",
+      "bytes": 38355
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/customer-support-module10.json",
+      "sha256": "17cae45380e5c1271c61aa81521790b99b5c87f9f80173bc7cec9c9ee206a925",
+      "bytes": 37196
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/education-module03.json",
+      "sha256": "70477d618ebe5981a3554b1c24cf8ef468013123f914400bb8e93eccce78e9fe",
+      "bytes": 44007
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/education-module04.json",
+      "sha256": "3419c8f8b43ae8f48c54d9b41671d777fe5836cbf4350e7f84871c69a82c8405",
+      "bytes": 47767
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/education-module05.json",
+      "sha256": "2c1b5a636476e8d0432a51a29b980fa469b5298ebd96dd58c8ef2d47b4237686",
+      "bytes": 52795
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/education-module06.json",
+      "sha256": "d4e94457578063fcb32c0191db23501357fa033f65f4181641d91ee5207ea686",
+      "bytes": 47042
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/education-module07.json",
+      "sha256": "689a528c587a7f9b534e115fd3903af642d20b39ee939c06e0e31b2016a59acc",
+      "bytes": 46638
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/education-module08.json",
+      "sha256": "9a37038bce59d540ccc43509ccb4fbe38062d0404d29add275082a51953cfe9c",
+      "bytes": 51405
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/education-module09.json",
+      "sha256": "2b9ee696ffaad81e64ba250d8a2157078d88556ba4af560cd858c69dca30549f",
+      "bytes": 50339
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/education-module10.json",
+      "sha256": "a8ca9351e529c69500a3bd7e717207dd5dfd98761b9c4d88dc911249b3261941",
+      "bytes": 52737
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/food-service-module03.json",
+      "sha256": "892929f2cca7fad991e2bccf6e4ffaa592921f9afc31058c6086dcc0902e4087",
+      "bytes": 31385
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/food-service-module04.json",
+      "sha256": "2a02ec6ea99b52ba41fb993dd792f127d7bb88c86a4b1331e8bc9a98614a74ba",
+      "bytes": 36265
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/food-service-module05.json",
+      "sha256": "eedc8563a92fb1b4775f500b2da263fed2fd857390b6e0b932f599389141357e",
+      "bytes": 41660
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/food-service-module06.json",
+      "sha256": "765c669c7a5fed8a43fec379ea4a56321f42d664fbb686b668ed6526c91e8b17",
+      "bytes": 38172
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/food-service-module07.json",
+      "sha256": "5d3dd5643cc72eaf0bb07132f7f04996d6f7092c805ad169d731927c221054e2",
+      "bytes": 39085
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/food-service-module08.json",
+      "sha256": "3748b5018a6f2ab6d4f0aed5f9810a2ace7892f2572e083d97014f8d40f1b072",
+      "bytes": 41256
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/food-service-module09.json",
+      "sha256": "49b01a081f3bff7796c3343fad6f5519bfa36d1c37d573f07a696383d3d8b173",
+      "bytes": 36238
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/food-service-module10.json",
+      "sha256": "c4df59b51d609a118dfbceff7de7a6b1301998622844088849809ec653e6b5e0",
+      "bytes": 34371
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/foundation-module01.json",
+      "sha256": "428ff84a40186b150e72e25a27ad121097f7ed807919c8a67dde815cbffa1436",
+      "bytes": 30340
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/foundation-module02.json",
+      "sha256": "62468cc44a6fc0c1226d0533351d2c3bd8f414a530a350b436464dce5eb00bc9",
+      "bytes": 33602
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/hospitality-module03.json",
+      "sha256": "0cc80ec0e9d812b40b775079a1180f96813df89d51af9ecf68b3b2e2e7085d4c",
+      "bytes": 34165
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/hospitality-module04.json",
+      "sha256": "ce40d80c1f63668c4a46c236f2b90060f6e7c9aec83e3607dfe6d5a730634aa1",
+      "bytes": 36158
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/hospitality-module05.json",
+      "sha256": "3672d7cbfc224874d19cec90cac9fa748bd360bb47201f54da2ddfc619ad04a5",
+      "bytes": 46380
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/hospitality-module06.json",
+      "sha256": "898e6e44a08b75a857d3a085045886c257752a8c9ea5ab31cccca92563425400",
+      "bytes": 37505
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/hospitality-module07.json",
+      "sha256": "3ccf5631d3bdcd82f52bf6b0ce03adcb0a19f5a48f6b88f2d37618dc3b49622b",
+      "bytes": 40487
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/hospitality-module08.json",
+      "sha256": "86c77b1ed08e4e04b3e3dfed48f8cb760af86a8582b7034d2959811fe1be2102",
+      "bytes": 42376
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/hospitality-module09.json",
+      "sha256": "e918b7b7f701ded331b3e24566b143123f09bfaedabb78d98a06b3ca60a05668",
+      "bytes": 37703
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/hospitality-module10.json",
+      "sha256": "741a0e18d1fda8d30b48f06f59c811803421a51c2f26b6736a48908f2b574f12",
+      "bytes": 35833
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/hr-module03.json",
+      "sha256": "647a052d5e6e52764d583e352ca62d984304b3a3dfdc2c2046079c78d93a7643",
+      "bytes": 32981
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/hr-module04.json",
+      "sha256": "be73917fc575b8dc90b9069573f89622d689c65e2c6f61100be542d8108410fb",
+      "bytes": 40263
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/hr-module05.json",
+      "sha256": "5553a84b3e93758c0daf9e76a47dc515e863460f903650eebff9f1173ae93351",
+      "bytes": 41726
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/hr-module06.json",
+      "sha256": "6d0a52a1178d2c0b111399181fc1cfa1e20ece74284486d819d520a7f5e2c78a",
+      "bytes": 41224
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/hr-module07.json",
+      "sha256": "63d5362bb9d1b50f97e389d0ee5729d59453ec05f99e8b6b38dac983006fdf9c",
+      "bytes": 35235
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/hr-module08.json",
+      "sha256": "237c1c3ab34f70f758909611d6f11c3e901198752728d163e8b99868fc9d0e91",
+      "bytes": 38718
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/hr-module09.json",
+      "sha256": "6d9e1997ff1c0a7ac77ddf149e7ee8b3fb474c5ad475698c76d7e54a8fd16470",
+      "bytes": 36765
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/hr-module10.json",
+      "sha256": "38746436584db04a5da64fcae398c0afa9d3425bf7d899dfb75d587654be0200",
+      "bytes": 36276
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/it-support-module03.json",
+      "sha256": "00ea545d1c22ac2486eb56df6492c95ce2b0afc6c49ffc27bf8742961992f4c2",
+      "bytes": 35831
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/it-support-module04.json",
+      "sha256": "aa63ff2d90dbb2e73fff9e71f047264f5eaa19cdd72f4045e7d1d86cc7229a9a",
+      "bytes": 36283
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/it-support-module05.json",
+      "sha256": "28d8f09b3d0940472386355f7ad9fe3d5ad7828742fc3754dcf64d6546378270",
+      "bytes": 44058
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/it-support-module06.json",
+      "sha256": "e1233450abed9cb09b9159975769aa09f66c05bf875ca5343edaf531439c4d69",
+      "bytes": 38784
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/it-support-module07.json",
+      "sha256": "d3c5acf138ad43c0a9a645aea0bde79273394936034e9bb29aba25444318c7df",
+      "bytes": 38556
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/it-support-module08.json",
+      "sha256": "5533bd8f7ff499bbc9c439209180a51b16c162e29148cc1a839f82e3cbb23881",
+      "bytes": 38363
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/it-support-module09.json",
+      "sha256": "68d4453b3ec94c495a3798cae1c956595ea658f64f0fc246fe7077341986b040",
+      "bytes": 39557
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/it-support-module10.json",
+      "sha256": "82a338b237a903a784c73833490e124d18b1d424f21a60f9c0aa66a1898239ea",
+      "bytes": 36243
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/legal-module03.json",
+      "sha256": "7e5d8ada7a70d0c4aed0a36cc603b725858145fd0c3a2a353334032f4d09f2ed",
+      "bytes": 45545
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/legal-module04.json",
+      "sha256": "d4b580b356e655c0c2bded9bff421f244e64a09fff3818676932525d77c615a7",
+      "bytes": 53001
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/legal-module05.json",
+      "sha256": "c889c2d1065f7cdfee47e075cebad0b16d29a365c97aa3593065ac3e566d2465",
+      "bytes": 56245
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/legal-module06.json",
+      "sha256": "275a8020de3a0b9805838ffe53350674e6579117842231887a900b32c011861b",
+      "bytes": 45109
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/legal-module07.json",
+      "sha256": "9d63ddf66c7cdc17abd1e8311537ceaa688483bf3972651758969efc0bb2a28a",
+      "bytes": 55144
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/legal-module08.json",
+      "sha256": "b3915bffd9cc177f1564bd35b8be4bfd239de3dc81476efbc047538c51a5df48",
+      "bytes": 49153
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/legal-module09.json",
+      "sha256": "a9115e0fa9cf40cccf982ea95ed0175c6b798614b73ddc44f2bfd78c0c1c34de",
+      "bytes": 73062
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/legal-module10.json",
+      "sha256": "90cec549a2bc59277cd14e6d108270af56028fb203c0a12c64a2e113a79df928",
+      "bytes": 44438
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/manufacturing-module03.json",
+      "sha256": "2bc5212f6d1a0fa796db0f1fe58b867426d64d565f8ca856581bb8f913400233",
+      "bytes": 46583
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/manufacturing-module04.json",
+      "sha256": "00f517e70f4ac3dffe7f7790871fdc24342b37f5b078b49853e0e1ad7ce47302",
+      "bytes": 46183
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/manufacturing-module05.json",
+      "sha256": "18d6b0063a354883fc8ab3b5cec44435e760d1041d9f8ee009e324a23ade22bc",
+      "bytes": 54677
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/manufacturing-module06.json",
+      "sha256": "6ab377058c54911b62a35b6d71751c01831db88a5411cda6adfaa9511dd0ed5e",
+      "bytes": 44919
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/manufacturing-module07.json",
+      "sha256": "b803259c420e863cb7efac575661869424c84b5844a2cce2866cdda329beb624",
+      "bytes": 45000
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/manufacturing-module08.json",
+      "sha256": "fad8a286a09184fe927489077aff85b17ac0f88eaf03c0cb910747c1d520fe96",
+      "bytes": 46767
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/manufacturing-module09.json",
+      "sha256": "23e1ec23e843d2850dc23f869b7d1c330e3bbaec11181562645bbf611d34fee8",
+      "bytes": 46641
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/manufacturing-module10.json",
+      "sha256": "c71bca601cfd715efef147141270ecdd4c15e48bd8a888e378a2975deb31aac2",
+      "bytes": 54192
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/nursing-module04.json",
+      "sha256": "ca97a60267cece730a295c76df36bade70f32b9121068cae93eb63d765055b56",
+      "bytes": 39498
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/nursing-module05.json",
+      "sha256": "95ad9cce094db417fea47ab7cd92399814459fe9b88ee84d5d405654b3f5ba9d",
+      "bytes": 43071
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/nursing-module06.json",
+      "sha256": "7aea619a44d177eac7ffce991a45d3e134cdd1607df3d6bed0bdd0ea42025c5d",
+      "bytes": 38647
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/nursing-module07.json",
+      "sha256": "9d9d14f5a92b6d7de5aae97de58d79be0b4e4633ce87c8d6ba5d3e8c9d25fc1d",
+      "bytes": 36421
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/nursing-module08.json",
+      "sha256": "fe246c77bf741617f0dd12ce4344d083fdbf3190b2d63149d443fcac33ed8c97",
+      "bytes": 37848
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/nursing-module09.json",
+      "sha256": "850e6e0d957e47399fd09eaa6a4fe412a24e9dc722c9178242f942998fb346ec",
+      "bytes": 39122
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/nursing-module10.json",
+      "sha256": "ff41dedebae6f946c2311a558e61791f67c910c74d396ea9c760a88d5ce2fa33",
+      "bytes": 38058
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/nursing-pilot.json",
+      "sha256": "a312b502a8a125426b3d33d6ba70abe1ec91a3cedf8038ce8dc3d761ed085ee3",
+      "bytes": 22985
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/office-admin-module03.json",
+      "sha256": "57b65e28d8c19e5a94ec3fa1e5a74994086603574a2cde0c26a31a2f25ee87d8",
+      "bytes": 34692
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/office-admin-module04.json",
+      "sha256": "feb94d5c2fc90aac7342a5055e2fc9bb61750f9c8536d2172fa199a7a10251a3",
+      "bytes": 39821
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/office-admin-module05.json",
+      "sha256": "7cff8ccd4cb295ad83c2978377a0ee70a994df4ad6f68c05e78f175b176bcf81",
+      "bytes": 43314
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/office-admin-module06.json",
+      "sha256": "67788472867ad78db594251f0ba946d0ee0851d443505668487d1b528e4f5002",
+      "bytes": 36172
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/office-admin-module07.json",
+      "sha256": "2a443de9529d7fa32d23badef2900a81753299b46120ad1a2e55c6f3e8cabfa9",
+      "bytes": 38987
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/office-admin-module08.json",
+      "sha256": "25200480f511bfc327cee08e1936322c939746fa3933256b01a41c7e512373e9",
+      "bytes": 40007
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/office-admin-module09.json",
+      "sha256": "8599ede9001c80590343790aeed943cc0c81449537b6af313902a7f6d6691980",
+      "bytes": 39005
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/office-admin-module10.json",
+      "sha256": "36890a44d6da9901d49f5328d14091832aabf690cd6b383401248d1d419d7675",
+      "bytes": 35398
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/retail-module04.json",
+      "sha256": "85cc40129c0c62145d34b00394435beda98fcfb1886631ce72fc53b02fe2d2db",
+      "bytes": 64858
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/retail-module05.json",
+      "sha256": "2dbd11fa16ae9fe6ebacd4bf14cff5e65d3976b142858758ce5cd389d1acc1c9",
+      "bytes": 64771
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/retail-module06.json",
+      "sha256": "ef159961108b43f96ca7d8b1eeb02d6bf8a24b5f845a345dcfea8703a22ce369",
+      "bytes": 70533
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/retail-module07.json",
+      "sha256": "5dc812e0626a4cc033b469d1ca290a4d4eb08b826c3fbb0a94ed83a8fa4bcd17",
+      "bytes": 74912
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/retail-module08.json",
+      "sha256": "d38bef42a871932c5352021d01addfba267f2439d8ab8284e1ae556603b49742",
+      "bytes": 37827
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/retail-module09.json",
+      "sha256": "644427c387b099a74c4ce9dd57736ac451767a0203bbf8ed90b7c029730faeac",
+      "bytes": 37309
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/retail-module10.json",
+      "sha256": "3ab9e41fa7348735fd3a262168df6254efebc192e3f79f59587ff6e2386b9cbd",
+      "bytes": 36135
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/retail-pilot.json",
+      "sha256": "49edf3bf0049f1816565c34a1effa0254356b3c995b058b4dbe4b82000b42884",
+      "bytes": 28145
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/sales-module03.json",
+      "sha256": "556b49e8adfe18eab7f7fa279c75dea34b2398f619bd676c066cb27daf1f9919",
+      "bytes": 36580
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/sales-module04.json",
+      "sha256": "3243f13ef6ca6a2dc7cb888cf63ff04a3317b2baf6d0d45ddfdb11677b26646b",
+      "bytes": 43699
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/sales-module05.json",
+      "sha256": "c68d7a35d3d4d6ab8ee9b02bbd4a8dfc97f1ec5b37ecbdc61db7cb00a4693089",
+      "bytes": 47077
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/sales-module06.json",
+      "sha256": "bfc13e5bbc50dafa2dd6194ca999bb51a69fd182accf5449126d42dc9a45cc35",
+      "bytes": 38018
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/sales-module07.json",
+      "sha256": "f9c6fcf82cc7bcef266581f5f142f03e630013c626f556756afbf319db94e284",
+      "bytes": 43136
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/sales-module08.json",
+      "sha256": "e2f77a5313bdfb688d40dd8e20a31597b057ae5bb24418abd08fff3b0b88e92b",
+      "bytes": 39011
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/sales-module09.json",
+      "sha256": "2dd094920a9f126459fa840690cba7254af516f50e6ab7334dfff65295124325",
+      "bytes": 44337
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/sales-module10.json",
+      "sha256": "43d31c5cca1591eaa3c347d52e9324318a566f983d4d8f9fd9c0192a974953e9",
+      "bytes": 39129
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/software-data-module04.json",
+      "sha256": "3d984a06f09739cc792e803f4c17ffde23a696e4d25802f575c1b8b391fcfca1",
+      "bytes": 34938
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/software-data-module05.json",
+      "sha256": "f004a6f32cdedc91f8db03c5da9faa7a4913223ad0285798bd13235949dffa3f",
+      "bytes": 43427
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/software-data-module06.json",
+      "sha256": "ba0a78b4a77bf49fe389b6f947edd4795e9fab6d0b5d3093d9dfee06394a50b9",
+      "bytes": 34273
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/software-data-module07.json",
+      "sha256": "ef448f9f08abf6ccb44536678a9bcee221da9b8b8a02b7f12271e2f3573dd4d7",
+      "bytes": 36946
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/software-data-module08.json",
+      "sha256": "0c590d89a4255c00c4548a9b3c2fee5dd415f94b9bfc91d3d56efc631ae15c07",
+      "bytes": 36521
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/software-data-module09.json",
+      "sha256": "785f8705a3575b29278ce79e9d4f4384938c4f99f46abf2d34228752db37f576",
+      "bytes": 35170
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/software-data-module10.json",
+      "sha256": "541478897d18aaa0e1c049e817f3e4b257986eac9f94813e62cecef6f1930152",
+      "bytes": 35032
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/software-data-pilot.json",
+      "sha256": "ceaa13f8e174abe2f2e19b2cb79f36f3cdfb308d714476fa4bb2e8a481a0a068",
+      "bytes": 27813
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/transport-module03.json",
+      "sha256": "8255fb2ae03cfb269635d2b872b7417a3e5421188df70370c60150a49083e81b",
+      "bytes": 37409
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/transport-module04.json",
+      "sha256": "48ecd5ed276ab4319361f5020edd4951ed1cce7815cfc1ec8efa95a9a6c54029",
+      "bytes": 38460
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/transport-module05.json",
+      "sha256": "f1177d17250dcd8c778971c69f88bf61e35f095a56f91b560fe6998665df72ca",
+      "bytes": 46400
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/transport-module06.json",
+      "sha256": "560146857ed6dda4466934f860dfaa27ee452b6a1e134d675fb0d2b60b4df32f",
+      "bytes": 38985
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/transport-module07.json",
+      "sha256": "1b1d274f4b1481b545664baf03a74ee2b5e8b15076ec65b3fc444ddc1b7cf3a4",
+      "bytes": 46804
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/transport-module08.json",
+      "sha256": "50c734f92e2ba6589b42414f96745f2f4099d64f4f4d40582a94d2e1dbc4d85b",
+      "bytes": 43015
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/transport-module09.json",
+      "sha256": "48fcc9fc6336ed527e1cb384f35b95853144d725e06ff8d650d809e670e18825",
+      "bytes": 38789
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/transport-module10.json",
+      "sha256": "a4558fc85115def9d1d5f6ab4dd347cb6d18507a830aca281f795551f426da13",
+      "bytes": 38290
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/warehouse-module03.json",
+      "sha256": "bfff841933fcf8c5dffd102a7c67cd0f584a899e9f8a578ccb5d9beb36df3c61",
+      "bytes": 33633
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/warehouse-module04.json",
+      "sha256": "f071fe20dd099e8eccb67b1c743eaad712bb8585ac77c4527ba318ec6805bf94",
+      "bytes": 36784
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/warehouse-module05.json",
+      "sha256": "a58a9d911a2c72c6298f59ee36d43b2446922c39555fdb5ede17cbdb4ad62c3d",
+      "bytes": 41578
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/warehouse-module06.json",
+      "sha256": "bb7b097895b27c0131165f60c9d7303a25384716ddfa6c486d95c1e76d91d215",
+      "bytes": 38333
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/warehouse-module07.json",
+      "sha256": "bb2de0432888efcbd196c00ba52c2aaab28c0cae66e5ae5e73fde4122f98a117",
+      "bytes": 40392
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/warehouse-module08.json",
+      "sha256": "975bef2aa86c8c12ac7ab4d65fe769791991d33f767245fbd7624debd0c868af",
+      "bytes": 41527
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/warehouse-module09.json",
+      "sha256": "03f48b42b476da155390d6b6e91dc3b80e9b6a592df0e81b8b54022916fb2273",
+      "bytes": 37052
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/expressions/warehouse-module10.json",
+      "sha256": "23f05efb4b11d23df5486a91c142f80d195c9ee28b70c73446e04930963183f5",
+      "bytes": 34909
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/accounting-module03.json",
+      "sha256": "4cc8f99dec1d458ec45d3b9d89ac3a3e6d58d1b4936a4ce7ae8ea9486f7024ec",
+      "bytes": 71600
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/accounting-module04.json",
+      "sha256": "fb43b8f738a0345ed29f28b24b5dfc4f05a30341b55707040dfba8ddc95865bb",
+      "bytes": 220059
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/accounting-module05.json",
+      "sha256": "42d69fe15d0f9c60cbfdd9e6c36a157ef2020eb1b9401602c405b4a89f3c0d74",
+      "bytes": 151767
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/accounting-module06.json",
+      "sha256": "f06b5538e247d7360d7ce94794b8943a786502b4fe9361282824fca7233f25de",
+      "bytes": 193139
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/accounting-module07.json",
+      "sha256": "635e272515e1a57e7fb299662925f55d0271dca7115f9707c2f52ac800d9ac2c",
+      "bytes": 261919
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/accounting-module08.json",
+      "sha256": "13fb14296d9cb9d03d3e8fb2477605783893fb1a00a2647d972cad84288310ff",
+      "bytes": 207115
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/accounting-module09.json",
+      "sha256": "65d94e67b3cce4669a723541f474dfac2534bdca115a4bc456ced67bf8c18bfc",
+      "bytes": 234643
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/accounting-module10.json",
+      "sha256": "cafedccbb50711af9d8f1f7310dcdb6bd60f91f2751ea35e8f6d413679db4f11",
+      "bytes": 187518
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/caregiving-module03.json",
+      "sha256": "8428425d59d1bb8a0e5532c213c2bf1ca15fb5df3236d6b56822b521b76e1337",
+      "bytes": 135081
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/caregiving-module04.json",
+      "sha256": "e825d87302ffa9dc0cd91c67929b51a68188e9639672064c5f6e2a325a3c71e4",
+      "bytes": 104752
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/caregiving-module05.json",
+      "sha256": "3ed722261ea33bc53de1bab193ac016291b03e7861f3f3e4dbc135e115a39c22",
+      "bytes": 84311
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/caregiving-module06.json",
+      "sha256": "1ef9b196737342becc36981abdcc17cde7b792be40465d89f52994650502145c",
+      "bytes": 135750
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/caregiving-module07.json",
+      "sha256": "2bfcbc82cb659d7877bc31940f1d030485cf0cee220d40e6ad7c9e54f621b328",
+      "bytes": 78024
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/caregiving-module08.json",
+      "sha256": "8773a479f87276a398733646eba80d1e1476813dd7d48ac03c92b4886b07121b",
+      "bytes": 80315
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/caregiving-module09.json",
+      "sha256": "b9b2176be88aa624b9af7aa768e41118767273a19522a091ead55d27b6f1eac7",
+      "bytes": 50266
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/caregiving-module10.json",
+      "sha256": "8a129963ae322e5549dca9cea242985585534a81016e2f740c3bdc729aec298f",
+      "bytes": 62080
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/cleaning-module03.json",
+      "sha256": "f5f3698bf04449785873d3b286efe7f7dad4cce59c0d3c24f796cf3c60142861",
+      "bytes": 163054
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/cleaning-module04.json",
+      "sha256": "6c9766213049425e3f560f4486ef20843e2e6b346bf11ba2b221236aae745e04",
+      "bytes": 160827
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/cleaning-module05.json",
+      "sha256": "7665d8387005bfd18c4937a9b91101f78e58ee485fb692238bf5fdae92e54846",
+      "bytes": 106233
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/cleaning-module06.json",
+      "sha256": "de86b7447515f0e78bb5025a3f0e337790589484754bc1d54f85af7bd400ca06",
+      "bytes": 201971
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/cleaning-module07.json",
+      "sha256": "9752ef12caddeb4d47c46db792b88aafe59db475a847ff70054b6e9cad460dd1",
+      "bytes": 132009
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/cleaning-module08.json",
+      "sha256": "6a0432e6a17f9407b7d11657c54206f02b26aed40a55c5597ad4496c2cbb01d0",
+      "bytes": 85071
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/cleaning-module09.json",
+      "sha256": "c8d04d319af583403f24b10f96e04475dabe05a2aa4cc566174e30996308c825",
+      "bytes": 84018
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/cleaning-module10.json",
+      "sha256": "bbd9dea2d575fa1978d02c3f3f139dcd4ccf7b23047d628b84e3f6836d8308e9",
+      "bytes": 77195
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/clinical-module03.json",
+      "sha256": "03186681146fdef00322ade1c5ccabd69e75fa149a7790845d03d02220af1be1",
+      "bytes": 107745
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/clinical-module04.json",
+      "sha256": "f79af0f3c91cb230ac27fc7d8b3ec28aef9cf102b9fab156aa46094f7c1e38ba",
+      "bytes": 72329
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/clinical-module05.json",
+      "sha256": "716a9479aea913940f8acd9979d9782538340004c24deb51253aba318c205c09",
+      "bytes": 120842
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/clinical-module06.json",
+      "sha256": "fc18da97d63c5dc34ddc2959eae9cad7948a07a024e50c70fbac751771b18830",
+      "bytes": 84021
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/clinical-module07.json",
+      "sha256": "fcb51b72023b70c1b4c1a43406f664996a824565e5b3f819353c53fd2eda83cb",
+      "bytes": 208517
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/clinical-module08.json",
+      "sha256": "cccbdcda1ec538cd5260b3fe4f432749e1e0d8c8277554c4c4d15fa510458f94",
+      "bytes": 74100
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/clinical-module09.json",
+      "sha256": "93be37931ea8113950d7288db9b678a5ccf145eaedd37be53614643397693cb8",
+      "bytes": 16356
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/clinical-module10.json",
+      "sha256": "5376f7d761e1d791c0f8bafed53f0fddd0dd94d24da8a980425250b393623a3f",
+      "bytes": 78755
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/construction-module03.json",
+      "sha256": "0b0944ce4f55b31afc1da3284380a4c13f128fed53492ac6563bf975d0711a4f",
+      "bytes": 242754
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/construction-module04.json",
+      "sha256": "74873574616d05312c92e2c27ad42264a7d83d33bbc6e1c842854502a4fccb32",
+      "bytes": 236157
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/construction-module05.json",
+      "sha256": "0b833f58ce9176ddc979eaa23935ae5b6b9b1b1d1e3e3e374f598cdc31d4243a",
+      "bytes": 167933
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/construction-module06.json",
+      "sha256": "89bb536140f8101a48b04da1d0b43223fbc271ab402789bf5d247e02ce63cbeb",
+      "bytes": 230567
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/construction-module07.json",
+      "sha256": "01accf5b6969b0b7058e72175f1a26ce95ba6f70e3903e661afdcd25bd5c491e",
+      "bytes": 266633
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/construction-module08.json",
+      "sha256": "7f7da9f908ff36796de8479c25275a3df462fcf5b74375e92c226cef3cb7f3df",
+      "bytes": 100608
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/construction-module09.json",
+      "sha256": "622727048c41f1285cb637b707497be393a2e99412373e8444194a4dc67b63f4",
+      "bytes": 223518
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/construction-module10.json",
+      "sha256": "b4f7349d1a5cdba17f86d3c8ad16f0422d5f974e3a91a1bcf5ec94fa9512fe9f",
+      "bytes": 243940
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/customer-support-module03.json",
+      "sha256": "f4479b3487ff4153dd7bdb8651bd49d66dc09d133e82cb6cc7a1e8d43ed3fad0",
+      "bytes": 87785
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/customer-support-module04.json",
+      "sha256": "d35983572f3fd2817dd56dd657e3584f1ddffde5480927d9c4b5d726d2c99221",
+      "bytes": 51785
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/customer-support-module05.json",
+      "sha256": "92ac90d8b3b9677d3418f1c2c5a878a832f99c81e27c047a781f55c9c65d8a81",
+      "bytes": 133891
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/customer-support-module06.json",
+      "sha256": "e81eab83922b203efe5a0dc2cc7bc672bdb2169b06917a6d05799f944edf78e4",
+      "bytes": 100351
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/customer-support-module07.json",
+      "sha256": "a608e8b6aaed2d564c009b6ffc415d9b2f0e8b26f3ed86d25413a63e69f0314c",
+      "bytes": 147410
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/customer-support-module08.json",
+      "sha256": "c9df805ae1b8c42e886e591791465deb78fc996dc8053324b36a92324f135a3b",
+      "bytes": 55110
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/customer-support-module09.json",
+      "sha256": "b645299a3346a8cdd286feeb1a39f1b9cdbce82f6f5000b02e7090a0b8ec8755",
+      "bytes": 44575
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/customer-support-module10.json",
+      "sha256": "d304e760e44595155f7db38456aedc07b99753fdc5b766d25316992e9c68b38d",
+      "bytes": 85787
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/education-module03.json",
+      "sha256": "b26e1e8565987d7955e3c28a9e9931bb3834f8a4fd8e6b5327c71f53bec052d5",
+      "bytes": 250931
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/education-module04.json",
+      "sha256": "45be334bf3575302e555f5492724deaf219deed63856de67029247a9e7a26b6d",
+      "bytes": 209222
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/education-module05.json",
+      "sha256": "39fbbfda84192007ff0544ae536415b6d59074e41ed9ecb68c90e59262f499d9",
+      "bytes": 174265
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/education-module06.json",
+      "sha256": "b04860128a4d35548902cdd24742e626ffa0d8f32f7f8323cb6f5fcd755cefab",
+      "bytes": 239604
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/education-module07.json",
+      "sha256": "67a67abf3a832a8089f807095afc7b299490a57a1619f56a6457f75cf82221ec",
+      "bytes": 162563
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/education-module08.json",
+      "sha256": "948c51b4e91ee6eef65084fb35b70407c2acaf7df3ca976886cdf6db97b74693",
+      "bytes": 150384
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/education-module09.json",
+      "sha256": "3a86d73ca0fe5e26c06bab62d2da5abc4cd09a11be34aff304d441a2468d73d8",
+      "bytes": 96746
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/education-module10.json",
+      "sha256": "b5e5dc4463ee4ac0a46dab6eff484bd5db2442f298938117063eccaa2c9ddb13",
+      "bytes": 235954
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/food-service-module03.json",
+      "sha256": "d125814b112b99a2000bdadaf0897641e7f2cecb277c44f79e40df93e33e4323",
+      "bytes": 116047
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/food-service-module04.json",
+      "sha256": "d2926ff66f0d6d0cf6bb153f06dcd70c071481f21f100afeecc45f5e6c01087e",
+      "bytes": 104900
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/food-service-module05.json",
+      "sha256": "eacc026a108befa831a135568459eea2ac729d82f09b486fefa32779ec19ff64",
+      "bytes": 84580
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/food-service-module06.json",
+      "sha256": "7c933a50ed34204153d601534410733812b7084532349c768669979a963b129e",
+      "bytes": 112473
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/food-service-module07.json",
+      "sha256": "fedb8229fefd4cc7259458f136416cb537dbdb7f1ef38902a9c6e09fd0123775",
+      "bytes": 41318
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/food-service-module08.json",
+      "sha256": "b32c8727152bb1576483fbe64c50d664510e5a5a2801bbc8ef2a79afeae6daaf",
+      "bytes": 74838
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/food-service-module09.json",
+      "sha256": "bb5f405594fa89d7324368292e714afff03a74eb19185d42bb7273adb3480d23",
+      "bytes": 42277
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/food-service-module10.json",
+      "sha256": "f2f0a106ce4558fa0ced817f6afcea0ebed000a6e99b69961e521743a9a6bfe3",
+      "bytes": 72386
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/foundation-module01.json",
+      "sha256": "a7853d049a715ce992978744c93f81cb481a6cae2b97879cdbc83d2a81629b70",
+      "bytes": 313832
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/foundation-module02.json",
+      "sha256": "9f698ae9b2572d279709b521e6b7d490ffe3d05b1a8ed362add36e07fd4accbc",
+      "bytes": 372196
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/hospitality-module03.json",
+      "sha256": "101f699dad56a7cb618c6a76c3bc6f099eaeceeea2016539e3c10d02fd4d6f0e",
+      "bytes": 115480
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/hospitality-module04.json",
+      "sha256": "8320e6db164e8ee2539df478c8385cc55ea9c3e64c8339f31bac033de3a4e13f",
+      "bytes": 138906
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/hospitality-module05.json",
+      "sha256": "98fe9ae8a99d3066bfd2a3a65ad946ae240259fe2a7acfe7f4e68d477fea7c28",
+      "bytes": 53759
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/hospitality-module06.json",
+      "sha256": "7a01f11696ea45684ec5ce491b6de161138f8073770ff598f180304587b4a3d8",
+      "bytes": 113014
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/hospitality-module07.json",
+      "sha256": "60391f79d08ef68c40d9e6dfbee4388b3650a8a7981d827a06e5960daa093199",
+      "bytes": 123440
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/hospitality-module08.json",
+      "sha256": "23833f01c3f6a77da2029d6ed9d205f67854202784da424467967be6b7a46674",
+      "bytes": 37174
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/hospitality-module09.json",
+      "sha256": "0ee3c872e5fd10553838ae9737f571462fe1581a76456329cc09071e09f23b29",
+      "bytes": 70088
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/hospitality-module10.json",
+      "sha256": "410378efd79cb13fd8ab8b72ed5d4a405c37a97751bb90a037a77bf9793fb70b",
+      "bytes": 69235
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/hr-module03.json",
+      "sha256": "42594da833f6fadce591bf89133d83a9ca3d871519cb72a34092b3de301387df",
+      "bytes": 97857
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/hr-module04.json",
+      "sha256": "049b2ad946715c2beb115804911a8b0282a50da189e56d2b90eaf0ddc4c7722a",
+      "bytes": 228055
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/hr-module05.json",
+      "sha256": "b1cb299df79f6c55d60595fef760d54ca2c508260ea0a9d712a3a9db55ad5d69",
+      "bytes": 152168
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/hr-module06.json",
+      "sha256": "3e2b050646acbd27556b31558f91641b0efb14cc55f45320829fa07f685b88b0",
+      "bytes": 235900
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/hr-module07.json",
+      "sha256": "3db53c6f134efe8407e6b89b6fe38f0836335c987b314cc18fab634eb1ca12f1",
+      "bytes": 187082
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/hr-module08.json",
+      "sha256": "d13db40c4cad4a29671a6340191e7faa59acdddc9bfee0fa06d9593e4e994f4b",
+      "bytes": 182272
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/hr-module09.json",
+      "sha256": "c21d9ab234047d79f63226ac0d0247c2f8060fb926fdaf3fea9ddf2f3a47064d",
+      "bytes": 200733
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/hr-module10.json",
+      "sha256": "89ead45befdca574f13395ab312f4792928526cbebeeaf4593890538df25d8f3",
+      "bytes": 214580
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/it-support-module03.json",
+      "sha256": "b339c1b0b6d0a399950fa1d80b9814cc68eb88af1151dbd1bf5c31b04ed70bb3",
+      "bytes": 99585
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/it-support-module04.json",
+      "sha256": "94cd611f178fdcf11c08ae46f18ed43cee20a7eb7ef3c6bf2bc743de3bbf35f2",
+      "bytes": 172914
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/it-support-module05.json",
+      "sha256": "bfee9030c747cdb846b52f7b5ada761fa6c994ae4d294705ca885fe1203d98f4",
+      "bytes": 135455
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/it-support-module06.json",
+      "sha256": "d665d894b3c4f047a2a2e82ca4f4cabb78ba5f3401a9fc7e6cddde52fe3e5b54",
+      "bytes": 205957
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/it-support-module07.json",
+      "sha256": "c184096c81c9a6b1d66b1166efd3a84a9030287157a26c0c374754ffaf12ad04",
+      "bytes": 185651
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/it-support-module08.json",
+      "sha256": "7389aa0b02706000ac5ba43ad4555e4a6c16f5b21f107e11cf30947db2ea68dc",
+      "bytes": 119153
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/it-support-module09.json",
+      "sha256": "df40d2b2b257083f60ea49c98d9a37b113d37a7eb327103eabb2bc379c3c9b4e",
+      "bytes": 139410
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/it-support-module10.json",
+      "sha256": "28fea8724bbb62e9eec9f841ae75cab57c8242d790c97cdc9de648ee7bd58c0d",
+      "bytes": 117332
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/legal-module03.json",
+      "sha256": "66ab1d636e721a2f6d645fabd0d8e5042dd105b36f6ee94e46233ac4ee48b060",
+      "bytes": 216376
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/legal-module04.json",
+      "sha256": "ecdde5edc905a15fbea435b90cf39070e41dbb1612640d4eda4546b856e9bf6d",
+      "bytes": 126296
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/legal-module05.json",
+      "sha256": "37bb41528fd361f0205afa300c564e07cf982b9c24f15c0c68e9840d39644d0d",
+      "bytes": 285859
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/legal-module06.json",
+      "sha256": "6f814699ab08b55e525443a56c6fdc306bc1c08852da65f09bb257c06f9fb0f7",
+      "bytes": 249398
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/legal-module07.json",
+      "sha256": "bb91d3a48796a996f97ec288ab8146f8d2bff4ce03f3539e084607ab6ba1fc3c",
+      "bytes": 224093
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/legal-module08.json",
+      "sha256": "22bcdba0591d9db891ddf3e66e5073807f114831fcbe9c44ff71d71e30ee642c",
+      "bytes": 97185
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/legal-module09.json",
+      "sha256": "b6c45105758a975ea48f8a61928f753c5d1e39e51e6519c3f7e08ca27716d2df",
+      "bytes": 305764
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/manufacturing-module03.json",
+      "sha256": "cf7a38ec0c5755f6e4a5f23d25d2559b53d5c41e78849db64fe35402f7d8c5ef",
+      "bytes": 197341
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/manufacturing-module04.json",
+      "sha256": "78719a105fc37ecfaa34e638103d03e3de221c5e00ec2cba4ae75778423e8af4",
+      "bytes": 175128
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/manufacturing-module05.json",
+      "sha256": "a7b82590e2b11cb04f0306bd54a49566fbc9f359cc1c37fe07afe75d4bd297ab",
+      "bytes": 110855
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/manufacturing-module06.json",
+      "sha256": "eb09a5f92b898a50426522eaf3b2108498c4207f9841dc93af5db1fe9566c329",
+      "bytes": 212915
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/manufacturing-module07.json",
+      "sha256": "c20e16d6e03b1a4a6f89500166f92e31c654ed68e417624ab4d2d72fd94af9d6",
+      "bytes": 160580
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/manufacturing-module08.json",
+      "sha256": "19f4eb2364bdf0fb0601c66f5417196598d95ee7754630bcdc1ffe9b2db3da08",
+      "bytes": 167442
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/manufacturing-module09.json",
+      "sha256": "8e62d0ca4c9b9bfcccb8da325f422d52ee2d21e350053d7d56d4ce313a535465",
+      "bytes": 118056
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/manufacturing-module10.json",
+      "sha256": "2760ec647ccb06c9cb798a13a13c7d92e7ef0ad734ae1f3090d4b3d696755535",
+      "bytes": 217435
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/nursing-module04.json",
+      "sha256": "704045fa5fd9532a8f1763f91a85721dae60226bd63ae5f38e6c276f47ab2a9d",
+      "bytes": 219676
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/nursing-module05.json",
+      "sha256": "7bb2a58246bd1053b2e4f724e25229baf904f460692a2afb5d5bd97163586d55",
+      "bytes": 229902
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/nursing-module06.json",
+      "sha256": "2194c71291392832639cb963595b4852832759c10ebe775ad4df8535a274fdd1",
+      "bytes": 210275
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/nursing-module07.json",
+      "sha256": "43a41dc9e2bd347e0c67adb36aa9dbc04e3d57d95b5d60e348ed95362044e6c1",
+      "bytes": 256455
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/nursing-module08.json",
+      "sha256": "a5ab09d52a466091d36229b528e31f6254bac1c3c5a963c87d9aab9819f8527c",
+      "bytes": 236268
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/nursing-module09.json",
+      "sha256": "0c239dece5e67d4ea6ea494fafbcf192212edaefb0c24af819cdd41f608ca188",
+      "bytes": 237350
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/nursing-module10.json",
+      "sha256": "aa43569ad7c2e8da1e7eaf1058dd7e11f8dc0c07f52b29923ec39927d530c986",
+      "bytes": 212165
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/nursing-pilot.json",
+      "sha256": "f0777eff27fed1a46113220f5343169a9cae9af4ed1c5721c5fb1c487aba6333",
+      "bytes": 176266
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/office-admin-module03.json",
+      "sha256": "f4293e3dffc5cc2976d36d9ef6943f979730b8705cae44c0bce0aa087d46dd7f",
+      "bytes": 154037
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/office-admin-module04.json",
+      "sha256": "a24e01786ca007a7488ea677ed399a909ea01c8a747189e0e4ece5fa55ce38d4",
+      "bytes": 211721
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/office-admin-module05.json",
+      "sha256": "59707f4c785caebb298c01eaae4a62e09cb95cbb32998d19f2dbe9ed1931666f",
+      "bytes": 68911
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/office-admin-module06.json",
+      "sha256": "47233b4f0c44fb95bf88ae0bc12340e49da8f5ec6777836081fd0a9f1a1ebc9d",
+      "bytes": 131217
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/office-admin-module07.json",
+      "sha256": "d20cf0c1d1f7f61fc2a36e0ce6801b4a2aadc754c517193c38738fd988aef907",
+      "bytes": 66437
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/office-admin-module08.json",
+      "sha256": "c5fe0dfed8e50bfd3d0a5504564138c7e490bb3f8e4a9beccb1e8f583b021fc2",
+      "bytes": 25943
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/office-admin-module09.json",
+      "sha256": "b8487a2a6fc0370bf4a1a7c5bebdc182736041d152df9b5c7abc9407acd0f5e5",
+      "bytes": 104381
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/office-admin-module10.json",
+      "sha256": "815e5a89ca238e5518aa097a4b4219c3438399cab7f81f6d424259c990cc2dd2",
+      "bytes": 59974
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/retail-module04.json",
+      "sha256": "d6abaeaec930a02a47460c9a5751d7b0cd55693205e56283249da30768efe4c8",
+      "bytes": 322464
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/retail-module05.json",
+      "sha256": "78967500d9d48f2bcff24d2dddd633f67a12712fa702e19f6dac0e8e0ce8a215",
+      "bytes": 341482
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/retail-module06.json",
+      "sha256": "e789916be9423c0e4153972fded7032d64f2e1fd16ad4919d1bdc63143b23da5",
+      "bytes": 317054
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/retail-module07.json",
+      "sha256": "6ddedb6643c345d26fccb7f9163ebbb35199b68bc148cfb4357a830acb5059b5",
+      "bytes": 380328
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/retail-module08.json",
+      "sha256": "fa88cf2d1900b0b25e1b4e3a2ba0192c4b8ee03d612b39b9e5eaf55a3e8440e6",
+      "bytes": 292281
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/retail-module09.json",
+      "sha256": "76888177494656000227c04ba63e159f88d6304b8852c07f7f7b20988fb23cff",
+      "bytes": 275519
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/retail-module10.json",
+      "sha256": "7fd709707cb37d463e8d57207889594b0d644e8a1170dc9982f2cf407675fd6a",
+      "bytes": 264078
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/retail-pilot.json",
+      "sha256": "7efcb9f1ce7cd931982ca6978278f547e05745059762c3558f5ef1864faea897",
+      "bytes": 358948
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/sales-module03.json",
+      "sha256": "99c64649e3cb5d428feac5172360430046f9c67c853dc53879581d36d72f4c5f",
+      "bytes": 82396
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/sales-module04.json",
+      "sha256": "27f85ca90addca04177098c8171f1e9530f19aeba3aab92d9f751af665e7d5d3",
+      "bytes": 227906
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/sales-module05.json",
+      "sha256": "94697557f7919feaa41cb3de0ac6dfdef288b728fc5e022c2c9de18d7c427a55",
+      "bytes": 141436
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/sales-module06.json",
+      "sha256": "cb0a42100851c816724b45218ce1229f22e95fcf6aa6cace9e692def8617e1e7",
+      "bytes": 194443
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/sales-module07.json",
+      "sha256": "e2fb08cdc9f4787163cdb54093ae2135beed3e2cdbbccc23b5d392828401f2c8",
+      "bytes": 208213
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/sales-module08.json",
+      "sha256": "a2aaf44c2bf3592ddd4a8523ac0bb71c3203b3113c31521725cf0c740328e39d",
+      "bytes": 196181
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/sales-module09.json",
+      "sha256": "95d956baeee8934385b0d9781a95aa73127ce63635181c7759627bb95e5e1bc3",
+      "bytes": 196079
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/sales-module10.json",
+      "sha256": "ba8cc970a165941c748343c2eddc9fdc87ca7b1bbc93baf15d065dc4032ad610",
+      "bytes": 113725
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/shared-coordination.json",
+      "sha256": "b0bae7097233f766d5be5f9119d65d6acf94fc6ad95811aa9b70a16ce8aa47cc",
+      "bytes": 15042
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/shared-pilot.json",
+      "sha256": "8c25b6341d72cb8ef07e6710f6a0b7ed9a05ecb61141e6317f17c826419f5d56",
+      "bytes": 21356
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/software-data-module04.json",
+      "sha256": "9269efb19e6ebf92e594f782e88cc26e849d134363ca527f1e38876ada7d502c",
+      "bytes": 154401
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/software-data-module05.json",
+      "sha256": "c36f78dd78561d58d4b4157e6813e84876bfbbef1374b048af7b7331b7753f1e",
+      "bytes": 162659
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/software-data-module06.json",
+      "sha256": "24c3e7225afc2596cc4954969581ae03aa18b3f45cfe3a1d077a0da960666c95",
+      "bytes": 190155
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/software-data-module07.json",
+      "sha256": "54605a91a455b5d329539e10ef5838c9e5acd40bd6e19a62b51c62dcebefa274",
+      "bytes": 159810
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/software-data-module08.json",
+      "sha256": "d846ee927986ed1521cbd725df3d75637ff8a421f3218534cebff16b078f8562",
+      "bytes": 215489
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/software-data-module09.json",
+      "sha256": "af362050d3a94907421d654a567cc7740713cd528044ec869f80a815ccf26e2d",
+      "bytes": 131462
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/software-data-module10.json",
+      "sha256": "e30f0d9e20bfa8181dbe136c9911558ccc908e28a7eef7523af7e110243b57d3",
+      "bytes": 171647
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/software-data-pilot.json",
+      "sha256": "aed0680a69532b9b9d1bb781c212ee90ad65895833419baf2b395b338a7dc51b",
+      "bytes": 221226
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/transport-module03.json",
+      "sha256": "7c0d08e06aa810721c58ce633807eeab35d5c7016b1ccd6836aed27c93596279",
+      "bytes": 120256
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/transport-module04.json",
+      "sha256": "524b00f000fade0ac759feefc9f40c396c41529e3b579949635e2c88d00d45fd",
+      "bytes": 68927
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/transport-module05.json",
+      "sha256": "1aa36ed6c8375f735acfc75ffd1a143635ddfa259f2824386efffabcbc567ed0",
+      "bytes": 49955
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/transport-module06.json",
+      "sha256": "4b40e71517e50c29508e6ef4c63e39148b210c56d5a5c7ee5255bab1da9e5f0c",
+      "bytes": 171614
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/transport-module07.json",
+      "sha256": "5b893027bcaaaa0e6dde9565fe28adb7bd44ba2d18b3547a5a24a7f0244111e3",
+      "bytes": 54588
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/transport-module08.json",
+      "sha256": "ed3ca8f512eefe53d84b9a9d82929734fa7f595815fe4340b0aed31cb3513cd0",
+      "bytes": 41710
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/transport-module09.json",
+      "sha256": "7b1cefebaf077e1d40fcb210c7d803b47a1e901e9c1fc4b9d2ec14390ca0b256",
+      "bytes": 45817
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/transport-module10.json",
+      "sha256": "6d3404a9dc20134f75569fc56835c1c031bbdaf7305dc526a7bf9700e104ce88",
+      "bytes": 56123
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/warehouse-module03.json",
+      "sha256": "1c0c0b759817f75dafbf7e873b301856f3d96a773dcadd3134ba3680c946790d",
+      "bytes": 131004
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/warehouse-module04.json",
+      "sha256": "0af14ec05c68295e5ecf26e509118c167c2cb624587b90369c59bed9049cf2fc",
+      "bytes": 46064
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/warehouse-module05.json",
+      "sha256": "e94963122f4a08e9a5135d6f1f5240800c6ff04854f2369c97eaa36ac4237aec",
+      "bytes": 77071
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/warehouse-module06.json",
+      "sha256": "1ba55aa1730c51d10e116aeb58892d5db08d4875d1518287b7e98a6ddb7e8f0a",
+      "bytes": 158512
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/warehouse-module07.json",
+      "sha256": "6bc27059756162e621eb5b5461a3ea8e25da1595bd41224d2e22d96139c47ef5",
+      "bytes": 90578
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/warehouse-module08.json",
+      "sha256": "07ae92ab2bf9c3f58a6df4893b4f128df7ff95ea853d9aa570224a1258cff397",
+      "bytes": 49645
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/warehouse-module09.json",
+      "sha256": "b0f9b3b00e17b38c5a7ebc38f6f9a5f83b1a7b1f4ed3a4469d93f73f77905b60",
+      "bytes": 71906
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/lexemes/warehouse-module10.json",
+      "sha256": "cfa111f8d4d2d2127ef8a4c191d7f66117749e103c90cb0af01143b10c414f97",
+      "bytes": 81838
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/foundation-module01-attendance-language-2026-10-17.json",
+      "sha256": "cbb6efd22a55d7d6da77459d2da062ae435e8617091fbf7a2508715d0a8c3195",
+      "bytes": 43889
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json",
+      "sha256": "ccd4ab160b89efbc21289c51fd576933d7da19734567ee986656b4462ad06083",
+      "bytes": 3209077
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/foundation-module01-language-first10-2026-10-16.json",
+      "sha256": "c6c6083fe03324ac5ea5d1e7c5ec7cf2bad92559616d8437ce32d572fe1b3d92",
+      "bytes": 3197142
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json",
+      "sha256": "8ab99dbd7a7ea692401c594259986328d43e04e676557c51d15aa675fc7bf83b",
+      "bytes": 2216910
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/foundation-module01-language-second10-2026-10-16.json",
+      "sha256": "528267cabf4ef12daa9977da23267131c3b69d223f76d1a4a83fcac9ba9973e7",
+      "bytes": 2755242
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/foundation-module01-language-third10-2026-10-16.json",
+      "sha256": "d821f85146ef5e5e14ee5b4cee9ce129d0c6652f683090bc44fb7af14d6d14f1",
+      "bytes": 2367179
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/foundation-module01-supervisor-language-2026-10-16.json",
+      "sha256": "2a7c020cad817b427ccc718c67aec77bda96e43b4c6c8614ad8231b13e576062",
+      "bytes": 148295
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/foundation-module02-language-first10-2026-10-16.json",
+      "sha256": "fc5e42cc6ba98bbff87c432f0f0555a8e468714eb928b905d467a4d98a734f85",
+      "bytes": 296668
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/foundation-module02-language-fourth10-2026-10-17.json",
+      "sha256": "51d6569514875bc8bceeaa149cef44f7863d28d0e523e4557472909607efeece",
+      "bytes": 2337675
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/foundation-module02-language-second10-2026-10-17.json",
+      "sha256": "7b2c674a5249ef8c59afc2ab9e620cd2ed8d4e6a55704a231ca53f00005cd4fc",
+      "bytes": 866140
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/foundation-module02-language-third10-2026-10-17.json",
+      "sha256": "f264f845f89647880ea280aff7fcbadc66b6c28bb4c52f7aba5a950b7518213d",
+      "bytes": 1059797
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/hold9-basket-grouped-content-validation-2026-10-16.json",
+      "sha256": "a0fef4fbcc754b49b2e3aac9f8de54f4d2972f03128b6a4f2e4a456b3562a92c",
+      "bytes": 2124
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/morphology-hold9-2026-10-16.json",
+      "sha256": "e6077218a39b035e1f86d043c1216fefc80d5de16a6b97f62c2e3de297417a3e",
+      "bytes": 113154
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/morphology-hold9-review-2026-10-16.json",
+      "sha256": "3f42dcfeeb62c2ae965fd6eb5701fe511b6d5dbb47755a2739050dacfa3ed07d",
+      "bytes": 181109
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/morphology-revised-second-2026-10-16.json",
+      "sha256": "f364a28a279e88823c8de71f52fe1f3771739d8f9e1be7ed1b1bfc1ca960cd07",
+      "bytes": 83995
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-approved-audio-2026-10-16.json",
+      "sha256": "6d4af5ffcc27546f0cb0215193c604d5859e4f4440bf84f99e4bc8102d7ad671",
+      "bytes": 7120
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-bag-wrap-approved-audio-2026-10-16.json",
+      "sha256": "f31b861437044d9afa10647cefbe75713dabd2398da93845c87081758e776081",
+      "bytes": 314636
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-barcode-image-2026-10-16.json",
+      "sha256": "c9582598af7fbe9158ac1202987b00e3d797fe96cdb6af2928a065c013911e8d",
+      "bytes": 60220
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-card-reader-barcode-approved-audio-2026-10-16.json",
+      "sha256": "6987e6622ad549379290a17e98bb849b1bd065cd382595412141eacc547383fa",
+      "bytes": 337595
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-cart-basket-approved-audio-2026-10-16.json",
+      "sha256": "b08dd8188b58c7886bad8512b0fe0ee2c767fbb4ac0a56abe84f469412bf3096",
+      "bytes": 328578
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-case-family-review-2026-10-16.json",
+      "sha256": "caf7ba1896e63ef181774059d02defb3c6fd99adcdf3dd4d2b03cca41dc23506",
+      "bytes": 455053
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-cash-register-image-2026-10-16.json",
+      "sha256": "5e63276edb93d1f61bd605d44bbaa47736e9bfa97835a2729f175d42d23ba065",
+      "bytes": 64391
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-checkout-image-2026-10-16.json",
+      "sha256": "eb7af638989a02484bd10f195e0a1b2272a78f40770b5c08e8ead909b63bb487",
+      "bytes": 99680
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-counter-checkout-approved-audio-2026-10-16.json",
+      "sha256": "96993b16eb8abc4bf90f32200144d375a426f4e0bf2d70b958d1899210d42259",
+      "bytes": 335875
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-counter-image-2026-10-16.json",
+      "sha256": "5bcc8b2d06a306259a57d958b09db863204519e095073149eea4510af2fc2afb",
+      "bytes": 67403
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-module03-combined-validation-2026-10-16.json",
+      "sha256": "664b4a1a6232ef18759d0c333e1fec422661558ec5862a2ca3ca7cd67996772b",
+      "bytes": 1852
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-module03-editorial-2026-10-16.json",
+      "sha256": "6dbe389c89159020c3abc593185aa2441a4a047281fd5ae6d8d9ddc40c04a62a",
+      "bytes": 891004
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-module03-language-review-2026-10-16.json",
+      "sha256": "d272c56eab196f5e824694bae62c9a7944360aea3e3c35924f6ba64bcd4ed799",
+      "bytes": 668460
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-module03-morphology-fifth10-2026-10-16.json",
+      "sha256": "14c6cf6d25085f8df8efdf96ad4a9be3699e14016f00b5ddb58303d2b0eac4d3",
+      "bytes": 6180180
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-module03-morphology-first10-2026-10-16.json",
+      "sha256": "f46500b6845133c4db731882c42848b5c84cd29ad1ed0c61ad444a0ae08f828d",
+      "bytes": 200609
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-module03-morphology-fourth10-2026-10-16.json",
+      "sha256": "34f16c20451400665939ab8c7f97e3317f61a9821b59317c8567800fd8edab4d",
+      "bytes": 2888153
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-module03-morphology-next10-2026-10-16.json",
+      "sha256": "c1b891f918b9803dde926521581a08150d6293e5388c7dacba3dcc7dbac333b3",
+      "bytes": 278914
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-module03-morphology-third10-2026-10-16.json",
+      "sha256": "53f367d7ddf67004fd5b0b8b7f88026ae7258cd35f341cd8feef1ffe71d38eda",
+      "bytes": 788165
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-module04-editorial-2026-10-16.json",
+      "sha256": "14afde2b52a8dee6d5a053501737d1d3e53d56774645f37213e10b76b0da75f2",
+      "bytes": 1190460
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-module04-focused-validation-2026-10-16.json",
+      "sha256": "1872da691fadf731dd4aa67bd534093f03eab92b4362f1aaf02d9af199ee1d59",
+      "bytes": 2342
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-module04-language-review-2026-10-16.json",
+      "sha256": "ceb79c82354b8c681adcc757e8e330bc5c5e6779dbd354cca86dd130cd46bf57",
+      "bytes": 776977
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-module04-morphology-first10-2026-10-16.json",
+      "sha256": "99a075957add70dffbcc8ae2584fac7482cf370c38390b2db6c2ca2e3805dca9",
+      "bytes": 8900805
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-module04-morphology-second10-2026-10-16.json",
+      "sha256": "47ab25af388b38011e5dc4a35840981af482d9bf278ce2083cf08ece425eb5f6",
+      "bytes": 3149998
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-module04-morphology-third10-2026-10-16.json",
+      "sha256": "ddb380b0009d499a1e47e2041f7d77bbf1015d223d9a7835106de8ed681a0ed5",
+      "bytes": 4053971
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-module05-editorial-2026-10-16.json",
+      "sha256": "99468bbacaa37f801c3d0a6d75f070aa5066061dba736cedcb050d8592aa131d",
+      "bytes": 1626906
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-module05-editorial-validation-2026-10-16.json",
+      "sha256": "e27579241f69775e45a1369918f69c46d4397f861bea1970379e8b9eeb4456f6",
+      "bytes": 1880
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-module05-language-review-2026-10-16.json",
+      "sha256": "f947a46da8bc1227ccb937fa2c0c20af13c723d809669af260e8c09093830a95",
+      "bytes": 913155
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-module05-language-validation-2026-10-16.json",
+      "sha256": "c0894c2da263a26fcfbb7e9985b30f0ee09b83f469e276ddde8a7a02731f21dd",
+      "bytes": 2565
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-module06-editorial-2026-10-16.json",
+      "sha256": "29f7cb06584a00bff08ee8637d6db7c041646ec9e63b37d2a36ac7ef0dec08d3",
+      "bytes": 1273341
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-module06-editorial-validation-2026-10-16.json",
+      "sha256": "c9fd9f1e2664000f0b37ba8d0d10349fea06b68b95e9ef4ba12601ef3ffb82df",
+      "bytes": 2549
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-module06-language-review-2026-10-16.json",
+      "sha256": "e52e7a3c0ffaa5f9659ea26d46e37fcb89ae324d50dde54eccb3424cea62c42f",
+      "bytes": 860359
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-module06-language-validation-2026-10-16.json",
+      "sha256": "55e75a180170206f46d4330f89642fd7177eae14f739d710bc604379d03aed96",
+      "bytes": 2652
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-module07-editorial-2026-10-16.json",
+      "sha256": "e08ffdca6a8ed1b4c0595ddd38b2470aff0765c0a83757fd18855b7b605105bd",
+      "bytes": 1742955
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-module07-editorial-validation-2026-10-16.json",
+      "sha256": "b386024da92c9f04e715cb6db862b41a6d02b0f22d62ef192f296b135cfdc19b",
+      "bytes": 2338
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-module07-language-review-2026-10-16.json",
+      "sha256": "0b61eb285419328e9ea3036bef0231c256d80c426bd0dadfaa6ff27997576159",
+      "bytes": 1097937
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-module07-language-validation-2026-10-16.json",
+      "sha256": "54e08cc8558d96583f17cfa03dafc37c85701c9664d3950b9aba9f8adfa799fd",
+      "bytes": 18704
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-pallet-image-2026-10-16.json",
+      "sha256": "ed0762ebb5e8e10e78b65c521c75171cb76ff232458f833f5f935c1cea5b467a",
+      "bytes": 18208
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-pallet-shelf-approved-audio-2026-10-16.json",
+      "sha256": "aa3f0ff1e3d92c7a2cd0761e4a7284e48a05a49457c35b2091eb1240ee1c9f27",
+      "bytes": 331033
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-picture-exclusions-2026-10-16.json",
+      "sha256": "c859aee004f205ddfe078746b041a1eef12bda8b7c94bb318a5c03a1adbdfcb5",
+      "bytes": 146791
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-shelf-image-2026-10-16.json",
+      "sha256": "29fa0f55c39569496ef79b15efbb976c78c74667403a75515a9a8b8e6e4fa654",
+      "bytes": 40239
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-shopping-basket-image-2026-10-16.json",
+      "sha256": "460c735e2cf9d6fcd1f51a01df30f9935b4faeed322434c321ca28606d41416a",
+      "bytes": 15968
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/provenance/retail-shopping-cart-image-2026-10-16.json",
+      "sha256": "1f16d6da7bdc8cedca64022afccb1399af7c24bb015854582a31f268becbbbf0",
+      "bytes": 13160
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/schemas/catalog.schema.json",
+      "sha256": "390ab594b41ef8955d13448882c9732ea0d7ab3841f4d51ec8720a8df5794ac5",
+      "bytes": 3206
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/schemas/common.schema.json",
+      "sha256": "4d27b5255e854f57be7a1778bc3aec6c467d0777c44f79ec8219ae617f6c8113",
+      "bytes": 12377
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/schemas/course.schema.json",
+      "sha256": "4ffebf8bd5fb635eb6db15a70f85a203588dbff3b796cc1e6953aae5459aa24a",
+      "bytes": 3688
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/schemas/expression.schema.json",
+      "sha256": "0b4ecce1acb728ff044732244a4410424473a42c84d53e9a794d8dbadbeef03a",
+      "bytes": 1950
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/schemas/learning-context.schema.json",
+      "sha256": "466af7a175c3b349d41c982a2c61bf4e0028601c67b8ca926f4aa2677be8b1d4",
+      "bytes": 703
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/schemas/lexeme.schema.json",
+      "sha256": "8837fa8779894d7b0d67e9e46d97aefdd7e952b476715df436db03ead4b4ff60",
+      "bytes": 2276
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/schemas/morphology.schema.json",
+      "sha256": "5248a5e3fbbbcc70b63dbb13072f6ae0148a6ba2871eb9e44739bb94f4bbda6c",
+      "bytes": 3928
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/schemas/theme.schema.json",
+      "sha256": "03202db37b6e6b8b1dea3a2058b646807c9da5630fe0e4cba8b40896966aa77f",
+      "bytes": 4798
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/sources.json",
+      "sha256": "310be48d81d29917146db162b26d9927007b68ed12380df4a113458d2de7b330",
+      "bytes": 869470
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/professional/themes.json",
+      "sha256": "2bf6d483cae7b3d38c96945719612a5394a9aa6e2d94d63db9a12b4b55edc669",
+      "bytes": 91201
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/vocabulary/morphology/age-03.json",
+      "sha256": "0901f4f5845451a5195b0ba347052304dcec17cd8aad842225dd8f65c3257c1c",
+      "bytes": 86158
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/vocabulary/morphology/age-04.json",
+      "sha256": "0f0926f7f845372f9648cad790f311c4d4edf682442926a54031d69a46a59dcf",
+      "bytes": 107574
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/vocabulary/morphology/age-05.json",
+      "sha256": "cf29cf0c1d4a4fa1a528c2954d615d45c123073a335d949a29f5538fd905719a",
+      "bytes": 214078
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/vocabulary/morphology/age-06.json",
+      "sha256": "9286ccefd45751d02dfe48448d72019432b0f6ed1ac8b8593b59447fbc6cc50e",
+      "bytes": 316607
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/vocabulary/morphology/age-07.json",
+      "sha256": "0a5b68fb84a9b0fa7f9a8d5523699e1a02eb7ec9dfd34d9539289ec092601afc",
+      "bytes": 356742
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/vocabulary/morphology/age-08.json",
+      "sha256": "f7da5e85f339bebd472d42ca7060e766013b8658d4fd5850680c946363e37ce6",
+      "bytes": 247190
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/vocabulary/morphology/age-09.json",
+      "sha256": "0042f4ef43a0c932360f8a1c0998b6a9d164984cbbf7fd960b4d9168e3e0dbba",
+      "bytes": 229459
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/vocabulary/morphology/age-10.json",
+      "sha256": "b02c37bc5f1a84e55d8aa50dc3a08e9dc02f8fd9009e3312bfc0369ce497b0a3",
+      "bytes": 130839
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/vocabulary/morphology/age-11.json",
+      "sha256": "2118745f6884b7ac8fcf0aa52d71b440f7283202e6d71c8a98b95fe9a45497ec",
+      "bytes": 107297
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/vocabulary/morphology/age-12.json",
+      "sha256": "6bb848a51bfd21f8d85646a06372de2b50085ebd55d56f98b915be0977cd2ced",
+      "bytes": 125608
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/data/vocabulary/morphology/index.json",
+      "sha256": "9f680945eac49d4b4ff471b9b214a1b5851b1999a64adab18d2ed74f0aa8fd5e",
+      "bytes": 84262
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/project.godot",
+      "sha256": "51a407ae3c1fe75179b28fdac305d9204825479f63cc961fec1c581ea4b46aec",
+      "bytes": 145
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/scripts/growth_morphology.gd",
+      "sha256": "cf5140ffff2ca4ac2f9bfa7368d07617fa4d2200659f7dbf47a95eeb3f6f4b8f",
+      "bytes": 4976
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/scripts/morphology_analysis.gd",
+      "sha256": "f3d22c45d79b11e80e967de42840669fb282ceb5afa5891b0622df2959209f9b",
+      "bytes": 7877
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/scripts/morphology_resolver.gd",
+      "sha256": "bbd22c8fb11f96d7dcc4a8d534ba80bc63f0c2ed1b2cc1578e7656c06d7d67e8",
+      "bytes": 10233
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/tests/godot/professional_retail_morphology_tests.gd",
+      "sha256": "db277170d8bc7285204b86784ba2f118cae8f01fa8311eb7ac55f5953cd039a0",
+      "bytes": 114792
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/project/words.json",
+      "sha256": "81809bf9d2c810aaee4f5a5aabf9f0f1b48a4f822dc2325a1c6b714ec4e92be0",
+      "bytes": 645989
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/receipt.json",
+      "sha256": "1dbb1e3a9d34226b77381502edd6a9d745605f0e05d320297519e45106c5bc0c",
+      "bytes": 6069
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/start.json",
+      "sha256": "4723eb0c7395f311c564119748edca6e559b0b4af394fc3e34ab0c6dec8e4a80",
+      "bytes": 125214
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/dispatch-source.json",
+      "sha256": "785b9464468b9231d72e35264a6a3928325ac56cc33609f021f757570f407fc0",
+      "bytes": 4184
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/run.cjs",
+      "sha256": "5e53f7cdeb13a9d45a031f1aec08e46b9752fc445cc0f6815cc6163e657664e2",
+      "bytes": 5991
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-persisted-validation-r01/invoke.cjs",
+      "sha256": "ec257f224e091177f1f8b7193bd3f96ec5773cc96e975377c8d6c276cfb7b491",
+      "bytes": 4817
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-preparation-source-review-r02/review.json",
+      "sha256": "2511462555e4235129d032aa51bd214aa3d0ae725b92b8cc9cd251de34c7d969",
+      "bytes": 3115
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-prepared-output-review-r02/binding.json",
+      "sha256": "dbacf79ca796410664a1a6af9a577172c93234109b3c33c326ba669a5394dc21",
+      "bytes": 235896
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-prepared-output-review-r02/input-measurements.json",
+      "sha256": "8950e600b3f81f61cc72dae6e2514c4e982ca0cc6ef95e93536b86a01652dd67",
+      "bytes": 352709
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-prepared-output-review-r02/inspect-output.cjs",
+      "sha256": "098515f301d802730db55c64be2400872d34717c9e08b91f8a74ac6a8a522b16",
+      "bytes": 29597
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-prepared-output-review-r02/inspection.json",
+      "sha256": "edd347aa083986ce7de304c27b3ae6ccf9c5dcc047774feb5d38475ef0564cfd",
+      "bytes": 29402
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-prepared-output-review-r02/review.json",
+      "sha256": "38806f472694084563690f5218ff6af70c3338b3837d79d63c0a9bf3d04d0276",
+      "bytes": 3355
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-root-preparation-r02/dispatch-source.json",
+      "sha256": "dee5bc7f2fbc43d649af9f48bb08744ee39eeea5f4e8368ec19b7248e06192d7",
+      "bytes": 485
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-root-preparation-r02/execution/command-1.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-root-preparation-r02/execution/command-2.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-root-preparation-r02/execution/command-3.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-root-preparation-r02/execution/command-4.log",
+      "sha256": "571ad3541c378279750bc6f3c20484f77f800a1225500848be32dc2033687f1e",
+      "bytes": 295
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-root-preparation-r02/execution/receipt.json",
+      "sha256": "b3597a51b6d3a501ddcd507471582b6370eff9c1a1904bbc557d84cfff69a82c",
+      "bytes": 8613
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-root-preparation-r02/execution/start.json",
+      "sha256": "e6c5b26575b05b74c51ba658fae8dce481c3613357c178921a0102cc9216a688",
+      "bytes": 4143
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-root-preparation-r02/invoke.cjs",
+      "sha256": "6f565c2e6dd23d3f67582d66608a9b7d7e5ec1a4b767d8a1063db711997c6c06",
+      "bytes": 3519
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-review-r01/probe.cjs",
+      "sha256": "3625a6202b7a22b95f19982ec84ee74839acb437ea92975eaa8f6d9f14c94ec2",
+      "bytes": 20961
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-persisted-validation-r01/attempt-001/command-1.log",
+      "sha256": "00800ad6139ddb4f9836c27309c2e3f73dbcd14e9d38f86099dd9cdaf96554d3",
+      "bytes": 591
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-persisted-validation-r01/attempt-001/command-2.log",
+      "sha256": "20c016aeb906f07f939b8199db26857b10202efae48ec77075fef92d57333f82",
+      "bytes": 24098
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-persisted-validation-r01/attempt-001/command-3.log",
+      "sha256": "e3d9702396ad1581242c30762bf38a29e2fdba813db35be19060646bb32bf028",
+      "bytes": 130
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-persisted-validation-r01/attempt-001/command-4.log",
+      "sha256": "899fc4405b303da4c304f337feddfb9116f2d4bf678ea482effca4a15b86614a",
+      "bytes": 238
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-persisted-validation-r01/attempt-001/receipt.json",
+      "sha256": "509d64c10012756c7d44d0cdf6fb9b204a3c1cbfe1c4e0e76434ea2af36a33f8",
+      "bytes": 2816
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-persisted-validation-r01/attempt-001/start.json",
+      "sha256": "540a33d87769d9202ebbb1c2c5828bcd5f9e7ffaa40cb7fb5d56b58898fce1ab",
+      "bytes": 85433
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-persisted-validation-r01/invoke.cjs",
+      "sha256": "3582fb89265590dd9d0c323b477b6956ce82f4739fcbef4e526ac9db079d0314",
+      "bytes": 4529
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-persisted-validation-r01/source-review.json",
+      "sha256": "3c78c938e2ee0374cde51ea078d0c00b30e6ff154d579682486055a2adf212f8",
+      "bytes": 810
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/commit-receipt.json",
+      "sha256": "e247462f7d41a03b2b00b1dee17314987954d26df82f4b6949ddc2982fbbea35",
+      "bytes": 2474
+    },
+    {
+      "path": "tools/professional-picture-pools.cjs",
+      "sha256": "ca37e39c0987fb4d2738fec4b951bc2646464c36aa8acd9827173542e08e3629",
+      "bytes": 3496
+    },
+    {
+      "path": "tools/validate-professional-content.cjs",
+      "sha256": "a59598faf3ee917a738fe2c2dfc661ad03b7d6c325e7a3a2dc02a093e6e736cd",
+      "bytes": 31243
+    },
+    {
+      "path": "tools/validate-theme-motion.cjs",
+      "sha256": "bb2a9c07829a3b60616c663662875ba0cdbdf6af9fe9b607517ebf89ff721b04",
+      "bytes": 2288
+    },
+    {
+      "path": "web/professional-media.js",
+      "sha256": "db9ac8f3aeaaafb8f1ac411a56d56f0bfd6d8ad2862348868d42666d3021630a",
+      "bytes": 11851
+    }
+  ],
+  "module_paths": [
+    "build/professional-english/foundation02-fourth10-delivery-preparation-r02/projection.cjs",
+    "build/professional-english/foundation02-fourth10-delivery-preparation-r02/test-transforms.cjs",
+    "build/professional-english/foundation-module01-language-review/fifth10/delivery-r01/guarded-transaction.cjs",
+    "tools/validate-professional-content.cjs",
+    "tools/validate-theme-motion.cjs",
+    "tools/professional-picture-pools.cjs",
+    "web/professional-media.js"
+  ],
+  "proposal_inventory": {
+    "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/author-inventory.json",
+    "sha256": "f0043bfeada59d497be43cde8e3d753c0322cfa982c632fa40eae36cd62838d7",
+    "bytes": 1810
+  },
+  "planned_guard_count": 21,
+  "dynamic_proposal_contract": "The exact canonical proposal path and frozen author-inventory hash must be supplied; all members are independently hashed before any memory-only execution."
+}

@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "kind": "commit-guards",
+  "dispatcher": "/root",
+  "observed_at": "2026-10-17T00:32:36.475Z",
+  "session_id": 64189,
+  "source": {
+    "path": "build/professional-english/foundation02-fifth10-commit-guards-r02/guard.cjs",
+    "bytes": 20304,
+    "raw_sha256": "d78bf87f72576d1228f29d919aed8085a28cb2da5b4c848f45059c3aa5039346"
+  },
+  "input": {
+    "path": "build/professional-english/foundation02-fifth10-root-guards-r02/input.json",
+    "bytes": 1134,
+    "raw_sha256": "29c07e48ad4bf10622d0d247c0365bc5f735204aab99dd36063ac7cfc2d00915"
+  },
+  "receipt": {
+    "path": "build/professional-english/foundation02-fifth10-root-guards-r02/execution-r01/receipt.json",
+    "bytes": 4465,
+    "raw_sha256": "d4d65aed2bf1d72dc5ce0017279bf76f9dde10766c44accc7c3873cef8c90024"
+  },
+  "child_observation": {
+    "path": "build/professional-english/foundation02-fifth10-root-guards-r02/execution-r01/child-observation.json",
+    "bytes": 1407,
+    "raw_sha256": "56dd3d9eea6de765901821ca07f0c8198cb934977471d1e2737f2153ef45aa71"
+  },
+  "exit_code": 0,
+  "signal": null,
+  "error": null,
+  "final_tool_result": {
+    "chunk_id": "540435",
+    "wall_time_seconds": 0.0000222,
+    "exit_code": 0,
+    "original_token_count": 310,
+    "output": "{\"schema\":1,\"kind\":\"commit-guards-child\",\"dispatcher\":\"/root\",\"started_at\":\"2026-10-17T00:28:29.420Z\",\"finished_at\":\"2026-10-17T00:31:44.897Z\",\"source\":{\"path\":\"build/professional-english/foundation02-fifth10-commit-guards-r02/guard.cjs\",\"bytes\":20304,\"raw_sha256\":\"d78bf87f72576d1228f29d919aed8085a28cb2da5b4c848f45059c3aa5039346\"},\"input\":{\"path\":\"build/professional-english/foundation02-fifth10-root-guards-r02/input.json\",\"bytes\":1134,\"raw_sha256\":\"29c07e48ad4bf10622d0d247c0365bc5f735204aab99dd36063ac7cfc2d00915\"},\"receipt\":{\"path\":\"build/professional-english/foundation02-fifth10-root-guards-r02/execution-r01/receipt.json\",\"bytes\":4465,\"raw_sha256\":\"d4d65aed2bf1d72dc5ce0017279bf76f9dde10766c44accc7c3873cef8c90024\"},\"exit_code\":0,\"signal\":null,\"error\":null,\"parse_error\":null,\"stdout\":{\"path\":\"build/professional-english/foundation02-fifth10-root-guards-r02/execution-r01/stdout.log\",\"bytes\":4465,\"raw_sha256\":\"d4d65aed2bf1d72dc5ce0017279bf76f9dde10766c44accc7c3873cef8c90024\"},\"stderr\":{\"path\":\"build/professional-english/foundation02-fifth10-root-guards-r02/execution-r01/stderr.log\",\"bytes\":0,\"raw_sha256\":\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\"},\"production_mutated\":false,\"replay_allowed\":false}\n"
+  },
+  "observation_basis": "Root observed actual tools.write_stdin terminal exit 0 and independently read the successful child outcome and eighteen-case memory-only receipt.",
+  "production_mutated": false,
+  "actual_installation": false,
+  "replay_allowed": false
+}

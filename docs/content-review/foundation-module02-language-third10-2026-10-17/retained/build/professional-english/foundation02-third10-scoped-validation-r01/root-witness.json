@@ -1,0 +1,58 @@
+{
+  "schema": 1,
+  "ok": true,
+  "started_at": "2026-10-16T20:10:58.312Z",
+  "finished_at": "2026-10-16T20:11:15.881Z",
+  "source_before_candidate": {
+    "path": "build/professional-english/foundation02-third10-scoped-validation-r01/invoke.cjs",
+    "bytes": 6633,
+    "sha256": "38b8936ad6a325fb9c4078e7ef977010fa5a3cc5ce18631d01b1998288bb98fd"
+  },
+  "source_after_candidate": {
+    "path": "build/professional-english/foundation02-third10-scoped-validation-r01/invoke.cjs",
+    "bytes": 6633,
+    "sha256": "38b8936ad6a325fb9c4078e7ef977010fa5a3cc5ce18631d01b1998288bb98fd"
+  },
+  "source_observation": {
+    "path": "build/professional-english/foundation02-third10-scoped-validation-r01/source-observation.json",
+    "bytes": 883,
+    "sha256": "04d08c0191d2aa2c49a6354938b8105ff473a8c95dc1c7a735047af3f21b716d"
+  },
+  "retained_source": {
+    "path": "build/professional-english/foundation02-third10-scoped-validation-r01/executed-source-observed.cjs",
+    "bytes": 6633,
+    "sha256": "38b8936ad6a325fb9c4078e7ef977010fa5a3cc5ce18631d01b1998288bb98fd"
+  },
+  "candidate_start": {
+    "path": "build/professional-english/foundation02-third10-scoped-validation-r01/candidate-start.json",
+    "bytes": 1145,
+    "sha256": "f52bc40037648378a5c23d6625061cdd7b14a6f8e1280dd185199be2bf56aac7"
+  },
+  "baseline_receipt": {
+    "path": "build/professional-english/foundation02-third10-scoped-validation-r01/baseline/receipt.json",
+    "bytes": 85988,
+    "sha256": "3a2873b6be182b117e83ff516d2aae68b8d8603462ff921c196a5f9c5c69a687"
+  },
+  "baseline_source_timing": "The source was retained and hashed after baseline dispatch. Root created it through the recorded tool patch, was its sole authorized writer and made no changes. This is not a pre-dispatch hash witness.",
+  "baseline_command_outcome": {
+    "session_id": 22236,
+    "exit_code": 0,
+    "receipt_ok": true
+  },
+  "candidate_receipt": {
+    "path": "build/professional-english/foundation02-third10-scoped-validation-r01/candidate/receipt.json",
+    "bytes": 86328,
+    "sha256": "fcba82f121c313f79e50f8a11c6c047ea27d878e6025d5c631a35643fdcb6abc"
+  },
+  "candidate_command": [
+    "C:\\nvm4w\\nodejs\\node.exe",
+    "build/professional-english/foundation02-third10-scoped-validation-r01/invoke.cjs",
+    "candidate"
+  ],
+  "candidate_exit_code": 0,
+  "candidate_error": null,
+  "candidate_signal": null,
+  "candidate_log_sha256": "c7024aceb937cf2f027a86bd4e94df1ac7a9fba1aedb61d878a6751653e5a509",
+  "no_production_mutation": true,
+  "scope": "Separate fresh affected baseline and isolated native candidate; no whole-repository or browser validation."
+}

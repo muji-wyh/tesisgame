@@ -1,0 +1,2787 @@
+{
+  "schema": 1,
+  "status": "accepted_seven_picture_exclusion_edges_integrated_no_other_content_changes",
+  "date": "2026-10-16",
+  "accepted_report_json_sha256": "ecde1246e18dadbbeee10bd41a33dfe64f726df6298c50ff473ae698a5e1fcf9",
+  "independent_acceptance": {
+    "status": "accepted_metadata_only_seven_conservative_pairs",
+    "date": "2026-10-15T23:00:41.585Z",
+    "reviewer": "Codex root independent editorial review",
+    "report_json_sha256": "ecde1246e18dadbbeee10bd41a33dfe64f726df6298c50ff473ae698a5e1fcf9",
+    "scope": "All seven exact current definition/brief pairs independently read. Add only canonical image.confusable_with links and provenance; no other entry or gate changes. One direction per pair suffices because runtime exclusions are symmetric.",
+    "accepted_pairs": [
+      {
+        "pair": [
+          "pack.place-in-container.v",
+          "bag.put-in-bag.v"
+        ],
+        "classification": "exclude",
+        "rationale": "Putting groceries into a bag for carrying satisfies both bag and the broader pack definition. The pack brief uses a shipping box, so that image need not also show bagging; the reverse bag-to-pack ambiguity is enough to exclude the pair symmetrically. Distinct box/bag examples do not restrict the broad pack answer to boxes.",
+        "reconsideration": "A later task with explicit container-specific instructions could distinguish the actions, but a general single-answer picture round should not rely on that absent instruction.",
+        "entry_preimages": [
+          {
+            "id": "pack.place-in-container.v",
+            "json_sha256": "0fdec26884a2e58b674e5bb399bd046ecc8e4910c3e434b1e4d096edde842be6"
+          },
+          {
+            "id": "bag.put-in-bag.v",
+            "json_sha256": "c68509803c330e943eab8e948012b3c734542c1a7c0ace8bfe5916af7f600282"
+          }
+        ]
+      },
+      {
+        "pair": [
+          "fasten.close-securely.v",
+          "zip.close-with-zipper.v"
+        ],
+        "classification": "exclude",
+        "rationale": "Closing a zipper joins and closes parts so they stay in place, which also fastens the item. The buckle-only fasten brief provides a distinct example but does not narrow the current definition to buckles. A zip image can therefore be a valid fasten answer.",
+        "reconsideration": "Retain the exclusion in general picture rounds; device-specific sentences may teach the difference without scoring the broader action as wrong.",
+        "entry_preimages": [
+          {
+            "id": "fasten.close-securely.v",
+            "json_sha256": "944a340b8521ff2bbf0c6e00bf08200f1966ad888bb2a71fe62ed8182b548424"
+          },
+          {
+            "id": "zip.close-with-zipper.v",
+            "json_sha256": "b44a7fd81f9945f573b2cf62cae4c8d1c0aa83ce3b17b4d4c17812f87e147a6a"
+          }
+        ]
+      },
+      {
+        "pair": [
+          "container.holding-object.n",
+          "carton.packaging-box.n"
+        ],
+        "classification": "exclude",
+        "rationale": "A packing carton is a container under both exact definitions. The storage tub and cardboard carton briefs select different exemplars, but the carton remains a valid answer to container. The container brief already rejects choice sets containing another equally valid vessel.",
+        "reconsideration": "Do not remove this class/member exclusion just because the two assets have different silhouettes.",
+        "entry_preimages": [
+          {
+            "id": "container.holding-object.n",
+            "json_sha256": "f710f01427e7fd54bb32b57a167c3867584072034b3a8dd3e17da5d88ac54b5d"
+          },
+          {
+            "id": "carton.packaging-box.n",
+            "json_sha256": "372dce28c1db21b6dfa7eb687382bf33f447141f78becf28d46cf2f8a5c1f378"
+          }
+        ]
+      },
+      {
+        "pair": [
+          "lid.container-top.n",
+          "cap.bottle-closure.n"
+        ],
+        "classification": "exclude",
+        "rationale": "The bottle cap is a small removable container cover and fits the current lid definition. Oxford's lid comparison expressly describes a cap as a small lid, and gives bottle-lid usage. Broad-tub and narrow-bottle crops do not make the general word lid incorrect for a cap.",
+        "reconsideration": "Retain in ordinary picture rounds; teaching a prototypical size difference is not evidence of mutually exclusive meanings.",
+        "entry_preimages": [
+          {
+            "id": "lid.container-top.n",
+            "json_sha256": "63f3722e00c7990cd8bf325508baaa80b6c42560f8c49d23aef4c0d02d60c980"
+          },
+          {
+            "id": "cap.bottle-closure.n",
+            "json_sha256": "5a9f82986584ed302177f57bd1de2affb0c5c169c2421be73c6224b9fb02e2bf"
+          }
+        ]
+      },
+      {
+        "pair": [
+          "sole.shoe-bottom.n",
+          "heel.raised-shoe-back.n"
+        ],
+        "classification": "exclude_conservatively_pending_boundary_and_crop_review",
+        "rationale": "The current sole definition says only the shoe bottom that touches the ground and does not exclude a heel. The current heel definition places it on that bottom. This makes the written teaching boundary broad enough to confuse a learner, and neither pending picture has been checked. A conservative pair exclusion is defensible now.",
+        "reconsideration": "Revisit after an independently accepted sole boundary clarification and actual card crops clearly isolate the two parts. Do not present this exclusion as proof that heel means sole.",
+        "entry_preimages": [
+          {
+            "id": "sole.shoe-bottom.n",
+            "json_sha256": "10d577a9be301aa0744ba94328658013c7058b04baef9b61d38e426b202e77fd"
+          },
+          {
+            "id": "heel.raised-shoe-back.n",
+            "json_sha256": "c9cb92aa7987504ac8efbefc480f78faacedad9fbb90419cdb4b86738a8f87d9"
+          }
+        ]
+      },
+      {
+        "pair": [
+          "weigh.measure-weight.v",
+          "measure.find-dimensions.v"
+        ],
+        "classification": "exclude",
+        "rationale": "Weighing with a scale determines a physical quantity using an instrument and is therefore a kind of measurement. The live measure definition covers size, amount or degree; its legacy dimensions ID and tape-measure illustration do not narrow that shared sense. The scale scene is valid for both words.",
+        "reconsideration": "Keep this exclusion while measure retains its broad canonical definition; a length-only contextual prompt would require separate reviewed instructions.",
+        "entry_preimages": [
+          {
+            "id": "weigh.measure-weight.v",
+            "json_sha256": "76a8d06417bcb1cf889d791635b5b7c1f4b5d4bafb759d53dd14d0dd78db8f67"
+          },
+          {
+            "id": "measure.find-dimensions.v",
+            "json_sha256": "39a21ef81ee23fe8d8eaae4e538fe5cf12927a341259c3471a08c2b323b51e44"
+          }
+        ]
+      },
+      {
+        "pair": [
+          "handle.grip-part.n",
+          "strap.flexible-fastening-band.n"
+        ],
+        "classification": "exclude_conservatively_pending_asset_review",
+        "rationale": "A flexible carrying band designed to be gripped can be both a strap and a handle. The current handle definition permits that form, and its suitcase-grip brief does not require a rigid piece. The strap brief rejects rigid grips, but the potential overlap is the flexible carrying handle.",
+        "reconsideration": "Actual assets could establish a rigid handgrip versus an unambiguously shoulder-worn band. Until reviewed, the conservative exclusion avoids relying on a rigidity boundary absent from the definitions.",
+        "entry_preimages": [
+          {
+            "id": "handle.grip-part.n",
+            "json_sha256": "d541cbe35c9472549e9440411c28c401da6710d4f707ce996aadfc29266da0b4"
+          },
+          {
+            "id": "strap.flexible-fastening-band.n",
+            "json_sha256": "3ded5c9040e50f37d63f28bd742336b57e5c7e41beb768dae18f7ef1de470297"
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      "Sole/heel and handle/strap are conservative crop/boundary safeguards, not synonym claims.",
+      "No actual picture was reviewed or approved. No specialty review or module readiness promotion."
+    ],
+    "exact_entry_preimages_checked": 14
+  },
+  "report": {
+    "schema": 1,
+    "status": "independent_scratch_review_no_production_change",
+    "date": "2026-10-16",
+    "reviewer": "Codex independent AI editorial reviewer; not visual or domain approval",
+    "scope": "Current Retail04 and Retail05 definitions, examples, picture briefs and eligibility. Five requested pairs challenged, with two additional candidate pairs and separate deferred cases.",
+    "registry_json_sha256": "8e55c4983165015802a88f5d8c373f5dbb6992063bbd269694502eb3d14aab49",
+    "snapshot_json_sha256": "39b969cabf8aae86a0d3609c6b5e77e2b4198c91892d7d0cd724341d29c22201",
+    "symmetric_semantics": "Every approved runtime pair must exclude co-selection in both directions. A one-way broader/narrower relation is sufficient for symmetric exclusion; no synonymous accepted form is implied.",
+    "requested_pair_decisions": [
+      {
+        "pair": [
+          "pack.place-in-container.v",
+          "bag.put-in-bag.v"
+        ],
+        "requested": true,
+        "recommendation": "exclude",
+        "basis": "broader_action_and_specific_container",
+        "confidence": "high",
+        "rationale": "Putting groceries into a bag for carrying satisfies both bag and the broader pack definition. The pack brief uses a shipping box, so that image need not also show bagging; the reverse bag-to-pack ambiguity is enough to exclude the pair symmetrically. Distinct box/bag examples do not restrict the broad pack answer to boxes.",
+        "counterargument": "Not every act of bagging is packing for storage or transport, and a pictured packed box is not a bag. The recommended exclusion does not assert full synonymy.",
+        "reconsideration": "A later task with explicit container-specific instructions could distinguish the actions, but a general single-answer picture round should not rely on that absent instruction.",
+        "symmetric_runtime_pair": [
+          "bag.put-in-bag.v",
+          "pack.place-in-container.v"
+        ],
+        "current_entries": [
+          {
+            "module_id": "module05",
+            "id": "pack.place-in-container.v",
+            "text": "pack",
+            "pos": "verb",
+            "definition": "To put items into a container for storage or transport.",
+            "example": "Please pack the cups carefully.",
+            "image_brief": "Hands place a plain cup into a fitted shipping box beside an already packed cup; keep the enclosing container prominent and avoid gift wrapping.",
+            "picture_suitable": true,
+            "practice_modes": [
+              "match",
+              "memory",
+              "pop",
+              "jelly",
+              "word_jelly",
+              "phrase"
+            ],
+            "image_status": "pending",
+            "image_path": null,
+            "image_review": {
+              "status": "pending"
+            },
+            "full_lexeme_json_sha256": "0fdec26884a2e58b674e5bb399bd046ecc8e4910c3e434b1e4d096edde842be6"
+          },
+          {
+            "module_id": "module05",
+            "id": "bag.put-in-bag.v",
+            "text": "bag",
+            "pos": "verb",
+            "definition": "To put items into a bag.",
+            "example": "Would you like me to bag these items together?",
+            "image_brief": "Hands place plain groceries into a reusable shopping bag, with the bag opening and insertion clear; avoid a generic held bag.",
+            "picture_suitable": true,
+            "practice_modes": [
+              "match",
+              "memory",
+              "pop",
+              "jelly",
+              "word_jelly",
+              "phrase"
+            ],
+            "image_status": "pending",
+            "image_path": null,
+            "image_review": {
+              "status": "pending"
+            },
+            "full_lexeme_json_sha256": "c68509803c330e943eab8e948012b3c734542c1a7c0ace8bfe5916af7f600282"
+          }
+        ]
+      },
+      {
+        "pair": [
+          "fasten.close-securely.v",
+          "zip.close-with-zipper.v"
+        ],
+        "requested": true,
+        "recommendation": "exclude",
+        "basis": "broader_action_and_specific_fastener",
+        "confidence": "high",
+        "rationale": "Closing a zipper joins and closes parts so they stay in place, which also fastens the item. The buckle-only fasten brief provides a distinct example but does not narrow the current definition to buckles. A zip image can therefore be a valid fasten answer.",
+        "counterargument": "Many fastening actions are not zipping. That one-way relation still creates a false distractor in the opposite presentation direction.",
+        "reconsideration": "Retain the exclusion in general picture rounds; device-specific sentences may teach the difference without scoring the broader action as wrong.",
+        "symmetric_runtime_pair": [
+          "fasten.close-securely.v",
+          "zip.close-with-zipper.v"
+        ],
+        "current_entries": [
+          {
+            "module_id": "module05",
+            "id": "fasten.close-securely.v",
+            "text": "fasten",
+            "pos": "verb",
+            "definition": "To join or close parts so they stay in place.",
+            "example": "Please fasten the strap before moving the bag.",
+            "image_brief": "Close view of hands bringing the two halves of a bag buckle together; make the joined closure legible at card size.",
+            "picture_suitable": true,
+            "practice_modes": [
+              "match",
+              "memory",
+              "pop",
+              "jelly",
+              "word_jelly",
+              "phrase"
+            ],
+            "image_status": "pending",
+            "image_path": null,
+            "image_review": {
+              "status": "pending"
+            },
+            "full_lexeme_json_sha256": "944a340b8521ff2bbf0c6e00bf08200f1966ad888bb2a71fe62ed8182b548424"
+          },
+          {
+            "module_id": "module05",
+            "id": "zip.close-with-zipper.v",
+            "text": "zip",
+            "pos": "verb",
+            "definition": "To close something using a zipper.",
+            "example": "Please zip the bag before placing it on the shelf.",
+            "image_brief": "A hand pulls a bag zipper toward the closed end; show joined teeth behind the slider and a short open section ahead.",
+            "picture_suitable": true,
+            "practice_modes": [
+              "match",
+              "memory",
+              "pop",
+              "jelly",
+              "word_jelly"
+            ],
+            "image_status": "pending",
+            "image_path": null,
+            "image_review": {
+              "status": "pending"
+            },
+            "full_lexeme_json_sha256": "b44a7fd81f9945f573b2cf62cae4c8d1c0aa83ce3b17b4d4c17812f87e147a6a"
+          }
+        ]
+      },
+      {
+        "pair": [
+          "container.holding-object.n",
+          "carton.packaging-box.n"
+        ],
+        "requested": true,
+        "recommendation": "exclude",
+        "basis": "class_and_member",
+        "confidence": "high",
+        "rationale": "A packing carton is a container under both exact definitions. The storage tub and cardboard carton briefs select different exemplars, but the carton remains a valid answer to container. The container brief already rejects choice sets containing another equally valid vessel.",
+        "counterargument": "A storage tub is usually not a carton. The pair is excluded because the broader container target also admits the carton, not because every container is a carton.",
+        "reconsideration": "Do not remove this class/member exclusion just because the two assets have different silhouettes.",
+        "symmetric_runtime_pair": [
+          "carton.packaging-box.n",
+          "container.holding-object.n"
+        ],
+        "current_entries": [
+          {
+            "module_id": "module04",
+            "id": "container.holding-object.n",
+            "text": "container",
+            "pos": "noun",
+            "definition": "An object used to hold, store, or transport something.",
+            "example": "This container has a tight lid.",
+            "image_brief": "Use a sourced open storage tub with a few benign contents and its lid resting to one side, framing the holding vessel as the main object. Avoid a dominant shipping-container silhouette. Because carton and other vessels also qualify, reject any exercise choice set where another displayed vessel is an equally valid container answer.",
+            "picture_suitable": true,
+            "practice_modes": [
+              "match",
+              "memory",
+              "pop",
+              "jelly",
+              "word_jelly"
+            ],
+            "image_status": "pending",
+            "image_path": null,
+            "image_review": {
+              "status": "pending"
+            },
+            "full_lexeme_json_sha256": "f710f01427e7fd54bb32b57a167c3867584072034b3a8dd3e17da5d88ac54b5d"
+          },
+          {
+            "module_id": "module04",
+            "id": "carton.packaging-box.n",
+            "text": "carton",
+            "pos": "noun",
+            "definition": "A box or container, usually made from cardboard, used for packing goods.",
+            "example": "The carton contains six bottles.",
+            "image_brief": "Use sourced artwork of an open packing carton with folded flaps and six plain bottles partly visible inside. Make the carton structure dominant. Do not show a freight container, shopping basket or loose cardboard sheets as the target. Keep liquids and brand information unspecified.",
+            "picture_suitable": true,
+            "practice_modes": [
+              "match",
+              "memory",
+              "pop",
+              "jelly",
+              "word_jelly",
+              "phrase"
+            ],
+            "image_status": "pending",
+            "image_path": null,
+            "image_review": {
+              "status": "pending"
+            },
+            "full_lexeme_json_sha256": "372dce28c1db21b6dfa7eb687382bf33f447141f78becf28d46cf2f8a5c1f378"
+          }
+        ]
+      },
+      {
+        "pair": [
+          "lid.container-top.n",
+          "cap.bottle-closure.n"
+        ],
+        "requested": true,
+        "recommendation": "exclude",
+        "basis": "overlapping_cover_terms",
+        "confidence": "high",
+        "rationale": "The bottle cap is a small removable container cover and fits the current lid definition. Oxford's lid comparison expressly describes a cap as a small lid, and gives bottle-lid usage. Broad-tub and narrow-bottle crops do not make the general word lid incorrect for a cap.",
+        "counterargument": "Not every lid is a cap, and the selected bottle-cap entry excludes hats and protective lens caps. Those separate senses do not remove the overlap of the selected container covers.",
+        "reconsideration": "Retain in ordinary picture rounds; teaching a prototypical size difference is not evidence of mutually exclusive meanings.",
+        "symmetric_runtime_pair": [
+          "cap.bottle-closure.n",
+          "lid.container-top.n"
+        ],
+        "current_entries": [
+          {
+            "module_id": "module04",
+            "id": "lid.container-top.n",
+            "text": "lid",
+            "pos": "noun",
+            "definition": "A removable or hinged cover for a container.",
+            "example": "The lid belongs to the larger box.",
+            "image_brief": "Use a sourced broad box or tub lid lifted just above its matching opening, with the cover dominant and the vessel only as context. Do not choose a tiny bottle cap as its unique opposing distractor: both can correctly be called lids. Reject a roof, hat or ambiguous flat panel.",
+            "picture_suitable": true,
+            "practice_modes": [
+              "match",
+              "memory",
+              "pop",
+              "jelly",
+              "word_jelly"
+            ],
+            "image_status": "pending",
+            "image_path": null,
+            "image_review": {
+              "status": "pending"
+            },
+            "full_lexeme_json_sha256": "63f3722e00c7990cd8bf325508baaa80b6c42560f8c49d23aef4c0d02d60c980"
+          },
+          {
+            "module_id": "module04",
+            "id": "cap.bottle-closure.n",
+            "text": "cap",
+            "pos": "noun",
+            "definition": "A small cover that closes the opening of a bottle or tube.",
+            "example": "The bottle cap is missing.",
+            "image_brief": "Use a sourced screw cap just above a narrow bottle neck, with its rim and matching thread area visible. Keep the cap large in frame. Reject a hat, lens cap, jar seal or tiny distant closure. Review lid/cap distractors for semantic overlap instead of treating all other covers as wrong answers.",
+            "picture_suitable": true,
+            "practice_modes": [
+              "match",
+              "memory",
+              "pop",
+              "jelly",
+              "word_jelly"
+            ],
+            "image_status": "pending",
+            "image_path": null,
+            "image_review": {
+              "status": "pending"
+            },
+            "full_lexeme_json_sha256": "5a9f82986584ed302177f57bd1de2affb0c5c169c2421be73c6224b9fb02e2bf"
+          }
+        ]
+      },
+      {
+        "pair": [
+          "sole.shoe-bottom.n",
+          "heel.raised-shoe-back.n"
+        ],
+        "requested": true,
+        "recommendation": "exclude_conservatively_pending_boundary_and_crop_review",
+        "basis": "current_definition_boundary_and_adjacent_part",
+        "confidence": "medium",
+        "rationale": "The current sole definition says only the shoe bottom that touches the ground and does not exclude a heel. The current heel definition places it on that bottom. This makes the written teaching boundary broad enough to confuse a learner, and neither pending picture has been checked. A conservative pair exclusion is defensible now.",
+        "counterargument": "These are not synonyms or an established lexical class/member pair in the selected dictionary sense. Oxford sole sense 2 explicitly excludes the heel; the current briefs already target forefoot/midfoot underside versus a raised heel block. Correct wording and clearly marked crops can make them distinct.",
+        "reconsideration": "Revisit after an independently accepted sole boundary clarification and actual card crops clearly isolate the two parts. Do not present this exclusion as proof that heel means sole.",
+        "symmetric_runtime_pair": [
+          "heel.raised-shoe-back.n",
+          "sole.shoe-bottom.n"
+        ],
+        "current_entries": [
+          {
+            "module_id": "module04",
+            "id": "sole.shoe-bottom.n",
+            "text": "sole",
+            "pos": "noun",
+            "definition": "The bottom part of a shoe that touches the ground.",
+            "example": "The sole has a textured surface.",
+            "image_brief": "Use a sourced underside view of a shoe with the forefoot and midfoot contact surface dominant and the shoe edge visible. Keep a separate heel secondary. Reject a foot sole, fish, full side-view shoe or an insole removed from the shoe; inspect the chosen crop against heel cards.",
+            "picture_suitable": true,
+            "practice_modes": [
+              "match",
+              "memory",
+              "pop",
+              "jelly",
+              "word_jelly"
+            ],
+            "image_status": "pending",
+            "image_path": null,
+            "image_review": {
+              "status": "pending"
+            },
+            "full_lexeme_json_sha256": "10d577a9be301aa0744ba94328658013c7058b04baef9b61d38e426b202e77fd"
+          },
+          {
+            "module_id": "module04",
+            "id": "heel.raised-shoe-back.n",
+            "text": "heel",
+            "pos": "noun",
+            "definition": "The raised back part of the bottom of some shoes.",
+            "example": "This shoe has a low heel.",
+            "image_brief": "Use a sourced side-back close view of a shoe with a clearly raised heel block; include a little upper and sole to locate it. The heel must fill the important area. Reject a bare foot, the whole shoe as the only cue, or an underside crop dominated by the sole.",
+            "picture_suitable": true,
+            "practice_modes": [
+              "match",
+              "memory",
+              "pop",
+              "jelly",
+              "word_jelly"
+            ],
+            "image_status": "pending",
+            "image_path": null,
+            "image_review": {
+              "status": "pending"
+            },
+            "full_lexeme_json_sha256": "c9cb92aa7987504ac8efbefc480f78faacedad9fbb90419cdb4b86738a8f87d9"
+          }
+        ]
+      }
+    ],
+    "additional_pair_decisions": [
+      {
+        "pair": [
+          "weigh.measure-weight.v",
+          "measure.find-dimensions.v"
+        ],
+        "requested": false,
+        "recommendation": "exclude",
+        "basis": "specific_measurement_and_broader_measurement",
+        "confidence": "high",
+        "rationale": "Weighing with a scale determines a physical quantity using an instrument and is therefore a kind of measurement. The live measure definition covers size, amount or degree; its legacy dimensions ID and tape-measure illustration do not narrow that shared sense. The scale scene is valid for both words.",
+        "counterargument": "In a narrow clothing context, weigh and measure can contrast weight and height. This project's broad definition and generic picture instruction do not establish that narrower context.",
+        "reconsideration": "Keep this exclusion while measure retains its broad canonical definition; a length-only contextual prompt would require separate reviewed instructions.",
+        "symmetric_runtime_pair": [
+          "measure.find-dimensions.v",
+          "weigh.measure-weight.v"
+        ],
+        "current_entries": [
+          {
+            "module_id": "module05",
+            "id": "weigh.measure-weight.v",
+            "text": "weigh",
+            "pos": "verb",
+            "definition": "To find how heavy something is using a scale.",
+            "example": "We weigh loose produce at this counter.",
+            "image_brief": "A staff member places loose apples on a shop scale and watches its display; distinguish the act from merely holding produce.",
+            "picture_suitable": true,
+            "practice_modes": [
+              "match",
+              "memory",
+              "pop",
+              "jelly",
+              "word_jelly",
+              "phrase"
+            ],
+            "image_status": "pending",
+            "image_path": null,
+            "image_review": {
+              "status": "pending"
+            },
+            "full_lexeme_json_sha256": "76a8d06417bcb1cf889d791635b5b7c1f4b5d4bafb759d53dd14d0dd78db8f67"
+          },
+          {
+            "module_id": "module05",
+            "id": "measure.find-dimensions.v",
+            "text": "measure",
+            "pos": "verb",
+            "definition": "To determine the size, amount, or degree of something using an appropriate method or instrument.",
+            "example": "We can measure the shelf before ordering a display.",
+            "image_brief": "A person measures the length of a shelf with a visible tape and clear endpoints; this illustrates one physical use only, not all shared measurement contexts.",
+            "picture_suitable": true,
+            "practice_modes": [
+              "match",
+              "memory",
+              "pop",
+              "jelly",
+              "word_jelly",
+              "phrase"
+            ],
+            "image_status": "pending",
+            "image_path": null,
+            "image_review": {
+              "status": "pending"
+            },
+            "full_lexeme_json_sha256": "39a21ef81ee23fe8d8eaae4e538fe5cf12927a341259c3471a08c2b323b51e44"
+          }
+        ]
+      },
+      {
+        "pair": [
+          "handle.grip-part.n",
+          "strap.flexible-fastening-band.n"
+        ],
+        "requested": false,
+        "recommendation": "exclude_conservatively_pending_asset_review",
+        "basis": "overlapping_part_function_and_form",
+        "confidence": "medium",
+        "rationale": "A flexible carrying band designed to be gripped can be both a strap and a handle. The current handle definition permits that form, and its suitcase-grip brief does not require a rigid piece. The strap brief rejects rigid grips, but the potential overlap is the flexible carrying handle.",
+        "counterargument": "A long shoulder strap is often worn rather than held and can be visually distinct from a rigid suitcase handle. Not every strap is a handle, and not every handle is a strap.",
+        "reconsideration": "Actual assets could establish a rigid handgrip versus an unambiguously shoulder-worn band. Until reviewed, the conservative exclusion avoids relying on a rigidity boundary absent from the definitions.",
+        "symmetric_runtime_pair": [
+          "handle.grip-part.n",
+          "strap.flexible-fastening-band.n"
+        ],
+        "current_entries": [
+          {
+            "module_id": "module04",
+            "id": "handle.grip-part.n",
+            "text": "handle",
+            "pos": "noun",
+            "definition": "A part designed to be held when carrying or using an object.",
+            "example": "The suitcase has a strong handle.",
+            "image_brief": "Use sourced artwork cropped around a suitcase carrying handle with its two attachment points and enough case body to show function. Make the grip dominant. Reject a full suitcase portrait, loose strap, online username or door-only scene that obscures the carrying example.",
+            "picture_suitable": true,
+            "practice_modes": [
+              "match",
+              "memory",
+              "pop",
+              "jelly",
+              "word_jelly",
+              "phrase"
+            ],
+            "image_status": "pending",
+            "image_path": null,
+            "image_review": {
+              "status": "pending"
+            },
+            "full_lexeme_json_sha256": "d541cbe35c9472549e9440411c28c401da6710d4f707ce996aadfc29266da0b4"
+          },
+          {
+            "module_id": "module04",
+            "id": "strap.flexible-fastening-band.n",
+            "text": "strap",
+            "pos": "noun",
+            "definition": "A narrow flexible band used to hold, fasten, or carry something.",
+            "example": "You can adjust the shoulder strap.",
+            "image_brief": "Use a sourced bag shoulder strap with its long flexible band, adjustment fitting and attachment points visible. Keep the bag secondary and crop so the whole band reads clearly. Reject a rigid grip, loose string or broad garment waistband; no load-bearing or restraint instructions.",
+            "picture_suitable": true,
+            "practice_modes": [
+              "match",
+              "memory",
+              "pop",
+              "jelly",
+              "word_jelly",
+              "phrase"
+            ],
+            "image_status": "pending",
+            "image_path": null,
+            "image_review": {
+              "status": "pending"
+            },
+            "full_lexeme_json_sha256": "3ded5c9040e50f37d63f28bd742336b57e5c7e41beb768dae18f7ef1de470297"
+          }
+        ]
+      }
+    ],
+    "inactive_overlaps": [
+      {
+        "pair": [
+          "label.attach-information.v",
+          "tag.attach-small-marker.v"
+        ],
+        "rationale": "Tagging with an identifying marker can also be labeling. Tag is already picture-ineligible; no current picture pool should contain both. Reconsider an exclusion before any future promotion.",
+        "current_picture_flags": [
+          {
+            "id": "label.attach-information.v",
+            "picture_suitable": true
+          },
+          {
+            "id": "tag.attach-small-marker.v",
+            "picture_suitable": false
+          }
+        ]
+      },
+      {
+        "pair": [
+          "restock.replace-sold-stock.v",
+          "replenish.restore-supply.v"
+        ],
+        "rationale": "Restoring depleted retail goods can satisfy both meanings. Both are already picture-ineligible; their semantic overlap is not a reason to enable them.",
+        "current_picture_flags": [
+          {
+            "id": "restock.replace-sold-stock.v",
+            "picture_suitable": false
+          },
+          {
+            "id": "replenish.restore-supply.v",
+            "picture_suitable": false
+          }
+        ]
+      },
+      {
+        "pair": [
+          "pack.place-in-container.v",
+          "load.put-goods-for-transport.v"
+        ],
+        "rationale": "Putting goods into a transport container can be both packing and loading. Load is currently picture-ineligible; this is a future-review dependency, not a new active pair.",
+        "current_picture_flags": [
+          {
+            "id": "pack.place-in-container.v",
+            "picture_suitable": true
+          },
+          {
+            "id": "load.put-goods-for-transport.v",
+            "picture_suitable": false
+          }
+        ]
+      },
+      {
+        "pair": [
+          "unpack.remove-from-container.v",
+          "unload.remove-carried-goods.v"
+        ],
+        "rationale": "Removing contents from a transport container can overlap. Unload is already picture-ineligible; retain that gate.",
+        "current_picture_flags": [
+          {
+            "id": "unpack.remove-from-container.v",
+            "picture_suitable": true
+          },
+          {
+            "id": "unload.remove-carried-goods.v",
+            "picture_suitable": false
+          }
+        ]
+      },
+      {
+        "pair": [
+          "advertise.publicize-offer.v",
+          "promote.encourage-product-interest.v"
+        ],
+        "rationale": "Advertising can promote an offer. Both entries remain context-only and do not need a new active picture-pool pair.",
+        "current_picture_flags": [
+          {
+            "id": "advertise.publicize-offer.v",
+            "picture_suitable": false
+          },
+          {
+            "id": "promote.encourage-product-interest.v",
+            "picture_suitable": false
+          }
+        ]
+      },
+      {
+        "pair": [
+          "total.add-amounts.v",
+          "calculate.work-out-number.v"
+        ],
+        "rationale": "Adding figures to total them is one kind of calculation. Both entries are already picture-ineligible; no picture-status promotion follows.",
+        "current_picture_flags": [
+          {
+            "id": "total.add-amounts.v",
+            "picture_suitable": false
+          },
+          {
+            "id": "calculate.work-out-number.v",
+            "picture_suitable": false
+          }
+        ]
+      }
+    ],
+    "asset_sensitive_or_rejected_blanket_pairs": [
+      {
+        "pairs": [
+          [
+            "fabric.woven-or-knitted-cloth.n",
+            "lining.inner-covering.n"
+          ],
+          [
+            "fabric.woven-or-knitted-cloth.n",
+            "sleeve.arm-clothing-part.n"
+          ],
+          [
+            "fabric.woven-or-knitted-cloth.n",
+            "collar.neck-clothing-part.n"
+          ],
+          [
+            "fabric.woven-or-knitted-cloth.n",
+            "waistband.waist-clothing-band.n"
+          ]
+        ],
+        "decision": "review_actual_referent_and_crop_before_deciding_global_pairs",
+        "rationale": "A fabric material and a garment part can occupy the same pixels, but they are different targets: substance versus attached part or layer. The existing briefs distinguish a cloth sheet with an edge from an attached lining, sleeve, collar or waistband. Do not assert that those words are synonyms or add every material/part pair mechanically. Unmarked images containing two equally plausible referents still require suppression or recropping before release."
+      },
+      {
+        "pairs": [
+          [
+            "cardboard.thick-paper-material.n",
+            "carton.packaging-box.n"
+          ]
+        ],
+        "decision": "review_actual_referent_and_crop",
+        "rationale": "A carton can be made of cardboard, but the material and the container are distinct targets. Current briefs deliberately use sheets/cut edge versus an open box. That can support a clear contrast if the actual images realize it; an ordinary cardboard box as both cards would fail."
+      },
+      {
+        "pairs": [
+          [
+            "container.holding-object.n",
+            "multipack.combined-item-pack.n"
+          ],
+          [
+            "carton.packaging-box.n",
+            "multipack.combined-item-pack.n"
+          ]
+        ],
+        "decision": "review_actual_outer_package_and_target_extent",
+        "rationale": "The multipack brief uses several identical juice cartons in one visible outer sleeve. The whole pack, its wrapper and the individual cartons must not be confused. These are not automatically identical concepts, but a boxed multipack or an unclear crop could produce an equally valid container or carton answer."
+      },
+      {
+        "pairs": [
+          [
+            "unwrap.remove-covering.v",
+            "unpack.remove-from-container.v"
+          ],
+          [
+            "wrap.cover-item.v",
+            "pack.place-in-container.v"
+          ],
+          [
+            "fold.bend-cloth-neatly.v",
+            "wrap.cover-item.v"
+          ]
+        ],
+        "decision": "review_action_focus_in_actual_art",
+        "rationale": "Wrapping, packing and folding may occur in one scene, as may removing wrapping and unpacking. Current briefs separate covering an item, inserting/removing container contents and folding a cloth item. Co-occurrence alone is not a blanket synonym exclusion; reject an asset whose visible action supports both answers without a clear target."
+      },
+      {
+        "pairs": [
+          [
+            "fasten.close-securely.v",
+            "unfasten.release-fastener.v"
+          ],
+          [
+            "pack.place-in-container.v",
+            "unpack.remove-from-container.v"
+          ],
+          [
+            "wrap.cover-item.v",
+            "unwrap.remove-covering.v"
+          ]
+        ],
+        "decision": "do_not_add_blanket_antonym_exclusion",
+        "rationale": "Opposite actions can form useful contrasts when direction and state are visible. The briefs deliberately show joining/separating, insertion/removal and applying/peeling. A directionless still image must fail visual review; an exclusion must not conceal that missing action cue."
+      }
+    ],
+    "additional_source_consultations": [
+      {
+        "url": "https://www.oxfordlearnersdictionaries.com/definition/english/lid",
+        "section": "sense 1 and lid/top/cap comparison",
+        "consulted_on": "2026-10-16",
+        "finding": "The selected container-cover sense overlaps cap; the comparison identifies a cap as a small lid and includes bottle use."
+      },
+      {
+        "url": "https://www.oxfordlearnersdictionaries.com/definition/english/sole_2",
+        "section": "noun sense 2",
+        "consulted_on": "2026-10-16",
+        "finding": "The shoe-bottom sense explicitly excludes the heel. This challenges treating the current pair as a permanent synonym relation."
+      },
+      {
+        "url": "https://www.oxfordlearnersdictionaries.com/definition/english/heel_1",
+        "section": "noun sense 3",
+        "consulted_on": "2026-10-16",
+        "finding": "The selected heel is the raised support at the back of a shoe, compared separately with sole."
+      },
+      {
+        "url": "https://www.oxfordlearnersdictionaries.com/definition/english/measure_1",
+        "section": "verb sense 1",
+        "consulted_on": "2026-10-16",
+        "finding": "Measurement covers finding size or quantity in units. A tape example does not restrict measurement to length."
+      }
+    ],
+    "limits": [
+      "No actual image was acquired or visually inspected. All seven candidate pairs have pending images.",
+      "No lexeme, definition, accepted form, morphology, picture flag, route or review status was changed.",
+      "A pair exclusion does not approve either image or make a module release-ready.",
+      "This report supplies editorial judgments; root owns independent final acceptance and the production serializer owns any JSON writes."
+    ]
+  },
+  "patches": [
+    {
+      "id": "pack.place-in-container.v",
+      "resource": "res://data/professional/lexemes/retail-module05.json",
+      "before_sha256": "0fdec26884a2e58b674e5bb399bd046ecc8e4910c3e434b1e4d096edde842be6",
+      "after_sha256": "73959ff171be0303d8125cf683808163959bd652ab47d63a412f00e328879e61",
+      "before": {
+        "id": "pack.place-in-container.v",
+        "text": "pack",
+        "display_text": "pack",
+        "pos": "verb",
+        "definition": "To put items into a container for storage or transport.",
+        "example": "Please pack the cups carefully.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "pack"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "Hands place a plain cup into a fitted shipping box beside an already packed cup; keep the enclosing container prominent and avoid gift wrapping.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "pack.place-in-container.v.analysis.v1",
+          "lexeme_id": "pack.place-in-container.v",
+          "text": "pack",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Explicitly authored modern morphological candidate; language and boundary review remain pending. Named spelling rules describe this graph only.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical": "pack",
+              "surface": "pack",
+              "type": "atomic",
+              "canonical_id": "morph.pack"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "reviewed",
+          "domain": "pending",
+          "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "bls-retail-sales",
+            "status": "pending_term_check",
+            "scope": "Context source only. Original definition, usage, image suitability, and morphology require term-level review."
+          },
+          {
+            "source_id": "bls-food-preparation",
+            "status": "pending_term_check",
+            "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+          },
+          {
+            "source_id": "onet-general-office-clerks",
+            "status": "pending_term_check",
+            "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+          },
+          {
+            "source_id": "onet-stockers-order-fillers",
+            "status": "pending_term_check",
+            "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+          },
+          {
+            "source_id": "transport-bls-delivery-drivers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "transport-onet-couriers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "transport-hse-loading",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-bls-maintenance",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-bls-machinists",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-bls-quality",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-hse-maintenance",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "r05-oald-pack",
+            "status": "verified",
+            "scope": "Selected passage consulted: verb sense 2, put into container. Goods can be placed in containers for storage, carriage or sale. This is broader than packing personal luggage for a trip. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+          }
+        ],
+        "editorial_notes": "Original project-authored definition, example, and sense-specific picture brief. Subject, morphological, and visual approvals remain separate. Retail module05 individual editorial decision: Retain placing goods inside a container for storage or carriage. Packing can overlap with bagging, so those answers must not compete for one ambiguous image. Retain the existing lemma form. Inflections and synonyms are not added as interchangeable scored answers. Preserve the exact pending atomic graph (pack). Lexical evidence does not approve its boundaries or review status. Difficulty remains a provisional editorial estimate. No human, subject-matter, visual or listening approval is claimed. Independent AI editorial language review was completed on 2026-10-16 for this exact verb sense, part of speech, definition, original example, evidenced forms and reviewed contextual uses; no human or subject-matter credential is claimed. Required domain review remains pending. The authored morphology graph remains pending review. Picture suitability and word-media production remain pending. This record alone does not make a course or module ready."
+      },
+      "after": {
+        "id": "pack.place-in-container.v",
+        "text": "pack",
+        "display_text": "pack",
+        "pos": "verb",
+        "definition": "To put items into a container for storage or transport.",
+        "example": "Please pack the cups carefully.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "pack"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "Hands place a plain cup into a fitted shipping box beside an already packed cup; keep the enclosing container prominent and avoid gift wrapping.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": [],
+            "confusable_with": [
+              "bag.put-in-bag.v"
+            ]
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "pack.place-in-container.v.analysis.v1",
+          "lexeme_id": "pack.place-in-container.v",
+          "text": "pack",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Explicitly authored modern morphological candidate; language and boundary review remain pending. Named spelling rules describe this graph only.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical": "pack",
+              "surface": "pack",
+              "type": "atomic",
+              "canonical_id": "morph.pack"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "reviewed",
+          "domain": "pending",
+          "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "bls-retail-sales",
+            "status": "pending_term_check",
+            "scope": "Context source only. Original definition, usage, image suitability, and morphology require term-level review."
+          },
+          {
+            "source_id": "bls-food-preparation",
+            "status": "pending_term_check",
+            "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+          },
+          {
+            "source_id": "onet-general-office-clerks",
+            "status": "pending_term_check",
+            "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+          },
+          {
+            "source_id": "onet-stockers-order-fillers",
+            "status": "pending_term_check",
+            "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+          },
+          {
+            "source_id": "transport-bls-delivery-drivers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "transport-onet-couriers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "transport-hse-loading",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-bls-maintenance",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-bls-machinists",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-bls-quality",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-hse-maintenance",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "r05-oald-pack",
+            "status": "verified",
+            "scope": "Selected passage consulted: verb sense 2, put into container. Goods can be placed in containers for storage, carriage or sale. This is broader than packing personal luggage for a trip. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+          }
+        ],
+        "editorial_notes": "Original project-authored definition, example, and sense-specific picture brief. Subject, morphological, and visual approvals remain separate. Retail module05 individual editorial decision: Retain placing goods inside a container for storage or carriage. Packing can overlap with bagging, so those answers must not compete for one ambiguous image. Retain the existing lemma form. Inflections and synonyms are not added as interchangeable scored answers. Preserve the exact pending atomic graph (pack). Lexical evidence does not approve its boundaries or review status. Difficulty remains a provisional editorial estimate. No human, subject-matter, visual or listening approval is claimed. Independent AI editorial language review was completed on 2026-10-16 for this exact verb sense, part of speech, definition, original example, evidenced forms and reviewed contextual uses; no human or subject-matter credential is claimed. Required domain review remains pending. The authored morphology graph remains pending review. Picture suitability and word-media production remain pending. This record alone does not make a course or module ready."
+      },
+      "pair": [
+        "pack.place-in-container.v",
+        "bag.put-in-bag.v"
+      ],
+      "classification": "exclude",
+      "rationale": "Putting groceries into a bag for carrying satisfies both bag and the broader pack definition. The pack brief uses a shipping box, so that image need not also show bagging; the reverse bag-to-pack ambiguity is enough to exclude the pair symmetrically. Distinct box/bag examples do not restrict the broad pack answer to boxes.",
+      "reconsideration": "A later task with explicit container-specific instructions could distinguish the actions, but a general single-answer picture round should not rely on that absent instruction."
+    },
+    {
+      "id": "fasten.close-securely.v",
+      "resource": "res://data/professional/lexemes/retail-module05.json",
+      "before_sha256": "944a340b8521ff2bbf0c6e00bf08200f1966ad888bb2a71fe62ed8182b548424",
+      "after_sha256": "2bfd5b3794ec822f0a31f2309c2eeccceee5f91faad3c98db80fce844111c228",
+      "before": {
+        "id": "fasten.close-securely.v",
+        "text": "fasten",
+        "display_text": "fasten",
+        "pos": "verb",
+        "definition": "To join or close parts so they stay in place.",
+        "example": "Please fasten the strap before moving the bag.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "fasten"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "Close view of hands bringing the two halves of a bag buckle together; make the joined closure legible at card size.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "fasten.close-securely.v.analysis.v1",
+          "lexeme_id": "fasten.close-securely.v",
+          "text": "fasten",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Explicitly authored modern morphological candidate; language and boundary review remain pending. Named spelling rules describe this graph only.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical": "fast",
+              "surface": "fast",
+              "type": "stem",
+              "canonical_id": "morph.fast"
+            },
+            {
+              "id": "p2",
+              "canonical": "-en",
+              "surface": "en",
+              "type": "suffix",
+              "canonical_id": "affix.en.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "fasten",
+              "rule": "suffix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "reviewed",
+          "domain": "pending",
+          "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "bls-retail-sales",
+            "status": "pending_term_check",
+            "scope": "Context source only. Original definition, usage, image suitability, and morphology require term-level review."
+          },
+          {
+            "source_id": "transport-bls-delivery-drivers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "transport-onet-couriers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "transport-hse-loading",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "construction-bls-laborers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "construction-bls-carpenters",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "construction-bls-electricians",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "construction-bls-plumbers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-bls-maintenance",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-bls-machinists",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-bls-quality",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-hse-maintenance",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "r05-oald-fasten",
+            "status": "verified",
+            "scope": "Selected passage consulted: verb senses 1 and 2. The selected action closes or joins parts and keeps a closure shut; a buckle is an appropriate concrete example. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+          }
+        ],
+        "editorial_notes": "Original project-authored definition, example, and sense-specific picture brief. Subject, morphological, and visual approvals remain separate. Retail module05 individual editorial decision: Retain joining or closing parts so they stay together. Fastening is broader than zipping and can use a buckle. Retain the existing lemma form. Inflections and synonyms are not added as interchangeable scored answers. Preserve the exact pending morphological graph (fast + -en). Lexical evidence does not approve its boundaries or review status. Difficulty remains a provisional editorial estimate. No human, subject-matter, visual or listening approval is claimed. Independent AI editorial language review was completed on 2026-10-16 for this exact verb sense, part of speech, definition, original example, evidenced forms and reviewed contextual uses; no human or subject-matter credential is claimed. Required domain review remains pending. The authored morphology graph remains pending review. Picture suitability and word-media production remain pending. This record alone does not make a course or module ready."
+      },
+      "after": {
+        "id": "fasten.close-securely.v",
+        "text": "fasten",
+        "display_text": "fasten",
+        "pos": "verb",
+        "definition": "To join or close parts so they stay in place.",
+        "example": "Please fasten the strap before moving the bag.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "fasten"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "Close view of hands bringing the two halves of a bag buckle together; make the joined closure legible at card size.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": [],
+            "confusable_with": [
+              "zip.close-with-zipper.v"
+            ]
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "fasten.close-securely.v.analysis.v1",
+          "lexeme_id": "fasten.close-securely.v",
+          "text": "fasten",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Explicitly authored modern morphological candidate; language and boundary review remain pending. Named spelling rules describe this graph only.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical": "fast",
+              "surface": "fast",
+              "type": "stem",
+              "canonical_id": "morph.fast"
+            },
+            {
+              "id": "p2",
+              "canonical": "-en",
+              "surface": "en",
+              "type": "suffix",
+              "canonical_id": "affix.en.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "fasten",
+              "rule": "suffix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "reviewed",
+          "domain": "pending",
+          "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "bls-retail-sales",
+            "status": "pending_term_check",
+            "scope": "Context source only. Original definition, usage, image suitability, and morphology require term-level review."
+          },
+          {
+            "source_id": "transport-bls-delivery-drivers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "transport-onet-couriers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "transport-hse-loading",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "construction-bls-laborers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "construction-bls-carpenters",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "construction-bls-electricians",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "construction-bls-plumbers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-bls-maintenance",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-bls-machinists",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-bls-quality",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-hse-maintenance",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "r05-oald-fasten",
+            "status": "verified",
+            "scope": "Selected passage consulted: verb senses 1 and 2. The selected action closes or joins parts and keeps a closure shut; a buckle is an appropriate concrete example. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+          }
+        ],
+        "editorial_notes": "Original project-authored definition, example, and sense-specific picture brief. Subject, morphological, and visual approvals remain separate. Retail module05 individual editorial decision: Retain joining or closing parts so they stay together. Fastening is broader than zipping and can use a buckle. Retain the existing lemma form. Inflections and synonyms are not added as interchangeable scored answers. Preserve the exact pending morphological graph (fast + -en). Lexical evidence does not approve its boundaries or review status. Difficulty remains a provisional editorial estimate. No human, subject-matter, visual or listening approval is claimed. Independent AI editorial language review was completed on 2026-10-16 for this exact verb sense, part of speech, definition, original example, evidenced forms and reviewed contextual uses; no human or subject-matter credential is claimed. Required domain review remains pending. The authored morphology graph remains pending review. Picture suitability and word-media production remain pending. This record alone does not make a course or module ready."
+      },
+      "pair": [
+        "fasten.close-securely.v",
+        "zip.close-with-zipper.v"
+      ],
+      "classification": "exclude",
+      "rationale": "Closing a zipper joins and closes parts so they stay in place, which also fastens the item. The buckle-only fasten brief provides a distinct example but does not narrow the current definition to buckles. A zip image can therefore be a valid fasten answer.",
+      "reconsideration": "Retain the exclusion in general picture rounds; device-specific sentences may teach the difference without scoring the broader action as wrong."
+    },
+    {
+      "id": "container.holding-object.n",
+      "resource": "res://data/professional/lexemes/retail-module04.json",
+      "before_sha256": "f710f01427e7fd54bb32b57a167c3867584072034b3a8dd3e17da5d88ac54b5d",
+      "after_sha256": "d12775fc856a69bb300dab899ed0e9ab35786e298455293fefb2fe4303a4ee26",
+      "before": {
+        "id": "container.holding-object.n",
+        "text": "container",
+        "display_text": "container",
+        "pos": "noun",
+        "definition": "An object used to hold, store, or transport something.",
+        "example": "This container has a tight lid.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "container"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "Use a sourced open storage tub with a few benign contents and its lid resting to one side, framing the holding vessel as the main object. Avoid a dominant shipping-container silhouette. Because carton and other vessels also qualify, reject any exercise choice set where another displayed vessel is an equally valid container answer.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": null,
+        "review": {
+          "status": "pending",
+          "language": "reviewed",
+          "domain": "pending",
+          "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "bls-retail-sales",
+            "status": "pending_term_check",
+            "scope": "Context source only. Original definition, usage, image suitability, and morphology require term-level review."
+          },
+          {
+            "source_id": "bls-food-preparation",
+            "status": "pending_term_check",
+            "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+          },
+          {
+            "source_id": "bls-material-movers",
+            "status": "pending_term_check",
+            "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+          },
+          {
+            "source_id": "transport-onet-couriers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "transport-hse-loading",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "retail04-container",
+            "status": "verified",
+            "scope": "Selected passage consulted: Noun sense 1. The general holding object can be a box, bottle or similar vessel. The separate freight-container sense should not replace it. Selected lexical sense and explicitly listed variants only. No term-level CEFR, morphology, pronunciation recording, image license, domain practice, or release approval is inferred. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+          }
+        ],
+        "editorial_notes": "Original project-authored definition, example, and sense-specific picture brief. Subject, morphological, and visual approval are separate. Retail module04 individual editorial decision: Retain the general object used to hold or transport contents, including food-service and shipping settings. Do not silently narrow it to a freight container. Retain container. A box, jar or bottle is a specific example rather than an exact universal alternative. Keep null; contain + agent/instrument suffix is not automatically accepted without graph review. Selected lexical passages were read and original project examples were checked. Independent AI editorial language review was completed on 2026-10-16 for this exact noun sense, part of speech, definition, original example, and evidenced forms; no human or subject-matter credential is claimed. Required domain review remains pending. Morphology remains unauthored. Picture suitability and word-media production remain pending. This record alone does not make a course or module ready. Difficulty is a provisional editorial estimate. All required domain, morphology and media gates stay exact; no human or specialist credential is claimed."
+      },
+      "after": {
+        "id": "container.holding-object.n",
+        "text": "container",
+        "display_text": "container",
+        "pos": "noun",
+        "definition": "An object used to hold, store, or transport something.",
+        "example": "This container has a tight lid.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "container"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "Use a sourced open storage tub with a few benign contents and its lid resting to one side, framing the holding vessel as the main object. Avoid a dominant shipping-container silhouette. Because carton and other vessels also qualify, reject any exercise choice set where another displayed vessel is an equally valid container answer.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": [],
+            "confusable_with": [
+              "carton.packaging-box.n"
+            ]
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": null,
+        "review": {
+          "status": "pending",
+          "language": "reviewed",
+          "domain": "pending",
+          "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "bls-retail-sales",
+            "status": "pending_term_check",
+            "scope": "Context source only. Original definition, usage, image suitability, and morphology require term-level review."
+          },
+          {
+            "source_id": "bls-food-preparation",
+            "status": "pending_term_check",
+            "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+          },
+          {
+            "source_id": "bls-material-movers",
+            "status": "pending_term_check",
+            "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+          },
+          {
+            "source_id": "transport-onet-couriers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "transport-hse-loading",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "retail04-container",
+            "status": "verified",
+            "scope": "Selected passage consulted: Noun sense 1. The general holding object can be a box, bottle or similar vessel. The separate freight-container sense should not replace it. Selected lexical sense and explicitly listed variants only. No term-level CEFR, morphology, pronunciation recording, image license, domain practice, or release approval is inferred. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+          }
+        ],
+        "editorial_notes": "Original project-authored definition, example, and sense-specific picture brief. Subject, morphological, and visual approval are separate. Retail module04 individual editorial decision: Retain the general object used to hold or transport contents, including food-service and shipping settings. Do not silently narrow it to a freight container. Retain container. A box, jar or bottle is a specific example rather than an exact universal alternative. Keep null; contain + agent/instrument suffix is not automatically accepted without graph review. Selected lexical passages were read and original project examples were checked. Independent AI editorial language review was completed on 2026-10-16 for this exact noun sense, part of speech, definition, original example, and evidenced forms; no human or subject-matter credential is claimed. Required domain review remains pending. Morphology remains unauthored. Picture suitability and word-media production remain pending. This record alone does not make a course or module ready. Difficulty is a provisional editorial estimate. All required domain, morphology and media gates stay exact; no human or specialist credential is claimed."
+      },
+      "pair": [
+        "container.holding-object.n",
+        "carton.packaging-box.n"
+      ],
+      "classification": "exclude",
+      "rationale": "A packing carton is a container under both exact definitions. The storage tub and cardboard carton briefs select different exemplars, but the carton remains a valid answer to container. The container brief already rejects choice sets containing another equally valid vessel.",
+      "reconsideration": "Do not remove this class/member exclusion just because the two assets have different silhouettes."
+    },
+    {
+      "id": "lid.container-top.n",
+      "resource": "res://data/professional/lexemes/retail-module04.json",
+      "before_sha256": "63f3722e00c7990cd8bf325508baaa80b6c42560f8c49d23aef4c0d02d60c980",
+      "after_sha256": "90dda49c36474cb391ec3b5fb617df14ca6f8ac4ade4de6ea29e468d28c0bce9",
+      "before": {
+        "id": "lid.container-top.n",
+        "text": "lid",
+        "display_text": "lid",
+        "pos": "noun",
+        "definition": "A removable or hinged cover for a container.",
+        "example": "The lid belongs to the larger box.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "lid"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "Use a sourced broad box or tub lid lifted just above its matching opening, with the cover dominant and the vessel only as context. Do not choose a tiny bottle cap as its unique opposing distractor: both can correctly be called lids. Reject a roof, hat or ambiguous flat panel.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "lid.container-top.n.analysis.v1",
+          "lexeme_id": "lid.container-top.n",
+          "text": "lid",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Explicitly authored modern morphological candidate; language and boundary review remain pending. Named spelling rules describe this graph only.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical": "lid",
+              "surface": "lid",
+              "type": "atomic",
+              "canonical_id": "morph.lid"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "reviewed",
+          "domain": "pending",
+          "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "bls-retail-sales",
+            "status": "pending_term_check",
+            "scope": "Context source only. Original definition, usage, image suitability, and morphology require term-level review."
+          },
+          {
+            "source_id": "bls-food-preparation",
+            "status": "pending_term_check",
+            "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+          },
+          {
+            "source_id": "bls-material-movers",
+            "status": "pending_term_check",
+            "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+          },
+          {
+            "source_id": "retail04-lid",
+            "status": "verified",
+            "scope": "Selected passage consulted: Noun sense 1 and lid/top/cap comparison. A lid covers the top opening of a container and can be lifted, turned or hinged. Cap is a narrower overlapping cover term, so their images must not be mutually valid distractors. Selected lexical sense and explicitly listed variants only. No term-level CEFR, morphology, pronunciation recording, image license, domain practice, or release approval is inferred. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+          }
+        ],
+        "editorial_notes": "Original project-authored definition, example, and sense-specific picture brief. Subject, morphological, and visual approval are separate. Retail module04 individual editorial decision: Retain the removable or hinged container top. Broad usage overlaps cap, which must be respected when choosing image distractors. Retain lid. Top is too broad and cap denotes an overlapping narrower closure; do not bulk merge their identities. Preserve the pending intact base; no composition is introduced. Selected lexical passages were read and original project examples were checked. Independent AI editorial language review was completed on 2026-10-16 for this exact noun sense, part of speech, definition, original example, and evidenced forms; no human or subject-matter credential is claimed. Required domain review remains pending. The authored morphology graph remains pending review. Picture suitability and word-media production remain pending. This record alone does not make a course or module ready. Difficulty is a provisional editorial estimate. All required domain, morphology and media gates stay exact; no human or specialist credential is claimed."
+      },
+      "after": {
+        "id": "lid.container-top.n",
+        "text": "lid",
+        "display_text": "lid",
+        "pos": "noun",
+        "definition": "A removable or hinged cover for a container.",
+        "example": "The lid belongs to the larger box.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "lid"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "Use a sourced broad box or tub lid lifted just above its matching opening, with the cover dominant and the vessel only as context. Do not choose a tiny bottle cap as its unique opposing distractor: both can correctly be called lids. Reject a roof, hat or ambiguous flat panel.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": [],
+            "confusable_with": [
+              "cap.bottle-closure.n"
+            ]
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "lid.container-top.n.analysis.v1",
+          "lexeme_id": "lid.container-top.n",
+          "text": "lid",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Explicitly authored modern morphological candidate; language and boundary review remain pending. Named spelling rules describe this graph only.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical": "lid",
+              "surface": "lid",
+              "type": "atomic",
+              "canonical_id": "morph.lid"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "reviewed",
+          "domain": "pending",
+          "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "bls-retail-sales",
+            "status": "pending_term_check",
+            "scope": "Context source only. Original definition, usage, image suitability, and morphology require term-level review."
+          },
+          {
+            "source_id": "bls-food-preparation",
+            "status": "pending_term_check",
+            "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+          },
+          {
+            "source_id": "bls-material-movers",
+            "status": "pending_term_check",
+            "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+          },
+          {
+            "source_id": "retail04-lid",
+            "status": "verified",
+            "scope": "Selected passage consulted: Noun sense 1 and lid/top/cap comparison. A lid covers the top opening of a container and can be lifted, turned or hinged. Cap is a narrower overlapping cover term, so their images must not be mutually valid distractors. Selected lexical sense and explicitly listed variants only. No term-level CEFR, morphology, pronunciation recording, image license, domain practice, or release approval is inferred. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+          }
+        ],
+        "editorial_notes": "Original project-authored definition, example, and sense-specific picture brief. Subject, morphological, and visual approval are separate. Retail module04 individual editorial decision: Retain the removable or hinged container top. Broad usage overlaps cap, which must be respected when choosing image distractors. Retain lid. Top is too broad and cap denotes an overlapping narrower closure; do not bulk merge their identities. Preserve the pending intact base; no composition is introduced. Selected lexical passages were read and original project examples were checked. Independent AI editorial language review was completed on 2026-10-16 for this exact noun sense, part of speech, definition, original example, and evidenced forms; no human or subject-matter credential is claimed. Required domain review remains pending. The authored morphology graph remains pending review. Picture suitability and word-media production remain pending. This record alone does not make a course or module ready. Difficulty is a provisional editorial estimate. All required domain, morphology and media gates stay exact; no human or specialist credential is claimed."
+      },
+      "pair": [
+        "lid.container-top.n",
+        "cap.bottle-closure.n"
+      ],
+      "classification": "exclude",
+      "rationale": "The bottle cap is a small removable container cover and fits the current lid definition. Oxford's lid comparison expressly describes a cap as a small lid, and gives bottle-lid usage. Broad-tub and narrow-bottle crops do not make the general word lid incorrect for a cap.",
+      "reconsideration": "Retain in ordinary picture rounds; teaching a prototypical size difference is not evidence of mutually exclusive meanings."
+    },
+    {
+      "id": "sole.shoe-bottom.n",
+      "resource": "res://data/professional/lexemes/retail-module04.json",
+      "before_sha256": "10d577a9be301aa0744ba94328658013c7058b04baef9b61d38e426b202e77fd",
+      "after_sha256": "a25c4e7a075df8fd3cfea861084e70370e7ed77eebcc3ef88bb1c1604f075f21",
+      "before": {
+        "id": "sole.shoe-bottom.n",
+        "text": "sole",
+        "display_text": "sole",
+        "pos": "noun",
+        "definition": "The bottom part of a shoe that touches the ground.",
+        "example": "The sole has a textured surface.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "sole"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "Use a sourced underside view of a shoe with the forefoot and midfoot contact surface dominant and the shoe edge visible. Keep a separate heel secondary. Reject a foot sole, fish, full side-view shoe or an insole removed from the shoe; inspect the chosen crop against heel cards.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "sole.shoe-bottom.n.analysis.v1",
+          "lexeme_id": "sole.shoe-bottom.n",
+          "text": "sole",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Explicitly authored modern morphological candidate; language and boundary review remain pending. Named spelling rules describe this graph only.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical": "sole",
+              "surface": "sole",
+              "type": "atomic",
+              "canonical_id": "morph.sole"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "reviewed",
+          "language": "reviewed",
+          "domain": "not_required",
+          "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "bls-retail-sales",
+            "status": "pending_term_check",
+            "scope": "Context source only. Original definition, usage, image suitability, and morphology require term-level review."
+          },
+          {
+            "source_id": "retail04-sole",
+            "status": "verified",
+            "scope": "Selected passage consulted: Noun sense 2, shoe or sock bottom. The selected shoe-bottom noun is separate from the body part, flat fish and only/single adjective. The shoe heel is a distinct part. Selected lexical sense and explicitly listed variants only. No term-level CEFR, morphology, pronunciation recording, image license, domain practice, or release approval is inferred. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+          }
+        ],
+        "editorial_notes": "Original project-authored definition, example, and sense-specific picture brief. Subject, morphological, and visual approval are separate. Retail module04 individual editorial decision: Retain the shoe-bottom part rather than a bare foot, a fish or the adjective only. Keep it distinct from the separate raised heel. Retain sole. Soul is a homophone with another meaning; outsole is more specific and is not added as a universal synonym. Preserve the pending whole-form graph and shoe sense. Selected lexical passages were read and original project examples were checked. Independent AI editorial language review was completed on 2026-10-16 for this exact noun sense, part of speech, definition, original example, and evidenced forms; no human or subject-matter credential is claimed. Domain review remains not required under the current unchanged authoring rules. The authored morphology graph remains pending review. Picture suitability and word-media production remain pending. This record alone does not make a course or module ready. Difficulty is a provisional editorial estimate. All required domain, morphology and media gates stay exact; no human or specialist credential is claimed."
+      },
+      "after": {
+        "id": "sole.shoe-bottom.n",
+        "text": "sole",
+        "display_text": "sole",
+        "pos": "noun",
+        "definition": "The bottom part of a shoe that touches the ground.",
+        "example": "The sole has a textured surface.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "sole"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "Use a sourced underside view of a shoe with the forefoot and midfoot contact surface dominant and the shoe edge visible. Keep a separate heel secondary. Reject a foot sole, fish, full side-view shoe or an insole removed from the shoe; inspect the chosen crop against heel cards.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": [],
+            "confusable_with": [
+              "heel.raised-shoe-back.n"
+            ]
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "sole.shoe-bottom.n.analysis.v1",
+          "lexeme_id": "sole.shoe-bottom.n",
+          "text": "sole",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Explicitly authored modern morphological candidate; language and boundary review remain pending. Named spelling rules describe this graph only.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical": "sole",
+              "surface": "sole",
+              "type": "atomic",
+              "canonical_id": "morph.sole"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "reviewed",
+          "language": "reviewed",
+          "domain": "not_required",
+          "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "bls-retail-sales",
+            "status": "pending_term_check",
+            "scope": "Context source only. Original definition, usage, image suitability, and morphology require term-level review."
+          },
+          {
+            "source_id": "retail04-sole",
+            "status": "verified",
+            "scope": "Selected passage consulted: Noun sense 2, shoe or sock bottom. The selected shoe-bottom noun is separate from the body part, flat fish and only/single adjective. The shoe heel is a distinct part. Selected lexical sense and explicitly listed variants only. No term-level CEFR, morphology, pronunciation recording, image license, domain practice, or release approval is inferred. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+          }
+        ],
+        "editorial_notes": "Original project-authored definition, example, and sense-specific picture brief. Subject, morphological, and visual approval are separate. Retail module04 individual editorial decision: Retain the shoe-bottom part rather than a bare foot, a fish or the adjective only. Keep it distinct from the separate raised heel. Retain sole. Soul is a homophone with another meaning; outsole is more specific and is not added as a universal synonym. Preserve the pending whole-form graph and shoe sense. Selected lexical passages were read and original project examples were checked. Independent AI editorial language review was completed on 2026-10-16 for this exact noun sense, part of speech, definition, original example, and evidenced forms; no human or subject-matter credential is claimed. Domain review remains not required under the current unchanged authoring rules. The authored morphology graph remains pending review. Picture suitability and word-media production remain pending. This record alone does not make a course or module ready. Difficulty is a provisional editorial estimate. All required domain, morphology and media gates stay exact; no human or specialist credential is claimed."
+      },
+      "pair": [
+        "sole.shoe-bottom.n",
+        "heel.raised-shoe-back.n"
+      ],
+      "classification": "exclude_conservatively_pending_boundary_and_crop_review",
+      "rationale": "The current sole definition says only the shoe bottom that touches the ground and does not exclude a heel. The current heel definition places it on that bottom. This makes the written teaching boundary broad enough to confuse a learner, and neither pending picture has been checked. A conservative pair exclusion is defensible now.",
+      "reconsideration": "Revisit after an independently accepted sole boundary clarification and actual card crops clearly isolate the two parts. Do not present this exclusion as proof that heel means sole."
+    },
+    {
+      "id": "weigh.measure-weight.v",
+      "resource": "res://data/professional/lexemes/retail-module05.json",
+      "before_sha256": "76a8d06417bcb1cf889d791635b5b7c1f4b5d4bafb759d53dd14d0dd78db8f67",
+      "after_sha256": "08d0b9598072195e0158cb3206dfdb4971c9f76a347ac0a37eff222ccff72387",
+      "before": {
+        "id": "weigh.measure-weight.v",
+        "text": "weigh",
+        "display_text": "weigh",
+        "pos": "verb",
+        "definition": "To find how heavy something is using a scale.",
+        "example": "We weigh loose produce at this counter.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "weigh"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A staff member places loose apples on a shop scale and watches its display; distinguish the act from merely holding produce.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "weigh.measure-weight.v.analysis.v1",
+          "lexeme_id": "weigh.measure-weight.v",
+          "text": "weigh",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Explicitly authored modern morphological candidate; language and boundary review remain pending. Named spelling rules describe this graph only.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical": "weigh",
+              "surface": "weigh",
+              "type": "atomic",
+              "canonical_id": "morph.weigh"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "reviewed",
+          "domain": "pending",
+          "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "bls-retail-sales",
+            "status": "pending_term_check",
+            "scope": "Context source only. Original definition, usage, image suitability, and morphology require term-level review."
+          },
+          {
+            "source_id": "bls-food-preparation",
+            "status": "pending_term_check",
+            "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+          },
+          {
+            "source_id": "onet-stockers-order-fillers",
+            "status": "pending_term_check",
+            "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+          },
+          {
+            "source_id": "transport-bls-delivery-drivers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "transport-onet-couriers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "transport-hse-loading",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-bls-maintenance",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-bls-machinists",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-bls-quality",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-hse-maintenance",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "r05-oald-weigh",
+            "status": "verified",
+            "scope": "Selected passage consulted: verb sense 2. The transitive measurement sense determines heaviness, commonly using scales; the entry distinguishes it from considering options. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+          }
+        ],
+        "editorial_notes": "Original project-authored definition, example, and sense-specific picture brief. Subject, morphological, and visual approvals remain separate. Retail module05 individual editorial decision: Retain finding heaviness with a scale, not weighing an argument. A displayed scale establishes the measurement action. Retain the existing lemma form. Inflections and synonyms are not added as interchangeable scored answers. Preserve the exact pending atomic graph (weigh). Lexical evidence does not approve its boundaries or review status. Difficulty remains a provisional editorial estimate. No human, subject-matter, visual or listening approval is claimed. Independent AI editorial language review was completed on 2026-10-16 for this exact verb sense, part of speech, definition, original example, evidenced forms and reviewed contextual uses; no human or subject-matter credential is claimed. Required domain review remains pending. The authored morphology graph remains pending review. Picture suitability and word-media production remain pending. This record alone does not make a course or module ready."
+      },
+      "after": {
+        "id": "weigh.measure-weight.v",
+        "text": "weigh",
+        "display_text": "weigh",
+        "pos": "verb",
+        "definition": "To find how heavy something is using a scale.",
+        "example": "We weigh loose produce at this counter.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "weigh"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A staff member places loose apples on a shop scale and watches its display; distinguish the act from merely holding produce.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": [],
+            "confusable_with": [
+              "measure.find-dimensions.v"
+            ]
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "weigh.measure-weight.v.analysis.v1",
+          "lexeme_id": "weigh.measure-weight.v",
+          "text": "weigh",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Explicitly authored modern morphological candidate; language and boundary review remain pending. Named spelling rules describe this graph only.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical": "weigh",
+              "surface": "weigh",
+              "type": "atomic",
+              "canonical_id": "morph.weigh"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "reviewed",
+          "domain": "pending",
+          "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "bls-retail-sales",
+            "status": "pending_term_check",
+            "scope": "Context source only. Original definition, usage, image suitability, and morphology require term-level review."
+          },
+          {
+            "source_id": "bls-food-preparation",
+            "status": "pending_term_check",
+            "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+          },
+          {
+            "source_id": "onet-stockers-order-fillers",
+            "status": "pending_term_check",
+            "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+          },
+          {
+            "source_id": "transport-bls-delivery-drivers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "transport-onet-couriers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "transport-hse-loading",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-bls-maintenance",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-bls-machinists",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-bls-quality",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "manufacturing-hse-maintenance",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "r05-oald-weigh",
+            "status": "verified",
+            "scope": "Selected passage consulted: verb sense 2. The transitive measurement sense determines heaviness, commonly using scales; the entry distinguishes it from considering options. Lexical evidence only. This does not certify project difficulty, morphology, workplace procedures, image suitability or audio. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+          }
+        ],
+        "editorial_notes": "Original project-authored definition, example, and sense-specific picture brief. Subject, morphological, and visual approvals remain separate. Retail module05 individual editorial decision: Retain finding heaviness with a scale, not weighing an argument. A displayed scale establishes the measurement action. Retain the existing lemma form. Inflections and synonyms are not added as interchangeable scored answers. Preserve the exact pending atomic graph (weigh). Lexical evidence does not approve its boundaries or review status. Difficulty remains a provisional editorial estimate. No human, subject-matter, visual or listening approval is claimed. Independent AI editorial language review was completed on 2026-10-16 for this exact verb sense, part of speech, definition, original example, evidenced forms and reviewed contextual uses; no human or subject-matter credential is claimed. Required domain review remains pending. The authored morphology graph remains pending review. Picture suitability and word-media production remain pending. This record alone does not make a course or module ready."
+      },
+      "pair": [
+        "weigh.measure-weight.v",
+        "measure.find-dimensions.v"
+      ],
+      "classification": "exclude",
+      "rationale": "Weighing with a scale determines a physical quantity using an instrument and is therefore a kind of measurement. The live measure definition covers size, amount or degree; its legacy dimensions ID and tape-measure illustration do not narrow that shared sense. The scale scene is valid for both words.",
+      "reconsideration": "Keep this exclusion while measure retains its broad canonical definition; a length-only contextual prompt would require separate reviewed instructions."
+    },
+    {
+      "id": "handle.grip-part.n",
+      "resource": "res://data/professional/lexemes/retail-module04.json",
+      "before_sha256": "d541cbe35c9472549e9440411c28c401da6710d4f707ce996aadfc29266da0b4",
+      "after_sha256": "a1c1e77a1fd463a098996fee0dfc10614b430c7da777680fea1ee2144f2d5ce3",
+      "before": {
+        "id": "handle.grip-part.n",
+        "text": "handle",
+        "display_text": "handle",
+        "pos": "noun",
+        "definition": "A part designed to be held when carrying or using an object.",
+        "example": "The suitcase has a strong handle.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "handle"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "Use sourced artwork cropped around a suitcase carrying handle with its two attachment points and enough case body to show function. Make the grip dominant. Reject a full suitcase portrait, loose strap, online username or door-only scene that obscures the carrying example.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "handle.grip-part.n.analysis.v1",
+          "lexeme_id": "handle.grip-part.n",
+          "text": "handle",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Explicitly authored modern morphological candidate; language and boundary review remain pending. Named spelling rules describe this graph only.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical": "handle",
+              "surface": "handle",
+              "type": "atomic",
+              "canonical_id": "morph.handle"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "reviewed",
+          "language": "reviewed",
+          "domain": "not_required",
+          "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "bls-retail-sales",
+            "status": "pending_term_check",
+            "scope": "Context source only. Original definition, usage, image suitability, and morphology require term-level review."
+          },
+          {
+            "source_id": "retail04-handle",
+            "status": "verified",
+            "scope": "Selected passage consulted: Noun sense 2, of cup/bag/tool. The selected part is held to carry or use an object. Door controls are related, but social usernames and the verb are separate senses. Selected lexical sense and explicitly listed variants only. No term-level CEFR, morphology, pronunciation recording, image license, domain practice, or release approval is inferred. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+          }
+        ],
+        "editorial_notes": "Original project-authored definition, example, and sense-specific picture brief. Subject, morphological, and visual approval are separate. Retail module04 individual editorial decision: Retain the gripping part used to carry or operate an object. The suitcase example selects this noun clearly. Retain handle. A flexible carrying strap is related but remains a separate taught part. Preserve the existing pending whole-form decision; no hand-derived graph is newly asserted. Selected lexical passages were read and original project examples were checked. Independent AI editorial language review was completed on 2026-10-16 for this exact noun sense, part of speech, definition, original example, and evidenced forms; no human or subject-matter credential is claimed. Domain review remains not required under the current unchanged authoring rules. The authored morphology graph remains pending review. Picture suitability and word-media production remain pending. This record alone does not make a course or module ready. Difficulty is a provisional editorial estimate. All required domain, morphology and media gates stay exact; no human or specialist credential is claimed."
+      },
+      "after": {
+        "id": "handle.grip-part.n",
+        "text": "handle",
+        "display_text": "handle",
+        "pos": "noun",
+        "definition": "A part designed to be held when carrying or using an object.",
+        "example": "The suitcase has a strong handle.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "handle"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "Use sourced artwork cropped around a suitcase carrying handle with its two attachment points and enough case body to show function. Make the grip dominant. Reject a full suitcase portrait, loose strap, online username or door-only scene that obscures the carrying example.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": [],
+            "confusable_with": [
+              "strap.flexible-fastening-band.n"
+            ]
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "handle.grip-part.n.analysis.v1",
+          "lexeme_id": "handle.grip-part.n",
+          "text": "handle",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Explicitly authored modern morphological candidate; language and boundary review remain pending. Named spelling rules describe this graph only.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical": "handle",
+              "surface": "handle",
+              "type": "atomic",
+              "canonical_id": "morph.handle"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "reviewed",
+          "language": "reviewed",
+          "domain": "not_required",
+          "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "bls-retail-sales",
+            "status": "pending_term_check",
+            "scope": "Context source only. Original definition, usage, image suitability, and morphology require term-level review."
+          },
+          {
+            "source_id": "retail04-handle",
+            "status": "verified",
+            "scope": "Selected passage consulted: Noun sense 2, of cup/bag/tool. The selected part is held to carry or use an object. Door controls are related, but social usernames and the verb are separate senses. Selected lexical sense and explicitly listed variants only. No term-level CEFR, morphology, pronunciation recording, image license, domain practice, or release approval is inferred. This exact selected lexical passage was used in the completed independent AI language review. It does not approve subject practice, morphology, images, audio, or release."
+          }
+        ],
+        "editorial_notes": "Original project-authored definition, example, and sense-specific picture brief. Subject, morphological, and visual approval are separate. Retail module04 individual editorial decision: Retain the gripping part used to carry or operate an object. The suitcase example selects this noun clearly. Retain handle. A flexible carrying strap is related but remains a separate taught part. Preserve the existing pending whole-form decision; no hand-derived graph is newly asserted. Selected lexical passages were read and original project examples were checked. Independent AI editorial language review was completed on 2026-10-16 for this exact noun sense, part of speech, definition, original example, and evidenced forms; no human or subject-matter credential is claimed. Domain review remains not required under the current unchanged authoring rules. The authored morphology graph remains pending review. Picture suitability and word-media production remain pending. This record alone does not make a course or module ready. Difficulty is a provisional editorial estimate. All required domain, morphology and media gates stay exact; no human or specialist credential is claimed."
+      },
+      "pair": [
+        "handle.grip-part.n",
+        "strap.flexible-fastening-band.n"
+      ],
+      "classification": "exclude_conservatively_pending_asset_review",
+      "rationale": "A flexible carrying band designed to be gripped can be both a strap and a handle. The current handle definition permits that form, and its suitcase-grip brief does not require a rigid piece. The strap brief rejects rigid grips, but the potential overlap is the flexible carrying handle.",
+      "reconsideration": "Actual assets could establish a rigid handgrip versus an unambiguously shoulder-worn band. Until reviewed, the conservative exclusion avoids relying on a rigidity boundary absent from the definitions."
+    }
+  ],
+  "before_registry_json_sha256": "d84bdef64003ca897f41ba6a4b258082ccc0b27be5ea838f666c6f030faf7135",
+  "after_registry_json_sha256": "69633084c1e02f13bc2ceacf41912c7be5a321a55368c7a413e80ebcac2488e8",
+  "scope": "Seven canonical ID links only, each stored once and interpreted symmetrically by picture-mode selection. All fourteen exact entry preimages checked. Sole/heel and handle/strap remain conservative asset-sensitive safeguards, not synonym assertions. Definitions, examples, picture flags, language/domain/morphology reviews, acquired media, course/module memberships and readiness remain unchanged."
+}

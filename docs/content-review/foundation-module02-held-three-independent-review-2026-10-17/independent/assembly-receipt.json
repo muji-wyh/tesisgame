@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "status": "review_record_assembly_complete",
+  "started_at": "2026-10-16T21:05:13.584Z",
+  "completed_at": "2026-10-16T21:05:14.820Z",
+  "root": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame",
+  "assembly_source": "build/professional-english/foundation02-held-three-independent-review-r01/assemble-review-record.cjs",
+  "source_before_sha256": "2c95bd3b3899fe6fb2e581857d4dd59d9268a76fd325896c7e6d8c063da52b7a",
+  "source_after_sha256": "2c95bd3b3899fe6fb2e581857d4dd59d9268a76fd325896c7e6d8c063da52b7a",
+  "source_unchanged": true,
+  "author_inventory_sha256": "68813f88a92eefba3ac1f03921ce2080c65cec6f989d8988f14e4a6958923d22",
+  "author_artifact_count": 15,
+  "checked_input_records": 353,
+  "checked_unique_inputs": 352,
+  "drift_record_count": 1,
+  "drift_paths": [
+    "docs/plans/professional-english-checkpoint.md"
+  ],
+  "exact_held_entries_checked": 6,
+  "exact_expression_records_checked": 24,
+  "membership_records_checked": 120,
+  "alternative_records_checked": 4,
+  "neighbor_records_checked": 9,
+  "accepted_language_projections": 3,
+  "production_whole_entry_holds_unchanged": 6,
+  "production_review_gates_changed": 0,
+  "source_observations_sha256": "a2cf97e889a612c071063c0f6a8ecd89a97118689bd7e0dbb2372a52daa6a72f",
+  "reviewer_decisions_sha256": "80d07670034418d6a973d1a776d4e410903e6fa274ea1aa3daf3ef91c4a0da39",
+  "outputs_before_receipt": [
+    {
+      "path": "input-verification.json",
+      "bytes": 122799,
+      "sha256": "e68dbb74b29aa63d40bfe27f13c1dac7de88156f8f7cf231b69ca7fc739f24d4"
+    },
+    {
+      "path": "language-projections.json",
+      "bytes": 64341,
+      "sha256": "531122b370d14a559791f360b04c3b373c697fcf92f94dc8ab6428861a9304cf"
+    },
+    {
+      "path": "context-checks.json",
+      "bytes": 66405,
+      "sha256": "2a4a1c5b34e3e5dc8d8b44af82ae654d7369bca049ed576984c78536cd07cdfc"
+    }
+  ],
+  "production_mutated": false,
+  "project_module_imports": false,
+  "preparation_dispatched": false,
+  "serializer_dispatched": false,
+  "tests_dispatched": false,
+  "native_dispatched": false,
+  "build_or_browser_dispatched": false,
+  "runtime_validation_transfer": false,
+  "overall_or_language_counts_advanced": false
+}

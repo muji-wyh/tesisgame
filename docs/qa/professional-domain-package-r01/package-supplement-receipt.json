@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "kind": "professional_domain_affected_package_supplement",
+  "started_at": "2026-10-16T19:01:29.0093336Z",
+  "finished_at": "2026-10-16T19:07:48.3057508Z",
+  "command": "node --test --test-name-pattern '^Professional domain package installation' tests/professional-domain-release.test.cjs",
+  "exit_code": 0,
+  "log_path": "build\\professional-english\\domain-application-release-r01\\node-package-supplement-r01.log",
+  "log_sha256": "0a9107160714d480c04d60c319d7c5389c23d7e160d38191ce435e19a8141060",
+  "original_run_remains_failed": true,
+  "production_implementation_changed": false,
+  "native_execution": false,
+  "real_package_installation": false,
+  "web_export": false
+}

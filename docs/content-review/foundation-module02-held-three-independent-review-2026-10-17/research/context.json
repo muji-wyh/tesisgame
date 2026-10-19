@@ -1,0 +1,6251 @@
+{
+  "status": "research_only_unaccepted",
+  "captured_at": "2026-10-16T20:50:03.026Z",
+  "root": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame",
+  "branch": "codex/current-age-vocabulary",
+  "head": "1a8e2c4d13b31e0da9b73adbf63f5327b8fab243",
+  "entries": [
+    {
+      "id": "collect.gather.v",
+      "object_sha256": "177f9fc35b0d348ddcc3cdf60c43dd5119d145acfe781d17c2b988e1b6d77981",
+      "entry": {
+        "id": "collect.gather.v",
+        "text": "collect",
+        "display_text": "collect",
+        "pos": "verb",
+        "definition": "To gather items together or pick them up from a place.",
+        "example": "Please collect the documents from reception.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "collect"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A friendly worker picking up an agreed set of fictional documents from reception; show the pickup context clearly, with no money collection or private information.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "collect.gather.v.analysis.v1",
+          "lexeme_id": "collect.gather.v",
+          "text": "collect",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "collect",
+              "surface": "collect",
+              "canonical_id": "morph.collect"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. The assessment explicitly uses picking up items from a place. The general gathering identity is retained; collection of money is outside this example."
+      }
+    },
+    {
+      "id": "notify.inform.v",
+      "object_sha256": "7aaf8490d372bb3c8490c2824955a59e92c3d3dfe4416cb73d772cc6413a0cdc",
+      "entry": {
+        "id": "notify.inform.v",
+        "text": "notify",
+        "display_text": "notify",
+        "pos": "verb",
+        "definition": "To formally tell someone information they need to know.",
+        "example": "Please notify the team if the meeting time changes.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "notify"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A meeting change notification reaching all affected colleagues.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "notify.inform.v.analysis.v1",
+          "lexeme_id": "notify.inform.v",
+          "text": "notify",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "Proposed intact modern teaching unit, not a claim that the word lacks historical morphology. The history concerns making known from Latin notus. Splitting modern not + ify without a carefully explained Latin root would misleadingly present the English negative not. Keep the headword intact pending that decision. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/notify"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.notify",
+              "type": "atomic",
+              "canonical": "notify",
+              "surface": "notify"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-notify",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      }
+    },
+    {
+      "id": "postpone.delay-until-later.v",
+      "object_sha256": "ba004741e07d1dddcc8e1f69ebea15717ad97d90ea87f483e72559846a17cded",
+      "entry": {
+        "id": "postpone.delay-until-later.v",
+        "text": "postpone",
+        "display_text": "postpone",
+        "pos": "verb",
+        "definition": "To arrange for a planned activity to happen later.",
+        "example": "The team decided to postpone the review until next week.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "postpone"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "An event moved from this week to a later date.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "postpone.delay-until-later.v.analysis.v1",
+          "lexeme_id": "postpone.delay-until-later.v",
+          "text": "postpone",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "The history documents post- and the Latin placing root from ponere. Pone here is a bound classical root, not an ordinary modern word. The after/later relation needs a learner-facing explanation before release. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/postpone",
+              "https://www.dictionary.com/browse/postpone"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "affix.post.prefix",
+              "type": "prefix",
+              "canonical": "post",
+              "surface": "post"
+            },
+            {
+              "id": "p2",
+              "canonical_id": "morph.pone",
+              "type": "root",
+              "canonical": "pone",
+              "surface": "pone"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "postpone",
+              "rule": "latinate_prefix_root_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-postpone",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          },
+          {
+            "source_id": "foundation-dictionary-postpone",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      }
+    },
+    {
+      "id": "verify.establish-accuracy.v",
+      "object_sha256": "d900dc371a4f37e536e5b252470b50fc85e988fc799ab279f2ef836e9ea43e9a",
+      "entry": {
+        "id": "verify.establish-accuracy.v",
+        "text": "verify",
+        "display_text": "verify",
+        "pos": "verb",
+        "definition": "To establish that information is accurate by checking suitable evidence.",
+        "example": "Please verify the reference number against the order record.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "verify"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A reference number compared with an authoritative order record.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "verify.establish-accuracy.v.analysis.v1",
+          "lexeme_id": "verify.establish-accuracy.v",
+          "text": "verify",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "The source explicitly gives the true-related veri- combining form and -fy family. Preserve those constituents rather than syllable cuts, and review their relationship to checking accuracy. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/verify",
+              "https://www.dictionary.com/browse/verify"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.veri",
+              "type": "combining_form",
+              "canonical": "veri",
+              "surface": "veri"
+            },
+            {
+              "id": "p2",
+              "canonical_id": "affix.fy.suffix",
+              "type": "suffix",
+              "canonical": "fy",
+              "surface": "fy"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "verify",
+              "rule": "latinate_combining_form_suffix"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-verify",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          },
+          {
+            "source_id": "foundation-dictionary-verify",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      }
+    },
+    {
+      "id": "unsafe.presenting-danger.adj",
+      "object_sha256": "b03ac8acf04932b9dfc3d44775939399ad37f73a1149faf72b708f244fc23286",
+      "entry": {
+        "id": "unsafe.presenting-danger.adj",
+        "text": "unsafe",
+        "display_text": "unsafe",
+        "pos": "adjective",
+        "definition": "Presenting a risk of harm in the situation.",
+        "example": "The worker reported an unsafe storage area.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "unsafe"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "An unstable stack behind a barrier while a worker reports the concern.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "unsafe.presenting-danger.adj.analysis.v1",
+          "lexeme_id": "unsafe.presenting-danger.adj",
+          "text": "unsafe",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "prefix",
+              "canonical": "un-",
+              "surface": "un",
+              "canonical_id": "affix.un.prefix"
+            },
+            {
+              "id": "p2",
+              "type": "stem",
+              "canonical": "safe",
+              "surface": "safe",
+              "canonical_id": "morph.safe"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "unsafe",
+              "rule": "prefix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "osha-worker-participation",
+            "status": "pending_term_check",
+            "scope": "Context for communicating workplace concerns; not procedural safety advice or a claim about local law."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      }
+    },
+    {
+      "id": "hazard.possible-harm.n",
+      "object_sha256": "e513da37995090db5f5ef68c255e5beffde131c10afe12478e644651361c1045",
+      "entry": {
+        "id": "hazard.possible-harm.n",
+        "text": "hazard",
+        "display_text": "hazard",
+        "pos": "noun",
+        "definition": "Something with the potential to cause harm.",
+        "example": "The loose cable was reported as a trip hazard.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "hazard"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A loose cable crossing a walkway, noticed and reported without anyone falling.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "hazard.possible-harm.n.analysis.v1",
+          "lexeme_id": "hazard.possible-harm.n",
+          "text": "hazard",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "hazard",
+              "surface": "hazard",
+              "canonical_id": "morph.hazard"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "osha-worker-participation",
+            "status": "pending_term_check",
+            "scope": "Context for communicating workplace concerns; not procedural safety advice or a claim about local law."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      }
+    }
+  ],
+  "course_memberships": [
+    {
+      "file": "data/professional/courses/accounting_finance.json",
+      "course": "accounting_finance",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/accounting_finance.json",
+      "course": "accounting_finance",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/accounting_finance.json",
+      "course": "accounting_finance",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/accounting_finance.json",
+      "course": "accounting_finance",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/accounting_finance.json",
+      "course": "accounting_finance",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/accounting_finance.json",
+      "course": "accounting_finance",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/caregiving.json",
+      "course": "caregiving",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/caregiving.json",
+      "course": "caregiving",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/caregiving.json",
+      "course": "caregiving",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/caregiving.json",
+      "course": "caregiving",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/caregiving.json",
+      "course": "caregiving",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/caregiving.json",
+      "course": "caregiving",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/cleaning_facilities.json",
+      "course": "cleaning_facilities",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/cleaning_facilities.json",
+      "course": "cleaning_facilities",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/cleaning_facilities.json",
+      "course": "cleaning_facilities",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/cleaning_facilities.json",
+      "course": "cleaning_facilities",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/cleaning_facilities.json",
+      "course": "cleaning_facilities",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/cleaning_facilities.json",
+      "course": "cleaning_facilities",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/clinical_medicine.json",
+      "course": "clinical_medicine",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/clinical_medicine.json",
+      "course": "clinical_medicine",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/clinical_medicine.json",
+      "course": "clinical_medicine",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/clinical_medicine.json",
+      "course": "clinical_medicine",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/clinical_medicine.json",
+      "course": "clinical_medicine",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/clinical_medicine.json",
+      "course": "clinical_medicine",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/construction_trades.json",
+      "course": "construction_trades",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/construction_trades.json",
+      "course": "construction_trades",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/construction_trades.json",
+      "course": "construction_trades",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/construction_trades.json",
+      "course": "construction_trades",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/construction_trades.json",
+      "course": "construction_trades",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/construction_trades.json",
+      "course": "construction_trades",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/customer_support.json",
+      "course": "customer_support",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/customer_support.json",
+      "course": "customer_support",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/customer_support.json",
+      "course": "customer_support",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/customer_support.json",
+      "course": "customer_support",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/customer_support.json",
+      "course": "customer_support",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/customer_support.json",
+      "course": "customer_support",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/education_childcare.json",
+      "course": "education_childcare",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/education_childcare.json",
+      "course": "education_childcare",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/education_childcare.json",
+      "course": "education_childcare",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/education_childcare.json",
+      "course": "education_childcare",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/education_childcare.json",
+      "course": "education_childcare",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/education_childcare.json",
+      "course": "education_childcare",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/food_service.json",
+      "course": "food_service",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/food_service.json",
+      "course": "food_service",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/food_service.json",
+      "course": "food_service",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/food_service.json",
+      "course": "food_service",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/food_service.json",
+      "course": "food_service",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/food_service.json",
+      "course": "food_service",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/hospitality_tourism.json",
+      "course": "hospitality_tourism",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/hospitality_tourism.json",
+      "course": "hospitality_tourism",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/hospitality_tourism.json",
+      "course": "hospitality_tourism",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/hospitality_tourism.json",
+      "course": "hospitality_tourism",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/hospitality_tourism.json",
+      "course": "hospitality_tourism",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/hospitality_tourism.json",
+      "course": "hospitality_tourism",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/hr_recruitment.json",
+      "course": "hr_recruitment",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/hr_recruitment.json",
+      "course": "hr_recruitment",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/hr_recruitment.json",
+      "course": "hr_recruitment",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/hr_recruitment.json",
+      "course": "hr_recruitment",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/hr_recruitment.json",
+      "course": "hr_recruitment",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/hr_recruitment.json",
+      "course": "hr_recruitment",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/it_support.json",
+      "course": "it_support",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/it_support.json",
+      "course": "it_support",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/it_support.json",
+      "course": "it_support",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/it_support.json",
+      "course": "it_support",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/it_support.json",
+      "course": "it_support",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/it_support.json",
+      "course": "it_support",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/legal_paralegal.json",
+      "course": "legal_paralegal",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/legal_paralegal.json",
+      "course": "legal_paralegal",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/legal_paralegal.json",
+      "course": "legal_paralegal",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/legal_paralegal.json",
+      "course": "legal_paralegal",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/legal_paralegal.json",
+      "course": "legal_paralegal",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/legal_paralegal.json",
+      "course": "legal_paralegal",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/manufacturing_maintenance.json",
+      "course": "manufacturing_maintenance",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/manufacturing_maintenance.json",
+      "course": "manufacturing_maintenance",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/manufacturing_maintenance.json",
+      "course": "manufacturing_maintenance",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/manufacturing_maintenance.json",
+      "course": "manufacturing_maintenance",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/manufacturing_maintenance.json",
+      "course": "manufacturing_maintenance",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/manufacturing_maintenance.json",
+      "course": "manufacturing_maintenance",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/nursing.json",
+      "course": "nursing",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/nursing.json",
+      "course": "nursing",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/nursing.json",
+      "course": "nursing",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/nursing.json",
+      "course": "nursing",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/nursing.json",
+      "course": "nursing",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/nursing.json",
+      "course": "nursing",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/office_admin.json",
+      "course": "office_admin",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/office_admin.json",
+      "course": "office_admin",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/office_admin.json",
+      "course": "office_admin",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/office_admin.json",
+      "course": "office_admin",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/office_admin.json",
+      "course": "office_admin",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/office_admin.json",
+      "course": "office_admin",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/retail.json",
+      "course": "retail",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/retail.json",
+      "course": "retail",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/retail.json",
+      "course": "retail",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/retail.json",
+      "course": "retail",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/retail.json",
+      "course": "retail",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/retail.json",
+      "course": "retail",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/sales_marketing.json",
+      "course": "sales_marketing",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/sales_marketing.json",
+      "course": "sales_marketing",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/sales_marketing.json",
+      "course": "sales_marketing",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/sales_marketing.json",
+      "course": "sales_marketing",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/sales_marketing.json",
+      "course": "sales_marketing",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/sales_marketing.json",
+      "course": "sales_marketing",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/software_data.json",
+      "course": "software_data",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/software_data.json",
+      "course": "software_data",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/software_data.json",
+      "course": "software_data",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/software_data.json",
+      "course": "software_data",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/software_data.json",
+      "course": "software_data",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/software_data.json",
+      "course": "software_data",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/transport_delivery.json",
+      "course": "transport_delivery",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/transport_delivery.json",
+      "course": "transport_delivery",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/transport_delivery.json",
+      "course": "transport_delivery",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/transport_delivery.json",
+      "course": "transport_delivery",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/transport_delivery.json",
+      "course": "transport_delivery",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/transport_delivery.json",
+      "course": "transport_delivery",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/warehouse_logistics.json",
+      "course": "warehouse_logistics",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/warehouse_logistics.json",
+      "course": "warehouse_logistics",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/warehouse_logistics.json",
+      "course": "warehouse_logistics",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/warehouse_logistics.json",
+      "course": "warehouse_logistics",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/warehouse_logistics.json",
+      "course": "warehouse_logistics",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/warehouse_logistics.json",
+      "course": "warehouse_logistics",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    }
+  ],
+  "expression_context": [
+    {
+      "file": "data/professional/expressions/caregiving-module08.json",
+      "object_sha256": "70e7d3af88771f0b314f7e0167caf7e39680249796cd5a83920b4ec15e4c25cf",
+      "focus_ids": [],
+      "expression": {
+        "id": "expr.caregiving.module08.04",
+        "text": "The spill on the wet floor and the trip hazard were reported after a fall; a clean floor can still present risks.",
+        "meaning": "Report an event and distinguish visible cleanliness from safety.",
+        "context": "A worker records environmental concerns after a fall.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "The",
+            "start": 0,
+            "end": 3
+          },
+          {
+            "index": 1,
+            "text": "spill",
+            "start": 4,
+            "end": 9
+          },
+          {
+            "index": 2,
+            "text": "on",
+            "start": 10,
+            "end": 12
+          },
+          {
+            "index": 3,
+            "text": "the",
+            "start": 13,
+            "end": 16
+          },
+          {
+            "index": 4,
+            "text": "wet",
+            "start": 17,
+            "end": 20
+          },
+          {
+            "index": 5,
+            "text": "floor",
+            "start": 21,
+            "end": 26
+          },
+          {
+            "index": 6,
+            "text": "and",
+            "start": 27,
+            "end": 30
+          },
+          {
+            "index": 7,
+            "text": "the",
+            "start": 31,
+            "end": 34
+          },
+          {
+            "index": 8,
+            "text": "trip",
+            "start": 35,
+            "end": 39
+          },
+          {
+            "index": 9,
+            "text": "hazard",
+            "start": 40,
+            "end": 46
+          },
+          {
+            "index": 10,
+            "text": "were",
+            "start": 47,
+            "end": 51
+          },
+          {
+            "index": 11,
+            "text": "reported",
+            "start": 52,
+            "end": 60
+          },
+          {
+            "index": 12,
+            "text": "after",
+            "start": 61,
+            "end": 66
+          },
+          {
+            "index": 13,
+            "text": "a",
+            "start": 67,
+            "end": 68
+          },
+          {
+            "index": 14,
+            "text": "fall",
+            "start": 69,
+            "end": 73
+          },
+          {
+            "index": 15,
+            "text": ";",
+            "start": 73,
+            "end": 74
+          },
+          {
+            "index": 16,
+            "text": "a",
+            "start": 75,
+            "end": 76
+          },
+          {
+            "index": 17,
+            "text": "clean",
+            "start": 77,
+            "end": 82
+          },
+          {
+            "index": 18,
+            "text": "floor",
+            "start": 83,
+            "end": 88
+          },
+          {
+            "index": 19,
+            "text": "can",
+            "start": 89,
+            "end": 92
+          },
+          {
+            "index": 20,
+            "text": "still",
+            "start": 93,
+            "end": 98
+          },
+          {
+            "index": 21,
+            "text": "present",
+            "start": 99,
+            "end": 106
+          },
+          {
+            "index": 22,
+            "text": "risks",
+            "start": 107,
+            "end": 112
+          },
+          {
+            "index": 23,
+            "text": ".",
+            "start": 112,
+            "end": 113
+          }
+        ],
+        "focus_lexeme_ids": [
+          "wet-floor.damp-walking-surface.n",
+          "spill.escaped-liquid-or-material.n",
+          "trip-hazard.obstacle-likely-to-cause-tripping.n",
+          "fall.unintended-descent-to-lower-level.n",
+          "clean.free-of-visible-soiling.a"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "nhs-adult-safeguarding",
+            "status": "pending_term_check",
+            "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+          }
+        ]
+      }
+    },
+    {
+      "file": "data/professional/expressions/cleaning-module08.json",
+      "object_sha256": "bf254b9d1cc3b10894078ade0288cba5b84d32cffeb3ed8c48205170c1202e91",
+      "focus_ids": [],
+      "expression": {
+        "id": "expr.cleaning_facilities.module08.02",
+        "text": "The spill and obstruction are reported separately from the trip hazard and possible slip hazard.",
+        "meaning": "Describe observed conditions accurately.",
+        "context": "Reporting a workplace concern.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "The",
+            "start": 0,
+            "end": 3
+          },
+          {
+            "index": 1,
+            "text": "spill",
+            "start": 4,
+            "end": 9
+          },
+          {
+            "index": 2,
+            "text": "and",
+            "start": 10,
+            "end": 13
+          },
+          {
+            "index": 3,
+            "text": "obstruction",
+            "start": 14,
+            "end": 25
+          },
+          {
+            "index": 4,
+            "text": "are",
+            "start": 26,
+            "end": 29
+          },
+          {
+            "index": 5,
+            "text": "reported",
+            "start": 30,
+            "end": 38
+          },
+          {
+            "index": 6,
+            "text": "separately",
+            "start": 39,
+            "end": 49
+          },
+          {
+            "index": 7,
+            "text": "from",
+            "start": 50,
+            "end": 54
+          },
+          {
+            "index": 8,
+            "text": "the",
+            "start": 55,
+            "end": 58
+          },
+          {
+            "index": 9,
+            "text": "trip",
+            "start": 59,
+            "end": 63
+          },
+          {
+            "index": 10,
+            "text": "hazard",
+            "start": 64,
+            "end": 70
+          },
+          {
+            "index": 11,
+            "text": "and",
+            "start": 71,
+            "end": 74
+          },
+          {
+            "index": 12,
+            "text": "possible",
+            "start": 75,
+            "end": 83
+          },
+          {
+            "index": 13,
+            "text": "slip",
+            "start": 84,
+            "end": 88
+          },
+          {
+            "index": 14,
+            "text": "hazard",
+            "start": 89,
+            "end": 95
+          },
+          {
+            "index": 15,
+            "text": ".",
+            "start": 95,
+            "end": 96
+          }
+        ],
+        "focus_lexeme_ids": [
+          "spill.escaped-liquid-or-material.n",
+          "obstruction.blocked-route-object.n",
+          "trip-hazard.obstacle-likely-to-cause-tripping.n",
+          "slip-hazard.condition-increasing-likelihood-of-slipping.n"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "cleaning-hse-risk-topics",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "cleaning-osha-hazcom",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          }
+        ]
+      }
+    },
+    {
+      "file": "data/professional/expressions/cleaning-module08.json",
+      "object_sha256": "231d0e2df95d44733215c03175bf4fae13b1536ac69f0466b961951fa3e65abe",
+      "focus_ids": [],
+      "expression": {
+        "id": "expr.cleaning_facilities.module08.03",
+        "text": "The safety data sheet, chemical label, hazard pictogram, and signal word must be read in their proper context.",
+        "meaning": "Identify sources of hazard information.",
+        "context": "Discussing a damaged label.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "The",
+            "start": 0,
+            "end": 3
+          },
+          {
+            "index": 1,
+            "text": "safety",
+            "start": 4,
+            "end": 10
+          },
+          {
+            "index": 2,
+            "text": "data",
+            "start": 11,
+            "end": 15
+          },
+          {
+            "index": 3,
+            "text": "sheet",
+            "start": 16,
+            "end": 21
+          },
+          {
+            "index": 4,
+            "text": ",",
+            "start": 21,
+            "end": 22
+          },
+          {
+            "index": 5,
+            "text": "chemical",
+            "start": 23,
+            "end": 31
+          },
+          {
+            "index": 6,
+            "text": "label",
+            "start": 32,
+            "end": 37
+          },
+          {
+            "index": 7,
+            "text": ",",
+            "start": 37,
+            "end": 38
+          },
+          {
+            "index": 8,
+            "text": "hazard",
+            "start": 39,
+            "end": 45
+          },
+          {
+            "index": 9,
+            "text": "pictogram",
+            "start": 46,
+            "end": 55
+          },
+          {
+            "index": 10,
+            "text": ",",
+            "start": 55,
+            "end": 56
+          },
+          {
+            "index": 11,
+            "text": "and",
+            "start": 57,
+            "end": 60
+          },
+          {
+            "index": 12,
+            "text": "signal",
+            "start": 61,
+            "end": 67
+          },
+          {
+            "index": 13,
+            "text": "word",
+            "start": 68,
+            "end": 72
+          },
+          {
+            "index": 14,
+            "text": "must",
+            "start": 73,
+            "end": 77
+          },
+          {
+            "index": 15,
+            "text": "be",
+            "start": 78,
+            "end": 80
+          },
+          {
+            "index": 16,
+            "text": "read",
+            "start": 81,
+            "end": 85
+          },
+          {
+            "index": 17,
+            "text": "in",
+            "start": 86,
+            "end": 88
+          },
+          {
+            "index": 18,
+            "text": "their",
+            "start": 89,
+            "end": 94
+          },
+          {
+            "index": 19,
+            "text": "proper",
+            "start": 95,
+            "end": 101
+          },
+          {
+            "index": 20,
+            "text": "context",
+            "start": 102,
+            "end": 109
+          },
+          {
+            "index": 21,
+            "text": ".",
+            "start": 109,
+            "end": 110
+          }
+        ],
+        "focus_lexeme_ids": [
+          "safety-data-sheet.chemical-hazard-document.n",
+          "chemical-label.label-providing-identification-and-hazard-information-for-chemical.n",
+          "hazard-pictogram.standardized-graphic-identifying-hazard-category.n",
+          "signal-word.word-indicating-hazard-severity-on-label.n"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "cleaning-hse-risk-topics",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "cleaning-osha-hazcom",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          }
+        ]
+      }
+    },
+    {
+      "file": "data/professional/expressions/cleaning-module08.json",
+      "object_sha256": "9661356ed32ada65bb7189ea33de5a0e2877293beafae425a574876b1142a860",
+      "focus_ids": [],
+      "expression": {
+        "id": "expr.cleaning_facilities.module08.08",
+        "text": "The noise, vibration, and suspected asbestos require specialist attention alongside the working at height and electrical hazard concerns.",
+        "meaning": "Identify issues needing qualified assessment.",
+        "context": "Passing on a task review.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "The",
+            "start": 0,
+            "end": 3
+          },
+          {
+            "index": 1,
+            "text": "noise",
+            "start": 4,
+            "end": 9
+          },
+          {
+            "index": 2,
+            "text": ",",
+            "start": 9,
+            "end": 10
+          },
+          {
+            "index": 3,
+            "text": "vibration",
+            "start": 11,
+            "end": 20
+          },
+          {
+            "index": 4,
+            "text": ",",
+            "start": 20,
+            "end": 21
+          },
+          {
+            "index": 5,
+            "text": "and",
+            "start": 22,
+            "end": 25
+          },
+          {
+            "index": 6,
+            "text": "suspected",
+            "start": 26,
+            "end": 35
+          },
+          {
+            "index": 7,
+            "text": "asbestos",
+            "start": 36,
+            "end": 44
+          },
+          {
+            "index": 8,
+            "text": "require",
+            "start": 45,
+            "end": 52
+          },
+          {
+            "index": 9,
+            "text": "specialist",
+            "start": 53,
+            "end": 63
+          },
+          {
+            "index": 10,
+            "text": "attention",
+            "start": 64,
+            "end": 73
+          },
+          {
+            "index": 11,
+            "text": "alongside",
+            "start": 74,
+            "end": 83
+          },
+          {
+            "index": 12,
+            "text": "the",
+            "start": 84,
+            "end": 87
+          },
+          {
+            "index": 13,
+            "text": "working",
+            "start": 88,
+            "end": 95
+          },
+          {
+            "index": 14,
+            "text": "at",
+            "start": 96,
+            "end": 98
+          },
+          {
+            "index": 15,
+            "text": "height",
+            "start": 99,
+            "end": 105
+          },
+          {
+            "index": 16,
+            "text": "and",
+            "start": 106,
+            "end": 109
+          },
+          {
+            "index": 17,
+            "text": "electrical",
+            "start": 110,
+            "end": 120
+          },
+          {
+            "index": 18,
+            "text": "hazard",
+            "start": 121,
+            "end": 127
+          },
+          {
+            "index": 19,
+            "text": "concerns",
+            "start": 128,
+            "end": 136
+          },
+          {
+            "index": 20,
+            "text": ".",
+            "start": 136,
+            "end": 137
+          }
+        ],
+        "focus_lexeme_ids": [
+          "noise.unwanted-or-potentially-harmful-sound.n",
+          "vibration.repeated-oscillating-movement.n",
+          "asbestos.group-of-fibrous-minerals-used-in-some-older-products.n",
+          "working-at-height.work-where-fall-could-cause-injury.n",
+          "electrical-hazard.condition-presenting-risk-from-electrical-energy.n"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "cleaning-hse-risk-topics",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "cleaning-osha-hazcom",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          }
+        ]
+      }
+    },
+    {
+      "file": "data/professional/expressions/construction-module08.json",
+      "object_sha256": "f3ee872bca3307359dc9361fec11f3ae1569386d7cb15ee57dddf78a55a9fb83",
+      "focus_ids": [],
+      "expression": {
+        "id": "expr.construction_trades.module08.09",
+        "text": "The hot work record names the fire watch responsibility, and the electrical hazard has been referred to qualified personnel.",
+        "meaning": "Report responsibilities and a referred hazard.",
+        "context": "Reading actual controlled-work arrangements without operating instructions.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "The",
+            "start": 0,
+            "end": 3
+          },
+          {
+            "index": 1,
+            "text": "hot",
+            "start": 4,
+            "end": 7
+          },
+          {
+            "index": 2,
+            "text": "work",
+            "start": 8,
+            "end": 12
+          },
+          {
+            "index": 3,
+            "text": "record",
+            "start": 13,
+            "end": 19
+          },
+          {
+            "index": 4,
+            "text": "names",
+            "start": 20,
+            "end": 25
+          },
+          {
+            "index": 5,
+            "text": "the",
+            "start": 26,
+            "end": 29
+          },
+          {
+            "index": 6,
+            "text": "fire",
+            "start": 30,
+            "end": 34
+          },
+          {
+            "index": 7,
+            "text": "watch",
+            "start": 35,
+            "end": 40
+          },
+          {
+            "index": 8,
+            "text": "responsibility",
+            "start": 41,
+            "end": 55
+          },
+          {
+            "index": 9,
+            "text": ",",
+            "start": 55,
+            "end": 56
+          },
+          {
+            "index": 10,
+            "text": "and",
+            "start": 57,
+            "end": 60
+          },
+          {
+            "index": 11,
+            "text": "the",
+            "start": 61,
+            "end": 64
+          },
+          {
+            "index": 12,
+            "text": "electrical",
+            "start": 65,
+            "end": 75
+          },
+          {
+            "index": 13,
+            "text": "hazard",
+            "start": 76,
+            "end": 82
+          },
+          {
+            "index": 14,
+            "text": "has",
+            "start": 83,
+            "end": 86
+          },
+          {
+            "index": 15,
+            "text": "been",
+            "start": 87,
+            "end": 91
+          },
+          {
+            "index": 16,
+            "text": "referred",
+            "start": 92,
+            "end": 100
+          },
+          {
+            "index": 17,
+            "text": "to",
+            "start": 101,
+            "end": 103
+          },
+          {
+            "index": 18,
+            "text": "qualified",
+            "start": 104,
+            "end": 113
+          },
+          {
+            "index": 19,
+            "text": "personnel",
+            "start": 114,
+            "end": 123
+          },
+          {
+            "index": 20,
+            "text": ".",
+            "start": 123,
+            "end": 124
+          }
+        ],
+        "focus_lexeme_ids": [
+          "hot-work.work-producing-heat-sparks-or-flame-that-may-ignite-material.n",
+          "fire-watch.designated-monitoring-for-fire-related-risks.n",
+          "electrical-hazard.condition-presenting-risk-from-electrical-energy.n"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "construction-hse-induction",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "construction-hse-health-risks",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "construction-bls-inspectors",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          }
+        ]
+      }
+    },
+    {
+      "file": "data/professional/expressions/customer-support-module04.json",
+      "object_sha256": "3c9fcafbc1e1ed40a51a804010d89567d055592c2c3368a6b9309de7ca2b9ee4",
+      "focus_ids": [],
+      "expression": {
+        "id": "expr.customer_support.module04.10",
+        "text": "Please verify the declined payment and payment status before suggesting another payment attempt.",
+        "meaning": "Check existing payment information before further action.",
+        "context": "An agent refers a billing concern for authorized review.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "Please",
+            "start": 0,
+            "end": 6
+          },
+          {
+            "index": 1,
+            "text": "verify",
+            "start": 7,
+            "end": 13
+          },
+          {
+            "index": 2,
+            "text": "the",
+            "start": 14,
+            "end": 17
+          },
+          {
+            "index": 3,
+            "text": "declined",
+            "start": 18,
+            "end": 26
+          },
+          {
+            "index": 4,
+            "text": "payment",
+            "start": 27,
+            "end": 34
+          },
+          {
+            "index": 5,
+            "text": "and",
+            "start": 35,
+            "end": 38
+          },
+          {
+            "index": 6,
+            "text": "payment",
+            "start": 39,
+            "end": 46
+          },
+          {
+            "index": 7,
+            "text": "status",
+            "start": 47,
+            "end": 53
+          },
+          {
+            "index": 8,
+            "text": "before",
+            "start": 54,
+            "end": 60
+          },
+          {
+            "index": 9,
+            "text": "suggesting",
+            "start": 61,
+            "end": 71
+          },
+          {
+            "index": 10,
+            "text": "another",
+            "start": 72,
+            "end": 79
+          },
+          {
+            "index": 11,
+            "text": "payment",
+            "start": 80,
+            "end": 87
+          },
+          {
+            "index": 12,
+            "text": "attempt",
+            "start": 88,
+            "end": 95
+          },
+          {
+            "index": 13,
+            "text": ".",
+            "start": 95,
+            "end": 96
+          }
+        ],
+        "focus_lexeme_ids": [
+          "declined-payment.unapproved-payment.n",
+          "payment-status.payment-progress-state.n"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "onet-customer-service",
+            "status": "pending_term_check",
+            "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+          }
+        ]
+      }
+    },
+    {
+      "file": "data/professional/expressions/customer-support-module07.json",
+      "object_sha256": "0a38463bfd52d25680849405bf15a98fb53ab40029e6b89f20115da28d5240a3",
+      "focus_ids": [],
+      "expression": {
+        "id": "expr.customer_support.module07.08",
+        "text": "The verified status page describes the service outage and the time of its latest update.",
+        "meaning": "Refer to current published service information.",
+        "context": "An agent checks a reported interruption.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "The",
+            "start": 0,
+            "end": 3
+          },
+          {
+            "index": 1,
+            "text": "verified",
+            "start": 4,
+            "end": 12
+          },
+          {
+            "index": 2,
+            "text": "status",
+            "start": 13,
+            "end": 19
+          },
+          {
+            "index": 3,
+            "text": "page",
+            "start": 20,
+            "end": 24
+          },
+          {
+            "index": 4,
+            "text": "describes",
+            "start": 25,
+            "end": 34
+          },
+          {
+            "index": 5,
+            "text": "the",
+            "start": 35,
+            "end": 38
+          },
+          {
+            "index": 6,
+            "text": "service",
+            "start": 39,
+            "end": 46
+          },
+          {
+            "index": 7,
+            "text": "outage",
+            "start": 47,
+            "end": 53
+          },
+          {
+            "index": 8,
+            "text": "and",
+            "start": 54,
+            "end": 57
+          },
+          {
+            "index": 9,
+            "text": "the",
+            "start": 58,
+            "end": 61
+          },
+          {
+            "index": 10,
+            "text": "time",
+            "start": 62,
+            "end": 66
+          },
+          {
+            "index": 11,
+            "text": "of",
+            "start": 67,
+            "end": 69
+          },
+          {
+            "index": 12,
+            "text": "its",
+            "start": 70,
+            "end": 73
+          },
+          {
+            "index": 13,
+            "text": "latest",
+            "start": 74,
+            "end": 80
+          },
+          {
+            "index": 14,
+            "text": "update",
+            "start": 81,
+            "end": 87
+          },
+          {
+            "index": 15,
+            "text": ".",
+            "start": 87,
+            "end": 88
+          }
+        ],
+        "focus_lexeme_ids": [
+          "status-page.page-reporting-service-condition.n",
+          "service-outage.period-of-service-unavailability.n"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "zendesk-ticket-lifecycle",
+            "status": "pending_term_check",
+            "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+          }
+        ]
+      }
+    },
+    {
+      "file": "data/professional/expressions/customer-support-module08.json",
+      "object_sha256": "86263c4a7ed17b4a1d0432fdda55af3b9ff57c497b4c9cea3e8d35497f2c37ae",
+      "focus_ids": [],
+      "expression": {
+        "id": "expr.customer_support.module08.04",
+        "text": "Please verify the redaction before sending the document through the approved secure channel.",
+        "meaning": "Check protected information before sharing.",
+        "context": "A worker prepares a fictional document.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "Please",
+            "start": 0,
+            "end": 6
+          },
+          {
+            "index": 1,
+            "text": "verify",
+            "start": 7,
+            "end": 13
+          },
+          {
+            "index": 2,
+            "text": "the",
+            "start": 14,
+            "end": 17
+          },
+          {
+            "index": 3,
+            "text": "redaction",
+            "start": 18,
+            "end": 27
+          },
+          {
+            "index": 4,
+            "text": "before",
+            "start": 28,
+            "end": 34
+          },
+          {
+            "index": 5,
+            "text": "sending",
+            "start": 35,
+            "end": 42
+          },
+          {
+            "index": 6,
+            "text": "the",
+            "start": 43,
+            "end": 46
+          },
+          {
+            "index": 7,
+            "text": "document",
+            "start": 47,
+            "end": 55
+          },
+          {
+            "index": 8,
+            "text": "through",
+            "start": 56,
+            "end": 63
+          },
+          {
+            "index": 9,
+            "text": "the",
+            "start": 64,
+            "end": 67
+          },
+          {
+            "index": 10,
+            "text": "approved",
+            "start": 68,
+            "end": 76
+          },
+          {
+            "index": 11,
+            "text": "secure",
+            "start": 77,
+            "end": 83
+          },
+          {
+            "index": 12,
+            "text": "channel",
+            "start": 84,
+            "end": 91
+          },
+          {
+            "index": 13,
+            "text": ".",
+            "start": 91,
+            "end": 92
+          }
+        ],
+        "focus_lexeme_ids": [
+          "redaction.removal-or-obscuring-of-sensitive-information.n",
+          "secure-channel.communication-route-with-appropriate-protection.n"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "ico-data-minimization",
+            "status": "pending_term_check",
+            "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+          }
+        ]
+      }
+    },
+    {
+      "file": "data/professional/expressions/customer-support-module09.json",
+      "object_sha256": "c4269c7d546f1418254431f4cb0021d34317714d8ab44c2705a4149699b07377",
+      "focus_ids": [],
+      "expression": {
+        "id": "expr.customer_support.module09.04",
+        "text": "Please adapt the saved reply template to the actual request and verify the knowledge article's review date.",
+        "meaning": "Use a reusable reply while checking its relevance and source.",
+        "context": "An agent prepares a response to a specific request.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "Please",
+            "start": 0,
+            "end": 6
+          },
+          {
+            "index": 1,
+            "text": "adapt",
+            "start": 7,
+            "end": 12
+          },
+          {
+            "index": 2,
+            "text": "the",
+            "start": 13,
+            "end": 16
+          },
+          {
+            "index": 3,
+            "text": "saved",
+            "start": 17,
+            "end": 22
+          },
+          {
+            "index": 4,
+            "text": "reply",
+            "start": 23,
+            "end": 28
+          },
+          {
+            "index": 5,
+            "text": "template",
+            "start": 29,
+            "end": 37
+          },
+          {
+            "index": 6,
+            "text": "to",
+            "start": 38,
+            "end": 40
+          },
+          {
+            "index": 7,
+            "text": "the",
+            "start": 41,
+            "end": 44
+          },
+          {
+            "index": 8,
+            "text": "actual",
+            "start": 45,
+            "end": 51
+          },
+          {
+            "index": 9,
+            "text": "request",
+            "start": 52,
+            "end": 59
+          },
+          {
+            "index": 10,
+            "text": "and",
+            "start": 60,
+            "end": 63
+          },
+          {
+            "index": 11,
+            "text": "verify",
+            "start": 64,
+            "end": 70
+          },
+          {
+            "index": 12,
+            "text": "the",
+            "start": 71,
+            "end": 74
+          },
+          {
+            "index": 13,
+            "text": "knowledge",
+            "start": 75,
+            "end": 84
+          },
+          {
+            "index": 14,
+            "text": "article's",
+            "start": 85,
+            "end": 94
+          },
+          {
+            "index": 15,
+            "text": "review",
+            "start": 95,
+            "end": 101
+          },
+          {
+            "index": 16,
+            "text": "date",
+            "start": 102,
+            "end": 106
+          },
+          {
+            "index": 17,
+            "text": ".",
+            "start": 106,
+            "end": 107
+          }
+        ],
+        "focus_lexeme_ids": [
+          "saved-reply.reusable-prepared-response-text.n",
+          "knowledge-article.single-reference-information-entry.n",
+          "template.reusable-document-pattern.n"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "onet-customer-service",
+            "status": "pending_term_check",
+            "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+          }
+        ]
+      }
+    },
+    {
+      "file": "data/professional/expressions/education-module08.json",
+      "object_sha256": "c4e2d29b124f6702a6e2c1182461c58c251958e2c753186a68d2f4485526a27c",
+      "focus_ids": [],
+      "expression": {
+        "id": "expr.education_childcare.module08.09",
+        "text": "The accident form records the injury and the reported choking hazard; the qualified first aider has been informed through the applicable process.",
+        "meaning": "Separate an observed injury from a reported hazard and identify the relevant role.",
+        "context": "Reviewing an incident record.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "The",
+            "start": 0,
+            "end": 3
+          },
+          {
+            "index": 1,
+            "text": "accident",
+            "start": 4,
+            "end": 12
+          },
+          {
+            "index": 2,
+            "text": "form",
+            "start": 13,
+            "end": 17
+          },
+          {
+            "index": 3,
+            "text": "records",
+            "start": 18,
+            "end": 25
+          },
+          {
+            "index": 4,
+            "text": "the",
+            "start": 26,
+            "end": 29
+          },
+          {
+            "index": 5,
+            "text": "injury",
+            "start": 30,
+            "end": 36
+          },
+          {
+            "index": 6,
+            "text": "and",
+            "start": 37,
+            "end": 40
+          },
+          {
+            "index": 7,
+            "text": "the",
+            "start": 41,
+            "end": 44
+          },
+          {
+            "index": 8,
+            "text": "reported",
+            "start": 45,
+            "end": 53
+          },
+          {
+            "index": 9,
+            "text": "choking",
+            "start": 54,
+            "end": 61
+          },
+          {
+            "index": 10,
+            "text": "hazard",
+            "start": 62,
+            "end": 68
+          },
+          {
+            "index": 11,
+            "text": ";",
+            "start": 68,
+            "end": 69
+          },
+          {
+            "index": 12,
+            "text": "the",
+            "start": 70,
+            "end": 73
+          },
+          {
+            "index": 13,
+            "text": "qualified",
+            "start": 74,
+            "end": 83
+          },
+          {
+            "index": 14,
+            "text": "first",
+            "start": 84,
+            "end": 89
+          },
+          {
+            "index": 15,
+            "text": "aider",
+            "start": 90,
+            "end": 95
+          },
+          {
+            "index": 16,
+            "text": "has",
+            "start": 96,
+            "end": 99
+          },
+          {
+            "index": 17,
+            "text": "been",
+            "start": 100,
+            "end": 104
+          },
+          {
+            "index": 18,
+            "text": "informed",
+            "start": 105,
+            "end": 113
+          },
+          {
+            "index": 19,
+            "text": "through",
+            "start": 114,
+            "end": 121
+          },
+          {
+            "index": 20,
+            "text": "the",
+            "start": 122,
+            "end": 125
+          },
+          {
+            "index": 21,
+            "text": "applicable",
+            "start": 126,
+            "end": 136
+          },
+          {
+            "index": 22,
+            "text": "process",
+            "start": 137,
+            "end": 144
+          },
+          {
+            "index": 23,
+            "text": ".",
+            "start": 144,
+            "end": 145
+          }
+        ],
+        "focus_lexeme_ids": [
+          "accident-form.form-recording-accident-information.n",
+          "injury.physical-harm.n",
+          "choking-hazard.item-or-situation-that-can-obstruct-breathing.n",
+          "qualified-first-aider.person-with-relevant-first-aid-qualification.n"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "education-kcsie-overview",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "education-naeyc-dap",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "education-idea-iep-definition",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          }
+        ]
+      }
+    },
+    {
+      "file": "data/professional/expressions/foundation-module02.json",
+      "object_sha256": "575a776da9babf5dcc2aea9ae62b3d5066345c9fb6ed1ac58dde304860ff2c43",
+      "focus_ids": [
+        "notify.inform.v"
+      ],
+      "expression": {
+        "id": "expr.foundation.module02.02",
+        "text": "Please contact the supplier to confirm the delivery time, and notify us of any delay.",
+        "meaning": "Ask someone to communicate with the provider and pass on timing changes.",
+        "context": "A team coordinates an expected delivery.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "Please",
+            "start": 0,
+            "end": 6
+          },
+          {
+            "index": 1,
+            "text": "contact",
+            "start": 7,
+            "end": 14
+          },
+          {
+            "index": 2,
+            "text": "the",
+            "start": 15,
+            "end": 18
+          },
+          {
+            "index": 3,
+            "text": "supplier",
+            "start": 19,
+            "end": 27
+          },
+          {
+            "index": 4,
+            "text": "to",
+            "start": 28,
+            "end": 30
+          },
+          {
+            "index": 5,
+            "text": "confirm",
+            "start": 31,
+            "end": 38
+          },
+          {
+            "index": 6,
+            "text": "the",
+            "start": 39,
+            "end": 42
+          },
+          {
+            "index": 7,
+            "text": "delivery",
+            "start": 43,
+            "end": 51
+          },
+          {
+            "index": 8,
+            "text": "time",
+            "start": 52,
+            "end": 56
+          },
+          {
+            "index": 9,
+            "text": ",",
+            "start": 56,
+            "end": 57
+          },
+          {
+            "index": 10,
+            "text": "and",
+            "start": 58,
+            "end": 61
+          },
+          {
+            "index": 11,
+            "text": "notify",
+            "start": 62,
+            "end": 68
+          },
+          {
+            "index": 12,
+            "text": "us",
+            "start": 69,
+            "end": 71
+          },
+          {
+            "index": 13,
+            "text": "of",
+            "start": 72,
+            "end": 74
+          },
+          {
+            "index": 14,
+            "text": "any",
+            "start": 75,
+            "end": 78
+          },
+          {
+            "index": 15,
+            "text": "delay",
+            "start": 79,
+            "end": 84
+          },
+          {
+            "index": 16,
+            "text": ".",
+            "start": 84,
+            "end": 85
+          }
+        ],
+        "focus_lexeme_ids": [
+          "contact.communicate-with.v",
+          "confirm.verify-arrangement.v",
+          "notify.inform.v",
+          "delay.late-occurrence.n"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+          }
+        ]
+      }
+    },
+    {
+      "file": "data/professional/expressions/foundation-module02.json",
+      "object_sha256": "ccd764a43dd2503bf77bb1b654e73a0ab742e439df7cb3ef623b9e0af7d366c4",
+      "focus_ids": [
+        "verify.establish-accuracy.v"
+      ],
+      "expression": {
+        "id": "expr.foundation.module02.04",
+        "text": "Please verify the reference number, correct any error, and check the form before you submit it.",
+        "meaning": "Request an evidence-based check and correction before sending a document.",
+        "context": "A worker prepares a form for processing.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "Please",
+            "start": 0,
+            "end": 6
+          },
+          {
+            "index": 1,
+            "text": "verify",
+            "start": 7,
+            "end": 13
+          },
+          {
+            "index": 2,
+            "text": "the",
+            "start": 14,
+            "end": 17
+          },
+          {
+            "index": 3,
+            "text": "reference",
+            "start": 18,
+            "end": 27
+          },
+          {
+            "index": 4,
+            "text": "number",
+            "start": 28,
+            "end": 34
+          },
+          {
+            "index": 5,
+            "text": ",",
+            "start": 34,
+            "end": 35
+          },
+          {
+            "index": 6,
+            "text": "correct",
+            "start": 36,
+            "end": 43
+          },
+          {
+            "index": 7,
+            "text": "any",
+            "start": 44,
+            "end": 47
+          },
+          {
+            "index": 8,
+            "text": "error",
+            "start": 48,
+            "end": 53
+          },
+          {
+            "index": 9,
+            "text": ",",
+            "start": 53,
+            "end": 54
+          },
+          {
+            "index": 10,
+            "text": "and",
+            "start": 55,
+            "end": 58
+          },
+          {
+            "index": 11,
+            "text": "check",
+            "start": 59,
+            "end": 64
+          },
+          {
+            "index": 12,
+            "text": "the",
+            "start": 65,
+            "end": 68
+          },
+          {
+            "index": 13,
+            "text": "form",
+            "start": 69,
+            "end": 73
+          },
+          {
+            "index": 14,
+            "text": "before",
+            "start": 74,
+            "end": 80
+          },
+          {
+            "index": 15,
+            "text": "you",
+            "start": 81,
+            "end": 84
+          },
+          {
+            "index": 16,
+            "text": "submit",
+            "start": 85,
+            "end": 91
+          },
+          {
+            "index": 17,
+            "text": "it",
+            "start": 92,
+            "end": 94
+          },
+          {
+            "index": 18,
+            "text": ".",
+            "start": 94,
+            "end": 95
+          }
+        ],
+        "focus_lexeme_ids": [
+          "verify.establish-accuracy.v",
+          "correct.put-right.v",
+          "error.mistake.n",
+          "check.examine.v",
+          "submit.send-for-consideration.v"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+          }
+        ]
+      }
+    },
+    {
+      "file": "data/professional/expressions/foundation-module02.json",
+      "object_sha256": "38d227c600008c8eb1c840e8768fb672caf3fd3b920c3c308096b16c03638aaf",
+      "focus_ids": [
+        "postpone.delay-until-later.v"
+      ],
+      "expression": {
+        "id": "expr.foundation.module02.07",
+        "text": "We can adjust the start time or arrange to postpone the meeting; cancel only the duplicate booking.",
+        "meaning": "Distinguish changing a time from stopping a duplicate arrangement.",
+        "context": "Colleagues review conflicting meeting bookings.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "We",
+            "start": 0,
+            "end": 2
+          },
+          {
+            "index": 1,
+            "text": "can",
+            "start": 3,
+            "end": 6
+          },
+          {
+            "index": 2,
+            "text": "adjust",
+            "start": 7,
+            "end": 13
+          },
+          {
+            "index": 3,
+            "text": "the",
+            "start": 14,
+            "end": 17
+          },
+          {
+            "index": 4,
+            "text": "start",
+            "start": 18,
+            "end": 23
+          },
+          {
+            "index": 5,
+            "text": "time",
+            "start": 24,
+            "end": 28
+          },
+          {
+            "index": 6,
+            "text": "or",
+            "start": 29,
+            "end": 31
+          },
+          {
+            "index": 7,
+            "text": "arrange",
+            "start": 32,
+            "end": 39
+          },
+          {
+            "index": 8,
+            "text": "to",
+            "start": 40,
+            "end": 42
+          },
+          {
+            "index": 9,
+            "text": "postpone",
+            "start": 43,
+            "end": 51
+          },
+          {
+            "index": 10,
+            "text": "the",
+            "start": 52,
+            "end": 55
+          },
+          {
+            "index": 11,
+            "text": "meeting",
+            "start": 56,
+            "end": 63
+          },
+          {
+            "index": 12,
+            "text": ";",
+            "start": 63,
+            "end": 64
+          },
+          {
+            "index": 13,
+            "text": "cancel",
+            "start": 65,
+            "end": 71
+          },
+          {
+            "index": 14,
+            "text": "only",
+            "start": 72,
+            "end": 76
+          },
+          {
+            "index": 15,
+            "text": "the",
+            "start": 77,
+            "end": 80
+          },
+          {
+            "index": 16,
+            "text": "duplicate",
+            "start": 81,
+            "end": 90
+          },
+          {
+            "index": 17,
+            "text": "booking",
+            "start": 91,
+            "end": 98
+          },
+          {
+            "index": 18,
+            "text": ".",
+            "start": 98,
+            "end": 99
+          }
+        ],
+        "focus_lexeme_ids": [
+          "adjust.change-slightly.v",
+          "arrange.organize.v",
+          "postpone.delay-until-later.v",
+          "cancel.stop-arrangement.v"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+          }
+        ]
+      }
+    },
+    {
+      "file": "data/professional/expressions/foundation-module02.json",
+      "object_sha256": "f3cc73cccd14dbbe07ccf7c14632119e81107907529721fb626c8c914eb5e6d3",
+      "focus_ids": [
+        "collect.gather.v"
+      ],
+      "expression": {
+        "id": "expr.foundation.module02.08",
+        "text": "Could you assist me while I collect the documents from reception and return the key?",
+        "meaning": "Ask for help with picking up documents and giving a key back.",
+        "context": "A worker coordinates routine errands with a colleague.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "Could",
+            "start": 0,
+            "end": 5
+          },
+          {
+            "index": 1,
+            "text": "you",
+            "start": 6,
+            "end": 9
+          },
+          {
+            "index": 2,
+            "text": "assist",
+            "start": 10,
+            "end": 16
+          },
+          {
+            "index": 3,
+            "text": "me",
+            "start": 17,
+            "end": 19
+          },
+          {
+            "index": 4,
+            "text": "while",
+            "start": 20,
+            "end": 25
+          },
+          {
+            "index": 5,
+            "text": "I",
+            "start": 26,
+            "end": 27
+          },
+          {
+            "index": 6,
+            "text": "collect",
+            "start": 28,
+            "end": 35
+          },
+          {
+            "index": 7,
+            "text": "the",
+            "start": 36,
+            "end": 39
+          },
+          {
+            "index": 8,
+            "text": "documents",
+            "start": 40,
+            "end": 49
+          },
+          {
+            "index": 9,
+            "text": "from",
+            "start": 50,
+            "end": 54
+          },
+          {
+            "index": 10,
+            "text": "reception",
+            "start": 55,
+            "end": 64
+          },
+          {
+            "index": 11,
+            "text": "and",
+            "start": 65,
+            "end": 68
+          },
+          {
+            "index": 12,
+            "text": "return",
+            "start": 69,
+            "end": 75
+          },
+          {
+            "index": 13,
+            "text": "the",
+            "start": 76,
+            "end": 79
+          },
+          {
+            "index": 14,
+            "text": "key",
+            "start": 80,
+            "end": 83
+          },
+          {
+            "index": 15,
+            "text": "?",
+            "start": 83,
+            "end": 84
+          }
+        ],
+        "focus_lexeme_ids": [
+          "assist.help.v",
+          "collect.gather.v",
+          "return.send-back.v"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+          }
+        ]
+      }
+    },
+    {
+      "file": "data/professional/expressions/foundation-module02.json",
+      "object_sha256": "44958213897b4660f6afdb2fca5df3c7d04edc4f4d7c1f25fb0ec60bf9ec20bf",
+      "focus_ids": [
+        "unsafe.presenting-danger.adj"
+      ],
+      "expression": {
+        "id": "expr.foundation.module02.09",
+        "text": "Please follow the procedure to report the unsafe area and ask for a safe route.",
+        "meaning": "Request reporting and use of established arrangements for a concern.",
+        "context": "A worker notices a possible workplace risk without giving a technical response.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "Please",
+            "start": 0,
+            "end": 6
+          },
+          {
+            "index": 1,
+            "text": "follow",
+            "start": 7,
+            "end": 13
+          },
+          {
+            "index": 2,
+            "text": "the",
+            "start": 14,
+            "end": 17
+          },
+          {
+            "index": 3,
+            "text": "procedure",
+            "start": 18,
+            "end": 27
+          },
+          {
+            "index": 4,
+            "text": "to",
+            "start": 28,
+            "end": 30
+          },
+          {
+            "index": 5,
+            "text": "report",
+            "start": 31,
+            "end": 37
+          },
+          {
+            "index": 6,
+            "text": "the",
+            "start": 38,
+            "end": 41
+          },
+          {
+            "index": 7,
+            "text": "unsafe",
+            "start": 42,
+            "end": 48
+          },
+          {
+            "index": 8,
+            "text": "area",
+            "start": 49,
+            "end": 53
+          },
+          {
+            "index": 9,
+            "text": "and",
+            "start": 54,
+            "end": 57
+          },
+          {
+            "index": 10,
+            "text": "ask",
+            "start": 58,
+            "end": 61
+          },
+          {
+            "index": 11,
+            "text": "for",
+            "start": 62,
+            "end": 65
+          },
+          {
+            "index": 12,
+            "text": "a",
+            "start": 66,
+            "end": 67
+          },
+          {
+            "index": 13,
+            "text": "safe",
+            "start": 68,
+            "end": 72
+          },
+          {
+            "index": 14,
+            "text": "route",
+            "start": 73,
+            "end": 78
+          },
+          {
+            "index": 15,
+            "text": ".",
+            "start": 78,
+            "end": 79
+          }
+        ],
+        "focus_lexeme_ids": [
+          "report.give-information.v",
+          "unsafe.presenting-danger.adj",
+          "follow.act-on.v",
+          "procedure.agreed-method.n",
+          "safe.free-from-unacceptable-danger.adj"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+          }
+        ]
+      }
+    },
+    {
+      "file": "data/professional/expressions/foundation-module02.json",
+      "object_sha256": "81304fbc0ef1d9870d4b19e0241a744fd9e38e6183b626454b4ff77476bdc9c6",
+      "focus_ids": [
+        "hazard.possible-harm.n"
+      ],
+      "expression": {
+        "id": "expr.foundation.module02.10",
+        "text": "Please report the hazard and record the incident for review by the responsible team.",
+        "meaning": "Ask someone to communicate an observed danger and the related workplace event.",
+        "context": "A team raises a concern through the workplace's applicable arrangements.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "Please",
+            "start": 0,
+            "end": 6
+          },
+          {
+            "index": 1,
+            "text": "report",
+            "start": 7,
+            "end": 13
+          },
+          {
+            "index": 2,
+            "text": "the",
+            "start": 14,
+            "end": 17
+          },
+          {
+            "index": 3,
+            "text": "hazard",
+            "start": 18,
+            "end": 24
+          },
+          {
+            "index": 4,
+            "text": "and",
+            "start": 25,
+            "end": 28
+          },
+          {
+            "index": 5,
+            "text": "record",
+            "start": 29,
+            "end": 35
+          },
+          {
+            "index": 6,
+            "text": "the",
+            "start": 36,
+            "end": 39
+          },
+          {
+            "index": 7,
+            "text": "incident",
+            "start": 40,
+            "end": 48
+          },
+          {
+            "index": 8,
+            "text": "for",
+            "start": 49,
+            "end": 52
+          },
+          {
+            "index": 9,
+            "text": "review",
+            "start": 53,
+            "end": 59
+          },
+          {
+            "index": 10,
+            "text": "by",
+            "start": 60,
+            "end": 62
+          },
+          {
+            "index": 11,
+            "text": "the",
+            "start": 63,
+            "end": 66
+          },
+          {
+            "index": 12,
+            "text": "responsible",
+            "start": 67,
+            "end": 78
+          },
+          {
+            "index": 13,
+            "text": "team",
+            "start": 79,
+            "end": 83
+          },
+          {
+            "index": 14,
+            "text": ".",
+            "start": 83,
+            "end": 84
+          }
+        ],
+        "focus_lexeme_ids": [
+          "report.give-information.v",
+          "hazard.possible-harm.n",
+          "incident.workplace-event.n"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+          }
+        ]
+      }
+    },
+    {
+      "file": "data/professional/expressions/it-support-module09.json",
+      "object_sha256": "573c8bc9aa2a8e49230399130fefb0f64a14822e198f2b38d5a061fe82ea7c28",
+      "focus_ids": [],
+      "expression": {
+        "id": "expr.it_support.module09.03",
+        "text": "The URL uses HTTPS rather than HTTP, but that alone does not verify the site's identity or purpose.",
+        "meaning": "The address and transport protocol do not establish that the destination is trustworthy.",
+        "context": "Reading a resource address",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "The",
+            "start": 0,
+            "end": 3
+          },
+          {
+            "index": 1,
+            "text": "URL",
+            "start": 4,
+            "end": 7
+          },
+          {
+            "index": 2,
+            "text": "uses",
+            "start": 8,
+            "end": 12
+          },
+          {
+            "index": 3,
+            "text": "HTTPS",
+            "start": 13,
+            "end": 18
+          },
+          {
+            "index": 4,
+            "text": "rather",
+            "start": 19,
+            "end": 25
+          },
+          {
+            "index": 5,
+            "text": "than",
+            "start": 26,
+            "end": 30
+          },
+          {
+            "index": 6,
+            "text": "HTTP",
+            "start": 31,
+            "end": 35
+          },
+          {
+            "index": 7,
+            "text": ",",
+            "start": 35,
+            "end": 36
+          },
+          {
+            "index": 8,
+            "text": "but",
+            "start": 37,
+            "end": 40
+          },
+          {
+            "index": 9,
+            "text": "that",
+            "start": 41,
+            "end": 45
+          },
+          {
+            "index": 10,
+            "text": "alone",
+            "start": 46,
+            "end": 51
+          },
+          {
+            "index": 11,
+            "text": "does",
+            "start": 52,
+            "end": 56
+          },
+          {
+            "index": 12,
+            "text": "not",
+            "start": 57,
+            "end": 60
+          },
+          {
+            "index": 13,
+            "text": "verify",
+            "start": 61,
+            "end": 67
+          },
+          {
+            "index": 14,
+            "text": "the",
+            "start": 68,
+            "end": 71
+          },
+          {
+            "index": 15,
+            "text": "site's",
+            "start": 72,
+            "end": 78
+          },
+          {
+            "index": 16,
+            "text": "identity",
+            "start": 79,
+            "end": 87
+          },
+          {
+            "index": 17,
+            "text": "or",
+            "start": 88,
+            "end": 90
+          },
+          {
+            "index": 18,
+            "text": "purpose",
+            "start": 91,
+            "end": 98
+          },
+          {
+            "index": 19,
+            "text": ".",
+            "start": 98,
+            "end": 99
+          }
+        ],
+        "focus_lexeme_ids": [
+          "url.resource-address.n",
+          "https.tls-protected-http.n",
+          "http.web-message-protocol.n"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "it-support-onet-tasks",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "it-support-microsoft-troubleshooting",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          }
+        ]
+      }
+    },
+    {
+      "file": "data/professional/expressions/it-support-module10.json",
+      "object_sha256": "5eaf8b5598cd587ef095ea8d282019ae47551c6c8ef14409dd2894da00c8ee21",
+      "focus_ids": [],
+      "expression": {
+        "id": "expr.it_support.module10.10",
+        "text": "The outage notice will be updated when service restoration has been verified.",
+        "meaning": "The service communication will reflect a confirmed return to the defined working condition.",
+        "context": "Communicating service progress",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "The",
+            "start": 0,
+            "end": 3
+          },
+          {
+            "index": 1,
+            "text": "outage",
+            "start": 4,
+            "end": 10
+          },
+          {
+            "index": 2,
+            "text": "notice",
+            "start": 11,
+            "end": 17
+          },
+          {
+            "index": 3,
+            "text": "will",
+            "start": 18,
+            "end": 22
+          },
+          {
+            "index": 4,
+            "text": "be",
+            "start": 23,
+            "end": 25
+          },
+          {
+            "index": 5,
+            "text": "updated",
+            "start": 26,
+            "end": 33
+          },
+          {
+            "index": 6,
+            "text": "when",
+            "start": 34,
+            "end": 38
+          },
+          {
+            "index": 7,
+            "text": "service",
+            "start": 39,
+            "end": 46
+          },
+          {
+            "index": 8,
+            "text": "restoration",
+            "start": 47,
+            "end": 58
+          },
+          {
+            "index": 9,
+            "text": "has",
+            "start": 59,
+            "end": 62
+          },
+          {
+            "index": 10,
+            "text": "been",
+            "start": 63,
+            "end": 67
+          },
+          {
+            "index": 11,
+            "text": "verified",
+            "start": 68,
+            "end": 76
+          },
+          {
+            "index": 12,
+            "text": ".",
+            "start": 76,
+            "end": 77
+          }
+        ],
+        "focus_lexeme_ids": [
+          "outage-notice.message-informing-users-of-service-unavailability.n",
+          "service-restoration.return-of-service-to-defined-working-condition.n"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "it-support-bls-role",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "it-support-onet-tasks",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          }
+        ]
+      }
+    },
+    {
+      "file": "data/professional/expressions/legal-module07.json",
+      "object_sha256": "62b810e72abc956243e7cb6afd13b3b27969bb741312ed5948d387bd50512b4a",
+      "focus_ids": [],
+      "expression": {
+        "id": "expr.legal_paralegal.module07.07",
+        "text": "The property record mentions title and a covenant, but neither has been verified by this team.",
+        "meaning": "Keep recorded ownership and obligation information distinct from verification.",
+        "context": "Reviewing fictional property information with legal questions unresolved.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "The",
+            "start": 0,
+            "end": 3
+          },
+          {
+            "index": 1,
+            "text": "property",
+            "start": 4,
+            "end": 12
+          },
+          {
+            "index": 2,
+            "text": "record",
+            "start": 13,
+            "end": 19
+          },
+          {
+            "index": 3,
+            "text": "mentions",
+            "start": 20,
+            "end": 28
+          },
+          {
+            "index": 4,
+            "text": "title",
+            "start": 29,
+            "end": 34
+          },
+          {
+            "index": 5,
+            "text": "and",
+            "start": 35,
+            "end": 38
+          },
+          {
+            "index": 6,
+            "text": "a",
+            "start": 39,
+            "end": 40
+          },
+          {
+            "index": 7,
+            "text": "covenant",
+            "start": 41,
+            "end": 49
+          },
+          {
+            "index": 8,
+            "text": ",",
+            "start": 49,
+            "end": 50
+          },
+          {
+            "index": 9,
+            "text": "but",
+            "start": 51,
+            "end": 54
+          },
+          {
+            "index": 10,
+            "text": "neither",
+            "start": 55,
+            "end": 62
+          },
+          {
+            "index": 11,
+            "text": "has",
+            "start": 63,
+            "end": 66
+          },
+          {
+            "index": 12,
+            "text": "been",
+            "start": 67,
+            "end": 71
+          },
+          {
+            "index": 13,
+            "text": "verified",
+            "start": 72,
+            "end": 80
+          },
+          {
+            "index": 14,
+            "text": "by",
+            "start": 81,
+            "end": 83
+          },
+          {
+            "index": 15,
+            "text": "this",
+            "start": 84,
+            "end": 88
+          },
+          {
+            "index": 16,
+            "text": "team",
+            "start": 89,
+            "end": 93
+          },
+          {
+            "index": 17,
+            "text": ".",
+            "start": 93,
+            "end": 94
+          }
+        ],
+        "focus_lexeme_ids": [
+          "property.thing-or-right-capable-of-legal-ownership.n",
+          "title.legal-basis-or-right-of-ownership-in-property.n",
+          "covenant.formal-promise-or-obligation-in-legal-instrument.n"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "legal-bls-lawyers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "legal-bls-paralegals",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "legal-ew-cpr-glossary",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "legal-dictionary-counterpart",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "legal-dictionary-counter-prefix",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          }
+        ]
+      }
+    },
+    {
+      "file": "data/professional/expressions/legal-module09.json",
+      "object_sha256": "1cb1be7bbd5e7e8c90f06abe9ac32b7438975a605f28ed172ba3336f9522bdd9",
+      "focus_ids": [],
+      "expression": {
+        "id": "expr.legal_paralegal.module09.09",
+        "text": "The notice describes a remote hearing; please verify the meeting link and the interpreter request through the authorized arrangements.",
+        "meaning": "Check hearing logistics and communication support.",
+        "context": "Preparing for a fictional hearing without sharing real access credentials or treating a request as confirmation.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "The",
+            "start": 0,
+            "end": 3
+          },
+          {
+            "index": 1,
+            "text": "notice",
+            "start": 4,
+            "end": 10
+          },
+          {
+            "index": 2,
+            "text": "describes",
+            "start": 11,
+            "end": 20
+          },
+          {
+            "index": 3,
+            "text": "a",
+            "start": 21,
+            "end": 22
+          },
+          {
+            "index": 4,
+            "text": "remote",
+            "start": 23,
+            "end": 29
+          },
+          {
+            "index": 5,
+            "text": "hearing",
+            "start": 30,
+            "end": 37
+          },
+          {
+            "index": 6,
+            "text": ";",
+            "start": 37,
+            "end": 38
+          },
+          {
+            "index": 7,
+            "text": "please",
+            "start": 39,
+            "end": 45
+          },
+          {
+            "index": 8,
+            "text": "verify",
+            "start": 46,
+            "end": 52
+          },
+          {
+            "index": 9,
+            "text": "the",
+            "start": 53,
+            "end": 56
+          },
+          {
+            "index": 10,
+            "text": "meeting",
+            "start": 57,
+            "end": 64
+          },
+          {
+            "index": 11,
+            "text": "link",
+            "start": 65,
+            "end": 69
+          },
+          {
+            "index": 12,
+            "text": "and",
+            "start": 70,
+            "end": 73
+          },
+          {
+            "index": 13,
+            "text": "the",
+            "start": 74,
+            "end": 77
+          },
+          {
+            "index": 14,
+            "text": "interpreter",
+            "start": 78,
+            "end": 89
+          },
+          {
+            "index": 15,
+            "text": "request",
+            "start": 90,
+            "end": 97
+          },
+          {
+            "index": 16,
+            "text": "through",
+            "start": 98,
+            "end": 105
+          },
+          {
+            "index": 17,
+            "text": "the",
+            "start": 106,
+            "end": 109
+          },
+          {
+            "index": 18,
+            "text": "authorized",
+            "start": 110,
+            "end": 120
+          },
+          {
+            "index": 19,
+            "text": "arrangements",
+            "start": 121,
+            "end": 133
+          },
+          {
+            "index": 20,
+            "text": ".",
+            "start": 133,
+            "end": 134
+          }
+        ],
+        "focus_lexeme_ids": [
+          "remote-hearing.hearing-conducted-with-participants-connected-remotely.n",
+          "meeting-link.address-for-joining-online-meeting.n",
+          "interpreter-request.language-support-request.n"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "legal-bls-paralegals",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "legal-us-courts-glossary",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "legal-ew-cpr-glossary",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "legal-us-court-records",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "legal-cornell-leading-question",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "legal-cornell-circumstantial-evidence",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "legal-cornell-fre801",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "legal-judiciary-witnesses-oaths",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          }
+        ]
+      }
+    },
+    {
+      "file": "data/professional/expressions/office-admin-module08.json",
+      "object_sha256": "465d0f1a3c024822db36e7d22d835efd17539eaa6cd1a8b787d62fc95ffb3f11",
+      "focus_ids": [],
+      "expression": {
+        "id": "expr.office_admin.module08.05",
+        "text": "Verify the destination, authorized purpose, and any required consent before sharing personal data, and apply the relevant data minimization requirements.",
+        "meaning": "Clarify the basis and scope for sharing personal information.",
+        "context": "An administrator checks the applicable information-handling requirements.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "Verify",
+            "start": 0,
+            "end": 6
+          },
+          {
+            "index": 1,
+            "text": "the",
+            "start": 7,
+            "end": 10
+          },
+          {
+            "index": 2,
+            "text": "destination",
+            "start": 11,
+            "end": 22
+          },
+          {
+            "index": 3,
+            "text": ",",
+            "start": 22,
+            "end": 23
+          },
+          {
+            "index": 4,
+            "text": "authorized",
+            "start": 24,
+            "end": 34
+          },
+          {
+            "index": 5,
+            "text": "purpose",
+            "start": 35,
+            "end": 42
+          },
+          {
+            "index": 6,
+            "text": ",",
+            "start": 42,
+            "end": 43
+          },
+          {
+            "index": 7,
+            "text": "and",
+            "start": 44,
+            "end": 47
+          },
+          {
+            "index": 8,
+            "text": "any",
+            "start": 48,
+            "end": 51
+          },
+          {
+            "index": 9,
+            "text": "required",
+            "start": 52,
+            "end": 60
+          },
+          {
+            "index": 10,
+            "text": "consent",
+            "start": 61,
+            "end": 68
+          },
+          {
+            "index": 11,
+            "text": "before",
+            "start": 69,
+            "end": 75
+          },
+          {
+            "index": 12,
+            "text": "sharing",
+            "start": 76,
+            "end": 83
+          },
+          {
+            "index": 13,
+            "text": "personal",
+            "start": 84,
+            "end": 92
+          },
+          {
+            "index": 14,
+            "text": "data",
+            "start": 93,
+            "end": 97
+          },
+          {
+            "index": 15,
+            "text": ",",
+            "start": 97,
+            "end": 98
+          },
+          {
+            "index": 16,
+            "text": "and",
+            "start": 99,
+            "end": 102
+          },
+          {
+            "index": 17,
+            "text": "apply",
+            "start": 103,
+            "end": 108
+          },
+          {
+            "index": 18,
+            "text": "the",
+            "start": 109,
+            "end": 112
+          },
+          {
+            "index": 19,
+            "text": "relevant",
+            "start": 113,
+            "end": 121
+          },
+          {
+            "index": 20,
+            "text": "data",
+            "start": 122,
+            "end": 126
+          },
+          {
+            "index": 21,
+            "text": "minimization",
+            "start": 127,
+            "end": 139
+          },
+          {
+            "index": 22,
+            "text": "requirements",
+            "start": 140,
+            "end": 152
+          },
+          {
+            "index": 23,
+            "text": ".",
+            "start": 152,
+            "end": 153
+          }
+        ],
+        "focus_lexeme_ids": [
+          "personal-data.identifiable-person-information.n",
+          "data-minimization.limiting-data-to-what-purpose-requires.n",
+          "consent.informed-agreement.n"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "osha-computer-workstations",
+            "status": "pending_term_check",
+            "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+          },
+          {
+            "source_id": "ico-data-minimization",
+            "status": "pending_term_check",
+            "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+          }
+        ]
+      }
+    },
+    {
+      "file": "data/professional/expressions/office-admin-module08.json",
+      "object_sha256": "dc8a6ededced0290b12ecfe7c66f95e1e0936e4efe28f4680eaa5da024ba8810",
+      "focus_ids": [],
+      "expression": {
+        "id": "expr.office_admin.module08.08",
+        "text": "Complete the identity check and verify authority separately when an authorized representative requests access.",
+        "meaning": "Distinguish identity from authority to act.",
+        "context": "An administrator handles a representative's access request.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "Complete",
+            "start": 0,
+            "end": 8
+          },
+          {
+            "index": 1,
+            "text": "the",
+            "start": 9,
+            "end": 12
+          },
+          {
+            "index": 2,
+            "text": "identity",
+            "start": 13,
+            "end": 21
+          },
+          {
+            "index": 3,
+            "text": "check",
+            "start": 22,
+            "end": 27
+          },
+          {
+            "index": 4,
+            "text": "and",
+            "start": 28,
+            "end": 31
+          },
+          {
+            "index": 5,
+            "text": "verify",
+            "start": 32,
+            "end": 38
+          },
+          {
+            "index": 6,
+            "text": "authority",
+            "start": 39,
+            "end": 48
+          },
+          {
+            "index": 7,
+            "text": "separately",
+            "start": 49,
+            "end": 59
+          },
+          {
+            "index": 8,
+            "text": "when",
+            "start": 60,
+            "end": 64
+          },
+          {
+            "index": 9,
+            "text": "an",
+            "start": 65,
+            "end": 67
+          },
+          {
+            "index": 10,
+            "text": "authorized",
+            "start": 68,
+            "end": 78
+          },
+          {
+            "index": 11,
+            "text": "representative",
+            "start": 79,
+            "end": 93
+          },
+          {
+            "index": 12,
+            "text": "requests",
+            "start": 94,
+            "end": 102
+          },
+          {
+            "index": 13,
+            "text": "access",
+            "start": 103,
+            "end": 109
+          },
+          {
+            "index": 14,
+            "text": ".",
+            "start": 109,
+            "end": 110
+          }
+        ],
+        "focus_lexeme_ids": [
+          "authorized-representative.person-permitted-to-act-for-another.n",
+          "identity-check.identity-verification.n"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "osha-computer-workstations",
+            "status": "pending_term_check",
+            "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+          }
+        ]
+      }
+    },
+    {
+      "file": "data/professional/expressions/office-admin-module08.json",
+      "object_sha256": "2623a21aac5943e437f1321a7068dba7e503e2d437e91bb74c41378bf73b74d6",
+      "focus_ids": [],
+      "expression": {
+        "id": "expr.office_admin.module08.09",
+        "text": "Use the incident form to report the trip hazard and obstruction near the assembly point through the workplace's approved safety process.",
+        "meaning": "Report an environmental safety concern.",
+        "context": "A worker records a hazard near an emergency gathering location.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "Use",
+            "start": 0,
+            "end": 3
+          },
+          {
+            "index": 1,
+            "text": "the",
+            "start": 4,
+            "end": 7
+          },
+          {
+            "index": 2,
+            "text": "incident",
+            "start": 8,
+            "end": 16
+          },
+          {
+            "index": 3,
+            "text": "form",
+            "start": 17,
+            "end": 21
+          },
+          {
+            "index": 4,
+            "text": "to",
+            "start": 22,
+            "end": 24
+          },
+          {
+            "index": 5,
+            "text": "report",
+            "start": 25,
+            "end": 31
+          },
+          {
+            "index": 6,
+            "text": "the",
+            "start": 32,
+            "end": 35
+          },
+          {
+            "index": 7,
+            "text": "trip",
+            "start": 36,
+            "end": 40
+          },
+          {
+            "index": 8,
+            "text": "hazard",
+            "start": 41,
+            "end": 47
+          },
+          {
+            "index": 9,
+            "text": "and",
+            "start": 48,
+            "end": 51
+          },
+          {
+            "index": 10,
+            "text": "obstruction",
+            "start": 52,
+            "end": 63
+          },
+          {
+            "index": 11,
+            "text": "near",
+            "start": 64,
+            "end": 68
+          },
+          {
+            "index": 12,
+            "text": "the",
+            "start": 69,
+            "end": 72
+          },
+          {
+            "index": 13,
+            "text": "assembly",
+            "start": 73,
+            "end": 81
+          },
+          {
+            "index": 14,
+            "text": "point",
+            "start": 82,
+            "end": 87
+          },
+          {
+            "index": 15,
+            "text": "through",
+            "start": 88,
+            "end": 95
+          },
+          {
+            "index": 16,
+            "text": "the",
+            "start": 96,
+            "end": 99
+          },
+          {
+            "index": 17,
+            "text": "workplace's",
+            "start": 100,
+            "end": 111
+          },
+          {
+            "index": 18,
+            "text": "approved",
+            "start": 112,
+            "end": 120
+          },
+          {
+            "index": 19,
+            "text": "safety",
+            "start": 121,
+            "end": 127
+          },
+          {
+            "index": 20,
+            "text": "process",
+            "start": 128,
+            "end": 135
+          },
+          {
+            "index": 21,
+            "text": ".",
+            "start": 135,
+            "end": 136
+          }
+        ],
+        "focus_lexeme_ids": [
+          "trip-hazard.obstacle-likely-to-cause-tripping.n",
+          "obstruction.blocked-route-object.n",
+          "incident-form.event-report-document.n",
+          "assembly-point.designated-meeting-place.n"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "osha-computer-workstations",
+            "status": "pending_term_check",
+            "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+          }
+        ]
+      }
+    },
+    {
+      "file": "data/professional/expressions/sales-module08.json",
+      "object_sha256": "d42881ce9bf7958d746678483f2f72dd9dae02087e7ac0bc937295b3a198d1de",
+      "focus_ids": [],
+      "expression": {
+        "id": "expr.sales_marketing.module08.10",
+        "text": "Please verify the duplicate lead before merging records, and record the current approval status.",
+        "meaning": "Request an identity check before a data change.",
+        "context": "Maintaining an authorized contact list.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "Please",
+            "start": 0,
+            "end": 6
+          },
+          {
+            "index": 1,
+            "text": "verify",
+            "start": 7,
+            "end": 13
+          },
+          {
+            "index": 2,
+            "text": "the",
+            "start": 14,
+            "end": 17
+          },
+          {
+            "index": 3,
+            "text": "duplicate",
+            "start": 18,
+            "end": 27
+          },
+          {
+            "index": 4,
+            "text": "lead",
+            "start": 28,
+            "end": 32
+          },
+          {
+            "index": 5,
+            "text": "before",
+            "start": 33,
+            "end": 39
+          },
+          {
+            "index": 6,
+            "text": "merging",
+            "start": 40,
+            "end": 47
+          },
+          {
+            "index": 7,
+            "text": "records",
+            "start": 48,
+            "end": 55
+          },
+          {
+            "index": 8,
+            "text": ",",
+            "start": 55,
+            "end": 56
+          },
+          {
+            "index": 9,
+            "text": "and",
+            "start": 57,
+            "end": 60
+          },
+          {
+            "index": 10,
+            "text": "record",
+            "start": 61,
+            "end": 67
+          },
+          {
+            "index": 11,
+            "text": "the",
+            "start": 68,
+            "end": 71
+          },
+          {
+            "index": 12,
+            "text": "current",
+            "start": 72,
+            "end": 79
+          },
+          {
+            "index": 13,
+            "text": "approval",
+            "start": 80,
+            "end": 88
+          },
+          {
+            "index": 14,
+            "text": "status",
+            "start": 89,
+            "end": 95
+          },
+          {
+            "index": 15,
+            "text": ".",
+            "start": 95,
+            "end": 96
+          }
+        ],
+        "focus_lexeme_ids": [
+          "duplicate-lead.repeated-record-of-same-potential-sales-contact.n",
+          "approval-status.current-state-of-required-approval.n"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "sales-ftc-advertising-basics",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "sales-asa-misleading-advertising",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          }
+        ]
+      }
+    }
+  ],
+  "alternative_inventory": [
+    {
+      "file": "data/professional/lexemes/accounting-module06.json",
+      "object_sha256": "ee501124d4e5bf406503e2b7e7a988a741884581be1cb7d2654144936109b6b4",
+      "entry": {
+        "id": "check.written-order-directing-bank-to-pay-specified-amount.n",
+        "text": "check",
+        "display_text": "check",
+        "pos": "noun",
+        "definition": "A written order directing a bank to pay a specified amount from an account, subject to the applicable arrangements.",
+        "example": "The check number appears on the payment record.",
+        "difficulty": "B2",
+        "accepted_forms": [
+          "check",
+          "cheque"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A clearly fictional bank check with payee, amount and date fields, distinct from an inspection tick or checklist.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "check.written-order-directing-bank-to-pay-specified-amount.n.analysis.v1",
+          "lexeme_id": "check.written-order-directing-bank-to-pay-specified-amount.n",
+          "text": "check",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.check",
+              "type": "atomic",
+              "canonical": "check",
+              "surface": "check"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "accounting-bls-clerks",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "accounting-irs-recordkeeping",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "accounting-govuk-company-records",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "accounting-cfpb-overdraft",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          }
+        ],
+        "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+      }
+    },
+    {
+      "file": "data/professional/lexemes/foundation-module02.json",
+      "object_sha256": "122fd00272a5a183226db9c9c07f0b2ab13cef997aec6ce8670bfcbb10b8be3e",
+      "entry": {
+        "id": "check.examine.v",
+        "text": "check",
+        "display_text": "check",
+        "pos": "verb",
+        "definition": "To examine something to find out whether it is correct or in good condition.",
+        "example": "I will check the delivery details.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "check"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A person comparing a delivery note with the actual parcel.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "check.examine.v.analysis.v1",
+          "lexeme_id": "check.examine.v",
+          "text": "check",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "check",
+              "surface": "check",
+              "canonical_id": "morph.check"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "reviewed",
+          "language": "reviewed",
+          "domain": "not_required",
+          "reviewer": "Codex root independent AI language review; not human or subject-matter approval",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation02-language-first10-oxford-check",
+            "status": "verified",
+            "scope": "Verified selected ordinary-language consultation within root independent AI acceptance. Source finding: The selected use examines whether something is correct or satisfactory. Other verification patterns and homographs require their own context; the original details example fits the selected verb. Literal selected source level: not observed. Other-sense labels not applied: {}. Independent decision: Accept examination for correctness or condition and delivery-details example, with Collins selected A2. Do not transfer the noun, payment instrument, tick-mark action, check-in/out or specialist inspection authority. No human, subject-matter, morphology, media, domain, expression or release approval is claimed."
+          },
+          {
+            "source_id": "foundation02-language-first10-collins-check",
+            "status": "verified",
+            "scope": "Verified selected ordinary-language consultation within root independent AI acceptance. Source finding: The selected examine-for-correctness verb displays A2. The inspection noun is B1, while marking a box is a distinct US verb use also marked A2. These adjacent labels do not collapse senses or POS. Literal selected source level: A2. Other-sense labels not applied: {\"inspection_noun\":\"B1\",\"tick_mark_us_verb\":\"A2\"}. Independent decision: Accept examination for correctness or condition and delivery-details example, with Collins selected A2. Do not transfer the noun, payment instrument, tick-mark action, check-in/out or specialist inspection authority. No human, subject-matter, morphology, media, domain, expression or release approval is claimed."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. The exact ordinary selected-sense definition, example and editorial difficulty have scoped independent AI language acceptance recorded by root. Accept examination for correctness or condition and delivery-details example, with Collins selected A2. Do not transfer the noun, payment instrument, tick-mark action, check-in/out or specialist inspection authority. Retain examining for correctness or condition. Exclude check as a noun, a bank payment instrument, a tick mark, restraining something, check in/out, and dedicated clinical or operational checking procedures. Accepted forms, POS, region, morphology, image, word audio and historical reference prefix remain unchanged. Only the two newly added lexical references are verified for this bounded language decision. No whole expression, specialist procedure, authority, module or release approval is implied."
+      }
+    },
+    {
+      "file": "data/professional/lexemes/foundation-module02.json",
+      "object_sha256": "af2c19270729a0b41440613703e70f772bfcfc5777f5d1c22d60c78fa86b497f",
+      "entry": {
+        "id": "delay.late-occurrence.n",
+        "text": "delay",
+        "display_text": "delay",
+        "pos": "noun",
+        "definition": "A period of waiting caused by something happening later than expected.",
+        "example": "There is a short delay with the delivery.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "delay"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "An expected delivery time followed by a later updated time.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "delay.late-occurrence.n.analysis.v1",
+          "lexeme_id": "delay.late-occurrence.n",
+          "text": "delay",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "delay",
+              "surface": "delay",
+              "canonical_id": "morph.delay"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      }
+    },
+    {
+      "file": "data/professional/lexemes/transport-module05.json",
+      "object_sha256": "bed64c6d0d308759bc54ac4acf5883529d2c834433f221cf63f63a7e4f45c24a",
+      "entry": {
+        "id": "delay.make-action-happen-later.v",
+        "text": "delay",
+        "display_text": "delay",
+        "pos": "verb",
+        "definition": "To make an action or event happen later than planned.",
+        "example": "The road closure may delay the collection.",
+        "difficulty": "B1",
+        "accepted_forms": [
+          "delay"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A fictional collection time moving later on a schedule, distinct from a noun naming the waiting period.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": null,
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "transport-bls-delivery-drivers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "transport-onet-couriers",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          },
+          {
+            "source_id": "transport-hse-loading",
+            "status": "pending_term_check",
+            "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+          }
+        ],
+        "editorial_notes": "Original Transport & Delivery communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not driver training, a handling procedure, a legal rule, a load calculation, an emergency procedure, or a carrier service guarantee. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+      }
+    }
+  ],
+  "retained_review_files": [
+    "docs/content-review/foundation-module02-language-second10-proposals-2026-10-17/review.json",
+    "docs/content-review/foundation-module02-language-third10-independent-review-2026-10-17/review.json",
+    "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/review-ledger.json"
+  ],
+  "scope": "No production changes; no new acceptance; snapshots preserve existing whole-entry holds."
+}

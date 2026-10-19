@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "status": "raw_json_and_bytes_only_no_project_audit_or_tests",
+  "before_registry_sha256": "9a9b3c8665ce920fcddd584456e4ca47b8c365d8d2c43daacb9ea908c540ee1c",
+  "after_registry_sha256": "dcfe28d7c7c6048206b740459a65ce9b482ba2768d388b0b29d7ab31174ed1a0",
+  "protected_state": {
+    "other_lexemes_json_sha256": "4bd66cb8d65ecae7c533ef1cd4ad9905d578912daf160b373a0ae5b8a99913fd",
+    "catalog_json_sha256": "fa54b3db53df9816bd2af57f08a3adfc8647c1f2db0f79754db6557e0ca00442",
+    "courses_json_sha256": "780a3e385fc713b8f7db16594b2010e1b329d40c6bc1b3d783df49fcc6cc90d1",
+    "expressions_json_sha256": "6123997d5d536376c2b5de984e7014848de50f49e022a4ab996a69e7b134d15e",
+    "sources_json_sha256": "c9c3bc8fc72113d3804cc2a49067bc30bc6aba0964b52f20216a8d7bbf0ec6c1",
+    "themes_json_sha256": "d61cc725d971313efbec74494879afcc19dc67723d0f5b72292326f5b21bfc8e",
+    "lexemeOrigins_json_sha256": "5fd02bdcb728ab1aaa519f288320c03de9a7d981914d5702008ac1a5ca136140",
+    "expressionOrigins_json_sha256": "b83e6056d03fc77753d1588a44d6ee299da376fd62e6a2bf3c8eea30233872c2"
+  },
+  "counts_before": {
+    "images": 8,
+    "audio": 12
+  },
+  "counts_after": {
+    "images": 9,
+    "audio": 12
+  },
+  "all_modules_remain_draft": true,
+  "actual_validator_module_not_loaded": true,
+  "tests_executed": false,
+  "native_replayed": false,
+  "production_mutated": false
+}

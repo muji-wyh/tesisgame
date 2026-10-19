@@ -1,0 +1,146 @@
+{
+  "schema": 1,
+  "status": "frozen_additive_actual_candidate_dependencies_no_project_execution",
+  "author_binding_sha256": "1506caf881745539b971881e978e5a5f60fc8de8640066169953f6ee45417da6",
+  "files": [
+    {
+      "path": "build/professional-english/transactions/foundation01-language-fourth10-r01/prepared.json",
+      "bytes": 33319,
+      "sha256": "c86134feb6aa16a0c14687865f5dedbf30a0d2c053150754bbf6421547cd0a02",
+      "reason": "Concrete existing content/morphology journal read omitted from frozen author baseline."
+    },
+    {
+      "path": "build/professional-english/transactions/foundation01-language-fourth10-r01/states/000084-committed.json",
+      "bytes": 10679,
+      "sha256": "94192988fe7596600042525ee72763b9593b94753eac28fea06ff9e51269a307",
+      "reason": "Concrete existing content/morphology journal read omitted from frozen author baseline."
+    },
+    {
+      "path": "build/professional-english/transactions/foundation01-language-fifth10-r01/prepared.json",
+      "bytes": 35636,
+      "sha256": "b04a4fd632e8b8a840e89e3eb789b0553d78b9e8ab8c7d5ddb051006262d96da",
+      "reason": "Concrete existing content/morphology journal read omitted from frozen author baseline."
+    },
+    {
+      "path": "build/professional-english/transactions/foundation01-language-fifth10-r01/states/000090-committed.json",
+      "bytes": 11421,
+      "sha256": "121d0a49c253beb3c28fc5a8e7f938bf6b9bfc0b99528841db830ff0b4cab16d",
+      "reason": "Concrete existing content/morphology journal read omitted from frozen author baseline."
+    },
+    {
+      "path": "build/professional-english/transactions/foundation02-language-first10-r01/states/000050-committed.json",
+      "bytes": 6083,
+      "sha256": "01b49e5e15c1b3f4e9c456805c9c9d356d77f668f53db73a25f4679e113db835",
+      "reason": "Concrete existing content/morphology journal read omitted from frozen author baseline."
+    },
+    {
+      "path": "build/professional-english/transactions/foundation01-attendance-language-r01/states/000046-committed.json",
+      "bytes": 5607,
+      "sha256": "0c3db59442c89e393f403d489756a4542d1462c7da9143310a7ac8393bf4f3b0",
+      "reason": "Concrete existing content/morphology journal read omitted from frozen author baseline."
+    },
+    {
+      "path": "build/professional-english/transactions/foundation02-second10-language-r02/states/000054-committed.json",
+      "bytes": 6573,
+      "sha256": "60b7080e9fd46f23a0bb5b12788aade62ca557c0f342bcb992856084ee76e6f8",
+      "reason": "Concrete existing content/morphology journal read omitted from frozen author baseline."
+    },
+    {
+      "path": "build/professional-english/transactions/retail04-second10-r01/prepared.json",
+      "bytes": 3771,
+      "sha256": "d4fcd7944e28033d7040a460439c8a6845e486c37fbc37aec444f491e55c1093",
+      "reason": "Concrete existing content/morphology journal read omitted from frozen author baseline."
+    },
+    {
+      "path": "build/professional-english/transactions/retail04-second10-r01/states/000010-committed.json",
+      "bytes": 1203,
+      "sha256": "ae18ecb882899de777b6bfddf2157da433c66f207cb9cb17acb6842fc778d0ac",
+      "reason": "Concrete existing content/morphology journal read omitted from frozen author baseline."
+    },
+    {
+      "path": "build/professional-english/transactions/retail04-third10-r01/prepared.json",
+      "bytes": 3765,
+      "sha256": "2565898a38c27e5a52f13f74ad5666e1edbf55225339c48c61c5b01d7b861a0e",
+      "reason": "Concrete existing content/morphology journal read omitted from frozen author baseline."
+    },
+    {
+      "path": "build/professional-english/transactions/retail04-third10-r01/states/000010-committed.json",
+      "bytes": 1201,
+      "sha256": "a555cbfb248758edc05bac719fd132f97b11c13c1212c60162023f5862bd1785",
+      "reason": "Concrete existing content/morphology journal read omitted from frozen author baseline."
+    },
+    {
+      "path": "tools/validate-professional-content.cjs",
+      "bytes": 31243,
+      "sha256": "a59598faf3ee917a738fe2c2dfc661ad03b7d6c325e7a3a2dc02a093e6e736cd",
+      "reason": "Complete local validator import closure and schema copy inputs; imports beyond these files are Node built-ins."
+    },
+    {
+      "path": "tools/validate-theme-motion.cjs",
+      "bytes": 2288,
+      "sha256": "bb2a9c07829a3b60616c663662875ba0cdbdf6af9fe9b607517ebf89ff721b04",
+      "reason": "Complete local validator import closure and schema copy inputs; imports beyond these files are Node built-ins."
+    },
+    {
+      "path": "tools/professional-picture-pools.cjs",
+      "bytes": 3496,
+      "sha256": "ca37e39c0987fb4d2738fec4b951bc2646464c36aa8acd9827173542e08e3629",
+      "reason": "Complete local validator import closure and schema copy inputs; imports beyond these files are Node built-ins."
+    },
+    {
+      "path": "web/professional-media.js",
+      "bytes": 11851,
+      "sha256": "db9ac8f3aeaaafb8f1ac411a56d56f0bfd6d8ad2862348868d42666d3021630a",
+      "reason": "Complete local validator import closure and schema copy inputs; imports beyond these files are Node built-ins."
+    },
+    {
+      "path": "data/professional/schemas/catalog.schema.json",
+      "bytes": 3206,
+      "sha256": "390ab594b41ef8955d13448882c9732ea0d7ab3841f4d51ec8720a8df5794ac5",
+      "reason": "Complete local validator import closure and schema copy inputs; imports beyond these files are Node built-ins."
+    },
+    {
+      "path": "data/professional/schemas/common.schema.json",
+      "bytes": 12377,
+      "sha256": "4d27b5255e854f57be7a1778bc3aec6c467d0777c44f79ec8219ae617f6c8113",
+      "reason": "Complete local validator import closure and schema copy inputs; imports beyond these files are Node built-ins."
+    },
+    {
+      "path": "data/professional/schemas/course.schema.json",
+      "bytes": 3688,
+      "sha256": "4ffebf8bd5fb635eb6db15a70f85a203588dbff3b796cc1e6953aae5459aa24a",
+      "reason": "Complete local validator import closure and schema copy inputs; imports beyond these files are Node built-ins."
+    },
+    {
+      "path": "data/professional/schemas/expression.schema.json",
+      "bytes": 1950,
+      "sha256": "0b4ecce1acb728ff044732244a4410424473a42c84d53e9a794d8dbadbeef03a",
+      "reason": "Complete local validator import closure and schema copy inputs; imports beyond these files are Node built-ins."
+    },
+    {
+      "path": "data/professional/schemas/learning-context.schema.json",
+      "bytes": 703,
+      "sha256": "466af7a175c3b349d41c982a2c61bf4e0028601c67b8ca926f4aa2677be8b1d4",
+      "reason": "Complete local validator import closure and schema copy inputs; imports beyond these files are Node built-ins."
+    },
+    {
+      "path": "data/professional/schemas/lexeme.schema.json",
+      "bytes": 2276,
+      "sha256": "8837fa8779894d7b0d67e9e46d97aefdd7e952b476715df436db03ead4b4ff60",
+      "reason": "Complete local validator import closure and schema copy inputs; imports beyond these files are Node built-ins."
+    },
+    {
+      "path": "data/professional/schemas/morphology.schema.json",
+      "bytes": 3928,
+      "sha256": "5248a5e3fbbbcc70b63dbb13072f6ae0148a6ba2871eb9e44739bb94f4bbda6c",
+      "reason": "Complete local validator import closure and schema copy inputs; imports beyond these files are Node built-ins."
+    },
+    {
+      "path": "data/professional/schemas/theme.schema.json",
+      "bytes": 4798,
+      "sha256": "03202db37b6e6b8b1dea3a2058b646807c9da5630fe0e4cba8b40896966aa77f",
+      "reason": "Complete local validator import closure and schema copy inputs; imports beyond these files are Node built-ins."
+    }
+  ],
+  "scope": "Additive root candidate/commit input pins. The frozen 5085-file author binding and historical executions remain unchanged."
+}

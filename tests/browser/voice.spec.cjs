@@ -1,8 +1,9 @@
 const { test, expect } = require('@playwright/test');
-const { boardPoint, chooseTheme, contentBounds, headerPoint, headerIconRect, uiScale, rendered, observeAudio, enterGame, metrics: logicalMetrics, tap, seedGrowth } = require('./game-ui.cjs');
+const { boardPoint, contentBounds, headerPoint, headerIconRect, uiScale, rendered, observeAudio, enterGame, metrics: logicalMetrics, tap, seedGrowth } = require('./game-ui.cjs');
 const { watchAudioRequests, observeOutputAudio, expectRecording, waveDuration } = require('./bundled-audio.cjs');
 const catalog = require('../../words.json');
 const voiceHitRecording = 'assets/imported-audio/pair-feedback/right.wav';
+const growthTheme = require('../../data/professional/themes.json').profiles.find(profile => profile.id === 'growth_garden');
 
 async function voiceMatchLink(page) {
   return page.locator('#game-status').evaluate(element => JSON.parse(element.dataset.voiceMatchLink || '{"active":false}'));
@@ -205,24 +206,27 @@ test('Voice gains emphasis only after activation without automatic recording', a
   await page.setViewportSize({ width: 320, height: 568 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   const errors = await openGame(page);
-  await chooseTheme(page, 4);
+  expect((await logicalMetrics(page)).library.learning.selection.track).toBe('growth');
+  await expect.poll(() => page.locator('#game').evaluate(element => element.style.getPropertyValue('--voice-accent').toLowerCase()))
+    .toBe(growthTheme.palette.accent.toLowerCase());
   await page.mouse.move(0, 0);
   await rendered(page);
   const bounds = await logicalMetrics(page), rect = headerIconRect(bounds, 'voice');
   const clip = { x: bounds.x + rect.x * bounds.scale, y: bounds.y + rect.y * bounds.scale,
     width: rect.width * bounds.scale, height: rect.height * bounds.scale };
   const available = await page.screenshot({ path: testInfo.outputPath('voice-primary-ready.png'), clip, scale: 'css' });
-  const fraction = await page.evaluate(async encoded => {
+  const fraction = await page.evaluate(async ({ encoded, accent }) => {
     const image = new Image(); image.src = 'data:image/png;base64,' + encoded; await image.decode();
     const canvas = document.createElement('canvas'); canvas.width = image.width; canvas.height = image.height;
     const context = canvas.getContext('2d'); context.drawImage(image, 0, 0);
     const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+    const color = accent.slice(1).match(/../g).map(channel => parseInt(channel, 16));
     let filled = 0;
     for (let index = 0; index < pixels.length; index += 4) {
-      if (Math.abs(pixels[index] - 0x13) + Math.abs(pixels[index + 1] - 0x75) + Math.abs(pixels[index + 2] - 0x8b) < 40) filled++;
+      if (color.reduce((distance, channel, offset) => distance + Math.abs(pixels[index + offset] - channel), 0) < 40) filled++;
     }
     return filled / (pixels.length / 4);
-  }, available.toString('base64'));
+  }, { encoded: available.toString('base64'), accent: growthTheme.palette.accent });
   expect(fraction, 'An inactive microphone keeps the quiet shared action surface.').toBeLessThan(0.2);
   expect(await page.evaluate(() => window.speechFixture.starts)).toBe(0);
   await page.evaluate(() => { window.speechFixture.automatic = false; });

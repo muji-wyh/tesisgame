@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-10-16T18:09:27.045Z",
+  "scope": "Exact durable copies of frozen author proposals only; no integration or new language acceptance.",
+  "source_directory": "build/professional-english/foundation-module02-language-review/second10-continuation-r01",
+  "durable_directory": "docs/content-review/foundation-module02-language-second10-proposals-2026-10-17",
+  "inventory_sha256": "a40645e1cd6d7011d03b62ba8c6d4a08749f6a95d8e5d287b2beb24d839ed9bf",
+  "artifacts": [
+    {
+      "path": "HANDOFF.md",
+      "bytes": 4745,
+      "sha256": "34e857eb835b261e6c1eb8c4965327130a52e665275ff93bafaa025dc189b9d3"
+    },
+    {
+      "path": "candidate-ledger.json",
+      "bytes": 85848,
+      "sha256": "2e1e09b0d3c602b1da4d163159a8482154df0ce819ba361d2d04a699e44a19ed"
+    },
+    {
+      "path": "context-screen.json",
+      "bytes": 741020,
+      "sha256": "592b2a4f7c7bc37127763a9ebd7b1852e453a89227a8e4f27817e875260ab86e"
+    },
+    {
+      "path": "deliver-correction-r01.json",
+      "bytes": 4478,
+      "sha256": "5b5d09430ef76b504616c1510a6c44ec4ab8b311be5c24d24a9233cca73d38e4"
+    },
+    {
+      "path": "source-index.json",
+      "bytes": 16893,
+      "sha256": "b6b1c07dc6d4d013a002a5a8b1eb63caf3ea8b46a19d7173f65470da558736e5"
+    },
+    {
+      "path": "sources-a.json",
+      "bytes": 12255,
+      "sha256": "9bb428882426366203c57f9846f270790f603de8510fe2807759250a1e3aaf66"
+    },
+    {
+      "path": "sources-b.json",
+      "bytes": 25987,
+      "sha256": "91f8e84c9e6254d6fb32bad84de62b1a99d87c2375b06bc03ebc93b942dac2c9"
+    },
+    {
+      "path": "validation.json",
+      "bytes": 1866,
+      "sha256": "39b23618141950f5cd69bd001f19799befcaf85ee9f0728aab2c5bd4df0ce5a5"
+    },
+    {
+      "path": "inventory.json",
+      "bytes": 1824,
+      "sha256": "a40645e1cd6d7011d03b62ba8c6d4a08749f6a95d8e5d287b2beb24d839ed9bf"
+    }
+  ]
+}

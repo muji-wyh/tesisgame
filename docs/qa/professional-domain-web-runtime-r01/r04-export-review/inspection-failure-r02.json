@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "status": "independent_read_only_inspector_failed_before_review",
+  "source": {
+    "path": "docs/qa/professional-domain-web-runtime-r01/r04-export-review/inspect-r02.ps1",
+    "sha256": "f2ee2a0a78e400358d874813fefd6ca057b1e311432c62a4c64d4197770ad245"
+  },
+  "error": "A broad result-name substitution also changed the retained prepared-inspection.json input path to prepared-inspection-r02.json.",
+  "correction": "Fresh inspect-r03.ps1 restores that exact input path and changes only its own source/start/result names.",
+  "fixture_runtime_replayed": false
+}

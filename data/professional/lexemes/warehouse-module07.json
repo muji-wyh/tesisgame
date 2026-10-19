@@ -1,0 +1,2493 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "quantity.amount-expressed-with-unit.n",
+      "text": "quantity",
+      "display_text": "quantity",
+      "pos": "noun",
+      "definition": "An amount of something, usually expressed with a number and an appropriate unit.",
+      "example": "The quantity is recorded in cases rather than individual items.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "quantity"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional goods record showing one numeric quantity next to its clearly labeled unit.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "in-transit-stock.inventory-recorded-as-moving-between-locations.n",
+      "text": "in-transit stock",
+      "display_text": "in-transit stock",
+      "pos": "noun",
+      "definition": "Inventory recorded as being transported between locations under the relevant tracking rules.",
+      "example": "The inventory view lists these goods as in-transit stock.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "in-transit stock",
+        "stock in transit"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional inventory status record linking an origin and destination, without implying ownership or availability for sale.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "in-transit-stock.inventory-recorded-as-moving-between-locations.n.analysis.v1",
+        "lexeme_id": "in-transit-stock.inventory-recorded-as-moving-between-locations.n",
+        "text": "in-transit stock",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.in",
+            "type": "stem",
+            "canonical": "in",
+            "surface": "in"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.transit",
+            "type": "stem",
+            "canonical": "transit",
+            "surface": "transit"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.stock",
+            "type": "stem",
+            "canonical": "stock",
+            "surface": "stock"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "in-transit",
+            "rule": "hyphenated_compound"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "in-transit stock",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "bin-location.identified-storage-position-in-warehouse.n",
+      "text": "bin location",
+      "display_text": "bin location",
+      "pos": "noun",
+      "definition": "An identified storage position within a warehouse, such as a shelf space or compartment.",
+      "example": "The bin location differs from the one shown in the item record.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "bin location"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional warehouse shelf position with an invented location marker clearly distinct from the item label.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "bin-location.identified-storage-position-in-warehouse.n.analysis.v1",
+        "lexeme_id": "bin-location.identified-storage-position-in-warehouse.n",
+        "text": "bin location",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.bin",
+            "type": "stem",
+            "canonical": "bin",
+            "surface": "bin"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.location",
+            "type": "stem",
+            "canonical": "location",
+            "surface": "location"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "bin location",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "location-code.identifier-for-storage-or-work-position.n",
+      "text": "location code",
+      "display_text": "location code",
+      "pos": "noun",
+      "definition": "A code used to identify a storage or work position in a facility.",
+      "example": "The location code is missing from the movement record.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "location code"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional shelf marker and matching record field displaying the same invented location identifier.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "location-code.identifier-for-storage-or-work-position.n.analysis.v1",
+        "lexeme_id": "location-code.identifier-for-storage-or-work-position.n",
+        "text": "location code",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.location",
+            "type": "stem",
+            "canonical": "location",
+            "surface": "location"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.code",
+            "type": "stem",
+            "canonical": "code",
+            "surface": "code"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "location code",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "perpetual-inventory.system-updating-stock-records-for-transactions.n",
+      "text": "perpetual inventory",
+      "display_text": "perpetual inventory",
+      "pos": "noun",
+      "definition": "An inventory system that maintains ongoing stock records by recording stock transactions as they are processed.",
+      "example": "The team compares the perpetual inventory records with the physical count.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "perpetual inventory"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional ongoing inventory record showing successive stock transactions beside a separate physical-count record, without implying automatic real-time accuracy.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "perpetual-inventory.system-updating-stock-records-for-transactions.n.analysis.v1",
+        "lexeme_id": "perpetual-inventory.system-updating-stock-records-for-transactions.n",
+        "text": "perpetual inventory",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.perpetual",
+            "type": "stem",
+            "canonical": "perpetual",
+            "surface": "perpetual"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.inventory",
+            "type": "stem",
+            "canonical": "inventory",
+            "surface": "inventory"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "perpetual inventory",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "available-stock.inventory-eligible-for-stated-demand.n",
+      "text": "available stock",
+      "display_text": "available stock",
+      "pos": "noun",
+      "definition": "Stock that the relevant system or process identifies as eligible to meet a stated demand.",
+      "example": "Ask which restrictions are included in the available stock figure.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "available stock"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional inventory screen distinguishing available, allocated, and held quantities with a visible local-definition note.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "available-stock.inventory-eligible-for-stated-demand.n.analysis.v1",
+        "lexeme_id": "available-stock.inventory-eligible-for-stated-demand.n",
+        "text": "available stock",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.available",
+            "type": "stem",
+            "canonical": "available",
+            "surface": "available"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.stock",
+            "type": "stem",
+            "canonical": "stock",
+            "surface": "stock"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "available stock",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "allocated-stock.inventory-assigned-to-specific-demand.n",
+      "text": "allocated stock",
+      "display_text": "allocated stock",
+      "pos": "noun",
+      "definition": "Stock assigned to a specified order or other demand under the relevant inventory rules.",
+      "example": "The allocated stock is linked to an identified customer order.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "allocated stock"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional stock record connected to one order, with availability and allocation displayed as separate concepts.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "allocated-stock.inventory-assigned-to-specific-demand.n.analysis.v1",
+        "lexeme_id": "allocated-stock.inventory-assigned-to-specific-demand.n",
+        "text": "allocated stock",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.allocate",
+            "type": "stem",
+            "canonical": "allocate",
+            "surface": "allocat"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ed.suffix",
+            "type": "suffix",
+            "canonical": "ed",
+            "surface": "ed"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.stock",
+            "type": "stem",
+            "canonical": "stock",
+            "surface": "stock"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "allocated",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "allocated stock",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "stock-reservation.arrangement-holding-stock-for-demand.n",
+      "text": "stock reservation",
+      "display_text": "stock reservation",
+      "pos": "noun",
+      "definition": "An arrangement that sets stock aside for an identified demand under the applicable system rules.",
+      "example": "The planner is checking when this stock reservation applies.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "stock reservation"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional reservation record linking an item, a demand reference, and locally defined reservation details.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "stock-reservation.arrangement-holding-stock-for-demand.n.analysis.v1",
+        "lexeme_id": "stock-reservation.arrangement-holding-stock-for-demand.n",
+        "text": "stock reservation",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.stock",
+            "type": "stem",
+            "canonical": "stock",
+            "surface": "stock"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.reservation",
+            "type": "stem",
+            "canonical": "reservation",
+            "surface": "reservation"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "stock reservation",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "inventory-freeze.temporary-restriction-on-specified-stock-activity.n",
+      "text": "inventory freeze",
+      "display_text": "inventory freeze",
+      "pos": "noun",
+      "definition": "A temporary restriction on specified inventory movements or record changes, often supporting a count or review.",
+      "example": "Ask which activities are covered by the inventory freeze.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "inventory freeze"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional inventory notice identifying its scope and review contact, without implying that all movement must stop.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "inventory-freeze.temporary-restriction-on-specified-stock-activity.n.analysis.v1",
+        "lexeme_id": "inventory-freeze.temporary-restriction-on-specified-stock-activity.n",
+        "text": "inventory freeze",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.inventory",
+            "type": "stem",
+            "canonical": "inventory",
+            "surface": "inventory"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.freeze",
+            "type": "stem",
+            "canonical": "freeze",
+            "surface": "freeze"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "inventory freeze",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "recount-request.request-for-another-stock-count.n",
+      "text": "recount request",
+      "display_text": "recount request",
+      "pos": "noun",
+      "definition": "A request for a further count of specified stock to check an earlier result or concern.",
+      "example": "The recount request identifies the item and location to review.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "recount request"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional count-review form with an item reference, location reference, and a request for another count.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "recount-request.request-for-another-stock-count.n.analysis.v1",
+        "lexeme_id": "recount-request.request-for-another-stock-count.n",
+        "text": "recount request",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "affix.re.prefix",
+            "type": "prefix",
+            "canonical": "re",
+            "surface": "re"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.count",
+            "type": "stem",
+            "canonical": "count",
+            "surface": "count"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.request",
+            "type": "stem",
+            "canonical": "request",
+            "surface": "request"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "recount",
+            "rule": "prefix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "recount request",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "blind-count.stock-count-with-expected-quantity-hidden.n",
+      "text": "blind count",
+      "display_text": "blind count",
+      "pos": "noun",
+      "definition": "A stock count in which the person counting is not shown the expected quantity.",
+      "example": "The supervisor has requested a blind count under the site's process.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "blind count"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional count-entry screen with the observed-quantity field visible and the expected-quantity field unavailable.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "blind-count.stock-count-with-expected-quantity-hidden.n.analysis.v1",
+        "lexeme_id": "blind-count.stock-count-with-expected-quantity-hidden.n",
+        "text": "blind count",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.blind",
+            "type": "stem",
+            "canonical": "blind",
+            "surface": "blind"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.count",
+            "type": "stem",
+            "canonical": "count",
+            "surface": "count"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "blind count",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "stockout.absence-of-stock-needed-to-meet-demand.n",
+      "text": "stockout",
+      "display_text": "stockout",
+      "pos": "noun",
+      "definition": "A situation in which the stock needed to meet a specified demand is unavailable at the relevant place or time.",
+      "example": "The report records a stockout for this item at the branch.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "stockout"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional item-availability record showing an unmet demand and the relevant location, without a replenishment promise.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "stockout.absence-of-stock-needed-to-meet-demand.n.analysis.v1",
+        "lexeme_id": "stockout.absence-of-stock-needed-to-meet-demand.n",
+        "text": "stockout",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.stock",
+            "type": "stem",
+            "canonical": "stock",
+            "surface": "stock"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.out",
+            "type": "stem",
+            "canonical": "out",
+            "surface": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "stockout",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "replenishment-task.assigned-work-to-restore-stock-supply.n",
+      "text": "replenishment task",
+      "display_text": "replenishment task",
+      "pos": "noun",
+      "definition": "An assigned piece of work to restore stock at a specified location or supply point.",
+      "example": "The replenishment task refers to the wrong destination location.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "replenishment task"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional assigned stock-restoration task with source and destination references, without a handling procedure.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "replenishment-task.assigned-work-to-restore-stock-supply.n.analysis.v1",
+        "lexeme_id": "replenishment-task.assigned-work-to-restore-stock-supply.n",
+        "text": "replenishment task",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.replenishment",
+            "type": "stem",
+            "canonical": "replenishment",
+            "surface": "replenishment"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.task",
+            "type": "stem",
+            "canonical": "task",
+            "surface": "task"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "replenishment task",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "replenishment-quantity.amount-specified-for-stock-restoration.n",
+      "text": "replenishment quantity",
+      "display_text": "replenishment quantity",
+      "pos": "noun",
+      "definition": "The amount of stock specified for a replenishment request or task.",
+      "example": "Please confirm the unit for the replenishment quantity.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "replenishment quantity"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional replenishment request highlighting its quantity and unit fields beside an invented item reference.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "replenishment-quantity.amount-specified-for-stock-restoration.n.analysis.v1",
+        "lexeme_id": "replenishment-quantity.amount-specified-for-stock-restoration.n",
+        "text": "replenishment quantity",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.replenishment",
+            "type": "stem",
+            "canonical": "replenishment",
+            "surface": "replenishment"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.quantity",
+            "type": "stem",
+            "canonical": "quantity",
+            "surface": "quantity"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "replenishment quantity",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "minimum-stock.lower-stock-target-under-planning-policy.n",
+      "text": "minimum stock",
+      "display_text": "minimum stock",
+      "pos": "noun",
+      "definition": "A lower stock target set for an item under the relevant planning policy.",
+      "example": "The planner is reviewing the minimum stock setting for this item.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "minimum stock"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional planning screen with a labeled lower stock target and a local-policy reference, without a universal threshold.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "minimum-stock.lower-stock-target-under-planning-policy.n.analysis.v1",
+        "lexeme_id": "minimum-stock.lower-stock-target-under-planning-policy.n",
+        "text": "minimum stock",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.minimum",
+            "type": "stem",
+            "canonical": "minimum",
+            "surface": "minimum"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.stock",
+            "type": "stem",
+            "canonical": "stock",
+            "surface": "stock"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "minimum stock",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "maximum-stock.upper-stock-target-under-planning-policy.n",
+      "text": "maximum stock",
+      "display_text": "maximum stock",
+      "pos": "noun",
+      "definition": "An upper stock target set for an item under the relevant planning policy.",
+      "example": "The maximum stock setting needs review after demand changes.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "maximum stock"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional planning screen with an upper stock target clearly distinguished from an equipment or storage load limit.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "maximum-stock.upper-stock-target-under-planning-policy.n.analysis.v1",
+        "lexeme_id": "maximum-stock.upper-stock-target-under-planning-policy.n",
+        "text": "maximum stock",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.maximum",
+            "type": "stem",
+            "canonical": "maximum",
+            "surface": "maximum"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.stock",
+            "type": "stem",
+            "canonical": "stock",
+            "surface": "stock"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "maximum stock",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "safety-stock.inventory-buffer-for-supply-or-demand-variation.n",
+      "text": "safety stock",
+      "display_text": "safety stock",
+      "pos": "noun",
+      "definition": "Extra inventory planned as a buffer against variation in demand or supply.",
+      "example": "The planning team is reviewing the safety stock assumption.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "safety stock"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional inventory-planning view identifying a buffer category without a formula, universal quantity, or guarantee against shortages.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "safety-stock.inventory-buffer-for-supply-or-demand-variation.n.analysis.v1",
+        "lexeme_id": "safety-stock.inventory-buffer-for-supply-or-demand-variation.n",
+        "text": "safety stock",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.safety",
+            "type": "stem",
+            "canonical": "safety",
+            "surface": "safety"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.stock",
+            "type": "stem",
+            "canonical": "stock",
+            "surface": "stock"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "safety stock",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-nist-process-improvement",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "inventory-accuracy.agreement-between-stock-records-and-physical-stock.n",
+      "text": "inventory accuracy",
+      "display_text": "inventory accuracy",
+      "pos": "noun",
+      "definition": "The extent to which inventory records agree with the physical stock they describe.",
+      "example": "The report states how inventory accuracy was measured.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "inventory accuracy"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional comparison of recorded and observed stock with a clearly labeled measurement-basis note.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "inventory-accuracy.agreement-between-stock-records-and-physical-stock.n.analysis.v1",
+        "lexeme_id": "inventory-accuracy.agreement-between-stock-records-and-physical-stock.n",
+        "text": "inventory accuracy",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.inventory",
+            "type": "stem",
+            "canonical": "inventory",
+            "surface": "inventory"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.accuracy",
+            "type": "stem",
+            "canonical": "accuracy",
+            "surface": "accuracy"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "inventory accuracy",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "first-expired-first-out.stock-selection-by-earliest-expiration.n",
+      "text": "first expired, first out",
+      "display_text": "first expired, first out",
+      "pos": "noun",
+      "definition": "A stock-selection principle that gives priority to eligible goods with the earliest expiration date.",
+      "example": "Ask how first expired, first out applies under the approved product rules.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "first expired, first out",
+        "first expired first out",
+        "FEFO"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Fictional dated stock records ordered by expiration date, with eligibility shown separately and no expired goods presented as usable.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "shelf-life.period-of-specified-product-suitability.n",
+      "text": "shelf life",
+      "display_text": "shelf life",
+      "pos": "noun",
+      "definition": "The period during which a product is expected to meet specified requirements under stated conditions.",
+      "example": "Check the approved product information for its shelf life.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "shelf life"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional product-information sheet linking a stated suitability period to specified conditions without invented storage limits.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "shelf-life.period-of-specified-product-suitability.n.analysis.v1",
+        "lexeme_id": "shelf-life.period-of-specified-product-suitability.n",
+        "text": "shelf life",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.shelf",
+            "type": "stem",
+            "canonical": "shelf",
+            "surface": "shelf"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.life",
+            "type": "stem",
+            "canonical": "life",
+            "surface": "life"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "shelf life",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "stock-aging.analysis-of-time-inventory-has-been-held.n",
+      "text": "stock aging",
+      "display_text": "stock aging",
+      "pos": "noun",
+      "definition": "The analysis or classification of inventory by how long it has been held or remained without movement, using a stated basis.",
+      "example": "The stock aging report explains which date starts the calculation.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "stock aging",
+        "stock ageing"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional inventory report grouping records by time held and displaying its date basis, without automatic disposal advice.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "stock-aging.analysis-of-time-inventory-has-been-held.n.analysis.v1",
+        "lexeme_id": "stock-aging.analysis-of-time-inventory-has-been-held.n",
+        "text": "stock aging",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.stock",
+            "type": "stem",
+            "canonical": "stock",
+            "surface": "stock"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.age",
+            "type": "stem",
+            "canonical": "age",
+            "surface": "ag"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "aging",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "stock aging",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "inventory-valuation.determination-of-inventory-monetary-value.n",
+      "text": "inventory valuation",
+      "display_text": "inventory valuation",
+      "pos": "noun",
+      "definition": "The determination of the monetary value assigned to inventory under an identified accounting policy or method.",
+      "example": "The finance team has requested the inventory valuation report.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "inventory valuation"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional stock-value report with an accounting-policy reference and invented figures, without recommending a valuation method.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "inventory-valuation.determination-of-inventory-monetary-value.n.analysis.v1",
+        "lexeme_id": "inventory-valuation.determination-of-inventory-monetary-value.n",
+        "text": "inventory valuation",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.inventory",
+            "type": "stem",
+            "canonical": "inventory",
+            "surface": "inventory"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.valuation",
+            "type": "stem",
+            "canonical": "valuation",
+            "surface": "valuation"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "inventory valuation",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    }
+  ]
+}

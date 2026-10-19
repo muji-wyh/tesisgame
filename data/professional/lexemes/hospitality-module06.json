@@ -1,0 +1,3179 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "room-rate.price-for-accommodation-on-stated-basis.n",
+      "text": "room rate",
+      "display_text": "room rate",
+      "pos": "noun",
+      "definition": "The price charged for a room on a stated basis, such as a specified period and occupancy.",
+      "example": "Confirm what is included in the room rate.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "room rate"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional accommodation price card stating its period and inclusions clearly.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "room-rate.price-for-accommodation-on-stated-basis.n.analysis.v1",
+        "lexeme_id": "room-rate.price-for-accommodation-on-stated-basis.n",
+        "text": "room rate",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.room",
+            "type": "stem",
+            "canonical": "room",
+            "surface": "room"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.rate",
+            "type": "stem",
+            "canonical": "rate",
+            "surface": "rate"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "room rate",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "rate-plan.defined-price-package-and-booking-conditions.n",
+      "text": "rate plan",
+      "display_text": "rate plan",
+      "pos": "noun",
+      "definition": "A defined accommodation pricing package with its stated inclusions and booking conditions.",
+      "example": "The rate plan includes specific cancellation terms.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "rate plan"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional rate-plan comparison showing different inclusions and clearly identified terms.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "rate-plan.defined-price-package-and-booking-conditions.n.analysis.v1",
+        "lexeme_id": "rate-plan.defined-price-package-and-booking-conditions.n",
+        "text": "rate plan",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.rate",
+            "type": "stem",
+            "canonical": "rate",
+            "surface": "rate"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.plan",
+            "type": "stem",
+            "canonical": "plan",
+            "surface": "plan"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "rate plan",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "room-availability.status-of-rooms-eligible-for-booking-or-use.n",
+      "text": "room availability",
+      "display_text": "room availability",
+      "pos": "noun",
+      "definition": "The status of rooms that can be booked or used under the provider's current arrangements.",
+      "example": "Please check room availability for the requested dates.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "room availability"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional room-availability calendar with statuses distinguished from confirmed bookings.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "room-availability.status-of-rooms-eligible-for-booking-or-use.n.analysis.v1",
+        "lexeme_id": "room-availability.status-of-rooms-eligible-for-booking-or-use.n",
+        "text": "room availability",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.room",
+            "type": "stem",
+            "canonical": "room",
+            "surface": "room"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.availability",
+            "type": "stem",
+            "canonical": "availability",
+            "surface": "availability"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "room availability",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "room-allocation.assignment-of-specific-room-to-booking.n",
+      "text": "room allocation",
+      "display_text": "room allocation",
+      "pos": "noun",
+      "definition": "The assignment of a particular room to a booking or guest under the applicable process.",
+      "example": "The room allocation needs review against the guest's requirements.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "room allocation"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional booking record assigned to an invented room identifier without real guest details.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "room-allocation.assignment-of-specific-room-to-booking.n.analysis.v1",
+        "lexeme_id": "room-allocation.assignment-of-specific-room-to-booking.n",
+        "text": "room allocation",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.room",
+            "type": "stem",
+            "canonical": "room",
+            "surface": "room"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.allocation",
+            "type": "stem",
+            "canonical": "allocation",
+            "surface": "allocation"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "room allocation",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "room-block.group-of-rooms-held-for-defined-booking-purpose.n",
+      "text": "room block",
+      "display_text": "room block",
+      "pos": "noun",
+      "definition": "A group of rooms held under an arrangement for a particular group, event, or booking purpose.",
+      "example": "The event organizer has asked about the room block.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "room block"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional event booking linked to several room records with explicit review dates and no availability guarantee.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "room-block.group-of-rooms-held-for-defined-booking-purpose.n.analysis.v1",
+        "lexeme_id": "room-block.group-of-rooms-held-for-defined-booking-purpose.n",
+        "text": "room block",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.room",
+            "type": "stem",
+            "canonical": "room",
+            "surface": "room"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.block",
+            "type": "stem",
+            "canonical": "block",
+            "surface": "block"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "room block",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "occupancy.extent-to-which-accommodation-is-in-use.n",
+      "text": "occupancy",
+      "display_text": "occupancy",
+      "pos": "noun",
+      "definition": "The extent to which accommodation is occupied or recorded as in use, measured on a stated basis.",
+      "example": "Confirm the basis of the occupancy figure before comparing reports.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "occupancy"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional occupancy report with its scope and reporting period clearly identified.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "length-of-stay.duration-of-accommodation-visit.n",
+      "text": "length of stay",
+      "display_text": "length of stay",
+      "pos": "noun",
+      "definition": "The duration of a guest's accommodation stay, expressed on the stated booking basis.",
+      "example": "The length of stay is shown as three nights.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "length of stay"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional stay calendar with arrival and departure dates and a labeled duration.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "length-of-stay.duration-of-accommodation-visit.n.analysis.v1",
+        "lexeme_id": "length-of-stay.duration-of-accommodation-visit.n",
+        "text": "length of stay",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.length",
+            "type": "stem",
+            "canonical": "length",
+            "surface": "length"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.of",
+            "type": "stem",
+            "canonical": "of",
+            "surface": "of"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.stay",
+            "type": "stem",
+            "canonical": "stay",
+            "surface": "stay"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "length of",
+            "rule": "word_boundary"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "length of stay",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "arrival-date.calendar-date-of-expected-or-actual-arrival.n",
+      "text": "arrival date",
+      "display_text": "arrival date",
+      "pos": "noun",
+      "definition": "The calendar date on which someone is expected to arrive or actually arrives.",
+      "example": "The arrival date differs from the date in the confirmation.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "arrival date"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two fictional booking records with different arrival-date fields highlighted for review.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "arrival-date.calendar-date-of-expected-or-actual-arrival.n.analysis.v1",
+        "lexeme_id": "arrival-date.calendar-date-of-expected-or-actual-arrival.n",
+        "text": "arrival date",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.arrive",
+            "type": "stem",
+            "canonical": "arrive",
+            "surface": "arriv"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.al.suffix",
+            "type": "suffix",
+            "canonical": "al",
+            "surface": "al"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.date",
+            "type": "stem",
+            "canonical": "date",
+            "surface": "date"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "arrival",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "arrival date",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "departure-date.calendar-date-of-expected-or-actual-departure.n",
+      "text": "departure date",
+      "display_text": "departure date",
+      "pos": "noun",
+      "definition": "The calendar date on which someone is expected to leave or actually leaves.",
+      "example": "The guest has requested a change to the departure date.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "departure date"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional booking record with a proposed departure-date change awaiting confirmation.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "departure-date.calendar-date-of-expected-or-actual-departure.n.analysis.v1",
+        "lexeme_id": "departure-date.calendar-date-of-expected-or-actual-departure.n",
+        "text": "departure date",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.departure",
+            "type": "stem",
+            "canonical": "departure",
+            "surface": "departure"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.date",
+            "type": "stem",
+            "canonical": "date",
+            "surface": "date"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "departure date",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "early-check-in.arrival-registration-before-standard-booking-time.n",
+      "text": "early check-in",
+      "display_text": "early check-in",
+      "pos": "noun",
+      "definition": "Arrival registration or room access before the provider's standard time, subject to the applicable arrangements.",
+      "example": "We will check whether early check-in is available.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "early check-in"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional request for arrival before the stated standard time with availability still unconfirmed.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "early-check-in.arrival-registration-before-standard-booking-time.n.analysis.v1",
+        "lexeme_id": "early-check-in.arrival-registration-before-standard-booking-time.n",
+        "text": "early check-in",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.early",
+            "type": "stem",
+            "canonical": "early",
+            "surface": "early"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.check",
+            "type": "stem",
+            "canonical": "check",
+            "surface": "check"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.in",
+            "type": "stem",
+            "canonical": "in",
+            "surface": "in"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "check-in",
+            "rule": "hyphenated_compound"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "early check-in",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "late-check-out.departure-after-standard-booking-time.n",
+      "text": "late check-out",
+      "display_text": "late check-out",
+      "pos": "noun",
+      "definition": "Departure or room use after the provider's standard check-out time under an agreed arrangement.",
+      "example": "Please confirm the availability and terms of late check-out.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "late check-out"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional request to extend departure time with its conditions awaiting review.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "late-check-out.departure-after-standard-booking-time.n.analysis.v1",
+        "lexeme_id": "late-check-out.departure-after-standard-booking-time.n",
+        "text": "late check-out",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.late",
+            "type": "stem",
+            "canonical": "late",
+            "surface": "late"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.check",
+            "type": "stem",
+            "canonical": "check",
+            "surface": "check"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.out",
+            "type": "stem",
+            "canonical": "out",
+            "surface": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "check-out",
+            "rule": "hyphenated_compound"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "late check-out",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "overbooking.acceptance-of-more-bookings-than-available-capacity.n",
+      "text": "overbooking",
+      "display_text": "overbooking",
+      "pos": "noun",
+      "definition": "A situation in which accepted bookings exceed the accommodation capacity available for them.",
+      "example": "The manager is reviewing the reported overbooking.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "overbooking"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional booking-capacity mismatch referred to the responsible manager without prescribing a remedy.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "overbooking.acceptance-of-more-bookings-than-available-capacity.n.analysis.v1",
+        "lexeme_id": "overbooking.acceptance-of-more-bookings-than-available-capacity.n",
+        "text": "overbooking",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "affix.over.prefix",
+            "type": "prefix",
+            "canonical": "over",
+            "surface": "over"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.book",
+            "type": "stem",
+            "canonical": "book",
+            "surface": "book"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "booking",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "overbooking",
+            "rule": "prefix_attachment"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "booking-channel.route-through-which-reservation-is-made.n",
+      "text": "booking channel",
+      "display_text": "booking channel",
+      "pos": "noun",
+      "definition": "The route through which a reservation is made, such as directly with the provider or through an agent.",
+      "example": "Which booking channel was used for this reservation?",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "booking channel"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional reservation showing its source channel without vendor branding.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "booking-channel.route-through-which-reservation-is-made.n.analysis.v1",
+        "lexeme_id": "booking-channel.route-through-which-reservation-is-made.n",
+        "text": "booking channel",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.book",
+            "type": "stem",
+            "canonical": "book",
+            "surface": "book"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.channel",
+            "type": "stem",
+            "canonical": "channel",
+            "surface": "channel"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "booking",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "booking channel",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "booking-confirmation.message-recording-confirmed-reservation-details.n",
+      "text": "booking confirmation",
+      "display_text": "booking confirmation",
+      "pos": "noun",
+      "definition": "A message or document recording the details of a confirmed reservation.",
+      "example": "Please compare the dates with the booking confirmation.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "booking confirmation"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional confirmation showing invented booking details without implying that every request is guaranteed.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "booking-confirmation.message-recording-confirmed-reservation-details.n.analysis.v1",
+        "lexeme_id": "booking-confirmation.message-recording-confirmed-reservation-details.n",
+        "text": "booking confirmation",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.book",
+            "type": "stem",
+            "canonical": "book",
+            "surface": "book"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.confirmation",
+            "type": "stem",
+            "canonical": "confirmation",
+            "surface": "confirmation"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "booking",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "booking confirmation",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "cancellation-deadline.time-limit-for-stated-cancellation-condition.n",
+      "text": "cancellation deadline",
+      "display_text": "cancellation deadline",
+      "pos": "noun",
+      "definition": "The time limit relevant to a stated cancellation condition under the booking arrangements and applicable law.",
+      "example": "Confirm the time zone and terms linked to the cancellation deadline.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "cancellation deadline"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional booking condition with its date, time zone, and review reference visible.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "cancellation-deadline.time-limit-for-stated-cancellation-condition.n.analysis.v1",
+        "lexeme_id": "cancellation-deadline.time-limit-for-stated-cancellation-condition.n",
+        "text": "cancellation deadline",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.cancellation",
+            "type": "stem",
+            "canonical": "cancellation",
+            "surface": "cancellation"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.dead",
+            "type": "stem",
+            "canonical": "dead",
+            "surface": "dead"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.line",
+            "type": "stem",
+            "canonical": "line",
+            "surface": "line"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "deadline",
+            "rule": "closed_compound"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "cancellation deadline",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "cancellation-fee.charge-associated-with-cancelling-arrangement.n",
+      "text": "cancellation fee",
+      "display_text": "cancellation fee",
+      "pos": "noun",
+      "definition": "A charge associated with canceling an arrangement under the applicable terms and law.",
+      "example": "Ask the authorized reviewer whether a cancellation fee applies.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "cancellation fee"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional cancellation query with the charge field awaiting an authorized decision.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "cancellation-fee.charge-associated-with-cancelling-arrangement.n.analysis.v1",
+        "lexeme_id": "cancellation-fee.charge-associated-with-cancelling-arrangement.n",
+        "text": "cancellation fee",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.cancellation",
+            "type": "stem",
+            "canonical": "cancellation",
+            "surface": "cancellation"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.fee",
+            "type": "stem",
+            "canonical": "fee",
+            "surface": "fee"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "cancellation fee",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "refundable-rate.accommodation-price-with-specified-refund-conditions.n",
+      "text": "refundable rate",
+      "display_text": "refundable rate",
+      "pos": "noun",
+      "definition": "An accommodation price whose terms provide for a refund in specified circumstances, subject to applicable law.",
+      "example": "Check the actual conditions of the refundable rate.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "refundable rate"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional rate card showing defined refund conditions without an unconditional promise.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "refundable-rate.accommodation-price-with-specified-refund-conditions.n.analysis.v1",
+        "lexeme_id": "refundable-rate.accommodation-price-with-specified-refund-conditions.n",
+        "text": "refundable rate",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.refund",
+            "type": "stem",
+            "canonical": "refund",
+            "surface": "refund"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.able.suffix",
+            "type": "suffix",
+            "canonical": "able",
+            "surface": "able"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.rate",
+            "type": "stem",
+            "canonical": "rate",
+            "surface": "rate"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "refundable",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "refundable rate",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "nonrefundable-rate.accommodation-price-with-limited-voluntary-refunds.n",
+      "text": "nonrefundable rate",
+      "display_text": "nonrefundable rate",
+      "pos": "noun",
+      "definition": "An accommodation price described as not providing a voluntary refund under its stated terms, subject to applicable law and other relevant rights.",
+      "example": "Refer the nonrefundable rate question to the authorized reviewer rather than assuming no refund can ever apply.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "nonrefundable rate",
+        "non-refundable rate"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional rate card with a visible terms reference and no claim that the label overrides legal rights.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "nonrefundable-rate.accommodation-price-with-limited-voluntary-refunds.n.analysis.v1",
+        "lexeme_id": "nonrefundable-rate.accommodation-price-with-limited-voluntary-refunds.n",
+        "text": "nonrefundable rate",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "affix.non.prefix",
+            "type": "prefix",
+            "canonical": "non",
+            "surface": "non"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.refund",
+            "type": "stem",
+            "canonical": "refund",
+            "surface": "refund"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.able.suffix",
+            "type": "suffix",
+            "canonical": "able",
+            "surface": "able"
+          },
+          {
+            "id": "p4",
+            "canonical_id": "morph.rate",
+            "type": "stem",
+            "canonical": "rate",
+            "surface": "rate"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "refundable",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "nonrefundable",
+            "rule": "prefix_attachment"
+          },
+          {
+            "id": "n3",
+            "left": "n2",
+            "right": "p4",
+            "surface": "nonrefundable rate",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n3"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "room-only-rate.accommodation-price-without-included-meals.n",
+      "text": "room-only rate",
+      "display_text": "room-only rate",
+      "pos": "noun",
+      "definition": "An accommodation rate that covers the room without included meals under its stated terms.",
+      "example": "The room-only rate does not include breakfast in this booking.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "room-only rate"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional room-rate card showing meals separately from the accommodation price.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "room-only-rate.accommodation-price-without-included-meals.n.analysis.v1",
+        "lexeme_id": "room-only-rate.accommodation-price-without-included-meals.n",
+        "text": "room-only rate",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.room",
+            "type": "stem",
+            "canonical": "room",
+            "surface": "room"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.only",
+            "type": "stem",
+            "canonical": "only",
+            "surface": "only"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.rate",
+            "type": "stem",
+            "canonical": "rate",
+            "surface": "rate"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "room-only",
+            "rule": "hyphenated_compound"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "room-only rate",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "half-board.accommodation-arrangement-including-two-stated-meals.n",
+      "text": "half board",
+      "display_text": "half board",
+      "pos": "noun",
+      "definition": "An accommodation arrangement that includes breakfast and one other specified main meal under the provider's terms.",
+      "example": "Confirm which second meal is included in half board.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "half board"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional accommodation meal-inclusion card with two clearly identified meals.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "half-board.accommodation-arrangement-including-two-stated-meals.n.analysis.v1",
+        "lexeme_id": "half-board.accommodation-arrangement-including-two-stated-meals.n",
+        "text": "half board",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.half",
+            "type": "stem",
+            "canonical": "half",
+            "surface": "half"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.board",
+            "type": "stem",
+            "canonical": "board",
+            "surface": "board"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "half board",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "full-board.accommodation-arrangement-including-three-main-meals.n",
+      "text": "full board",
+      "display_text": "full board",
+      "pos": "noun",
+      "definition": "An accommodation arrangement that includes breakfast, lunch, and dinner under the provider's stated terms.",
+      "example": "Ask which drinks and other items are included in full board.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "full board"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional meal-inclusion card distinguishing the three main meals from other items.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "full-board.accommodation-arrangement-including-three-main-meals.n.analysis.v1",
+        "lexeme_id": "full-board.accommodation-arrangement-including-three-main-meals.n",
+        "text": "full board",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.full",
+            "type": "stem",
+            "canonical": "full",
+            "surface": "full"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.board",
+            "type": "stem",
+            "canonical": "board",
+            "surface": "board"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "full board",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "all-inclusive.including-specified-services-in-one-price.a",
+      "text": "all-inclusive",
+      "display_text": "all-inclusive",
+      "pos": "adjective",
+      "definition": "Describing an arrangement in which a stated price includes a defined range of services or items.",
+      "example": "Check the actual inclusions and exclusions of the all-inclusive package.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "all-inclusive"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional package card listing included and excluded items without claiming that every service is covered.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "all-inclusive.including-specified-services-in-one-price.a.analysis.v1",
+        "lexeme_id": "all-inclusive.including-specified-services-in-one-price.a",
+        "text": "all-inclusive",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.all",
+            "type": "stem",
+            "canonical": "all",
+            "surface": "all"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.inclusive",
+            "type": "stem",
+            "canonical": "inclusive",
+            "surface": "inclusive"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "all-inclusive",
+            "rule": "hyphenated_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "security-deposit.money-held-against-specified-potential-costs.n",
+      "text": "security deposit",
+      "display_text": "security deposit",
+      "pos": "noun",
+      "definition": "Money held against specified possible costs under an agreement and applicable law.",
+      "example": "Ask the authorized contact about the security deposit and its release arrangements.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "security deposit"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional deposit record separating the held amount from ordinary charges without promising a release date.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "security-deposit.money-held-against-specified-potential-costs.n.analysis.v1",
+        "lexeme_id": "security-deposit.money-held-against-specified-potential-costs.n",
+        "text": "security deposit",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.security",
+            "type": "stem",
+            "canonical": "security",
+            "surface": "security"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.deposit",
+            "type": "stem",
+            "canonical": "deposit",
+            "surface": "deposit"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "security deposit",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "preauthorization.temporary-card-authorization-hold-before-final-charge.n",
+      "text": "preauthorization",
+      "display_text": "preauthorization",
+      "pos": "noun",
+      "definition": "A temporary authorization hold on a payment card before a possible final charge under the provider's and issuer's arrangements.",
+      "example": "The preauthorization is different from a completed payment.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "preauthorization",
+        "preauthorisation",
+        "pre-authorization",
+        "pre-authorisation"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional payment-status record distinguishing a temporary hold from a settled charge.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "preauthorization.temporary-card-authorization-hold-before-final-charge.n.analysis.v1",
+        "lexeme_id": "preauthorization.temporary-card-authorization-hold-before-final-charge.n",
+        "text": "preauthorization",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "affix.pre.prefix",
+            "type": "prefix",
+            "canonical": "pre",
+            "surface": "pre"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.authorize",
+            "type": "stem",
+            "canonical": "authorize",
+            "surface": "authoriz"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.ation.suffix",
+            "type": "suffix",
+            "canonical": "ation",
+            "surface": "ation"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "authorization",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "preauthorization",
+            "rule": "prefix_attachment"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "guest-folio.account-record-of-guest-charges-payments-and-credits.n",
+      "text": "guest folio",
+      "display_text": "guest folio",
+      "pos": "noun",
+      "definition": "An account record of a guest's charges, payments, and credits during the relevant stay or arrangement.",
+      "example": "Review the guest folio privately with the authorized guest.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "guest folio"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional guest-account record with invented charges and payments and no personal identifiers.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "guest-folio.account-record-of-guest-charges-payments-and-credits.n.analysis.v1",
+        "lexeme_id": "guest-folio.account-record-of-guest-charges-payments-and-credits.n",
+        "text": "guest folio",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.guest",
+            "type": "stem",
+            "canonical": "guest",
+            "surface": "guest"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.folio",
+            "type": "stem",
+            "canonical": "folio",
+            "surface": "folio"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "guest folio",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "ada-lodging-low-vision",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "outstanding-balance.amount-recorded-as-still-due-on-account.n",
+      "text": "outstanding balance",
+      "display_text": "outstanding balance",
+      "pos": "noun",
+      "definition": "The amount recorded as still due on an account under the relevant records and arrangements.",
+      "example": "Please ask the authorized reviewer to confirm the outstanding balance.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "outstanding balance"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional account summary distinguishing recorded charges, payments, and the amount still due.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "outstanding-balance.amount-recorded-as-still-due-on-account.n.analysis.v1",
+        "lexeme_id": "outstanding-balance.amount-recorded-as-still-due-on-account.n",
+        "text": "outstanding balance",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.outstanding",
+            "type": "stem",
+            "canonical": "outstanding",
+            "surface": "outstanding"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.balance",
+            "type": "stem",
+            "canonical": "balance",
+            "surface": "balance"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "outstanding balance",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "incidental-charge.additional-cost-separate-from-base-accommodation-rate.n",
+      "text": "incidental charge",
+      "display_text": "incidental charge",
+      "pos": "noun",
+      "definition": "An additional cost for an item or service separate from the base accommodation rate under the booking terms.",
+      "example": "The guest has asked for clarification of an incidental charge.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "incidental charge"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional guest bill with one additional item clearly separated from the base room charge.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "incidental-charge.additional-cost-separate-from-base-accommodation-rate.n.analysis.v1",
+        "lexeme_id": "incidental-charge.additional-cost-separate-from-base-accommodation-rate.n",
+        "text": "incidental charge",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.incidental",
+            "type": "stem",
+            "canonical": "incidental",
+            "surface": "incidental"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.charge",
+            "type": "stem",
+            "canonical": "charge",
+            "surface": "charge"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "incidental charge",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-hotel-desk-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    }
+  ]
+}

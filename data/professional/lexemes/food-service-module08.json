@@ -1,0 +1,1955 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "foodborne-illness.illness-transmitted-through-food.n",
+      "text": "foodborne illness",
+      "display_text": "foodborne illness",
+      "pos": "noun",
+      "definition": "Illness caused by consuming food containing harmful biological or other agents.",
+      "example": "The supervisor explained the term foodborne illness during training.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "foodborne illness"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A calm food-safety training scene without illness imagery.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "foodborne-illness.illness-transmitted-through-food.n.analysis.v1",
+        "lexeme_id": "foodborne-illness.illness-transmitted-through-food.n",
+        "text": "foodborne illness",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.food",
+            "type": "stem",
+            "canonical": "food",
+            "surface": "food"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.borne",
+            "type": "stem",
+            "canonical": "borne",
+            "surface": "borne"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.ill",
+            "type": "stem",
+            "canonical": "ill",
+            "surface": "ill"
+          },
+          {
+            "id": "p4",
+            "canonical_id": "affix.ness.suffix",
+            "type": "suffix",
+            "canonical": "ness",
+            "surface": "ness"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "foodborne",
+            "rule": "closed_compound"
+          },
+          {
+            "id": "n2",
+            "left": "p3",
+            "right": "p4",
+            "surface": "illness",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n3",
+            "left": "n1",
+            "right": "n2",
+            "surface": "foodborne illness",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n3"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "fda-food-code-2026",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "food-intolerance.nonallergic-adverse-food-response.n",
+      "text": "food intolerance",
+      "display_text": "food intolerance",
+      "pos": "noun",
+      "definition": "An adverse response to a food that is not a food allergy; its cause and significance require appropriate assessment.",
+      "example": "The worker asked how to record a reported food intolerance accurately.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "food intolerance"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A respectful guest conversation without diagnosing or minimizing a concern.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "food-intolerance.nonallergic-adverse-food-response.n.analysis.v1",
+        "lexeme_id": "food-intolerance.nonallergic-adverse-food-response.n",
+        "text": "food intolerance",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.food",
+            "type": "stem",
+            "canonical": "food",
+            "surface": "food"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.in.prefix",
+            "type": "prefix",
+            "canonical": "in",
+            "surface": "in"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.tolerance",
+            "type": "stem",
+            "canonical": "tolerance",
+            "surface": "tolerance"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "intolerance",
+            "rule": "prefix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "food intolerance",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "fda-food-code-2026",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "allergen-cross-contact.unintended-allergen-transfer.n",
+      "text": "allergen cross-contact",
+      "display_text": "allergen cross-contact",
+      "pos": "noun",
+      "definition": "Unintended transfer of an allergen into a food or onto something that contacts food.",
+      "example": "The supervisor reviewed the allergen cross-contact concern.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "allergen cross-contact"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A labeled concern diagram without claiming a universal prevention method.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "allergen-cross-contact.unintended-allergen-transfer.n.analysis.v1",
+        "lexeme_id": "allergen-cross-contact.unintended-allergen-transfer.n",
+        "text": "allergen cross-contact",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.allergen",
+            "type": "stem",
+            "canonical": "allergen",
+            "surface": "allergen"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.cross",
+            "type": "stem",
+            "canonical": "cross",
+            "surface": "cross"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.contact",
+            "type": "stem",
+            "canonical": "contact",
+            "surface": "contact"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "cross-contact",
+            "rule": "hyphenated_compound"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "allergen cross-contact",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "fda-food-code-2026",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "fsa-allergen-guidance-landing",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "fda-food-code-overview",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "visitengland-accessible-tourism",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "education-kcsie-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-dap",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-idea-iep-definition",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "ready-to-eat-food.food-intended-without-further-safety-preparation.n",
+      "text": "ready-to-eat food",
+      "display_text": "ready-to-eat food",
+      "pos": "noun",
+      "definition": "Food intended to be eaten without further preparation needed for safety, under the applicable food-safety definition.",
+      "example": "The worker asked which local definition of ready-to-eat food applied.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "ready-to-eat food"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A product-label review without implying that appearance proves readiness.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "ready-to-eat-food.food-intended-without-further-safety-preparation.n.analysis.v1",
+        "lexeme_id": "ready-to-eat-food.food-intended-without-further-safety-preparation.n",
+        "text": "ready-to-eat food",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.ready",
+            "type": "stem",
+            "canonical": "ready",
+            "surface": "ready"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.to",
+            "type": "stem",
+            "canonical": "to",
+            "surface": "to"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.eat",
+            "type": "stem",
+            "canonical": "eat",
+            "surface": "eat"
+          },
+          {
+            "id": "p4",
+            "canonical_id": "morph.food",
+            "type": "stem",
+            "canonical": "food",
+            "surface": "food"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "ready-to",
+            "rule": "hyphenated_compound"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "ready-to-eat",
+            "rule": "hyphenated_compound"
+          },
+          {
+            "id": "n3",
+            "left": "n2",
+            "right": "p4",
+            "surface": "ready-to-eat food",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n3"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "fda-food-code-2026",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "raw-food.food-not-cooked.n",
+      "text": "raw food",
+      "display_text": "raw food",
+      "pos": "noun",
+      "definition": "Food that has not been cooked.",
+      "example": "The worker asked which storage arrangement applied to the raw food.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "raw food"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Labeled uncooked food in closed packaging without handling instructions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "raw-food.food-not-cooked.n.analysis.v1",
+        "lexeme_id": "raw-food.food-not-cooked.n",
+        "text": "raw food",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.raw",
+            "type": "stem",
+            "canonical": "raw",
+            "surface": "raw"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.food",
+            "type": "stem",
+            "canonical": "food",
+            "surface": "food"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "raw food",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "fda-food-code-2026",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "cooked-food.food-subjected-to-cooking.n",
+      "text": "cooked food",
+      "display_text": "cooked food",
+      "pos": "noun",
+      "definition": "Food that has undergone cooking; the term alone does not establish safety.",
+      "example": "The supervisor checked the record for the cooked food.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "cooked food"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A labeled prepared dish with an explicit record-check context.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "cooked-food.food-subjected-to-cooking.n.analysis.v1",
+        "lexeme_id": "cooked-food.food-subjected-to-cooking.n",
+        "text": "cooked food",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.cook",
+            "type": "atomic",
+            "canonical": "cook",
+            "surface": "cook"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ed.suffix",
+            "type": "suffix",
+            "canonical": "ed",
+            "surface": "ed"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.food",
+            "type": "stem",
+            "canonical": "food",
+            "surface": "food"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "cooked",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "cooked food",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "fda-food-code-2026",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "hot-holding.keeping-food-hot-before-service.n",
+      "text": "hot holding",
+      "display_text": "hot holding",
+      "pos": "noun",
+      "definition": "Keeping food hot before service under applicable requirements.",
+      "example": "The worker asked for the approved hot holding instructions.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "hot holding"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A food-service record with no universal temperature or duration.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "hot-holding.keeping-food-hot-before-service.n.analysis.v1",
+        "lexeme_id": "hot-holding.keeping-food-hot-before-service.n",
+        "text": "hot holding",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.hot",
+            "type": "stem",
+            "canonical": "hot",
+            "surface": "hot"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.hold",
+            "type": "stem",
+            "canonical": "hold",
+            "surface": "hold"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "holding",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "hot holding",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "fda-food-code-2026",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "cold-holding.keeping-food-cold-before-service.n",
+      "text": "cold holding",
+      "display_text": "cold holding",
+      "pos": "noun",
+      "definition": "Keeping food cold before service under applicable requirements.",
+      "example": "The supervisor clarified which cold holding record was required.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "cold holding"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A refrigerated service display with a fictional log.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "cold-holding.keeping-food-cold-before-service.n.analysis.v1",
+        "lexeme_id": "cold-holding.keeping-food-cold-before-service.n",
+        "text": "cold holding",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.cold",
+            "type": "stem",
+            "canonical": "cold",
+            "surface": "cold"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.hold",
+            "type": "stem",
+            "canonical": "hold",
+            "surface": "hold"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "holding",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "cold holding",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "fda-food-code-2026",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "sanitize.reduce-microorganisms-to-required-level.v",
+      "text": "sanitize",
+      "display_text": "sanitize",
+      "pos": "verb",
+      "definition": "To reduce microorganisms on a surface to a level specified by the applicable process or standard.",
+      "example": "The worker asked which approved process the word sanitize referred to.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "sanitize",
+        "sanitise"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A supervisor explaining terminology without chemical mixing instructions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "fda-food-code-2026",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "fda-food-code-overview",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "onet-concierges",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "cleaning-onet-janitors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-hse-risk-topics",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "cleaning-schedule.planned-cleaning-task-record.n",
+      "text": "cleaning schedule",
+      "display_text": "cleaning schedule",
+      "pos": "noun",
+      "definition": "A plan stating cleaning tasks, responsibilities, and when they should be carried out.",
+      "example": "The worker checked the current cleaning schedule.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "cleaning schedule"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional cleaning plan with no product concentrations.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "cleaning-schedule.planned-cleaning-task-record.n.analysis.v1",
+        "lexeme_id": "cleaning-schedule.planned-cleaning-task-record.n",
+        "text": "cleaning schedule",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.clean",
+            "type": "stem",
+            "canonical": "clean",
+            "surface": "clean"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.schedule",
+            "type": "stem",
+            "canonical": "schedule",
+            "surface": "schedule"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "cleaning",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "cleaning schedule",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "fda-food-code-2026",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "osha-warehousing",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "visitengland-accessible-tourism",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-cdc-home-definitions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-gov-waste-transfer",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-epa-recycling",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "pest-control.management-of-unwanted-animals-or-insects.n",
+      "text": "pest control",
+      "display_text": "pest control",
+      "pos": "noun",
+      "definition": "Work to prevent or manage unwanted animals or insects in a place.",
+      "example": "The worker reported a pest control concern to the designated person.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "pest control"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A calm reporting scene without pest-treatment instructions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "pest-control.management-of-unwanted-animals-or-insects.n.analysis.v1",
+        "lexeme_id": "pest-control.management-of-unwanted-animals-or-insects.n",
+        "text": "pest control",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.pest",
+            "type": "stem",
+            "canonical": "pest",
+            "surface": "pest"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.control",
+            "type": "stem",
+            "canonical": "control",
+            "surface": "control"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "pest control",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "fda-food-code-2026",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "osha-warehousing",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "visitengland-accessible-tourism",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "traceability.ability-to-follow-product-history.n",
+      "text": "traceability",
+      "display_text": "traceability",
+      "pos": "noun",
+      "definition": "The ability to follow a product's identity and movement through relevant records.",
+      "example": "The supervisor requested the records needed for traceability.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "traceability"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional product record linked to supplier and batch information.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "fda-food-code-2026",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-dvsa-walkaround",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-highway-code-context",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-quality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-hse-inspection",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "corrective-action.action-to-address-identified-problem.n",
+      "text": "corrective action",
+      "display_text": "corrective action",
+      "pos": "noun",
+      "definition": "An action taken to address an identified problem or departure from a requirement.",
+      "example": "The responsible supervisor recorded the corrective action.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "corrective action"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional issue record with an authorized action field.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "corrective-action.action-to-address-identified-problem.n.analysis.v1",
+        "lexeme_id": "corrective-action.action-to-address-identified-problem.n",
+        "text": "corrective action",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.correct",
+            "type": "stem",
+            "canonical": "correct",
+            "surface": "correct"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ive.suffix",
+            "type": "suffix",
+            "canonical": "ive",
+            "surface": "ive"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.action",
+            "type": "stem",
+            "canonical": "action",
+            "surface": "action"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "corrective",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "corrective action",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "fda-food-code-2026",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "fda-haccp-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-quality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-nist-process-improvement",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-irs-recordkeeping",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-aasb-information-quality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "critical-control-point.food-safety-control-essential-stage.n",
+      "text": "critical control point",
+      "display_text": "critical control point",
+      "pos": "noun",
+      "definition": "A stage where control is essential to prevent, remove, or reduce a food-safety hazard to an acceptable level in the applicable plan.",
+      "example": "The trainee asked which critical control point the plan identified.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "critical control point"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A qualified trainer explaining a fictional plan without supplying a process.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "critical-control-point.food-safety-control-essential-stage.n.analysis.v1",
+        "lexeme_id": "critical-control-point.food-safety-control-essential-stage.n",
+        "text": "critical control point",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.critical",
+            "type": "stem",
+            "canonical": "critical",
+            "surface": "critical"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.control",
+            "type": "stem",
+            "canonical": "control",
+            "surface": "control"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.point",
+            "type": "stem",
+            "canonical": "point",
+            "surface": "point"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "critical control",
+            "rule": "word_boundary"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "critical control point",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "fda-food-code-2026",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "fda-haccp-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "haccp.hazard-analysis-critical-control-points-system.n",
+      "text": "HACCP",
+      "display_text": "HACCP",
+      "pos": "noun",
+      "definition": "A food-safety management approach based on hazard analysis and critical control points.",
+      "example": "The supervisor explained where the approved HACCP plan was kept.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "HACCP"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A closed fictional HACCP folder with a training discussion.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "haccp.hazard-analysis-critical-control-points-system.n.analysis.v1",
+        "lexeme_id": "haccp.hazard-analysis-critical-control-points-system.n",
+        "text": "HACCP",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "abbr.haccp",
+            "type": "abbreviation",
+            "canonical": "HACCP",
+            "surface": "HACCP"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "fda-food-code-2026",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "fda-haccp-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    }
+  ]
+}

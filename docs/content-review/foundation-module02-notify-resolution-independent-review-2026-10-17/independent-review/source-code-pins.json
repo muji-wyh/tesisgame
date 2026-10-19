@@ -1,0 +1,61 @@
+{
+  "status": "source_inspection_inputs_only_not_final_live_content_binding",
+  "measured_at": "2026-10-16T21:57:26.7525967Z",
+  "files": [
+    {
+      "path": "web/professional-progress.js",
+      "bytes": 19082,
+      "sha256": "e1b1ae3f2045c3bfaa4fde84703f30617547817a9409d602444d2c2e4f1ec8c9"
+    },
+    {
+      "path": "scripts/professional_progress.gd",
+      "bytes": 12616,
+      "sha256": "56437fdfb907bc9cfcbeb0b9ba1442f98f6c07aaf21bc81024af9a70838f5c4f"
+    },
+    {
+      "path": "tools/validate-professional-content.cjs",
+      "bytes": 31243,
+      "sha256": "a59598faf3ee917a738fe2c2dfc661ad03b7d6c325e7a3a2dc02a093e6e736cd"
+    },
+    {
+      "path": "scripts/professional_store.gd",
+      "bytes": 13762,
+      "sha256": "671fe81e308241e976d2307d1dc3ed7544226314b5d12f5e4215754f90197c2f"
+    },
+    {
+      "path": "scripts/professional_session.gd",
+      "bytes": 13663,
+      "sha256": "a6d5115d6e65a74c97cd129be4a3613358295566ac2065d046ac440560be8616"
+    },
+    {
+      "path": "scripts/coin_wallet.gd",
+      "bytes": 9873,
+      "sha256": "cea4d3781cb1db8101b01f1dce074037d1f5e405a5ccb73a6f30c2040f4a6a02"
+    },
+    {
+      "path": "scripts/learning_path_selector.gd",
+      "bytes": 20855,
+      "sha256": "930145d368aca58bfd73d076d44047d51f37c06f13758d7a4a38f4a8b7eaf141"
+    },
+    {
+      "path": "scripts/morphology_analysis.gd",
+      "bytes": 7877,
+      "sha256": "f3d22c45d79b11e80e967de42840669fb282ceb5afa5891b0622df2959209f9b"
+    },
+    {
+      "path": "scripts/professional_media_manifest.gd",
+      "bytes": 14605,
+      "sha256": "a6b41f99f97c2b537837ebf457d04e7f9189bf82325ff258747d4e1db7943a1c"
+    },
+    {
+      "path": "tools/professional-domain/compiler.cjs",
+      "bytes": 6613,
+      "sha256": "dea40cba27f75860180a43858711139179f2aed497725c7238ad102e2f3373af"
+    },
+    {
+      "path": "scripts/professional_domain_owner.gd",
+      "bytes": 30569,
+      "sha256": "a5d38afb67e53eede47fc2a50bec1e42060c39597021d3c0774be8cd45855feb"
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "status": "fourth10_adaptation_of_frozen_third10_delivery",
+  "reference_files_raw_sha256": {
+    "build/professional-english/foundation-module01-language-review/third10/delivery-r01/delivery-lib.cjs": "7e10d25e5982253a05bd2994c64245f85a456e2384d03ea8a792112a24d6d987",
+    "build/professional-english/foundation-module01-language-review/third10/delivery-r01/prepare-delivery.cjs": "11ce14b96cc322f28249b0b4e63b77c69f7d35214b08d93b23d3513d2719ae5c",
+    "build/professional-english/foundation-module01-language-review/third10/delivery-r01/dry-run.cjs": "2d5bd6db9789742257e96a7f03abc4f548380d6f0abe38a513e499aac84af0e8",
+    "build/professional-english/foundation-module01-language-review/third10/delivery-r01/bind-current-baseline.cjs": "eb9c146e6a6b9ae56e3e1faa20f4302402a3bac122fb50ed89b6a1b63cfaac8a",
+    "build/professional-english/foundation-module01-language-review/third10/delivery-r01/integrate-reviewed.cjs": "4a8f8f14027b00a7d9fedc93d3befa21eb5eade3977c6d4ece596bdd7633cf99",
+    "build/professional-english/foundation-module01-language-review/third10/delivery-r01/update-persisted-tests.cjs": "0bf82a057438d016886e9818a6d3cd52b23b2e00c285be5af8f6d635ac9309d0",
+    "build/professional-english/foundation-module01-language-review/third10/delivery-r01/persisted-test-transforms.cjs": "57e44585bc412f9af6c9ea1fd69662fbfa16394502505e2e634d0fe91c25a45e",
+    "build/professional-english/foundation-module01-language-review/third10/delivery-r01/guarded-transaction.cjs": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6",
+    "build/professional-english/foundation-module01-language-review/third10/delivery-r01/transaction-plan.cjs": "dca101335d6c1f9bdc379f566c1d048e094638371e720f7afde2398ca1ab1ea2",
+    "build/professional-english/foundation-module01-language-review/third10/delivery-r01/helper-origin.json": "27d5dd2d62ed8cfdae225489fc059a2cb774122a42c7343e7257886ccfc73a3a",
+    "build/professional-english/foundation-module01-language-review/third10/delivery-r01/delivery-origin.json": "291a5d61b6f9bb12b6d7ca455b0480c578fd26caf6f9586298626ad7c9146f2d",
+    "build/professional-english/foundation-module01-language-review/third10/delivery-r01/preparation-receipt.json": "36dc714329a93257f8180c9756b9c9cb210c780b85a532661cf5a567628ff702",
+    "build/professional-english/foundation-module01-language-review/third10/delivery-r01/artifact-inventory.json": "3600c8e10d6d38f0176129719ac4e8294ba5ad548e8dfe26d332cc80ac522172"
+  },
+  "helper": {
+    "helper_source": "build/professional-english/retail-module03-morphology-review/fifth10/serializer-review-r01/guarded-transaction.cjs",
+    "helper_raw_sha256": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6",
+    "helper_validation": {
+      "path": "build/professional-english/retail-module03-morphology-review/fifth10/serializer-review-r01/validation-attempt-XE9O6l/receipt.json",
+      "raw_sha256": "abd19b9952fe3085ef8cab5b87e430ef442780ed05f3a9a2105f909f968a9bae",
+      "tests": 20,
+      "pass": 20,
+      "fail": 0
+    },
+    "adapter_source": "build/professional-english/retail-term-art-review/counter-r01/delivery-r02/transaction-plan.cjs",
+    "adapter_raw_sha256": "dca101335d6c1f9bdc379f566c1d048e094638371e720f7afde2398ca1ab1ea2",
+    "adapter_validation": {
+      "path": "build/professional-english/retail-term-art-review/counter-r01/delivery-r02/adapter-tests-r02/result.json",
+      "raw_sha256": "61764fb1c4587e19d88a27d9494988539a17336cf0687baa792fc5e214c0a38d",
+      "assertions": 32,
+      "failures": 0
+    },
+    "scope": "Byte-identical reused guarded helper and plan adapter. Earlier scratch fault-test receipts remain evidence; this Foundation language package performs no native run or rerun of those fixtures.",
+    "copied_origin_record": {
+      "path": "build/professional-english/retail-audio-review/counter-checkout-acquired-r01/delivery-r01/helper-origin.json",
+      "raw_sha256": "ca9fc913ac187268813e900f55e3748e4317944a29ed43f0578aa3ce18dc012d"
+    }
+  },
+  "adaptations": [
+    "Ten exact root-accepted language candidates, twenty additive consulted sources and 200 memberships.",
+    "Supervisor and attendance remain entire-entry holds; all four current and five prior expression holds remain exact.",
+    "The binder pins successful R25, including root's R24 picture-exclusion correction. All current measured inputs and every Professional JSON must match.",
+    "Byte-identical validated helper and adapter; content and shared-test transactions remain separate, explicit and write-once.",
+    "Source-specific reference wording preserves Oxford and Collins voicemail system entries as contrast evidence only. Literal B1+, other-sense labels and disagreements remain separate from editorial course levels.",
+    "Author preparation is unbound, read-only with respect to production/shared tests, and runs no suite or native code. Root owns binding, transactions and execution validation."
+  ],
+  "native_runtime_executed": false,
+  "shared_tests_mutated": false
+}

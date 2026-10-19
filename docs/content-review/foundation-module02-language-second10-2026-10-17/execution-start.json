@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "status": "preparation_dispatch_recorded",
+  "started_at": "2026-10-16T18:32:04.373Z",
+  "entrypoint": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/prepare.cjs",
+  "source_files": [
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/delivery-lib.cjs",
+      "raw_sha256": "a094e1b7f81f8259f1a00b2e37b3b5daae589ba7a7c6ac1970040ab7d6e54fbb"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/test-transforms.cjs",
+      "raw_sha256": "65e236565b29148ab220a4ce7ac7ff3894f06e2f8ef20c64c8855713a593450b"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/prepare.cjs",
+      "raw_sha256": "b81f3f19fae42219cac0e5e00aade2bb1af56e37ddb5d0edf4b2800307f9218f"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/deliver.cjs",
+      "raw_sha256": "4f6a713d84c65650e17fa82161a718e238ef1cf001903e7f43f9deaf7f24f483"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/baseline-config.json",
+      "raw_sha256": "d3eb180e31c07370640cc1ac3b60f7fe5d7a71aa17b66219bb3637d9efb8d665"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/HANDOFF.md",
+      "raw_sha256": "f18ef9ef4e3a5ce106c34cecc625327a2e985933b8a6c21d3ac7bd9c7647888f"
+    }
+  ],
+  "production_mutated": false
+}

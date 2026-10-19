@@ -1,0 +1,85 @@
+{
+  "schema": 1,
+  "status": "static_source_delta_and_copy_boundary_inspection",
+  "reviewer": "/root/recover_delivery",
+  "source_inventory": {
+    "path": "build/professional-english/foundation02-fifth10-projected-validation-r02/source-inventory.json",
+    "bytes": 807,
+    "raw_sha256": "a7a14add7f19e7240c2561cec604212cd00718c5b986b24614502fc20401c374"
+  },
+  "runner": {
+    "path": "build/professional-english/foundation02-fifth10-projected-validation-r02/run.cjs",
+    "bytes": 11683,
+    "raw_sha256": "7961b9c2e01a867d64f68ea4dbed83b9e58ff5025b71e8b986b50bc0f7f29f80"
+  },
+  "unique_input_pins": 31,
+  "prior_review": {
+    "path": "build/professional-english/foundation02-fifth10-projected-validator-independent-review-r01/review.json",
+    "bytes": 7200,
+    "raw_sha256": "06f07e21d517918330785ab226f1d94a68c5ba7594bab64f58a9ce06bfc44da1"
+  },
+  "source_delta": {
+    "helper_lines": 15,
+    "added_override": "cpSync: copySchemas",
+    "otherwise_identical_after_newline_normalization": true,
+    "prior_crlf_count": 0,
+    "revision_crlf_count": 0,
+    "helper_source": "  // The retained Home-preview callback copies only this pinned schema tree.\n  function copySchemas(from, to, options) {\n    assert.equal(key(from), path.join(root, 'data/professional/schemas'));\n    assert.deepEqual(options, {recursive: true});\n    const destination = writable(to);\n    function copy(source, target) {\n      writable(target);\n      const stat = fs.lstatSync(source); assert(!stat.isSymbolicLink(), 'No schema copy through symbolic links');\n      if (stat.isDirectory()) {\n        fs.mkdirSync(target, {recursive: true});\n        for (const name of fs.readdirSync(source)) copy(path.join(source, name), path.join(target, name));\n      } else { assert(stat.isFile()); fs.writeFileSync(target, observedRead(source)); }\n    }\n    copy(key(from), destination);\n  }\n"
+  },
+  "copy_compatibility": {
+    "trigger_file": "tests/professional-content.test.cjs",
+    "trigger_line": 1421,
+    "source": "data/professional/schemas",
+    "options": {
+      "recursive": true
+    },
+    "destination": "Newly generated temporaryRoot/data/professional/schemas",
+    "source_entries": [
+      {
+        "name": "catalog.schema.json",
+        "type": "regular_file"
+      },
+      {
+        "name": "common.schema.json",
+        "type": "regular_file"
+      },
+      {
+        "name": "course.schema.json",
+        "type": "regular_file"
+      },
+      {
+        "name": "expression.schema.json",
+        "type": "regular_file"
+      },
+      {
+        "name": "learning-context.schema.json",
+        "type": "regular_file"
+      },
+      {
+        "name": "lexeme.schema.json",
+        "type": "regular_file"
+      },
+      {
+        "name": "morphology.schema.json",
+        "type": "regular_file"
+      },
+      {
+        "name": "theme.schema.json",
+        "type": "regular_file"
+      }
+    ],
+    "all_current_source_entries_regular_files": true,
+    "source_leaves_use_observedRead": true,
+    "source_links_reject": true,
+    "every_destination_uses_writable": true,
+    "destination_containment": "Inherited lexical path containment within roots created by mkdtempSync; current fixture creates no links.",
+    "host_context_and_trusted_code_assumptions_unchanged": true
+  },
+  "actual_preparation_inputs_inspected": false,
+  "source_modules_imported": false,
+  "syntax_checks_run": false,
+  "source_or_test_execution": false,
+  "actual_binding_accepted": false,
+  "preparation_execution_accepted": false,
+  "production_mutated": false
+}

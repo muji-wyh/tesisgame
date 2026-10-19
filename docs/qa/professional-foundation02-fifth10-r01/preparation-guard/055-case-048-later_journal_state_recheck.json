@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "id": "later_journal_state_recheck",
+  "specification": "later_journal_state",
+  "classification": "directory_snapshot_recheck_guard",
+  "expected": "reject",
+  "mutation": "Open the genuine session, then append a later filename only before recheck.",
+  "synthetic_in_memory_only": true,
+  "source_sha256": "022fc186186ade95d6d58908932db5520652f39a1417255c3c5080a4e4841f1b",
+  "actual_preparation_input": {
+    "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+    "bytes": 1191,
+    "raw_sha256": "f8a61b805220a2d6e64788a92960a35bd280af3c45b1f265dbdcf91955b81549"
+  },
+  "opened": true,
+  "recheck_passed": false,
+  "passed": true,
+  "virtual_io": {
+    "imports": [
+      "node:fs",
+      "node:path",
+      "node:crypto",
+      "node:assert/strict"
+    ],
+    "file_reads": 25260,
+    "directory_reads": 4,
+    "existence_reads": 817,
+    "denied": []
+  },
+  "virtual_changes": [],
+  "rejection": {
+    "name": "AssertionError",
+    "code": "ERR_ASSERTION",
+    "message": "Expected values to be strictly equal:\n+ actual - expected\n\n+ '000309-committed.json'\n- '000308-committed.json'\n        ^\n",
+    "stack": "node:assert:152\n  throw new AssertionError(obj);\n  ^\n\nAssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ '000309-committed.json'\n- '000308-committed.json'\n        ^\n\n    at Object.recheck (fifth10-frozen-binding.cjs:210:134)\n    at fifth10-memory-guard-call.cjs:1:16\n    at Script.runInContext (node:vm:149:12)\n    at run (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:428:82)\n    at Object.recheck (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:431:15)\n    at main (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:232:19)\n    at Object.<anonymous> (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:584:1)\n    at Module._compile (node:internal/modules/cjs/loader:1804:14)\n    at Object..js (node:internal/modules/cjs/loader:1936:10)\n    at Module.load (node:internal/modules/cjs/loader:1525:32)"
+  },
+  "expected_assertion": {
+    "line": 210,
+    "column_start": 127,
+    "column_end": 182,
+    "source_fragment": "const names = fs.readdirSync(at(path.posix.dirname(state))).filter(name => /^\\d{6}-[a-z-]+\\.json$/.test(name)).sort();assert.equal(names.at(-1), path.posix.basename(state));"
+  },
+  "actual_first_binding_frame": {
+    "line": 210,
+    "column": 134
+  }
+}

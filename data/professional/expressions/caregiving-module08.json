@@ -1,0 +1,1588 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.caregiving.module08.01",
+      "text": "I need to report a safeguarding concern involving possible abuse or neglect.",
+      "meaning": "Communicate a concern through the appropriate route.",
+      "context": "A worker contacts the designated safeguarding professional.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "I",
+          "start": 0,
+          "end": 1
+        },
+        {
+          "index": 1,
+          "text": "need",
+          "start": 2,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "to",
+          "start": 7,
+          "end": 9
+        },
+        {
+          "index": 3,
+          "text": "report",
+          "start": 10,
+          "end": 16
+        },
+        {
+          "index": 4,
+          "text": "a",
+          "start": 17,
+          "end": 18
+        },
+        {
+          "index": 5,
+          "text": "safeguarding",
+          "start": 19,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "concern",
+          "start": 32,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "involving",
+          "start": 40,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "possible",
+          "start": 50,
+          "end": 58
+        },
+        {
+          "index": 9,
+          "text": "abuse",
+          "start": 59,
+          "end": 64
+        },
+        {
+          "index": 10,
+          "text": "or",
+          "start": 65,
+          "end": 67
+        },
+        {
+          "index": 11,
+          "text": "neglect",
+          "start": 68,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 75,
+          "end": 76
+        }
+      ],
+      "focus_lexeme_ids": [
+        "safeguarding-concern.possible-abuse-or-neglect-concern.n",
+        "abuse.harmful-mistreatment.n",
+        "neglect.failure-to-meet-required-care.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-adult-safeguarding",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module08.02",
+      "text": "The concern may involve financial abuse or coercion, so I need the designated person's guidance.",
+      "meaning": "Name a concern without investigating it independently.",
+      "context": "A worker seeks safeguarding support.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "concern",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "may",
+          "start": 12,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "involve",
+          "start": 16,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "financial",
+          "start": 24,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "abuse",
+          "start": 34,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "or",
+          "start": 40,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "coercion",
+          "start": 43,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 51,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "so",
+          "start": 53,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": "I",
+          "start": 56,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": "need",
+          "start": 58,
+          "end": 62
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 13,
+          "text": "designated",
+          "start": 67,
+          "end": 77
+        },
+        {
+          "index": 14,
+          "text": "person's",
+          "start": 78,
+          "end": 86
+        },
+        {
+          "index": 15,
+          "text": "guidance",
+          "start": 87,
+          "end": 95
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 95,
+          "end": 96
+        }
+      ],
+      "focus_lexeme_ids": [
+        "financial-abuse.harmful-misuse-of-money-or-property.n",
+        "coercion.pressure-or-threat-removing-free-choice.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-adult-safeguarding",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module08.03",
+      "text": "Please clarify the local policy on restraint and duty of care.",
+      "meaning": "Request qualified explanation of rights and responsibilities.",
+      "context": "A staff training discussion.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "clarify",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "local",
+          "start": 19,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "policy",
+          "start": 25,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "on",
+          "start": 32,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "restraint",
+          "start": 35,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "duty",
+          "start": 49,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "of",
+          "start": 54,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "care",
+          "start": 57,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 61,
+          "end": 62
+        }
+      ],
+      "focus_lexeme_ids": [
+        "restraint.restriction-of-movement-or-action.n",
+        "duty-of-care.responsibility-to-take-reasonable-care.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-adult-safeguarding",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module08.04",
+      "text": "The spill on the wet floor and the trip hazard were reported after a fall; a clean floor can still present risks.",
+      "meaning": "Report an event and distinguish visible cleanliness from safety.",
+      "context": "A worker records environmental concerns after a fall.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "spill",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "on",
+          "start": 10,
+          "end": 12
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 4,
+          "text": "wet",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 5,
+          "text": "floor",
+          "start": 21,
+          "end": 26
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 8,
+          "text": "trip",
+          "start": 35,
+          "end": 39
+        },
+        {
+          "index": 9,
+          "text": "hazard",
+          "start": 40,
+          "end": 46
+        },
+        {
+          "index": 10,
+          "text": "were",
+          "start": 47,
+          "end": 51
+        },
+        {
+          "index": 11,
+          "text": "reported",
+          "start": 52,
+          "end": 60
+        },
+        {
+          "index": 12,
+          "text": "after",
+          "start": 61,
+          "end": 66
+        },
+        {
+          "index": 13,
+          "text": "a",
+          "start": 67,
+          "end": 68
+        },
+        {
+          "index": 14,
+          "text": "fall",
+          "start": 69,
+          "end": 73
+        },
+        {
+          "index": 15,
+          "text": ";",
+          "start": 73,
+          "end": 74
+        },
+        {
+          "index": 16,
+          "text": "a",
+          "start": 75,
+          "end": 76
+        },
+        {
+          "index": 17,
+          "text": "clean",
+          "start": 77,
+          "end": 82
+        },
+        {
+          "index": 18,
+          "text": "floor",
+          "start": 83,
+          "end": 88
+        },
+        {
+          "index": 19,
+          "text": "can",
+          "start": 89,
+          "end": 92
+        },
+        {
+          "index": 20,
+          "text": "still",
+          "start": 93,
+          "end": 98
+        },
+        {
+          "index": 21,
+          "text": "present",
+          "start": 99,
+          "end": 106
+        },
+        {
+          "index": 22,
+          "text": "risks",
+          "start": 107,
+          "end": 112
+        },
+        {
+          "index": 23,
+          "text": ".",
+          "start": 112,
+          "end": 113
+        }
+      ],
+      "focus_lexeme_ids": [
+        "wet-floor.damp-walking-surface.n",
+        "spill.escaped-liquid-or-material.n",
+        "trip-hazard.obstacle-likely-to-cause-tripping.n",
+        "fall.unintended-descent-to-lower-level.n",
+        "clean.free-of-visible-soiling.a"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-adult-safeguarding",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module08.05",
+      "text": "The risk assessment identifies fall risk and pressure injury risk for professional review.",
+      "meaning": "Refer to individual risk information without prescribing actions.",
+      "context": "A worker checks a current support plan.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "risk",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "assessment",
+          "start": 9,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "identifies",
+          "start": 20,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": "fall",
+          "start": 31,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": "risk",
+          "start": 36,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "pressure",
+          "start": 45,
+          "end": 53
+        },
+        {
+          "index": 8,
+          "text": "injury",
+          "start": 54,
+          "end": 60
+        },
+        {
+          "index": 9,
+          "text": "risk",
+          "start": 61,
+          "end": 65
+        },
+        {
+          "index": 10,
+          "text": "for",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 11,
+          "text": "professional",
+          "start": 70,
+          "end": 82
+        },
+        {
+          "index": 12,
+          "text": "review",
+          "start": 83,
+          "end": 89
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 89,
+          "end": 90
+        }
+      ],
+      "focus_lexeme_ids": [
+        "risk-assessment.hazard-evaluation.n",
+        "fall-risk.likelihood-of-falling.n",
+        "pressure-injury-risk.likelihood-of-pressure-related-damage.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-adult-safeguarding",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module08.06",
+      "text": "Please explain the difference between a medication reminder and medicine administration in my assigned role.",
+      "meaning": "Clarify medicine-related role boundaries.",
+      "context": "A worker asks the responsible professional before accepting a task.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "explain",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "difference",
+          "start": 19,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": "between",
+          "start": 30,
+          "end": 37
+        },
+        {
+          "index": 5,
+          "text": "a",
+          "start": 38,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "medication",
+          "start": 40,
+          "end": 50
+        },
+        {
+          "index": 7,
+          "text": "reminder",
+          "start": 51,
+          "end": 59
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 9,
+          "text": "medicine",
+          "start": 64,
+          "end": 72
+        },
+        {
+          "index": 10,
+          "text": "administration",
+          "start": 73,
+          "end": 87
+        },
+        {
+          "index": 11,
+          "text": "in",
+          "start": 88,
+          "end": 90
+        },
+        {
+          "index": 12,
+          "text": "my",
+          "start": 91,
+          "end": 93
+        },
+        {
+          "index": 13,
+          "text": "assigned",
+          "start": 94,
+          "end": 102
+        },
+        {
+          "index": 14,
+          "text": "role",
+          "start": 103,
+          "end": 107
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 107,
+          "end": 108
+        }
+      ],
+      "focus_lexeme_ids": [
+        "medication-reminder.prompt-about-planned-medicine-use.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-adult-safeguarding",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module08.07",
+      "text": "The record describes a possible medication error, side effect, or adverse event; the qualified reviewer must clarify which.",
+      "meaning": "Avoid classifying medicine events without review.",
+      "context": "A supervisor discusses accurate terminology.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "record",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "describes",
+          "start": 11,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 21,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "possible",
+          "start": 23,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "medication",
+          "start": 32,
+          "end": 42
+        },
+        {
+          "index": 6,
+          "text": "error",
+          "start": 43,
+          "end": 48
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 48,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "side",
+          "start": 50,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "effect",
+          "start": 55,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 61,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "or",
+          "start": 63,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "adverse",
+          "start": 66,
+          "end": 73
+        },
+        {
+          "index": 13,
+          "text": "event",
+          "start": 74,
+          "end": 79
+        },
+        {
+          "index": 14,
+          "text": ";",
+          "start": 79,
+          "end": 80
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 81,
+          "end": 84
+        },
+        {
+          "index": 16,
+          "text": "qualified",
+          "start": 85,
+          "end": 94
+        },
+        {
+          "index": 17,
+          "text": "reviewer",
+          "start": 95,
+          "end": 103
+        },
+        {
+          "index": 18,
+          "text": "must",
+          "start": 104,
+          "end": 108
+        },
+        {
+          "index": 19,
+          "text": "clarify",
+          "start": 109,
+          "end": 116
+        },
+        {
+          "index": 20,
+          "text": "which",
+          "start": 117,
+          "end": 122
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 122,
+          "end": 123
+        }
+      ],
+      "focus_lexeme_ids": [
+        "medication-error.preventable-medicine-use-error.n",
+        "side-effect.additional-medicine-effect.n",
+        "adverse-event.harm-associated-with-care.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-adult-safeguarding",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module08.08",
+      "text": "Please clarify the infection prevention guidance for hand hygiene and PPE after possible exposure, including how infection and cross-contamination differ.",
+      "meaning": "Ask for relevant guidance and clarification of safety terms.",
+      "context": "A worker seeks current professional guidance after a possible exposure.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "clarify",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "infection",
+          "start": 19,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "prevention",
+          "start": 29,
+          "end": 39
+        },
+        {
+          "index": 5,
+          "text": "guidance",
+          "start": 40,
+          "end": 48
+        },
+        {
+          "index": 6,
+          "text": "for",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 7,
+          "text": "hand",
+          "start": 53,
+          "end": 57
+        },
+        {
+          "index": 8,
+          "text": "hygiene",
+          "start": 58,
+          "end": 65
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 10,
+          "text": "PPE",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 11,
+          "text": "after",
+          "start": 74,
+          "end": 79
+        },
+        {
+          "index": 12,
+          "text": "possible",
+          "start": 80,
+          "end": 88
+        },
+        {
+          "index": 13,
+          "text": "exposure",
+          "start": 89,
+          "end": 97
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 97,
+          "end": 98
+        },
+        {
+          "index": 15,
+          "text": "including",
+          "start": 99,
+          "end": 108
+        },
+        {
+          "index": 16,
+          "text": "how",
+          "start": 109,
+          "end": 112
+        },
+        {
+          "index": 17,
+          "text": "infection",
+          "start": 113,
+          "end": 122
+        },
+        {
+          "index": 18,
+          "text": "and",
+          "start": 123,
+          "end": 126
+        },
+        {
+          "index": 19,
+          "text": "cross-contamination",
+          "start": 127,
+          "end": 146
+        },
+        {
+          "index": 20,
+          "text": "differ",
+          "start": 147,
+          "end": 153
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 153,
+          "end": 154
+        }
+      ],
+      "focus_lexeme_ids": [
+        "infection-prevention.infection-risk-reduction-work.n",
+        "hand-hygiene.hand-cleaning-practices.n",
+        "ppe.personal-protective-equipment.n",
+        "exposure.contact-with-potential-health-hazard.n",
+        "infection.microorganism-invasion-and-response.n",
+        "cross-contamination.unwanted-material-transfer.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-adult-safeguarding",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module08.09",
+      "text": "The lone working plan names a contact and the local escalation criteria.",
+      "meaning": "Confirm an agreed support arrangement.",
+      "context": "A worker reviews visit arrangements.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "lone",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "working",
+          "start": 9,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "plan",
+          "start": 17,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "names",
+          "start": 22,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "a",
+          "start": 28,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "contact",
+          "start": 30,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 38,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 9,
+          "text": "local",
+          "start": 46,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "escalation",
+          "start": 52,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "criteria",
+          "start": 63,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 71,
+          "end": 72
+        }
+      ],
+      "focus_lexeme_ids": [
+        "lone-working.working-without-nearby-colleague.n",
+        "escalation-criteria.specified-triggers-for-further-help.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-adult-safeguarding",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.caregiving.module08.10",
+      "text": "Please show me the reporting route for a burn, scald, or near miss, and explain when the whistleblowing policy applies.",
+      "meaning": "Clarify reporting routes for injuries and concerns.",
+      "context": "A worker asks how to report a concern under local policy.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "show",
+          "start": 7,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "me",
+          "start": 12,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "reporting",
+          "start": 19,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "route",
+          "start": 29,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "for",
+          "start": 35,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "a",
+          "start": 39,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": "burn",
+          "start": 41,
+          "end": 45
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 45,
+          "end": 46
+        },
+        {
+          "index": 10,
+          "text": "scald",
+          "start": 47,
+          "end": 52
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 52,
+          "end": 53
+        },
+        {
+          "index": 12,
+          "text": "or",
+          "start": 54,
+          "end": 56
+        },
+        {
+          "index": 13,
+          "text": "near",
+          "start": 57,
+          "end": 61
+        },
+        {
+          "index": 14,
+          "text": "miss",
+          "start": 62,
+          "end": 66
+        },
+        {
+          "index": 15,
+          "text": ",",
+          "start": 66,
+          "end": 67
+        },
+        {
+          "index": 16,
+          "text": "and",
+          "start": 68,
+          "end": 71
+        },
+        {
+          "index": 17,
+          "text": "explain",
+          "start": 72,
+          "end": 79
+        },
+        {
+          "index": 18,
+          "text": "when",
+          "start": 80,
+          "end": 84
+        },
+        {
+          "index": 19,
+          "text": "the",
+          "start": 85,
+          "end": 88
+        },
+        {
+          "index": 20,
+          "text": "whistleblowing",
+          "start": 89,
+          "end": 103
+        },
+        {
+          "index": 21,
+          "text": "policy",
+          "start": 104,
+          "end": 110
+        },
+        {
+          "index": 22,
+          "text": "applies",
+          "start": 111,
+          "end": 118
+        },
+        {
+          "index": 23,
+          "text": ".",
+          "start": 118,
+          "end": 119
+        }
+      ],
+      "focus_lexeme_ids": [
+        "near-miss.narrowly-avoided-incident.n",
+        "whistleblowing.raising-concerns-about-wrongdoing.n",
+        "burn.tissue-injury-from-damaging-energy-or-substance.n",
+        "scald.burn-from-hot-liquid-or-steam.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-adult-safeguarding",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ]
+    }
+  ]
+}

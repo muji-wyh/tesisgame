@@ -1,0 +1,650 @@
+{
+  "schema": 1,
+  "status": "read_only_existing_media_observation_not_final_registry_or_transaction_baseline",
+  "source": "data/professional/lexemes/retail-pilot.json",
+  "media": [
+    {
+      "sense_id": "aisle.passage.n",
+      "kind": "audio",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3.wav",
+        "sha256": "3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3",
+        "source": "res://docs/assets/sources/professional-retail-ava/acquisition.json",
+        "creator": "Microsoft Ava Neural; original project texts",
+        "license": "Microsoft Services Agreement applies to synthesized output; the client LGPL license does not confer separate rights to speech. No additional license claim.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact sample listening approval in tesis-iter-2; provenance: listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "descriptor_json_sha256": "8f8003d4c7f08691875b0e9739872ed8e0448a15dca0ea8583781343e72212f2",
+      "file": {
+        "path": "professional-media/3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3.wav",
+        "bytes": 82598,
+        "sha256": "3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3"
+      }
+    },
+    {
+      "sense_id": "checkout.payment-area.n",
+      "kind": "image",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe.png",
+        "sha256": "eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe",
+        "source": "res://docs/assets/sources/professional-retail-checkout/source-record.json",
+        "creator": "Kenney; Mini Market additional credits: Fleur Keijsers and Guus Vermeulen",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex independent AI source and scoped payment-area picture review; see root-image-review.json",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Show a complete staffed checkout lane: customer side, short goods belt or counter, and a register, with a shopper presenting purchases. Frame the lane as one place while the equipment stays subordinate. Reject a close-up of a register alone, a help desk, or a hotel reception. No readable payment credentials or brand marks.",
+        "picture_suitable": true,
+        "available_animations": [],
+        "adaptations": []
+      },
+      "descriptor_json_sha256": "3540fed8356667cb283a60d14508479a5da93b980e882b2281aad6eef3e68929",
+      "file": {
+        "path": "professional-media/eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe.png",
+        "bytes": 148338,
+        "sha256": "eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe"
+      }
+    },
+    {
+      "sense_id": "checkout.payment-area.n",
+      "kind": "audio",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/39df6ba3406a891283f99379ca8526d93fc8f3279b571134c0213dd824282224.wav",
+        "sha256": "39df6ba3406a891283f99379ca8526d93fc8f3279b571134c0213dd824282224",
+        "source": "res://docs/assets/sources/professional-retail-ava/counter-checkout/listening-approval-2026-10-16.json",
+        "creator": "Microsoft Ava Neural; original project term text",
+        "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact counter and checkout samples approved in the continuation chat; see counter-checkout listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "descriptor_json_sha256": "799ce8d5241d4d9125ac17873d3e8d5f919594d09e600cb33875a29550ff5d0d",
+      "file": {
+        "path": "professional-media/39df6ba3406a891283f99379ca8526d93fc8f3279b571134c0213dd824282224.wav",
+        "bytes": 82598,
+        "sha256": "39df6ba3406a891283f99379ca8526d93fc8f3279b571134c0213dd824282224"
+      }
+    },
+    {
+      "sense_id": "counter.service-surface.n",
+      "kind": "image",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a.png",
+        "sha256": "c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a",
+        "source": "Kenney Furniture Kit 2.1: https://kenney.nl/assets/furniture-kit; Kenney Car Kit 3.1: https://kenney.nl/assets/car-kit",
+        "creator": "Kenney",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex root independent AI source, physical-sense and minimum-card picture review",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Show a broad, raised service surface with a solid front, a small parcel resting on top, a staff side behind it, and clear customer standing space in front. Crop around the surface and front panel. Exclude a dominant register, refund receipt, or order handoff that would turn the image into a particular service function.",
+        "picture_suitable": true,
+        "available_animations": [],
+        "adaptations": [
+          "Four complete acquired Furniture Kit 2.1 kitchenBar models form a broad raised surface with a solid front and a perpendicular staff-side return. Original geometry, materials, textures and source child transforms are preserved; only complete model roots are placed and rotated, then the common assembly is recentered.",
+          "One complete acquired Car Kit 3.1 box model supplies the small sealed parcel. Its original geometry, materials, texture and child transforms are preserved; the root is uniformly scaled to 0.16, rotated -10 degrees and placed at the countertop height of 0.42. No added register, refund receipt, printed label or service-function prop is used.",
+          "The orthographic camera is at [-1.1,1.8,4], aimed at [0,0.24,0], size 1.55. Ambient energy 0.18 and directional energy 0.38 illuminate a transparent 768 by 768 render. The complete alpha bounds remain within the frame; a 16-pixel margin and proportional Lanczos downscale produce 512 by 293.",
+          "Independent root review covers the exact broad-return image and actual Match 126 by 72 and Memory 144 by 74 cards, including the real badge and matched alpha. The pale top has reduced contour contrast on white and the badge overlaps the far-right return, while the solid front and staff-side recess remain readable. This scoped AI picture review is not a participant recognition study, service-function classification, domain approval or module-readiness claim."
+        ]
+      },
+      "descriptor_json_sha256": "fd0bd516076694647ad5d661dd264dfe58550b8c9253187be05e31afde8e8360",
+      "file": {
+        "path": "professional-media/c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a.png",
+        "bytes": 31426,
+        "sha256": "c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a"
+      }
+    },
+    {
+      "sense_id": "counter.service-surface.n",
+      "kind": "audio",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/685b544dbb353f3a1f3fb999fbe3f541cb94874d0e4543ad0cba774c39fd4bc3.wav",
+        "sha256": "685b544dbb353f3a1f3fb999fbe3f541cb94874d0e4543ad0cba774c39fd4bc3",
+        "source": "res://docs/assets/sources/professional-retail-ava/counter-checkout/listening-approval-2026-10-16.json",
+        "creator": "Microsoft Ava Neural; original project term text",
+        "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact counter and checkout samples approved in the continuation chat; see counter-checkout listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "descriptor_json_sha256": "2f489e4ac7a7f7f62371de1b2baa4a94ac3d1c0f96e15ce26f89a1c39ef7a12f",
+      "file": {
+        "path": "professional-media/685b544dbb353f3a1f3fb999fbe3f541cb94874d0e4543ad0cba774c39fd4bc3.wav",
+        "bytes": 82598,
+        "sha256": "685b544dbb353f3a1f3fb999fbe3f541cb94874d0e4543ad0cba774c39fd4bc3"
+      }
+    },
+    {
+      "sense_id": "cash-register.sales-device.n",
+      "kind": "image",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png",
+        "sha256": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262",
+        "source": "res://docs/assets/sources/professional-retail-cash-register/source-record.json",
+        "creator": "Isa Lousberg (Tiny Treats)",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex root independent AI source and scoped cash-register picture review; see root-picture-acceptance-r01.json",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Use a dedicated three-quarter view of a complete retail register with sale display, physical keys, and the drawer base visible as one machine. Make the machine fill the frame. Keep any receipt secondary; exclude a detached drawer, a handheld scanner, or an isolated payment reader. Inspect the Mini Market cash-register lead before making the term render.",
+        "picture_suitable": true,
+        "available_animations": [],
+        "adaptations": [
+          "Original full source model and atlas, unchanged materials and child transforms",
+          "Root centering, root-reviewed camera and original inspection studio lighting",
+          "Transparent background, 16-pixel alpha-bound padding, 512-pixel-wide Lanczos resize"
+        ]
+      },
+      "descriptor_json_sha256": "639e63b912cf2e91b5d9d82f533607cbc386917b3215e8f4584c4e6e03f6128f",
+      "file": {
+        "path": "professional-media/f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png",
+        "bytes": 172442,
+        "sha256": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262"
+      }
+    },
+    {
+      "sense_id": "cash-register.sales-device.n",
+      "kind": "audio",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/0f883c09be9a86be9f30e444953d001d3a385ba71034e60ceb4181fc0b9aa763.wav",
+        "sha256": "0f883c09be9a86be9f30e444953d001d3a385ba71034e60ceb4181fc0b9aa763",
+        "source": "res://docs/assets/sources/professional-retail-ava/acquisition.json",
+        "creator": "Microsoft Ava Neural; original project texts",
+        "license": "Microsoft Services Agreement applies to synthesized output; the client LGPL license does not confer separate rights to speech. No additional license claim.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact sample listening approval in tesis-iter-2; provenance: listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "descriptor_json_sha256": "d330d6d558adb9b5c9e19520d376d77b45616a049b3e8e77f645b4871b8dc201",
+      "file": {
+        "path": "professional-media/0f883c09be9a86be9f30e444953d001d3a385ba71034e60ceb4181fc0b9aa763.wav",
+        "bytes": 82598,
+        "sha256": "0f883c09be9a86be9f30e444953d001d3a385ba71034e60ceb4181fc0b9aa763"
+      }
+    },
+    {
+      "sense_id": "card-reader.payment-device.n",
+      "kind": "audio",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/acd48c920c631906e6ff0775cf3f373c247687fcb128b41e3ce0f3bdf668ba45.wav",
+        "sha256": "acd48c920c631906e6ff0775cf3f373c247687fcb128b41e3ce0f3bdf668ba45",
+        "source": "res://docs/assets/sources/professional-retail-ava/card-reader-barcode/listening-approval-2026-10-16.json",
+        "creator": "Microsoft Ava Neural; original project term text",
+        "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact card reader and barcode samples approved in tesis-iter-4; see card-reader-barcode listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "descriptor_json_sha256": "8b346e8297ac37f54b3b2565260763827b9aeb7eae3c3a6c8713c62dd9091b53",
+      "file": {
+        "path": "professional-media/acd48c920c631906e6ff0775cf3f373c247687fcb128b41e3ce0f3bdf668ba45.wav",
+        "bytes": 82598,
+        "sha256": "acd48c920c631906e6ff0775cf3f373c247687fcb128b41e3ce0f3bdf668ba45"
+      }
+    },
+    {
+      "sense_id": "barcode.product-code.n",
+      "kind": "image",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c.png",
+        "sha256": "a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c",
+        "source": "res://docs/assets/sources/professional-retail-barcode/source-record.json",
+        "creator": "netalloy (barcode artwork); Kenney (Car Kit parcel)",
+        "license": "CC0 1.0 Universal",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex independent AI source and scoped barcode picture review; see root-image-review.json",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Make a linear barcode on an unbranded package the dominant feature, large enough that separate bars and spaces remain clear on a phone. Use a quiet package edge only for context. No price text, real customer identifier, or claim that the pictured code is a licensed or usable product code; reject a scanner or price-tag image as the main subject.",
+        "picture_suitable": true,
+        "available_animations": [],
+        "adaptations": [
+          "Change only source SVG viewBox from 0 0 300 300 to 92 79 173 88, retaining every original bar and space. The narrow border is cropped at its edge; no barcode strokes are fabricated.",
+          "Rasterize this source crop at 692 by 352, then apply it as a planar artwork surface on the unchanged complete Kenney parcel.",
+          "Use recorded camera and lighting with an intentional package-edge close-up; preserve all original parcel nodes, geometry, materials, texture and child transforms.",
+          "Downscale the 768 by 440 rendered composition proportionally to 512 by 293."
+        ]
+      },
+      "descriptor_json_sha256": "ca1c7b92c7d3bbfd048c2bc374ab8f674c1f520ee55bb86b55a0ed8448a7c9db",
+      "file": {
+        "path": "professional-media/a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c.png",
+        "bytes": 27650,
+        "sha256": "a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c"
+      }
+    },
+    {
+      "sense_id": "barcode.product-code.n",
+      "kind": "audio",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/01b2666324e5e373b75799535d8a78494a6afe8225c4b82147975d55405c96e5.wav",
+        "sha256": "01b2666324e5e373b75799535d8a78494a6afe8225c4b82147975d55405c96e5",
+        "source": "res://docs/assets/sources/professional-retail-ava/card-reader-barcode/listening-approval-2026-10-16.json",
+        "creator": "Microsoft Ava Neural; original project term text",
+        "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact card reader and barcode samples approved in tesis-iter-4; see card-reader-barcode listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "descriptor_json_sha256": "861d318bba664730a665fd408a28b0280eb31f272acf0bffa15eb1b15ceecfec",
+      "file": {
+        "path": "professional-media/01b2666324e5e373b75799535d8a78494a6afe8225c4b82147975d55405c96e5.wav",
+        "bytes": 82598,
+        "sha256": "01b2666324e5e373b75799535d8a78494a6afe8225c4b82147975d55405c96e5"
+      }
+    },
+    {
+      "sense_id": "shopping-basket.store-container.n",
+      "kind": "image",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3.png",
+        "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+        "source": "https://kenney.nl/assets/mini-market",
+        "creator": "Kenney; Fleur Keijsers; Guus Vermeulen",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex source inspection and independent root physical-sense picture review at actual minimum Match and Memory card sizes, including cart/basket comparison",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Show an empty compact rigid retail shopping basket in a three-quarter view, with its raised hand-carry handle and open basket clearly visible at the actual minimum card size. Keep the handheld basket distinct from a wheeled shopping cart. Exclude wheels, fabric sides, a lid, and groceries that obscure the handle or opening. Use the inspected original Mini Market shopping-basket mesh without geometry or material changes.",
+        "picture_suitable": true,
+        "available_animations": [],
+        "adaptations": [
+          "Rendered the acquired Mini Market shopping-basket mesh with its original geometry, materials and external colormap; no model parts, textures or groceries were invented.",
+          "Three-quarter view shades the raised hand-carry handle for contrast against the actual light card surface. The empty basket preserves the handle and opening; the original groceries-in-basket brief and its accepted revision are retained in provenance.",
+          "768 by 768 transparent source render, alpha-bounds crop with a 16-pixel margin, and Lanczos reduction to 512 by 454. The exact accepted PNG is retained without further conversion.",
+          "Independently inspected in actual native WordCard at Match 126 by 72 and Memory 144 by 74, unmatched and matched with the real badge and alpha tint, including side-by-side comparison with the accepted cart. This is agent picture review, not a participant recognition test; see docs/assets/professional-retail-shopping-basket.md for source history and separate delivery verification."
+        ]
+      },
+      "descriptor_json_sha256": "c42e46b66006a37da97d49473123642dd0da7fd86e065cdc2c162d5640b9b017",
+      "file": {
+        "path": "professional-media/fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3.png",
+        "bytes": 105604,
+        "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3"
+      }
+    },
+    {
+      "sense_id": "shopping-basket.store-container.n",
+      "kind": "audio",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/aac69f3394f2acd4486e68e32213e328849c204f0ddced680f56011c65ce4e12.wav",
+        "sha256": "aac69f3394f2acd4486e68e32213e328849c204f0ddced680f56011c65ce4e12",
+        "source": "res://docs/assets/sources/professional-retail-ava/cart-basket/listening-approval-2026-10-16.json",
+        "creator": "Microsoft Ava Neural; original project term text",
+        "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact shopping cart and shopping basket samples approved in the continuation chat; see cart-basket listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "descriptor_json_sha256": "a6d269b24cd3c10a3fabd111e68fcb148d8e9be3ca03eb633ec65e380ed74006",
+      "file": {
+        "path": "professional-media/aac69f3394f2acd4486e68e32213e328849c204f0ddced680f56011c65ce4e12.wav",
+        "bytes": 82598,
+        "sha256": "aac69f3394f2acd4486e68e32213e328849c204f0ddced680f56011c65ce4e12"
+      }
+    },
+    {
+      "sense_id": "shopping-cart.store-trolley.n",
+      "kind": "image",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1.png",
+        "sha256": "b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1",
+        "source": "https://kenney.nl/assets/mini-market",
+        "creator": "Kenney; Fleur Keijsers; Guus Vermeulen",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex source inspection and independent root physical-sense picture review at actual minimum Match and Memory card sizes",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Show a full-size retail trolley in a three-quarter side view with basket, push handle, lower frame, and four wheels legible. Keep it mostly empty so its structure is visible. Exclude a hand-carried basket, flat warehouse trolley, wheelchair, or online cart icon. Inspect the Mini Market shopping-cart lead before rendering.",
+        "picture_suitable": true,
+        "available_animations": [],
+        "adaptations": [
+          "Rendered the acquired Mini Market shopping-cart mesh with its original geometry, materials and external colormap; no model parts or textures were invented.",
+          "Near-eye-level three-quarter side camera preserves the empty basket, orange push handle, lower frame and four wheel silhouettes. One rear wheel is partly occluded by the frame; this perspective limitation was explicitly accepted during independent root review.",
+          "768 by 768 transparent source render, alpha-bounds crop with a 16-pixel margin, and Lanczos reduction to 512 by 415. The exact accepted PNG is retained without further conversion.",
+          "Independently inspected in actual native WordCard at Match 126 by 72 and Memory 144 by 74, both unmatched and matched with the real badge and alpha tint. This is picture suitability review only; see docs/assets/professional-retail-shopping-cart.md for provenance and separate delivery verification."
+        ]
+      },
+      "descriptor_json_sha256": "bdebd007958c4b8472c5a792d4313131205ee023a2827450afb4dc2e1d046ec7",
+      "file": {
+        "path": "professional-media/b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1.png",
+        "bytes": 93422,
+        "sha256": "b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1"
+      }
+    },
+    {
+      "sense_id": "shopping-cart.store-trolley.n",
+      "kind": "audio",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/150246ccfdd916301a660583fc5e552a7fb585fb4ccb2317b9ed4a40ebd1da56.wav",
+        "sha256": "150246ccfdd916301a660583fc5e552a7fb585fb4ccb2317b9ed4a40ebd1da56",
+        "source": "res://docs/assets/sources/professional-retail-ava/cart-basket/listening-approval-2026-10-16.json",
+        "creator": "Microsoft Ava Neural; original project term text",
+        "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact shopping cart and shopping basket samples approved in the continuation chat; see cart-basket listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "descriptor_json_sha256": "737a51d9b1c6a5d031a84bc4399cd6b99d4e5f08bef5adf51baca16cb73fddd1",
+      "file": {
+        "path": "professional-media/150246ccfdd916301a660583fc5e552a7fb585fb4ccb2317b9ed4a40ebd1da56.wav",
+        "bytes": 82598,
+        "sha256": "150246ccfdd916301a660583fc5e552a7fb585fb4ccb2317b9ed4a40ebd1da56"
+      }
+    },
+    {
+      "sense_id": "shelf.storage-surface.n",
+      "kind": "image",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/bddc3c2dd3b889c785195a572b95a33455c047e097e927232c735b3b43a24f04.png",
+        "sha256": "bddc3c2dd3b889c785195a572b95a33455c047e097e927232c735b3b43a24f04",
+        "source": "https://kenney.nl/assets/mini-market",
+        "creator": "Kenney",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex root independent AI source, physical-sense and minimum-card picture review",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Show one clearly emphasized horizontal shelf within a simple shelving frame, carrying a few boxes with space above and below it. Use lighting and a close crop to identify that single support surface without a printed word or colored label. Reject an entire aisle, a freestanding table, or a wall cabinet. Inspect the Mini Market shelf lead and avoid overfilling it.",
+        "picture_suitable": true,
+        "available_animations": [],
+        "adaptations": [
+          "Rendered the acquired Kenney Mini Market 1.0 shelf-boxes GLB with its original colormap. Frame and visible box geometry, materials, textures and per-node transforms are preserved; only the model root is recentered.",
+          "Six source carton nodes and two rear box nodes are hidden at scene level, leaving the source frame and its two front upper boxes. No replacement geometry or added text/target label is used.",
+          "Camera and studio lighting emphasize one upper support surface. A 768 by 768 transparent render is cropped to focus rectangle [0,0,768,640], then alpha bounds plus a 16-pixel margin and Lanczos resizing produce 512 by 309. The crop deliberately cuts the backing panel below the selected shelf and excludes the lower shelf and feet.",
+          "Root inspected eight original source views, four sparse compositions, and actual Match 126 by 72 and Memory 144 by 74 cards in unmatched/matched states. The support edge remains distinguishable with the real badge and matched alpha. This is scoped AI image review, not a participant recognition study or domain/module approval."
+        ]
+      },
+      "descriptor_json_sha256": "7d3cc7997459036dd8b2de74328da408041381279c60af5e5808ec4f45f8affe",
+      "file": {
+        "path": "professional-media/bddc3c2dd3b889c785195a572b95a33455c047e097e927232c735b3b43a24f04.png",
+        "bytes": 56729,
+        "sha256": "bddc3c2dd3b889c785195a572b95a33455c047e097e927232c735b3b43a24f04"
+      }
+    },
+    {
+      "sense_id": "shelf.storage-surface.n",
+      "kind": "audio",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/778fcf9304a06cd7ed04566cdc1f9bf28997bfbdbcd6e757f20ff9c3cb6282e3.wav",
+        "sha256": "778fcf9304a06cd7ed04566cdc1f9bf28997bfbdbcd6e757f20ff9c3cb6282e3",
+        "source": "res://docs/assets/sources/professional-retail-ava/pallet-shelf/listening-approval-2026-10-16.json",
+        "creator": "Microsoft Ava Neural; original project term text",
+        "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact pallet and shelf samples approved in the continuation chat; see pallet-shelf listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "descriptor_json_sha256": "2b6b14cc1e456a92a15718ebd8b7109bef9e3bb39ac9eea51a472465b17e4821",
+      "file": {
+        "path": "professional-media/778fcf9304a06cd7ed04566cdc1f9bf28997bfbdbcd6e757f20ff9c3cb6282e3.wav",
+        "bytes": 82598,
+        "sha256": "778fcf9304a06cd7ed04566cdc1f9bf28997bfbdbcd6e757f20ff9c3cb6282e3"
+      }
+    },
+    {
+      "sense_id": "pallet.goods-platform.n",
+      "kind": "image",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/7487ee641b0cea58e5de43f619f03dead5d382444928d408c71d3811b60761b8.png",
+        "sha256": "7487ee641b0cea58e5de43f619f03dead5d382444928d408c71d3811b60761b8",
+        "source": "https://kenney.nl/assets/mini-skate",
+        "creator": "Kenney",
+        "license": "CC0 1.0",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex root independent source, physical-sense and actual minimum-card picture review",
+          "reviewed_at": "2026-10-16"
+        },
+        "brief": "Show a clean wooden goods pallet in a low three-quarter view so top slats, spacer blocks, and fork-entry gaps are visible. One small carton may show scale without obscuring the platform. Reject a pile of boards, a bed, or a loaded pallet hidden entirely by boxes. A weathered source asset is not automatically compatible with the clean Retail art direction.",
+        "picture_suitable": true,
+        "available_animations": [],
+        "adaptations": [
+          "Rendered the acquired Mini Skate 1.2 pallet mesh with its original external colormap. Geometry, materials, textures and source node transforms remain unchanged; only the root is recentered.",
+          "Low three-quarter camera and studio lighting retain the three top slats, spacer/support blocks and visible side fork opening. The optional carton is omitted; no additional model parts were invented.",
+          "Transparent 768 by 768 render, alpha-bounds crop with 16-pixel padding and Lanczos reduction to 512 by 278. The accepted PNG is copied exactly.",
+          "Root inspected eight source views, actual native Match 126 by 72 and Memory 144 by 74 cards in unmatched/matched states, and comparison with the accepted cart/basket. Matched badges leave the principal slats and lower opening readable. This is scoped AI picture review, not a participant recognition study or pallet-load specification."
+        ]
+      },
+      "descriptor_json_sha256": "7584a679157e99a4d5856fde1f7e97bb7066688e85de2c692e96d9c35a88d75f",
+      "file": {
+        "path": "professional-media/7487ee641b0cea58e5de43f619f03dead5d382444928d408c71d3811b60761b8.png",
+        "bytes": 86689,
+        "sha256": "7487ee641b0cea58e5de43f619f03dead5d382444928d408c71d3811b60761b8"
+      }
+    },
+    {
+      "sense_id": "pallet.goods-platform.n",
+      "kind": "audio",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/8d4713a7e8576fa065ad1c9e1b18edcfc10b192254182fad626392a2de71893f.wav",
+        "sha256": "8d4713a7e8576fa065ad1c9e1b18edcfc10b192254182fad626392a2de71893f",
+        "source": "res://docs/assets/sources/professional-retail-ava/pallet-shelf/listening-approval-2026-10-16.json",
+        "creator": "Microsoft Ava Neural; original project term text",
+        "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact pallet and shelf samples approved in the continuation chat; see pallet-shelf listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "descriptor_json_sha256": "f35080689a5c15240a1de8611545f35c6c7521102242408c1486c0e23412ef85",
+      "file": {
+        "path": "professional-media/8d4713a7e8576fa065ad1c9e1b18edcfc10b192254182fad626392a2de71893f.wav",
+        "bytes": 82598,
+        "sha256": "8d4713a7e8576fa065ad1c9e1b18edcfc10b192254182fad626392a2de71893f"
+      }
+    },
+    {
+      "sense_id": "gift-wrap.wrapping-paper.n",
+      "kind": "audio",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/cad8619dad6e225ce73c835ce5e90f7252c42af3c546aaa393adcd8db3e0f3a2.wav",
+        "sha256": "cad8619dad6e225ce73c835ce5e90f7252c42af3c546aaa393adcd8db3e0f3a2",
+        "source": "res://docs/assets/sources/professional-retail-ava/bag-wrap/listening-approval-2026-10-16.json",
+        "creator": "Microsoft Ava Neural; original project term text",
+        "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact shopping bag and gift wrap samples approved in the continuation chat; see bag-wrap listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "descriptor_json_sha256": "261cba9b353ded9348733723d85ffe2b71d6a1e89a8f01834c321269eeb040ab",
+      "file": {
+        "path": "professional-media/cad8619dad6e225ce73c835ce5e90f7252c42af3c546aaa393adcd8db3e0f3a2.wav",
+        "bytes": 82598,
+        "sha256": "cad8619dad6e225ce73c835ce5e90f7252c42af3c546aaa393adcd8db3e0f3a2"
+      }
+    },
+    {
+      "sense_id": "shopping-bag.goods-carrier.n",
+      "kind": "audio",
+      "descriptor": {
+        "status": "integrated",
+        "path": "res://professional-media/6c7d2ac0e733214faf920a4a0781d0458b6b891a92aa07b7ab433b501d19de72.wav",
+        "sha256": "6c7d2ac0e733214faf920a4a0781d0458b6b891a92aa07b7ab433b501d19de72",
+        "source": "res://docs/assets/sources/professional-retail-ava/bag-wrap/listening-approval-2026-10-16.json",
+        "creator": "Microsoft Ava Neural; original project term text",
+        "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact shopping bag and gift wrap samples approved in the continuation chat; see bag-wrap listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      },
+      "descriptor_json_sha256": "70dbda1733e5c25f396eb644cf19433e9555697bfdcd2913725dcedd145f3edc",
+      "file": {
+        "path": "professional-media/6c7d2ac0e733214faf920a4a0781d0458b6b891a92aa07b7ab433b501d19de72.wav",
+        "bytes": 82598,
+        "sha256": "6c7d2ac0e733214faf920a4a0781d0458b6b891a92aa07b7ab433b501d19de72"
+      }
+    }
+  ],
+  "final_rebase_requirement": "Recheck all exact descriptors and file hashes from the actual post-fourth10 production state. Existing audio and eight images are protected, not reapproved or replaced."
+}

@@ -1,0 +1,145 @@
+{
+  "date": "2026-10-16",
+  "status": "previously_acquired_source_copied_to_scratch_inspection_only",
+  "sense_id": "pallet.goods-platform.n",
+  "approved_brief": "Show a clean wooden goods pallet in a low three-quarter view so top slats, spacer blocks, and fork-entry gaps are visible. One small carton may show scale without obscuring the platform. Reject a pile of boards, a bed, or a loaded pallet hidden entirely by boxes. A weathered source asset is not automatically compatible with the clean Retail art direction.",
+  "source": "https://kenney.nl/assets/mini-skate",
+  "creator": "Kenney",
+  "license": "CC0 1.0",
+  "local_version": "Mini Skate 1.2, source license creation 2024-02-29; public current page advertises 2.0, not used here.",
+  "files": [
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Skate/Models/GLB format/pallet.glb",
+      "retained_path": "source/original/pallet.glb",
+      "bytes": 11704,
+      "sha256": "90312cbba080e0852f4ab92a50744fa0349ddf4683f48ce92f24f29a2bcb2e75"
+    },
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Skate/Models/GLB format/Textures/colormap.png",
+      "retained_path": "source/original/Textures/colormap.png",
+      "bytes": 7529,
+      "sha256": "66fd49be148f32e88f6c8cace67120250d1943a7856601158ad0ff24651db0b0"
+    },
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Skate/License.txt",
+      "retained_path": "source/License.txt",
+      "bytes": 713,
+      "sha256": "6a075a1edb319f16d86cb6b9065436ce89dd851c234704ad160b4255b85e1b67"
+    },
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Skate/Previews/pallet.png",
+      "retained_path": "source/source-preview.png",
+      "bytes": 1969,
+      "sha256": "83549cff5da9d9806a07e288c9aabf31e11acb5d0ddbb52d774ff41fea8f7313"
+    }
+  ],
+  "model_structure": {
+    "meshes": 1,
+    "nodes": [
+      {
+        "mesh": 0,
+        "name": "pallet"
+      }
+    ],
+    "images": [
+      {
+        "uri": "Textures/colormap.png",
+        "name": "colormap"
+      }
+    ],
+    "materials": [
+      {
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 0,
+            "extensions": {
+              "KHR_texture_transform": {
+                "texCoord": 0
+              }
+            }
+          },
+          "metallicFactor": 0
+        },
+        "doubleSided": true,
+        "name": "colormap"
+      }
+    ],
+    "skins": [],
+    "animations": [],
+    "accessors": [
+      {
+        "type": "VEC3",
+        "count": 200,
+        "min": [
+          -0.21142856776714325,
+          -1.2947008713065124e-14,
+          -0.21142856776714325
+        ],
+        "max": [
+          0.21142858266830444,
+          0.1340000033378601,
+          0.21142856776714325
+        ]
+      },
+      {
+        "type": "VEC3",
+        "count": 200,
+        "min": [
+          -1,
+          -1,
+          -1
+        ],
+        "max": [
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "type": "VEC4",
+        "count": 200,
+        "min": [
+          -1,
+          -0.7071068286895752,
+          -1,
+          1
+        ],
+        "max": [
+          1,
+          0.7071068286895752,
+          1,
+          1
+        ]
+      },
+      {
+        "type": "VEC2",
+        "count": 200,
+        "min": [
+          0.59375,
+          0.7749999761581421
+        ],
+        "max": [
+          0.59375,
+          0.9750000238418579
+        ]
+      },
+      {
+        "type": "SCALAR",
+        "count": 324,
+        "min": [
+          0
+        ],
+        "max": [
+          199
+        ]
+      }
+    ]
+  },
+  "available_animations": [],
+  "adaptations_planned": [
+    "Preserve all source geometry/materials/textures and node transforms.",
+    "Camera, studio lighting, alpha crop and resize only.",
+    "Inspect exact real WordCard states only after source selection."
+  ],
+  "production_changes": false
+}

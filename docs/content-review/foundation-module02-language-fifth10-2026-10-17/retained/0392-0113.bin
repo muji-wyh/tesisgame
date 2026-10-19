@@ -1,0 +1,125 @@
+{
+  "schema": 1,
+  "status": "accepted_for_one_root_owned_projected_candidate_dispatch_only",
+  "reviewer": "Codex independent prepared-output and candidate-dispatch reviewer recover_delivery",
+  "recorded_at": "2026-10-16T22:20:08.4859929Z",
+  "decision": {
+    "candidate_dispatch_approved": true,
+    "approved_dispatch_count": 1,
+    "root_owned_dispatch_required": true,
+    "candidate_runner_executed_by_reviewer": false,
+    "project_modules_loaded_by_reviewer": false,
+    "test_callbacks_executed_by_reviewer": false,
+    "production_commit_approved": false,
+    "actual_candidate_success_claimed": false
+  },
+  "exact_dispatch": {
+    "runner": {
+      "path": "build/professional-english/shopping-bag-projected-validation-r01/run.cjs",
+      "raw_sha256": "815e2387471801fbaeb148a1c27a668265fe352a6b3875b37b381b948bf03073"
+    },
+    "input": {
+      "path": "build/professional-english/shopping-bag-projected-validation-r01/input.json",
+      "raw_sha256": "e391994e98771ff5148da8b8ff85fd55b6e5af885d8a371333a4a876a388e484"
+    },
+    "argv": [
+      "815e2387471801fbaeb148a1c27a668265fe352a6b3875b37b381b948bf03073",
+      "e391994e98771ff5148da8b8ff85fd55b6e5af885d8a371333a4a876a388e484"
+    ],
+    "attempt_path": "build/professional-english/shopping-bag-projected-validation-r01/attempt-001",
+    "attempt_absent_when_approved": true
+  },
+  "prepared_evidence": {
+    "root_attempt_receipt": {
+      "path": "build/professional-english/shopping-bag-root-preparation-r02/attempt-001/receipt.json",
+      "raw_sha256": "6324cb02e67d6d76d48bebe77233c5b47cb9349cdbd3b84a5f03ae9fe76035cf",
+      "ok": true,
+      "commands": 3
+    },
+    "preparation_receipt": {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/preparation-receipt.json",
+      "raw_sha256": "153b3071e6d24e51da2bd26cf39bb3e0873f684182d19fd289960ae88deab443",
+      "artifacts_rehashed": 42,
+      "artifact_size_and_hash_failures": []
+    },
+    "target_plan": {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/target-plan.json",
+      "raw_sha256": "321b6ed0a4d0b66721b36c2d53de9bd3416277641fa1fd227650dd5a45321e98",
+      "total": 34,
+      "replace": 4,
+      "add_absent": 28,
+      "add_absent_pending_actual_stage_finalization": 2,
+      "preimage_absence_and_afterimage_failures": [],
+      "duplicate_targets": []
+    },
+    "afterimages": [
+      {
+        "path": "data/professional/lexemes/retail-pilot.json",
+        "artifact": "retail-pilot.json.after",
+        "raw_sha256": "e5029b78d5093acc9d35440df78a5e34e0fdd29d08a2617104a8f7c57efa0df2"
+      },
+      {
+        "path": "tests/professional-content.test.cjs",
+        "artifact": "professional-content.test.cjs.after",
+        "raw_sha256": "0519ea34d948fa75bddc1e29cbfc70f97e7667a4495a947719fbd9ac36cabe28"
+      },
+      {
+        "path": "tests/professional-retail-morphology.test.cjs",
+        "artifact": "professional-retail-morphology.test.cjs.after",
+        "raw_sha256": "8280c7159fc3852cc9c5c80c6a17f0b3963ad8e66f5803adbcabe3d798702a29"
+      },
+      {
+        "path": "tests/professional-retail-media.test.cjs",
+        "artifact": "professional-retail-media.test.cjs.after",
+        "raw_sha256": "6a278d2dd88941a51e2b4b401af8e21893156c72fcb40a8e05ea7dd63e6e8ef7"
+      }
+    ],
+    "provenance_prepared_sha256": "a11d6cfa4fca3b3d5a782ae0e30fedbd982e9b19d71996c9f69f9d6bf4e00640",
+    "document_prepared_sha256": "5550617be9d2479f85be87647313d7a3536b0aa634a34d0a2c39111c7ebbdfe2"
+  },
+  "verification": {
+    "expected_inputs_rehashed": 5097,
+    "expected_input_hash_failures": [],
+    "expected_input_map_equals_5085_binding_plus_12_unique_supplements": true,
+    "evidence_files_rehashed": 76,
+    "evidence_hash_failures": [],
+    "duplicate_evidence_paths": [],
+    "prepared_artifact_name_duplicates": [],
+    "changed_lexeme_ids": [
+      "shopping-bag.goods-carrier.n"
+    ],
+    "before_entry_json_sha256": "ba96e5d4ba9911b68ddb630d3413cac52d155a3d27c7452aaee97ba5284f7e07",
+    "after_entry_json_sha256": "25300b5f9d78a6327c16c27143f1aeddd9dba1c41bdd4e42c20f30d36148cc85",
+    "protected_entry_json_sha256": "091cb33bb94c158215dc8db8c4198482b0c2f991ce4b964786321d5114c51d69",
+    "before_registry_json_sha256": "9a9b3c8665ce920fcddd584456e4ca47b8c365d8d2c43daacb9ea908c540ee1c",
+    "after_registry_json_sha256": "dcfe28d7c7c6048206b740459a65ce9b482ba2768d388b0b29d7ab31174ed1a0",
+    "registry_reconstruction": "Independent built-in JSON reads only; no project loader imported.",
+    "three_note_replacements_exact": true,
+    "twenty_protected_media_descriptors_and_files_exact": true,
+    "all_other_registry_section_hashes_exact": true,
+    "test_afterimages_equal_exact_ledger_changes_and_reviewed_literal_appendix": true,
+    "aggregate_history_anchors": 14,
+    "focused_media_cases": 5,
+    "complete_fourth10_donor_row_assertions_preserved": true,
+    "accepted_proposal_paths_resolve_to_exact_prepared_durable_copies": true,
+    "png": {
+      "raw_sha256": "f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+      "bytes": 135843,
+      "width": 414,
+      "height": 512
+    },
+    "actual_production_success_fields_remain_false_or_null": true
+  },
+  "runner_review": [
+    "The exact runner was inspected statically and remains byte-identical to the previously reviewed source. It records one new attempt, verifies root source/input and every evidence/expected-input pin, checks all prepared artifacts, and overlays exactly the 34 reviewed target files.",
+    "The actual validator is separately compiled against the same projected filesystem. Synchronous callbacks from all three exact test afterimages are collected and called; no project/test callback was invoked during this review.",
+    "Inspected real callers use string file paths and supported read/existence/size/realpath operations. New PNG and retained copies have consistent virtual bytes, file size and regular-file behavior. Tests write only their newly created temporary fixtures.",
+    "The full validator helper closure and copied schemas are explicitly included in expected_inputs, covering nativeRequire and cpSync/copyFileSync reads that bypass observedRead. Eleven concrete historical journal reads are included through the frozen supplement.",
+    "Unpinned or changed project reads fail; real observed reads and all expected inputs are rechecked after callbacks. Any failed candidate attempt must be preserved; corrections require a new revision, not replay."
+  ],
+  "remaining_requirements": [
+    "Root must collect the actual candidate receipt and inspect its audit, all callback results, input rechecks and failure state. Approval here is for one attempt, not a prediction of success.",
+    "Keep the prepared provenance/document construction stage truthful. Finalize exact transaction artifacts and durable validation evidence separately after real candidate outcomes.",
+    "Guarded transaction source/input, target allowlist, failure/recovery behavior and actual persisted installation remain a separate review. No production write is approved by this artifact."
+  ]
+}

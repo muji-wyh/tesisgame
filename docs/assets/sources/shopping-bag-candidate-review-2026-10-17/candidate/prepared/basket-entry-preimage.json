@@ -1,0 +1,167 @@
+{
+  "id": "shopping-basket.store-container.n",
+  "text": "shopping basket",
+  "display_text": "shopping basket",
+  "pos": "noun",
+  "definition": "A small container with handles used to carry items while shopping.",
+  "example": "There are empty shopping baskets by the door.",
+  "difficulty": "B1",
+  "accepted_forms": [
+    "shopping basket"
+  ],
+  "regions": [
+    "general"
+  ],
+  "practice_modes": [
+    "match",
+    "memory",
+    "pop",
+    "jelly",
+    "word_jelly",
+    "phrase"
+  ],
+  "media": {
+    "image": {
+      "status": "integrated",
+      "path": "res://professional-media/fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3.png",
+      "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+      "source": "https://kenney.nl/assets/mini-market",
+      "creator": "Kenney; Fleur Keijsers; Guus Vermeulen",
+      "license": "CC0 1.0",
+      "acquisition_status": "integrated",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex source inspection and independent root physical-sense picture review at actual minimum Match and Memory card sizes, including cart/basket comparison",
+        "reviewed_at": "2026-10-16"
+      },
+      "brief": "Show an empty compact rigid retail shopping basket in a three-quarter view, with its raised hand-carry handle and open basket clearly visible at the actual minimum card size. Keep the handheld basket distinct from a wheeled shopping cart. Exclude wheels, fabric sides, a lid, and groceries that obscure the handle or opening. Use the inspected original Mini Market shopping-basket mesh without geometry or material changes.",
+      "picture_suitable": true,
+      "available_animations": [],
+      "adaptations": [
+        "Rendered the acquired Mini Market shopping-basket mesh with its original geometry, materials and external colormap; no model parts, textures or groceries were invented.",
+        "Three-quarter view shades the raised hand-carry handle for contrast against the actual light card surface. The empty basket preserves the handle and opening; the original groceries-in-basket brief and its accepted revision are retained in provenance.",
+        "768 by 768 transparent source render, alpha-bounds crop with a 16-pixel margin, and Lanczos reduction to 512 by 454. The exact accepted PNG is retained without further conversion.",
+        "Independently inspected in actual native WordCard at Match 126 by 72 and Memory 144 by 74, unmatched and matched with the real badge and alpha tint, including side-by-side comparison with the accepted cart. This is agent picture review, not a participant recognition test; see docs/assets/professional-retail-shopping-basket.md for source history and separate delivery verification."
+      ]
+    },
+    "audio": {
+      "status": "integrated",
+      "path": "res://professional-media/aac69f3394f2acd4486e68e32213e328849c204f0ddced680f56011c65ce4e12.wav",
+      "sha256": "aac69f3394f2acd4486e68e32213e328849c204f0ddced680f56011c65ce4e12",
+      "source": "res://docs/assets/sources/professional-retail-ava/cart-basket/listening-approval-2026-10-16.json",
+      "creator": "Microsoft Ava Neural; original project term text",
+      "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+      "acquisition_status": "integrated",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "User (exact shopping cart and shopping basket samples approved in the continuation chat; see cart-basket listening-approval-2026-10-16.json)",
+        "reviewed_at": "2026-10-16"
+      },
+      "voice": "ava-sweet",
+      "voice_settings": {
+        "voice": "en-US-AvaNeural",
+        "rate": "-15%",
+        "pitch": "+8Hz",
+        "volume": "+0%",
+        "postprocessing": false
+      }
+    }
+  },
+  "morphology": {
+    "schema": 1,
+    "id": "professional.shopping-basket.store-container.n.morphology.retail03.next10.proposal.v1",
+    "lexeme_id": "shopping-basket.store-container.n",
+    "text": "shopping basket",
+    "kind": "phrase",
+    "parts": [
+      {
+        "id": "p1",
+        "canonical_id": "morph.shop",
+        "canonical": "shop",
+        "type": "stem",
+        "surface": "shop",
+        "break_offsets": []
+      },
+      {
+        "id": "p2",
+        "canonical_id": "english.affix.ing.activity",
+        "canonical": "-ing",
+        "type": "suffix",
+        "surface": "ing",
+        "break_offsets": []
+      },
+      {
+        "id": "p3",
+        "canonical_id": "morph.basket",
+        "canonical": "basket",
+        "type": "word",
+        "surface": "basket",
+        "break_offsets": []
+      }
+    ],
+    "nodes": [
+      {
+        "id": "shopping",
+        "left": "p1",
+        "right": "p2",
+        "surface": "shopping",
+        "rule": "authored-shop-plus-ing-double-p",
+        "break_offsets": []
+      },
+      {
+        "id": "whole",
+        "left": "shopping",
+        "right": "p3",
+        "surface": "shopping basket",
+        "rule": "preserve-word-boundary",
+        "break_offsets": [
+          9
+        ]
+      }
+    ],
+    "roots": [
+      "whole"
+    ],
+    "review": {
+      "status": "reviewed",
+      "draft_author": "Codex retail_content (AI source consultation; not human or specialist approval)",
+      "notes": "Modern shop plus activity -ing, then the physical basket component. The node explicitly spells shopping with doubled p; no extra-letter tile or generative runtime rule is introduced. Shop and basket remain whole current bases after the source history review. The integrated image is preserved exactly and receives no new visual judgment. The selected noun is the handheld store container, not an online basket or basketball target.",
+      "references": [
+        "https://www.dictionary.com/browse/shopping",
+        "https://www.dictionary.com/browse/shop",
+        "https://www.dictionary.com/browse/basket",
+        "https://www.dictionary.com/browse/ing"
+      ],
+      "source_record_ids": [
+        "retail03-morph-next10-dcom-shopping",
+        "retail03-morph-next10-dcom-shop",
+        "retail03-morph-next10-dcom-basket",
+        "retail03-morph-next10-dcom-ing"
+      ],
+      "independent_review": "completed_exact_next10_graph_and_current_stem_depth",
+      "reviewer": "Codex (independent AI morphology review; not human or subject-matter approval)",
+      "reviewed_at": "2026-10-16",
+      "acceptance_record": "data/professional/provenance/retail-module03-morphology-next10-2026-10-16.json"
+    }
+  },
+  "review": {
+    "status": "reviewed",
+    "language": "reviewed",
+    "domain": "not_required",
+    "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+    "reviewed_at": "2026-10-16"
+  },
+  "references": [
+    {
+      "source_id": "bls-cashiers",
+      "status": "pending_term_check",
+      "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+    },
+    {
+      "source_id": "retail03-ox-basket",
+      "status": "verified",
+      "scope": "Selected passage consulted: Noun sense 1, shopping-basket collocation. A basket holds or carries things, with shopping basket explicitly given as a compound. Selected lexical sense and explicitly stated alternatives only. Unrelated word-of-the-day level labels do not rate this term. No media acquired. This editorial proposal does not approve language, morphology, domain practice, or media."
+    }
+  ],
+  "editorial_notes": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the small handheld shopping container noun. Keep the physical basket distinct from the online shopping sense. Retain shopping basket; basket alone is broader, and a bag is a different container. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Domain review is not required for the current memberships. Independent AI morphology review was completed on 2026-10-16 for this exact graph at the documented modern-stem depth; this is not human or subject-matter approval. The shopping-basket image has completed scoped physical-sense picture review and integration; the exact Ava word recording has user listening approval and is integrated. The empty-basket composition keeps the raised carrying handle and opening readable. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready."
+}

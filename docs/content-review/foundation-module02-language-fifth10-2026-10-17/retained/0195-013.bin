@@ -1,0 +1,120 @@
+{
+  "schema": 1,
+  "status": "immutable_accepted_candidate_evidence_pinned_for_proposal",
+  "hash_kind": "sha256_exact_file_bytes",
+  "files": [
+    {
+      "path": "docs/assets/sources/shopping-bag-additional-leads-2026-10-17/README.md",
+      "bytes": 7506,
+      "sha256": "c9cfe94e88e6c4648f07e182f00ea1814c8e12b9cc9ef7ce11acbffdabe2579c"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-additional-leads-2026-10-17/source-record.json",
+      "bytes": 4055,
+      "sha256": "208f160c8b25f1c27f3d458be20db7f11d23680b6f7dc6f14df7c565e060d62e"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-additional-leads-2026-10-17/source-evidence/icon-page.html",
+      "bytes": 73501,
+      "sha256": "4e3fa8944f1c528f496f165cf189d719614d8377684ec699af6135751d389aac"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-additional-leads-2026-10-17/source-evidence/library-v1-license-page.html",
+      "bytes": 71695,
+      "sha256": "096190ee4db963fbe0373a6cb37ca7411835bdfa38d3e4150b5bf0d349be3cdc"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-additional-leads-2026-10-17/source-evidence/CC0-1.0-legalcode.txt",
+      "bytes": 7048,
+      "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-additional-leads-2026-10-17/source-evidence/retrievals.json",
+      "bytes": 1323,
+      "sha256": "2b0dced40546248ef9b899e9ae0b7991ca8e12e48edcd3a2e7e6878977d6645a"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-additional-leads-2026-10-17/acquired/3dicons-bag-dynamic-color.png",
+      "bytes": 2963534,
+      "sha256": "93065262e9028397705eb2ddcaf985942eb3ae81abf21dc5187e331ea5e004da"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-additional-leads-2026-10-17/size-study/bag-crop-512-study.png",
+      "bytes": 135843,
+      "sha256": "f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-candidate-review-2026-10-17/README.md",
+      "bytes": 2498,
+      "sha256": "cbb3f8b08ee7ef7a08ba5b71b5e1f37659e56640d7e97c046aeb37c480ad73ed"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-candidate-review-2026-10-17/visual-review.json",
+      "bytes": 11625,
+      "sha256": "fa9e40fa7475be0bdd5831ba1907577707fb3557f9f177e7b3f0453df569a97b"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-candidate-review-2026-10-17/source-review.json",
+      "bytes": 2529,
+      "sha256": "daaf46b70634aed91d0f4d99b4b871f7e6191d2231c080f4ccd7a27d1fccf96b"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-candidate-review-2026-10-17/prepared-inspection.json",
+      "bytes": 2268,
+      "sha256": "7e4e506405efa7d857a8b7630606fba00fa70849388a7d7c2410f0855f082281"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-candidate-review-2026-10-17/copy-receipt.json",
+      "bytes": 19846,
+      "sha256": "6811e85aa4d9b39f44bc09bcba292f3eafed905abf223f3ff41b211763ecca83"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-candidate-review-2026-10-17/candidate/brief-revision-proposal.json",
+      "bytes": 2527,
+      "sha256": "c8997bfa4b132d6f356d515aaa81f3f4cfb697f28723eee6be693e8c41644739"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-candidate-review-2026-10-17/candidate/candidate-receipt.json",
+      "bytes": 10147,
+      "sha256": "48b8553e2b9e4f5eed52340d833608baf10fb1c4140b1d380db1a75d4aa0d62d"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-candidate-review-2026-10-17/candidate/output/report.json",
+      "bytes": 87826,
+      "sha256": "b66061388d92cca865e2e49207a24b01d92001465e4d33b0768b893b65cf852e"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-candidate-review-2026-10-17/candidate/output/actual-wordcard-comparison.png",
+      "bytes": 184430,
+      "sha256": "4bace55f87ae52a5f241d4bba383a00b242dac03d3acd06e89cbcfe3a07c9902"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-candidate-review-2026-10-17/candidate/prepared/bag-entry-preimage.json",
+      "bytes": 6908,
+      "sha256": "cec2b375554a5a6ac2e834aa24074fb8b3924f83b1c992e8c6a69804e0e73760"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-candidate-review-2026-10-17/candidate/prepared/basket-entry-preimage.json",
+      "bytes": 8626,
+      "sha256": "4d1aeb1e2be6e5e29af1110e63c58df6f8d794daf86d75cf99d0f8aeedb03aa5"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-candidate-review-2026-10-17/candidate/prepared/manifest.json",
+      "bytes": 1046,
+      "sha256": "64c3789aafac42d981c691c439eab21fdef29372e834867a107de1c1a07333ed"
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-candidate-review-2026-10-17/candidate/prepared/fixture/professional-media/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png",
+      "bytes": 135843,
+      "sha256": "f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb"
+    }
+  ],
+  "historical_state_rule": "Source/acquisition and preparation false or pending gates stay unchanged. Later visual-review.json records scoped image/brief acceptance; neither this proposal nor those historical records establish production integration.",
+  "shared_baseline_deferred": [
+    "loaded registry",
+    "sources.json",
+    "shared test files",
+    "fourth10 actual committed receipt",
+    "fourth10 successful persisted-validation receipt"
+  ]
+}

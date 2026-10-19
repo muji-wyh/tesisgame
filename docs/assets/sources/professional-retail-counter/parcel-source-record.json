@@ -1,0 +1,164 @@
+{
+  "date": "2026-10-16",
+  "source": "https://kenney.nl/assets/car-kit",
+  "creator": "Kenney",
+  "license": "CC0 1.0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "local_version": "Car Kit 3.1; license creation 2026-04-02 14:03; acquired All-in-1 3.7.0 library",
+  "status": "Acquired original source retained for scratch inspection; not integrated",
+  "files": [
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Car Kit/Models/GLB format/box.glb",
+      "retained_path": "source/parcel/original/box.glb",
+      "bytes": 14108,
+      "sha256": "b773815c791d2708a2a70f1a9bb6d197d7211269ad96e273f9e364ea536c1b18"
+    },
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Car Kit/Models/GLB format/Textures/colormap.png",
+      "retained_path": "source/parcel/original/Textures/colormap.png",
+      "bytes": 12371,
+      "sha256": "f3622a03a20c6696065cae9cbe391351be873508af190c2ebd1d420c055787a5"
+    },
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Car Kit/Previews/box.png",
+      "retained_path": "source/parcel/previews/box.png",
+      "bytes": 2167,
+      "sha256": "09f15ddc812880968ec354f09c8cdd03adc95c407471ba5d3cf32734562c1d73"
+    },
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Car Kit/License.txt",
+      "retained_path": "source/parcel/License.txt",
+      "bytes": 696,
+      "sha256": "c33b7f6453d134deae7b1b8493717d9ccfa754c25ab97f6de89b88f8fda19b00"
+    }
+  ],
+  "model": {
+    "asset": {
+      "generator": "UnityGLTF",
+      "version": "2.0"
+    },
+    "nodes": [
+      {
+        "mesh": 0,
+        "name": "box"
+      }
+    ],
+    "meshes": [
+      {
+        "primitives": [
+          {
+            "attributes": {
+              "POSITION": 0,
+              "NORMAL": 1,
+              "TANGENT": 2,
+              "TEXCOORD_0": 3
+            },
+            "indices": 4,
+            "material": 0
+          }
+        ],
+        "name": "box"
+      }
+    ],
+    "materials": [
+      {
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 0,
+            "extensions": {
+              "KHR_texture_transform": {
+                "texCoord": 0
+              }
+            }
+          },
+          "metallicFactor": 0
+        },
+        "doubleSided": true,
+        "name": "colormap"
+      }
+    ],
+    "images": [
+      {
+        "uri": "Textures/colormap.png",
+        "name": "colormap"
+      }
+    ],
+    "animations": [],
+    "skins": [],
+    "accessor_bounds": [
+      {
+        "index": 0,
+        "count": 248,
+        "type": "VEC3",
+        "min": [
+          -0.35749998688697815,
+          0,
+          -0.35749998688697815
+        ],
+        "max": [
+          0.35749998688697815,
+          0.7149999737739563,
+          0.35749998688697815
+        ]
+      },
+      {
+        "index": 1,
+        "count": 248,
+        "type": "VEC3",
+        "min": [
+          -0.9914832711219788,
+          -1,
+          -0.9991419315338135
+        ],
+        "max": [
+          0.9914832711219788,
+          1,
+          0.9991419315338135
+        ]
+      },
+      {
+        "index": 2,
+        "count": 248,
+        "type": "VEC4",
+        "min": [
+          -1,
+          -0.39371371269226074,
+          -0.9957506656646729,
+          1
+        ],
+        "max": [
+          1,
+          0.39371371269226074,
+          0.9957506656646729,
+          1
+        ]
+      },
+      {
+        "index": 3,
+        "count": 248,
+        "type": "VEC2",
+        "min": [
+          0.21875,
+          0.2749999761581421
+        ],
+        "max": [
+          0.96875,
+          0.7250000238418579
+        ]
+      },
+      {
+        "index": 4,
+        "count": 372,
+        "type": "SCALAR",
+        "min": [
+          0
+        ],
+        "max": [
+          247
+        ]
+      }
+    ]
+  },
+  "selection_reason": "Original supplied preview has a closed top with a pale packing-tape cross, unlike the lifted flaps of Furniture Kit cardboardBoxClosed. Actual native source view still required before composition.",
+  "planned_adaptation": "Uniform root scale and root placement only. Keep original tape texture, geometry, materials and source child transforms."
+}

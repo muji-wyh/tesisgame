@@ -1,0 +1,219 @@
+{
+  "schema": 1,
+  "author": "/root/recover_delivery",
+  "reviewed_at": "2026-10-17T00:49:49.863Z",
+  "status": "bounded_source_search_completed_no_suitable_complete_image",
+  "sense_id": "gift-wrap.wrapping-paper.n",
+  "brief": "Show a large loose sheet and partly unrolled roll of decorative paper beside one partly wrapped present, with the paper as the main subject. Use a cheerful repeating motif without text. Reject a completed gift box alone, a wrapping action close-up, a ribbon-only picture, or patterned cloth.",
+  "records": [
+    {
+      "id": "commons-coloured-gift-paper",
+      "title": "Coloured gift paper",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Coloured_gift_paper.jpg",
+      "original_source_url": "https://www.flickr.com/photos/96881678@N00/252767689/",
+      "creator": "Asta (Flickr display name written as Åsta on the source page)",
+      "license": "CC BY 2.0 Generic",
+      "license_url": "https://creativecommons.org/licenses/by/2.0/",
+      "license_evidence": "Commons identifies the original Flickr creator and CC BY 2.0. A named reviewer confirmed that grant on 2006-11-13; the page records that a later Flickr licensing change does not revoke it.",
+      "attribution": "Coloured gift paper by Åsta, via Wikimedia Commons, CC BY 2.0. Source inspection thumbnails resized only; original JPEG unchanged.",
+      "local_original": {
+        "path": "docs/assets/sources/gift-wrap-source-recovery-r03/originals/coloured-gift-paper.jpg",
+        "bytes": 2029035,
+        "sha256": "920dd49078200158417f4e8b59ac83c869dde725fe4a915db1104665b1246312"
+      },
+      "dimensions": [
+        2272,
+        1704
+      ],
+      "acquisition_status": "original_format_jpeg_acquired_not_integrated",
+      "available_animations": [],
+      "frames": 1,
+      "visual_inspection": "A fan of overlapping patterned sheets fills the frame. The patterns and lower sheet edges are clear at source size; there is no roll or present. At source-derived 72px and 44px card sizes it becomes a small pattern fan rather than the approved paper/roll/present composition.",
+      "decision": "Rejected as a complete word image. Retain only as a licensed reference for real paper sheets; no crop or added placeholder geometry is proposed."
+    },
+    {
+      "id": "commons-jewellery-shop-5",
+      "title": "Gift wrapping in a jewellery shop 5",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Gift_wrapping_in_a_jewellery_shop_5.jpg",
+      "creator": "W.carter / Ann-Sophie Qvarnström",
+      "license": "CC BY-SA 4.0 International",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "license_evidence": "The author publishes own work under CC BY-SA 4.0 on the Commons source page. Attribution and same-license or compatible-license terms apply to adaptations; the source and license must remain linked.",
+      "attribution": "Gift wrapping in a jewellery shop 5 by W.carter (Ann-Sophie Qvarnström), Wikimedia Commons, CC BY-SA 4.0. Source inspection thumbnails resized only; original JPEG unchanged.",
+      "local_original": {
+        "path": "docs/assets/sources/gift-wrap-source-recovery-r03/originals/jewellery-shop-5.jpg",
+        "bytes": 2338137,
+        "sha256": "fee9901199bfb0aeaafe4b6591b553b0daccc78e8fa1d275119e2f2d23101bb8"
+      },
+      "dimensions": [
+        2537,
+        1691
+      ],
+      "acquisition_status": "original_format_jpeg_acquired_not_integrated",
+      "available_animations": [],
+      "frames": 1,
+      "visual_inspection": "Two completely wrapped silver packages with large dark-pink ribbon bows dominate a white background. No decorative loose sheet, roll or incomplete wrapping appears. The bows dominate at both small card sizes.",
+      "decision": "Rejected as a complete word image because it depicts finished gifts and ribbon."
+    },
+    {
+      "id": "pexels-iris-35169413",
+      "title": "Elegant Christmas Gift Wrapping Scene",
+      "source_url": "https://www.pexels.com/photo/elegant-christmas-gift-wrapping-scene-35169413/",
+      "creator": "Lydia Griva (Pexels handle iris)",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "license_evidence": "The exact primary listing marks the photograph free. The official license allows free use in an app and modification; attribution is optional. It excludes unaltered-copy sales, stock/wallpaper redistribution, implied endorsement and trademark use.",
+      "attribution": "Photograph by Lydia Griva on Pexels. Source inspection thumbnails resized only; original-format JPEG unchanged.",
+      "local_original": {
+        "path": "docs/assets/sources/gift-wrap-source-recovery-r03/originals/pexels-iris-35169413.jpg",
+        "bytes": 1556200,
+        "sha256": "31ad7139bdd7870e09832ae826f83e233d650c1d3a230a87f6ee2a944f00f29b"
+      },
+      "dimensions": [
+        2997,
+        4032
+      ],
+      "acquisition_status": "original_format_jpeg_acquired_not_integrated",
+      "available_animations": [],
+      "frames": 1,
+      "visual_inspection": "A large completed striped parcel occupies the foreground beside a smaller completed deer-patterned parcel. Many rolls, cards, an envelope, stickers, string and ribbon compete around them. Several visible items carry text; no large loose sheet and partly wrapped present are established. At 72px and 44px card sizes the narrow scene is cluttered and its paper geometry is indistinct.",
+      "decision": "Rejected as a complete word image. The original is preserved for evidence; missing subject matter is not supplied by a crop."
+    },
+    {
+      "id": "freesvg-187259",
+      "title": "Wraping Paper",
+      "source_url": "https://freesvg.org/index.php/wraping-paper",
+      "creator": "j4p4n; publisher describes a remix of paper-roll-vector-clip-art",
+      "license": "CC0 1.0 Universal, as linked by FreeSVG",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_evidence": "The primary listing identifies Public Domain and its sitewide notice links CC0. The page names j4p4n as publisher and identifies the parent roll illustration. No exact original SVG was acquired.",
+      "attribution": "Wraping Paper by j4p4n, FreeSVG, CC0. Acquired source-preview PNG only; full-fit review thumbnails resized from that preview.",
+      "source_preview": {
+        "path": "build/professional-english/retail-term-art-review/gift-wrap-source-recovery-r03/freesvg-187259-source-preview.png",
+        "bytes": 1442999,
+        "sha256": "da47681a1d8721d1c177772be79bec683a09315a025aa4375379889f2ec27b7a"
+      },
+      "acquisition_status": "source_preview_only_original_svg_not_acquired",
+      "available_animations": [],
+      "animation_evidence": "Inspected static PNG preview only; original SVG not acquired, so original animation/layer content is unverified.",
+      "visual_inspection": "The visible illustration is a pink roll with green dots and a short unrolled tail, with simple shaded curvature and no text. It has no separate large loose sheet and no present. At small source-derived card sizes the horizontal roll is tiny within its square transparent canvas.",
+      "decision": "Possible roll illustration reference only, rejected as a complete image. Public original SVG link returned HTTP 200 with an empty text/html body; response retained, not counted as an acquired SVG and not retried. The large PNG link redirected to the site homepage. No synthetic completion or integration is proposed."
+    }
+  ],
+  "prior_packets_preserved": [
+    {
+      "path": "build/professional-english/retail-term-art-review/gift-wrap-source-recovery-r02/source-review.json",
+      "bytes": 12665,
+      "sha256": "7aef64f57f485c51107d6eb65579d80e7e9935badff4b06645e7118a233b0e07"
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/gift-wrap-and-bag-source-review-r01/source-review.json",
+      "bytes": 4592,
+      "sha256": "3354fd40d65b6502f329684ac799b036b139370fdf3a488f95137d7bac84e886"
+    }
+  ],
+  "prior_rejections_and_failed_routes_not_retried": [
+    "Pexels 29341293",
+    "Pexels 35395084",
+    "MB53Studio finished-box model preview",
+    "fahad121 plain-roll model lead",
+    "PublicDomainPictures 316708 HTTP 403 download",
+    "Unsplash cbEf1Xmlkc8 HTTP 401 download",
+    "3dassets Griffin page HTTP 503",
+    "Rawpixel premium AI roll 12226380"
+  ],
+  "other_current_leads": [
+    {
+      "url": "https://commons.wikimedia.org/wiki/File:Holiday_Paper_Gift_Wrapping_(Unsplash).jpg",
+      "creator": "Nathan Lemon",
+      "status": "primary_metadata_only_not_acquired_or_pixel_inspected",
+      "reason": "Primary description identifies completed brown parcels with twine and pine; no evidence of the required three-part composition. Its Commons historical CC0 statement is also marked review needed."
+    },
+    {
+      "url": "https://commons.wikimedia.org/wiki/File:Christmas_wrap.jpg",
+      "creator": "Iwona Erskine-Kellie",
+      "status": "primary_metadata_only_not_acquired_or_pixel_inspected",
+      "reason": "Primary description is a completed present with a gold bow and card; no complete-brief evidence."
+    },
+    {
+      "url": "https://commons.wikimedia.org/wiki/File:Holiday_Paper.jpg",
+      "creator": "ScOtT",
+      "status": "primary_metadata_only_not_acquired_or_pixel_inspected",
+      "reason": "The page supplies CC BY-SA 4.0 but the generic description establishes no approved composition. Not treated as an inspected candidate."
+    },
+    {
+      "url": "https://www.pexels.com/photo/festive-gift-wrapping-papers-and-envelopes-35488301/",
+      "creator": "Lydia Griva",
+      "status": "primary_metadata_only_not_acquired_or_pixel_inspected",
+      "reason": "Primary description identifies rolls and envelopes rather than the required partly wrapped present."
+    },
+    {
+      "url": "https://freesvg.org/index.php/vector-clip-art-of-gift-wrapping-paper",
+      "creator": "FreeSVG lists OpenClipart; original artist not established",
+      "status": "primary_metadata_only_not_acquired_or_pixel_inspected",
+      "reason": "The page describes a grayscale decorative pattern template, not a sheet/roll/present composition."
+    },
+    {
+      "url": "https://openclipart.org/tag/wrapping%2Bpaper",
+      "status": "category_retrieval_timed_out_no_followup_request",
+      "reason": "A detailed retrieval timed out. No source original or license was acquired from that category."
+    }
+  ],
+  "search_scope": "Fresh public web searches across Pexels, Commons, public-domain/vector sources and general licensed-image leads. Returned repeats were not reacquired. This is a bounded search result, not proof that no suitable image exists anywhere.",
+  "visual_qa": {
+    "artifact": {
+      "path": "build/professional-english/retail-term-art-review/gift-wrap-source-recovery-r03/source-game-size-inspection.png",
+      "bytes": 346654,
+      "sha256": "1aea3147b62f7230fd5384aa44c82f9a6dc9e951a89fa388a6b45b1b211d9bba"
+    },
+    "source_originals_viewed": true,
+    "original_source_pixel_dimensions_verified": true,
+    "sizes": [
+      {
+        "card": [
+          72,
+          72
+        ],
+        "image_box": [
+          48,
+          52
+        ]
+      },
+      {
+        "card": [
+          44,
+          44
+        ],
+        "image_box": [
+          20,
+          24
+        ]
+      }
+    ],
+    "basis": "Raw word_card.gd setup uses 72x72, picture offsets 12/10/-12/-10 and aspect-centered fitting. memory_garden.gd overrides a card minimum to 44x44 and uses adaptive layout. The sheet reproduces those nominal boxes only; actual rendered card dimensions remain device/layout dependent.",
+    "adaptation": "Whole images fitted without cropping, sharpening, recoloring, added content or placeholder artwork; simple labeled inspection panels are review UI only.",
+    "actual_game_run": false,
+    "device_runtime_visual_acceptance": false,
+    "conclusion": "Every inspected asset fails the complete composition at source size, and the nominal game-size inspection does not repair it."
+  },
+  "acquisition_summary": {
+    "original_format_jpegs": 3,
+    "source_preview_pngs": 1,
+    "original_svgs": 0,
+    "models": 0,
+    "suitable_complete_images": 0,
+    "integrated_assets": 0,
+    "empty_download_responses_preserved": 1
+  },
+  "remaining_dependency": "Acquire a complete licensed image that visibly makes the decorative paper dominant while showing a large loose sheet, a partly unrolled roll and one partly wrapped present, with a cheerful repeating motif and no text. Existing textures and the new roll preview are components/references only. No source geometry assembly, model rendering, generated replacement, shared media edit or runtime acceptance is authorized by this record.",
+  "scope": {
+    "shared_content_edits": false,
+    "production_integration": false,
+    "project_or_proposal_code_execution": false,
+    "game_native_browser_test_or_build_execution": false,
+    "credentials_login_purchase": false,
+    "generated_artwork_or_placeholders": false,
+    "other_chats_messaged": false,
+    "source_only_network_and_image_inspection": true
+  }
+}

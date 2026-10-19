@@ -302,6 +302,41 @@ test('sources changed during export cannot receive a successful receipt', t => {
   assert.equal(fs.existsSync(receipt), false);
 });
 
+test('inputs edited while output verification runs cannot receive a successful receipt', t => {
+  const { root, write, config, receipt } = fixture(t);
+  const read = fs.readFileSync;
+  let changed = false;
+  const packed = path.join(root, 'build/web', config.mainPack);
+  t.mock.method(fs, 'readFileSync', function (filename, ...args) {
+    const result = read.call(fs, filename, ...args);
+    if (filename === packed && !changed) {
+      changed = true;
+      write('scripts/game.gd', 'extends Node # edited during output verification');
+    }
+    return result;
+  });
+  assert.throws(() => writeBuildReceipt(root, snapshotInputs(root)), /inputs changed during output audit.*game\.gd/);
+  assert.equal(changed, true);
+  assert.equal(fs.existsSync(receipt), false);
+});
+
+test('receipt verification rejects source edits during its output audit', t => {
+  const { root, write, config, record } = fixture(t);
+  record();
+  const read = fs.readFileSync;
+  let changed = false;
+  t.mock.method(fs, 'readFileSync', function (filename, ...args) {
+    const result = read.call(fs, filename, ...args);
+    if (filename === path.join(root, 'build/web', config.mainPack) && !changed) {
+      changed = true;
+      write('scripts/game.gd', 'extends Node # edited while verifying receipt');
+    }
+    return result;
+  });
+  assert.throws(() => verifyBuildReceipt(root), /Stale Web build.*during output audit.*game\.gd/);
+  assert.equal(changed, true);
+});
+
 test('unpackaged exports and malformed receipts fail closed', t => {
   const { root, write, receipt } = fixture(t);
   write('build/web/index.html', '<script>const config = {"executable":"index"};</script>');

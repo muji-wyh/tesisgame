@@ -1,0 +1,71 @@
+{
+  "schema": 1,
+  "status": "frozen_independent_bounded_language_and_static_architecture_review_not_delivery_binding",
+  "frozen_at": "2026-10-16T21:58:03.9081194Z",
+  "files": [
+    {
+      "path": "accepted-expression-language-projection.json",
+      "bytes": 2085,
+      "sha256": "08323c46bd1ead445935972c32688a25431b71244f92305454392ccac6b89b47"
+    },
+    {
+      "path": "accepted-lexical-fields.json",
+      "bytes": 347,
+      "sha256": "01e4492eadff7ea4b1739efe4f44d1f24bbd2cbe4f84502e7a6fd88e0227a2c6"
+    },
+    {
+      "path": "context-and-identity-audit.json",
+      "bytes": 12701,
+      "sha256": "3f79487a4018977cf5f9435507a355f6cd3068426ef0828b5385e1264f5d978d"
+    },
+    {
+      "path": "immutable-corpus-comparison.json",
+      "bytes": 112458,
+      "sha256": "029557ee2c732cfb6a43f07d8dd88bd01054e9198166aed937304f25b3e7ec74"
+    },
+    {
+      "path": "independent-source-observations.json",
+      "bytes": 6270,
+      "sha256": "9fbd4b767745129789a43a88b7cba450824e13c23c7b6e2616cb03a1c15692d8"
+    },
+    {
+      "path": "input-audit.json",
+      "bytes": 2045,
+      "sha256": "bdb270db2238fc6f9f48f9e01652b9907b77fb70f85d732c5cf6218bd56e01a9"
+    },
+    {
+      "path": "membership-audit.json",
+      "bytes": 8967,
+      "sha256": "6c43f80cf2f2f76f5e1d781304ccf634f639e0516a8095034ce6fa265384f01c"
+    },
+    {
+      "path": "progress-and-revision-review.json",
+      "bytes": 6655,
+      "sha256": "0ad3a5db1ef10bc5c2d5b5109b4e805192b4138f106c04db9f0dd89bffa67c60"
+    },
+    {
+      "path": "README.md",
+      "bytes": 4386,
+      "sha256": "6e174604fc3ddeda7a6e0e120124d01c16dd365d341fe3cae14eb8551b1fef1f"
+    },
+    {
+      "path": "reviewer-decisions.json",
+      "bytes": 6044,
+      "sha256": "bcf5fc537644394bac3a138cc0b6222caebd66a8dd1c251f20e73e25cfccc62f"
+    },
+    {
+      "path": "source-code-pins.json",
+      "bytes": 2054,
+      "sha256": "c91f2c0fd20a2955746bc0a21cb78026e6becde890b750326df7c33a37787b4b"
+    },
+    {
+      "path": "supplemental-identity-contexts.json",
+      "bytes": 15256,
+      "sha256": "772b71b58c13b3e505b828032e1a1745ab08d454b2ef911b0965a3bbd2fd65a3"
+    }
+  ],
+  "inventory_excludes_itself": true,
+  "production_changed": false,
+  "project_execution": false,
+  "final_live_binding": "UNBOUND"
+}

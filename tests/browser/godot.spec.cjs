@@ -4,8 +4,19 @@ const { test, expect } = require('@playwright/test');
 const { installGamepad, pressGamepad } = require('./gamepad.cjs');
 const { watchAudioRequests, observeOutputAudio, expectOutputEnergy, expectRecording, recordingTiming } = require('./bundled-audio.cjs');
 const catalog = require('../../words.json');
-const { THEME_COLORS, metrics: logicalMetrics, tap, chooseTheme, chooseMode, openRewards, enterGame,
+const { metrics: logicalMetrics, tap, chooseMode, openRewards, enterGame, openModeMenu, activateLibraryControl,
   contentBounds, headerPoint, rendered, observeAudio, boardPoint, resultPoint, growthView, activateGrowthControl, rewardState, acceptCelebration } = require('./game-ui.cjs');
+const learningThemes = require('../../data/professional/themes.json').profiles;
+const growthTheme = learningThemes.find(profile => profile.id === 'growth_garden');
+
+test.beforeEach(async ({ page }) => {
+  // The chest interaction cases start after two saved dry rounds. The runtime
+  // still reserves, earns and claims the guaranteed first chest normally.
+  await page.addInitScript(() => {
+    if (localStorage.getItem('wordBuddies.medalProgress') === null) localStorage.setItem('wordBuddies.medalProgress',
+      '[medals]\nversion=1\ncounts={}\n[pair_chests]\nversion=1\nstate={"match":{"dry_rounds":2,"round":{}},"memory":{"dry_rounds":0,"round":{}}}\n');
+  });
+});
 
 test.beforeAll(() => {
   const directory = path.join(__dirname, '..', '..', 'build', 'web');
@@ -198,7 +209,7 @@ test('real touch input selects and cancels a native Godot card', async ({ page }
   expect(errors).toEqual([]);
 });
 
-test('Xbox navigation, seasons and collection controls preserve the current round', async ({ page }) => {
+test('Xbox navigation and collection controls preserve the current round and automatic palette', async ({ page }) => {
   const errors = watchErrors(page);
   await installGamepad(page);
   await page.goto('/');
@@ -209,7 +220,7 @@ test('Xbox navigation, seasons and collection controls preserve the current roun
   const selected = await page.locator('#selection-status').textContent();
   const background = await page.locator('meta[name="theme-color"]').getAttribute('content');
   await pressGamepad(page, 4);
-  await expect(page.locator('meta[name="theme-color"]')).not.toHaveAttribute('content', background);
+  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', background);
   await expect(page.locator('#selection-status')).toHaveText(selected);
   await expect(page.locator('#game-status')).toHaveText('Now find its match!');
   await pressGamepad(page, 5);
@@ -274,8 +285,23 @@ test('orientation changes preserve selection and fit the resized canvas', async 
   expect(errors).toEqual([]);
 });
 
-async function chooseSeason(page, index) {
-  await chooseTheme(page, index);
+async function previewCareer(page, career) {
+  await openModeMenu(page);
+  await activateLibraryControl(page, 'ChangeLearningPath');
+  await activateLibraryControl(page, 'ProfessionalPath');
+  await activateLibraryControl(page, `Career_${career}`);
+  await expect.poll(async () => (await logicalMetrics(page)).library.learning.course_id).toBe(career);
+  const theme = learningThemes.find(profile => profile.course_id === career);
+  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', theme.palette.background.toLowerCase());
+  await expect.poll(() => page.locator('#game').evaluate(element => element.style.getPropertyValue('--voice-accent').toLowerCase()))
+    .toBe(theme.palette.accent.toLowerCase());
+}
+
+async function continueGrowthRound(page) {
+  await activateLibraryControl(page, 'ContinueCurrentRound');
+  await expect.poll(async () => (await logicalMetrics(page)).library.visible).toBe(false);
+  expect((await logicalMetrics(page)).library.learning.selection.track).toBe('growth');
+  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', growthTheme.palette.background.toLowerCase());
 }
 
 test('the first card interaction uses real browser audio or reports genuine missing audio support', async ({ page }) => {
@@ -331,11 +357,8 @@ test('bundled words and card input work offline immediately after readiness', as
   }
 });
 
-test('season colors and bundled music preserve selection while offline', async ({ page, context, browserName }) => {
-  // Eight complete room/focus/back traversals can exceed the general 90-second
-  // budget with Chromium's traced software renderer. Each audio assertion
-  // retains its usual timeout while the full UI tour gets time to finish.
-  test.setTimeout(150000);
+test('automatic career colors and bundled music preserve selection while offline', async ({ page, context, browserName }) => {
+  test.setTimeout(240000);
   const errors = watchErrors(page), requests = watchAudioRequests(page);
   await observeOutputAudio(page, { trackSourceLifecycle: true });
   await page.goto('/');
@@ -347,17 +370,18 @@ test('season colors and bundled music preserve selection while offline', async (
     const point = firstCard(await canvasMetrics(page));
     await page.touchscreen.tap(point.x, point.y);
     const selected = await page.locator('#selection-status').textContent();
-    const themes = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'];
-    for (const [index, theme] of themes.entries()) {
-      const before = await page.evaluate(() => window.audioObservation.playbacks.length);
-      await chooseSeason(page, index);
-      await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', THEME_COLORS[index]);
+    for (const career of ['caregiving', 'retail', 'food_service']) {
+      await previewCareer(page, career);
+      if (available) {
+        // A career preview preserves the paused round's existing music source.
+        await expectRecording(page, 0, growthTheme.audio.music.replace('res://', ''), { active: true });
+        await expectOutputEnergy(page);
+      }
+      await continueGrowthRound(page);
       await expect(page.locator('#game-status')).toHaveText('Now find its match!');
       await expect(page.locator('#selection-status')).toHaveText(selected);
       if (available) {
-        // The first choice can already be the current world; inspect the live
-        // source in that case instead of requiring an unnecessary restart.
-        await expectRecording(page, index === 0 ? 0 : before, 'assets/audio/bgm/' + theme + '.wav', { active: true });
+        await expectRecording(page, 0, growthTheme.audio.music.replace('res://', ''), { active: true });
         await expectOutputEnergy(page);
       }
     }
@@ -369,7 +393,7 @@ test('season colors and bundled music preserve selection while offline', async (
   }
 });
 
-test('missing browser audio support leaves card input and world selection usable', async ({ page }) => {
+test('missing browser audio support leaves card input and career browsing usable', async ({ page }) => {
   const errors = watchErrors(page), requests = watchAudioRequests(page);
   await page.addInitScript(() => {
     Object.defineProperty(window, 'AudioContext', { configurable: true, value: undefined });
@@ -382,7 +406,8 @@ test('missing browser audio support leaves card input and world selection usable
   await expect(page.locator('#game-status')).toHaveText('Now find its match!');
   const selected = await page.locator('#selection-status').textContent();
   await expect(page.locator('#audio-status')).toHaveText('Sound is not available in this browser.');
-  await chooseSeason(page, 5);
+  await previewCareer(page, 'retail');
+  await continueGrowthRound(page);
   await expect(page.locator('#selection-status')).toHaveText(selected);
   await page.touchscreen.tap(point.x, point.y);
   await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
@@ -526,6 +551,10 @@ function rewardPieceTotal(saved) {
     .reduce((total, [, , count]) => total + Number(count), 0);
 }
 
+function rewardCounts(saved) {
+  return JSON.parse(saved.match(/^counts=(\{.*\})$/m)?.[1] || '{}');
+}
+
 test('new adventures rotate after the chest is opened and growth navigation preserves its claim', async ({ page }, testInfo) => {
   const errors = watchErrors(page);
   await installGamepad(page);
@@ -577,7 +606,7 @@ test('Pip follows the board and chest while growth preserves rewards without ext
   await greet(boardPip);
   await expect(page.locator('#selection-status')).toBeEmpty();
   await page.screenshot({ path: testInfo.outputPath('pip-board.png'), scale: 'css' });
-  await chooseSeason(page, 0);
+  expect((await logicalMetrics(page)).library.learning.selection.track).toBe('growth');
   await winWithTouch(page);
   const coveredPip = headerPoint(await logicalMetrics(page), 'pip');
   await tap(page, coveredPip.x, coveredPip.y);
@@ -593,7 +622,8 @@ test('Pip follows the board and chest while growth preserves rewards without ext
   expect(errors).toEqual([]);
 });
 
-test('world changes keep bundled music audible offline without Pip welcome narration', async ({ page, context }) => {
+test('career previews keep bundled music audible offline without Pip welcome narration', async ({ page, context }) => {
+  test.setTimeout(240000);
   const errors = watchErrors(page), requests = watchAudioRequests(page);
   await installGamepad(page);
   await observeOutputAudio(page, { trackSourceLifecycle: true, fingerprintBuffers: true });
@@ -604,22 +634,22 @@ test('world changes keep bundled music audible offline without Pip welcome narra
   await context.setOffline(true);
   try {
     await page.evaluate(() => window.gamepadFixture.connect());
-    for (let index = 0; index < 8; index++) {
+    for (const career of ['caregiving', 'retail', 'food_service']) {
       const previousTheme = await page.locator('html').getAttribute('data-pip-theme');
       const before = await page.evaluate(() => window.audioObservation.playbacks.length);
-      await pressGamepad(page, 5);
-      await expect(page.locator('html')).not.toHaveAttribute('data-pip-theme', previousTheme);
-      const theme = await page.locator('html').getAttribute('data-pip-theme');
-      await expectRecording(page, before, 'assets/audio/bgm/' + theme + '.wav', { active: true });
+      await previewCareer(page, career);
+      await continueGrowthRound(page);
+      await expect(page.locator('html')).toHaveAttribute('data-pip-theme', previousTheme);
+      await expectRecording(page, 0, growthTheme.audio.music.replace('res://', ''), { active: true });
       const click = await expectRecording(page, before, 'assets/imported-audio/ui-click/select.wav');
       expect(click.fingerprint).toBeTruthy();
       expect(click.peak, 'Interface feedback contains real audible PCM').toBeGreaterThan(0.01);
       await expectOutputEnergy(page);
-      const allowed = ['assets/audio/bgm/' + theme + '.wav', 'assets/imported-audio/ui-click/select.wav'].map(recordingTiming);
+      const allowed = [growthTheme.audio.music.replace('res://', ''), 'assets/imported-audio/ui-click/select.wav'].map(recordingTiming);
       const played = await page.evaluate(from => window.audioObservation.playbacks.slice(from), before);
       expect(played.every(sound => allowed.some(timing =>
         Math.abs(sound.duration - timing.seconds) <= timing.importAllowance + 1 / sound.sampleRate)),
-      'Each world change plays only its bundled music and interface click, without a Pip welcome or other narration.').toBe(true);
+      'Career browsing plays only bundled music and interface clicks, without a Pip welcome or other narration.').toBe(true);
     }
     expect(requests).toEqual([]);
     expect(errors).toEqual([]);
@@ -629,7 +659,7 @@ test('world changes keep bundled music audible offline without Pip welcome narra
 });
 
 test('paid hints have no round limit across touch and Xbox', async ({ page }, testInfo) => {
-  // Buy a hint for all five pairs, preserve purchases across worlds, then reset the next round's price.
+  // Buy a hint for all five pairs, preserve purchases across career previews, then reset the next round's price.
   test.setTimeout(240000);
   const errors = watchErrors(page);
   await installGamepad(page);
@@ -666,22 +696,21 @@ test('paid hints have no round limit across touch and Xbox', async ({ page }, te
   await expect.poll(async () => (await page.screenshot({
     path: testInfo.outputPath('hint-direct-after.png'), clip: linkClip, scale: 'css'
   })).equals(current), { timeout: 3000, intervals: [200], message: 'The direct electric bolt flickers between the hinted cards.' }).toBe(false);
-  const initialTheme = THEME_COLORS.indexOf(await page.locator('meta[name="theme-color"]').getAttribute('content'));
   const initialSelection = await page.locator('#selection-status').textContent();
   const paidHint = await matchHintState(page);
-  for (const [theme, index, color] of [['autumn', 2, 'warm'], ['ocean', 4, 'cool'], ['space', 5, 'purple'], ['candy', 7, 'pink']]) {
-    await chooseSeason(page, index);
+  for (const career of ['caregiving', 'retail', 'food_service']) {
+    await previewCareer(page, career);
+    await continueGrowthRound(page);
     await expect(page.locator('#game-status')).toHaveText(firstHint);
     await expect(page.locator('#selection-status')).toHaveText(initialSelection);
-    expect(await matchHintState(page), `${theme} preserves the paid hint and its next price.`)
+    expect(await matchHintState(page), `${career} browsing preserves the paid hint and its next price.`)
       .toMatchObject({ uses: paidHint.uses, price: paidHint.price, active: true, round_id: paidHint.round_id });
-    const themed = await page.screenshot({ path: testInfo.outputPath(`hint-theme-${theme}-bolt.png`), clip: linkClip, scale: 'css' });
-    expect((await boltColors(page, themed))[color], `${theme} recolors the active bolt to its ${color} palette.`).toBeGreaterThan(4);
-    await page.screenshot({ path: testInfo.outputPath(`hint-theme-${theme}.png`), scale: 'css' });
+    const resumed = await page.screenshot({ path: testInfo.outputPath(`hint-after-${career}-bolt.png`), clip: linkClip, scale: 'css' });
+    expect((await boltColors(page, resumed)).saturated, 'The resumed hint still visibly connects the same cards.').toBeGreaterThan(4);
+    await page.screenshot({ path: testInfo.outputPath(`hint-after-${career}.png`), scale: 'css' });
   }
-  await chooseSeason(page, initialTheme);
   await expect(page.locator('#game-status')).toHaveText(firstHint);
-  expect(await matchHintWallet(page), 'Changing theme preserves the purchased hint and its receipt').toEqual(firstPurchase);
+  expect(await matchHintWallet(page), 'Browsing careers preserves the purchased hint and its receipt').toEqual(firstPurchase);
   for (const index of [firstPair.Word, firstPair.Picture]) {
     const point = cardPoint(metrics, index);
     await page.touchscreen.tap(point.x, point.y);
@@ -705,7 +734,8 @@ test('paid hints have no round limit across touch and Xbox', async ({ page }, te
     await page.touchscreen.tap(point.x, point.y);
   }
   await continueMatch(page);
-  await chooseSeason(page, 1);
+  await previewCareer(page, 'retail');
+  await continueGrowthRound(page);
   const thirdPurchase = await buyMatchHint(page, () => page.touchscreen.tap(hintPoint.x, hintPoint.y));
   const thirdHint = await page.locator('#game-status').textContent();
   const thirdWord = thirdHint.match(MATCH_HINT_STATUS)[1];
@@ -814,7 +844,7 @@ test('keyboard hints focus a suggested card ready for Enter', async ({ page }) =
   await fundMatchHints(page, 200);
   await page.goto('/');
   await ready(page);
-  await chooseSeason(page, 0);
+  expect((await logicalMetrics(page)).library.learning.selection.track).toBe('growth');
   await page.keyboard.press('Shift+Tab');
   await buyMatchHint(page, () => page.keyboard.press('Enter'));
   const word = (await page.locator('#game-status').textContent()).match(MATCH_HINT_STATUS)[1];
@@ -865,16 +895,18 @@ test('Match keeps the same board after repeated mistakes and finishes only when 
   }
 });
 
-test('fresh adventures save exactly one chest reward per round and preserve progress', async ({ page }, testInfo) => {
+test('fresh adventures save at most one chest per round, honor pity and preserve earned progress', async ({ page }, testInfo) => {
+  test.setTimeout(480000);
   const errors = watchErrors(page);
   await installGamepad(page);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
   await ready(page);
   await page.evaluate(() => window.gamepadFixture.connect());
-  await chooseSeason(page, 0);
+  expect((await logicalMetrics(page)).library.learning.selection.track).toBe('growth');
   const background = await page.locator('meta[name="theme-color"]').getAttribute('content');
   let previousWords = [];
+  let earned = 0, dryRounds = 2, savedProgress;
   for (let round = 0; round < 4; round++) {
     await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', background);
     const board = await discoverCards(page);
@@ -882,36 +914,40 @@ test('fresh adventures save exactly one chest reward per round and preserve prog
     if (previousWords.length) expect([...words].sort()).not.toEqual([...previousWords].sort());
     previousWords = words;
     await winWithTouch(page, board);
-    await holdControllerChest(page);
-    await expect(page.locator('#game-status')).toHaveText('Round complete Treasure collected!');
+    const hasChest = (await logicalMetrics(page)).growth.result.controls
+      .some(control => control.name === 'OpenSettlementChest' && control.visible && !control.disabled);
+    if (dryRounds === 2) expect(hasChest, 'Two completed dry rounds guarantee the next chest').toBe(true);
+    if (hasChest) {
+      await holdControllerChest(page);
+      await expect(page.locator('#game-status')).toHaveText('Round complete Treasure collected!');
+      earned++;
+      dryRounds = 0;
+    } else dryRounds++;
     await pressGamepad(page, 3);
     expect((await growthView(page)).visible, 'Settlement blocks the covered growth shortcut.').toBe(false);
     expect((await logicalMetrics(page)).growth.settlement.visible).toBe(true);
     await openRewards(page);
     expect((await growthView(page)).visible).toBe(true);
     const progress = await rewardState(page);
-    expect(progress.medals).toMatch(new RegExp(`"spring-1"\\s*:\\s*${Math.min(round + 1, 3)}`));
-    if (round === 3) expect(progress.medals).toMatch(/"spring-2"\s*:\s*1/);
-    await page.screenshot({ path: testInfo.outputPath(`season-goal-${round + 1}.png`), scale: 'css' });
+    expect(rewardPieceTotal(progress.medals), 'Every round saves exactly its earned chest, without duplication').toBe(earned);
+    savedProgress = rewardCounts(progress.medals);
+    await page.screenshot({ path: testInfo.outputPath(`growth-rewards-${round + 1}.png`), scale: 'css' });
     await pressGamepad(page, 1);
     expect((await logicalMetrics(page)).library.visible).toBe(true);
     await chooseMode(page, 'match');
-    await expect(page.locator('#game-status')).toHaveText('Round complete Treasure collected!');
-    expect((await rewardState(page)).medals).toBe(progress.medals);
-    if (round < 3) {
-      await pressGamepad(page, 0);
-      await ready(page);
-    }
+    await expect(page.locator('#game-status')).toHaveText('Find 5 word–picture pairs.');
+    expect(rewardCounts((await rewardState(page)).medals)).toEqual(savedProgress);
   }
+  expect(earned, 'Four rounds with the initial pity guarantee include an earned chest').toBeGreaterThan(0);
   await page.reload();
   await ready(page);
-  await chooseSeason(page, 0);
+  expect((await logicalMetrics(page)).library.learning.selection.track).toBe('growth');
   await page.evaluate(() => window.gamepadFixture.connect());
   await pressGamepad(page, 3);
   expect((await growthView(page)).visible).toBe(true);
   const restored = await rewardState(page);
-  expect(restored.medals).toMatch(/"spring-1"\s*:\s*3/);
-  expect(restored.medals).toMatch(/"spring-2"\s*:\s*1/);
+  expect(rewardCounts(restored.medals)).toEqual(savedProgress);
+  expect(rewardPieceTotal(restored.medals)).toBe(earned);
   await activateGrowthControl(page, 'GrowthAge4');
   expect((await rewardState(page)).medals).toBe(restored.medals);
   expect(errors).toEqual([]);
@@ -1138,7 +1174,7 @@ test('completed Match keeps its board behind a bounded settlement dialog with a 
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/');
     await ready(page);
-    await chooseSeason(page, 1);
+    expect((await logicalMetrics(page)).library.learning.selection.track).toBe('growth');
     await winWithTouch(page);
     await page.screenshot({ path: testInfo.outputPath('result-match-closed-phone.png'), scale: 'css' });
     await holdChestUntilOpen(page, resultScreenPoint(await canvasMetrics(page)));

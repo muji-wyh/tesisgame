@@ -1,0 +1,253 @@
+{
+  "status": "research_only_unaccepted",
+  "retrieval_kind": "fresh_direct_http",
+  "results": [
+    {
+      "id": "cefrj_v15_csv",
+      "url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/cefrj-vocabulary-profile-1.5.csv",
+      "fetched_at": "2026-10-16T20:50:26.268Z",
+      "final_url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/cefrj-vocabulary-profile-1.5.csv",
+      "http_status": 200,
+      "ok": true,
+      "bytes": 233214,
+      "sha256": "b0dd3c635f1c9a4fdf1490c7e5b7c48e8bbe55b652ad0c9860a95f98e10ae498",
+      "content_type": "text/plain; charset=utf-8",
+      "etag": "W/\"cd6a572e66f4c5578f655934c65d5856c3d30c2dd2624e92fc7ee061b7f45663\"",
+      "last_modified": null,
+      "complete_source_retained": false,
+      "header": "headword,pos,CEFR,CoreInventory 1,CoreInventory 2,Threshold",
+      "rows": [
+        {
+          "term": "collect",
+          "matches": [
+            {
+              "line_number_1_based": 1258,
+              "csv": "collect,verb,A1,,,"
+            }
+          ]
+        },
+        {
+          "term": "notify",
+          "matches": []
+        },
+        {
+          "term": "postpone",
+          "matches": [
+            {
+              "line_number_1_based": 5160,
+              "csv": "postpone,verb,B2,,,"
+            }
+          ]
+        },
+        {
+          "term": "verify",
+          "matches": []
+        },
+        {
+          "term": "unsafe",
+          "matches": [
+            {
+              "line_number_1_based": 7341,
+              "csv": "unsafe,adjective,B2,,,"
+            }
+          ]
+        },
+        {
+          "term": "hazard",
+          "matches": [
+            {
+              "line_number_1_based": 3155,
+              "csv": "hazard,noun,B1,,,"
+            }
+          ]
+        },
+        {
+          "term": "inform",
+          "matches": [
+            {
+              "line_number_1_based": 3499,
+              "csv": "inform,verb,B1,,,"
+            }
+          ]
+        },
+        {
+          "term": "double-check",
+          "matches": []
+        },
+        {
+          "term": "gather",
+          "matches": [
+            {
+              "line_number_1_based": 2872,
+              "csv": "gather,verb,A2,,,"
+            }
+          ]
+        },
+        {
+          "term": "warn",
+          "matches": [
+            {
+              "line_number_1_based": 7537,
+              "csv": "warn,verb,B1,,,"
+            }
+          ]
+        },
+        {
+          "term": "danger",
+          "matches": [
+            {
+              "line_number_1_based": 1668,
+              "csv": "danger,noun,A2,\"News, lifestyles and current affairs\",,Travel"
+            }
+          ]
+        },
+        {
+          "term": "dangerous",
+          "matches": [
+            {
+              "line_number_1_based": 1669,
+              "csv": "dangerous,adjective,A2,,,"
+            }
+          ]
+        }
+      ],
+      "scope": "Headword/POS profile rows. These are not selected-sense or productive-skill certifications. Absence is limited to exact first-column matches in this v1.5 file."
+    },
+    {
+      "id": "cefrj_readme",
+      "url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/README.md",
+      "fetched_at": "2026-10-16T20:50:26.830Z",
+      "final_url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/README.md",
+      "http_status": 200,
+      "ok": true,
+      "bytes": 1956,
+      "sha256": "8b69f7366fa3c7be328cb9ba02ceb7b3725697f36125bb75b85131d664b5e359",
+      "content_type": "text/plain; charset=utf-8",
+      "etag": "W/\"b73c3b8a468884ebf9ba8c1e9b5792cd911728b26a2f6bb446357b6ad4a458e2\"",
+      "last_modified": null,
+      "complete_source_retained": false,
+      "scope": "Terms and citation read separately through fresh web retrieval. Raw document hash identifies this successful download; full text is not copied."
+    },
+    {
+      "id": "oxford_collect_1",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/collect_1",
+      "fetched_at": "2026-10-16T20:50:27.007Z",
+      "final_url": "https://www.oxfordlearnersdictionaries.com/definition/english/collect_1",
+      "http_status": 200,
+      "ok": true,
+      "bytes": 99232,
+      "sha256": "84cb49c89430032d9f7d6ec059739deed6d0f3f4a2ba3932cfd0e5f53b6faca4",
+      "content_type": "text/html;charset=UTF-8",
+      "etag": null,
+      "last_modified": null,
+      "complete_source_retained": false,
+      "sense_opening_tags": [
+        "<li class=\"sense\" sensenum=\"1\" id=\"collect_sng_2\" cefr=\"a2\" hclass=\"sense\" ox3000=\"y\" htag=\"li\">",
+        "<li class=\"sense\" hclass=\"sense\" sensenum=\"2\" id=\"collect_sng_3\" cefr=\"a2\" htag=\"li\" ox3000=\"y\">",
+        "<li class=\"sense\" htag=\"li\" ox3000=\"y\" hclass=\"sense\" cefr=\"b1\" id=\"collect_sng_5\" sensenum=\"3\">",
+        "<li class=\"sense\" sensenum=\"4\" cefr=\"b1\" id=\"collect_sng_6\" hclass=\"sense\" ox3000=\"y\" htag=\"li\">",
+        "<li class=\"sense\" htag=\"li\" ox3000=\"y\" hclass=\"sense\" sensenum=\"5\" id=\"collect_sng_7\" cefr=\"b1\">",
+        "<li class=\"sense\" htag=\"li\" hclass=\"sense\" id=\"collect_sng_8\" sensenum=\"6\">",
+        "<li class=\"sense\" sensenum=\"7\" id=\"collect_sng_9\" hclass=\"sense\" htag=\"li\">",
+        "<li class=\"sense\" sensenum=\"8\" id=\"collect_sng_4\" hclass=\"sense\" htag=\"li\">",
+        "<li class=\"sense\" id=\"dust_sng_12\" hclass=\"sense\" htag=\"li\">",
+        "<li class=\"sense\" hclass=\"sense\" id=\"collect_sng_10\" sensenum=\"1\" htag=\"li\">",
+        "<li class=\"sense\" hclass=\"sense\" sensenum=\"2\" id=\"collect_sng_11\" htag=\"li\">"
+      ],
+      "scope": "Only raw sense opening-tag metadata retained. Definitions inspected separately through fresh web retrieval; page footer levels excluded."
+    },
+    {
+      "id": "oxford_notify",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/notify",
+      "fetched_at": "2026-10-16T20:50:27.804Z",
+      "final_url": "https://www.oxfordlearnersdictionaries.com/definition/english/notify",
+      "http_status": 200,
+      "ok": true,
+      "bytes": 79827,
+      "sha256": "232e4dc6d7e0d84499dca4d10e71671e82e73027214f0026748b4b1913a6a8b7",
+      "content_type": "text/html;charset=UTF-8",
+      "etag": null,
+      "last_modified": null,
+      "complete_source_retained": false,
+      "sense_opening_tags": [
+        "<li class=\"sense\" htag=\"li\" id=\"notify_sng_1\" fkox5000=\"y\" hclass=\"sense\" fkcefr=\"c1\">"
+      ],
+      "scope": "Only raw sense opening-tag metadata retained. Definitions inspected separately through fresh web retrieval; page footer levels excluded."
+    },
+    {
+      "id": "oxford_postpone",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/postpone",
+      "fetched_at": "2026-10-16T20:50:28.020Z",
+      "final_url": "https://www.oxfordlearnersdictionaries.com/definition/english/postpone",
+      "http_status": 200,
+      "ok": true,
+      "bytes": 82924,
+      "sha256": "0c6ebaf063c0efb84cdf71786c5437c00b00619ffe854eb8581f1d64f0fc2b4b",
+      "content_type": "text/html;charset=UTF-8",
+      "etag": null,
+      "last_modified": null,
+      "complete_source_retained": false,
+      "sense_opening_tags": [
+        "<li class=\"sense\" htag=\"li\" fkcefr=\"c1\" hclass=\"sense\" fkox5000=\"y\" id=\"postpone_sng_1\">"
+      ],
+      "scope": "Only raw sense opening-tag metadata retained. Definitions inspected separately through fresh web retrieval; page footer levels excluded."
+    },
+    {
+      "id": "oxford_verify",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/verify",
+      "fetched_at": "2026-10-16T20:50:28.248Z",
+      "final_url": "https://www.oxfordlearnersdictionaries.com/definition/english/verify",
+      "http_status": 200,
+      "ok": true,
+      "bytes": 78828,
+      "sha256": "4f2282b69d441fe8d51619a0e8744648f622f8c74ebfd3941202bb86d80864e7",
+      "content_type": "text/html;charset=UTF-8",
+      "etag": null,
+      "last_modified": null,
+      "complete_source_retained": false,
+      "sense_opening_tags": [
+        "<li class=\"sense\" ox5000=\"y\" htag=\"li\" sensenum=\"1\" cefr=\"c1\" id=\"verify_sng_1\" hclass=\"sense\">",
+        "<li class=\"sense\" id=\"verify_sng_2\" cefr=\"c1\" sensenum=\"2\" hclass=\"sense\" ox5000=\"y\" htag=\"li\">"
+      ],
+      "scope": "Only raw sense opening-tag metadata retained. Definitions inspected separately through fresh web retrieval; page footer levels excluded."
+    },
+    {
+      "id": "oxford_unsafe",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/unsafe",
+      "fetched_at": "2026-10-16T20:50:28.450Z",
+      "final_url": "https://www.oxfordlearnersdictionaries.com/definition/english/unsafe",
+      "http_status": 200,
+      "ok": true,
+      "bytes": 72367,
+      "sha256": "3db8c933687335abd17633fe2d337ba7471e7f13fac724088dc0c240fbaa8f61",
+      "content_type": "text/html;charset=UTF-8",
+      "etag": null,
+      "last_modified": null,
+      "complete_source_retained": false,
+      "sense_opening_tags": [
+        "<li class=\"sense\" htag=\"li\" hclass=\"sense\" id=\"unsafe_sng_1\" sensenum=\"1\">",
+        "<li class=\"sense\" htag=\"li\" sensenum=\"2\" id=\"unsafe_sng_2\" hclass=\"sense\">",
+        "<li class=\"sense\" htag=\"li\" hclass=\"sense\" sensenum=\"3\" id=\"unsafe_sng_3\">"
+      ],
+      "scope": "Only raw sense opening-tag metadata retained. Definitions inspected separately through fresh web retrieval; page footer levels excluded."
+    },
+    {
+      "id": "oxford_hazard_1",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/hazard_1",
+      "fetched_at": "2026-10-16T20:50:28.657Z",
+      "final_url": "https://www.oxfordlearnersdictionaries.com/definition/english/hazard_1",
+      "http_status": 200,
+      "ok": true,
+      "bytes": 76860,
+      "sha256": "b1acb950d6591511a8759118eeea4a6d74bafe5782ea3169d2136bbcdacbc749",
+      "content_type": "text/html;charset=UTF-8",
+      "etag": null,
+      "last_modified": null,
+      "complete_source_retained": false,
+      "sense_opening_tags": [
+        "<li class=\"sense\" htag=\"li\" fkox5000=\"y\" fkcefr=\"c1\" hclass=\"sense\" id=\"hazard_sng_1\">"
+      ],
+      "scope": "Only raw sense opening-tag metadata retained. Definitions inspected separately through fresh web retrieval; page footer levels excluded."
+    }
+  ]
+}

@@ -1,0 +1,154 @@
+{
+  "schema": 1,
+  "status": "unbound_in_memory_dry_run_and_preservation_guards_passed",
+  "production_mutated": false,
+  "shared_tests_mutated": false,
+  "tests_executed": false,
+  "native_executed": false,
+  "baseline_bound": false,
+  "intended_validation_checked_read_only": {
+    "path": "build/professional-english/continuation-validation-r29.json",
+    "raw_sha256": "ff2753a293782475ba8732ae6a03a984bd29bbf07cc4568e2c1e13530d18bca1"
+  },
+  "helper": {
+    "helper_source": "build/professional-english/retail-module03-morphology-review/fifth10/serializer-review-r01/guarded-transaction.cjs",
+    "helper_raw_sha256": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6",
+    "helper_validation": {
+      "path": "build/professional-english/retail-module03-morphology-review/fifth10/serializer-review-r01/validation-attempt-XE9O6l/receipt.json",
+      "raw_sha256": "abd19b9952fe3085ef8cab5b87e430ef442780ed05f3a9a2105f909f968a9bae",
+      "tests": 20,
+      "pass": 20,
+      "fail": 0
+    },
+    "adapter_source": "build/professional-english/retail-term-art-review/counter-r01/delivery-r02/transaction-plan.cjs",
+    "adapter_raw_sha256": "dca101335d6c1f9bdc379f566c1d048e094638371e720f7afde2398ca1ab1ea2",
+    "adapter_validation": {
+      "path": "build/professional-english/retail-term-art-review/counter-r01/delivery-r02/adapter-tests-r02/result.json",
+      "raw_sha256": "61764fb1c4587e19d88a27d9494988539a17336cf0687baa792fc5e214c0a38d",
+      "assertions": 32,
+      "failures": 0
+    },
+    "scope": "Byte-identical reused guarded helper and plan adapter. Earlier scratch fault-test receipts remain evidence; this Foundation language package performs no native run or rerun of those fixtures.",
+    "copied_origin_record": {
+      "path": "build/professional-english/retail-audio-review/counter-checkout-acquired-r01/delivery-r01/helper-origin.json",
+      "raw_sha256": "ca9fc913ac187268813e900f55e3748e4317944a29ed43f0578aa3ce18dc012d"
+    }
+  },
+  "observed_registry_sha256_informational": "58acf6fbf52810707fa5e57dadc23e42b73b2cf7171144a9cdbf2650258c0d50",
+  "proposed_registry_sha256_informational": "4ad48ae53f0fb028b95d063611c2ad95409e8e20716b65b0227b17d2f61b717f",
+  "prospective_replacements": {
+    "data/professional/lexemes/foundation-module01.json": {
+      "before_raw_sha256_informational": "1606a76a46b8a35aca06590ddad50e6f0db56a53d964e6563e5366f8e985724b",
+      "after_raw_sha256_informational": "718a853ccc94ddcc145f36de5181ae98685190c84c122747aadece7b08d1dfcd"
+    },
+    "data/professional/sources.json": {
+      "before_raw_sha256_informational": "7dd18a1b3a91d0268371677d80f6bde76aa175ba34ec79e6c97cb1f43348ef20",
+      "after_raw_sha256_informational": "77c995308c9beb28435a09a561cf699913f7c53fb0ad4afb60d370f7c77f19c7"
+    }
+  },
+  "before_audit": {
+    "errors": 0,
+    "warnings": 29492,
+    "summary": {
+      "courses": 20,
+      "modules": 200,
+      "themes": 21,
+      "unique_lexemes": 4939,
+      "vocabulary_memberships": 10000,
+      "vocabulary_memberships_target": 10000,
+      "vocabulary_memberships_remaining": 0,
+      "expressions": 1620,
+      "expression_memberships": 2000,
+      "expression_memberships_target": 2000,
+      "expression_memberships_remaining": 0,
+      "ready_modules": 0,
+      "reviewed_lexemes": 100,
+      "morphology_authored": 4045,
+      "morphology_reviewed": 89,
+      "integrated_word_images": 8,
+      "integrated_word_audio": 12,
+      "release_ready": false
+    }
+  },
+  "proposed_audit": {
+    "errors": 0,
+    "warnings": 29472,
+    "summary": {
+      "courses": 20,
+      "modules": 200,
+      "themes": 21,
+      "unique_lexemes": 4939,
+      "vocabulary_memberships": 10000,
+      "vocabulary_memberships_target": 10000,
+      "vocabulary_memberships_remaining": 0,
+      "expressions": 1620,
+      "expression_memberships": 2000,
+      "expression_memberships_target": 2000,
+      "expression_memberships_remaining": 0,
+      "ready_modules": 0,
+      "reviewed_lexemes": 110,
+      "morphology_authored": 4045,
+      "morphology_reviewed": 89,
+      "integrated_word_images": 8,
+      "integrated_word_audio": 12,
+      "release_ready": false
+    }
+  },
+  "test_transforms": {
+    "tests/professional-content.test.cjs": {
+      "before_raw_sha256": "dcd132c657933d433b53962d0a87f06c328f545fa49e91bcadea087e9de4755d",
+      "after_raw_sha256": "34a1ad2c48df656b665e522ee5dc1046fe1beb88a3e76e3d3aba88102eed6c54",
+      "preview": "build/professional-english/foundation-module01-language-review/fifth10/delivery-r01/preview/tests/professional-content.test.cjs"
+    },
+    "tests/professional-retail-morphology.test.cjs": {
+      "before_raw_sha256": "70d430920e9cb8f8d600b0e90e2b5b75db8dbc15af4313dc63d82cbae67e8ed8",
+      "after_raw_sha256": "86773940915510679915fc173ae4c377d397b28fc8bb2f93d600d9a3bd77b73e",
+      "preview": "build/professional-english/foundation-module01-language-review/fifth10/delivery-r01/preview/tests/professional-retail-morphology.test.cjs"
+    }
+  },
+  "accepted": 10,
+  "held": 2,
+  "registered_source_additions": 20,
+  "retained_source_consultations": 20,
+  "failed_accesses_excluded": 0,
+  "excluded_attendance_source_ids": [
+    "foundation01-language-third10-oxford-attendance",
+    "foundation01-language-third10-collins-attendance"
+  ],
+  "prior_held_entry_json_sha256": {
+    "supervisor.work-overseer.n": "4a2ae571f902632d58bb7d81ea7c5151c1132cd21a52885921eb30071d217583",
+    "attendance.presence-record.n": "a7699c3e58649791eaee79817f87879c2ce6b2418e729768c6f1a43c19b3594e"
+  },
+  "accepted_memberships": 200,
+  "preserved_selected_memberships": 200,
+  "protected_unique_entries": 164,
+  "protected_expressions": 123,
+  "protected_modules": 97,
+  "protected_existing_sources": 145,
+  "protected_growth_files": 10,
+  "protected_prior_artifacts": 10,
+  "expression_hold_ids": [
+    "expr.customer_support.module03.08",
+    "expr.foundation.module01.06",
+    "expr.office_admin.module09.01"
+  ],
+  "prior_expression_hold_ids": [
+    "expr.customer_support.module07.08",
+    "expr.foundation.module01.03",
+    "expr.foundation.module01.08",
+    "expr.hospitality_tourism.module05.04",
+    "expr.hospitality_tourism.module09.02",
+    "expr.hospitality_tourism.module09.08",
+    "expr.office_admin.module05.07",
+    "expr.office_admin.module06.03",
+    "expr.transport_delivery.module09.06"
+  ],
+  "expression_mutations": 0,
+  "accepted_form_mutations": 0,
+  "region_mutations": 0,
+  "protected_current_professional_json_count": 406,
+  "protected_shared_test_source_count": 259,
+  "scope_guards_passed": 7286,
+  "script_syntax": "All delivery scripts and both CJS test previews parse; no tests or native code executed.",
+  "shared_test_context_is_not_binding": true
+}

@@ -1,0 +1,2188 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "dementia.syndrome-affecting-cognitive-daily-function.n",
+      "text": "dementia",
+      "display_text": "dementia",
+      "pos": "noun",
+      "definition": "A syndrome involving changes in thinking and related abilities that affect daily life, arising from diseases affecting the brain.",
+      "example": "The worker asked the clinician to explain the dementia diagnosis.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "dementia"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An adult in a respectful discussion with no imagery implying lost identity.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-dementia-communication",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "nhs-dementia-symptoms",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "delirium.acute-fluctuating-attention-awareness-change.n",
+      "text": "delirium",
+      "display_text": "delirium",
+      "pos": "noun",
+      "definition": "A condition with an acute change in attention and awareness, often fluctuating, that requires clinical assessment.",
+      "example": "The clinician explained that delirium and dementia are different terms.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "delirium"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clinician explaining terminology without a diagnostic checklist.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-dementia-communication",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "nhs-delirium",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "memory.ability-to-retain-and-recall.n",
+      "text": "memory",
+      "display_text": "memory",
+      "pos": "noun",
+      "definition": "The ability to retain information and recall experiences or learning.",
+      "example": "He described a change in his memory.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "memory"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An adult discussing familiar experiences without stereotyped aging imagery.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-dementia-communication",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "education-naeyc-dap",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-eyfs-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-ufli-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "attention.focus-on-information-or-activity.n",
+      "text": "attention",
+      "display_text": "attention",
+      "pos": "noun",
+      "definition": "The ability or act of focusing on information or an activity.",
+      "example": "She asked for fewer distractions while giving her attention to the conversation.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "attention"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An adult choosing a comfortable setting for discussion.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-dementia-communication",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "education-naeyc-dap",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-eyfs-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-ufli-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "hearing.sense-of-perceiving-sound.n",
+      "text": "hearing",
+      "display_text": "hearing",
+      "pos": "noun",
+      "definition": "The sense or ability through which a person perceives sound.",
+      "example": "He explained which support helped his hearing.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "hearing"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An adult describing preferred hearing support.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "hearing.sense-of-perceiving-sound.n.analysis.v1",
+        "lexeme_id": "hearing.sense-of-perceiving-sound.n",
+        "text": "hearing",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.hear",
+            "type": "stem",
+            "canonical": "hear",
+            "surface": "hear"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "hearing",
+            "rule": "suffix_attachment"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-dementia-communication",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "vision.sense-of-seeing.n",
+      "text": "vision",
+      "display_text": "vision",
+      "pos": "noun",
+      "definition": "The sense or ability through which a person sees.",
+      "example": "She asked for a format that suited her vision.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "vision"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An adult choosing a comfortable reading format.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-dementia-communication",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "speech.spoken-language-expression.n",
+      "text": "speech",
+      "display_text": "speech",
+      "pos": "noun",
+      "definition": "The production of spoken language.",
+      "example": "He asked for time because his speech was slower today.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "speech"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An attentive listener giving an adult time to speak.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "speech.spoken-language-expression.n.analysis.v1",
+        "lexeme_id": "speech.spoken-language-expression.n",
+        "text": "speech",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.speech",
+            "type": "atomic",
+            "canonical": "speech",
+            "surface": "speech"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-dementia-communication",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "education-naeyc-dap",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-eyfs-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-ufli-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "gesture.meaningful-body-movement.n",
+      "text": "gesture",
+      "display_text": "gesture",
+      "pos": "noun",
+      "definition": "A movement of the body used to express or communicate something.",
+      "example": "She used a gesture to indicate her choice.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "gesture"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An adult making a respectful choice gesture.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "gesture.meaningful-body-movement.n.analysis.v1",
+        "lexeme_id": "gesture.meaningful-body-movement.n",
+        "text": "gesture",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.gesture",
+            "type": "atomic",
+            "canonical": "gesture",
+            "surface": "gesture"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-dementia-communication",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "facial-expression.face-movement-conveying-feeling.n",
+      "text": "facial expression",
+      "display_text": "facial expression",
+      "pos": "noun",
+      "definition": "A position or movement of the face that may convey emotion or meaning.",
+      "example": "The worker described the facial expression without guessing its cause.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "facial expression"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A gentle portrait showing an expression without diagnostic labeling.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "facial-expression.face-movement-conveying-feeling.n.analysis.v1",
+        "lexeme_id": "facial-expression.face-movement-conveying-feeling.n",
+        "text": "facial expression",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.face",
+            "type": "stem",
+            "canonical": "face",
+            "surface": "fac"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ial.suffix",
+            "type": "suffix",
+            "canonical": "ial",
+            "surface": "ial"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.expression",
+            "type": "stem",
+            "canonical": "expression",
+            "surface": "expression"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "facial",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "facial expression",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-dementia-communication",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "body-language.communication-through-posture-and-movement.n",
+      "text": "body language",
+      "display_text": "body language",
+      "pos": "noun",
+      "definition": "Meaning communicated through posture, movement, or other bodily signals.",
+      "example": "He asked what her body language meant rather than assuming.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "body language"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two adults clarifying a nonverbal message.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "body-language.communication-through-posture-and-movement.n.analysis.v1",
+        "lexeme_id": "body-language.communication-through-posture-and-movement.n",
+        "text": "body language",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.body",
+            "type": "stem",
+            "canonical": "body",
+            "surface": "body"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.language",
+            "type": "stem",
+            "canonical": "language",
+            "surface": "language"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "body language",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-dementia-communication",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "communication-aid.tool-supporting-expression-or-understanding.n",
+      "text": "communication aid",
+      "display_text": "communication aid",
+      "pos": "noun",
+      "definition": "A tool that helps someone communicate or understand information.",
+      "example": "She chose the communication aid that worked for her.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "communication aid"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An adult selecting a familiar communication tool.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "communication-aid.tool-supporting-expression-or-understanding.n.analysis.v1",
+        "lexeme_id": "communication-aid.tool-supporting-expression-or-understanding.n",
+        "text": "communication aid",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.communication",
+            "type": "stem",
+            "canonical": "communication",
+            "surface": "communication"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.aid",
+            "type": "stem",
+            "canonical": "aid",
+            "surface": "aid"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "communication aid",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-dementia-communication",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "education-kcsie-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-dap",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-idea-iep-definition",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "picture-board.picture-based-communication-board.n",
+      "text": "picture board",
+      "display_text": "picture board",
+      "pos": "noun",
+      "definition": "A board displaying pictures that a person can use to communicate.",
+      "example": "He pointed to an item on his picture board.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "picture board"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A personalized communication board with clear nonmedical choices.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "picture-board.picture-based-communication-board.n.analysis.v1",
+        "lexeme_id": "picture-board.picture-based-communication-board.n",
+        "text": "picture board",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.picture",
+            "type": "stem",
+            "canonical": "picture",
+            "surface": "picture"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.board",
+            "type": "stem",
+            "canonical": "board",
+            "surface": "board"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "picture board",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-dementia-communication",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "large-print.enlarged-readable-text-format.n",
+      "text": "large print",
+      "display_text": "large print",
+      "pos": "noun",
+      "definition": "Text printed or displayed in a larger size to support reading.",
+      "example": "She requested the information in large print.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "large print"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A person selecting an enlarged-text version of a leaflet.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "large-print.enlarged-readable-text-format.n.analysis.v1",
+        "lexeme_id": "large-print.enlarged-readable-text-format.n",
+        "text": "large print",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.large",
+            "type": "stem",
+            "canonical": "large",
+            "surface": "large"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.print",
+            "type": "stem",
+            "canonical": "print",
+            "surface": "print"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "large print",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-dementia-communication",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "w3c-accessible-events",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "easy-read.accessible-simplified-information-format.n",
+      "text": "easy read",
+      "display_text": "easy read",
+      "pos": "noun",
+      "definition": "A format combining clearly structured plain text and supportive images for easier understanding.",
+      "example": "He asked whether an easy read version was available.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "easy read"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An accessible fictional leaflet with concise text and supporting images.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "easy-read.accessible-simplified-information-format.n.analysis.v1",
+        "lexeme_id": "easy-read.accessible-simplified-information-format.n",
+        "text": "easy read",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.easy",
+            "type": "stem",
+            "canonical": "easy",
+            "surface": "easy"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.read",
+            "type": "stem",
+            "canonical": "read",
+            "surface": "read"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "easy read",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-dementia-communication",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "sign-language.visual-language-using-signs.n",
+      "text": "sign language",
+      "display_text": "sign language",
+      "pos": "noun",
+      "definition": "A language expressed through structured hand movements, facial expression, and body movement.",
+      "example": "She requested an interpreter for her sign language.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "sign language"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A qualified interpreter in a respectful adult conversation.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "sign-language.visual-language-using-signs.n.analysis.v1",
+        "lexeme_id": "sign-language.visual-language-using-signs.n",
+        "text": "sign language",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.sign",
+            "type": "stem",
+            "canonical": "sign",
+            "surface": "sign"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.language",
+            "type": "stem",
+            "canonical": "language",
+            "surface": "language"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "sign language",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-dementia-communication",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "w3c-accessible-events",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "preferred-language.chosen-language-for-communication.n",
+      "text": "preferred language",
+      "display_text": "preferred language",
+      "pos": "noun",
+      "definition": "The language a person chooses for a particular communication.",
+      "example": "He asked which preferred language to record for the visit.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "preferred language"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An adult choosing a language for a conversation.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "preferred-language.chosen-language-for-communication.n.analysis.v1",
+        "lexeme_id": "preferred-language.chosen-language-for-communication.n",
+        "text": "preferred language",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.prefer",
+            "type": "stem",
+            "canonical": "prefer",
+            "surface": "preferr"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ed.suffix",
+            "type": "suffix",
+            "canonical": "ed",
+            "surface": "ed"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.language",
+            "type": "stem",
+            "canonical": "language",
+            "surface": "language"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "preferred",
+            "rule": "double_final_consonant_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "preferred language",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-dementia-communication",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-gmc-patient-communication",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "communication-passport.personal-communication-support-profile.n",
+      "text": "communication passport",
+      "display_text": "communication passport",
+      "pos": "noun",
+      "definition": "A personal document explaining how someone communicates and what support they prefer.",
+      "example": "She chose what to include in her communication passport.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "communication passport"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional personal communication profile controlled by its owner.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "communication-passport.personal-communication-support-profile.n.analysis.v1",
+        "lexeme_id": "communication-passport.personal-communication-support-profile.n",
+        "text": "communication passport",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.communication",
+            "type": "stem",
+            "canonical": "communication",
+            "surface": "communication"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.pass",
+            "type": "stem",
+            "canonical": "pass",
+            "surface": "pass"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.port",
+            "type": "stem",
+            "canonical": "port",
+            "surface": "port"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "passport",
+            "rule": "closed_compound"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "communication passport",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-dementia-communication",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "repetition.saying-or-doing-again.n",
+      "text": "repetition",
+      "display_text": "repetition",
+      "pos": "noun",
+      "definition": "The act of saying or doing something again.",
+      "example": "He asked for repetition of the part he had missed.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "repetition"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A listener respectfully asking to hear a statement again.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-dementia-communication",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "processing-time.time-to-understand-and-respond.n",
+      "text": "processing time",
+      "display_text": "processing time",
+      "pos": "noun",
+      "definition": "The time a person needs to understand information and form a response.",
+      "example": "She asked for more processing time before answering.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "processing time"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An attentive conversation with space for an unhurried response.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "processing-time.time-to-understand-and-respond.n.analysis.v1",
+        "lexeme_id": "processing-time.time-to-understand-and-respond.n",
+        "text": "processing time",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.process",
+            "type": "stem",
+            "canonical": "process",
+            "surface": "process"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.time",
+            "type": "stem",
+            "canonical": "time",
+            "surface": "time"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "processing",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "processing time",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-dementia-communication",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "unmet-need.need-not-yet-addressed.n",
+      "text": "unmet need",
+      "display_text": "unmet need",
+      "pos": "noun",
+      "definition": "A need that has not been adequately recognized or addressed.",
+      "example": "The team asked whether an unmet need might be affecting her experience.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "unmet need"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An adult explaining a support need to a listener.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "unmet-need.need-not-yet-addressed.n.analysis.v1",
+        "lexeme_id": "unmet-need.need-not-yet-addressed.n",
+        "text": "unmet need",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "affix.un.prefix",
+            "type": "prefix",
+            "canonical": "un",
+            "surface": "un"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.met",
+            "type": "stem",
+            "canonical": "met",
+            "surface": "met"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.need",
+            "type": "stem",
+            "canonical": "need",
+            "surface": "need"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "unmet",
+            "rule": "prefix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "unmet need",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-dementia-communication",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    }
+  ]
+}

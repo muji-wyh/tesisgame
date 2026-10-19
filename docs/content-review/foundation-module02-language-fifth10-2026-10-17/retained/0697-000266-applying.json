@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 266,
+  "status": "applying",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "7424e1678771b3bddaf192496616f5e7fe31189bbf60eb4fb08f3f786f226cee",
+  "recorded_at": "2026-10-16T22:48:58.086Z",
+  "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-final-artifacts-r01/candidate-command-witness.json",
+  "work": "work/3124cbae-d2ac-4b0f-8f58-c2050c4d32bd.bin"
+}

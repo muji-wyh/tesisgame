@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "status": "end_of_author_research_static_integrity_observation_not_delivery_acceptance",
+  "recorded_at": "2026-10-16T21:45:39.5810227Z",
+  "measured_input_rows": 365,
+  "distinct_input_paths": 365,
+  "drift_since_each_capture": [],
+  "proposed_token_count": 17,
+  "token_slice_mismatches": [],
+  "old_token_index_or_offset_mismatches": [],
+  "project_imports": false,
+  "project_validation": false,
+  "tests_dispatched": false,
+  "production_mutated": false,
+  "live_save_inspection": false,
+  "instruction": "Keep original snapshot pins and disclose later root-owned delivery changes. Rebase only after actual acceptance, never replace old captured evidence."
+}

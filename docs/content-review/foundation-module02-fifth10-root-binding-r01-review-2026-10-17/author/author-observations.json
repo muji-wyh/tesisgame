@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "status": "author_read_only_source_and_json_observations_not_execution",
+  "author": "/root/recover_delivery",
+  "built_in_import_literals": [
+    "node:fs",
+    "node:path",
+    "node:crypto",
+    "node:assert/strict"
+  ],
+  "frozen_r03_inventory": {
+    "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/source-inventory.json",
+    "bytes": 3279,
+    "raw_sha256": "2f4033d3edfeb6eacc78657e9c215ef8718bd3ceb275c94f4c6168e68d2c6ee3"
+  },
+  "frozen_r03_members_rehashed_unchanged": 17,
+  "supplement_input_files_rehashed": 141,
+  "supplement_inventory_roots": 11,
+  "explicit_runtime_dependency_paths": 961,
+  "mandatory_bag_input_foundation": {
+    "expected_inputs": 11740,
+    "evidence_files": 579,
+    "input_raw_sha256": "a31cd76e3f21b19fc727a5ce735bac6c3d20c9de8a71fe80b70b587c1907b70f"
+  },
+  "source_text_copy_method": "Read immutable r03 source as UTF-8 text; copy named predecessor/registry/JSON-check sections with only documented utility and session/binding-comparison substitutions. No require/import/eval or proposal execution.",
+  "actual_bag_persisted_success_selected": false,
+  "actual_baseline_binding_created": false,
+  "helper_imported_or_executed": false,
+  "syntax_checks_run": false,
+  "guard_cases_executed": false,
+  "preparation_run": false,
+  "project_tests_run": false,
+  "native_browser_build_run": false,
+  "production_or_shared_test_written": false,
+  "authoring_directory_only": "build/professional-english/foundation02-fifth10-root-binding-proposal-r01"
+}

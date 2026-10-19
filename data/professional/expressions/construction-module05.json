@@ -1,0 +1,1942 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.construction_trades.module05.01",
+      "text": "Please inspect and compare these panels, record the differences, and document anything the designer needs to review.",
+      "meaning": "Request observations and records for a later design review.",
+      "context": "Discussing visible differences between panels.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "inspect",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "compare",
+          "start": 19,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "these",
+          "start": 27,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "panels",
+          "start": 33,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 39,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "record",
+          "start": 41,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "differences",
+          "start": 52,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 63,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 12,
+          "text": "document",
+          "start": 69,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": "anything",
+          "start": 78,
+          "end": 86
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 87,
+          "end": 90
+        },
+        {
+          "index": 15,
+          "text": "designer",
+          "start": 91,
+          "end": 99
+        },
+        {
+          "index": 16,
+          "text": "needs",
+          "start": 100,
+          "end": 105
+        },
+        {
+          "index": 17,
+          "text": "to",
+          "start": 106,
+          "end": 108
+        },
+        {
+          "index": 18,
+          "text": "review",
+          "start": 109,
+          "end": 115
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 115,
+          "end": 116
+        }
+      ],
+      "focus_lexeme_ids": [
+        "inspect.examine-visually.v",
+        "compare.examine-differences.v",
+        "record.store-observed-information.v",
+        "document.make-care-record.v",
+        "review.reconsider-care-information.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-laborers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-electricians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module05.02",
+      "text": "Could you identify the reference and help me interpret where to mark this panel?",
+      "meaning": "Ask for help understanding a marking reference.",
+      "context": "Clarifying a fictional drawing before the task is assigned.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Could",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "you",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "identify",
+          "start": 10,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "reference",
+          "start": 23,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 33,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "help",
+          "start": 37,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "me",
+          "start": 42,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "interpret",
+          "start": 45,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "where",
+          "start": 55,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": "to",
+          "start": 61,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "mark",
+          "start": 64,
+          "end": 68
+        },
+        {
+          "index": 12,
+          "text": "this",
+          "start": 69,
+          "end": 73
+        },
+        {
+          "index": 13,
+          "text": "panel",
+          "start": 74,
+          "end": 79
+        },
+        {
+          "index": 14,
+          "text": "?",
+          "start": 79,
+          "end": 80
+        }
+      ],
+      "focus_lexeme_ids": [
+        "identify.establish-identity-or-nature.v",
+        "interpret.understand-meaning-of-information.v",
+        "mark.indicate-material-position.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-laborers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-electricians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module05.03",
+      "text": "Which team will cut and drill the panels, and which will saw the boards or sand and grind the edges?",
+      "meaning": "Clarify which team owns different component tasks.",
+      "context": "Coordinating trade responsibilities without operating instructions.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Which",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "team",
+          "start": 6,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "will",
+          "start": 11,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "cut",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 20,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "drill",
+          "start": 24,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 7,
+          "text": "panels",
+          "start": 34,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 40,
+          "end": 41
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 10,
+          "text": "which",
+          "start": 46,
+          "end": 51
+        },
+        {
+          "index": 11,
+          "text": "will",
+          "start": 52,
+          "end": 56
+        },
+        {
+          "index": 12,
+          "text": "saw",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 61,
+          "end": 64
+        },
+        {
+          "index": 14,
+          "text": "boards",
+          "start": 65,
+          "end": 71
+        },
+        {
+          "index": 15,
+          "text": "or",
+          "start": 72,
+          "end": 74
+        },
+        {
+          "index": 16,
+          "text": "sand",
+          "start": 75,
+          "end": 79
+        },
+        {
+          "index": 17,
+          "text": "and",
+          "start": 80,
+          "end": 83
+        },
+        {
+          "index": 18,
+          "text": "grind",
+          "start": 84,
+          "end": 89
+        },
+        {
+          "index": 19,
+          "text": "the",
+          "start": 90,
+          "end": 93
+        },
+        {
+          "index": 20,
+          "text": "edges",
+          "start": 94,
+          "end": 99
+        },
+        {
+          "index": 21,
+          "text": "?",
+          "start": 99,
+          "end": 100
+        }
+      ],
+      "focus_lexeme_ids": [
+        "cut.divide-or-shape-material-with-cutting-tool.v",
+        "drill.make-hole-with-drill.v",
+        "saw.cut-with-saw.v",
+        "sand.smooth-with-abrasive.v",
+        "grind.remove-material-by-abrasive-action.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-laborers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-electricians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module05.04",
+      "text": "Can we repair this unit, or must we dismantle and assemble it again? Who will weld or solder the connections?",
+      "meaning": "Ask about repair scope and the responsible trade team.",
+      "context": "A work-planning conversation without a joining procedure.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Can",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "we",
+          "start": 4,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "repair",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "this",
+          "start": 14,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "unit",
+          "start": 19,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 23,
+          "end": 24
+        },
+        {
+          "index": 6,
+          "text": "or",
+          "start": 25,
+          "end": 27
+        },
+        {
+          "index": 7,
+          "text": "must",
+          "start": 28,
+          "end": 32
+        },
+        {
+          "index": 8,
+          "text": "we",
+          "start": 33,
+          "end": 35
+        },
+        {
+          "index": 9,
+          "text": "dismantle",
+          "start": 36,
+          "end": 45
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 46,
+          "end": 49
+        },
+        {
+          "index": 11,
+          "text": "assemble",
+          "start": 50,
+          "end": 58
+        },
+        {
+          "index": 12,
+          "text": "it",
+          "start": 59,
+          "end": 61
+        },
+        {
+          "index": 13,
+          "text": "again",
+          "start": 62,
+          "end": 67
+        },
+        {
+          "index": 14,
+          "text": "?",
+          "start": 67,
+          "end": 68
+        },
+        {
+          "index": 15,
+          "text": "Who",
+          "start": 69,
+          "end": 72
+        },
+        {
+          "index": 16,
+          "text": "will",
+          "start": 73,
+          "end": 77
+        },
+        {
+          "index": 17,
+          "text": "weld",
+          "start": 78,
+          "end": 82
+        },
+        {
+          "index": 18,
+          "text": "or",
+          "start": 83,
+          "end": 85
+        },
+        {
+          "index": 19,
+          "text": "solder",
+          "start": 86,
+          "end": 92
+        },
+        {
+          "index": 20,
+          "text": "the",
+          "start": 93,
+          "end": 96
+        },
+        {
+          "index": 21,
+          "text": "connections",
+          "start": 97,
+          "end": 108
+        },
+        {
+          "index": 22,
+          "text": "?",
+          "start": 108,
+          "end": 109
+        }
+      ],
+      "focus_lexeme_ids": [
+        "repair.restore-damaged-item-to-working-condition.v",
+        "dismantle.take-assembly-apart-in-planned-parts.v",
+        "assemble.join-components-into-complete-unit.v",
+        "weld.join-materials-by-welding-process.v",
+        "solder.join-metal-using-low-melting-filler.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-laborers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-electricians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module05.05",
+      "text": "We will plaster and paint the walls, seal the joints, and cover the floor; please confirm which other surfaces to coat.",
+      "meaning": "Report finishing scope and request a missing surface reference.",
+      "context": "A fictional team update based on the finish schedule.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "We",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "will",
+          "start": 3,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "plaster",
+          "start": 8,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "paint",
+          "start": 20,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "walls",
+          "start": 30,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 35,
+          "end": 36
+        },
+        {
+          "index": 8,
+          "text": "seal",
+          "start": 37,
+          "end": 41
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 10,
+          "text": "joints",
+          "start": 46,
+          "end": 52
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 52,
+          "end": 53
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 13,
+          "text": "cover",
+          "start": 58,
+          "end": 63
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 15,
+          "text": "floor",
+          "start": 68,
+          "end": 73
+        },
+        {
+          "index": 16,
+          "text": ";",
+          "start": 73,
+          "end": 74
+        },
+        {
+          "index": 17,
+          "text": "please",
+          "start": 75,
+          "end": 81
+        },
+        {
+          "index": 18,
+          "text": "confirm",
+          "start": 82,
+          "end": 89
+        },
+        {
+          "index": 19,
+          "text": "which",
+          "start": 90,
+          "end": 95
+        },
+        {
+          "index": 20,
+          "text": "other",
+          "start": 96,
+          "end": 101
+        },
+        {
+          "index": 21,
+          "text": "surfaces",
+          "start": 102,
+          "end": 110
+        },
+        {
+          "index": 22,
+          "text": "to",
+          "start": 111,
+          "end": 113
+        },
+        {
+          "index": 23,
+          "text": "coat",
+          "start": 114,
+          "end": 118
+        },
+        {
+          "index": 24,
+          "text": ".",
+          "start": 118,
+          "end": 119
+        }
+      ],
+      "focus_lexeme_ids": [
+        "plaster.apply-plaster.v",
+        "paint.make-picture-or-apply-color-with-paint.v",
+        "seal.close-gap-against-passage.v",
+        "cover.place-protective-covering.v",
+        "coat.apply-surface-layer.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-laborers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-electricians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module05.06",
+      "text": "Before we erect the frame, please confirm who will align, level, and anchor it.",
+      "meaning": "Clarify assigned responsibilities for the frame work.",
+      "context": "Coordinating an existing work plan without prescribing its method.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Before",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "we",
+          "start": 7,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "erect",
+          "start": 10,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "frame",
+          "start": 20,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 25,
+          "end": 26
+        },
+        {
+          "index": 6,
+          "text": "please",
+          "start": 27,
+          "end": 33
+        },
+        {
+          "index": 7,
+          "text": "confirm",
+          "start": 34,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": "who",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 9,
+          "text": "will",
+          "start": 46,
+          "end": 50
+        },
+        {
+          "index": 10,
+          "text": "align",
+          "start": 51,
+          "end": 56
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 56,
+          "end": 57
+        },
+        {
+          "index": 12,
+          "text": "level",
+          "start": 58,
+          "end": 63
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 63,
+          "end": 64
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 15,
+          "text": "anchor",
+          "start": 69,
+          "end": 75
+        },
+        {
+          "index": 16,
+          "text": "it",
+          "start": 76,
+          "end": 78
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 78,
+          "end": 79
+        }
+      ],
+      "focus_lexeme_ids": [
+        "erect.put-structure-into-upright-or-built-position.v",
+        "align.position-parts-in-required-line-or-relationship.v",
+        "level.make-surface-horizontal.v",
+        "anchor.fix-securely-to-support.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-laborers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-electricians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module05.07",
+      "text": "Please check the time allowed to excavate this area and compact the fill; the concrete also needs time to cure.",
+      "meaning": "Request a check of schedule allowances.",
+      "context": "Discussing time requirements without giving durations or material specifications.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "check",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "time",
+          "start": 17,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "allowed",
+          "start": 22,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "to",
+          "start": 30,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "excavate",
+          "start": 33,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "this",
+          "start": 42,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "area",
+          "start": 47,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": "compact",
+          "start": 56,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": "fill",
+          "start": 68,
+          "end": 72
+        },
+        {
+          "index": 13,
+          "text": ";",
+          "start": 72,
+          "end": 73
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 74,
+          "end": 77
+        },
+        {
+          "index": 15,
+          "text": "concrete",
+          "start": 78,
+          "end": 86
+        },
+        {
+          "index": 16,
+          "text": "also",
+          "start": 87,
+          "end": 91
+        },
+        {
+          "index": 17,
+          "text": "needs",
+          "start": 92,
+          "end": 97
+        },
+        {
+          "index": 18,
+          "text": "time",
+          "start": 98,
+          "end": 102
+        },
+        {
+          "index": 19,
+          "text": "to",
+          "start": 103,
+          "end": 105
+        },
+        {
+          "index": 20,
+          "text": "cure",
+          "start": 106,
+          "end": 110
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 110,
+          "end": 111
+        }
+      ],
+      "focus_lexeme_ids": [
+        "excavate.remove-earth-to-form-opening-or-cut.v",
+        "compact.make-material-denser.v",
+        "cure.develop-material-properties-under-specified-conditions.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-laborers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-electricians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module05.08",
+      "text": "Please assign separate tasks to mix and pour the liquid, lay the tiles, and install and connect the fixtures.",
+      "meaning": "Request distinct work assignments for the finishing job.",
+      "context": "A fictional allocation discussion without quantities, settings, or execution steps.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "assign",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "separate",
+          "start": 14,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "tasks",
+          "start": 23,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "to",
+          "start": 29,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "mix",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "pour",
+          "start": 40,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "liquid",
+          "start": 49,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 55,
+          "end": 56
+        },
+        {
+          "index": 11,
+          "text": "lay",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 61,
+          "end": 64
+        },
+        {
+          "index": 13,
+          "text": "tiles",
+          "start": 65,
+          "end": 70
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 70,
+          "end": 71
+        },
+        {
+          "index": 15,
+          "text": "and",
+          "start": 72,
+          "end": 75
+        },
+        {
+          "index": 16,
+          "text": "install",
+          "start": 76,
+          "end": 83
+        },
+        {
+          "index": 17,
+          "text": "and",
+          "start": 84,
+          "end": 87
+        },
+        {
+          "index": 18,
+          "text": "connect",
+          "start": 88,
+          "end": 95
+        },
+        {
+          "index": 19,
+          "text": "the",
+          "start": 96,
+          "end": 99
+        },
+        {
+          "index": 20,
+          "text": "fixtures",
+          "start": 100,
+          "end": 108
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 108,
+          "end": 109
+        }
+      ],
+      "focus_lexeme_ids": [
+        "mix.combine-materials-into-mixture.v",
+        "pour.make-liquid-flow-from-container.v",
+        "lay.place-building-material.v",
+        "install.place-building-component-in-position.v",
+        "connect.join-physical-components.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-laborers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-electricians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module05.09",
+      "text": "The handling plan names who will secure and load the goods. Please confirm who will lift and lower them at the delivery point.",
+      "meaning": "Clarify handling responsibilities at the destination.",
+      "context": "Discussing an existing plan without movement commands or load advice.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "handling",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "plan",
+          "start": 13,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "names",
+          "start": 18,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "who",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "will",
+          "start": 28,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "secure",
+          "start": 33,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "load",
+          "start": 44,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 10,
+          "text": "goods",
+          "start": 53,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 58,
+          "end": 59
+        },
+        {
+          "index": 12,
+          "text": "Please",
+          "start": 60,
+          "end": 66
+        },
+        {
+          "index": 13,
+          "text": "confirm",
+          "start": 67,
+          "end": 74
+        },
+        {
+          "index": 14,
+          "text": "who",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 15,
+          "text": "will",
+          "start": 79,
+          "end": 83
+        },
+        {
+          "index": 16,
+          "text": "lift",
+          "start": 84,
+          "end": 88
+        },
+        {
+          "index": 17,
+          "text": "and",
+          "start": 89,
+          "end": 92
+        },
+        {
+          "index": 18,
+          "text": "lower",
+          "start": 93,
+          "end": 98
+        },
+        {
+          "index": 19,
+          "text": "them",
+          "start": 99,
+          "end": 103
+        },
+        {
+          "index": 20,
+          "text": "at",
+          "start": 104,
+          "end": 106
+        },
+        {
+          "index": 21,
+          "text": "the",
+          "start": 107,
+          "end": 110
+        },
+        {
+          "index": 22,
+          "text": "delivery",
+          "start": 111,
+          "end": 119
+        },
+        {
+          "index": 23,
+          "text": "point",
+          "start": 120,
+          "end": 125
+        },
+        {
+          "index": 24,
+          "text": ".",
+          "start": 125,
+          "end": 126
+        }
+      ],
+      "focus_lexeme_ids": [
+        "secure.fasten-load-under-required-arrangements.v",
+        "load.put-goods-for-transport.v",
+        "lift.raise-item.v",
+        "lower.move-to-lower-position.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-laborers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-electricians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module05.10",
+      "text": "Can your team sort and store the returned items while we clean and tidy the area?",
+      "meaning": "Propose a division of organizing and cleanup responsibilities.",
+      "context": "A team handover based on agreed work assignments.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Can",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "your",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "team",
+          "start": 9,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "sort",
+          "start": 14,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 5,
+          "text": "store",
+          "start": 23,
+          "end": 28
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 7,
+          "text": "returned",
+          "start": 33,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": "items",
+          "start": 42,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": "while",
+          "start": 48,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "we",
+          "start": 54,
+          "end": 56
+        },
+        {
+          "index": 11,
+          "text": "clean",
+          "start": 57,
+          "end": 62
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 13,
+          "text": "tidy",
+          "start": 67,
+          "end": 71
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 72,
+          "end": 75
+        },
+        {
+          "index": 15,
+          "text": "area",
+          "start": 76,
+          "end": 80
+        },
+        {
+          "index": 16,
+          "text": "?",
+          "start": 80,
+          "end": 81
+        }
+      ],
+      "focus_lexeme_ids": [
+        "sort.group-by-kind.v",
+        "store.keep-goods-in-suitable-location.v",
+        "clean.remove-dirt-or-unwanted-material.v",
+        "tidy.put-things-in-order.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-laborers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-electricians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

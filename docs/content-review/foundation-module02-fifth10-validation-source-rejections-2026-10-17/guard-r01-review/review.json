@@ -1,0 +1,129 @@
+{
+  "schema": 1,
+  "status": "changes_requested_for_precise_first_assertion_coverage",
+  "reviewer": "/root/recover_delivery",
+  "reviewed_guard_author": "/root/runtime_recovery",
+  "required_dispatcher": "/root",
+  "scope": "Independent raw-source review of the separate memory-guard proposal only. This is neither actual-binding acceptance nor preparation acceptance.",
+  "independence_disclosure": {
+    "reviewer_authored_root_binding_helper": true,
+    "reviewer_authored_frozen_preparation": true,
+    "reviewer_authored_reviewed_guard": false,
+    "independent_scope": "The separate guard source authored by /root/runtime_recovery.",
+    "actual_binding_and_preparation_acceptance_owners": ["/root", "/root/morph_review"],
+    "corroborating_raw_source_reviewer": "/root/recover_delivery/guard_assertion_review"
+  },
+  "guard_source_inventory": {
+    "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r01/source-inventory.json",
+    "bytes": 1405,
+    "raw_sha256": "ae29e404eceb8523bd7d4bb4fe26f3dbd8ff3b66d5d0ce585eebd40b84bf8b90"
+  },
+  "guard_source": {
+    "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r01/guard.cjs",
+    "bytes": 44590,
+    "raw_sha256": "bf2d06df37109966ed2d08226c047fac3f6ff385334531a41c5526cb1838a8bd"
+  },
+  "frozen_preparation_binding": {
+    "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/binding.cjs",
+    "bytes": 18553,
+    "raw_sha256": "022fc186186ade95d6d58908932db5520652f39a1417255c3c5080a4e4841f1b"
+  },
+  "review_evidence": {
+    "inputs": {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-independent-review-r01/inputs.json",
+      "bytes": 8244,
+      "raw_sha256": "2be5f6ab73c305d977398f1e6236c374d03b90c94b598e5b50ba9943df022597"
+    },
+    "inspection": {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-independent-review-r01/inspection.json",
+      "bytes": 3336,
+      "raw_sha256": "58d44b0e9658a70af095c3e71138d59c767c35303ea38b9591c481a2c8edfc6e"
+    },
+    "original_recheck": {
+      "path": "build/professional-english/foundation02-fifth10-preparation-guard-independent-review-r01/original-recheck.json",
+      "bytes": 8588,
+      "raw_sha256": "dfc8589136e117a089877987e96a590e6d4bfdee72e88f3f372f2535afda7b14"
+    }
+  },
+  "method": {
+    "raw_text_json_and_hash_inspection_only": true,
+    "unique_input_files": 35,
+    "guard_inventory_members": 6,
+    "reference_dependency_pins": 28,
+    "all_original_pins_rechecked_unchanged": true,
+    "source_modules_imported": false,
+    "syntax_checks_run": false,
+    "vm_or_guard_cases_run": false,
+    "preparation_or_project_code_run": false,
+    "tests_native_commands_or_transactions_run": false,
+    "actual_binding_selected_or_accepted": false,
+    "production_mutated": false
+  },
+  "findings": [
+    {
+      "id": "F01",
+      "priority": "P2",
+      "title": "Verify the actual first assertion instead of only its shared source line",
+      "file": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r01/guard.cjs",
+      "line": 245,
+      "related_lines": [246, 248, 249, 250, 461, 465, 529, 530, 531],
+      "observation": "The first frozen-binding stack frame is matched by line number while its column is discarded. Multiple assertions share frozen binding lines 191 and 126. Three negative variants therefore record a neighboring assertion that passes as the named rejection assertion.",
+      "affected_variants": [
+        {
+          "ids": ["review_pin_identity_binding_path", "review_pin_identity_binding_bytes"],
+          "binding_line": 191,
+          "selected_assertion_column": 3,
+          "selected_assertion": "assert.deepEqual(review.source_inventory, input.source_inventory);",
+          "mutated_assertion_column": 69,
+          "mutated_assertion": "assert.deepEqual(review.actual_binding, input.binding);",
+          "reason": "The variants change review.actual_binding while leaving review.source_inventory equal to input.source_inventory. The second assertion rejects on the same line as the selected marker."
+        },
+        {
+          "ids": ["persisted_state_mismatch"],
+          "binding_line": 126,
+          "selected_assertion_column": 5,
+          "selected_assertion": "assert.equal(persistedInput.committed_journal.path, receiptRelative(commit.state.path));",
+          "mutated_assertion_column": 93,
+          "mutated_assertion": "assert.equal(persistedInput.committed_journal.sha256, commit.state.sha256);",
+          "reason": "The variant changes only committed_journal.sha256. The path comparison still passes and the hash comparison rejects on the same line as the selected marker."
+        }
+      ],
+      "impact": "The source permits a passing negative case to report the wrong named first assertion. README line 32 and CASE-COVERAGE line 39 claim stronger attribution than this line-only check verifies. Static tracing still indicates rejection of the intended invalid semantic categories; this finding is not a bypass claim or an observed execution failure.",
+      "required_change": "In a fresh guard revision, choose the actual failing assertion marker for each variant and verify statement-level first-frame attribution, such as the assertion column/span or reliable assertion metadata. Keep the frozen preparation r03 source unchanged.",
+      "blocks_precise_first_assertion_source_acceptance": true
+    },
+    {
+      "id": "F02",
+      "priority": "P3",
+      "title": "Make the alternate reviewer identity guaranteed to differ",
+      "file": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r01/guard.cjs",
+      "line": 459,
+      "related_lines": [460],
+      "observation": "reviewer_role_mismatch unconditionally assigns /root/memory_guard_distinct_reviewer. That identity matches the canonical identity syntax and is not one of the prohibited author or dispatcher identities in frozen binding lines 40-44.",
+      "trigger": "A real accepted binding that already names /root/memory_guard_distinct_reviewer.",
+      "impact": "Under that permitted input, the fixture makes no reviewer mismatch and the guard stops as unexpectedly accepted. This is a conditional availability defect, not a false pass, and is not asserted to affect the currently intended /root/morph_review input.",
+      "required_change": "Choose between at least two valid alternate reviewer identities using the actual baseline reviewer, and assert that the chosen identity differs before running the fixture.",
+      "blocks_current_named_reviewer_input_by_itself": false
+    }
+  ],
+  "source_observations": {
+    "host_imports": ["node:fs", "node:path", "node:crypto", "node:assert/strict", "node:vm"],
+    "vm_boundary": "The VM evaluates only the exact hash-bound r03 binding.cjs. It exposes cached reads, captured directory listings, and known absence checks, with no filesystem writer. Unknown reads/imports raise GUARD_VM_BOUNDARY, which cannot satisfy an ERR_ASSERTION negative case. Real Buffer, path, and assertion objects remain exposed; the stated boundary is for trusted frozen source rather than hostile JavaScript security.",
+    "fixture_isolation": "Each case receives an independent overlay and directory-array copies. Semantic mutations rebind changed evidence pins, dependent receipt links, and fixture acceptance envelopes in memory. The deliberately stale installed-file pin and three hash controls are classified separately.",
+    "planned_coverage": {"positive_cases": 2, "frozen_negative_specifications": 29, "negative_variants": 48, "hash_controls": 3, "total_cases": 53, "execution_observed": false},
+    "positive_inputs": "The genuine baseline uses actual pinned root input and independent actual acceptance. The second positive uses explicitly mapped byte-identical committed/prepared journal copies.",
+    "actual_only_dependencies": "Actual capture receipt, helper inventory/review/input, real preparation root input, and independent actual-binding acceptance are mandatory pinned inputs. Source-only r03 acceptance remains distinct from actual-binding acceptance. This reviewer did not select or accept those actual inputs.",
+    "bag_union": {"expected_inputs": 11740, "evidence_inputs": 579, "overlaps": 89, "evidence_only": 490, "unique_union": 12230},
+    "relinking": "Static tracing of relinkCommit, relinkState, relinkPrepared, and exact journal copies did not identify a deterministic earlier-assertion blocker beyond the reported attribution mismatch.",
+    "original_rechecks": "The source rechecks disk pins, cached original bytes, captured directory lists, and known absences; initial admission and later recheck include latest journal state. Rechecks are attempted after a case failure as well as after successful case completion.",
+    "one_shot_behavior": "The fixed guard proposal attempt-001 output must be absent, artifacts use exclusive writes, and the loop stops on the first unexpected result. No preparation, projection, transformation, project module, test, native command, transaction, or production writer is invoked by the guard source."
+  },
+  "decision": {
+    "guard_source_accepted_for_execution": false,
+    "guard_execution_accepted": false,
+    "actual_binding_accepted": false,
+    "preparation_execution_accepted": false,
+    "required_next_step": "Preserve frozen r01 and preparation r03. Author a fresh guard revision addressing F01 and F02, then obtain independent source review before root considers its one-shot execution.",
+    "qualification": "All conclusions are static source observations. No guard result, successful actual binding, or preparation execution is claimed. Root and /root/morph_review retain actual-binding and preparation acceptance."
+  }
+}

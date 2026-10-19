@@ -1,0 +1,171 @@
+{
+  "schema": 1,
+  "status": "authored_negative_specifications_not_executed",
+  "execution_authority": "Root after independent helper-source review; do not execute these during authoring.",
+  "cases": [
+    {
+      "id": "G01",
+      "mutation": "Unbound template or changed root status",
+      "expected": "Reject before output creation.",
+      "executed": false
+    },
+    {
+      "id": "G02",
+      "mutation": "Wrong command-line hash of root input",
+      "expected": "Reject before parsing or output.",
+      "executed": false
+    },
+    {
+      "id": "G03",
+      "mutation": "Missing or false actual persisted-success attestation",
+      "expected": "Reject before output.",
+      "executed": false
+    },
+    {
+      "id": "G04",
+      "mutation": "False yielded-writer, frozen-input or reviewed-destination guard",
+      "expected": "Reject before output.",
+      "executed": false
+    },
+    {
+      "id": "G05",
+      "mutation": "Helper inventory or member changed after review",
+      "expected": "Reject byte/hash mismatch before output.",
+      "executed": false
+    },
+    {
+      "id": "G06",
+      "mutation": "Source reviewer empty, padded, author, inherited author or dispatcher",
+      "expected": "Reject canonical identity check.",
+      "executed": false
+    },
+    {
+      "id": "G07",
+      "mutation": "Helper review pin differs from root-selected inventory in path, bytes or hash",
+      "expected": "Reject exact pin comparison.",
+      "executed": false
+    },
+    {
+      "id": "G08",
+      "mutation": "Helper source review claims actual-binding or preparation approval",
+      "expected": "Reject false-boundary checks.",
+      "executed": false
+    },
+    {
+      "id": "G09",
+      "mutation": "Actual r02 bag receipt missing, unsuccessful, partial, from r01, or from a different attempt",
+      "expected": "Reject; no compatible receipt is fabricated.",
+      "executed": false
+    },
+    {
+      "id": "G10",
+      "mutation": "Retained bag persisted copy differs from original receipt or lacks either exact log",
+      "expected": "Reject original/copy/log equality.",
+      "executed": false
+    },
+    {
+      "id": "G11",
+      "mutation": "Bag persisted r02 input/source hash changed or either sealed pin collection differs",
+      "expected": "Reject exact sealed pins and 11740/579 counts.",
+      "executed": false
+    },
+    {
+      "id": "G12",
+      "mutation": "Any inherited expected-input, evidence-only or supplemental input changed",
+      "expected": "Reject complete union verification; no refresh.",
+      "executed": false
+    },
+    {
+      "id": "G13",
+      "mutation": "Fourth-ten commit chosen through an alias differing from persisted embedded path",
+      "expected": "Reject exact original selected receipt path.",
+      "executed": false
+    },
+    {
+      "id": "G14",
+      "mutation": "Fourth-ten nested result or bag top-level schema replaced with a wrapper",
+      "expected": "Reject genuine-schema checks.",
+      "executed": false
+    },
+    {
+      "id": "G15",
+      "mutation": "Committed state is not latest, or state/prepared/plan hashes disagree",
+      "expected": "Reject predecessor journal linkage.",
+      "executed": false
+    },
+    {
+      "id": "G16",
+      "mutation": "Any bag installed target omitted, added, duplicated or changed",
+      "expected": "Reject complete authoritative manifest equality.",
+      "executed": false
+    },
+    {
+      "id": "G17",
+      "mutation": "Actual persisted commands, callback counts, audit counts or log bytes differ",
+      "expected": "Reject exact required successes.",
+      "executed": false
+    },
+    {
+      "id": "G18",
+      "mutation": "Any accepted preimage, hold, donor row, membership or protected bag value differs",
+      "expected": "Reject copied frozen projection checks.",
+      "executed": false
+    },
+    {
+      "id": "G19",
+      "mutation": "Actual registry no longer equals delivered bag registry or reviewed-status anchor is not 148",
+      "expected": "Reject and require reinspection.",
+      "executed": false
+    },
+    {
+      "id": "G20",
+      "mutation": "Any stable/deferred addition already exists or case-folded destinations collide",
+      "expected": "Reject exact absence/uniqueness checks.",
+      "executed": false
+    },
+    {
+      "id": "G21",
+      "mutation": "Output directory exists or root input is inside the prospective output",
+      "expected": "Reject before writing.",
+      "executed": false
+    },
+    {
+      "id": "G22",
+      "mutation": "An input or predecessor state changes during capture",
+      "expected": "Final recheck fails; preserve consumed attempt and do not use partial binding.",
+      "executed": false
+    },
+    {
+      "id": "G23",
+      "mutation": "Root-selected actual-binding reviewer is invalid or an author/dispatcher",
+      "expected": "Reject independent identity check.",
+      "executed": false
+    },
+    {
+      "id": "G24",
+      "mutation": "One deferred external artifact is added prematurely as generated output",
+      "expected": "Helper emits no actual-binding acceptance or preparation root input; only three fixed deferred destinations are bound.",
+      "executed": false
+    },
+    {
+      "id": "G25",
+      "mutation": "An expected_inputs/evidence_files overlap has conflicting hashes",
+      "expected": "Reject conflict. Matching overlaps count once; evidence-only paths retain their original sealed hashes.",
+      "executed": false
+    },
+    {
+      "id": "G26",
+      "mutation": "Any of the 490 evidence-only paths is omitted from the complete union or omitted from retained evidence",
+      "expected": "Reject or fail the independent closure comparison; exact inherited union is 12230 and retained evidence count is579.",
+      "executed": false
+    },
+    {
+      "id": "G27",
+      "mutation": "The failed r01 receipt, prior helper/review, failure copy receipt or any of its 11 copies changes or disappears",
+      "expected": "Reject mandatory immutable lineage checks. No previous failure can substitute for actual r02 success.",
+      "executed": false
+    }
+  ],
+  "helper_or_guard_execution_performed": false,
+  "syntax_or_project_tests_run": false
+}

@@ -1,0 +1,115 @@
+{
+  "status": "author_mapping_not_expression_acceptance",
+  "before_text": "Please verify the reference number, correct any error, and check the form before you submit it.",
+  "proposed_text": "Please check the form, correct any error, and ensure that the reference number is included before you submit it.",
+  "before_token_count": 19,
+  "proposed_token_count": 22,
+  "bindings": [
+    {
+      "old_id": "verify.establish-accuracy.v",
+      "new_id": "ensure.make-certain.v",
+      "before": [
+        {
+          "index": 1,
+          "text": "verify",
+          "start": 7,
+          "end": 13
+        }
+      ],
+      "proposed_after": [
+        {
+          "index": 10,
+          "text": "ensure",
+          "start": 46,
+          "end": 52
+        }
+      ],
+      "boundary": "Outcome responsibility replaces evidence-based accuracy checking. This changes the assessed target."
+    },
+    {
+      "old_id": "correct.put-right.v",
+      "new_id": "correct.put-right.v",
+      "before": [
+        {
+          "index": 6,
+          "text": "correct",
+          "start": 36,
+          "end": 43
+        }
+      ],
+      "proposed_after": [
+        {
+          "index": 5,
+          "text": "correct",
+          "start": 23,
+          "end": 30
+        }
+      ],
+      "boundary": "Removing a form error fits the reviewed put-right sense; this full sentence is still pending."
+    },
+    {
+      "old_id": "error.mistake.n",
+      "new_id": "error.mistake.n",
+      "before": [
+        {
+          "index": 8,
+          "text": "error",
+          "start": 48,
+          "end": 53
+        }
+      ],
+      "proposed_after": [
+        {
+          "index": 7,
+          "text": "error",
+          "start": 35,
+          "end": 40
+        }
+      ],
+      "boundary": "An incorrect item on a fictional form; captured pending neighbor requires the later fourth-ten review state."
+    },
+    {
+      "old_id": "check.examine.v",
+      "new_id": "check.examine.v",
+      "before": [
+        {
+          "index": 11,
+          "text": "check",
+          "start": 59,
+          "end": 64
+        }
+      ],
+      "proposed_after": [
+        {
+          "index": 1,
+          "text": "check",
+          "start": 7,
+          "end": 12
+        }
+      ],
+      "boundary": "Examination of a form for correctness fits the reviewed ordinary verb."
+    },
+    {
+      "old_id": "submit.send-for-consideration.v",
+      "new_id": "submit.send-for-consideration.v",
+      "before": [
+        {
+          "index": 16,
+          "text": "submit",
+          "start": 85,
+          "end": 91
+        }
+      ],
+      "proposed_after": [
+        {
+          "index": 19,
+          "text": "submit",
+          "start": 102,
+          "end": 108
+        }
+      ],
+      "boundary": "The form is sent for routine processing; captured pending neighbor requires the later fourth-ten review state."
+    }
+  ],
+  "repeated_surface_note": "The two occurrences of the in the proposed sentence retain distinct token positions. All punctuation tokens and offsets are explicit in the full expression object."
+}

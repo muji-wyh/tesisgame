@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "status": "historical_holds_and_research_preserved",
+  "files": [
+    {
+      "path": "build/professional-english/foundation02-held-six-research-r01/inventory.json",
+      "bytes": 2487,
+      "sha256": "68813f88a92eefba3ac1f03921ce2080c65cec6f989d8988f14e4a6958923d22"
+    },
+    {
+      "path": "build/professional-english/foundation02-held-six-research-r01/PROPOSALS.md",
+      "bytes": 8331,
+      "sha256": "78795d371d0fa363f24aa5777720bd41855797e0b48b846287ebfe292a21d652"
+    },
+    {
+      "path": "build/professional-english/foundation02-held-six-research-r01/SOURCE-LEDGER.md",
+      "bytes": 12555,
+      "sha256": "f9b30b87e2a2e3f4760cb5ca996ae9e7b2a77dd113f555a77c1982ff34fdb862"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/independent/REVIEW.md",
+      "bytes": 8471,
+      "sha256": "45bb37be53141c32322f2c2cae5d6c381037e086ec4c04013664a6ba875c6e1f"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/independent/reviewer-decisions.json",
+      "bytes": 9851,
+      "sha256": "80d07670034418d6a973d1a776d4e410903e6fa274ea1aa3daf3ef91c4a0da39"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/independent/inventory.json",
+      "bytes": 2434,
+      "sha256": "e2ff507d70142e5c94f63b953ce04e080a85e69d398f8981d33c8b96229624ff"
+    },
+    {
+      "path": "build/professional-english/foundation02-held-six-research-r01/retained-reviews/1.json",
+      "bytes": 23927,
+      "sha256": "2d95fb5e1f08ed79a2b9de27ad2e031e36139385acf0d6d0e3e7a13b1a6f865e"
+    },
+    {
+      "path": "build/professional-english/foundation02-held-six-research-r01/retained-reviews/2.json",
+      "bytes": 43281,
+      "sha256": "2aaac3d8672600001faa104594a221ed1d079caf9723cc5495d1172de7fb0c4d"
+    },
+    {
+      "path": "build/professional-english/foundation02-held-six-research-r01/retained-reviews/3.json",
+      "bytes": 80788,
+      "sha256": "92c5b326565f95d9dacb8c11f8ca6684b5c39200b4ebcae57f3108a3c7a720b1"
+    }
+  ],
+  "preserved_collect_whole_entry_hash": "177f9fc35b0d348ddcc3cdf60c43dd5119d145acfe781d17c2b988e1b6d77981",
+  "old_hold_released": false,
+  "shared_source_or_test_baseline": null
+}

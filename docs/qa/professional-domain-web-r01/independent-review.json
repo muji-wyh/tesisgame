@@ -1,0 +1,510 @@
+{
+  "schema_version": 1,
+  "kind": "professional_domain_actual_web_independent_static_review_v1",
+  "status": "passed_bounded_static_review",
+  "reviewer": "Codex attendance_review independent static and byte-integrity review",
+  "recorded_at_utc": "2026-10-16T19:28:28.955Z",
+  "findings": [],
+  "reviewed_build": {
+    "started_at": "2026-10-16T19:09:19.047Z",
+    "finished_at": "2026-10-16T19:20:44.849Z",
+    "exit_status": 0,
+    "receipt_sha256": "2c9ad5292d4a5bd87d9631138d6206121172af1615d2deed5b563de233e9c232",
+    "source_inputs": 13318,
+    "output_files": 117,
+    "descriptor": {
+      "bytes": 954,
+      "path": "res://data/professional/domain-policy/generated/release.json",
+      "sha256": "28e8f954bb11e201d685190b295b90117c80ca922b43d6369f55052f71fd200b"
+    },
+    "decoded_pack": {
+      "bytes": 120258184,
+      "sha256": "f854fd4426e52bccafc7b5246902e7efc23cded132f33167444a525831dd410d"
+    },
+    "compressed_main_pack": {
+      "path": "build/web/game-f854fd4426e52bcc.pck.br",
+      "bytes": 30274379,
+      "sha256": "29c2a4a656076b0b72c9c2130709e3cd1dc53b5829561462f8ee8dd1d3b208d6"
+    }
+  },
+  "input_changes": {
+    "before_count": 13285,
+    "after_count": 13318,
+    "total_changed": 33,
+    "added": 33,
+    "modified": 0,
+    "removed": 0,
+    "expected_categories": {
+      "generated_domain_package": 3,
+      "generated_application_pin": 1,
+      "generated_pin_uid": 1,
+      "godot_media_import_metadata": 28,
+      "png_import_metadata": 16,
+      "wav_import_metadata": 12
+    },
+    "unexpected": [],
+    "all_changes": [
+      {
+        "path": "data/professional/domain-policy/generated/index.json",
+        "bytes": 20705,
+        "sha256": "21aa9d49135b574f12dcff2fdb2295a3fae329b0a6765ac3a914e90944994ac0",
+        "change": "added",
+        "category": "generated_domain_package"
+      },
+      {
+        "path": "data/professional/domain-policy/generated/release.json",
+        "bytes": 954,
+        "sha256": "28e8f954bb11e201d685190b295b90117c80ca922b43d6369f55052f71fd200b",
+        "change": "added",
+        "category": "generated_domain_package"
+      },
+      {
+        "path": "data/professional/domain-policy/generated/themes.json",
+        "bytes": 91201,
+        "sha256": "2bf6d483cae7b3d38c96945719612a5394a9aa6e2d94d63db9a12b4b55edc669",
+        "change": "added",
+        "category": "generated_domain_package"
+      },
+      {
+        "path": "professional-media/01b2666324e5e373b75799535d8a78494a6afe8225c4b82147975d55405c96e5.wav.import",
+        "bytes": 669,
+        "sha256": "f500e8e8dfa8c3fd0ba245d26e9d50c67f9e88c96af891dc3a367a5641660ef7",
+        "change": "added",
+        "category": "godot_media_import_metadata"
+      },
+      {
+        "path": "professional-media/0f883c09be9a86be9f30e444953d001d3a385ba71034e60ceb4181fc0b9aa763.wav.import",
+        "bytes": 669,
+        "sha256": "f059dedcfb4918862c2f9aa1e37b1990c33734d788a15b0a49c6fe9aea0a6fd6",
+        "change": "added",
+        "category": "godot_media_import_metadata"
+      },
+      {
+        "path": "professional-media/150246ccfdd916301a660583fc5e552a7fb585fb4ccb2317b9ed4a40ebd1da56.wav.import",
+        "bytes": 669,
+        "sha256": "44a0f78722671b57fd99362f9050e7e160d62ae37e01906a34fff09137f3b95c",
+        "change": "added",
+        "category": "godot_media_import_metadata"
+      },
+      {
+        "path": "professional-media/202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76.png.import",
+        "bytes": 1116,
+        "sha256": "cca7056cfca29cd2d77ee3cc103a1f2cc53bc217fb458f76afc480b672d96d48",
+        "change": "added",
+        "category": "godot_media_import_metadata"
+      },
+      {
+        "path": "professional-media/3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3.wav.import",
+        "bytes": 668,
+        "sha256": "e90c2c61d87032c27c5fca2e5c3663e8fd6fda6f06ae20f65dabd8da2d6fbab1",
+        "change": "added",
+        "category": "godot_media_import_metadata"
+      },
+      {
+        "path": "professional-media/39df6ba3406a891283f99379ca8526d93fc8f3279b571134c0213dd824282224.wav.import",
+        "bytes": 669,
+        "sha256": "d7b76a860539b9a03b1592224315b0ad62dd6b2e3becd32aaa049bf9c34d3db0",
+        "change": "added",
+        "category": "godot_media_import_metadata"
+      },
+      {
+        "path": "professional-media/3ac2473ca471d66026d60577db7f4c874dfbc2848cc859bc8b137d582b312714.png.import",
+        "bytes": 1116,
+        "sha256": "dc5636ee22e0b477ef29945f7e593d1271dd79592349a5cddcdef2644b4b8808",
+        "change": "added",
+        "category": "godot_media_import_metadata"
+      },
+      {
+        "path": "professional-media/41acd015cae790a0fb5242364776d2b52daa675450cf0b4f54da1a4d2c3c64f5.png.import",
+        "bytes": 1116,
+        "sha256": "396491e2689992a00d5d067ab4bc9f3c70f09d47a6172ac0e05723cf4cf15655",
+        "change": "added",
+        "category": "godot_media_import_metadata"
+      },
+      {
+        "path": "professional-media/65da9fe84c071420a9755e31b80b1f81cfe38277cba55210930c2289ee30e973.png.import",
+        "bytes": 1116,
+        "sha256": "f50a33481d12ac856ae98df7385017d7f15426077d0583a5a67725cd4052db7b",
+        "change": "added",
+        "category": "godot_media_import_metadata"
+      },
+      {
+        "path": "professional-media/685b544dbb353f3a1f3fb999fbe3f541cb94874d0e4543ad0cba774c39fd4bc3.wav.import",
+        "bytes": 669,
+        "sha256": "5480ef2d453c7eecfe573cc403cf0e01ad93fe2f6f929f345bd518f30140dc8c",
+        "change": "added",
+        "category": "godot_media_import_metadata"
+      },
+      {
+        "path": "professional-media/6c7d2ac0e733214faf920a4a0781d0458b6b891a92aa07b7ab433b501d19de72.wav.import",
+        "bytes": 668,
+        "sha256": "fd6b215db00eee6c138f3d900fb2626fdfe082e36b299a48bc739fee5071ac81",
+        "change": "added",
+        "category": "godot_media_import_metadata"
+      },
+      {
+        "path": "professional-media/712103b48aec2ae2a8a8b1b7365d6ae652e3887de1cb11a313c389de552c6ed9.png.import",
+        "bytes": 1116,
+        "sha256": "0ef4ebd60af5dc48ba26b8abe1ecdb0408d7f0927aa3dfa03b50dbb7cd86d6ed",
+        "change": "added",
+        "category": "godot_media_import_metadata"
+      },
+      {
+        "path": "professional-media/7487ee641b0cea58e5de43f619f03dead5d382444928d408c71d3811b60761b8.png.import",
+        "bytes": 1116,
+        "sha256": "88ddcaade393dd66f44ff794a80958af1e1bc6676d9a4f2bb5ff144f3e2d354d",
+        "change": "added",
+        "category": "godot_media_import_metadata"
+      },
+      {
+        "path": "professional-media/778fcf9304a06cd7ed04566cdc1f9bf28997bfbdbcd6e757f20ff9c3cb6282e3.wav.import",
+        "bytes": 669,
+        "sha256": "94f8966adb2c08dfca7eecfd99279533ee3ecb523790f84a680dad3b0be92be6",
+        "change": "added",
+        "category": "godot_media_import_metadata"
+      },
+      {
+        "path": "professional-media/8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8.png.import",
+        "bytes": 1116,
+        "sha256": "8d1d428654ec08c336396b3c93a6be4f8cf50c616a9ab79339ae101be77cc38f",
+        "change": "added",
+        "category": "godot_media_import_metadata"
+      },
+      {
+        "path": "professional-media/8d4713a7e8576fa065ad1c9e1b18edcfc10b192254182fad626392a2de71893f.wav.import",
+        "bytes": 669,
+        "sha256": "3fefd8759e15ccd4cea6637e07b7864b0c3a640ab7fa0b76552415c596faecd0",
+        "change": "added",
+        "category": "godot_media_import_metadata"
+      },
+      {
+        "path": "professional-media/a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c.png.import",
+        "bytes": 1115,
+        "sha256": "1b36c5e4e87b7eeb1852f1736f459f1f1ab96e33718a60d6762c9db7ab667b43",
+        "change": "added",
+        "category": "godot_media_import_metadata"
+      },
+      {
+        "path": "professional-media/aac69f3394f2acd4486e68e32213e328849c204f0ddced680f56011c65ce4e12.wav.import",
+        "bytes": 669,
+        "sha256": "ac4107100ab55e27f3c46626d3ec8feafc89c564a545605404e74bf7cb30df9e",
+        "change": "added",
+        "category": "godot_media_import_metadata"
+      },
+      {
+        "path": "professional-media/acd48c920c631906e6ff0775cf3f373c247687fcb128b41e3ce0f3bdf668ba45.wav.import",
+        "bytes": 669,
+        "sha256": "cbb0addcb4b34e8db9b06d23c37d1f57c2fac6a84684fbf8afb07edc83ff2d19",
+        "change": "added",
+        "category": "godot_media_import_metadata"
+      },
+      {
+        "path": "professional-media/afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c.png.import",
+        "bytes": 1116,
+        "sha256": "b5722382f429088521173889d2ba4d289e0ef100d1f510a7c4d35e496895f388",
+        "change": "added",
+        "category": "godot_media_import_metadata"
+      },
+      {
+        "path": "professional-media/b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1.png.import",
+        "bytes": 1116,
+        "sha256": "28199d8ea0be12d0ff31df083f753528e3ca42594ade057f65d2052ec9a38267",
+        "change": "added",
+        "category": "godot_media_import_metadata"
+      },
+      {
+        "path": "professional-media/b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae.png.import",
+        "bytes": 1116,
+        "sha256": "d28464643727fc270e1fb65acb592699acfe03a48db33a96f4b1b7174fb2d2b8",
+        "change": "added",
+        "category": "godot_media_import_metadata"
+      },
+      {
+        "path": "professional-media/bddc3c2dd3b889c785195a572b95a33455c047e097e927232c735b3b43a24f04.png.import",
+        "bytes": 1116,
+        "sha256": "fd14199059d8fc303e909a1155d1a67281f45d4b07b1a4c330820369608318bd",
+        "change": "added",
+        "category": "godot_media_import_metadata"
+      },
+      {
+        "path": "professional-media/c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a.png.import",
+        "bytes": 1116,
+        "sha256": "bf031c2555b3331731714231d8f3c4fd41dcfa501d63cda1b7c924a800abb01e",
+        "change": "added",
+        "category": "godot_media_import_metadata"
+      },
+      {
+        "path": "professional-media/cad8619dad6e225ce73c835ce5e90f7252c42af3c546aaa393adcd8db3e0f3a2.wav.import",
+        "bytes": 669,
+        "sha256": "21ae03a027be5b20dbe6a2655c541f705bc9b03508bbf87e69831c036d8d3f37",
+        "change": "added",
+        "category": "godot_media_import_metadata"
+      },
+      {
+        "path": "professional-media/eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe.png.import",
+        "bytes": 1116,
+        "sha256": "75d76ab230fe4bef59d7825993ad54fb519c807277a1751ae4804ffa5985619b",
+        "change": "added",
+        "category": "godot_media_import_metadata"
+      },
+      {
+        "path": "professional-media/f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png.import",
+        "bytes": 1116,
+        "sha256": "d316fa2d1d0b1927cc7f33b5195de6f8d1342824a3dc75610aba5190d2955652",
+        "change": "added",
+        "category": "godot_media_import_metadata"
+      },
+      {
+        "path": "professional-media/fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3.png.import",
+        "bytes": 1115,
+        "sha256": "112dafb5dba09fa69f6d9c67ecd368b98b02e1822dd19a16af8763f0c2c9c14f",
+        "change": "added",
+        "category": "godot_media_import_metadata"
+      },
+      {
+        "path": "scripts/professional_domain_release.gd",
+        "bytes": 543,
+        "sha256": "ffe5411752295e30abcb81bfa4634da56654ee60575d36f56426cba082f1161f",
+        "change": "added",
+        "category": "generated_application_pin"
+      },
+      {
+        "path": "scripts/professional_domain_release.gd.uid",
+        "bytes": 19,
+        "sha256": "e75cf0c5fae11ab649785e862aa23a800baabf6e1b4b0159e32f90c6633ad659",
+        "change": "added",
+        "category": "generated_pin_uid"
+      }
+    ],
+    "media_source_bytes_preserved": true,
+    "media_import_source_paths_and_source_filename_sha256_checked_in_initial_pass": true,
+    "current_source_inventory_matched_after_and_receipt_in_initial_pass": true
+  },
+  "package_checks": {
+    "courses": 20,
+    "modules": 200,
+    "ready_modules": 0,
+    "unavailable_modules": 200,
+    "module_rows_reconstructed_from_current_course_manifests_in_initial_pass": true,
+    "no_payload_or_manifest_descriptors_on_unavailable_rows": true,
+    "generated_files": [
+      {
+        "bytes": 20705,
+        "path": "res://data/professional/domain-policy/generated/index.json",
+        "sha256": "21aa9d49135b574f12dcff2fdb2295a3fae329b0a6765ac3a914e90944994ac0"
+      },
+      {
+        "bytes": 954,
+        "path": "res://data/professional/domain-policy/generated/release.json",
+        "sha256": "28e8f954bb11e201d685190b295b90117c80ca922b43d6369f55052f71fd200b"
+      },
+      {
+        "bytes": 91201,
+        "path": "res://data/professional/domain-policy/generated/themes.json",
+        "sha256": "2bf6d483cae7b3d38c96945719612a5394a9aa6e2d94d63db9a12b4b55edc669"
+      }
+    ],
+    "no_extra_generated_files_or_directories_at_initial_pass": true,
+    "theme_bytes_matched_original_source_in_initial_pass": true,
+    "accepted_ids": [],
+    "all_real_acceptances_null": true,
+    "lexical_exceptions": 0,
+    "expression_exceptions": 0,
+    "empty_decisions_verified_in_initial_pass": true,
+    "source_inventory_sha256": "abd7f4dcab649170ab7791bf6375c904138985581a2284fd45d736f89b5c5632",
+    "supporting_inventory_sha256": "945ad9ffa08c57aba41c410a7ad36772a6e1cb96ec321e432e24d117b0c43cc3",
+    "contracts_sha256": "1349a42c807b10260e5456af0df8419f7ff363435ed295d3c19c5e5acfee3b45",
+    "retained_full_snapshot_files": 407,
+    "retained_snapshot_bytes_matched_live_and_captured_hashes_in_initial_pass": true,
+    "contract_bytes_matched_audit_in_initial_pass": true,
+    "production_audit_summary": {
+      "courses": 20,
+      "expression_memberships": 2000,
+      "expression_memberships_remaining": 0,
+      "expression_memberships_target": 2000,
+      "expressions": 1620,
+      "integrated_word_audio": 12,
+      "integrated_word_images": 8,
+      "modules": 200,
+      "morphology_authored": 4045,
+      "morphology_reviewed": 89,
+      "ready_modules": 0,
+      "release_ready": false,
+      "reviewed_lexemes": 130,
+      "themes": 21,
+      "unique_lexemes": 4939,
+      "vocabulary_memberships": 10000,
+      "vocabulary_memberships_remaining": 0,
+      "vocabulary_memberships_target": 10000
+    },
+    "production_audit_warning_count": 29432
+  },
+  "proof_checks": {
+    "persisted_receipt_byte_equal_frozen_verified_receipt": true,
+    "current_output_inventory_matched_receipt_in_initial_pass": true,
+    "manifest_proof_receipt_generated_inventory_equal": true,
+    "native_proof_pin_constants_equal_frozen_pin": true,
+    "observed_pin_constants": {
+      "SCHEMA_VERSION": 1,
+      "POLICY_VERSION": "ordinary-lexical-v3",
+      "CONTEXT_BOUNDARY": "containing-modules-v1",
+      "DESCRIPTOR_PATH": "res://data/professional/domain-policy/generated/release.json",
+      "DESCRIPTOR_BYTES": 954,
+      "DESCRIPTOR_SHA256": "28e8f954bb11e201d685190b295b90117c80ca922b43d6369f55052f71fd200b",
+      "GENERATED_ROOT": "res://data/professional/domain-policy/generated/"
+    },
+    "descriptor_raw_length_hash_match_pin": true,
+    "release_index_audit_compile_binding_equal": true,
+    "prepared_installed_receipt_release_equal": true,
+    "current_brotli_main_pack_consumed_completely": true,
+    "current_decoded_main_pack_matches_native_verified_digest": true,
+    "result_log_hash_matches_raw_bytes": true,
+    "durable_copies_checked": 27,
+    "durable_copies_byte_equal_sources": true
+  },
+  "reviewer_check_history": [
+    {
+      "pass": "initial_ad_hoc_integrity_comparison",
+      "tool_session_id": 27693,
+      "status": "stopped_at_reviewer_pin_regex_error",
+      "exit_code": 1,
+      "completed_before_stop": [
+        "Compared raw result/log and persisted/frozen receipt bytes",
+        "Classified all 33 input additions and checked media source bytes/import source paths",
+        "Recomputed snapshotInputs and matched all 13318 source inputs to after inventory and receipt",
+        "Independently enumerated/rehashed all 117 current output files and matched the receipt",
+        "Rehashed the three generated files and checked exact directory inventory",
+        "Reconstructed 200 unavailable index rows from the 20 current course manifests and checked copied themes and empty decisions",
+        "Checked compiler/auditor/prepared/installed/native-manifest/proof bindings and canonical inventory digests",
+        "Rehashed all 407 retained snapshot files against captured hashes and current live bytes, plus contract hashes"
+      ],
+      "failure": "The reviewer regex [A-Z_]+ omitted DESCRIPTOR_SHA256 because its name contains digits. The actual pin file contains the correct constant. This was a reviewer extraction error, not a build failure.",
+      "report_written": false
+    },
+    {
+      "pass": "affected_pin_proof_and_copy_completion",
+      "status": "passed",
+      "correction": "Use [A-Z0-9_]+; all seven constants match the retained native proof and frozen descriptor.",
+      "scope": "Corrected pin extraction, main-PCK compressed/full decoded digest binding, frozen report consistency and 27 durable-copy equalities. No full source/output inventory rescan."
+    }
+  ],
+  "source_moment": "The 13318-input and 117-output byte comparisons were completed in the initial pass before root announced subsequent production implementation. This review binds the frozen completed build, not intentionally advancing source files. No later full source inventory scan was required or performed.",
+  "method": {
+    "read_only_source_snapshot_function": "snapshotInputs only; verifyBuildReceipt was not invoked",
+    "canonical_inventory_digest": "codec.digest only; no compiler or auditor execution",
+    "main_pack_check": "Read current Brotli bytes, decompress only the main PCK, compare exact byte count/full SHA256 with the retained native verification binding",
+    "native_evidence": "Inspected retained native proof, manifest, code contract and build log; no native execution repeated",
+    "new_files": [
+      "docs\\qa\\professional-domain-web-r01\\independent-review.json"
+    ]
+  },
+  "evidence_hashes": [
+    {
+      "path": "docs\\qa\\professional-domain-web-r01\\actual-web-build-result.json",
+      "bytes": 4995,
+      "sha256": "391f3943ab118bc6f4391adffdf7ee6a07b5bd92cf65225e84e7b2400f34a3ac"
+    },
+    {
+      "path": "docs\\qa\\professional-domain-web-r01\\actual-web-build.log",
+      "bytes": 6854,
+      "sha256": "8c138bf02dc6e5f70551c9901c0939c30ad2ca945727ef6845222f442e4359d6"
+    },
+    {
+      "path": "docs\\qa\\professional-domain-web-r01\\build-inputs-before.json",
+      "bytes": 2185105,
+      "sha256": "fb0f96851f6ae0fe7d353c3e105854a17182c77a4eb03b8aef7146072f292453"
+    },
+    {
+      "path": "docs\\qa\\professional-domain-web-r01\\build-inputs-after.json",
+      "bytes": 2192087,
+      "sha256": "49b860cf744c92b85694e7ea44c5ba32c095ecc1100621c4d32028258aa39102"
+    },
+    {
+      "path": "docs\\qa\\professional-domain-web-r01\\verified-web-build.json",
+      "bytes": 2437866,
+      "sha256": "2c9ad5292d4a5bd87d9631138d6206121172af1615d2deed5b563de233e9c232"
+    },
+    {
+      "path": "docs\\qa\\professional-domain-web-r01\\run-build.cjs",
+      "bytes": 3412,
+      "sha256": "42a84e952c94bcfb6495995e2750082c9bbd7de3ccf0f19aeee0c4a585b82748"
+    },
+    {
+      "path": "docs\\qa\\professional-domain-web-r01\\package\\compile-report.json",
+      "bytes": 1407,
+      "sha256": "59c6016c1fe7d627f3301f9d5e26ba43e2338056b4920720492c36c17cd2ce0d"
+    },
+    {
+      "path": "docs\\qa\\professional-domain-web-r01\\package\\audit-report.json",
+      "bytes": 67833,
+      "sha256": "50dd89d3d5645ac7b7c1076b466daeeb6331a500c3bce48e1bdef8945a76680e"
+    },
+    {
+      "path": "docs\\qa\\professional-domain-web-r01\\package\\source-capture.json",
+      "bytes": 128785,
+      "sha256": "bf81dd5b08d9a9ffa6a1d615af8eef1a9aa1407ed4742038a260c2a46b5b88a4"
+    },
+    {
+      "path": "docs\\qa\\professional-domain-web-r01\\package\\prepared-release.json",
+      "bytes": 66782,
+      "sha256": "3ff632fea2e35a588fbcffd9b3f3a985e9a4fabdc4f7d0c19664f42f1eab8c3f"
+    },
+    {
+      "path": "docs\\qa\\professional-domain-web-r01\\package\\installed-release.json",
+      "bytes": 66782,
+      "sha256": "3ff632fea2e35a588fbcffd9b3f3a985e9a4fabdc4f7d0c19664f42f1eab8c3f"
+    },
+    {
+      "path": "docs\\qa\\professional-domain-web-r01\\package\\web-pack-manifest.json",
+      "bytes": 1121,
+      "sha256": "e71ce6f51be064e6abd2b7fe05650af6fc06c5f6322bf001b1e9b6b3a07bafbb"
+    },
+    {
+      "path": "docs\\qa\\professional-domain-web-r01\\package\\web-pack-proof.json",
+      "bytes": 956,
+      "sha256": "f399600d32e33d4deb0112aaaf4a991b59e2bf6ee926ad74949b35acb240ec98"
+    },
+    {
+      "path": "docs\\qa\\professional-domain-web-r01\\generated\\index.json",
+      "bytes": 20705,
+      "sha256": "21aa9d49135b574f12dcff2fdb2295a3fae329b0a6765ac3a914e90944994ac0"
+    },
+    {
+      "path": "docs\\qa\\professional-domain-web-r01\\generated\\release.json",
+      "bytes": 954,
+      "sha256": "28e8f954bb11e201d685190b295b90117c80ca922b43d6369f55052f71fd200b"
+    },
+    {
+      "path": "docs\\qa\\professional-domain-web-r01\\generated\\themes.json",
+      "bytes": 91201,
+      "sha256": "2bf6d483cae7b3d38c96945719612a5394a9aa6e2d94d63db9a12b4b55edc669"
+    },
+    {
+      "path": "docs\\qa\\professional-domain-web-r01\\generated\\professional_domain_release.gd",
+      "bytes": 543,
+      "sha256": "ffe5411752295e30abcb81bfa4634da56654ee60575d36f56426cba082f1161f"
+    },
+    {
+      "path": "docs\\qa\\professional-domain-web-r01\\copy-receipt.json",
+      "bytes": 7472,
+      "sha256": "b960343ab062a4490aa001fc45441193c526ab2db4a1fd86c01e26063f40dff0"
+    }
+  ],
+  "limits": [
+    "Accepts the recorded local all-unavailable Web packaging result and the bounded byte/proof consistency checks only.",
+    "The root already executed persisted receipt verification; this independent pass did not call verifyBuildReceipt, compile, audit, tests, native Godot, export or build.",
+    "The 27 durable copies were checked for equality; their test artifacts were not independently re-executed and their stated test results are not expanded by this review.",
+    "The retained native proof was inspected and its full decoded-PCK digest rebound to current compressed bytes; no second native embedded-script evaluation or independent full PCK parser was run.",
+    "Root-owned browser Home smoke is separate evidence and is not assessed here. No gameplay, ready-module acceptance, production asynchronous owner integration, human/specialist approval, media quality/listening review, deployment, Web performance or memory acceptance is implied.",
+    "Subsequent intentional production edits are outside this completed-build receipt. This review does not authorize deployment of a future modified source state."
+  ],
+  "execution": {
+    "tests": false,
+    "native": false,
+    "build": false,
+    "export": false,
+    "browser": false,
+    "production_writes": false,
+    "verifyBuildReceipt": false
+  }
+}

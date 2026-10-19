@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "status": "exact_shared_test_replacements_prepared_unbound",
+  "patches": [
+    {
+      "file": "tests/professional-content.test.cjs",
+      "before_sha256": "83ccbe17e57bcd9ee8216f1416de68abcaae8ca79c54e493eaf0007d6e74440e",
+      "after_sha256": "6cc20ad953645ecf4961dfff2fd22f9cdd2ed5c4d6e3c9d100e938902fd3e9f0",
+      "before_artifact": "professional-content.test.cjs.before",
+      "after_artifact": "professional-content.test.cjs.after",
+      "exact_anchor_edits": [
+        {
+          "before": "function beforeSupervisorLanguage(entry) {",
+          "after": "const foundation02FirstLanguageRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/foundation-module02-language-first10-2026-10-16.json'), 'utf8'));\nfunction beforeFoundation02FirstLanguage(entry) {\n  const patch = foundation02FirstLanguageRecord.patches.find(item => item.id === entry.id);\n  if (!patch) return entry;\n  // Exact earlier snapshots remain valid; arbitrary partial or later edits do not.\n  if (require('node:util').isDeepStrictEqual(entry, patch.before)) return structuredClone(patch.before);\n  assert.deepEqual(entry, patch.after, entry.id + ': exact later module02 first-ten language and metadata delta');\n  return structuredClone(patch.before);\n}\nfunction beforeSupervisorLanguage(entry) {\n  entry = beforeFoundation02FirstLanguage(entry);",
+          "count": 1
+        },
+        {
+          "before": "...supervisorLanguageRecord.patches].map(item => item.id)",
+          "after": "...supervisorLanguageRecord.patches, ...foundation02FirstLanguageRecord.patches].map(item => item.id)",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(result.summary.reviewed_lexemes, 111);",
+          "after": "assert.equal(result.summary.reviewed_lexemes, 121);",
+          "count": 1
+        }
+      ],
+      "appended_tests": 5,
+      "syntax_valid": true,
+      "projected_focused_callbacks_passed": 30
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "before_sha256": "445ace67e25d2be472f58e41eb507cc2e96ca15a61f815d8a4583fe80c28650f",
+      "after_sha256": "5344e7ab7c62e62640f3c9047f602f0434be6d584430c08e65ae50dbeb9c210c",
+      "before_artifact": "professional-retail-morphology.test.cjs.before",
+      "after_artifact": "professional-retail-morphology.test.cjs.after",
+      "exact_anchor_edits": [
+        {
+          "before": "function beforeSupervisorLanguage(entry) {",
+          "after": "const foundation02FirstLanguageRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/foundation-module02-language-first10-2026-10-16.json'), 'utf8'));\nfunction beforeFoundation02FirstLanguage(entry) {\n  const patch = foundation02FirstLanguageRecord.patches.find(item => item.id === entry.id);\n  if (!patch) return entry;\n  // Exact earlier snapshots remain valid; arbitrary partial or later edits do not.\n  if (require('node:util').isDeepStrictEqual(entry, patch.before)) return structuredClone(patch.before);\n  assert.deepEqual(entry, patch.after, entry.id + ': exact later module02 first-ten language and metadata delta');\n  return structuredClone(patch.before);\n}\nfunction beforeSupervisorLanguage(entry) {\n  entry = beforeFoundation02FirstLanguage(entry);",
+          "count": 1
+        }
+      ],
+      "appended_tests": 1,
+      "syntax_valid": true,
+      "projected_focused_callbacks_passed": 6
+    }
+  ],
+  "baseline_bound": false,
+  "production_mutated": false
+}

@@ -1,0 +1,130 @@
+{
+  "schema": 1,
+  "status": "exact_persisted_input_and_committed_journal_independently_verified",
+  "reviewer": "Codex runtime_recovery",
+  "recorded_at": "2026-10-16T22:54:19.403Z",
+  "source": {
+    "path": "build/professional-english/shopping-bag-persisted-validation-r01/invoke.cjs",
+    "bytes": 5772,
+    "sha256": "c25cafb5332e391eeb76d59a51e5f317199504a2c112b7fdfca2e7a52435221f"
+  },
+  "input": {
+    "path": "build/professional-english/shopping-bag-persisted-validation-r01/input.json",
+    "bytes": 1808178,
+    "sha256": "a31cd76e3f21b19fc727a5ce735bac6c3d20c9de8a71fe80b70b587c1907b70f"
+  },
+  "commit_receipt": {
+    "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/receipt.json",
+    "bytes": 59877,
+    "sha256": "b5b263fda99813d9c45564d5fdc35a8b437f5a3a91ec60b06eb1b00e45ddb681"
+  },
+  "root_commit_receipt": {
+    "path": "build/professional-english/shopping-bag-root-commit-r01/execution-r01/receipt.json",
+    "bytes": 59877,
+    "sha256": "b5b263fda99813d9c45564d5fdc35a8b437f5a3a91ec60b06eb1b00e45ddb681"
+  },
+  "commit_command": {
+    "path": "build/professional-english/shopping-bag-root-commit-r01/command-witness.json",
+    "bytes": 523,
+    "sha256": "6b28432c772853529450959c26f9f25395cbe5729124276eb2201f5b03c7d84a"
+  },
+  "actual_guard_receipt": {
+    "path": "build/professional-english/shopping-bag-root-guard-r01/attempt-001/receipt.json",
+    "bytes": 4160638,
+    "sha256": "85b6c2259d0b19fb4977fad8b7b3d83ae7c9e0dd6ed4a4def7d7e47be90148ee"
+  },
+  "contract": {
+    "path": "build/professional-english/shopping-bag-root-commit-r01/contract.json",
+    "bytes": 58680,
+    "sha256": "94d2dd3c166a57f4dc5ec7e456944edf4f131e6769ebce4385b4977414f9ee0b"
+  },
+  "pin_map": {
+    "count": 11740,
+    "sha256": "4ccb7f217bb9b7a948b138c0580b8f51d50975e5722c4769ada75bf8bc79fac3",
+    "current_bytes": 1024576014,
+    "exactly_candidate_plus_committed_and_copied_afterimages": true,
+    "candidate_count": 11569,
+    "substitution_count": 4,
+    "substitutions": [
+      "data/professional/lexemes/retail-pilot.json",
+      "tests/professional-content.test.cjs",
+      "tests/professional-retail-morphology.test.cjs",
+      "tests/professional-retail-media.test.cjs"
+    ],
+    "new_committed_targets": 149,
+    "copied_files_including_copy_receipt": 22,
+    "hash_mismatches": 0
+  },
+  "evidence": {
+    "count": 579,
+    "all_rehashed": true,
+    "journal_files": 467,
+    "all_journal_files_explicitly_pinned": true
+  },
+  "journal": {
+    "transaction_dir": "build/professional-english/transactions/shopping-bag-image-r01",
+    "plan_sha256": "28c763178d2247e7e1fdce7290fa11799d8cce05709d3da696e2f7aeec9dfeb6",
+    "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+    "final_state": {
+      "path": "build/professional-english/transactions/shopping-bag-image-r01/states/000308-committed.json",
+      "sha256": "6734fefae6c4989100f37ae06bf8c910ce3cb4eeacad69cd335eb626381e4150"
+    },
+    "state_count": 308,
+    "stages": 153,
+    "backups": 4,
+    "live_afterimages": 153,
+    "complete_trusted_chain_verified": true,
+    "active_lock_absent": true
+  },
+  "candidate": {
+    "receipt": {
+      "path": "build/professional-english/shopping-bag-projected-validation-r03/attempt-001/receipt.json",
+      "bytes": 469175,
+      "sha256": "9a5ee12cf7ac2c4f6f6e41e7a05357a365eab570a5da1d4ce2a696143c73c121"
+    },
+    "callbacks": 255,
+    "expected_audit_summary": {
+      "courses": 20,
+      "modules": 200,
+      "themes": 21,
+      "unique_lexemes": 4939,
+      "vocabulary_memberships": 10000,
+      "vocabulary_memberships_target": 10000,
+      "vocabulary_memberships_remaining": 0,
+      "expressions": 1620,
+      "expression_memberships": 2000,
+      "expression_memberships_target": 2000,
+      "expression_memberships_remaining": 0,
+      "ready_modules": 0,
+      "reviewed_lexemes": 148,
+      "morphology_authored": 4045,
+      "morphology_reviewed": 89,
+      "integrated_word_images": 9,
+      "integrated_word_audio": 12,
+      "release_ready": false
+    },
+    "audit_errors": 0,
+    "audit_warnings": 29395
+  },
+  "copies": {
+    "receipt": {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/copy-receipt.json",
+      "bytes": 7407,
+      "sha256": "dc2b594970981808a9960cdfa4d30d2ad25cb631da936d30f64e0587793f7996"
+    },
+    "source_target_pairs": 21,
+    "exact_bytes": true
+  },
+  "one_shot_attempt_absent": true,
+  "actual_commit": true,
+  "persisted_validation_run": false,
+  "inspection_correction": "A first reviewer-local read-only inspection used an incorrectly transcribed full copy-receipt hash from an abbreviated message and stopped before writing output. This fresh complete inspection uses the actual exact-input pin and rechecks all bytes and links. No root runner or production state was changed.",
+  "execution": {
+    "node_builtins_raw_bytes_and_json_only": true,
+    "project_or_proposal_modules_imported": false,
+    "validator_or_tests_executed": false,
+    "native_executed": false,
+    "transaction_executed": false,
+    "production_mutated": false
+  }
+}

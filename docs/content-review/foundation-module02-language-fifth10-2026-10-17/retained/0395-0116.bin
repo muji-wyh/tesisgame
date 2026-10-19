@@ -1,0 +1,128 @@
+{
+  "schema": 1,
+  "status": "explicit_current_catalog_resource_dependency_supplement",
+  "prior_candidate_input": {
+    "path": "build/professional-english/shopping-bag-projected-validation-r01/input.json",
+    "sha256": "e391994e98771ff5148da8b8ff85fd55b6e5af885d8a371333a4a876a388e484"
+  },
+  "catalog_json_resources_inspected": 348,
+  "res_path_references": 408,
+  "files": [
+    {
+      "path": "assets/audio/bgm/spring.wav",
+      "bytes": 15876044,
+      "raw_sha256": "c318124a0b1375eb6262cc77da930f39588269a34f7304ab2e9b94372944ebe9"
+    },
+    {
+      "path": "assets/images/professional-previews/accounting-finance.png",
+      "bytes": 43089,
+      "raw_sha256": "31ea949bb0ca8e5774302dd8b22e18066a189baac9ad736d7935980c2e2c171a"
+    },
+    {
+      "path": "assets/images/professional-previews/caregiving.png",
+      "bytes": 43374,
+      "raw_sha256": "5158de0b177ab2e5159ca226f18c6c5a8536b39dbaab69c18791c80cdeef421a"
+    },
+    {
+      "path": "assets/images/professional-previews/cleaning-facilities.png",
+      "bytes": 40571,
+      "raw_sha256": "ec93a90cb516a727cac00af0b64875fc9c426a2a8c265db24bd7e7849e7a6c12"
+    },
+    {
+      "path": "assets/images/professional-previews/clinical-medicine.png",
+      "bytes": 52554,
+      "raw_sha256": "6b52f53f4d60046db67b948f5a2dfc8e4dc7604e8cee5b34ba1f020c93048367"
+    },
+    {
+      "path": "assets/images/professional-previews/construction-trades.png",
+      "bytes": 59658,
+      "raw_sha256": "ee917b37e665e6326c291c899f9a09adbf03675d96d572913a9d40a5bd82e6b6"
+    },
+    {
+      "path": "assets/images/professional-previews/customer-support.png",
+      "bytes": 40615,
+      "raw_sha256": "5a3a35221e881999e047390136f1cbe8a12aa238102e3b309bd2df3fe1cd6b8d"
+    },
+    {
+      "path": "assets/images/professional-previews/education-childcare.png",
+      "bytes": 41771,
+      "raw_sha256": "a65495ef4fc41b0a802547a036f3f90db9198ce0855006b16f017ddfa61b7d29"
+    },
+    {
+      "path": "assets/images/professional-previews/food-service.png",
+      "bytes": 50834,
+      "raw_sha256": "cb6952f9d40d6c9b7b074557e861e5bbe975c3826f83ed5eba83567313ec2ab3"
+    },
+    {
+      "path": "assets/images/professional-previews/hospitality-tourism.png",
+      "bytes": 42546,
+      "raw_sha256": "422cc920c1ab1dbbe090454a2b82b018a350f18650dff3287ff4e2af467c14ee"
+    },
+    {
+      "path": "assets/images/professional-previews/hr-recruitment.png",
+      "bytes": 39673,
+      "raw_sha256": "bb6ff2a331ad371a83fcc2eeadebe071fa275af3795d63054dc842646110f09a"
+    },
+    {
+      "path": "assets/images/professional-previews/it-support.png",
+      "bytes": 59268,
+      "raw_sha256": "c78665355a7ec8447d4575e19167b9a8e06452e3f8066174ef0e20a92d129048"
+    },
+    {
+      "path": "assets/images/professional-previews/legal-paralegal.png",
+      "bytes": 52601,
+      "raw_sha256": "0ef10dbaf2d1f7e8879beefaa10e02058a2a1a95343fc33e948e2f7a119a0eb6"
+    },
+    {
+      "path": "assets/images/professional-previews/manufacturing-maintenance.png",
+      "bytes": 53089,
+      "raw_sha256": "b9794f4f4ed02559b0fa2c1a810d2cd78d40252950aaa424e7656de2f9b06cb3"
+    },
+    {
+      "path": "assets/images/professional-previews/nursing.png",
+      "bytes": 52556,
+      "raw_sha256": "9dea5958b2143012b69d0119ce3b6c2fe9c3eaa0ad5e5b544cdcedd632fa73ee"
+    },
+    {
+      "path": "assets/images/professional-previews/office-admin.png",
+      "bytes": 45642,
+      "raw_sha256": "6ba67a3c508d6211bea2370589837e7e445c561b9b9ae9a5811639d2746239c8"
+    },
+    {
+      "path": "assets/images/professional-previews/retail.png",
+      "bytes": 91063,
+      "raw_sha256": "b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae"
+    },
+    {
+      "path": "assets/images/professional-previews/sales-marketing.png",
+      "bytes": 43114,
+      "raw_sha256": "283866d94d5fbe50b66f602bffe428632dcebcb188d8ef2db59fd769157437c7"
+    },
+    {
+      "path": "assets/images/professional-previews/software-data.png",
+      "bytes": 46113,
+      "raw_sha256": "5c87d4a3045d91aa60a5fb4be951baa43834fb39fbf684a5ee7aa132daece5b2"
+    },
+    {
+      "path": "assets/images/professional-previews/transport-delivery.png",
+      "bytes": 56497,
+      "raw_sha256": "ce672584af56edb6608203a5f16d93f8a846eb324073c362118037164a7ef234"
+    },
+    {
+      "path": "assets/images/professional-previews/warehouse-logistics.png",
+      "bytes": 43881,
+      "raw_sha256": "723cea4f1883ab238425f4f2c779e93030bbf5eda964f8fb52bd7c60b5be29f9"
+    },
+    {
+      "path": "docs/assets/jelly-garden.json",
+      "bytes": 7860,
+      "raw_sha256": "68df5cef578d8ae099a6ad3fa68d2fcb8456ff1341119ebe06cbaeaa6d1c1815"
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-ava/acquisition.json",
+      "bytes": 4088,
+      "raw_sha256": "60792dfaa7c580c6981901c6bce04626cf0ae2d57a0bd0edd66bf81a304a232c"
+    }
+  ],
+  "scope": "Read-only pins for20 existing Home previews plus referenced Growth BGM and2 provenance files. No content or runner logic change; historical acceptance is unchanged."
+}

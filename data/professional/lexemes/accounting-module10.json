@@ -1,0 +1,4222 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "month-end-close.process-of-completing-and-reviewing-accounting-records-for-month.n",
+      "text": "month-end close",
+      "display_text": "month-end close",
+      "pos": "noun",
+      "definition": "The process of completing and reviewing accounting records for a month.",
+      "example": "The month-end close still has two unresolved review items.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "month-end close"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional monthly close board with completed tasks, pending reviews and unresolved items clearly distinguished.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "month-end-close.process-of-completing-and-reviewing-accounting-records-for-month.n.analysis.v1",
+        "lexeme_id": "month-end-close.process-of-completing-and-reviewing-accounting-records-for-month.n",
+        "text": "month-end close",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.month",
+            "type": "stem",
+            "canonical": "month",
+            "surface": "month"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.end",
+            "type": "stem",
+            "canonical": "end",
+            "surface": "end"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.close",
+            "type": "stem",
+            "canonical": "close",
+            "surface": "close"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "month-end",
+            "rule": "hyphenated_compound"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "month-end close",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "year-end-close.process-of-completing-and-reviewing-accounting-records-for-financial-year.n",
+      "text": "year-end close",
+      "display_text": "year-end close",
+      "pos": "noun",
+      "definition": "The process of completing and reviewing accounting records for a financial year.",
+      "example": "The year-end close includes the final reporting-period review.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "year-end close"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional financial-year timeline ending in clearly labeled record preparation, reconciliation and review tasks.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "year-end-close.process-of-completing-and-reviewing-accounting-records-for-financial-year.n.analysis.v1",
+        "lexeme_id": "year-end-close.process-of-completing-and-reviewing-accounting-records-for-financial-year.n",
+        "text": "year-end close",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.year",
+            "type": "stem",
+            "canonical": "year",
+            "surface": "year"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.end",
+            "type": "stem",
+            "canonical": "end",
+            "surface": "end"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.close",
+            "type": "stem",
+            "canonical": "close",
+            "surface": "close"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "year-end",
+            "rule": "hyphenated_compound"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "year-end close",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "financial-close-checklist.list-of-tasks-and-checks-for-completing-period-accounting.n",
+      "text": "financial close checklist",
+      "display_text": "financial close checklist",
+      "pos": "noun",
+      "definition": "A list of tasks and checks for completing the accounting work for a period.",
+      "example": "The financial close checklist identifies the owner of each outstanding task.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "financial close checklist"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional period-end checklist showing assigned roles, evidence links and genuine pending statuses, distinct from a shop-locking checklist.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "financial-close-checklist.list-of-tasks-and-checks-for-completing-period-accounting.n.analysis.v1",
+        "lexeme_id": "financial-close-checklist.list-of-tasks-and-checks-for-completing-period-accounting.n",
+        "text": "financial close checklist",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.financial",
+            "type": "stem",
+            "canonical": "financial",
+            "surface": "financial"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.close",
+            "type": "stem",
+            "canonical": "close",
+            "surface": "close"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.check",
+            "type": "atomic",
+            "canonical": "check",
+            "surface": "check"
+          },
+          {
+            "id": "p4",
+            "canonical_id": "morph.list",
+            "type": "stem",
+            "canonical": "list",
+            "surface": "list"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "financial close",
+            "rule": "word_boundary"
+          },
+          {
+            "id": "n2",
+            "left": "p3",
+            "right": "p4",
+            "surface": "checklist",
+            "rule": "closed_compound"
+          },
+          {
+            "id": "n3",
+            "left": "n1",
+            "right": "n2",
+            "surface": "financial close checklist",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n3"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "close-calendar.schedule-of-period-end-accounting-tasks-and-deadlines.n",
+      "text": "close calendar",
+      "display_text": "close calendar",
+      "pos": "noun",
+      "definition": "A schedule of period-end accounting tasks and deadlines.",
+      "example": "The close calendar gives separate dates for preparation and review.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "close calendar"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional month-end calendar with preparation and review milestones assigned to different dates and owners.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "close-calendar.schedule-of-period-end-accounting-tasks-and-deadlines.n.analysis.v1",
+        "lexeme_id": "close-calendar.schedule-of-period-end-accounting-tasks-and-deadlines.n",
+        "text": "close calendar",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.close",
+            "type": "stem",
+            "canonical": "close",
+            "surface": "close"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.calendar",
+            "type": "stem",
+            "canonical": "calendar",
+            "surface": "calendar"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "close calendar",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "cutoff-date.date-marking-boundary-for-including-items-in-stated-period-or-set.n",
+      "text": "cutoff date",
+      "display_text": "cutoff date",
+      "pos": "noun",
+      "definition": "A date marking the boundary for including items in a stated period or set of records.",
+      "example": "The reviewer asked which cutoff date applies to this report.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "cutoff date"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional reporting timeline with a clear inclusion boundary and nearby transactions awaiting classification review.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "cutoff-date.date-marking-boundary-for-including-items-in-stated-period-or-set.n.analysis.v1",
+        "lexeme_id": "cutoff-date.date-marking-boundary-for-including-items-in-stated-period-or-set.n",
+        "text": "cutoff date",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.cut",
+            "type": "stem",
+            "canonical": "cut",
+            "surface": "cut"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.off",
+            "type": "stem",
+            "canonical": "off",
+            "surface": "off"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.date",
+            "type": "stem",
+            "canonical": "date",
+            "surface": "date"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "cutoff",
+            "rule": "closed_compound"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "cutoff date",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "internal-audit.independent-assurance-or-advisory-work-evaluating-organizations-governance-risk-and-controls.n",
+      "text": "internal audit",
+      "display_text": "internal audit",
+      "pos": "noun",
+      "definition": "Independent assurance or advisory work that evaluates an organization's governance, risk management and controls.",
+      "example": "Internal audit requested evidence of how the review step operates.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "internal audit"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An internal audit team reviewing documented controls with operational staff, with scope and independent review responsibilities clearly indicated.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "internal-audit.independent-assurance-or-advisory-work-evaluating-organizations-governance-risk-and-controls.n.analysis.v1",
+        "lexeme_id": "internal-audit.independent-assurance-or-advisory-work-evaluating-organizations-governance-risk-and-controls.n",
+        "text": "internal audit",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.internal",
+            "type": "stem",
+            "canonical": "internal",
+            "surface": "internal"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.audit",
+            "type": "stem",
+            "canonical": "audit",
+            "surface": "audit"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "internal audit",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "external-audit.independent-examination-by-auditor-outside-the-organization.n",
+      "text": "external audit",
+      "display_text": "external audit",
+      "pos": "noun",
+      "definition": "An independent examination by an auditor outside the organization, within an agreed or required scope.",
+      "example": "The external audit team asked for the supporting records.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "external audit"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An external audit team reviewing a fictional entity's evidence against an identified scope, without guaranteeing that every error is detected.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "external-audit.independent-examination-by-auditor-outside-the-organization.n.analysis.v1",
+        "lexeme_id": "external-audit.independent-examination-by-auditor-outside-the-organization.n",
+        "text": "external audit",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.external",
+            "type": "stem",
+            "canonical": "external",
+            "surface": "external"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.audit",
+            "type": "stem",
+            "canonical": "audit",
+            "surface": "audit"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "external audit",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "preparer.person-who-creates-or-assembles-item-for-review.n",
+      "text": "preparer",
+      "display_text": "preparer",
+      "pos": "noun",
+      "definition": "A person who creates or assembles an item for review.",
+      "example": "The preparer attached the supporting calculation.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "preparer"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional reconciliation labeled with its preparer and separately assigned reviewer, with the supporting calculation attached.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "preparer.person-who-creates-or-assembles-item-for-review.n.analysis.v1",
+        "lexeme_id": "preparer.person-who-creates-or-assembles-item-for-review.n",
+        "text": "preparer",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.prepare",
+            "type": "stem",
+            "canonical": "prepare",
+            "surface": "prepar"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.er.suffix",
+            "type": "suffix",
+            "canonical": "er",
+            "surface": "er"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "preparer",
+            "rule": "drop_final_e_before_suffix"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "approver.person-authorized-to-give-approval-within-stated-scope.n",
+      "text": "approver",
+      "display_text": "approver",
+      "pos": "noun",
+      "definition": "A person authorized to give approval within a stated scope.",
+      "example": "The approver asked for clarification before making a decision.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "approver"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An authorized role reviewing a fictional request within documented limits, with approval still pending.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "approver.person-authorized-to-give-approval-within-stated-scope.n.analysis.v1",
+        "lexeme_id": "approver.person-authorized-to-give-approval-within-stated-scope.n",
+        "text": "approver",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.approve",
+            "type": "stem",
+            "canonical": "approve",
+            "surface": "approv"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.er.suffix",
+            "type": "suffix",
+            "canonical": "er",
+            "surface": "er"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "approver",
+            "rule": "drop_final_e_before_suffix"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "audit-committee.governance-group-overseeing-financial-reporting-and-audit-matters.n",
+      "text": "audit committee",
+      "display_text": "audit committee",
+      "pos": "noun",
+      "definition": "A governance group assigned oversight of financial reporting and audit matters.",
+      "example": "The audit committee discussed the unresolved reporting issue.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "audit committee"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional governance meeting reviewing an audit report and financial-reporting concern, distinct from the team preparing daily entries.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "audit-committee.governance-group-overseeing-financial-reporting-and-audit-matters.n.analysis.v1",
+        "lexeme_id": "audit-committee.governance-group-overseeing-financial-reporting-and-audit-matters.n",
+        "text": "audit committee",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.audit",
+            "type": "stem",
+            "canonical": "audit",
+            "surface": "audit"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.committee",
+            "type": "stem",
+            "canonical": "committee",
+            "surface": "committee"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "audit committee",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "engagement-letter.letter-recording-terms-and-scope-of-professional-assignment.n",
+      "text": "engagement letter",
+      "display_text": "engagement letter",
+      "pos": "noun",
+      "definition": "A letter recording the terms and scope of a professional assignment.",
+      "example": "The engagement letter identifies the work and the responsibilities of each party.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "engagement letter"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional professional-service letter highlighting scope, responsibilities and terms, without inventing universally required clauses.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "engagement-letter.letter-recording-terms-and-scope-of-professional-assignment.n.analysis.v1",
+        "lexeme_id": "engagement-letter.letter-recording-terms-and-scope-of-professional-assignment.n",
+        "text": "engagement letter",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.engagement",
+            "type": "stem",
+            "canonical": "engagement",
+            "surface": "engagement"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.letter",
+            "type": "stem",
+            "canonical": "letter",
+            "surface": "letter"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "engagement letter",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "query-log.record-tracking-questions-responses-and-resolution-status.n",
+      "text": "query log",
+      "display_text": "query log",
+      "pos": "noun",
+      "definition": "A record tracking questions, responses and their resolution status.",
+      "example": "The query log shows who will answer the remaining question.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "query log"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional list of finance-review questions with responsible contacts, response dates and open or resolved statuses.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "query-log.record-tracking-questions-responses-and-resolution-status.n.analysis.v1",
+        "lexeme_id": "query-log.record-tracking-questions-responses-and-resolution-status.n",
+        "text": "query log",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.query",
+            "type": "stem",
+            "canonical": "query",
+            "surface": "query"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.log",
+            "type": "stem",
+            "canonical": "log",
+            "surface": "log"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "query log",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "open-item.matter-or-record-that-remains-unresolved.n",
+      "text": "open item",
+      "display_text": "open item",
+      "pos": "noun",
+      "definition": "A matter or record that remains unresolved.",
+      "example": "The open item concerns a payment that has not been matched.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "open item"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "One unresolved fictional payment question on a review board, with its next action and responsible contact visible.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "open-item.matter-or-record-that-remains-unresolved.n.analysis.v1",
+        "lexeme_id": "open-item.matter-or-record-that-remains-unresolved.n",
+        "text": "open item",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.open",
+            "type": "stem",
+            "canonical": "open",
+            "surface": "open"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.item",
+            "type": "stem",
+            "canonical": "item",
+            "surface": "item"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "open item",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "management-letter.auditors-communication-to-management-about-findings-or-recommendations.n",
+      "text": "management letter",
+      "display_text": "management letter",
+      "pos": "noun",
+      "definition": "An auditor's communication to management about findings or recommendations arising from the work.",
+      "example": "The management letter separates observed issues from suggested improvements.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "management letter"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional auditor's communication with findings and recommendations clearly distinguished, separate from the audit opinion.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "management-letter.auditors-communication-to-management-about-findings-or-recommendations.n.analysis.v1",
+        "lexeme_id": "management-letter.auditors-communication-to-management-about-findings-or-recommendations.n",
+        "text": "management letter",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.management",
+            "type": "stem",
+            "canonical": "management",
+            "surface": "management"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.letter",
+            "type": "stem",
+            "canonical": "letter",
+            "surface": "letter"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "management letter",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "management-commentary.managements-narrative-explanation-of-financial-results-and-circumstances.n",
+      "text": "management commentary",
+      "display_text": "management commentary",
+      "pos": "noun",
+      "definition": "Management's narrative explanation of financial results and the circumstances affecting them.",
+      "example": "The management commentary explains the main changes without replacing the figures.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "management commentary"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional report with a narrative explanation linked to the specific financial changes and uncertainties it discusses.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "management-commentary.managements-narrative-explanation-of-financial-results-and-circumstances.n.analysis.v1",
+        "lexeme_id": "management-commentary.managements-narrative-explanation-of-financial-results-and-circumstances.n",
+        "text": "management commentary",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.management",
+            "type": "stem",
+            "canonical": "management",
+            "surface": "management"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.commentary",
+            "type": "stem",
+            "canonical": "commentary",
+            "surface": "commentary"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "management commentary",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "variance-explanation.account-of-reasons-for-difference-from-comparison-amount.n",
+      "text": "variance explanation",
+      "display_text": "variance explanation",
+      "pos": "noun",
+      "definition": "An account of the reasons for a difference from a comparison amount.",
+      "example": "The variance explanation distinguishes timing from a permanent cost change.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "variance explanation"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional actual-versus-budget difference connected to documented timing and cost factors, with uncertainty visible.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "variance-explanation.account-of-reasons-for-difference-from-comparison-amount.n.analysis.v1",
+        "lexeme_id": "variance-explanation.account-of-reasons-for-difference-from-comparison-amount.n",
+        "text": "variance explanation",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.variance",
+            "type": "stem",
+            "canonical": "variance",
+            "surface": "variance"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.explanation",
+            "type": "stem",
+            "canonical": "explanation",
+            "surface": "explanation"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "variance explanation",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "forecast-revision.change-to-previous-forecast-based-on-updated-information.n",
+      "text": "forecast revision",
+      "display_text": "forecast revision",
+      "pos": "noun",
+      "definition": "A change to a previous forecast based on updated information.",
+      "example": "The forecast revision reflects the new delivery estimate.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "forecast revision"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two dated forecast versions with one changed assumption and its effect on the expected result highlighted.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "forecast-revision.change-to-previous-forecast-based-on-updated-information.n.analysis.v1",
+        "lexeme_id": "forecast-revision.change-to-previous-forecast-based-on-updated-information.n",
+        "text": "forecast revision",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.forecast",
+            "type": "stem",
+            "canonical": "forecast",
+            "surface": "forecast"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.revision",
+            "type": "stem",
+            "canonical": "revision",
+            "surface": "revision"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "forecast revision",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "budget-revision.change-to-previously-established-budget.n",
+      "text": "budget revision",
+      "display_text": "budget revision",
+      "pos": "noun",
+      "definition": "A change to a previously established budget.",
+      "example": "The proposed budget revision is awaiting approval.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "budget revision"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional original budget beside a revised proposal, with changed amounts marked and approval status clearly pending.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "budget-revision.change-to-previously-established-budget.n.analysis.v1",
+        "lexeme_id": "budget-revision.change-to-previously-established-budget.n",
+        "text": "budget revision",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.budget",
+            "type": "stem",
+            "canonical": "budget",
+            "surface": "budget"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.revision",
+            "type": "stem",
+            "canonical": "revision",
+            "surface": "revision"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "budget revision",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "funding-gap.difference-between-required-funds-and-available-or-expected-funds.n",
+      "text": "funding gap",
+      "display_text": "funding gap",
+      "pos": "noun",
+      "definition": "A difference between required funds and the funds available or expected for a stated purpose.",
+      "example": "The funding gap depends on the assumptions in the plan.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "funding gap"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional project funding requirement beside available and expected funding, with the remaining gap and assumptions visible.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "funding-gap.difference-between-required-funds-and-available-or-expected-funds.n.analysis.v1",
+        "lexeme_id": "funding-gap.difference-between-required-funds-and-available-or-expected-funds.n",
+        "text": "funding gap",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.funding",
+            "type": "stem",
+            "canonical": "funding",
+            "surface": "funding"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.gap",
+            "type": "stem",
+            "canonical": "gap",
+            "surface": "gap"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "funding gap",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "spending-commitment.agreement-or-obligation-to-incur-future-expenditure.n",
+      "text": "spending commitment",
+      "display_text": "spending commitment",
+      "pos": "noun",
+      "definition": "An agreement or obligation to incur future expenditure.",
+      "example": "The spending commitment is listed separately from amounts already paid.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "spending commitment"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional agreed purchase linked to a future payment period, clearly separated from completed cash payments.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "spending-commitment.agreement-or-obligation-to-incur-future-expenditure.n.analysis.v1",
+        "lexeme_id": "spending-commitment.agreement-or-obligation-to-incur-future-expenditure.n",
+        "text": "spending commitment",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.spending",
+            "type": "stem",
+            "canonical": "spending",
+            "surface": "spending"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.commitment",
+            "type": "stem",
+            "canonical": "commitment",
+            "surface": "commitment"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "spending commitment",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "cash-requirement.amount-of-cash-needed-for-stated-purpose-or-period.n",
+      "text": "cash requirement",
+      "display_text": "cash requirement",
+      "pos": "noun",
+      "definition": "The amount of cash needed for a stated purpose or period.",
+      "example": "The cash requirement includes the payments due next week.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "cash requirement"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional week's scheduled payment needs totaling to a clearly labeled cash requirement, separate from accounting profit.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "cash-requirement.amount-of-cash-needed-for-stated-purpose-or-period.n.analysis.v1",
+        "lexeme_id": "cash-requirement.amount-of-cash-needed-for-stated-purpose-or-period.n",
+        "text": "cash requirement",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.cash",
+            "type": "stem",
+            "canonical": "cash",
+            "surface": "cash"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.requirement",
+            "type": "stem",
+            "canonical": "requirement",
+            "surface": "requirement"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "cash requirement",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "cash-forecast.estimate-of-future-cash-receipts-payments-and-balances.n",
+      "text": "cash forecast",
+      "display_text": "cash forecast",
+      "pos": "noun",
+      "definition": "An estimate of future cash receipts, payments and balances.",
+      "example": "The cash forecast uses the latest expected receipt dates.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "cash forecast"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional future cash timeline with expected receipts, payments and balances, all visibly marked as estimates with dated assumptions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "cash-forecast.estimate-of-future-cash-receipts-payments-and-balances.n.analysis.v1",
+        "lexeme_id": "cash-forecast.estimate-of-future-cash-receipts-payments-and-balances.n",
+        "text": "cash forecast",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.cash",
+            "type": "stem",
+            "canonical": "cash",
+            "surface": "cash"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.forecast",
+            "type": "stem",
+            "canonical": "forecast",
+            "surface": "forecast"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "cash forecast",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "debt-maturity.date-or-stage-at-which-debt-becomes-due-for-final-repayment.n",
+      "text": "debt maturity",
+      "display_text": "debt maturity",
+      "pos": "noun",
+      "definition": "The date or stage at which a debt becomes due for final repayment.",
+      "example": "The debt maturity is shown in the loan agreement.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "debt maturity"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional loan timeline showing regular payments and a clearly identified final repayment date, without recommending a loan.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "debt-maturity.date-or-stage-at-which-debt-becomes-due-for-final-repayment.n.analysis.v1",
+        "lexeme_id": "debt-maturity.date-or-stage-at-which-debt-becomes-due-for-final-repayment.n",
+        "text": "debt maturity",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.debt",
+            "type": "stem",
+            "canonical": "debt",
+            "surface": "debt"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.maturity",
+            "type": "stem",
+            "canonical": "maturity",
+            "surface": "maturity"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "debt maturity",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "payment-schedule.timetable-of-planned-or-agreed-payments.n",
+      "text": "payment schedule",
+      "display_text": "payment schedule",
+      "pos": "noun",
+      "definition": "A timetable of planned or agreed payments.",
+      "example": "The payment schedule states the amount and date for each payment.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "payment schedule"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional agreed series of payments with distinct due dates and amounts, clearly distinguished from payments already made.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "payment-schedule.timetable-of-planned-or-agreed-payments.n.analysis.v1",
+        "lexeme_id": "payment-schedule.timetable-of-planned-or-agreed-payments.n",
+        "text": "payment schedule",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.payment",
+            "type": "stem",
+            "canonical": "payment",
+            "surface": "payment"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.schedule",
+            "type": "stem",
+            "canonical": "schedule",
+            "surface": "schedule"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "payment schedule",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "credit-limit.maximum-credit-amount-permitted-under-arrangement.n",
+      "text": "credit limit",
+      "display_text": "credit limit",
+      "pos": "noun",
+      "definition": "The maximum credit amount permitted under an arrangement.",
+      "example": "The customer asked how the credit limit applies to the proposed order.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "credit limit"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional customer's permitted credit amount beside current usage and a proposed order, with no automatic approval implied.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "credit-limit.maximum-credit-amount-permitted-under-arrangement.n.analysis.v1",
+        "lexeme_id": "credit-limit.maximum-credit-amount-permitted-under-arrangement.n",
+        "text": "credit limit",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.credit",
+            "type": "stem",
+            "canonical": "credit",
+            "surface": "credit"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.limit",
+            "type": "stem",
+            "canonical": "limit",
+            "surface": "limit"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "credit limit",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "credit-risk.risk-of-loss-because-party-does-not-meet-financial-obligation.n",
+      "text": "credit risk",
+      "display_text": "credit risk",
+      "pos": "noun",
+      "definition": "The risk of loss because another party does not fully meet a financial obligation.",
+      "example": "The reviewer asked how the report describes credit risk on outstanding balances.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "credit risk"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional balance owed by another party with an explicitly uncertain payment outcome and an assessment request, without implying that lateness proves fraud or that a score guarantees repayment.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "credit-risk.risk-of-loss-because-party-does-not-meet-financial-obligation.n.analysis.v1",
+        "lexeme_id": "credit-risk.risk-of-loss-because-party-does-not-meet-financial-obligation.n",
+        "text": "credit risk",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.credit",
+            "type": "stem",
+            "canonical": "credit",
+            "surface": "credit"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.risk",
+            "type": "stem",
+            "canonical": "risk",
+            "surface": "risk"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "credit risk",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "dispute-resolution.process-of-addressing-and-settling-disagreement.n",
+      "text": "dispute resolution",
+      "display_text": "dispute resolution",
+      "pos": "noun",
+      "definition": "The process of addressing and settling a disagreement.",
+      "example": "The parties requested help with dispute resolution for the invoice.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "dispute resolution"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two fictional parties comparing their records with a neutral facilitator, with the disagreement and outcome not prejudged.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "dispute-resolution.process-of-addressing-and-settling-disagreement.n.analysis.v1",
+        "lexeme_id": "dispute-resolution.process-of-addressing-and-settling-disagreement.n",
+        "text": "dispute resolution",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.dispute",
+            "type": "stem",
+            "canonical": "dispute",
+            "surface": "dispute"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.resolution",
+            "type": "stem",
+            "canonical": "resolution",
+            "surface": "resolution"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "dispute resolution",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "closing-entry.period-end-entry-transferring-temporary-account-balances.n",
+      "text": "closing entry",
+      "display_text": "closing entry",
+      "pos": "noun",
+      "definition": "An entry used at period end to transfer temporary account balances into the appropriate continuing accounts.",
+      "example": "The closing entry follows the applicable accounting setup.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "closing entry"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional period-end transfer from income and expense accounts to the relevant continuing account, with its stated system basis visible.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "closing-entry.period-end-entry-transferring-temporary-account-balances.n.analysis.v1",
+        "lexeme_id": "closing-entry.period-end-entry-transferring-temporary-account-balances.n",
+        "text": "closing entry",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.closing",
+            "type": "stem",
+            "canonical": "closing",
+            "surface": "closing"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.entry",
+            "type": "stem",
+            "canonical": "entry",
+            "surface": "entry"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "closing entry",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "retained-earnings.accumulated-profits-or-losses-after-distributions-and-relevant-adjustments.n",
+      "text": "retained earnings",
+      "display_text": "retained earnings",
+      "pos": "noun",
+      "definition": "Accumulated profits or losses remaining in an entity after distributions to owners and relevant adjustments.",
+      "example": "Retained earnings is an equity amount, not a separate pot of cash.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "retained earnings"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional equity reconciliation showing accumulated results and distributions, with a separate bank balance to prevent confusion with cash.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "retained-earnings.accumulated-profits-or-losses-after-distributions-and-relevant-adjustments.n.analysis.v1",
+        "lexeme_id": "retained-earnings.accumulated-profits-or-losses-after-distributions-and-relevant-adjustments.n",
+        "text": "retained earnings",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.retained",
+            "type": "stem",
+            "canonical": "retained",
+            "surface": "retained"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.earnings",
+            "type": "stem",
+            "canonical": "earnings",
+            "surface": "earnings"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "retained earnings",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "consolidated-accounts.financial-statements-presenting-parent-and-subsidiaries-as-one-entity.n",
+      "text": "consolidated accounts",
+      "display_text": "consolidated accounts",
+      "pos": "noun",
+      "definition": "Financial statements presenting a parent and its subsidiaries as one economic entity.",
+      "example": "The consolidated accounts reflect the stated group boundary and adjustments.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "consolidated accounts"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional parent and subsidiaries feeding into a group report, with intercompany amounts marked for elimination rather than simple addition.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "consolidated-accounts.financial-statements-presenting-parent-and-subsidiaries-as-one-entity.n.analysis.v1",
+        "lexeme_id": "consolidated-accounts.financial-statements-presenting-parent-and-subsidiaries-as-one-entity.n",
+        "text": "consolidated accounts",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.consolidated",
+            "type": "stem",
+            "canonical": "consolidated",
+            "surface": "consolidated"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.accounts",
+            "type": "stem",
+            "canonical": "accounts",
+            "surface": "accounts"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "consolidated accounts",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "annual-report.report-on-organizations-activities-and-results-for-year.n",
+      "text": "annual report",
+      "display_text": "annual report",
+      "pos": "noun",
+      "definition": "A report on an organization's activities and results for a year, often including financial statements.",
+      "example": "The annual report identifies the year and the entities it covers.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "annual report"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional yearly report containing an activity narrative and financial statements, with its scope and year clearly stated.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "annual-report.report-on-organizations-activities-and-results-for-year.n.analysis.v1",
+        "lexeme_id": "annual-report.report-on-organizations-activities-and-results-for-year.n",
+        "text": "annual report",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicitly authored structural candidates only. Modern phrase boundaries, compounds, affixes, spelling changes, metaphorical meanings, intact stems and deeper analyses still require qualified language review. No spelling-length, syllable or automatic suffix split. Unknown analysis remains null and never silently becomes atomic. Reconstruction and exercise reachability are not linguistic or subject approval.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.annual",
+            "type": "stem",
+            "canonical": "annual",
+            "surface": "annual"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.report",
+            "type": "stem",
+            "canonical": "report",
+            "surface": "report"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "annual report",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-accountants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-financial-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ecb-credit-risk",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs10-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    }
+  ]
+}

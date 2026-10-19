@@ -1,0 +1,1060 @@
+{
+  "schema": 1,
+  "date": "2026-10-16",
+  "accepted_proposal_json_sha256": "0982c8562cb2d6bc70a314516dac4db5babb73f22306f487244a0cf2cbf91d56",
+  "reviewer": "Codex (AI editorial review; not human approval)",
+  "interpretation": "These nine explicit decisions supersede the pending withdrawals preserved below. The earlier fifteen-entry correction history remains unchanged. Eight inherited families are authored; explore is retained as whole-stem exposure after an individual review of competing historical accounts.",
+  "baseline_overlay_sha256": "939195d78185488afd218e110d700c234361db5679802c9ac72eee3dfef7fab9",
+  "resulting_overlay_sha256": "0fd492358e6a812c6923ca75ec8993272fbe0917fc4af13c9edde5b6792cb6f7",
+  "newly_consulted_sources": {
+    "etym-compare-hold9": {
+      "title": "Online Etymology Dictionary: compare",
+      "author": "Douglas Harper",
+      "url": "https://www.etymonline.com/word/compare",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Entry history and linked family evidence",
+      "evidence": "The entry identifies com- with par equal through Latin comparare and French comparer. It dates the comparison of similarities and differences as a conventional extension of the earlier equality relation; current comparison does not assert that the compared objects are equal."
+    },
+    "etym-investigate-hold9": {
+      "title": "Online Etymology Dictionary: investigate",
+      "author": "Douglas Harper",
+      "url": "https://www.etymonline.com/word/investigate",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Entry history and linked family evidence",
+      "evidence": "Two routes into English are offered: back-formation from investigation or borrowing of the Latin participial form. Both retain the in- and vestigium track family. The entry distinguishes vestigium from the unrelated clothing root vestis."
+    },
+    "etym-suggest-hold9": {
+      "title": "Online Etymology Dictionary: suggest",
+      "author": "Douglas Harper",
+      "url": "https://www.etymonline.com/word/suggest",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Entry history and linked family evidence",
+      "evidence": "The history and linked suggestion discussion give sub- with gerere through suggestus. They trace the transition from supplying or bringing forward to proposing an idea; the modern proposal sense is not a literal carrying task."
+    },
+    "etym-explore-hold9": {
+      "title": "Online Etymology Dictionary: explore",
+      "author": "Douglas Harper",
+      "url": "https://www.etymonline.com/word/explore",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Entry history and linked family evidence",
+      "evidence": "The entry offers back-formation from exploration or borrowing via French. It discusses the historical plorare cry-out account but also a competing pluere flow account. That uncertainty and the established explore/exploration base argue against presenting one deep historical split as the uniquely settled learner graph."
+    },
+    "etym-separate-hold9": {
+      "title": "Online Etymology Dictionary: separate",
+      "author": "Douglas Harper",
+      "url": "https://www.etymonline.com/word/separate",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Entry history and linked family evidence",
+      "evidence": "The verb derives from the Latin participial form separatus, with se- apart and parare prepare/procure. The adjective has related borrowing/conversion history. This evidence supports the selected verb graph while keeping par.prepare distinct from compare par.equal."
+    },
+    "etym-multiply-hold9": {
+      "title": "Online Etymology Dictionary: multiply",
+      "author": "Douglas Harper",
+      "url": "https://www.etymonline.com/word/multiply",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Entry history and linked family evidence",
+      "evidence": "The entry traces the verb through French multiplier to Latin multiplicare and multiplex, linking the many element and fold family. The arithmetic sense is explicitly historical; no adverbial -ly analysis is licensed."
+    },
+    "etym-divide-hold9": {
+      "title": "Online Etymology Dictionary: divide",
+      "author": "Douglas Harper",
+      "url": "https://www.etymonline.com/word/divide",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Entry history and linked family evidence",
+      "evidence": "The entry identifies the assimilated dis- prefix plus a separate-root -videre, with an arithmetic extension. The separate root is not the Latin sight root used in video and vision."
+    },
+    "etym-estimate-hold9": {
+      "title": "Online Etymology Dictionary: estimate",
+      "author": "Douglas Harper",
+      "url": "https://www.etymonline.com/word/estimate",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Entry history and linked family evidence",
+      "evidence": "The verb is traced to Latin aestimatus/aestimare, valuing or appraising. Its current approximate-judgment meaning developed later. The esteem relation is historical; the target remains approximation rather than respectful admiration."
+    },
+    "etym-retire-hold9": {
+      "title": "Online Etymology Dictionary: retire",
+      "author": "Douglas Harper",
+      "url": "https://www.etymonline.com/word/retire",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Entry history and linked family evidence",
+      "evidence": "The entry gives French re- back plus tirer draw and explicitly traces withdrawal from employment as an extension of drawing back. It supports the career sense without substituting English tire weary."
+    },
+    "etym-ate-hold9": {
+      "title": "Online Etymology Dictionary: -ate",
+      "author": "Douglas Harper",
+      "url": "https://www.etymonline.com/word/-ate",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Entry history and linked family evidence",
+      "evidence": "The entry distinguishes the inherited noun/adjective ending from the English verbal -ate formation based on Latin participial stems. Separate is a named related form. This licenses an inherited verbal ending, not automatic stripping of every final ate string."
+    },
+    "etym-sub-hold9": {
+      "title": "Online Etymology Dictionary: sub-",
+      "author": "Douglas Harper",
+      "url": "https://www.etymonline.com/word/sub-",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Entry history and linked family evidence",
+      "evidence": "Latin sub- assimilates to following g and other consonants. The entry explicitly includes suggest among borrowed words whose historical prefix contribution is no longer transparent."
+    },
+    "etym-se-hold9": {
+      "title": "Online Etymology Dictionary: se-",
+      "author": "Douglas Harper",
+      "url": "https://www.etymonline.com/word/se-",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Entry history and linked family evidence",
+      "evidence": "The entry records the apart/away prefix in Latin-derived English words. This is the specific se- identity selected for separate, not an arbitrary opening syllable."
+    },
+    "etym-tire-hold9": {
+      "title": "Online Etymology Dictionary: tire",
+      "author": "Douglas Harper",
+      "url": "https://www.etymonline.com/word/tire",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Entry history and linked family evidence",
+      "evidence": "The fatigue verb comes from Old English teorian, a different history from the French drawing element in retire. The wheel noun has a separate equipment/attire history and is also excluded."
+    },
+    "mw-par-hold9": {
+      "title": "Merriam-Webster: par",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/par",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Relevant sense and Word History",
+      "evidence": "The equality noun is traced to Latin par equal and the child-oriented history explicitly connects it to compare. This supports par.equal, not pare trimming or parare preparation."
+    },
+    "mw-prepare-hold9": {
+      "title": "Merriam-Webster: prepare",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/prepare",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Relevant sense and Word History",
+      "evidence": "The history identifies prae- plus parare supply/provide/make ready, providing a companion family for the prepare/procure element of separate. It is unrelated to compare par equal."
+    },
+    "mw-ingest-hold9": {
+      "title": "Merriam-Webster: ingest",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/ingest",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Relevant sense and Word History",
+      "evidence": "The history gives ingestus from in- plus gerere bear/carry, corroborating the recurring gest realization independently of the unrelated modern noun gest."
+    },
+    "mw-dis-hold9": {
+      "title": "Merriam-Webster: dis-",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/dis-",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Relevant sense and Word History",
+      "evidence": "The prefix history explicitly gives Latin di- before v among the variants of dis- apart/asunder. This supports the exact di surface in divide and distinguishes it from the numeral di- two."
+    },
+    "mw-multi-hold9": {
+      "title": "Merriam-Webster: multi-",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/multi-",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Relevant sense and Word History",
+      "evidence": "The combining form supplies the many/multiple contribution and is traced to Latin multus. This is the numeric element in multiply rather than an arbitrary multi syllable sequence."
+    },
+    "collins-sug-hold9": {
+      "title": "Collins: sug-",
+      "author": "Webster's New World College Dictionary editors; HarperCollins",
+      "url": "https://www.collinsdictionary.com/us/dictionary/english/sug",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "American English prefix entry",
+      "evidence": "The entry explicitly identifies sug- as the before-g form of sub- and uses suggest as its example. The unrelated sales acronym is not selected."
+    },
+    "pearson-ply-hold9": {
+      "title": "Vocabulary Their Way, chapter 6: Teaching Content-Specific Academic Vocabulary",
+      "author": "Shane Templeton, Donald R. Bear, Francine Johnston, and Marcia Invernizzi",
+      "url": "https://ptgmedia.pearsoncmg.com/images/9780131555358/samplechapter/ch06.pdf",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Printed pages 110 and 130; mathematics root table and Origin of Multiply",
+      "evidence": "The publisher-hosted chapter explicitly associates plic/ply with the fold family in multiply/multiplication and discusses this family as vocabulary instruction. The game retains the actual mathematical definition rather than teaching that every multiplication makes a number larger or requires physical folding."
+    },
+    "michigan-ate-hold9": {
+      "title": "ELI 538: Rules and Practices, Rule 6-3",
+      "author": "University of Michigan English Language Institute; page cites Linda Grant, Well Said, 2nd edition",
+      "url": "https://www.lrc.lsa.umich.edu/eli-538/pg-014.html",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Rule 6-3 and Exercise 2",
+      "evidence": "This teaching resource explicitly treats estimate as a verb with -ate and contrasts its noun/verb pronunciations. Its exercise also places separate in the -ate family. This is term-level evidence for an English suffix boundary, not just a Latin derivation."
+    },
+    "thoughtful-vestig-hold9": {
+      "title": "Prefixes, Roots, and Suffixes",
+      "author": "Thoughtful Learning editorial team",
+      "url": "https://thoughtfullearning.com/inquirehsbook/pg166",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_nine_hold_pass",
+      "sections": "Root list: vestig",
+      "evidence": "The educational root list explicitly identifies vestig trace in investigate, vestige, and vestigial. This supports the retained vestig teaching unit while the dictionary establishes the in- and verbal formation."
+    }
+  },
+  "inherited_prior_pass_sources": {
+    "mw-compare-new": {
+      "title": "Merriam-Webster: compare",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/compare",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The current comparison sense matches the target. The history identifies com- plus par equal through comparare; this is distinct from English pare trim and the prepare root in separate."
+    },
+    "mw-com-prefix-new": {
+      "title": "Merriam-Webster: com-",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/com-",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Prefix entry and listed variants",
+      "evidence": "The prefix expresses with/together and explicitly lists con- as a variant. This supports com-/con in connect."
+    },
+    "anderson-2e-roots-new": {
+      "title": "Essentials of Linguistics, 2nd edition, section 5.2: Roots, bases, and affixes",
+      "author": "Catherine Anderson, Bronwyn Bjorkman, Derek Denis, Julianne Doner, Margaret Grant, Nathan Sanders, and Ai Taniguchi",
+      "url": "https://socialsci.libretexts.org/Bookshelves/Linguistics/Essentials_of_Linguistics_2e_(Anderson_et_al.)/05:_Morphology/5.02:_Roots_bases_and_affixes",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Affixes vs roots; Free and bound morphemes",
+      "evidence": "The author text distinguishes roots from bases and affixes and recognizes bound roots. It also separates historical source-language complexity from a contemporary speaker's analysis, using library and nation as examples. Neither free-base absence nor historical complexity alone decides a teaching graph."
+    },
+    "mw-investigate-new": {
+      "title": "Merriam-Webster: investigate",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/investigate",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The history derives the word through investigatus/investigare from in- and vestigium, footprint or track. It establishes a real historical family but does not by itself settle the intended English three-part graph."
+    },
+    "mw-vestige-new": {
+      "title": "Merriam-Webster: vestige",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/vestige",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The history independently traces vestige to Latin vestigium, footprint or trace. The relation is real; the precise vestig/vestige realization and English investigate suffix analysis still require a decision."
+    },
+    "mw-ate-suffix-new": {
+      "title": "Merriam-Webster: -ate",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/-ate",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Verb suffix and Word History",
+      "evidence": "The dictionary distinguishes a verb-forming suffix and traces it to Latin participial morphology. This is background evidence for investigate, separate, and estimate research, not term-level authorization for automatic splitting."
+    },
+    "mw-suggest-new": {
+      "title": "Merriam-Webster: suggest",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/suggest",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The proposing sense is explicit. The history identifies sub- plus gerere carry via the participial form suggestus. The sug-/gest realization is a valid research lead, not evidence for unrelated modern sug or gest words."
+    },
+    "mw-explore-new": {
+      "title": "Merriam-Webster: explore",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/explore",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The history identifies ex- plus plorare cry out. The selected examining/learning sense is semantically distant; historical segmentation alone does not settle an appropriate modern teaching graph."
+    },
+    "mw-separate-new": {
+      "title": "Merriam-Webster: separate",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/separate",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The history identifies se- apart plus parare prepare/procure. That prepare root differs from the equal par root in compare; a spelling-only shared canonical identity would be wrong."
+    },
+    "mw-multiply-new": {
+      "title": "Merriam-Webster: multiply",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/multiply",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The arithmetic verb is traced through French multiplier and Latin multiplicare to multiplex. This establishes the multiple family but not a direct English multi plus the layer verb ply exercise."
+    },
+    "mw-multiple-new": {
+      "title": "Merriam-Webster: multiple",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/multiple",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The history identifies Latin multi- plus -plex meaning fold. The relationship to multiply is documented, while the exact English plex/plic/ply realization remains to be authored."
+    },
+    "mw-divide-new": {
+      "title": "Merriam-Webster: divide",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/divide",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The arithmetic sense is explicit. The history identifies dis- plus a Latin -videre separate root, distinct from Latin videre see. No free English vide is needed for a possible bound-root analysis."
+    },
+    "mw-estimate-new": {
+      "title": "Merriam-Webster: estimate",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/estimate",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The history gives Latin aestimatus/aestimare value or estimate. It confirms a historical verbal formation but does not settle whether the intended English lesson should expose estim plus -ate."
+    },
+    "mw-retire-new": {
+      "title": "Merriam-Webster: retire",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/retire",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The history identifies French re- plus tirer draw. The career-ending sense must not be analyzed using modern tire fatigue; a draw-root proposal needs explicit treatment of the historical tire/tir realization."
+    },
+    "mw-re-prefix-new": {
+      "title": "Merriam-Webster: re-",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/re-",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Prefix entry, senses 1 and 2",
+      "evidence": "The prefix distinguishes again from back/backward. The revised receive and reflect candidates select the historical back identity, not a productive repetition claim."
+    }
+  },
+  "changes": [
+    {
+      "id": "compare",
+      "boundary_note": "Canonical par, surface pare; the explicit whole output is compare.",
+      "before_sha256": "d83eeed1b976b96d7ca55c105523d38f9239c9850562dc5935af0319d8d01b45",
+      "after_sha256": "3983171a720dfc89f3efb37c58f9be75e28903fdc41923c24e819699983068b4",
+      "before_entry": {
+        "id": "compare",
+        "text": "compare",
+        "min_age": 8,
+        "part_of_speech": "verb",
+        "meaning": "Look for similarities and differences",
+        "review": {
+          "status": "pending",
+          "reason": "Reopened after new term-specific evidence: The com- plus par equal family is documented, so the prior no-modern-com/pare argument is insufficient. Hold until the exact English par/pare realization and learner-level comparison meaning are authored and independently checked. Do not confuse equal par with pare trim or prepare par in separate."
+        }
+      },
+      "proposed_entry": {
+        "id": "compare",
+        "text": "compare",
+        "min_age": 8,
+        "part_of_speech": "verb",
+        "meaning": "Look for similarities and differences",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "The selected comparison action uses the inherited com- and par equal family. Its exact English root surface is pare; final e belongs to this authored realization and is not a third morpheme. The par.equal identity is corroborated by par and kept distinct from pare trim and separate par.prepare. Comparing can establish differences as well as similarities; it does not assert equality. The completed current meaning is preserved, and this graph does not claim a productive English com- plus free pare construction.",
+          "references": [
+            "anderson-morphology",
+            "mw-compare-new",
+            "etym-compare-hold9",
+            "mw-par-hold9",
+            "mw-com-prefix-new",
+            "anderson-2e-roots-new"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.compare.analysis.v1",
+          "lexeme_id": "compare",
+          "text": "compare",
+          "kind": "morphological",
+          "parts": [
+            {
+              "id": "part1",
+              "canonical_id": "english.affix.com.together",
+              "type": "prefix",
+              "canonical": "com-",
+              "surface": "com",
+              "break_offsets": []
+            },
+            {
+              "id": "part2",
+              "canonical_id": "english.root.par.equal",
+              "type": "root",
+              "canonical": "par",
+              "surface": "pare",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [
+            {
+              "id": "whole",
+              "left": "part1",
+              "right": "part2",
+              "rule": "authored-com-plus-par-equal-pare-realization",
+              "surface": "compare",
+              "break_offsets": []
+            }
+          ],
+          "roots": [
+            "whole"
+          ]
+        }
+      }
+    },
+    {
+      "id": "investigate",
+      "boundary_note": "in + vestig -> investig (bound intermediate); investig + ate -> investigate.",
+      "before_sha256": "1569c1254a5c84049a71846764d83107ae25677cb8ed65bfb38786c7d6dbbf11",
+      "after_sha256": "695e206ed64b517501e3da7985c82e356d42f5e8e7a45317d5cdd08a4a5e9483",
+      "before_entry": {
+        "id": "investigate",
+        "text": "investigate",
+        "min_age": 10,
+        "part_of_speech": "verb",
+        "meaning": "Examine something to find out more",
+        "review": {
+          "status": "pending",
+          "reason": "Reopened after new term-specific evidence: The in- and vestigium track family is documented. Hold the prior whole-form proposal and do not yet serialize in + vestig + -ate: the exact English stem realization, prefix contribution, and inherited verbal ending require a term-specific graph decision."
+        }
+      },
+      "proposed_entry": {
+        "id": "investigate",
+        "text": "investigate",
+        "min_age": 10,
+        "part_of_speech": "verb",
+        "meaning": "Examine something to find out more",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "The individually attested family combines in- into with vestig track/trace and inherited verbal -ate. The teaching source explicitly lists vestig in investigate and vestige. The graph first builds the bound stem investig, then the complete verb; investig is not presented as an independent English word. Both proposed routes into English, borrowing and back-formation from investigation, share this family, so the graph does not assert a unique chronology. The selected careful inquiry sense remains authoritative; there is no clothing vest root or invented free vestigate requirement.",
+          "references": [
+            "anderson-morphology",
+            "mw-investigate-new",
+            "mw-vestige-new",
+            "mw-ate-suffix-new",
+            "etym-investigate-hold9",
+            "thoughtful-vestig-hold9",
+            "etym-ate-hold9",
+            "anderson-2e-roots-new"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.investigate.analysis.v1",
+          "lexeme_id": "investigate",
+          "text": "investigate",
+          "kind": "morphological",
+          "parts": [
+            {
+              "id": "part1",
+              "canonical_id": "english.affix.in.inside",
+              "type": "prefix",
+              "canonical": "in-",
+              "surface": "in",
+              "break_offsets": []
+            },
+            {
+              "id": "part2",
+              "canonical_id": "english.root.vestig.track",
+              "type": "root",
+              "canonical": "vestig",
+              "surface": "vestig",
+              "break_offsets": []
+            },
+            {
+              "id": "part3",
+              "canonical_id": "english.affix.ate.verb",
+              "type": "suffix",
+              "canonical": "-ate",
+              "surface": "ate",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [
+            {
+              "id": "bound_stem",
+              "left": "part1",
+              "right": "part2",
+              "surface": "investig",
+              "rule": "authored-bound-stem-investig",
+              "break_offsets": []
+            },
+            {
+              "id": "whole",
+              "left": "bound_stem",
+              "right": "part3",
+              "rule": "authored-investig-bound-stem-plus-verbal-ate",
+              "surface": "investigate",
+              "break_offsets": []
+            }
+          ],
+          "roots": [
+            "whole"
+          ]
+        }
+      }
+    },
+    {
+      "id": "suggest",
+      "boundary_note": "Canonical sub-, surface sug; gest retains the carry family.",
+      "before_sha256": "23405551ee864d3c8bac1a75ab310f7222e28610757769efd7e486621b3a52a9",
+      "after_sha256": "987637520a6fa4388ed27cdc0e3f210078f4b9f09208b0d48cb4b373a89af3cf",
+      "before_entry": {
+        "id": "suggest",
+        "text": "suggest",
+        "min_age": 9,
+        "part_of_speech": "verb",
+        "meaning": "Put forward an idea to consider",
+        "review": {
+          "status": "pending",
+          "reason": "Reopened after new term-specific evidence: The sub-/gerere family and suggestus are documented. Hold while the sug-/gest allomorphs and the furnish/propose semantic development are checked as teaching units; the old whole-form justification cannot be based on missing free sug or gest words."
+        }
+      },
+      "proposed_entry": {
+        "id": "suggest",
+        "text": "suggest",
+        "min_age": 9,
+        "part_of_speech": "verb",
+        "meaning": "Put forward an idea to consider",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "Collins explicitly records sug- as the before-g allomorph of sub- in suggest. The suggest/ingest histories corroborate gest as the participial realization of the carry/bear family. Sub.under is a historical identity here, not a claim that proposing an idea literally means carrying something underneath. The dictionary traces the furnishing/bringing-forward development into the selected proposal sense. The graph neither selects the modern sales acronym sug nor treats the unrelated noun gest as its base.",
+          "references": [
+            "anderson-morphology",
+            "mw-suggest-new",
+            "etym-suggest-hold9",
+            "etym-sub-hold9",
+            "collins-sug-hold9",
+            "mw-ingest-hold9",
+            "anderson-2e-roots-new"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.suggest.analysis.v1",
+          "lexeme_id": "suggest",
+          "text": "suggest",
+          "kind": "morphological",
+          "parts": [
+            {
+              "id": "part1",
+              "canonical_id": "english.affix.sub.under",
+              "type": "prefix",
+              "canonical": "sub-",
+              "surface": "sug",
+              "break_offsets": []
+            },
+            {
+              "id": "part2",
+              "canonical_id": "english.root.gest.carry",
+              "type": "root",
+              "canonical": "gest",
+              "surface": "gest",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [
+            {
+              "id": "whole",
+              "left": "part1",
+              "right": "part2",
+              "rule": "authored-sub-sug-allomorph-plus-gest-carry",
+              "surface": "suggest",
+              "break_offsets": []
+            }
+          ],
+          "roots": [
+            "whole"
+          ]
+        }
+      }
+    },
+    {
+      "id": "explore",
+      "boundary_note": "One complete current stem; no composition mastery. Historical alternatives remain in the review record.",
+      "before_sha256": "842f45109c608bb9d43edb074c673617ac8690edee22dc792d051009ce0fc67c",
+      "after_sha256": "5085567ef8288c8f979e3030c37f336ef0f8e0d0d559dd2d2259887c5cce2262",
+      "before_entry": {
+        "id": "explore",
+        "text": "explore",
+        "min_age": 7,
+        "part_of_speech": "verb",
+        "meaning": "Look around to learn about something",
+        "review": {
+          "status": "pending",
+          "reason": "Reopened after new term-specific evidence: The ex-/plorare cry-out history is documented but distant from the target examining/learning sense. Hold both a reflexive whole-form declaration and a literal out-plus-cry exercise. A reviewer must decide contemporary learner depth with the explore/exploration family and historical opacity made explicit."
+        }
+      },
+      "proposed_entry": {
+        "id": "explore",
+        "text": "explore",
+        "min_age": 7,
+        "part_of_speech": "verb",
+        "meaning": "Look around to learn about something",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "Keep the current explore stem whole at this teaching depth after examining, rather than denying, its historical complexity. The new history offers back-formation from exploration or borrowing and records competing cry-out and flow explanations of the deeper element. The stable contemporary family is explore/explorer/exploration; neither disputed historical account supplies a uniquely settled ex-plus-root lesson for the selected examining/discovery sense. This deliberate whole-stem exposure does not claim that bound roots must be free words or that explore has no etymological structure. A future explicit historical-family lesson may revisit it with the competing account retained.",
+          "references": [
+            "anderson-morphology",
+            "mw-explore-new",
+            "etym-explore-hold9",
+            "anderson-2e-roots-new"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.explore.analysis.v1",
+          "lexeme_id": "explore",
+          "text": "explore",
+          "kind": "atomic",
+          "parts": [
+            {
+              "id": "whole",
+              "canonical_id": "growth.explore",
+              "canonical": "explore",
+              "surface": "explore",
+              "type": "atomic",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "whole"
+          ]
+        }
+      }
+    },
+    {
+      "id": "separate",
+      "boundary_note": "se + par -> separ (bound intermediate); separ + ate -> separate.",
+      "before_sha256": "19e0b1ad9732e1aab335600b1e85c3506ab9f76abe3ca39c326ad96bdfb0f5b9",
+      "after_sha256": "3c2e41f1c43b905d3f1db1d1f9f14a5c5d7977d8591851ce6bab82e856a6a266",
+      "before_entry": {
+        "id": "separate",
+        "text": "separate",
+        "min_age": 7,
+        "part_of_speech": "verb",
+        "meaning": "Move things apart from each other",
+        "review": {
+          "status": "pending",
+          "reason": "Reopened after new term-specific evidence: The se- apart plus parare prepare family is documented. Hold until the English se/par/ate realization and nonliteral prepare element are resolved. A future par.prepare identity must stay separate from par.equal in compare."
+        }
+      },
+      "proposed_entry": {
+        "id": "separate",
+        "text": "separate",
+        "min_age": 7,
+        "part_of_speech": "verb",
+        "meaning": "Move things apart from each other",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "The selected verb has the inherited se- apart, par prepare/procure, and verbal -ate structure. Prepare supplies the companion parare family, and the University of Michigan teaching exercise independently includes separate in the -ate family. The exact first join is the bound stem separ, not an invented standalone verb; the second yields separate. Par.prepare is kept distinct from compare par.equal. The whole separating action remains the definition; the historical preparation gloss is not a claim that separation means preparation or equalization. This review concerns the verb rather than automatically reusing its analysis for a noun or adjective sense.",
+          "references": [
+            "anderson-morphology",
+            "mw-separate-new",
+            "mw-ate-suffix-new",
+            "etym-separate-hold9",
+            "etym-se-hold9",
+            "mw-prepare-hold9",
+            "michigan-ate-hold9",
+            "anderson-2e-roots-new"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.separate.analysis.v1",
+          "lexeme_id": "separate",
+          "text": "separate",
+          "kind": "morphological",
+          "parts": [
+            {
+              "id": "part1",
+              "canonical_id": "english.affix.se.apart",
+              "type": "prefix",
+              "canonical": "se-",
+              "surface": "se",
+              "break_offsets": []
+            },
+            {
+              "id": "part2",
+              "canonical_id": "english.root.par.prepare",
+              "type": "root",
+              "canonical": "par",
+              "surface": "par",
+              "break_offsets": []
+            },
+            {
+              "id": "part3",
+              "canonical_id": "english.affix.ate.verb",
+              "type": "suffix",
+              "canonical": "-ate",
+              "surface": "ate",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [
+            {
+              "id": "bound_stem",
+              "left": "part1",
+              "right": "part2",
+              "surface": "separ",
+              "rule": "authored-bound-stem-separ",
+              "break_offsets": []
+            },
+            {
+              "id": "whole",
+              "left": "bound_stem",
+              "right": "part3",
+              "rule": "authored-separ-bound-stem-plus-verbal-ate",
+              "surface": "separate",
+              "break_offsets": []
+            }
+          ],
+          "roots": [
+            "whole"
+          ]
+        }
+      }
+    },
+    {
+      "id": "multiply",
+      "boundary_note": "multi + ply -> multiply; preserve ply as one root realization, with no separate y ending.",
+      "before_sha256": "7389fb7862be5673c2c562dd340b7c66ffe28655d4aef84a6f9f4acb1badea74",
+      "after_sha256": "2cd5f6160ddece7f05c78e0f1cff2f99f359416385921d364a333bdff489a0aa",
+      "before_entry": {
+        "id": "multiply",
+        "text": "multiply",
+        "min_age": 8,
+        "part_of_speech": "verb",
+        "meaning": "Add equal groups to find a total",
+        "review": {
+          "status": "pending",
+          "reason": "Reopened after new term-specific evidence: The multi-/plex fold family is documented through multiple and multiplicare. Hold while plex/plic/ply and the verb ending are resolved. Neither a missing free arithmetic ply nor the existence of the modern layer verb settles the graph."
+        }
+      },
+      "proposed_entry": {
+        "id": "multiply",
+        "text": "multiply",
+        "min_age": 8,
+        "part_of_speech": "verb",
+        "meaning": "Add equal groups to find a total",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "The publisher-hosted Vocabulary Their Way chapter explicitly teaches the plic/ply fold family in multiply and multiplication. Together with the word history and multi- entry this supports the exact multi plus ply graph. Ply is the inherited fold-family root, not a substituted modern layer noun or a verb about plying a trade. The full ply surface includes the inherited English realization; no detachable y or adverbial -ly is invented. Multiplication retains its arithmetic definition, including cases that do not increase a number, and the historical folding analogy does not replace that definition.",
+          "references": [
+            "anderson-morphology",
+            "mw-multiply-new",
+            "mw-multiple-new",
+            "etym-multiply-hold9",
+            "mw-multi-hold9",
+            "pearson-ply-hold9",
+            "anderson-2e-roots-new"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.multiply.analysis.v1",
+          "lexeme_id": "multiply",
+          "text": "multiply",
+          "kind": "morphological",
+          "parts": [
+            {
+              "id": "part1",
+              "canonical_id": "english.combining.multi.many",
+              "type": "combining_form",
+              "canonical": "multi-",
+              "surface": "multi",
+              "break_offsets": []
+            },
+            {
+              "id": "part2",
+              "canonical_id": "english.root.ply.fold",
+              "type": "root",
+              "canonical": "ply",
+              "surface": "ply",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [
+            {
+              "id": "whole",
+              "left": "part1",
+              "right": "part2",
+              "rule": "authored-multi-plus-ply-fold-family",
+              "surface": "multiply",
+              "break_offsets": []
+            }
+          ],
+          "roots": [
+            "whole"
+          ]
+        }
+      }
+    },
+    {
+      "id": "divide",
+      "boundary_note": "Canonical dis-, surface di; bound vide.separate is distinct from sight and numeral identities.",
+      "before_sha256": "a9f86f00c71eb913f597b7b22b1058376f24c4048442d7a7a0fcf63133e60e8a",
+      "after_sha256": "d371580e3bd442f280b8b57681610c598e57b6cc6e988dbe60451fd23f6d7a0a",
+      "before_entry": {
+        "id": "divide",
+        "text": "divide",
+        "min_age": 8,
+        "part_of_speech": "verb",
+        "meaning": "Split a number into equal groups",
+        "review": {
+          "status": "pending",
+          "reason": "Reopened after new term-specific evidence: The dictionary identifies dis- plus a separate-root -videre. Hold until di/dis and vid/vide are authored and independently checked; do not confuse this root with Latin videre see. Lack of a free English vide cannot justify atomic status."
+        }
+      },
+      "proposed_entry": {
+        "id": "divide",
+        "text": "divide",
+        "min_age": 8,
+        "part_of_speech": "verb",
+        "meaning": "Split a number into equal groups",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "The word history identifies dis- apart and the separate-root -videre. The prefix history explicitly records the di- realization before v, supporting di plus vide with the final e retained in the authored English root surface. The vide.separate identity is distinct from the vid/vis sight family and di is not the numeral combining form meaning two. The arithmetic sense is a conventional application of division into parts; the graph preserves its current definition without requiring a free English vide word.",
+          "references": [
+            "anderson-morphology",
+            "mw-divide-new",
+            "etym-divide-hold9",
+            "mw-dis-hold9",
+            "anderson-2e-roots-new"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.divide.analysis.v1",
+          "lexeme_id": "divide",
+          "text": "divide",
+          "kind": "morphological",
+          "parts": [
+            {
+              "id": "part1",
+              "canonical_id": "english.affix.dis.apart",
+              "type": "prefix",
+              "canonical": "dis-",
+              "surface": "di",
+              "break_offsets": []
+            },
+            {
+              "id": "part2",
+              "canonical_id": "english.root.vide.separate",
+              "type": "root",
+              "canonical": "vide",
+              "surface": "vide",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [
+            {
+              "id": "whole",
+              "left": "part1",
+              "right": "part2",
+              "rule": "authored-dis-di-allomorph-plus-vide-separate",
+              "surface": "divide",
+              "break_offsets": []
+            }
+          ],
+          "roots": [
+            "whole"
+          ]
+        }
+      }
+    },
+    {
+      "id": "estimate",
+      "boundary_note": "estim + ate -> estimate; the selected target is the verb, with its existing audio unchanged.",
+      "before_sha256": "0e0c975ac51edbf86bf6ea704057a9b7935014fc0ff3a259138c821fb0fe2b78",
+      "after_sha256": "c00b0eac6ea9f5995aa2f7f6c6190d1092689cea571bb5b08d06b4257b8c5810",
+      "before_entry": {
+        "id": "estimate",
+        "text": "estimate",
+        "min_age": 10,
+        "part_of_speech": "verb",
+        "meaning": "Make a careful approximate calculation",
+        "review": {
+          "status": "pending",
+          "reason": "Reopened after new term-specific evidence: The Latin aestimare/aestimatus family is established. Hold the old whole-form rationale while a reviewer determines whether estim and -ate are appropriate English teaching units; not having a free estim word is not decisive."
+        }
+      },
+      "proposed_entry": {
+        "id": "estimate",
+        "text": "estimate",
+        "min_age": 10,
+        "part_of_speech": "verb",
+        "meaning": "Make a careful approximate calculation",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "The history gives the aestimare/aestimatus valuing and appraising family, realized as estim in this inherited English form. The University of Michigan resource specifically identifies estimate as a verbal -ate example and contrasts it with the noun pronunciation. This term-level evidence supports estim plus -ate rather than a spelling-only suffix guess. Estim is bound, and no independent estim word is required. The selected informed approximation sense remains the whole meaning; the graph does not substitute the respectful-admiration sense of esteem or invent an es- prefix.",
+          "references": [
+            "anderson-morphology",
+            "mw-estimate-new",
+            "mw-ate-suffix-new",
+            "etym-estimate-hold9",
+            "etym-ate-hold9",
+            "michigan-ate-hold9",
+            "anderson-2e-roots-new"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.estimate.analysis.v1",
+          "lexeme_id": "estimate",
+          "text": "estimate",
+          "kind": "morphological",
+          "parts": [
+            {
+              "id": "part1",
+              "canonical_id": "english.root.estim.value",
+              "type": "root",
+              "canonical": "estim",
+              "surface": "estim",
+              "break_offsets": []
+            },
+            {
+              "id": "part2",
+              "canonical_id": "english.affix.ate.verb",
+              "type": "suffix",
+              "canonical": "-ate",
+              "surface": "ate",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [
+            {
+              "id": "whole",
+              "left": "part1",
+              "right": "part2",
+              "rule": "authored-estim-value-plus-verbal-ate",
+              "surface": "estimate",
+              "break_offsets": []
+            }
+          ],
+          "roots": [
+            "whole"
+          ]
+        }
+      }
+    },
+    {
+      "id": "retire",
+      "boundary_note": "Canonical tir, surface tire; re.back + tir.draw -> retire, with no fatigue or repetition identity.",
+      "before_sha256": "9c3c7a517ab961ecac1ef00dbdc39d481c1d60da1925c8cf297065168a5a9001",
+      "after_sha256": "03273d741011bf42d5026b3acbb1941185ee2bb9f6c99b8788c843d9edefd5ee",
+      "before_entry": {
+        "id": "retire",
+        "text": "retire",
+        "min_age": 9,
+        "part_of_speech": "verb",
+        "meaning": "Stop working after a long career",
+        "review": {
+          "status": "pending",
+          "reason": "Reopened after new term-specific evidence: New consultation establishes re- plus French tirer draw. Hold the prior whole-form proposal until historical tir/tire draw and career withdrawal are explicitly assessed. The unrelated English fatigue verb cannot serve as the component, but that does not make the word morphologically indivisible."
+        }
+      },
+      "proposed_entry": {
+        "id": "retire",
+        "text": "retire",
+        "min_age": 9,
+        "part_of_speech": "verb",
+        "meaning": "Stop working after a long career",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "The dictionary history explicitly traces retire through French re- back and tirer draw into withdrawal from employment. The graph uses canonical tir.draw with the inherited English tire surface; final e belongs to that realization. This is not the Old English fatigue verb tire, the wheel noun, or a productive instruction to become tired again. The selected retirement sense remains the complete definition. Bound historical tir is legitimate even without a current free drawing verb of that spelling, and its canonical identity remains separate from all fatigue and equipment senses.",
+          "references": [
+            "anderson-morphology",
+            "mw-retire-new",
+            "mw-re-prefix-new",
+            "etym-retire-hold9",
+            "etym-tire-hold9",
+            "anderson-2e-roots-new"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.retire.analysis.v1",
+          "lexeme_id": "retire",
+          "text": "retire",
+          "kind": "morphological",
+          "parts": [
+            {
+              "id": "part1",
+              "canonical_id": "english.affix.re.back",
+              "type": "prefix",
+              "canonical": "re-",
+              "surface": "re",
+              "break_offsets": []
+            },
+            {
+              "id": "part2",
+              "canonical_id": "english.root.tir.draw",
+              "type": "root",
+              "canonical": "tir",
+              "surface": "tire",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [
+            {
+              "id": "whole",
+              "left": "part1",
+              "right": "part2",
+              "rule": "authored-re-back-plus-tir-draw-tire-realization",
+              "surface": "retire",
+              "break_offsets": []
+            }
+          ],
+          "roots": [
+            "whole"
+          ]
+        }
+      }
+    }
+  ]
+}

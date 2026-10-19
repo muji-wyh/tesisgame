@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "scope": "Raw JSON field recount after actual successful shopping-bag persisted verification",
+  "overall_reviewed": 148,
+  "language_reviewed": 335,
+  "foundation02_language_reviewed": 36,
+  "unique_lexemes": 4939,
+  "integrated_images": 9,
+  "integrated_recordings": 12,
+  "ready_modules": 0,
+  "registry_sha256": "dcfe28d7c7c6048206b740459a65ce9b482ba2768d388b0b29d7ab31174ed1a0",
+  "sources_sha256": "310be48d81d29917146db162b26d9927007b68ed12380df4a113458d2de7b330",
+  "persisted_validation_receipt_sha256": "2b5675bdee6517924e260bb05e97b239d7838cd822f67ca6c35566a18833b5a9"
+}

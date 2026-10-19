@@ -1,0 +1,3146 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "uninstall.remove-installed-software.v",
+      "text": "uninstall",
+      "display_text": "uninstall",
+      "pos": "verb",
+      "definition": "To remove installed software through an appropriate process.",
+      "example": "The request to uninstall the application is awaiting approval.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "uninstall"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional approved software-removal request, without executable commands or a completed deletion.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "uninstall.remove-installed-software.v.analysis.v1",
+        "lexeme_id": "uninstall.remove-installed-software.v",
+        "text": "uninstall",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "affix.un.prefix",
+            "type": "prefix",
+            "canonical": "un",
+            "surface": "un"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.install",
+            "type": "stem",
+            "canonical": "install",
+            "surface": "install"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "uninstall",
+            "rule": "prefix_attachment"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-bls-role",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original IT Support communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not repair training, security approval, an access-bypass method, data-erasure guidance, a product-specific configuration procedure, or a guarantee of recovery or support. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "reconfigure.change-existing-system-options.v",
+      "text": "reconfigure",
+      "display_text": "reconfigure",
+      "pos": "verb",
+      "definition": "To change a system's existing configuration settings.",
+      "example": "The team will assess the request to reconfigure the device.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "reconfigure"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A before-and-proposed settings comparison awaiting authorization.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "reconfigure.change-existing-system-options.v.analysis.v1",
+        "lexeme_id": "reconfigure.change-existing-system-options.v",
+        "text": "reconfigure",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "affix.re.prefix",
+            "type": "prefix",
+            "canonical": "re",
+            "surface": "re"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.configure",
+            "type": "stem",
+            "canonical": "configure",
+            "surface": "configure"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "reconfigure",
+            "rule": "prefix_attachment"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-bls-role",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original IT Support communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not repair training, security approval, an access-bypass method, data-erasure guidance, a product-specific configuration procedure, or a guarantee of recovery or support. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "shut-down.end-computer-operation-in-controlled-way.v",
+      "text": "shut down",
+      "display_text": "shut down",
+      "pos": "verb",
+      "definition": "To end a computer's operation through its shutdown process.",
+      "example": "The support note asks when the device last shut down normally.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "shut down"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional recorded shutdown event, distinct from an unexpected power loss.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "shut-down.end-computer-operation-in-controlled-way.v.analysis.v1",
+        "lexeme_id": "shut-down.end-computer-operation-in-controlled-way.v",
+        "text": "shut down",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.shut",
+            "type": "stem",
+            "canonical": "shut",
+            "surface": "shut"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.down",
+            "type": "stem",
+            "canonical": "down",
+            "surface": "down"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "shut down",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-bls-role",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original IT Support communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not repair training, security approval, an access-bypass method, data-erasure guidance, a product-specific configuration procedure, or a guarantee of recovery or support. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "sign-in.start-authenticated-account-session.v",
+      "text": "sign in",
+      "display_text": "sign in",
+      "pos": "verb",
+      "definition": "To start an account session by completing the required access process.",
+      "example": "The user cannot sign in to the approved service.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "sign in"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional sign-in screen with empty fields and no credentials.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "sign-in.start-authenticated-account-session.v.analysis.v1",
+        "lexeme_id": "sign-in.start-authenticated-account-session.v",
+        "text": "sign in",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.sign",
+            "type": "stem",
+            "canonical": "sign",
+            "surface": "sign"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.in",
+            "type": "stem",
+            "canonical": "in",
+            "surface": "in"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "sign in",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-bls-role",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original IT Support communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not repair training, security approval, an access-bypass method, data-erasure guidance, a product-specific configuration procedure, or a guarantee of recovery or support. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "sign-out.end-current-account-session.v",
+      "text": "sign out",
+      "display_text": "sign out",
+      "pos": "verb",
+      "definition": "To end the current account session through the system's sign-out action.",
+      "example": "The support guide explains how to sign out of that service.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "sign out"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional session-ending control, distinct from shutting down the device.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "sign-out.end-current-account-session.v.analysis.v1",
+        "lexeme_id": "sign-out.end-current-account-session.v",
+        "text": "sign out",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.sign",
+            "type": "stem",
+            "canonical": "sign",
+            "surface": "sign"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.out",
+            "type": "stem",
+            "canonical": "out",
+            "surface": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "sign out",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-bls-role",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original IT Support communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not repair training, security approval, an access-bypass method, data-erasure guidance, a product-specific configuration procedure, or a guarantee of recovery or support. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "connect.establish-link-between-devices-or-systems.v",
+      "text": "connect",
+      "display_text": "connect",
+      "pos": "verb",
+      "definition": "To establish a link between devices or systems.",
+      "example": "The device cannot connect to the approved network.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "connect"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A device and service with an uncompleted connection indicator.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "professional.connect.establish-link-between-devices-or-systems.v.morphology.v2",
+        "lexeme_id": "connect.establish-link-between-devices-or-systems.v",
+        "text": "connect",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "english.affix.com.together",
+            "type": "prefix",
+            "canonical": "com-",
+            "surface": "con",
+            "break_offsets": []
+          },
+          {
+            "id": "p2",
+            "canonical_id": "english.root.nect.bind",
+            "type": "root",
+            "canonical": "nect",
+            "surface": "nect",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "p1",
+            "right": "p2",
+            "surface": "connect",
+            "rule": "authored-com-con-allomorph-plus-nect",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "AI-authored candidate, not human linguistic approval. Newly consulted term-specific evidence: Replace the whole-form choice with com- (surface con) and bound nect bind/join. Both term history and the current communications sense support this relation. Nect is a bound family element, not an invented standalone verb. The device-linking meaning is retained rather than reduced to a literal knot-tying instruction. Historical family structure, current whole-word meaning, and learner-level depth are distinguished. Exact graph reconstruction is not linguistic approval.",
+          "references": [
+            "https://www.merriam-webster.com/dictionary/connect",
+            "https://www.merriam-webster.com/dictionary/com-",
+            "https://socialsci.libretexts.org/Bookshelves/Linguistics/Essentials_of_Linguistics_2e_(Anderson_et_al.)/05:_Morphology/5.02:_Roots_bases_and_affixes"
+          ],
+          "draft_author": "Codex (AI source consultation and editorial proposal; not human approval)",
+          "source_consultation": "newly_consulted_page_bodies_with_individual_scope_notes",
+          "source_record_ids": [
+            "mw-connect-new",
+            "mw-com-prefix-new",
+            "anderson-2e-roots-new"
+          ],
+          "supersedes_scratch_proposal_sha256": "a6c4f521edbec2b6f0adf27e85f3e6a5e736b37fc0445e91b47a348880f9652f",
+          "inherited_growth_graph_status": "not_reused_prior_whole_form_reopened"
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-bls-role",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original IT Support communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not repair training, security approval, an access-bypass method, data-erasure guidance, a product-specific configuration procedure, or a guarantee of recovery or support. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "pair.establish-device-connection.v",
+      "text": "pair",
+      "display_text": "pair",
+      "pos": "verb",
+      "definition": "To associate compatible devices so they can communicate through the relevant connection method.",
+      "example": "The user asked whether this headset can pair with the device.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "pair"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two compatible fictional devices awaiting an authorized pairing decision, without codes.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "pair.establish-device-connection.v.analysis.v1",
+        "lexeme_id": "pair.establish-device-connection.v",
+        "text": "pair",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.pair",
+            "type": "atomic",
+            "canonical": "pair",
+            "surface": "pair"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-bls-role",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original IT Support communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not repair training, security approval, an access-bypass method, data-erasure guidance, a product-specific configuration procedure, or a guarantee of recovery or support. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "unpair.remove-device-connection.v",
+      "text": "unpair",
+      "display_text": "unpair",
+      "pos": "verb",
+      "definition": "To remove an established association between paired devices.",
+      "example": "The request to unpair the accessory is recorded.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "unpair"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional device-association list with a proposed removal awaiting user agreement.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "unpair.remove-device-connection.v.analysis.v1",
+        "lexeme_id": "unpair.remove-device-connection.v",
+        "text": "unpair",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "affix.un.prefix",
+            "type": "prefix",
+            "canonical": "un",
+            "surface": "un"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.pair",
+            "type": "atomic",
+            "canonical": "pair",
+            "surface": "pair"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "unpair",
+            "rule": "prefix_attachment"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-bls-role",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original IT Support communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not repair training, security approval, an access-bypass method, data-erasure guidance, a product-specific configuration procedure, or a guarantee of recovery or support. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "save.store-current-work.v",
+      "text": "save",
+      "display_text": "save",
+      "pos": "verb",
+      "definition": "To store current work so it can be retrieved later.",
+      "example": "The user could not save the updated document.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "save"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional document with an unsaved-change indicator and a storage destination, without personal content.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "save.store-current-work.v.analysis.v1",
+        "lexeme_id": "save.store-current-work.v",
+        "text": "save",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.save",
+            "type": "atomic",
+            "canonical": "save",
+            "surface": "save"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-bls-role",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-assistants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-assessment",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-naeyc-families",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original IT Support communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not repair training, security approval, an access-bypass method, data-erasure guidance, a product-specific configuration procedure, or a guarantee of recovery or support. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "rename.change-name-of-digital-item.v",
+      "text": "rename",
+      "display_text": "rename",
+      "pos": "verb",
+      "definition": "To change the name of a file, folder, or other digital item.",
+      "example": "The user asked to rename the shared folder.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "rename"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional file-name change proposal showing the same item before and after.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "rename.change-name-of-digital-item.v.analysis.v1",
+        "lexeme_id": "rename.change-name-of-digital-item.v",
+        "text": "rename",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "affix.re.prefix",
+            "type": "prefix",
+            "canonical": "re",
+            "surface": "re"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.name",
+            "type": "stem",
+            "canonical": "name",
+            "surface": "name"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "rename",
+            "rule": "prefix_attachment"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-bls-role",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original IT Support communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not repair training, security approval, an access-bypass method, data-erasure guidance, a product-specific configuration procedure, or a guarantee of recovery or support. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "copy.make-additional-digital-instance.v",
+      "text": "copy",
+      "display_text": "copy",
+      "pos": "verb",
+      "definition": "To make an additional instance of digital content or place it on a clipboard for reuse.",
+      "example": "The user needs permission to copy the file to that location.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "copy"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional source file and proposed additional copy, without disclosing the contents.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "copy.make-additional-digital-instance.v.analysis.v1",
+        "lexeme_id": "copy.make-additional-digital-instance.v",
+        "text": "copy",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.copy",
+            "type": "atomic",
+            "canonical": "copy",
+            "surface": "copy"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-bls-role",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original IT Support communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not repair training, security approval, an access-bypass method, data-erasure guidance, a product-specific configuration procedure, or a guarantee of recovery or support. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "paste.insert-content-from-clipboard.v",
+      "text": "paste",
+      "display_text": "paste",
+      "pos": "verb",
+      "definition": "To insert content held on a clipboard into a chosen location.",
+      "example": "The user cannot paste the copied text into the form.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "paste"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional clipboard and empty form field illustrating insertion of harmless sample text.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "paste.insert-content-from-clipboard.v.analysis.v1",
+        "lexeme_id": "paste.insert-content-from-clipboard.v",
+        "text": "paste",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.paste",
+            "type": "atomic",
+            "canonical": "paste",
+            "surface": "paste"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-bls-role",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original IT Support communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not repair training, security approval, an access-bypass method, data-erasure guidance, a product-specific configuration procedure, or a guarantee of recovery or support. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "move.relocate-digital-item.v",
+      "text": "move",
+      "display_text": "move",
+      "pos": "verb",
+      "definition": "To change the location of a digital item rather than keep an additional copy at the original location.",
+      "example": "The request to move the folder needs review.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "move"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional folder relocation proposal showing source and destination, without executing it.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "move.relocate-digital-item.v.analysis.v1",
+        "lexeme_id": "move.relocate-digital-item.v",
+        "text": "move",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.move",
+            "type": "atomic",
+            "canonical": "move",
+            "surface": "move"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-bls-role",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original IT Support communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not repair training, security approval, an access-bypass method, data-erasure guidance, a product-specific configuration procedure, or a guarantee of recovery or support. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "delete.remove-digital-item-through-system-action.v",
+      "text": "delete",
+      "display_text": "delete",
+      "pos": "verb",
+      "definition": "To remove a digital item through a system action, with recoverability depending on the system and circumstances.",
+      "example": "The request to delete the file is awaiting authorization.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "delete"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional deletion request marked for review, without a claim of secure erasure or recovery.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-bls-role",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original IT Support communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not repair training, security approval, an access-bypass method, data-erasure guidance, a product-specific configuration procedure, or a guarantee of recovery or support. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "restore.return-data-or-system-to-recorded-state.v",
+      "text": "restore",
+      "display_text": "restore",
+      "pos": "verb",
+      "definition": "To return data or a system to an earlier recorded state using an available recovery process.",
+      "example": "The specialist is reviewing whether the backup can restore the required files.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "restore"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional restore request linked to a selected recorded state, without an operational procedure.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-bls-role",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original IT Support communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not repair training, security approval, an access-bypass method, data-erasure guidance, a product-specific configuration procedure, or a guarantee of recovery or support. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "recover.regain-access-to-unavailable-or-lost-data.v",
+      "text": "recover",
+      "display_text": "recover",
+      "pos": "verb",
+      "definition": "To regain access to data or functionality that was lost or unavailable.",
+      "example": "The team is assessing whether it can recover the missing data.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "recover"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A recovery assessment of missing fictional files, without guaranteed success.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-bls-role",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original IT Support communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not repair training, security approval, an access-bypass method, data-erasure guidance, a product-specific configuration procedure, or a guarantee of recovery or support. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "back-up.create-copy-for-later-recovery.v",
+      "text": "back up",
+      "display_text": "back up",
+      "pos": "verb",
+      "definition": "To create a copy of data for use in recovery if needed.",
+      "example": "The support request asks when the system last managed to back up the data.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "back up"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional backup history linking source data to a recovery copy.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "back-up.create-copy-for-later-recovery.v.analysis.v1",
+        "lexeme_id": "back-up.create-copy-for-later-recovery.v",
+        "text": "back up",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.back",
+            "type": "stem",
+            "canonical": "back",
+            "surface": "back"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.up",
+            "type": "stem",
+            "canonical": "up",
+            "surface": "up"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "back up",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-bls-role",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original IT Support communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not repair training, security approval, an access-bypass method, data-erasure guidance, a product-specific configuration procedure, or a guarantee of recovery or support. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "synchronize.bring-related-copies-or-clocks-into-agreement.v",
+      "text": "synchronize",
+      "display_text": "synchronize",
+      "pos": "verb",
+      "definition": "To bring related copies of information or clocks into agreement under the relevant rules.",
+      "example": "The two file locations do not synchronize as expected.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "synchronize",
+        "synchronise"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two fictional file versions showing a synchronization difference, without implying a recovery copy.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-bls-role",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original IT Support communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not repair training, security approval, an access-bypass method, data-erasure guidance, a product-specific configuration procedure, or a guarantee of recovery or support. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "scan.examine-for-digital-threats.v",
+      "text": "scan",
+      "display_text": "scan",
+      "pos": "verb",
+      "definition": "To examine digital content or a system for specified signs of security threats.",
+      "example": "The security team will decide whether to scan the device.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "scan"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional approved security-scan request with no malware samples or bypass actions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "scan.examine-for-digital-threats.v.analysis.v1",
+        "lexeme_id": "scan.examine-for-digital-threats.v",
+        "text": "scan",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.scan",
+            "type": "atomic",
+            "canonical": "scan",
+            "surface": "scan"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-bls-role",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original IT Support communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not repair training, security approval, an access-bypass method, data-erasure guidance, a product-specific configuration procedure, or a guarantee of recovery or support. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "diagnose.identify-technical-cause.v",
+      "text": "diagnose",
+      "display_text": "diagnose",
+      "pos": "verb",
+      "definition": "To investigate evidence in order to identify the nature or cause of a technical problem.",
+      "example": "The technician needs more information to diagnose the fault.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "diagnose"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A support specialist comparing harmless diagnostic records and observed symptoms.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-bls-role",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-quality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-hse-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original IT Support communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not repair training, security approval, an access-bypass method, data-erasure guidance, a product-specific configuration procedure, or a guarantee of recovery or support. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "isolate.separate-cause-for-investigation.v",
+      "text": "isolate",
+      "display_text": "isolate",
+      "pos": "verb",
+      "definition": "To distinguish or narrow down a possible cause while investigating a problem.",
+      "example": "The team is trying to isolate the source of the intermittent fault.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "isolate"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional investigation chart narrowing several possible causes, without disconnecting equipment.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-bls-role",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original IT Support communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not repair training, security approval, an access-bypass method, data-erasure guidance, a product-specific configuration procedure, or a guarantee of recovery or support. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "test.check-behavior-under-defined-conditions.v",
+      "text": "test",
+      "display_text": "test",
+      "pos": "verb",
+      "definition": "To check how something behaves under defined conditions.",
+      "example": "The approved plan explains what the team will test.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "test"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A harmless fictional test plan with expected and observed behavior fields.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "test.check-behavior-under-defined-conditions.v.analysis.v1",
+        "lexeme_id": "test.check-behavior-under-defined-conditions.v",
+        "text": "test",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.test",
+            "type": "atomic",
+            "canonical": "test",
+            "surface": "test"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-bls-role",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-quality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-hse-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-market-research",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original IT Support communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not repair training, security approval, an access-bypass method, data-erasure guidance, a product-specific configuration procedure, or a guarantee of recovery or support. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "search.look-for-digital-information-or-item.v",
+      "text": "search",
+      "display_text": "search",
+      "pos": "verb",
+      "definition": "To look for information or an item in a digital system.",
+      "example": "The user can search the knowledge base by the error message.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "search"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional support search with a harmless error phrase and matching help records.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "search.look-for-digital-information-or-item.v.analysis.v1",
+        "lexeme_id": "search.look-for-digital-information-or-item.v",
+        "text": "search",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.search",
+            "type": "atomic",
+            "canonical": "search",
+            "surface": "search"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-bls-role",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original IT Support communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not repair training, security approval, an access-bypass method, data-erasure guidance, a product-specific configuration procedure, or a guarantee of recovery or support. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "enable.make-feature-available-for-use.v",
+      "text": "enable",
+      "display_text": "enable",
+      "pos": "verb",
+      "definition": "To make a feature or function available for use through its settings or configuration.",
+      "example": "The request to enable the feature needs approval.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "enable"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional disabled feature and an enable request awaiting authorization.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "enable.make-feature-available-for-use.v.analysis.v1",
+        "lexeme_id": "enable.make-feature-available-for-use.v",
+        "text": "enable",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "affix.en.prefix",
+            "type": "prefix",
+            "canonical": "en",
+            "surface": "en"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.able",
+            "type": "stem",
+            "canonical": "able",
+            "surface": "able"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "enable",
+            "rule": "prefix_attachment"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-bls-role",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original IT Support communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not repair training, security approval, an access-bypass method, data-erasure guidance, a product-specific configuration procedure, or a guarantee of recovery or support. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "disable.make-feature-unavailable-for-use.v",
+      "text": "disable",
+      "display_text": "disable",
+      "pos": "verb",
+      "definition": "To make a feature or function unavailable through its settings or configuration.",
+      "example": "The team is reviewing whether to disable the affected feature.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "disable"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional feature-control proposal marked for review, without security bypass instructions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "disable.make-feature-unavailable-for-use.v.analysis.v1",
+        "lexeme_id": "disable.make-feature-unavailable-for-use.v",
+        "text": "disable",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "affix.dis.prefix",
+            "type": "prefix",
+            "canonical": "dis",
+            "surface": "dis"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.able",
+            "type": "stem",
+            "canonical": "able",
+            "surface": "able"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "disable",
+            "rule": "prefix_attachment"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-bls-role",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original IT Support communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not repair training, security approval, an access-bypass method, data-erasure guidance, a product-specific configuration procedure, or a guarantee of recovery or support. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "unlock.remove-access-lock-through-authorized-process.v",
+      "text": "unlock",
+      "display_text": "unlock",
+      "pos": "verb",
+      "definition": "To remove a lock or restriction through the applicable authorized process.",
+      "example": "The user asked how to unlock the account through the approved service.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "unlock"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An account access-help screen with no bypass steps or secret information.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "unlock.remove-access-lock-through-authorized-process.v.analysis.v1",
+        "lexeme_id": "unlock.remove-access-lock-through-authorized-process.v",
+        "text": "unlock",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "affix.un.prefix",
+            "type": "prefix",
+            "canonical": "un",
+            "surface": "un"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.lock",
+            "type": "stem",
+            "canonical": "lock",
+            "surface": "lock"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "unlock",
+            "rule": "prefix_attachment"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-bls-role",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original IT Support communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not repair training, security approval, an access-bypass method, data-erasure guidance, a product-specific configuration procedure, or a guarantee of recovery or support. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "upgrade.improve-system-version.v",
+      "text": "upgrade",
+      "display_text": "upgrade",
+      "pos": "verb",
+      "definition": "To replace or improve hardware or software with a newer or more capable version.",
+      "example": "The request to upgrade the application is awaiting compatibility review.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "upgrade"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional software-version change proposal, distinct from upgrading a hotel booking.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "upgrade.improve-system-version.v.analysis.v1",
+        "lexeme_id": "upgrade.improve-system-version.v",
+        "text": "upgrade",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored structural draft of modern word boundaries, compounds, or affixes. Exact reconstruction is verified but is not linguistic approval. Intact stems, semantic transparency, lexicalization, accepted variants, and any deeper analysis require qualified review. No syllable, length, midpoint, or automatic suffix splitting is used. Null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.up",
+            "type": "stem",
+            "canonical": "up",
+            "surface": "up"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.grade",
+            "type": "stem",
+            "canonical": "grade",
+            "surface": "grade"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "upgrade",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-bls-role",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original IT Support communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not repair training, security approval, an access-bypass method, data-erasure guidance, a product-specific configuration procedure, or a guarantee of recovery or support. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "revoke.withdraw-previously-granted-access-or-authority.v",
+      "text": "revoke",
+      "display_text": "revoke",
+      "pos": "verb",
+      "definition": "To withdraw access or authority that was previously granted.",
+      "example": "The access owner must review the request to revoke that permission.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "revoke"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional access-permission withdrawal request awaiting the responsible decision.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-bls-role",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original IT Support communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not repair training, security approval, an access-bypass method, data-erasure guidance, a product-specific configuration procedure, or a guarantee of recovery or support. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    }
+  ]
+}

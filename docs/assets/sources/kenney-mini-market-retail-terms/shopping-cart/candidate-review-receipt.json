@@ -1,0 +1,334 @@
+{
+  "date": "2026-10-16",
+  "status": "one_scratch_candidate_pending_independent_root_review",
+  "reviewer": "Codex finish_difficulty agent source/candidate/native-card visual inspection; independent root semantic inspection pending",
+  "scope": "One shopping-cart image, unchanged original source geometry/materials, actual minimum WordCard size/state QA, and two rejected cash-register source inspections. No production media or vocabulary approval.",
+  "candidate": {
+    "path": "build/professional-english/retail-term-art-review/shopping-cart/candidate/shopping-cart.png",
+    "sha256": "b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1",
+    "bytes": 93422
+  },
+  "original_source": [
+    {
+      "path": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/shopping-cart.glb",
+      "sha256": "8933fdece5c43b619ea6902fa03a5fea9f490486048ae7543cc8b03ee98c98dd",
+      "bytes": 34832
+    },
+    {
+      "path": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/Textures/colormap.png",
+      "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e",
+      "bytes": 8706
+    },
+    {
+      "path": "docs/assets/sources/kenney-mini-market-retail-theme/License.txt",
+      "sha256": "5ee4df809330c05896f223c97f250cc1bdc13b46a370eb464533c85c94146070",
+      "bytes": 767
+    }
+  ],
+  "provenance": {
+    "source": "https://kenney.nl/assets/mini-market",
+    "creator": "Kenney; Fleur Keijsers; Guus Vermeulen",
+    "license": "CC0 1.0",
+    "available_animations": [],
+    "acquisition_status": "Existing acquired and retained source; not integrated or reviewed as term media."
+  },
+  "runtime": {
+    "engine": "Godot 4.7.stable.official.5b4e0cb0f",
+    "renderer": "GL Compatibility with opengl3_angle / Microsoft Basic Render Driver",
+    "command_wrapper": "node tools/run-godot.cjs",
+    "tests": 21,
+    "failed": 0,
+    "process_exit_code": 0,
+    "word_card": {
+      "path": "scripts/word_card.gd",
+      "sha256": "ddb3f7ef5b1910086e0418e476ceee4f551aa2e048bed6993005bdbd0402a3bf",
+      "bytes": 15387
+    },
+    "palette_source": {
+      "path": "data/professional/themes.json",
+      "sha256": "718bae2956226505281d5e8f62406d0b225b12834b00977f401cb517f068f9fd",
+      "bytes": 86469
+    },
+    "texture_delivery": "Direct scratch ImageTexture assignment after real WordCard setup; not the production media loader."
+  },
+  "visual_findings": [
+    "The original source has four wheels, confirmed by the source-inspection-r2 underside view.",
+    "The selected near-eye-level three-quarter view preserves the empty basket, orange push handle and lower frame, with four wheel silhouettes; one rear wheel remains partly behind the frame.",
+    "The native 1x contact and its nearest-neighbor 3x enlargement were inspected in unmatched and matched states for both games.",
+    "At the minimum card sizes, the rear wheel and lower frame are compact and partly merge visually. The matched Match badge sits close to the handle tip; the orange handle remains visible in the captured contact.",
+    "The isolated stylized source offers no human/store size reference, so the brief requirement for a full-size retail trolley still needs independent semantic review."
+  ],
+  "limitations": [
+    "The 21 passing checks verify dimensions, transparency and actual card states; they are not vocabulary-recognition tests.",
+    "The candidate uses a direct scratch texture assignment to the actual WordCard. This is not a production media-loading or web-export test.",
+    "No production term image, module status, audio, vocabulary, recognition review or media gate was changed by this scratch renderer.",
+    "No bulk term rendering or external purchase occurred. No claim of completed professional course media."
+  ],
+  "evidence_files": [
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register/alternative-mini-arcade/source-inspection/front-low.png",
+      "sha256": "2fdfd9d8e2e8423f2411dc282b77d9242dcf71b4a7bce1a2eebd391b19a3056a",
+      "bytes": 28218
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register/alternative-mini-arcade/source-inspection/front-other-side.png",
+      "sha256": "8c76ac92ecdfbfd875cf6a56dc911af4417f4a5fdc40b87529323a7f6d85f1f6",
+      "bytes": 34869
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register/alternative-mini-arcade/source-inspection/front-three-quarter.png",
+      "sha256": "ed25569638a395090531bb235466caa9e6244e39538486c51828c503f5d5611a",
+      "bytes": 31777
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register/alternative-mini-arcade/source-inspection/rear-three-quarter.png",
+      "sha256": "3c334ec19e0afbf8ae5ea8250f686f3ee65023afb279302b5d27cfe2fac63705",
+      "bytes": 21509
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register/alternative-mini-arcade/source-inspection/render.log",
+      "sha256": "5642a75ed177649be7659ea33c77d6c0c3273db658adcc7dabc9807e2fcdf4f0",
+      "bytes": 355
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register/alternative-mini-arcade/source-inspection/report.json",
+      "sha256": "18a760b0773321b8ea47c74ffa84ce889ba9abe666bd8b6e7652606231f74ebe",
+      "bytes": 728
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register/selection-outcome.json",
+      "sha256": "0e4518b8f6c7821f9b984c1305c510fdf9d9f012874faaf1c195c83950336737",
+      "bytes": 3861
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register/source-inspection/front-low.png",
+      "sha256": "19aa47d54153bba86d3156f7781f78935137fc36f2ed2ff006539fa748ac1c93",
+      "bytes": 30121
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register/source-inspection/front-other-side.png",
+      "sha256": "1a3520668eb300811221816ec48c7973a248be3ab22fd581a6945dccdf58cb53",
+      "bytes": 41498
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register/source-inspection/front-three-quarter.png",
+      "sha256": "dcb1c6565a8c123516f3763702582a6e0dc78077281071e793fc059988047740",
+      "bytes": 33782
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register/source-inspection/rear-three-quarter.png",
+      "sha256": "ce4aef975c12bf3d8e7a7b8e30ebed7aff5f6985896a95826e098ae70b8b79cb",
+      "bytes": 24256
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register/source-inspection/render.log",
+      "sha256": "5642a75ed177649be7659ea33c77d6c0c3273db658adcc7dabc9807e2fcdf4f0",
+      "bytes": 355
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register/source-inspection/report.json",
+      "sha256": "a19b1db61aed90e7c6d13c22085d886871f37019f3c6b83c83d8e7e38a2c6e2d",
+      "bytes": 755
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register/source-record.json",
+      "sha256": "f22f360c9e67d1ba071d3d65dd3d60576beb486de2f35cefa57f8cf5b7705e0c",
+      "bytes": 4120
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/inspect-cash-register.gd",
+      "sha256": "d87d5c86e2016c304cf3a03a954631937b1c264fb88deec2832f088ce71221c2",
+      "bytes": 3199
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/inspect-mini-arcade-register.gd",
+      "sha256": "cbb045f8163afb383e6cd7c67154ce6badd4c2dd0bc19c42487793a44942079c",
+      "bytes": 3231
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/inspect-shopping-cart-r2.gd",
+      "sha256": "9a52c9d0d1ff33ff3e693832b7485f011f9e722eed0937b524d124fc722caf66",
+      "bytes": 2745
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/inspect-shopping-cart-r3.gd",
+      "sha256": "74444c104bce38abdd4a6dacc6122499437e36074e10e8c28daab733d0ebc524",
+      "bytes": 2748
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/inspect-shopping-cart.gd",
+      "sha256": "31b93ed66338eafaa0a030de53cd01e37cd8b9dba6899eef32e3eb6a7a050c41",
+      "bytes": 3201
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/package-review.cjs",
+      "sha256": "818953d54907084a8c6a0d57bde8fd026f15a8dcb5223194b071c129dfc431f8",
+      "bytes": 7126
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/prepare-cash-register.cjs",
+      "sha256": "be7657eff11bffa5022e92ca3c1de119f71c8404e4bf45804eac25f54fcb2e6f",
+      "bytes": 3089
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/prepare-shopping-cart.cjs",
+      "sha256": "d4222c5c7ef1cfeb27c13d2c266fd57db20375c13dd9ea321093a41b01cc1725",
+      "bytes": 3075
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/README.md",
+      "sha256": "880c6ebfaafe9607487c62777743cdf6098d891dcd71506012e739c3c310c78d",
+      "bytes": 4359
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/render-shopping-cart-candidate.gd",
+      "sha256": "b5405daebd5ab5c47c55fe27f85d262b088702ad3b46873132619f693743ee65",
+      "bytes": 8228
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/candidate/actual-word-card-contact-3x.png",
+      "sha256": "0b0e1161d0d6b044ea5f145e7e7d922210bb74cd4a7a89e0efba3347b7a321d0",
+      "bytes": 70461
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/candidate/actual-word-card-contact.png",
+      "sha256": "ab0875ea1e938c89f8c62de1cea70ab99e7ae900dbfebbb17bb132afac5c985e",
+      "bytes": 50684
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/candidate/match-matched.png",
+      "sha256": "c7d468da7bfd675d9c70819a3f9d9c2e8bcfad627e6ccb96ba6f9ddab4f63d25",
+      "bytes": 5538
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/candidate/match-unmatched.png",
+      "sha256": "f5c678d7ca08af308022518ddfecb7cbf70bd44b017b4f7001f55ad20a7664bd",
+      "bytes": 4939
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/candidate/memory-matched.png",
+      "sha256": "a63eb551207dbc6b977058826783fab4255f65d1a634409c0bd94bb468b0a782",
+      "bytes": 5160
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/candidate/memory-unmatched.png",
+      "sha256": "0da3064336403592ab1fc6b548a2bc5ba86fd5aa992902694b1ed4e63df28774",
+      "bytes": 4799
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/candidate/render-raw.png",
+      "sha256": "4edec072c87043bd12096f3fb66f44f5fa6dec7afd6757baa809b6f4605cf26d",
+      "bytes": 46378
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/candidate/render.log",
+      "sha256": "651ee2dff2804ea2eedd411c46d784606f50b34a8e7aeb68c608b3185a00eb81",
+      "bytes": 370
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/candidate/report.json",
+      "sha256": "8dc5d11b796d6c495720912bcd3981933d1a37f4d14b8677a559c06de2eefaca",
+      "bytes": 4222
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/candidate/shopping-cart.png",
+      "sha256": "b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1",
+      "bytes": 93422
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/source-inspection/front-low.png",
+      "sha256": "bf2d2259106ce04eb21204e6fee4fccbdb563d938829d89497fe057d2551b929",
+      "bytes": 37527
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/source-inspection/front-other-side.png",
+      "sha256": "4d58525f04afa55a6ab7543beea9bdd5407b48d84ac56f36e1e4e1d385b78f97",
+      "bytes": 49852
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/source-inspection/front-three-quarter.png",
+      "sha256": "0378b35ed3c1240e52db3db9f4f8d9ffa19f378c238d714e97864520ff5f541d",
+      "bytes": 41465
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/source-inspection/rear-three-quarter.png",
+      "sha256": "c0953c47ffd7b02eaed76fd3a9950911eee77bc088474b4bb38cb4a158a513be",
+      "bytes": 34710
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/source-inspection/render.log",
+      "sha256": "f991b457bcc03ce78b5c2d22ae5e0cef1beb02dcbab4b97a160fbf75db37f2cc",
+      "bytes": 355
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/source-inspection/report.json",
+      "sha256": "270b045781ac509473fe206f977240f74313235140433e9c4793f29782f068f9",
+      "bytes": 754
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/source-inspection-r2/render.log",
+      "sha256": "a6b318887d02c5c79584da8a06b52a61f79fef96e39e6dc37402893d1d313379",
+      "bytes": 359
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/source-inspection-r2/report.json",
+      "sha256": "6bf64a25bbf2c92226c88cc48d45f52bbb78914df484010aeca83c7e722bdfb7",
+      "bytes": 666
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/source-inspection-r2/side-high.png",
+      "sha256": "a182af3b5dc834fdec80f5496ad53bfcb901839e5b5b8e7f2ed5360b699d3e13",
+      "bytes": 40418
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/source-inspection-r2/side-low.png",
+      "sha256": "e58d0bc27287445c4fd519b70a3da3cad601245e58e3894ba3cb00304da86c9c",
+      "bytes": 32079
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/source-inspection-r2/side-three-quarter.png",
+      "sha256": "33cf258f787ca20fe33fa3f77ad0ee66b9b256c71ac344d5fa577d70fbf420fb",
+      "bytes": 36280
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/source-inspection-r2/underside-wheel-evidence.png",
+      "sha256": "aaf1084f25119a92d87db1b851598e4ad67a8e52f7b8f6feaaabf80bf602bfc4",
+      "bytes": 29031
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/source-inspection-r3/diagonal-eye-level.png",
+      "sha256": "7aa361046d741d1b87231b153534e4864e3aa60204b3b1a5f85d1b7ab67f9aea",
+      "bytes": 29422
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/source-inspection-r3/front-eye-level.png",
+      "sha256": "715d5dfc7ce8d7969bc8e922bb0a500a213090364b5ac272cf6952c9bba5000a",
+      "bytes": 27830
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/source-inspection-r3/render.log",
+      "sha256": "a6b318887d02c5c79584da8a06b52a61f79fef96e39e6dc37402893d1d313379",
+      "bytes": 359
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/source-inspection-r3/report.json",
+      "sha256": "9ea2b940fbb9bc51b8396b35a8b0da5790c839266be4bac56e3e37308f04611c",
+      "bytes": 662
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/source-inspection-r3/side-eye-level.png",
+      "sha256": "0fadcbe80517db89f053d198ca80b8b6cd838aac5be0d0206e83b1efac620a6b",
+      "bytes": 26518
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/source-inspection-r3/side-slightly-high.png",
+      "sha256": "5b02f3b939ab1eb2a4c72c1bc6b6ed546661fb551f27ef5accb258aeb12530fa",
+      "bytes": 29132
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/shopping-cart/source-record.json",
+      "sha256": "3b5c965fe5807584bc9f4b9aadd02649bb4dd663655d7bbf6ee5ed2d0757dd1c",
+      "bytes": 4209
+    }
+  ]
+}

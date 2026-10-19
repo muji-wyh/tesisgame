@@ -1,8 +1,15 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, tap, chooseMode, chooseTheme, rendered, enterGame, openGame, boardPoint,
+const { metrics, tap, chooseMode, rendered, enterGame, openGame, boardPoint,
   resultPoint, headerPoint, memoryPoint, acceptCelebration } = require('./game-ui.cjs');
 
 const MEDAL_KEY = 'wordBuddies.medalProgress';
+
+async function seedGuaranteedMatchChest(page) {
+  await page.addInitScript(() => {
+    if (localStorage.getItem('wordBuddies.medalProgress') === null) localStorage.setItem('wordBuddies.medalProgress',
+      '[medals]\nversion=1\ncounts={}\n[pair_chests]\nversion=1\nstate={"match":{"dry_rounds":2,"round":{}},"memory":{"dry_rounds":0,"round":{}}}\n');
+  });
+}
 
 async function medalRecord(page) {
   return page.evaluate(key => localStorage.getItem(key), MEDAL_KEY);
@@ -99,9 +106,10 @@ test('unavailable rewards leave practice usable and a visible retry preserves th
 });
 
 test('New adventure preserves opened victory pieces across reload', async ({ page }, testInfo) => {
-  test.setTimeout(180000);
+  test.setTimeout(360000);
+  await seedGuaranteedMatchChest(page);
   const errors = await openGame(page);
-  await chooseTheme(page, 0);
+  expect((await metrics(page)).library.learning.selection.track).toBe('growth');
   await chooseMode(page, 'match');
   await winMatch(page);
   expect(await pieceCount(page)).toBe(0);
@@ -109,11 +117,18 @@ test('New adventure preserves opened victory pieces across reload', async ({ pag
   await resultTap(page, 'newAdventure');
   await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
   expect(await pieceCount(page)).toBe(1);
-  await chooseMode(page, 'match');
-  await winMatch(page);
-  await openChest(page);
-  await resultTap(page, 'newAdventure');
-  await expect(page.locator('#game-status')).toHaveText('Find 5 word–picture pairs.');
+  // Subsequent rounds use the real 50% drop and two-dry-round guarantee.
+  // A dry round must remain playable and must not invent a saved reward.
+  for (let attempt = 0; attempt < 3 && await pieceCount(page) < 2; attempt++) {
+    await winMatch(page);
+    const hasChest = (await metrics(page)).growth.result.controls
+      .some(control => control.name === 'OpenSettlementChest' && control.visible && !control.disabled);
+    if (attempt === 2) expect(hasChest, 'Two dry rounds guarantee the next chest').toBe(true);
+    if (hasChest) await openChest(page);
+    else expect(await pieceCount(page)).toBe(1);
+    await resultTap(page, 'newAdventure');
+    await expect(page.locator('#game-status')).toHaveText('Find 5 word–picture pairs.');
+  }
   expect(await pieceCount(page)).toBe(2);
   await page.reload();
   await enterGame(page);
@@ -124,8 +139,10 @@ test('New adventure preserves opened victory pieces across reload', async ({ pag
 });
 
 test('a failed victory save stays retryable and cannot lose or duplicate its piece', async ({ page }, testInfo) => {
+  test.setTimeout(180000);
+  await seedGuaranteedMatchChest(page);
   const errors = await openGame(page);
-  await chooseTheme(page, 0);
+  expect((await metrics(page)).library.learning.selection.track).toBe('growth');
   await chooseMode(page, 'match');
   await winMatch(page);
   const before = await medalRecord(page);

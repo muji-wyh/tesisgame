@@ -363,6 +363,51 @@ func check_finish_header(app, view) -> void:
 	check(view.finish_button.is_visible_in_tree(), "Returning to Jelly Words restores its own Finish control")
 
 
+func check_size_paused_finish(app, view) -> void:
+	var original_size: Vector2i = root.size
+	root.size = Vector2i(568, 320)
+	await settle()
+	check(view._layout_too_small and view.game.paused and view.can_finish_round(),
+		"A short landscape viewport pauses the authored board while keeping Finish available")
+	var button = view.finish_button
+	var start: Vector2 = button.get_global_rect().get_center()
+	var end: Vector2 = start + Vector2(0, float(button.snapshot().threshold) * 1.15)
+	var elapsed: float = view.game.spawn_elapsed
+	var cells: Array = view.game.cells.duplicate(true)
+	await pointer_event(start, true)
+	view._process(1.0 / 60.0)
+	check(button.is_pulling() and view.game.paused and view.game.spawn_elapsed == elapsed and view.game.cells == cells,
+		"A real Finish press survives the next frame without advancing the size-paused board")
+	view.pause(true)
+	view._process(1.0 / 60.0)
+	await pointer_event(end, false)
+	check(not button.is_pulling() and not view.can_finish_round() and view.game.phase == "playing"
+		and app._round_result.is_empty(),
+		"An external pause cancels the size-paused Finish gesture and rejects its later release")
+	view.pause(false)
+	check(view.game.paused and view.can_finish_round() and button.is_visible_in_tree() and not button.disabled,
+		"Clearing an external pause restores Finish while the small board stays paused")
+	await pointer_event(start, true)
+	view._process(1.0 / 60.0)
+	var motion := InputEventMouseMotion.new()
+	motion.position = end
+	motion.global_position = end
+	motion.button_mask = MOUSE_BUTTON_MASK_LEFT
+	root.push_input(motion)
+	view._process(1.0 / 60.0)
+	check(button.snapshot().armed and view.game.paused and view.game.spawn_elapsed == elapsed and view.game.cells == cells,
+		"The size-paused Finish pull remains armed across frames while board state stays unchanged")
+	await pointer_event(end, false)
+	await settle()
+	check(view.game.phase == "finished" and app._settlement_dialog.is_visible_in_tree() and not button.is_pulling(),
+		"Releasing an armed Finish pull during a size-only pause opens the settlement modal")
+	root.size = original_size
+	app._jelly_rewards._back.pressed.emit()
+	await settle()
+	check(view.game.phase == "playing" and not view.game.paused,
+		"Replay at the original viewport resumes a playable round after the size-paused finish")
+
+
 func _check_playfield_layout(view, s: float, context: String) -> void:
 	var bounds: Rect2 = view.get_global_rect().grow(0.1)
 	var board: Rect2 = view._global_rect(view._board)
@@ -564,6 +609,7 @@ func _run() -> void:
 	check(app._jelly_backdrop.visible and app._mode_heading.text.begins_with("Jelly Words"), "The new game has its heading and shared woodland")
 	check(app._round_id.begins_with("word_jelly:"), "Word treasure and coin receipts use a distinct round namespace")
 	await check_finish_header(app, view)
+	await check_size_paused_finish(app, view)
 	var vocabulary: Array = app._learning_words()
 	var word: Dictionary = vocabulary.filter(func(item: Dictionary) -> bool: return str(item.text).length() >= 2 and str(item.text).length() <= 6)[0]
 	check(view.configure([word], app.growth.learning_age(), Data.theme(app.model.theme_id), app.data.chests, true, 405), "The integration fixture uses a real current-age word")

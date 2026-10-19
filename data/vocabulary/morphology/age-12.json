@@ -1,0 +1,4077 @@
+{
+  "schema": 1,
+  "revision": "growth-morphology-v1",
+  "age": 12,
+  "entries": [
+    {
+      "id": "meteor",
+      "text": "meteor",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The celestial-object name is a whole modern borrowing; its historical Greek elevated-in-the-air construction is not taught as an English meter or meteo compound.",
+        "references": [
+          "anderson-morphology",
+          "mw-meteor"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.meteor.analysis.v1",
+        "lexeme_id": "meteor",
+        "text": "meteor",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.meteor",
+            "canonical": "meteor",
+            "surface": "meteor",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "galaxy",
+      "text": "galaxy",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The astronomical noun is a lexical whole. Its historical Greek milk metaphor does not turn the current collection of stars into an English gal plus axy formation.",
+        "references": [
+          "anderson-morphology",
+          "mw-galaxy"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.galaxy.analysis.v1",
+        "lexeme_id": "galaxy",
+        "text": "galaxy",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.galaxy",
+            "canonical": "galaxy",
+            "surface": "galaxy",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "satellite",
+      "text": "satellite",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The orbiting-object noun is one current base; its Latin attendant history does not create detachable English sat or lite components.",
+        "references": [
+          "anderson-morphology",
+          "mw-satellite"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.satellite.analysis.v1",
+        "lexeme_id": "satellite",
+        "text": "satellite",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.satellite",
+            "canonical": "satellite",
+            "surface": "satellite",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "telescope",
+      "text": "telescope",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The viewing instrument contains the documented distant and observing-instrument combining forms.",
+        "references": [
+          "anderson-morphology",
+          "mw-telescope"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.telescope.analysis.v1",
+        "lexeme_id": "telescope",
+        "text": "telescope",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.combining.tele.distant",
+            "canonical": "tele-",
+            "surface": "tele",
+            "type": "combining_form",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.combining.scope.examine",
+            "canonical": "-scope",
+            "surface": "scope",
+            "type": "combining_form",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "telescope",
+            "rule": "tele-distant-plus-scope",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "asteroid",
+      "text": "asteroid",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The name records the historically starlike appearance through the star root and resemblance suffix. The stored object remains a small celestial body, not a star.",
+        "references": [
+          "anderson-morphology",
+          "mw-asteroid",
+          "mw--oid"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.asteroid.analysis.v1",
+        "lexeme_id": "asteroid",
+        "text": "asteroid",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.root.aster.star",
+            "canonical": "aster",
+            "surface": "aster",
+            "type": "root",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.oid.resembling",
+            "canonical": "-oid",
+            "surface": "oid",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "asteroid",
+            "rule": "aster-star-plus-oid",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "saxophone",
+      "text": "saxophone",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The instrument name uses its inventor Sax and the sound-instrument form. The surname has an explicitly lowercase sax realization; it is distinct from the later instrument-name clipping sax.",
+        "references": [
+          "anderson-morphology",
+          "mw-saxophone"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.saxophone.analysis.v1",
+        "lexeme_id": "saxophone",
+        "text": "saxophone",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.part.sax.person",
+            "canonical": "Sax",
+            "surface": "sax",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.combining.phone.sound",
+            "canonical": "-phone",
+            "surface": "phone",
+            "type": "combining_form",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "saxophone",
+            "rule": "sax-person-plus-phone-with-lowercase-name",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "xylophone",
+      "text": "xylophone",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The instrument name contains the documented wood and sound-producing instrument elements, referring to its struck wooden bars.",
+        "references": [
+          "anderson-morphology",
+          "mw-xylophone"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.xylophone.analysis.v1",
+        "lexeme_id": "xylophone",
+        "text": "xylophone",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.combining.xylo.wood",
+            "canonical": "xylo-",
+            "surface": "xylo",
+            "type": "combining_form",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.combining.phone.sound",
+            "canonical": "-phone",
+            "surface": "phone",
+            "type": "combining_form",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "xylophone",
+            "rule": "xylo-wood-plus-phone",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "cymbal",
+      "text": "cymbal",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The percussion-instrument name is one borrowed base; bal is not a current musical suffix.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.cymbal.analysis.v1",
+        "lexeme_id": "cymbal",
+        "text": "cymbal",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.cymbal",
+            "canonical": "cymbal",
+            "surface": "cymbal",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "glacier",
+      "text": "glacier",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The moving-ice noun is a whole borrowing; its final er does not make it the agent of an English glaci verb.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.glacier.analysis.v1",
+        "lexeme_id": "glacier",
+        "text": "glacier",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.glacier",
+            "canonical": "glacier",
+            "surface": "glacier",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "peninsula",
+      "text": "peninsula",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The landform name is borrowed whole from Latin. Its historical almost-island description does not create modern English pen and insula bases.",
+        "references": [
+          "anderson-morphology",
+          "mw-peninsula"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.peninsula.analysis.v1",
+        "lexeme_id": "peninsula",
+        "text": "peninsula",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.peninsula",
+            "canonical": "peninsula",
+            "surface": "peninsula",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "canyon",
+      "text": "canyon",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The steep-sided valley name is a whole borrowed stem with no detachable English ending.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.canyon.analysis.v1",
+        "lexeme_id": "canyon",
+        "text": "canyon",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.canyon",
+            "canonical": "canyon",
+            "surface": "canyon",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "geyser",
+      "text": "geyser",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The hot-water-spring name is a whole borrowing; it is not an agent noun formed from a gey action.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.geyser.analysis.v1",
+        "lexeme_id": "geyser",
+        "text": "geyser",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.geyser",
+            "canonical": "geyser",
+            "surface": "geyser",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "avalanche",
+      "text": "avalanche",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The falling-snow mass is named by one borrowed base; dividing its syllables would not supply meaningful current components.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.avalanche.analysis.v1",
+        "lexeme_id": "avalanche",
+        "text": "avalanche",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.avalanche",
+            "canonical": "avalanche",
+            "surface": "avalanche",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "stalactite",
+      "text": "stalactite",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The cave-deposit name is a whole scientific borrowing. Its historical dripping root is not a free English stalact base plus a general mineral suffix in this learner analysis.",
+        "references": [
+          "anderson-morphology",
+          "mw-stalactite"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.stalactite.analysis.v1",
+        "lexeme_id": "stalactite",
+        "text": "stalactite",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.stalactite",
+            "canonical": "stalactite",
+            "surface": "stalactite",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "fossil",
+      "text": "fossil",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The preserved-organism noun is one current base; its final il is not an English suffix.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.fossil.analysis.v1",
+        "lexeme_id": "fossil",
+        "text": "fossil",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.fossil",
+            "canonical": "fossil",
+            "surface": "fossil",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "nebula",
+      "text": "nebula",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The astronomical cloud noun keeps its complete borrowed singular form; final a is not an English plural marker.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.nebula.analysis.v1",
+        "lexeme_id": "nebula",
+        "text": "nebula",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.nebula",
+            "canonical": "nebula",
+            "surface": "nebula",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "supernova",
+      "text": "supernova",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The astronomical name joins super- to nova to distinguish an enormously more energetic stellar event; the current supernova meaning remains intact.",
+        "references": [
+          "anderson-morphology",
+          "mw-supernova"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.supernova.analysis.v1",
+        "lexeme_id": "supernova",
+        "text": "supernova",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.affix.super.greater",
+            "canonical": "super-",
+            "surface": "super",
+            "type": "prefix",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.part.nova.stellar-outburst",
+            "canonical": "nova",
+            "surface": "nova",
+            "type": "stem",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "supernova",
+            "rule": "super-greater-plus-nova",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "eclipse",
+      "text": "eclipse",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The astronomical obscuring event is one lexical base; clip does not describe its internal morphology.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.eclipse.analysis.v1",
+        "lexeme_id": "eclipse",
+        "text": "eclipse",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.eclipse",
+            "canonical": "eclipse",
+            "surface": "eclipse",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "universe",
+      "text": "universe",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The whole-cosmos noun is lexicalized; modern verse in the poetry sense would give a false compound meaning.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.universe.analysis.v1",
+        "lexeme_id": "universe",
+        "text": "universe",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.universe",
+            "canonical": "universe",
+            "surface": "universe",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "capsule",
+      "text": "capsule",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The enclosed-compartment noun is one current base; the modern headwear noun cap is not its constituent sense.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.capsule.analysis.v1",
+        "lexeme_id": "capsule",
+        "text": "capsule",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.capsule",
+            "canonical": "capsule",
+            "surface": "capsule",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "spacesuit",
+      "text": "spacesuit",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The protective outfit is a suit for outer space; both free bases retain those particular meanings.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.spacesuit.analysis.v1",
+        "lexeme_id": "spacesuit",
+        "text": "spacesuit",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.part.space.outer-space",
+            "canonical": "space",
+            "surface": "space",
+            "type": "compound",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.part.suit.clothing",
+            "canonical": "suit",
+            "surface": "suit",
+            "type": "compound",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "spacesuit",
+            "rule": "authored-compound-concatenation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "accordion",
+      "text": "accordion",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The instrument name is borrowed from German. Its naming relation to musical accord does not make final ion the ordinary English action-noun suffix here.",
+        "references": [
+          "anderson-morphology",
+          "mw-accordion"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.accordion.analysis.v1",
+        "lexeme_id": "accordion",
+        "text": "accordion",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.accordion",
+            "canonical": "accordion",
+            "surface": "accordion",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "clarinet",
+      "text": "clarinet",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The wind-instrument name is one borrowed stem; its historical diminutive is not recast as an English clarin plus et operation.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.clarinet.analysis.v1",
+        "lexeme_id": "clarinet",
+        "text": "clarinet",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.clarinet",
+            "canonical": "clarinet",
+            "surface": "clarinet",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "trombone",
+      "text": "trombone",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The brass-instrument name is a whole borrowing; bone is not the anatomical noun within this musical term.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.trombone.analysis.v1",
+        "lexeme_id": "trombone",
+        "text": "trombone",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.trombone",
+            "canonical": "trombone",
+            "surface": "trombone",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "metronome",
+      "text": "metronome",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The tempo-regulating device contains the documented measure and regulating elements. The final nome realization is explicitly authored, and metro is not a city railway here.",
+        "references": [
+          "anderson-morphology",
+          "mw-metronome"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.metronome.analysis.v1",
+        "lexeme_id": "metronome",
+        "text": "metronome",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.combining.metro.measure",
+            "canonical": "metro-",
+            "surface": "metro",
+            "type": "combining_form",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.root.nom.regulate",
+            "canonical": "nom",
+            "surface": "nome",
+            "type": "root",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "metronome",
+            "rule": "metro-measure-plus-nom-authored-nome",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "harmonica",
+      "text": "harmonica",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The reed-instrument noun is borrowed from an Italian harmonious adjective; its final a is not an English instrument suffix.",
+        "references": [
+          "anderson-morphology",
+          "mw-harmonica"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.harmonica.analysis.v1",
+        "lexeme_id": "harmonica",
+        "text": "harmonica",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.harmonica",
+            "canonical": "harmonica",
+            "surface": "harmonica",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "microscope",
+      "text": "microscope",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The instrument makes tiny objects observable; the documented small prefix combines with the observing-instrument form.",
+        "references": [
+          "anderson-morphology",
+          "mw-microscope"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.microscope.analysis.v1",
+        "lexeme_id": "microscope",
+        "text": "microscope",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.affix.micro.small",
+            "canonical": "micro-",
+            "surface": "micro",
+            "type": "prefix",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.combining.scope.examine",
+            "canonical": "-scope",
+            "surface": "scope",
+            "type": "combining_form",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "microscope",
+            "rule": "micro-small-plus-scope",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "compass",
+      "text": "compass",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The direction-finding instrument is one current base; pass as an English movement verb does not explain this lexicalized noun.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.compass.analysis.v1",
+        "lexeme_id": "compass",
+        "text": "compass",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.compass",
+            "canonical": "compass",
+            "surface": "compass",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "hourglass",
+      "text": "hourglass",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The traditional sand timer combines the hour duration with its glass material; the second base is not a drinking container.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.hourglass.analysis.v1",
+        "lexeme_id": "hourglass",
+        "text": "hourglass",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.hour",
+            "canonical": "hour",
+            "surface": "hour",
+            "type": "compound",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.part.glass.material",
+            "canonical": "glass",
+            "surface": "glass",
+            "type": "compound",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "hourglass",
+            "rule": "authored-compound-concatenation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "binoculars",
+      "text": "binoculars",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The paired viewing instrument contains two-related bi- and eye-related ocular. The established noun uses plural -s after the complete binocular stem.",
+        "references": [
+          "anderson-morphology",
+          "mw-binocular",
+          "mw-ocular"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.binoculars.analysis.v1",
+        "lexeme_id": "binoculars",
+        "text": "binoculars",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.affix.bi.two",
+            "canonical": "bi-",
+            "surface": "bi",
+            "type": "prefix",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.part.ocular.eye-related",
+            "canonical": "ocular",
+            "surface": "ocular",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part3",
+            "canonical_id": "english.affix.s.plural",
+            "canonical": "-s",
+            "surface": "s",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "binocular",
+            "left": "part1",
+            "right": "part2",
+            "surface": "binocular",
+            "rule": "bi-two-plus-ocular",
+            "break_offsets": []
+          },
+          {
+            "id": "whole",
+            "left": "binocular",
+            "right": "part3",
+            "surface": "binoculars",
+            "rule": "binocular-plus-plural-s",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "abacus",
+      "text": "abacus",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The counting-frame noun is a complete borrowed singular form; us is not a plural ending to remove.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.abacus.analysis.v1",
+        "lexeme_id": "abacus",
+        "text": "abacus",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.abacus",
+            "canonical": "abacus",
+            "surface": "abacus",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "refrigerate",
+      "text": "refrigerate",
+      "min_age": 12,
+      "part_of_speech": "verb",
+      "meaning": "Keep food cold in a refrigerator",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The food-cooling verb is one current base. Its historical intensive re- and Latin cooling verb do not mean repeating a modern English frigerate action.",
+        "references": [
+          "anderson-morphology",
+          "mw-refrigerate"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.refrigerate.analysis.v1",
+        "lexeme_id": "refrigerate",
+        "text": "refrigerate",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.refrigerate",
+            "canonical": "refrigerate",
+            "surface": "refrigerate",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "permeable",
+      "text": "permeable",
+      "min_age": 12,
+      "part_of_speech": "adjective",
+      "meaning": "Allowing water to pass through",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The material permits water to permeate it. The permeate family and capability suffix are retained with the explicitly authored perme- realization before -able.",
+        "references": [
+          "anderson-morphology",
+          "mw-permeable",
+          "mw-permeate"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.permeable.analysis.v1",
+        "lexeme_id": "permeable",
+        "text": "permeable",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.part.permeate.pass-through",
+            "canonical": "permeate",
+            "surface": "permeate",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.able.capable",
+            "canonical": "-able",
+            "surface": "able",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "permeable",
+            "rule": "permeate-plus-able-authored-perme",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "opaque",
+      "text": "opaque",
+      "min_age": 12,
+      "part_of_speech": "adjective",
+      "meaning": "Not allowing light to pass through",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The light-blocking adjective is one borrowed stem, with no detachable English aque ending.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.opaque.analysis.v1",
+        "lexeme_id": "opaque",
+        "text": "opaque",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.opaque",
+            "canonical": "opaque",
+            "surface": "opaque",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "transparent",
+      "text": "transparent",
+      "min_age": 12,
+      "part_of_speech": "adjective",
+      "meaning": "Clear enough to see through",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The see-through adjective is kept whole in this learner analysis. Its historical appear-root is not the English family noun parent after trans-.",
+        "references": [
+          "anderson-morphology",
+          "mw-transparent"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.transparent.analysis.v1",
+        "lexeme_id": "transparent",
+        "text": "transparent",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.transparent",
+            "canonical": "transparent",
+            "surface": "transparent",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "diagonal",
+      "text": "diagonal",
+      "min_age": 12,
+      "part_of_speech": "adjective",
+      "meaning": "Slanting between horizontal and vertical directions",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The slanting-direction adjective is a whole current base. Its Greek angle history does not supply an English diagon word to which ordinary -al is attached.",
+        "references": [
+          "anderson-morphology",
+          "mw-diagonal"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.diagonal.analysis.v1",
+        "lexeme_id": "diagonal",
+        "text": "diagonal",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.diagonal",
+            "canonical": "diagonal",
+            "surface": "diagonal",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "horizontal",
+      "text": "horizontal",
+      "min_age": 12,
+      "part_of_speech": "adjective",
+      "meaning": "Running level from side to side",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The level direction is parallel to the horizon. The exact horizontal result records the horizont- stem realization before -al, without inferring an inserted letter at runtime.",
+        "references": [
+          "anderson-morphology",
+          "mw-horizontal"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.horizontal.analysis.v1",
+        "lexeme_id": "horizontal",
+        "text": "horizontal",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.part.horizon.level-line",
+            "canonical": "horizon",
+            "surface": "horizon",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.al.relating",
+            "canonical": "-al",
+            "surface": "al",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "horizontal",
+            "rule": "horizon-plus-al-authored-horizont",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "parallel",
+      "text": "parallel",
+      "min_age": 12,
+      "part_of_speech": "adjective",
+      "meaning": "Always the same distance apart",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The equal-distance adjective is lexicalized from Greek beside-one-another elements; allel is not presented as a free English geometric base.",
+        "references": [
+          "anderson-morphology",
+          "mw-parallel"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.parallel.analysis.v1",
+        "lexeme_id": "parallel",
+        "text": "parallel",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.parallel",
+            "canonical": "parallel",
+            "surface": "parallel",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "vertical",
+      "text": "vertical",
+      "min_age": 12,
+      "part_of_speech": "adjective",
+      "meaning": "Going straight up and down",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The up-and-down adjective is kept whole. Its historical summit-related vertex base is not substituted with the current corner sense of geometric vertex.",
+        "references": [
+          "anderson-morphology",
+          "mw-vertical"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.vertical.analysis.v1",
+        "lexeme_id": "vertical",
+        "text": "vertical",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.vertical",
+            "canonical": "vertical",
+            "surface": "vertical",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "acute",
+      "text": "acute",
+      "min_age": 12,
+      "part_of_speech": "adjective",
+      "meaning": "Having angles smaller than a right angle",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The small-angle adjective is one current base, distinct in sense from the medical and perceptual uses.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.acute.analysis.v1",
+        "lexeme_id": "acute",
+        "text": "acute",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.acute",
+            "canonical": "acute",
+            "surface": "acute",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "obtuse",
+      "text": "obtuse",
+      "min_age": 12,
+      "part_of_speech": "adjective",
+      "meaning": "Having an angle larger than ninety degrees",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The greater-than-right-angle adjective is a whole borrowed base; ob and tuse are not current free English shape words.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.obtuse.analysis.v1",
+        "lexeme_id": "obtuse",
+        "text": "obtuse",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.obtuse",
+            "canonical": "obtuse",
+            "surface": "obtuse",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "isosceles",
+      "text": "isosceles",
+      "min_age": 12,
+      "part_of_speech": "adjective",
+      "meaning": "Having two sides of equal length",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The attested equal-leg formation refers to equal sides of the triangle. The borrowed sceles realization of the leg root is authored explicitly rather than presented as a free English word.",
+        "references": [
+          "anderson-morphology",
+          "mw-isosceles"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.isosceles.analysis.v1",
+        "lexeme_id": "isosceles",
+        "text": "isosceles",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.combining.iso.equal",
+            "canonical": "iso-",
+            "surface": "iso",
+            "type": "combining_form",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.root.skel.leg",
+            "canonical": "skel",
+            "surface": "sceles",
+            "type": "root",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "isosceles",
+            "rule": "iso-equal-plus-skel-authored-sceles",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "scalene",
+      "text": "scalene",
+      "min_age": 12,
+      "part_of_speech": "adjective",
+      "meaning": "Having three sides of different lengths",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The unequal-sided triangle adjective is a whole borrowed base; it does not contain the weighing scale noun or a productive ene suffix.",
+        "references": [
+          "anderson-morphology",
+          "mw-scalene"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.scalene.analysis.v1",
+        "lexeme_id": "scalene",
+        "text": "scalene",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.scalene",
+            "canonical": "scalene",
+            "surface": "scalene",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "atom",
+      "text": "atom",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "A tiny building block of matter",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The matter-unit noun is one modern base. The historical uncut meaning must not falsely teach that a physical atom is indivisible.",
+        "references": [
+          "anderson-morphology",
+          "mw-atom"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.atom.analysis.v1",
+        "lexeme_id": "atom",
+        "text": "atom",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.atom",
+            "canonical": "atom",
+            "surface": "atom",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "atmosphere",
+      "text": "atmosphere",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "The layer of gases around Earth",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The documented vapor and sphere formation names the gaseous envelope surrounding Earth; its modern meaning includes the full gas mixture, not only water vapor.",
+        "references": [
+          "anderson-morphology",
+          "mw-atmosphere"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.atmosphere.analysis.v1",
+        "lexeme_id": "atmosphere",
+        "text": "atmosphere",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.combining.atmo.vapor",
+            "canonical": "atmo-",
+            "surface": "atmo",
+            "type": "combining_form",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.part.sphere.envelope",
+            "canonical": "sphere",
+            "surface": "sphere",
+            "type": "stem",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "atmosphere",
+            "rule": "atmo-vapor-plus-sphere",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "friction",
+      "text": "friction",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "A force resisting surfaces sliding together",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The resistance-between-surfaces noun is one current scientific base; a free frict action is not invented from its ion spelling.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.friction.analysis.v1",
+        "lexeme_id": "friction",
+        "text": "friction",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.friction",
+            "canonical": "friction",
+            "surface": "friction",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "gravity",
+      "text": "gravity",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "The force pulling objects toward Earth",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The Earth-attraction noun is lexicalized; joining the modern serious adjective grave with -ity would teach a different sense.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.gravity.analysis.v1",
+        "lexeme_id": "gravity",
+        "text": "gravity",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.gravity",
+            "canonical": "gravity",
+            "surface": "gravity",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "circuit",
+      "text": "circuit",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "A complete path for electric current",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The electrical-path noun is one current base; its Latin going-around history does not establish separate English cir and cuit words.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.circuit.analysis.v1",
+        "lexeme_id": "circuit",
+        "text": "circuit",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.circuit",
+            "canonical": "circuit",
+            "surface": "circuit",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "pipette",
+      "text": "pipette",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "A narrow tube for moving liquid drops",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The liquid-transfer instrument has the documented small-pipe formation. The exact pipette spelling shares the final e of pipe with the diminutive ending.",
+        "references": [
+          "anderson-morphology",
+          "mw-pipette",
+          "mw--ette"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.pipette.analysis.v1",
+        "lexeme_id": "pipette",
+        "text": "pipette",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.part.pipe.tube",
+            "canonical": "pipe",
+            "surface": "pipe",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.ette.diminutive",
+            "canonical": "-ette",
+            "surface": "ette",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "pipette",
+            "rule": "pipe-plus-ette-e-sharing",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "flask",
+      "text": "flask",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "A narrow necked container used in laboratories",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The laboratory-container noun is one stem with no affix.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.flask.analysis.v1",
+        "lexeme_id": "flask",
+        "text": "flask",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.flask",
+            "canonical": "flask",
+            "surface": "flask",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "tripod",
+      "text": "tripod",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "A support with three legs",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The three-legged support contains the documented three prefix and foot combining form, not pod in the seed-container sense.",
+        "references": [
+          "anderson-morphology",
+          "mw-tripod"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.tripod.analysis.v1",
+        "lexeme_id": "tripod",
+        "text": "tripod",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.affix.tri.three",
+            "canonical": "tri-",
+            "surface": "tri",
+            "type": "prefix",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.combining.pod.foot",
+            "canonical": "-pod",
+            "surface": "pod",
+            "type": "combining_form",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "tripod",
+            "rule": "tri-three-plus-pod-foot",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "scales",
+      "text": "scales",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "An instrument for measuring weight",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The weighing instrument uses the attested scale noun and plural -s; its base is distinct from the skin covering of a fish.",
+        "references": [
+          "anderson-morphology",
+          "mw-scales"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.scales.analysis.v1",
+        "lexeme_id": "scales",
+        "text": "scales",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.part.scale.weighing-device",
+            "canonical": "scale",
+            "surface": "scale",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.s.plural",
+            "canonical": "-s",
+            "surface": "s",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "scales",
+            "rule": "weighing-scale-plus-plural-s",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "algebra",
+      "text": "algebra",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "Mathematics using letters to stand for numbers",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The mathematics-domain name is a whole Arabic borrowing; its historical article is not a productive English al prefix.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.algebra.analysis.v1",
+        "lexeme_id": "algebra",
+        "text": "algebra",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.algebra",
+            "canonical": "algebra",
+            "surface": "algebra",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "hexagon",
+      "text": "hexagon",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "A shape with six straight sides",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The six-sided figure contains the documented six and angle-figure elements; hexa keeps its combining vowel.",
+        "references": [
+          "anderson-morphology",
+          "mw-hexagon",
+          "mw--gon"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.hexagon.analysis.v1",
+        "lexeme_id": "hexagon",
+        "text": "hexagon",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.combining.hexa.six",
+            "canonical": "hexa-",
+            "surface": "hexa",
+            "type": "combining_form",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.combining.gon.angle-figure",
+            "canonical": "-gon",
+            "surface": "gon",
+            "type": "combining_form",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "hexagon",
+            "rule": "hexa-six-plus-gon",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "heptagon",
+      "text": "heptagon",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "A shape with seven straight sides",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The seven-sided figure contains the documented seven and angle-figure elements, with the full hepta combining form.",
+        "references": [
+          "anderson-morphology",
+          "mw-heptagon",
+          "mw--gon"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.heptagon.analysis.v1",
+        "lexeme_id": "heptagon",
+        "text": "heptagon",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.combining.hepta.seven",
+            "canonical": "hepta-",
+            "surface": "hepta",
+            "type": "combining_form",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.combining.gon.angle-figure",
+            "canonical": "-gon",
+            "surface": "gon",
+            "type": "combining_form",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "heptagon",
+            "rule": "hepta-seven-plus-gon",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "octagon",
+      "text": "octagon",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "A shape with eight straight sides",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The eight-sided figure contains the documented eight and angle-figure forms; no octopus base is substituted.",
+        "references": [
+          "anderson-morphology",
+          "mw-octagon",
+          "mw--gon"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.octagon.analysis.v1",
+        "lexeme_id": "octagon",
+        "text": "octagon",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.combining.octa.eight",
+            "canonical": "octa-",
+            "surface": "octa",
+            "type": "combining_form",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.combining.gon.angle-figure",
+            "canonical": "-gon",
+            "surface": "gon",
+            "type": "combining_form",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "octagon",
+            "rule": "octa-eight-plus-gon",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "pentagon",
+      "text": "pentagon",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "A shape with five straight sides",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The five-sided figure joins the documented five and angle-figure elements, retaining its shape sense rather than a building name.",
+        "references": [
+          "anderson-morphology",
+          "mw-pentagon",
+          "mw--gon"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.pentagon.analysis.v1",
+        "lexeme_id": "pentagon",
+        "text": "pentagon",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.combining.penta.five",
+            "canonical": "penta-",
+            "surface": "penta",
+            "type": "combining_form",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.combining.gon.angle-figure",
+            "canonical": "-gon",
+            "surface": "gon",
+            "type": "combining_form",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "pentagon",
+            "rule": "penta-five-plus-gon",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "quadrilateral",
+      "text": "quadrilateral",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "A shape with four straight sides",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The four-sided shape contains four-related quadri- and side-related lateral, preserving the geometric noun sense.",
+        "references": [
+          "anderson-morphology",
+          "mw-quadrilateral",
+          "mw-lateral"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.quadrilateral.analysis.v1",
+        "lexeme_id": "quadrilateral",
+        "text": "quadrilateral",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.affix.quadri.four",
+            "canonical": "quadri-",
+            "surface": "quadri",
+            "type": "prefix",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.part.lateral.side-related",
+            "canonical": "lateral",
+            "surface": "lateral",
+            "type": "stem",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "quadrilateral",
+            "rule": "quadri-four-plus-lateral",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "rhombus",
+      "text": "rhombus",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "A quadrilateral with four equal sides",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The equal-sided quadrilateral name preserves its complete borrowed singular form; us is not an English ending to strip.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.rhombus.analysis.v1",
+        "lexeme_id": "rhombus",
+        "text": "rhombus",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.rhombus",
+            "canonical": "rhombus",
+            "surface": "rhombus",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "parallelogram",
+      "text": "parallelogram",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "A quadrilateral with two parallel side pairs",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The shape has parallel opposite sides. The documented line element is distinct from the weight unit gram, and the connecting o is included in the authored whole output.",
+        "references": [
+          "anderson-morphology",
+          "mw-parallelogram"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.parallelogram.analysis.v1",
+        "lexeme_id": "parallelogram",
+        "text": "parallelogram",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.parallel",
+            "canonical": "parallel",
+            "surface": "parallel",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.combining.gram.line",
+            "canonical": "-gram",
+            "surface": "gram",
+            "type": "combining_form",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "parallelogram",
+            "rule": "parallel-plus-gram-line-with-connecting-o",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "trapezoid",
+      "text": "trapezoid",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "A quadrilateral with a parallel side pair",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The selected quadrilateral noun is lexicalized. A contemporary circus trapeze is not its semantic base, despite the historical table-related family.",
+        "references": [
+          "anderson-morphology",
+          "mw-trapezoid"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.trapezoid.analysis.v1",
+        "lexeme_id": "trapezoid",
+        "text": "trapezoid",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.trapezoid",
+            "canonical": "trapezoid",
+            "surface": "trapezoid",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "pyramid",
+      "text": "pyramid",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "A solid with sides meeting at a point",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The solid-shape noun is one borrowed base; mid is not the current middle component within it.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.pyramid.analysis.v1",
+        "lexeme_id": "pyramid",
+        "text": "pyramid",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.pyramid",
+            "canonical": "pyramid",
+            "surface": "pyramid",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "prism",
+      "text": "prism",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "A solid with matching parallel end faces",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The geometric-solid noun is one borrowed stem with no detachable English suffix.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.prism.analysis.v1",
+        "lexeme_id": "prism",
+        "text": "prism",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.prism",
+            "canonical": "prism",
+            "surface": "prism",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "percent",
+      "text": "percent",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "An amount measured out of one hundred",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The quantity is measured for each hundred. The attested per-cent formation uses the hundred root, not a coin worth one hundredth of a dollar.",
+        "references": [
+          "anderson-morphology",
+          "mw-percent"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.percent.analysis.v1",
+        "lexeme_id": "percent",
+        "text": "percent",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.part.per.for-each",
+            "canonical": "per",
+            "surface": "per",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.root.cent.hundred",
+            "canonical": "cent",
+            "surface": "cent",
+            "type": "root",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "percent",
+            "rule": "per-each-plus-cent-hundred",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "fraction",
+      "text": "fraction",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "A number representing part of a whole",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The part-of-a-whole number noun is a lexicalized scientific base; it is not formed from a current free English fract verb in this learner analysis.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.fraction.analysis.v1",
+        "lexeme_id": "fraction",
+        "text": "fraction",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.fraction",
+            "canonical": "fraction",
+            "surface": "fraction",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "photocopier",
+      "text": "photocopier",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "A machine that makes copies of documents",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The machine makes a photocopy. Photo- supplies the light-related process, copy supplies the duplication action, and instrument -er forms copier with y changed to i.",
+        "references": [
+          "anderson-morphology",
+          "mw-photocopier",
+          "mw-photocopy"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.photocopier.analysis.v1",
+        "lexeme_id": "photocopier",
+        "text": "photocopier",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.combining.photo.light",
+            "canonical": "photo-",
+            "surface": "photo",
+            "type": "combining_form",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.copy",
+            "canonical": "copy",
+            "surface": "copy",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part3",
+            "canonical_id": "english.affix.er.agent-instrument",
+            "canonical": "-er",
+            "surface": "er",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "copier",
+            "left": "part2",
+            "right": "part3",
+            "surface": "copier",
+            "rule": "copy-plus-er-y-to-i",
+            "break_offsets": []
+          },
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "copier",
+            "surface": "photocopier",
+            "rule": "photo-plus-copier",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "boccia",
+      "text": "boccia",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "A game throwing balls near a target",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The target-ball sport name is borrowed whole from Italian; its ending is not an English plural operation.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.boccia.analysis.v1",
+        "lexeme_id": "boccia",
+        "text": "boccia",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.boccia",
+            "canonical": "boccia",
+            "surface": "boccia",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "athletics",
+      "text": "athletics",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "Sports including running and jumping",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The sports domain is associated with athletes. The documented activity-domain suffix -ics takes the athlet- realization; this is not the ordinary plural of athlete.",
+        "references": [
+          "anderson-morphology",
+          "mw-athletics",
+          "mw-athletic",
+          "mw--ics"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.athletics.analysis.v1",
+        "lexeme_id": "athletics",
+        "text": "athletics",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.part.athlete.sports-person",
+            "canonical": "athlete",
+            "surface": "athlete",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.ics.activities",
+            "canonical": "-ics",
+            "surface": "ics",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "athletics",
+            "rule": "athlete-plus-ics-e-loss",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "rosette",
+      "text": "rosette",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "A ribbon decoration given as an award",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The ribbon award has a rose-like decorative shape. The attested rose and diminutive formation uses one shared e in the exact rosette output.",
+        "references": [
+          "anderson-morphology",
+          "mw-rosette",
+          "mw--ette"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.rosette.analysis.v1",
+        "lexeme_id": "rosette",
+        "text": "rosette",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.rose",
+            "canonical": "rose",
+            "surface": "rose",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.ette.diminutive",
+            "canonical": "-ette",
+            "surface": "ette",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "rosette",
+            "rule": "rose-plus-ette-e-sharing",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "stirrups",
+      "text": "stirrups",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "Foot supports attached to a riding saddle",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The saddle foot supports use the attested complete singular stirrup plus plural -s; the opaque historical stair-and-rope formation is not reconstructed.",
+        "references": [
+          "anderson-morphology",
+          "mw-stirrup"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.stirrups.analysis.v1",
+        "lexeme_id": "stirrups",
+        "text": "stirrups",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.part.stirrup.saddle-foot-support",
+            "canonical": "stirrup",
+            "surface": "stirrup",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.s.plural",
+            "canonical": "-s",
+            "surface": "s",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "stirrups",
+            "rule": "stirrup-plus-plural-s",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "bridle",
+      "text": "bridle",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "Straps used to guide a horse",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The horse-guiding equipment noun is one base, distinct from the wedding-related bridal adjective.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.bridle.analysis.v1",
+        "lexeme_id": "bridle",
+        "text": "bridle",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.bridle",
+            "canonical": "bridle",
+            "surface": "bridle",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "celeriac",
+      "text": "celeriac",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "A knobbly root vegetable related to celery",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The root-vegetable name is a lexicalized formation. Its relation to celery does not supply a productive English ac suffix for constructing vegetable names.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.celeriac.analysis.v1",
+        "lexeme_id": "celeriac",
+        "text": "celeriac",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.celeriac",
+            "canonical": "celeriac",
+            "surface": "celeriac",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "macadamia",
+      "text": "macadamia",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "A round creamy nut with a hard shell",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The nut name is a lexicalized botanical eponym; the personal-name origin does not make mac and adamia current food components.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.macadamia.analysis.v1",
+        "lexeme_id": "macadamia",
+        "text": "macadamia",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.macadamia",
+            "canonical": "macadamia",
+            "surface": "macadamia",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "margarine",
+      "text": "margarine",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "A buttery spread made from vegetable oils",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The vegetable-oil spread noun is one established coined food name; ine alone does not justify inventing a free margar base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.margarine.analysis.v1",
+        "lexeme_id": "margarine",
+        "text": "margarine",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.margarine",
+            "canonical": "margarine",
+            "surface": "margarine",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "meringue",
+      "text": "meringue",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "A crisp sweet made with whipped egg whites",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The egg-white confection name is one borrowed base; its final sound is not the English progressive -ing ending.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.meringue.analysis.v1",
+        "lexeme_id": "meringue",
+        "text": "meringue",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.meringue",
+            "canonical": "meringue",
+            "surface": "meringue",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "muesli",
+      "text": "muesli",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "A cereal mixture of oats fruit and nuts",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The oat-mixture noun is borrowed whole; its Swiss German diminutive history is not an English li suffix.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.muesli.analysis.v1",
+        "lexeme_id": "muesli",
+        "text": "muesli",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.muesli",
+            "canonical": "muesli",
+            "surface": "muesli",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "quiche",
+      "text": "quiche",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "A savory pastry filled with eggs",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The savory-pastry noun is one borrowed base with no meaningful English internal join.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.quiche.analysis.v1",
+        "lexeme_id": "quiche",
+        "text": "quiche",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.quiche",
+            "canonical": "quiche",
+            "surface": "quiche",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "swede",
+      "text": "swede",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "A root vegetable with yellow flesh",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The root-vegetable noun is a lexicalized shortened name; no current compound is reconstructed inside its remaining letters.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.swede.analysis.v1",
+        "lexeme_id": "swede",
+        "text": "swede",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.swede",
+            "canonical": "swede",
+            "surface": "swede",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "petticoat",
+      "text": "petticoat",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "An underskirt worn beneath a dress",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The underskirt name is lexicalized. Its historical small-coat formation does not use the current disparaging sense of petty or denote a modern outer coat.",
+        "references": [
+          "anderson-morphology",
+          "mw-petticoat"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.petticoat.analysis.v1",
+        "lexeme_id": "petticoat",
+        "text": "petticoat",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.petticoat",
+            "canonical": "petticoat",
+            "surface": "petticoat",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "northeast",
+      "text": "northeast",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "The direction between north and east",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The intermediate direction combines the north and east compass directions.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.northeast.analysis.v1",
+        "lexeme_id": "northeast",
+        "text": "northeast",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.north",
+            "canonical": "north",
+            "surface": "north",
+            "type": "compound",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.east",
+            "canonical": "east",
+            "surface": "east",
+            "type": "compound",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "northeast",
+            "rule": "authored-compound-concatenation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "northwest",
+      "text": "northwest",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "The direction between north and west",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The intermediate direction combines the north and west compass directions.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.northwest.analysis.v1",
+        "lexeme_id": "northwest",
+        "text": "northwest",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.north",
+            "canonical": "north",
+            "surface": "north",
+            "type": "compound",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.west",
+            "canonical": "west",
+            "surface": "west",
+            "type": "compound",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "northwest",
+            "rule": "authored-compound-concatenation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "southeast",
+      "text": "southeast",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "The direction between south and east",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The intermediate direction combines the south and east compass directions.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.southeast.analysis.v1",
+        "lexeme_id": "southeast",
+        "text": "southeast",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.south",
+            "canonical": "south",
+            "surface": "south",
+            "type": "compound",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.east",
+            "canonical": "east",
+            "surface": "east",
+            "type": "compound",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "southeast",
+            "rule": "authored-compound-concatenation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "southwest",
+      "text": "southwest",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "The direction between south and west",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The intermediate direction combines the south and west compass directions.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.southwest.analysis.v1",
+        "lexeme_id": "southwest",
+        "text": "southwest",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.south",
+            "canonical": "south",
+            "surface": "south",
+            "type": "compound",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.west",
+            "canonical": "west",
+            "surface": "west",
+            "type": "compound",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "southwest",
+            "rule": "authored-compound-concatenation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "evaluate",
+      "text": "evaluate",
+      "min_age": 12,
+      "part_of_speech": "verb",
+      "meaning": "Judge using evidence and clear criteria",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The evidence-based judgment verb is retained whole. Its attested back-formation from evaluation does not justify inventing a productive e prefix plus valuate for this learner sense.",
+        "references": [
+          "anderson-morphology",
+          "mw-evaluate"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.evaluate.analysis.v1",
+        "lexeme_id": "evaluate",
+        "text": "evaluate",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.evaluate",
+            "canonical": "evaluate",
+            "surface": "evaluate",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "justify",
+      "text": "justify",
+      "min_age": 12,
+      "part_of_speech": "verb",
+      "meaning": "Give reasons to support an answer",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The answer-supporting verb means to show an answer just or reasonable through reasons; the just base is not the time adverb meaning recently.",
+        "references": [
+          "anderson-morphology",
+          "mw-justify"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.justify.analysis.v1",
+        "lexeme_id": "justify",
+        "text": "justify",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.part.just.reasonable",
+            "canonical": "just",
+            "surface": "just",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.ify.make-show",
+            "canonical": "-ify",
+            "surface": "ify",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "justify",
+            "rule": "just-reasonable-plus-ify",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "analyze",
+      "text": "analyze",
+      "min_age": 12,
+      "part_of_speech": "verb",
+      "meaning": "Study parts carefully to understand them",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The parts-examining verb is a whole lexical base. Its documented back-formation from analysis is not a concatenative ana plus lyze exercise or a productive spelling rule.",
+        "references": [
+          "anderson-morphology",
+          "mw-analyze"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.analyze.analysis.v1",
+        "lexeme_id": "analyze",
+        "text": "analyze",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.analyze",
+            "canonical": "analyze",
+            "surface": "analyze",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "sustainable",
+      "text": "sustainable",
+      "min_age": 12,
+      "part_of_speech": "adjective",
+      "meaning": "Able to continue without exhausting resources",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The practice can be sustained without depleting resources; sustain and capability -able retain the stored environmental-continuity sense.",
+        "references": [
+          "anderson-morphology",
+          "mw-sustainable"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.sustainable.analysis.v1",
+        "lexeme_id": "sustainable",
+        "text": "sustainable",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.part.sustain.maintain",
+            "canonical": "sustain",
+            "surface": "sustain",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.able.capable",
+            "canonical": "-able",
+            "surface": "able",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "sustainable",
+            "rule": "sustain-plus-able",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "conclusion",
+      "text": "conclusion",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "A judgment reached after considering evidence",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The judgment is the result of concluding from evidence. The attested verb family has an explicitly authored conclus- realization before -ion, retaining the inference sense rather than merely an ending.",
+        "references": [
+          "anderson-morphology",
+          "mw-conclusion",
+          "mw-conclude"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.conclusion.analysis.v1",
+        "lexeme_id": "conclusion",
+        "text": "conclusion",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.part.conclude.infer",
+            "canonical": "conclude",
+            "surface": "conclude",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.ion.result",
+            "canonical": "-ion",
+            "surface": "ion",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "conclusion",
+            "rule": "conclude-plus-ion-authored-conclus",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "strategy",
+      "text": "strategy",
+      "min_age": 12,
+      "part_of_speech": "noun",
+      "meaning": "A planned way to reach a goal",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The goal-directed plan noun is one borrowed base; its historical military roots do not supply current strate and gy English components.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.strategy.analysis.v1",
+        "lexeme_id": "strategy",
+        "text": "strategy",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.strategy",
+            "canonical": "strategy",
+            "surface": "strategy",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "id": "ensure.make-certain.v",
+  "text": "ensure",
+  "display_text": "ensure",
+  "pos": "verb",
+  "definition": "To make certain that a required result happens or a required condition is met.",
+  "example": "Please ensure that the form includes the reference number.",
+  "difficulty": "B2",
+  "accepted_forms": [
+    "ensure"
+  ],
+  "regions": [
+    "general"
+  ],
+  "practice_modes": [
+    "word_jelly",
+    "phrase"
+  ],
+  "media": {
+    "image": {
+      "status": "pending",
+      "path": null,
+      "sha256": null,
+      "source": null,
+      "creator": null,
+      "license": null,
+      "acquisition_status": "not_started",
+      "review": {
+        "status": "pending"
+      },
+      "brief": "A short three-stage workplace illustration: a friendly worker notices an empty reference-number field on a fictional workshop form, adds the required number, and places the completed form in a submission tray. Emphasize achieving the required inclusion of the number, without suggesting that its accuracy has been established. No real personal information.",
+      "picture_suitable": false,
+      "available_animations": [],
+      "adaptations": []
+    },
+    "audio": {
+      "status": "pending",
+      "path": null,
+      "sha256": null,
+      "source": null,
+      "creator": null,
+      "license": null,
+      "acquisition_status": "not_started",
+      "review": {
+        "status": "pending"
+      },
+      "voice": "ava-sweet",
+      "voice_settings": {
+        "voice": "en-US-AvaNeural",
+        "rate": "-15%",
+        "pitch": "+8Hz",
+        "volume": "+0%",
+        "postprocessing": false
+      }
+    }
+  },
+  "morphology": null,
+  "review": {
+    "status": "pending",
+    "language": "pending",
+    "domain": "not_required",
+    "reviewer": null,
+    "reviewed_at": null
+  },
+  "references": [
+    {
+      "source_id": "foundation02-verify-resolution-oxford-ensure",
+      "status": "pending_term_check",
+      "scope": "New ensure outcome sense and original wording proposed for independent language review. Source consultation does not grant acceptance."
+    },
+    {
+      "source_id": "foundation02-verify-resolution-collins-ensure",
+      "status": "pending_term_check",
+      "scope": "New ensure outcome sense and original wording proposed for independent language review. Source consultation does not grant acceptance."
+    },
+    {
+      "source_id": "foundation02-verify-resolution-cefrj-ensure-v15",
+      "status": "pending_term_check",
+      "scope": "New ensure outcome sense and original wording proposed for independent language review. Source consultation does not grant acceptance."
+    }
+  ],
+  "editorial_notes": "Proposed new shared workplace foundation sense: making a required result or condition certain. This is a curriculum replacement for held verify, not a rename, synonym alias, or transfer of evidence-checking mastery. Editorial B2 is proposed from selected Oxford and Collins B2 evidence; the CEFR-J v1.5 headword/POS row remains B1. The canonical ensure form is used in this candidate. The attested insure variant, especially North American, remains a separate pending regional/form decision; it is not declared incorrect English or conflated with financial insurance. Historical origin does not by itself approve a modern en + sure teaching graph; morphology is unauthored. Image, word audio, expression, curriculum coverage, retirement and progress/revision decisions remain pending."
+}

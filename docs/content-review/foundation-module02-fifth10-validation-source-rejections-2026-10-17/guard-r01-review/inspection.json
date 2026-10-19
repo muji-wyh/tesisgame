@@ -1,0 +1,93 @@
+{
+  "schema": 1,
+  "status": "read_only_source_and_json_inspection_no_guard_execution",
+  "reviewer": "/root/recover_delivery",
+  "source_inventory": {
+    "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r01/source-inventory.json",
+    "bytes": 1405,
+    "raw_sha256": "ae29e404eceb8523bd7d4bb4fe26f3dbd8ff3b66d5d0ce585eebd40b84bf8b90"
+  },
+  "guard_source": {
+    "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r01/guard.cjs",
+    "bytes": 44590,
+    "raw_sha256": "bf2d06df37109966ed2d08226c047fac3f6ff385334531a41c5526cb1838a8bd"
+  },
+  "inspected_unique_pins": 35,
+  "guard_inventory_members": 6,
+  "reference_dependency_pins": 28,
+  "host_imports": [
+    "node:fs",
+    "node:path",
+    "node:crypto",
+    "node:assert/strict",
+    "node:vm"
+  ],
+  "planned_cases": {
+    "positives": 2,
+    "frozen_negative_specifications": 29,
+    "negative_variants": 48,
+    "hash_controls": 3,
+    "total": 53,
+    "execution_observed": false
+  },
+  "first_assertion_attribution": {
+    "guard_line_only_comparison": {
+      "line": 250,
+      "column": 11,
+      "fragment": "assert.equal(Number(match[1]), expectedLine, 'Rejected by an earlier or unrelated assertion');"
+    },
+    "stack_column_discarded": true,
+    "examples": [
+      {
+        "cases": [
+          "review_pin_identity_binding_path",
+          "review_pin_identity_binding_bytes"
+        ],
+        "guard_marker": {
+          "line": 465,
+          "column": 7,
+          "fragment": "'assert.deepEqual(review.source_inventory, input.source_inventory);',f=>{f.reviewPinMutation=change;});"
+        },
+        "selected_marker": {
+          "line": 191,
+          "column": 3,
+          "fragment": "assert.deepEqual(review.source_inventory, input.source_inventory);"
+        },
+        "actual_mutated_assertion": {
+          "line": 191,
+          "column": 69,
+          "fragment": "assert.deepEqual(review.actual_binding, input.binding);"
+        },
+        "explanation": "Both source-inventory pins remain equal. The altered actual-binding path/bytes fail the next assertion on the same line. The guard checks the line and records the source-inventory fragment."
+      },
+      {
+        "cases": [
+          "persisted_state_mismatch"
+        ],
+        "guard_marker": {
+          "line": 530,
+          "column": 5,
+          "fragment": "'assert.equal(persistedInput.committed_journal.path, receiptRelative(commit.state.path));',"
+        },
+        "selected_marker": {
+          "line": 126,
+          "column": 5,
+          "fragment": "assert.equal(persistedInput.committed_journal.path, receiptRelative(commit.state.path));"
+        },
+        "actual_mutated_assertion": {
+          "line": 126,
+          "column": 93,
+          "fragment": "assert.equal(persistedInput.committed_journal.sha256, commit.state.sha256);"
+        },
+        "explanation": "The persisted path stays unchanged and matches. Only its hash changes, so the second assertion fails on the same line. The guard records the path assertion."
+      }
+    ]
+  },
+  "source_or_vm_executed": false,
+  "syntax_checks_run": false,
+  "guard_cases_run": false,
+  "preparation_or_project_imported": false,
+  "actual_binding_accepted": false,
+  "preparation_execution_accepted": false,
+  "production_mutated": false
+}

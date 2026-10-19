@@ -1,0 +1,1735 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.customer_support.module04.01",
+      "text": "The account holder can provide the account number through the approved verification route before we discuss their purchase history.",
+      "meaning": "Verify the account before discussing purchase records.",
+      "context": "An agent follows the approved verification process.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "account",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "holder",
+          "start": 12,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "can",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "provide",
+          "start": 23,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "account",
+          "start": 35,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "number",
+          "start": 43,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "through",
+          "start": 50,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": "approved",
+          "start": 62,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": "verification",
+          "start": 71,
+          "end": 83
+        },
+        {
+          "index": 12,
+          "text": "route",
+          "start": 84,
+          "end": 89
+        },
+        {
+          "index": 13,
+          "text": "before",
+          "start": 90,
+          "end": 96
+        },
+        {
+          "index": 14,
+          "text": "we",
+          "start": 97,
+          "end": 99
+        },
+        {
+          "index": 15,
+          "text": "discuss",
+          "start": 100,
+          "end": 107
+        },
+        {
+          "index": 16,
+          "text": "their",
+          "start": 108,
+          "end": 113
+        },
+        {
+          "index": 17,
+          "text": "purchase",
+          "start": 114,
+          "end": 122
+        },
+        {
+          "index": 18,
+          "text": "history",
+          "start": 123,
+          "end": 130
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 130,
+          "end": 131
+        }
+      ],
+      "focus_lexeme_ids": [
+        "account-holder.person-or-organization-holding-account.n",
+        "account-number.account-identifying-number.n",
+        "purchase-history.past-purchase-record.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module04.02",
+      "text": "Please check the subscription and renewal date against the customer's current terms.",
+      "meaning": "Verify the applicable arrangement.",
+      "context": "A worker reviews a fictional service record.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "check",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "subscription",
+          "start": 17,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "renewal",
+          "start": 34,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "date",
+          "start": 42,
+          "end": 46
+        },
+        {
+          "index": 7,
+          "text": "against",
+          "start": 47,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 55,
+          "end": 58
+        },
+        {
+          "index": 9,
+          "text": "customer's",
+          "start": 59,
+          "end": 69
+        },
+        {
+          "index": 10,
+          "text": "current",
+          "start": 70,
+          "end": 77
+        },
+        {
+          "index": 11,
+          "text": "terms",
+          "start": 78,
+          "end": 83
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 83,
+          "end": 84
+        }
+      ],
+      "focus_lexeme_ids": [
+        "subscription.ongoing-service-or-supply-arrangement.n",
+        "renewal-date.date-for-continuing-arrangement.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module04.03",
+      "text": "This recurring payment is the transaction shown for the billing cycle; please check its price, tax, and remaining balance on the statement.",
+      "meaning": "Clarify the amounts recorded for a recurring transaction.",
+      "context": "An agent reviews a customer's billing query.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "This",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "recurring",
+          "start": 5,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "payment",
+          "start": 15,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "is",
+          "start": 23,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "transaction",
+          "start": 30,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "shown",
+          "start": 42,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "for",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "billing",
+          "start": 56,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "cycle",
+          "start": 64,
+          "end": 69
+        },
+        {
+          "index": 11,
+          "text": ";",
+          "start": 69,
+          "end": 70
+        },
+        {
+          "index": 12,
+          "text": "please",
+          "start": 71,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": "check",
+          "start": 78,
+          "end": 83
+        },
+        {
+          "index": 14,
+          "text": "its",
+          "start": 84,
+          "end": 87
+        },
+        {
+          "index": 15,
+          "text": "price",
+          "start": 88,
+          "end": 93
+        },
+        {
+          "index": 16,
+          "text": ",",
+          "start": 93,
+          "end": 94
+        },
+        {
+          "index": 17,
+          "text": "tax",
+          "start": 95,
+          "end": 98
+        },
+        {
+          "index": 18,
+          "text": ",",
+          "start": 98,
+          "end": 99
+        },
+        {
+          "index": 19,
+          "text": "and",
+          "start": 100,
+          "end": 103
+        },
+        {
+          "index": 20,
+          "text": "remaining",
+          "start": 104,
+          "end": 113
+        },
+        {
+          "index": 21,
+          "text": "balance",
+          "start": 114,
+          "end": 121
+        },
+        {
+          "index": 22,
+          "text": "on",
+          "start": 122,
+          "end": 124
+        },
+        {
+          "index": 23,
+          "text": "the",
+          "start": 125,
+          "end": 128
+        },
+        {
+          "index": 24,
+          "text": "statement",
+          "start": 129,
+          "end": 138
+        },
+        {
+          "index": 25,
+          "text": ".",
+          "start": 138,
+          "end": 139
+        }
+      ],
+      "focus_lexeme_ids": [
+        "recurring-payment.payment-repeated-under-arrangement.n",
+        "billing-cycle.recurring-period-for-billing.n",
+        "transaction.business-exchange.n",
+        "price.amount-charged.n",
+        "tax.government-charge.n",
+        "balance.amount-remaining.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module04.04",
+      "text": "The shipping address and billing address may differ; please confirm the product's size and color before we check the delivery details.",
+      "meaning": "Confirm the product and distinguish delivery and billing details.",
+      "context": "An agent checks an order with the customer.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "shipping",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "address",
+          "start": 13,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 21,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "billing",
+          "start": 25,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "address",
+          "start": 33,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "may",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "differ",
+          "start": 45,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": ";",
+          "start": 51,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "please",
+          "start": 53,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "confirm",
+          "start": 60,
+          "end": 67
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 68,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "product's",
+          "start": 72,
+          "end": 81
+        },
+        {
+          "index": 13,
+          "text": "size",
+          "start": 82,
+          "end": 86
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 87,
+          "end": 90
+        },
+        {
+          "index": 15,
+          "text": "color",
+          "start": 91,
+          "end": 96
+        },
+        {
+          "index": 16,
+          "text": "before",
+          "start": 97,
+          "end": 103
+        },
+        {
+          "index": 17,
+          "text": "we",
+          "start": 104,
+          "end": 106
+        },
+        {
+          "index": 18,
+          "text": "check",
+          "start": 107,
+          "end": 112
+        },
+        {
+          "index": 19,
+          "text": "the",
+          "start": 113,
+          "end": 116
+        },
+        {
+          "index": 20,
+          "text": "delivery",
+          "start": 117,
+          "end": 125
+        },
+        {
+          "index": 21,
+          "text": "details",
+          "start": 126,
+          "end": 133
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 133,
+          "end": 134
+        }
+      ],
+      "focus_lexeme_ids": [
+        "shipping-address.address-for-delivering-goods.n",
+        "billing-address.payment-record-address.n",
+        "product.sale-item.n",
+        "size.product-dimensions.n",
+        "color.visual-hue.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module04.05",
+      "text": "The delivery estimate may change; I will check the recorded delivery attempt for you.",
+      "meaning": "Avoid presenting an estimate as a guarantee.",
+      "context": "An agent reviews a delayed shipment.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "delivery",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "estimate",
+          "start": 13,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "may",
+          "start": 22,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "change",
+          "start": 26,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": ";",
+          "start": 32,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "I",
+          "start": 34,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "will",
+          "start": 36,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": "check",
+          "start": 41,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 10,
+          "text": "recorded",
+          "start": 51,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "delivery",
+          "start": 60,
+          "end": 68
+        },
+        {
+          "index": 12,
+          "text": "attempt",
+          "start": 69,
+          "end": 76
+        },
+        {
+          "index": 13,
+          "text": "for",
+          "start": 77,
+          "end": 80
+        },
+        {
+          "index": 14,
+          "text": "you",
+          "start": 81,
+          "end": 84
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 84,
+          "end": 85
+        }
+      ],
+      "focus_lexeme_ids": [
+        "delivery-estimate.predicted-delivery-time-or-date.n",
+        "delivery-attempt.attempt-to-complete-delivery.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module04.06",
+      "text": "I will check the service plan, any service fee, and stock availability for the replacement accessory.",
+      "meaning": "Check service coverage and replacement availability.",
+      "context": "An agent investigates a replacement request without promising availability.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "I",
+          "start": 0,
+          "end": 1
+        },
+        {
+          "index": 1,
+          "text": "will",
+          "start": 2,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "check",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 4,
+          "text": "service",
+          "start": 17,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "plan",
+          "start": 25,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 29,
+          "end": 30
+        },
+        {
+          "index": 7,
+          "text": "any",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 8,
+          "text": "service",
+          "start": 35,
+          "end": 42
+        },
+        {
+          "index": 9,
+          "text": "fee",
+          "start": 43,
+          "end": 46
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 46,
+          "end": 47
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 12,
+          "text": "stock",
+          "start": 52,
+          "end": 57
+        },
+        {
+          "index": 13,
+          "text": "availability",
+          "start": 58,
+          "end": 70
+        },
+        {
+          "index": 14,
+          "text": "for",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 16,
+          "text": "replacement",
+          "start": 79,
+          "end": 90
+        },
+        {
+          "index": 17,
+          "text": "accessory",
+          "start": 91,
+          "end": 100
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 100,
+          "end": 101
+        }
+      ],
+      "focus_lexeme_ids": [
+        "service-plan.defined-service-package.n",
+        "service-fee.service-charge.n",
+        "stock-availability.goods-ready-for-sale.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module04.07",
+      "text": "Keep the order number, tracking number, and order status linked to the correct brand and product variant.",
+      "meaning": "Link shipment references to the correct product option.",
+      "context": "An agent organizes the records for a customer request.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Keep",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 5,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "order",
+          "start": 9,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "number",
+          "start": 15,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 21,
+          "end": 22
+        },
+        {
+          "index": 5,
+          "text": "tracking",
+          "start": 23,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "number",
+          "start": 32,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 38,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 9,
+          "text": "order",
+          "start": 44,
+          "end": 49
+        },
+        {
+          "index": 10,
+          "text": "status",
+          "start": 50,
+          "end": 56
+        },
+        {
+          "index": 11,
+          "text": "linked",
+          "start": 57,
+          "end": 63
+        },
+        {
+          "index": 12,
+          "text": "to",
+          "start": 64,
+          "end": 66
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 67,
+          "end": 70
+        },
+        {
+          "index": 14,
+          "text": "correct",
+          "start": 71,
+          "end": 78
+        },
+        {
+          "index": 15,
+          "text": "brand",
+          "start": 79,
+          "end": 84
+        },
+        {
+          "index": 16,
+          "text": "and",
+          "start": 85,
+          "end": 88
+        },
+        {
+          "index": 17,
+          "text": "product",
+          "start": 89,
+          "end": 96
+        },
+        {
+          "index": 18,
+          "text": "variant",
+          "start": 97,
+          "end": 104
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 104,
+          "end": 105
+        }
+      ],
+      "focus_lexeme_ids": [
+        "order-number.purchase-order-identifier.n",
+        "tracking-number.shipment-tracking-code.n",
+        "order-status.order-progress-state.n",
+        "brand.commercial-identity.n",
+        "variant.product-version.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module04.08",
+      "text": "I will check the refund policy, exchange policy, return window, and warranty; a digital receipt may provide proof of purchase.",
+      "meaning": "Check relevant terms and purchase evidence.",
+      "context": "An agent reviews a request subject to applicable rights and arrangements.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "I",
+          "start": 0,
+          "end": 1
+        },
+        {
+          "index": 1,
+          "text": "will",
+          "start": 2,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "check",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 4,
+          "text": "refund",
+          "start": 17,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "policy",
+          "start": 24,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 30,
+          "end": 31
+        },
+        {
+          "index": 7,
+          "text": "exchange",
+          "start": 32,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": "policy",
+          "start": 41,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 47,
+          "end": 48
+        },
+        {
+          "index": 10,
+          "text": "return",
+          "start": 49,
+          "end": 55
+        },
+        {
+          "index": 11,
+          "text": "window",
+          "start": 56,
+          "end": 62
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 62,
+          "end": 63
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 14,
+          "text": "warranty",
+          "start": 68,
+          "end": 76
+        },
+        {
+          "index": 15,
+          "text": ";",
+          "start": 76,
+          "end": 77
+        },
+        {
+          "index": 16,
+          "text": "a",
+          "start": 78,
+          "end": 79
+        },
+        {
+          "index": 17,
+          "text": "digital",
+          "start": 80,
+          "end": 87
+        },
+        {
+          "index": 18,
+          "text": "receipt",
+          "start": 88,
+          "end": 95
+        },
+        {
+          "index": 19,
+          "text": "may",
+          "start": 96,
+          "end": 99
+        },
+        {
+          "index": 20,
+          "text": "provide",
+          "start": 100,
+          "end": 107
+        },
+        {
+          "index": 21,
+          "text": "proof",
+          "start": 108,
+          "end": 113
+        },
+        {
+          "index": 22,
+          "text": "of",
+          "start": 114,
+          "end": 116
+        },
+        {
+          "index": 23,
+          "text": "purchase",
+          "start": 117,
+          "end": 125
+        },
+        {
+          "index": 24,
+          "text": ".",
+          "start": 125,
+          "end": 126
+        }
+      ],
+      "focus_lexeme_ids": [
+        "refund-policy.money-return-rules.n",
+        "return-window.return-time-period.n",
+        "warranty.product-assurance.n",
+        "exchange-policy.item-swap-rules.n",
+        "digital-receipt.electronic-purchase-record.n",
+        "proof-of-purchase.purchase-evidence.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module04.09",
+      "text": "The return authorization and return label cover this return parcel, including the faulty item, its accessory, and the damaged packaging.",
+      "meaning": "Identify what an authorized return covers.",
+      "context": "An agent checks the recorded contents of a return.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "return",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "authorization",
+          "start": 11,
+          "end": 24
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 25,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "return",
+          "start": 29,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": "label",
+          "start": 36,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "cover",
+          "start": 42,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "this",
+          "start": 48,
+          "end": 52
+        },
+        {
+          "index": 8,
+          "text": "return",
+          "start": 53,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "parcel",
+          "start": 60,
+          "end": 66
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 66,
+          "end": 67
+        },
+        {
+          "index": 11,
+          "text": "including",
+          "start": 68,
+          "end": 77
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 78,
+          "end": 81
+        },
+        {
+          "index": 13,
+          "text": "faulty",
+          "start": 82,
+          "end": 88
+        },
+        {
+          "index": 14,
+          "text": "item",
+          "start": 89,
+          "end": 93
+        },
+        {
+          "index": 15,
+          "text": ",",
+          "start": 93,
+          "end": 94
+        },
+        {
+          "index": 16,
+          "text": "its",
+          "start": 95,
+          "end": 98
+        },
+        {
+          "index": 17,
+          "text": "accessory",
+          "start": 99,
+          "end": 108
+        },
+        {
+          "index": 18,
+          "text": ",",
+          "start": 108,
+          "end": 109
+        },
+        {
+          "index": 19,
+          "text": "and",
+          "start": 110,
+          "end": 113
+        },
+        {
+          "index": 20,
+          "text": "the",
+          "start": 114,
+          "end": 117
+        },
+        {
+          "index": 21,
+          "text": "damaged",
+          "start": 118,
+          "end": 125
+        },
+        {
+          "index": 22,
+          "text": "packaging",
+          "start": 126,
+          "end": 135
+        },
+        {
+          "index": 23,
+          "text": ".",
+          "start": 135,
+          "end": 136
+        }
+      ],
+      "focus_lexeme_ids": [
+        "return-authorization.return-approval-reference.n",
+        "return-label.return-shipping-label.n",
+        "return-parcel.goods-package-going-back.n",
+        "faulty-item.nonworking-product.n",
+        "accessory.additional-useful-item.n",
+        "damaged-packaging.harmed-package.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module04.10",
+      "text": "Please verify the declined payment and payment status before suggesting another payment attempt.",
+      "meaning": "Check existing payment information before further action.",
+      "context": "An agent refers a billing concern for authorized review.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "verify",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "declined",
+          "start": 18,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "payment",
+          "start": 27,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 35,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "payment",
+          "start": 39,
+          "end": 46
+        },
+        {
+          "index": 7,
+          "text": "status",
+          "start": 47,
+          "end": 53
+        },
+        {
+          "index": 8,
+          "text": "before",
+          "start": 54,
+          "end": 60
+        },
+        {
+          "index": 9,
+          "text": "suggesting",
+          "start": 61,
+          "end": 71
+        },
+        {
+          "index": 10,
+          "text": "another",
+          "start": 72,
+          "end": 79
+        },
+        {
+          "index": 11,
+          "text": "payment",
+          "start": 80,
+          "end": 87
+        },
+        {
+          "index": 12,
+          "text": "attempt",
+          "start": 88,
+          "end": 95
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 95,
+          "end": 96
+        }
+      ],
+      "focus_lexeme_ids": [
+        "declined-payment.unapproved-payment.n",
+        "payment-status.payment-progress-state.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    }
+  ]
+}

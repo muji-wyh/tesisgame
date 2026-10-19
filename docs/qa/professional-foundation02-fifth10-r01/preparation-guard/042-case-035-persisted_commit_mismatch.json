@@ -1,0 +1,118 @@
+{
+  "schema": 1,
+  "id": "persisted_commit_mismatch",
+  "specification": "persisted_commit_or_state_mismatch",
+  "classification": "semantic_guard_with_rebound_fixture_envelopes",
+  "expected": "reject",
+  "mutation": "Rebind persisted input/receipt while selecting a different committed receipt path.",
+  "synthetic_in_memory_only": true,
+  "source_sha256": "022fc186186ade95d6d58908932db5520652f39a1417255c3c5080a4e4841f1b",
+  "actual_preparation_input": {
+    "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+    "bytes": 1191,
+    "raw_sha256": "f8a61b805220a2d6e64788a92960a35bd280af3c45b1f265dbdcf91955b81549"
+  },
+  "opened": false,
+  "recheck_passed": false,
+  "passed": true,
+  "virtual_io": {
+    "imports": [
+      "node:fs",
+      "node:path",
+      "node:crypto",
+      "node:assert/strict"
+    ],
+    "file_reads": 12501,
+    "directory_reads": 1,
+    "existence_reads": 0,
+    "denied": []
+  },
+  "virtual_changes": [
+    {
+      "path": "build/professional-english/foundation02-fifth10-actual-binding-independent-review-r01/review.json",
+      "original": {
+        "path": "build/professional-english/foundation02-fifth10-actual-binding-independent-review-r01/review.json",
+        "bytes": 8270,
+        "raw_sha256": "0dccddda14c35f3c5d90b69aa53623a8f99a91addfcc706ea0400adb3b09cc7c"
+      },
+      "fixture": {
+        "path": "build/professional-english/foundation02-fifth10-actual-binding-independent-review-r01/review.json",
+        "bytes": 8270,
+        "raw_sha256": "cfd5a970bb0459c7c906b8942fc96004024b85247a6e6b722b11fefd8a95ef27"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+      "original": {
+        "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+        "bytes": 3187477,
+        "raw_sha256": "7323bcb1baac6ea85817169bcc90325f9b54d587b19d4895ca3106ee7af0e015"
+      },
+      "fixture": {
+        "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+        "bytes": 3187477,
+        "raw_sha256": "cd84a4cd51cdfd35ac065cad29a543ae2e5225c85a48a79de62ca67bf4dfeb94"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+      "original": {
+        "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+        "bytes": 1191,
+        "raw_sha256": "f8a61b805220a2d6e64788a92960a35bd280af3c45b1f265dbdcf91955b81549"
+      },
+      "fixture": {
+        "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+        "bytes": 1191,
+        "raw_sha256": "013fa8e9697641fd3c0e94d3ad33c84a9d60808aac05d1787fe6ddb738050202"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-persisted-validation-r02/input.json",
+      "original": {
+        "path": "build/professional-english/shopping-bag-persisted-validation-r02/input.json",
+        "bytes": 1808178,
+        "raw_sha256": "a31cd76e3f21b19fc727a5ce735bac6c3d20c9de8a71fe80b70b587c1907b70f"
+      },
+      "fixture": {
+        "path": "build/professional-english/shopping-bag-persisted-validation-r02/input.json",
+        "bytes": 1808187,
+        "raw_sha256": "66637d3c6881f57c3bc0809e95ce05837a8802686b55df87c09e3131e5771fa5"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "docs/qa/professional-shopping-bag-r01/persisted/attempt-001/receipt.json",
+      "original": {
+        "path": "docs/qa/professional-shopping-bag-r01/persisted/attempt-001/receipt.json",
+        "bytes": 2187,
+        "raw_sha256": "2b5675bdee6517924e260bb05e97b239d7838cd822f67ca6c35566a18833b5a9"
+      },
+      "fixture": {
+        "path": "docs/qa/professional-shopping-bag-r01/persisted/attempt-001/receipt.json",
+        "bytes": 2187,
+        "raw_sha256": "eef2d4fe13c56c6a100ea5b1a6931ece3ef1464e0333b1153ece90b961d5e681"
+      },
+      "scope": "memory_only"
+    }
+  ],
+  "rejection": {
+    "name": "AssertionError",
+    "code": "ERR_ASSERTION",
+    "message": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'docs/content-review/foundation-module02-language-fourth10-2026-10-17/commit-receipt.json'\n- 'docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/receipt.json'\n",
+    "stack": "node:assert:152\n  throw new AssertionError(obj);\n  ^\n\nAssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'docs/content-review/foundation-module02-language-fourth10-2026-10-17/commit-receipt.json'\n- 'docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/receipt.json'\n\n    at successfulPredecessor (fifth10-frozen-binding.cjs:125:12)\n    at Object.openSession (fifth10-frozen-binding.cjs:194:15)\n    at fifth10-memory-guard-call.cjs:1:44\n    at Script.runInContext (node:vm:149:12)\n    at run (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:428:82)\n    at Object.open (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:430:12)\n    at main (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:229:19)\n    at Object.<anonymous> (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:584:1)\n    at Module._compile (node:internal/modules/cjs/loader:1804:14)\n    at Object..js (node:internal/modules/cjs/loader:1936:10)"
+  },
+  "expected_assertion": {
+    "line": 125,
+    "column_start": 5,
+    "column_end": 84,
+    "source_fragment": "assert.equal(persistedInput.commit_receipt.path, stage.committed_receipt.path);"
+  },
+  "actual_first_binding_frame": {
+    "line": 125,
+    "column": 12
+  }
+}

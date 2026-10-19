@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "status": "source_review_no_blocker_pending_actual_committed_journal",
+  "reviewer": "Codex recover_delivery",
+  "reviewed_at": "2026-10-16T21:40:23.773Z",
+  "source": {
+    "path": "build/professional-english/foundation02-fourth10-persisted-validation-r01/invoke.cjs",
+    "sha256": "ec257f224e091177f1f8b7193bd3f96ec5773cc96e975377c8d6c276cfb7b491",
+    "bytes": 4817
+  },
+  "findings": [
+    "The fixed Q worktree and source hash argument are checked before execution.",
+    "The supplied actual committed receipt hash and fixed prepared binding hash determine five exact afterimages and one new provenance hash.",
+    "The expected map has exactly 865 files: 864 baseline paths with five replaced hashes, plus fourth-ten provenance.",
+    "Source, committed receipt and all 865 paths are checked before and after each of four exact commands.",
+    "The four commands are draft audit, affected Node suites, native morphology and persisted committed-evidence test.",
+    "The attempt directory and each log/record use exclusive creation. Command exit status, signal/error records and Godot error output are preserved."
+  ],
+  "scope": "Source-only acceptance for root dispatch after actual fourth-ten committed journal inspection. No execution or validation result is claimed.",
+  "executed": false,
+  "production_mutated": false
+}

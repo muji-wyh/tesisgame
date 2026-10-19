@@ -1,0 +1,1512 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.software_data.module10.01",
+      "text": "The handover and briefing identify the owner of each action item.",
+      "meaning": "Explain how responsibilities are transferred.",
+      "context": "A team prepares a shift change.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "handover",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "briefing",
+          "start": 17,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "identify",
+          "start": 26,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 35,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "owner",
+          "start": 39,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "of",
+          "start": 45,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "each",
+          "start": 48,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "action",
+          "start": 53,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "item",
+          "start": 60,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 64,
+          "end": 65
+        }
+      ],
+      "focus_lexeme_ids": [
+        "handover.responsibility-transfer.n",
+        "briefing.short-work-information-session.n",
+        "owner.task-responsible-person.n",
+        "action-item.agreed-follow-up-task.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "google-sre-monitoring",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module10.02",
+      "text": "Use the huddle to discuss progress, outstanding work, pending decisions, and items on hold.",
+      "meaning": "Coordinate the current state of work.",
+      "context": "A team shares a short progress update.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Use",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "huddle",
+          "start": 8,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "to",
+          "start": 15,
+          "end": 17
+        },
+        {
+          "index": 4,
+          "text": "discuss",
+          "start": 18,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "progress",
+          "start": 26,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 34,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "outstanding",
+          "start": 36,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "work",
+          "start": 48,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 52,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "pending",
+          "start": 54,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": "decisions",
+          "start": 62,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 71,
+          "end": 72
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 73,
+          "end": 76
+        },
+        {
+          "index": 14,
+          "text": "items",
+          "start": 77,
+          "end": 82
+        },
+        {
+          "index": 15,
+          "text": "on",
+          "start": 83,
+          "end": 85
+        },
+        {
+          "index": 16,
+          "text": "hold",
+          "start": 86,
+          "end": 90
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 90,
+          "end": 91
+        }
+      ],
+      "focus_lexeme_ids": [
+        "huddle.short-team-discussion.n",
+        "progress.movement-toward-completion.n",
+        "outstanding.not-yet-completed.a",
+        "pending.awaiting-decision-or-action.a",
+        "on-hold.temporarily-paused.a"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "google-sre-monitoring",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module10.03",
+      "text": "The debrief records the escalation and follow-up agreed with the stakeholder.",
+      "meaning": "Summarize the actions from a review.",
+      "context": "A team documents an invented service event.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "debrief",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "records",
+          "start": 12,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 20,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "escalation",
+          "start": 24,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 35,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "follow-up",
+          "start": 39,
+          "end": 48
+        },
+        {
+          "index": 7,
+          "text": "agreed",
+          "start": 49,
+          "end": 55
+        },
+        {
+          "index": 8,
+          "text": "with",
+          "start": 56,
+          "end": 60
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 61,
+          "end": 64
+        },
+        {
+          "index": 10,
+          "text": "stakeholder",
+          "start": 65,
+          "end": 76
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 76,
+          "end": 77
+        }
+      ],
+      "focus_lexeme_ids": [
+        "debrief.after-event-review.n",
+        "escalation.higher-support-referral.n",
+        "follow-up.later-progress-action.n",
+        "stakeholder.affected-or-interested-party.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "google-sre-monitoring",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module10.04",
+      "text": "The product owner, scrum master, maintainer, reviewer, and contributor have different responsibilities.",
+      "meaning": "Clarify roles in the described development arrangement.",
+      "context": "A team introduces its working model.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "product",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "owner",
+          "start": 12,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 17,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "scrum",
+          "start": 19,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "master",
+          "start": 25,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 31,
+          "end": 32
+        },
+        {
+          "index": 7,
+          "text": "maintainer",
+          "start": 33,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 43,
+          "end": 44
+        },
+        {
+          "index": 9,
+          "text": "reviewer",
+          "start": 45,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 53,
+          "end": 54
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 55,
+          "end": 58
+        },
+        {
+          "index": 12,
+          "text": "contributor",
+          "start": 59,
+          "end": 70
+        },
+        {
+          "index": 13,
+          "text": "have",
+          "start": 71,
+          "end": 75
+        },
+        {
+          "index": 14,
+          "text": "different",
+          "start": 76,
+          "end": 85
+        },
+        {
+          "index": 15,
+          "text": "responsibilities",
+          "start": 86,
+          "end": 102
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 102,
+          "end": 103
+        }
+      ],
+      "focus_lexeme_ids": [
+        "product-owner.product-value-accountability-role.n",
+        "scrum-master.scrum-process-support-role.n",
+        "maintainer.ongoing-project-caretaker.n",
+        "reviewer.work-examining-person.n",
+        "contributor.project-work-provider.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "google-sre-monitoring",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module10.05",
+      "text": "Confirm the scope change, estimate, effort, capacity, and technical debt during the planning session.",
+      "meaning": "Ask for planning assumptions and consequences to be discussed.",
+      "context": "A team considers a proposed change.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Confirm",
+          "start": 0,
+          "end": 7
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 8,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "scope",
+          "start": 12,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "change",
+          "start": 18,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 24,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "estimate",
+          "start": 26,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 34,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "effort",
+          "start": 36,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 42,
+          "end": 43
+        },
+        {
+          "index": 9,
+          "text": "capacity",
+          "start": 44,
+          "end": 52
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 52,
+          "end": 53
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 12,
+          "text": "technical",
+          "start": 58,
+          "end": 67
+        },
+        {
+          "index": 13,
+          "text": "debt",
+          "start": 68,
+          "end": 72
+        },
+        {
+          "index": 14,
+          "text": "during",
+          "start": 73,
+          "end": 79
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 80,
+          "end": 83
+        },
+        {
+          "index": 16,
+          "text": "planning",
+          "start": 84,
+          "end": 92
+        },
+        {
+          "index": 17,
+          "text": "session",
+          "start": 93,
+          "end": 100
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 100,
+          "end": 101
+        }
+      ],
+      "focus_lexeme_ids": [
+        "scope-change.agreed-work-boundary-change.n",
+        "estimate.informed-work-approximation.n",
+        "effort.work-required-amount.n",
+        "capacity.available-work-capability.n",
+        "technical-debt.future-cost-of-technical-choices.n",
+        "planning-session.work-preparation-meeting.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "google-sre-monitoring",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module10.06",
+      "text": "The dependency graph shows a blocker on the critical path.",
+      "meaning": "Explain why an obstacle affects delivery.",
+      "context": "A team reviews its project plan.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "dependency",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "graph",
+          "start": 15,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "shows",
+          "start": 21,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "a",
+          "start": 27,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "blocker",
+          "start": 29,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "on",
+          "start": 37,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "critical",
+          "start": 44,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "path",
+          "start": 53,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": ".",
+          "start": 57,
+          "end": 58
+        }
+      ],
+      "focus_lexeme_ids": [
+        "dependency-graph.requirement-relationship-diagram.n",
+        "blocker.progress-preventing-obstacle.n",
+        "critical-path.completion-determining-task-sequence.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "google-sre-monitoring",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module10.07",
+      "text": "The retrospective reviews the definition of done, the value of the stand-up, and the team's velocity using its own estimation method.",
+      "meaning": "Review working practices and team-specific delivery measurements.",
+      "context": "A team discusses its completed work without comparing unlike estimates.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "retrospective",
+          "start": 4,
+          "end": 17
+        },
+        {
+          "index": 2,
+          "text": "reviews",
+          "start": 18,
+          "end": 25
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": "definition",
+          "start": 30,
+          "end": 40
+        },
+        {
+          "index": 5,
+          "text": "of",
+          "start": 41,
+          "end": 43
+        },
+        {
+          "index": 6,
+          "text": "done",
+          "start": 44,
+          "end": 48
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 48,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "value",
+          "start": 54,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "of",
+          "start": 60,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "stand-up",
+          "start": 67,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 75,
+          "end": 76
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 77,
+          "end": 80
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 81,
+          "end": 84
+        },
+        {
+          "index": 16,
+          "text": "team's",
+          "start": 85,
+          "end": 91
+        },
+        {
+          "index": 17,
+          "text": "velocity",
+          "start": 92,
+          "end": 100
+        },
+        {
+          "index": 18,
+          "text": "using",
+          "start": 101,
+          "end": 106
+        },
+        {
+          "index": 19,
+          "text": "its",
+          "start": 107,
+          "end": 110
+        },
+        {
+          "index": 20,
+          "text": "own",
+          "start": 111,
+          "end": 114
+        },
+        {
+          "index": 21,
+          "text": "estimation",
+          "start": 115,
+          "end": 125
+        },
+        {
+          "index": 22,
+          "text": "method",
+          "start": 126,
+          "end": 132
+        },
+        {
+          "index": 23,
+          "text": ".",
+          "start": 132,
+          "end": 133
+        }
+      ],
+      "focus_lexeme_ids": [
+        "retrospective.team-process-reflection.n",
+        "definition-of-done.shared-completion-standard.n",
+        "stand-up.brief-team-coordination-meeting.n",
+        "velocity.team-completed-work-measure.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "google-sre-monitoring",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module10.08",
+      "text": "Review the release candidate, rollout, rollback, and maintenance window with the service owner.",
+      "meaning": "Coordinate release preparation.",
+      "context": "A team prepares an authorized release.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Review",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 7,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "release",
+          "start": 11,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "candidate",
+          "start": 19,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 28,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "rollout",
+          "start": 30,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 37,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "rollback",
+          "start": 39,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 47,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 10,
+          "text": "maintenance",
+          "start": 53,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "window",
+          "start": 65,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "with",
+          "start": 72,
+          "end": 76
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 77,
+          "end": 80
+        },
+        {
+          "index": 14,
+          "text": "service",
+          "start": 81,
+          "end": 88
+        },
+        {
+          "index": 15,
+          "text": "owner",
+          "start": 89,
+          "end": 94
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 94,
+          "end": 95
+        }
+      ],
+      "focus_lexeme_ids": [
+        "release-candidate.potential-final-release-build.n",
+        "rollout.staged-or-complete-release-distribution.n",
+        "rollback.return-to-prior-system-state.n",
+        "maintenance-window.planned-service-work-period.n",
+        "service-owner.service-accountable-person.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "google-sre-monitoring",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module10.09",
+      "text": "The on-call engineer checks the service-level objective and error budget against the service-level agreement.",
+      "meaning": "Identify service commitments and operational targets.",
+      "context": "A team reviews an invented service report.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "on-call",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "engineer",
+          "start": 12,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "checks",
+          "start": 21,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "service-level",
+          "start": 32,
+          "end": 45
+        },
+        {
+          "index": 6,
+          "text": "objective",
+          "start": 46,
+          "end": 55
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 8,
+          "text": "error",
+          "start": 60,
+          "end": 65
+        },
+        {
+          "index": 9,
+          "text": "budget",
+          "start": 66,
+          "end": 72
+        },
+        {
+          "index": 10,
+          "text": "against",
+          "start": 73,
+          "end": 80
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 81,
+          "end": 84
+        },
+        {
+          "index": 12,
+          "text": "service-level",
+          "start": 85,
+          "end": 98
+        },
+        {
+          "index": 13,
+          "text": "agreement",
+          "start": 99,
+          "end": 108
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 108,
+          "end": 109
+        }
+      ],
+      "focus_lexeme_ids": [
+        "on-call-engineer.scheduled-incident-responder.n",
+        "service-level-objective.service-performance-target.n",
+        "error-budget.allowed-unreliability-under-objective.n",
+        "service-level-agreement.service-commitment-agreement.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "google-sre-monitoring",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module10.10",
+      "text": "The report explains uptime, downtime, latency, throughput, and saturation using defined measurements.",
+      "meaning": "Ask for clearly described service metrics.",
+      "context": "A team discusses an invented monitoring dashboard.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "report",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "explains",
+          "start": 11,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "uptime",
+          "start": 20,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 26,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "downtime",
+          "start": 28,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 36,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "latency",
+          "start": 38,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 45,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "throughput",
+          "start": 47,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 57,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 59,
+          "end": 62
+        },
+        {
+          "index": 12,
+          "text": "saturation",
+          "start": 63,
+          "end": 73
+        },
+        {
+          "index": 13,
+          "text": "using",
+          "start": 74,
+          "end": 79
+        },
+        {
+          "index": 14,
+          "text": "defined",
+          "start": 80,
+          "end": 87
+        },
+        {
+          "index": 15,
+          "text": "measurements",
+          "start": 88,
+          "end": 100
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 100,
+          "end": 101
+        }
+      ],
+      "focus_lexeme_ids": [
+        "uptime.service-available-duration.n",
+        "downtime.service-unavailable-duration.n",
+        "latency.operation-completion-delay.n",
+        "throughput.completed-work-rate.n",
+        "saturation.resource-capacity-pressure.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "google-sre-monitoring",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    }
+  ]
+}

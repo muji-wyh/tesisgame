@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "status": "fresh_unbound_preparation_after_root_test_correction",
+  "prior_package": "build/professional-english/foundation-module01-language-review/first10/delivery-r01",
+  "prior_preparation_raw_sha256": "4efcccd9c9e7164dd15592efbbe964eef2fb538f4441b5a06631234a5e34ec38",
+  "prior_inventory_raw_sha256": "56aacc7ce5bb471a99ae807b3c070d7ee70ea6c5b8e83899649e150ce37a8309",
+  "prior_files_preserved": true,
+  "root_correction": {
+    "path": "build/professional-english/retail04-test-correction-r01.json",
+    "raw_sha256": "6f155394d0ffd7b8cb8aff392369bfd5394a2f8b034765ac2694611fa3122c77",
+    "record": {
+      "schema": 1,
+      "status": "persisted_test_expectations_corrected_pending_r16",
+      "failed_validation": "build/professional-english/continuation-validation-r15.json",
+      "failed_validation_raw_sha256": "0af1eec36de0d34d8dcaf1e9c2f5b72cdb7538e6b2c790b25fab750affb09ff7",
+      "registry_sha256": "027e7049f2529e0bf3c7ec3d3516117b5d84adf103abe4b0567a01d623bd48f4",
+      "production_changed": false,
+      "corrections": [
+        {
+          "file": "tests/professional-content.test.cjs",
+          "before": "build/professional-english/professional-content-before-r16.test.cjs",
+          "reason": "The exact accepted material graph replaces one inherited pending Growth analysis. Reverse the complete accepted Retail04 entry for the historical 50-entry test, and assert 48 remaining live inherited graphs and the exact replaced material ID.",
+          "before_raw_sha256": "ae6d5fe554ee1f39b063f89b4259138677f962d26af62e14e3a9bf7554d9558c",
+          "after_raw_sha256": "776700d8ee6aa837b54361e8bbc34b03fa4e11730694d82f4c70b346410e1eb6"
+        },
+        {
+          "file": "tests/godot/professional_retail_morphology_tests.gd",
+          "before": "build/professional-english/professional_retail_morphology_before_r16.gd",
+          "reason": "Legacy brand, range, size, color and fabric roots and the numerical range root are p1, not whole. Require each exact graph roots[0] for paired and ambiguous source attribution; retain all analysis-ID, completion and no-mastery assertions.",
+          "before_raw_sha256": "eeb8c04897084e32adecd5dbbe42491806ec6735d483a9ed8f490df22cff6c3d",
+          "after_raw_sha256": "c29698b87c1db588d75f1d98f9d71b1f028c9bf3a33dc636c98c7cf55da937ed"
+        }
+      ]
+    }
+  },
+  "scope": "The prior unbound preview used the failed R15 test expectations. This revision preserves r01 and captures the root-corrected shared-test preimages. No language candidate or production change is made by this rebase."
+}

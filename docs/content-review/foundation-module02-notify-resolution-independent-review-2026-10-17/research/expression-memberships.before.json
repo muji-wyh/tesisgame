@@ -1,0 +1,422 @@
+[
+  {
+    "course_id": "caregiving",
+    "module_id": "module02",
+    "status": "draft",
+    "requirements_revision": "professional-v1",
+    "expression_ids": [
+      "expr.foundation.module02.01",
+      "expr.foundation.module02.02",
+      "expr.foundation.module02.03",
+      "expr.foundation.module02.04",
+      "expr.foundation.module02.05",
+      "expr.foundation.module02.06",
+      "expr.foundation.module02.07",
+      "expr.foundation.module02.08",
+      "expr.foundation.module02.09",
+      "expr.foundation.module02.10"
+    ],
+    "expression_files": [
+      "res://data/professional/expressions/foundation-module02.json"
+    ]
+  },
+  {
+    "course_id": "retail",
+    "module_id": "module02",
+    "status": "draft",
+    "requirements_revision": "professional-v1",
+    "expression_ids": [
+      "expr.foundation.module02.01",
+      "expr.foundation.module02.02",
+      "expr.foundation.module02.03",
+      "expr.foundation.module02.04",
+      "expr.foundation.module02.05",
+      "expr.foundation.module02.06",
+      "expr.foundation.module02.07",
+      "expr.foundation.module02.08",
+      "expr.foundation.module02.09",
+      "expr.foundation.module02.10"
+    ],
+    "expression_files": [
+      "res://data/professional/expressions/foundation-module02.json"
+    ]
+  },
+  {
+    "course_id": "food_service",
+    "module_id": "module02",
+    "status": "draft",
+    "requirements_revision": "professional-v1",
+    "expression_ids": [
+      "expr.foundation.module02.01",
+      "expr.foundation.module02.02",
+      "expr.foundation.module02.03",
+      "expr.foundation.module02.04",
+      "expr.foundation.module02.05",
+      "expr.foundation.module02.06",
+      "expr.foundation.module02.07",
+      "expr.foundation.module02.08",
+      "expr.foundation.module02.09",
+      "expr.foundation.module02.10"
+    ],
+    "expression_files": [
+      "res://data/professional/expressions/foundation-module02.json"
+    ]
+  },
+  {
+    "course_id": "nursing",
+    "module_id": "module02",
+    "status": "draft",
+    "requirements_revision": "professional-v1",
+    "expression_ids": [
+      "expr.foundation.module02.01",
+      "expr.foundation.module02.02",
+      "expr.foundation.module02.03",
+      "expr.foundation.module02.04",
+      "expr.foundation.module02.05",
+      "expr.foundation.module02.06",
+      "expr.foundation.module02.07",
+      "expr.foundation.module02.08",
+      "expr.foundation.module02.09",
+      "expr.foundation.module02.10"
+    ],
+    "expression_files": [
+      "res://data/professional/expressions/foundation-module02.json"
+    ]
+  },
+  {
+    "course_id": "customer_support",
+    "module_id": "module02",
+    "status": "draft",
+    "requirements_revision": "professional-v1",
+    "expression_ids": [
+      "expr.foundation.module02.01",
+      "expr.foundation.module02.02",
+      "expr.foundation.module02.03",
+      "expr.foundation.module02.04",
+      "expr.foundation.module02.05",
+      "expr.foundation.module02.06",
+      "expr.foundation.module02.07",
+      "expr.foundation.module02.08",
+      "expr.foundation.module02.09",
+      "expr.foundation.module02.10"
+    ],
+    "expression_files": [
+      "res://data/professional/expressions/foundation-module02.json"
+    ]
+  },
+  {
+    "course_id": "office_admin",
+    "module_id": "module02",
+    "status": "draft",
+    "requirements_revision": "professional-v1",
+    "expression_ids": [
+      "expr.foundation.module02.01",
+      "expr.foundation.module02.02",
+      "expr.foundation.module02.03",
+      "expr.foundation.module02.04",
+      "expr.foundation.module02.05",
+      "expr.foundation.module02.06",
+      "expr.foundation.module02.07",
+      "expr.foundation.module02.08",
+      "expr.foundation.module02.09",
+      "expr.foundation.module02.10"
+    ],
+    "expression_files": [
+      "res://data/professional/expressions/foundation-module02.json"
+    ]
+  },
+  {
+    "course_id": "warehouse_logistics",
+    "module_id": "module02",
+    "status": "draft",
+    "requirements_revision": "professional-v1",
+    "expression_ids": [
+      "expr.foundation.module02.01",
+      "expr.foundation.module02.02",
+      "expr.foundation.module02.03",
+      "expr.foundation.module02.04",
+      "expr.foundation.module02.05",
+      "expr.foundation.module02.06",
+      "expr.foundation.module02.07",
+      "expr.foundation.module02.08",
+      "expr.foundation.module02.09",
+      "expr.foundation.module02.10"
+    ],
+    "expression_files": [
+      "res://data/professional/expressions/foundation-module02.json"
+    ]
+  },
+  {
+    "course_id": "hospitality_tourism",
+    "module_id": "module02",
+    "status": "draft",
+    "requirements_revision": "professional-v1",
+    "expression_ids": [
+      "expr.foundation.module02.01",
+      "expr.foundation.module02.02",
+      "expr.foundation.module02.03",
+      "expr.foundation.module02.04",
+      "expr.foundation.module02.05",
+      "expr.foundation.module02.06",
+      "expr.foundation.module02.07",
+      "expr.foundation.module02.08",
+      "expr.foundation.module02.09",
+      "expr.foundation.module02.10"
+    ],
+    "expression_files": [
+      "res://data/professional/expressions/foundation-module02.json"
+    ]
+  },
+  {
+    "course_id": "transport_delivery",
+    "module_id": "module02",
+    "status": "draft",
+    "requirements_revision": "professional-v1",
+    "expression_ids": [
+      "expr.foundation.module02.01",
+      "expr.foundation.module02.02",
+      "expr.foundation.module02.03",
+      "expr.foundation.module02.04",
+      "expr.foundation.module02.05",
+      "expr.foundation.module02.06",
+      "expr.foundation.module02.07",
+      "expr.foundation.module02.08",
+      "expr.foundation.module02.09",
+      "expr.foundation.module02.10"
+    ],
+    "expression_files": [
+      "res://data/professional/expressions/foundation-module02.json"
+    ]
+  },
+  {
+    "course_id": "construction_trades",
+    "module_id": "module02",
+    "status": "draft",
+    "requirements_revision": "professional-v1",
+    "expression_ids": [
+      "expr.foundation.module02.01",
+      "expr.foundation.module02.02",
+      "expr.foundation.module02.03",
+      "expr.foundation.module02.04",
+      "expr.foundation.module02.05",
+      "expr.foundation.module02.06",
+      "expr.foundation.module02.07",
+      "expr.foundation.module02.08",
+      "expr.foundation.module02.09",
+      "expr.foundation.module02.10"
+    ],
+    "expression_files": [
+      "res://data/professional/expressions/foundation-module02.json"
+    ]
+  },
+  {
+    "course_id": "cleaning_facilities",
+    "module_id": "module02",
+    "status": "draft",
+    "requirements_revision": "professional-v1",
+    "expression_ids": [
+      "expr.foundation.module02.01",
+      "expr.foundation.module02.02",
+      "expr.foundation.module02.03",
+      "expr.foundation.module02.04",
+      "expr.foundation.module02.05",
+      "expr.foundation.module02.06",
+      "expr.foundation.module02.07",
+      "expr.foundation.module02.08",
+      "expr.foundation.module02.09",
+      "expr.foundation.module02.10"
+    ],
+    "expression_files": [
+      "res://data/professional/expressions/foundation-module02.json"
+    ]
+  },
+  {
+    "course_id": "education_childcare",
+    "module_id": "module02",
+    "status": "draft",
+    "requirements_revision": "professional-v1",
+    "expression_ids": [
+      "expr.foundation.module02.01",
+      "expr.foundation.module02.02",
+      "expr.foundation.module02.03",
+      "expr.foundation.module02.04",
+      "expr.foundation.module02.05",
+      "expr.foundation.module02.06",
+      "expr.foundation.module02.07",
+      "expr.foundation.module02.08",
+      "expr.foundation.module02.09",
+      "expr.foundation.module02.10"
+    ],
+    "expression_files": [
+      "res://data/professional/expressions/foundation-module02.json"
+    ]
+  },
+  {
+    "course_id": "manufacturing_maintenance",
+    "module_id": "module02",
+    "status": "draft",
+    "requirements_revision": "professional-v1",
+    "expression_ids": [
+      "expr.foundation.module02.01",
+      "expr.foundation.module02.02",
+      "expr.foundation.module02.03",
+      "expr.foundation.module02.04",
+      "expr.foundation.module02.05",
+      "expr.foundation.module02.06",
+      "expr.foundation.module02.07",
+      "expr.foundation.module02.08",
+      "expr.foundation.module02.09",
+      "expr.foundation.module02.10"
+    ],
+    "expression_files": [
+      "res://data/professional/expressions/foundation-module02.json"
+    ]
+  },
+  {
+    "course_id": "it_support",
+    "module_id": "module02",
+    "status": "draft",
+    "requirements_revision": "professional-v1",
+    "expression_ids": [
+      "expr.foundation.module02.01",
+      "expr.foundation.module02.02",
+      "expr.foundation.module02.03",
+      "expr.foundation.module02.04",
+      "expr.foundation.module02.05",
+      "expr.foundation.module02.06",
+      "expr.foundation.module02.07",
+      "expr.foundation.module02.08",
+      "expr.foundation.module02.09",
+      "expr.foundation.module02.10"
+    ],
+    "expression_files": [
+      "res://data/professional/expressions/foundation-module02.json"
+    ]
+  },
+  {
+    "course_id": "software_data",
+    "module_id": "module02",
+    "status": "draft",
+    "requirements_revision": "professional-v1",
+    "expression_ids": [
+      "expr.foundation.module02.01",
+      "expr.foundation.module02.02",
+      "expr.foundation.module02.03",
+      "expr.foundation.module02.04",
+      "expr.foundation.module02.05",
+      "expr.foundation.module02.06",
+      "expr.foundation.module02.07",
+      "expr.foundation.module02.08",
+      "expr.foundation.module02.09",
+      "expr.foundation.module02.10"
+    ],
+    "expression_files": [
+      "res://data/professional/expressions/foundation-module02.json"
+    ]
+  },
+  {
+    "course_id": "accounting_finance",
+    "module_id": "module02",
+    "status": "draft",
+    "requirements_revision": "professional-v1",
+    "expression_ids": [
+      "expr.foundation.module02.01",
+      "expr.foundation.module02.02",
+      "expr.foundation.module02.03",
+      "expr.foundation.module02.04",
+      "expr.foundation.module02.05",
+      "expr.foundation.module02.06",
+      "expr.foundation.module02.07",
+      "expr.foundation.module02.08",
+      "expr.foundation.module02.09",
+      "expr.foundation.module02.10"
+    ],
+    "expression_files": [
+      "res://data/professional/expressions/foundation-module02.json"
+    ]
+  },
+  {
+    "course_id": "sales_marketing",
+    "module_id": "module02",
+    "status": "draft",
+    "requirements_revision": "professional-v1",
+    "expression_ids": [
+      "expr.foundation.module02.01",
+      "expr.foundation.module02.02",
+      "expr.foundation.module02.03",
+      "expr.foundation.module02.04",
+      "expr.foundation.module02.05",
+      "expr.foundation.module02.06",
+      "expr.foundation.module02.07",
+      "expr.foundation.module02.08",
+      "expr.foundation.module02.09",
+      "expr.foundation.module02.10"
+    ],
+    "expression_files": [
+      "res://data/professional/expressions/foundation-module02.json"
+    ]
+  },
+  {
+    "course_id": "hr_recruitment",
+    "module_id": "module02",
+    "status": "draft",
+    "requirements_revision": "professional-v1",
+    "expression_ids": [
+      "expr.foundation.module02.01",
+      "expr.foundation.module02.02",
+      "expr.foundation.module02.03",
+      "expr.foundation.module02.04",
+      "expr.foundation.module02.05",
+      "expr.foundation.module02.06",
+      "expr.foundation.module02.07",
+      "expr.foundation.module02.08",
+      "expr.foundation.module02.09",
+      "expr.foundation.module02.10"
+    ],
+    "expression_files": [
+      "res://data/professional/expressions/foundation-module02.json"
+    ]
+  },
+  {
+    "course_id": "clinical_medicine",
+    "module_id": "module02",
+    "status": "draft",
+    "requirements_revision": "professional-v1",
+    "expression_ids": [
+      "expr.foundation.module02.01",
+      "expr.foundation.module02.02",
+      "expr.foundation.module02.03",
+      "expr.foundation.module02.04",
+      "expr.foundation.module02.05",
+      "expr.foundation.module02.06",
+      "expr.foundation.module02.07",
+      "expr.foundation.module02.08",
+      "expr.foundation.module02.09",
+      "expr.foundation.module02.10"
+    ],
+    "expression_files": [
+      "res://data/professional/expressions/foundation-module02.json"
+    ]
+  },
+  {
+    "course_id": "legal_paralegal",
+    "module_id": "module02",
+    "status": "draft",
+    "requirements_revision": "professional-v1",
+    "expression_ids": [
+      "expr.foundation.module02.01",
+      "expr.foundation.module02.02",
+      "expr.foundation.module02.03",
+      "expr.foundation.module02.04",
+      "expr.foundation.module02.05",
+      "expr.foundation.module02.06",
+      "expr.foundation.module02.07",
+      "expr.foundation.module02.08",
+      "expr.foundation.module02.09",
+      "expr.foundation.module02.10"
+    ],
+    "expression_files": [
+      "res://data/professional/expressions/foundation-module02.json"
+    ]
+  }
+]

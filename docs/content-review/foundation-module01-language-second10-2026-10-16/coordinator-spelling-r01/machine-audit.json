@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "status": "scratch_variant_scope_and_schema_checks_passed",
+  "date": "2026-10-16",
+  "checks_passed": 58,
+  "proposal_json_sha256": "66f576cd9e7b273de97450ee6afe79a565cb383b9db79cf8d22b88e2cd655371",
+  "candidate_entry_json_sha256": "4418216d47c4ddf15bd3b253d8951ff1fabf3ee0e491c6a3d9fe3cb66b0e1047",
+  "input_raw_sha256": {
+    "build/professional-english/foundation-module01-language-review/second10/capture-preimages.cjs": "701c6e45e124fd643a262b38bcd4b2fa3f16ab8f0db4e8bd3c1ccc6a4919bab1",
+    "build/professional-english/foundation-module01-language-review/second10/decision-notes.cjs": "15180d0507a2442151aa4197a824655100f0ca361148fb2980600bc394613a1a",
+    "build/professional-english/foundation-module01-language-review/second10/expression-notes.cjs": "366a590ae64c465cbc7e0c42aeab6beb896292b4aaaf59230764f88bd5bcf959",
+    "build/professional-english/foundation-module01-language-review/second10/expression-use-review.json": "dff39bd6b0f1d4c73e5beac7c30024017055ee598001994260f658efa2b04b91",
+    "build/professional-english/foundation-module01-language-review/second10/HANDOFF.md": "10203d4fec43ef4096e2f60f2c8f9fd515b1e1c9cd9469e23c064f5ee252c817",
+    "build/professional-english/foundation-module01-language-review/second10/language-ledger.json": "dc41b9c2cf20c04beecbd513e76a48cdeb3133d5481c028b4a29e7807775d06c",
+    "build/professional-english/foundation-module01-language-review/second10/preimages.json": "6acfeb073a50c3af7da1059ccc704dc6cfcd79cda58315daf37b23d9aa02c5ab",
+    "build/professional-english/foundation-module01-language-review/second10/prepare-ledger.cjs": "5c00e396117d8ef73d6800a3793eeb093345f005de5a13e16f526ff8647de32c",
+    "build/professional-english/foundation-module01-language-review/second10/source-consultations.json": "691bedae6f4165d63d6df46322108c466616e458e95c8530f8ec93d441caadde",
+    "build/professional-english/foundation-module01-language-review/second10/source-notes.cjs": "5fd3f0c73e9f77335ba946bf56ab73b21ae07089ab066be6ee06e676173ed33f",
+    "build/professional-english/foundation-module01-language-review/second10/structural-audit.json": "28eee41803f6c9a6e5a7aa2519c6df648eeafda853b547165885ccef0035f95f",
+    "build/professional-english/foundation-module01-language-review/second10/independent-review-r01/artifact-inventory.json": "055586612ce2381694ad9c08694f38801d8fa5c866ac0b38ae33f3331285aed7",
+    "build/professional-english/foundation-module01-language-review/second10/independent-review-r01/context-scope-audit.json": "45f907526bb3ba1642bbb2f18582fd62cd6f6aa7971acd2a62309f98b252990f",
+    "build/professional-english/foundation-module01-language-review/second10/independent-review-r01/HANDOFF.md": "47fdcd37a0684f0ae84949c7165cef4efbfd28fa69162cd87d019a2a58cec318",
+    "build/professional-english/foundation-module01-language-review/second10/independent-review-r01/language-review-proposal.json": "849fb6af65055e74802af8ad24ade1740dc4a9e75f7cfce38d205d2e06911202",
+    "build/professional-english/foundation-module01-language-review/second10/independent-review-r01/machine-audit.json": "efb1476ca26d8243a323f972e6b4196563cff4dd931737b51c249501cbb40b24",
+    "build/professional-english/foundation-module01-language-review/second10/independent-review-r01/review-notes.cjs": "8e2890580daf7dd138f0b646b0f85095315f6042244c7dc371c53c18b9a55ff7",
+    "build/professional-english/foundation-module01-language-review/second10/independent-review-r01/run-review.cjs": "10b4bbf5c825b39ae5f9198a744a21c29cc01512718169ef6ac1550432f83547",
+    "build/professional-english/foundation-module01-language-review/second10/independent-review-r01/source-provenance.json": "1e6fb834d16620d1f412c96da3b7faf6eaee38c3f8861412c0a50fc524710a0b"
+  },
+  "validator_raw_sha256": "a59598faf3ee917a738fe2c2dfc661ad03b7d6c325e7a3a2dc02a093e6e736cd",
+  "schema_raw_sha256": "8837fa8779894d7b0d67e9e46d97aefdd7e952b476715df436db03ead4b4ff60",
+  "counts": {
+    "changed_fields": 1,
+    "added_spelling_forms": 1,
+    "removed_spelling_forms": 0,
+    "region_changes": 0,
+    "candidate_schema_errors": 0,
+    "memberships": 20
+  },
+  "production_mutated": false,
+  "shared_tests_mutated": false,
+  "native_runtime_executed": false,
+  "root_independent_acceptance_pending": true
+}

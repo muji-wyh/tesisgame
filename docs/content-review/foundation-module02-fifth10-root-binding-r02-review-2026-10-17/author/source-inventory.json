@@ -1,0 +1,59 @@
+{
+  "schema": 1,
+  "status": "frozen_unexecuted_binding_capture_sources",
+  "author": "/root/recover_delivery",
+  "required_dispatcher": "/root",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 9717,
+      "raw_sha256": "8c8d23d7b57a87938a638a99df4488389b131565360cf4c488c02e43d5775dd4"
+    },
+    {
+      "path": "REVIEW-CONTRACT.md",
+      "bytes": 2024,
+      "raw_sha256": "12bf6fb6f744e653823aa0cb2429f0496275f1666bf27c874f50285ce4ee140d"
+    },
+    {
+      "path": "author-observations.json",
+      "bytes": 1068,
+      "raw_sha256": "2fe46c358b3897554cdc603f5fbe7dea37d969ff2b91d4610f128f773c428daf"
+    },
+    {
+      "path": "capture.cjs",
+      "bytes": 42867,
+      "raw_sha256": "8fdc5aeaa82eba2d6e4b4eea8a6a53b7b3b18e674d842ce7916263fa82cbe620"
+    },
+    {
+      "path": "closure-supplement.json",
+      "bytes": 118057,
+      "raw_sha256": "7ec2451c26d09a8c1b4d8d7319678d8b484e3eb4800b70ab430cc64fffeede37"
+    },
+    {
+      "path": "guard-cases.json",
+      "bytes": 6207,
+      "raw_sha256": "8ed954a40c3e99b3da22f5215be5d43a2bd1982ca2732adc8ca380207ee9e454"
+    },
+    {
+      "path": "revision-lineage.json",
+      "bytes": 3057,
+      "raw_sha256": "d14d728702ea90c834a598220d0ceb428155a162adc8820f24f6c8cc968ba3b0"
+    },
+    {
+      "path": "root-capture-input.template.json",
+      "bytes": 1216,
+      "raw_sha256": "7990fd2d94932f6aac46af2480daa834559e6ccb6b0664a9ab6c03bdf9509700"
+    }
+  ],
+  "actual_binding_created": false,
+  "actual_bag_persisted_success_selected": false,
+  "source_modules_imported": false,
+  "syntax_checks_run": false,
+  "guard_cases_executed": false,
+  "helper_executed": false,
+  "preparation_executed": false,
+  "project_tests_run": false,
+  "native_browser_build_run": false,
+  "production_or_shared_test_written": false,
+  "inventory_self_excluded": true
+}

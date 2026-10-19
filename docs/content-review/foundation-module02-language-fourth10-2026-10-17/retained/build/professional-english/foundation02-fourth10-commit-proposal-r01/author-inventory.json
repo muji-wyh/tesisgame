@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "status": "unexecuted_commit_proposal_pending_independent_review",
+  "author": "Codex runtime_recovery",
+  "recorded_at": "2026-10-16T21:37:09.120Z",
+  "artifacts": [
+    {
+      "path": "commit.cjs",
+      "bytes": 7978,
+      "sha256": "d9df7689e7e958036e6f328d91db9a090527fcfea0e00055ba50546b0caf7b61"
+    },
+    {
+      "path": "evidence-contract.cjs",
+      "bytes": 29420,
+      "sha256": "85dbf8515a67b479fb6b904ac65b8c6ca1a6477983fa14b17beb06e34b8b2efd"
+    },
+    {
+      "path": "committed-evidence.test.cjs",
+      "bytes": 508,
+      "sha256": "85a70750e79b4c0fe1511a5289cb6b232c4a8511f7478368c7a3c41df26acc9f"
+    },
+    {
+      "path": "INPUTS.md",
+      "bytes": 7842,
+      "sha256": "dd11e83f7996cac0b339121a6cd1fe57a9b56b26d46e5e321f664228770072b9"
+    },
+    {
+      "path": "root-commit-input.example.json",
+      "bytes": 1632,
+      "sha256": "f6ce26aa9d18382c70791eb21706a59eb2a6eaa9df18773047f84386da2736c5"
+    },
+    {
+      "path": "evidence-inputs.json",
+      "bytes": 4073,
+      "sha256": "391c9292b5b9cd1cb30a0a47c968565a41750d4c49e2b30556d61d6bdff83654"
+    }
+  ],
+  "source_witness_order": [
+    "commit.cjs",
+    "evidence-contract.cjs",
+    "committed-evidence.test.cjs",
+    "INPUTS.md",
+    "root-commit-input.example.json",
+    "evidence-inputs.json",
+    "author-inventory.json"
+  ],
+  "author_activity": "Static source-text authoring and built-in raw-byte/JSON consistency reads only. No proposal parse, import, guard probe, preparation, shared test, native or commit dispatch.",
+  "production_or_shared_tests_changed": false,
+  "required_independent_guard_cases": 21,
+  "template_scope": "Third10 r02 journal verifier source text reused without importing or dispatching; fourth10 binding/native/baseline contract and entrypoint freshly authored."
+}

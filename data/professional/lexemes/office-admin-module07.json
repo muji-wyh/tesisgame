@@ -1,0 +1,1589 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "purchase-requisition.internal-request-to-obtain-goods-or-services.n",
+      "text": "purchase requisition",
+      "display_text": "purchase requisition",
+      "pos": "noun",
+      "definition": "An internal request for goods or services to be considered for purchase.",
+      "example": "The purchase requisition is waiting for review.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "purchase requisition"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional internal purchasing request clearly marked as unapproved.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "purchase-requisition.internal-request-to-obtain-goods-or-services.n.analysis.v1",
+        "lexeme_id": "purchase-requisition.internal-request-to-obtain-goods-or-services.n",
+        "text": "purchase requisition",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, a selected combining form, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.purchase",
+            "type": "stem",
+            "canonical": "purchase",
+            "surface": "purchase"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.requisition",
+            "type": "stem",
+            "canonical": "requisition",
+            "surface": "requisition"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "purchase requisition",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "education-bls-preschool",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-assistants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-elementary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original office-communication draft. Language, records, privacy, access authority, financial scope, local workplace requirements, regional usage, and morphology require qualified review. No legal entitlement, record-disposal deadline, tax calculation, financial instruction, equipment repair, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "budget.plan-for-available-income-and-spending.n",
+      "text": "budget",
+      "display_text": "budget",
+      "pos": "noun",
+      "definition": "A plan that sets out expected available funds and intended spending for a period or purpose.",
+      "example": "Check the approved budget before requesting new equipment.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "budget"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional office spending plan with planned and available amounts separated.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "education-bls-preschool",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-assistants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-elementary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-market-research",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-onet-market-research",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-budget-analysts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-sec-statements",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-openstax-alternatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-paralegals",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-lawyers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original office-communication draft. Language, records, privacy, access authority, financial scope, local workplace requirements, regional usage, and morphology require qualified review. No legal entitlement, record-disposal deadline, tax calculation, financial instruction, equipment repair, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "cost-center.organizational-unit-for-tracking-costs.n",
+      "text": "cost center",
+      "display_text": "cost center",
+      "pos": "noun",
+      "definition": "An organizational unit or code used to collect and monitor assigned costs.",
+      "example": "Ask finance which cost center applies to this purchase.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "cost center",
+        "cost centre"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional cost-allocation form with an invented cost-center identifier.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "cost-center.organizational-unit-for-tracking-costs.n.analysis.v1",
+        "lexeme_id": "cost-center.organizational-unit-for-tracking-costs.n",
+        "text": "cost center",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, a selected combining form, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.cost",
+            "type": "stem",
+            "canonical": "cost",
+            "surface": "cost"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.center",
+            "type": "stem",
+            "canonical": "center",
+            "surface": "center"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "cost center",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "accounting-bls-budget-analysts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-sec-statements",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-ifrs-ias1-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-openstax-alternatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original office-communication draft. Language, records, privacy, access authority, financial scope, local workplace requirements, regional usage, and morphology require qualified review. No legal entitlement, record-disposal deadline, tax calculation, financial instruction, equipment repair, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "expense-claim.request-for-payment-of-incurred-costs.n",
+      "text": "expense claim",
+      "display_text": "expense claim",
+      "pos": "noun",
+      "definition": "A request for an organization to pay back or account for specified expenses.",
+      "example": "The expense claim needs the required supporting records.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "expense claim"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional expense request awaiting review with nonidentifying evidence.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "expense-claim.request-for-payment-of-incurred-costs.n.analysis.v1",
+        "lexeme_id": "expense-claim.request-for-payment-of-incurred-costs.n",
+        "text": "expense claim",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, a selected combining form, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.expense",
+            "type": "stem",
+            "canonical": "expense",
+            "surface": "expense"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.claim",
+            "type": "stem",
+            "canonical": "claim",
+            "surface": "claim"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "expense claim",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-irs-recordkeeping",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-govuk-company-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-cfpb-overdraft",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-paralegals",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-lawyers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original office-communication draft. Language, records, privacy, access authority, financial scope, local workplace requirements, regional usage, and morphology require qualified review. No legal entitlement, record-disposal deadline, tax calculation, financial instruction, equipment repair, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "reimbursement.repayment-for-approved-incurred-expense.n",
+      "text": "reimbursement",
+      "display_text": "reimbursement",
+      "pos": "noun",
+      "definition": "A payment that repays someone for an expense under the applicable arrangements.",
+      "example": "Ask finance about the status of the reimbursement.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "reimbursement"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional approved-expense repayment status with no guaranteed amount or timing.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "reimbursement.repayment-for-approved-incurred-expense.n.analysis.v1",
+        "lexeme_id": "reimbursement.repayment-for-approved-incurred-expense.n",
+        "text": "reimbursement",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, a selected combining form, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.reimburse",
+            "type": "stem",
+            "canonical": "reimburse",
+            "surface": "reimburse"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ment.suffix",
+            "type": "suffix",
+            "canonical": "ment",
+            "surface": "ment"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "reimbursement",
+            "rule": "suffix_attachment"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original office-communication draft. Language, records, privacy, access authority, financial scope, local workplace requirements, regional usage, and morphology require qualified review. No legal entitlement, record-disposal deadline, tax calculation, financial instruction, equipment repair, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "petty-cash.small-cash-fund-for-minor-expenses.n",
+      "text": "petty cash",
+      "display_text": "petty cash",
+      "pos": "noun",
+      "definition": "A small cash fund used for minor authorized expenses under an organization's rules.",
+      "example": "The finance contact will explain the petty cash arrangements.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "petty cash"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A closed fictional office cash box beside an authorization record.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "petty-cash.small-cash-fund-for-minor-expenses.n.analysis.v1",
+        "lexeme_id": "petty-cash.small-cash-fund-for-minor-expenses.n",
+        "text": "petty cash",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, a selected combining form, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.petty",
+            "type": "stem",
+            "canonical": "petty",
+            "surface": "petty"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.cash",
+            "type": "stem",
+            "canonical": "cash",
+            "surface": "cash"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "petty cash",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-irs-recordkeeping",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-govuk-company-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-cfpb-overdraft",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original office-communication draft. Language, records, privacy, access authority, financial scope, local workplace requirements, regional usage, and morphology require qualified review. No legal entitlement, record-disposal deadline, tax calculation, financial instruction, equipment repair, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "petty-cash-voucher.record-supporting-petty-cash-transaction.n",
+      "text": "petty cash voucher",
+      "display_text": "petty cash voucher",
+      "pos": "noun",
+      "definition": "A record documenting an approved or requested petty cash transaction.",
+      "example": "The petty cash voucher needs the correct expense category.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "petty cash voucher"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional small-expense voucher with all identifying information invented.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "petty-cash-voucher.record-supporting-petty-cash-transaction.n.analysis.v1",
+        "lexeme_id": "petty-cash-voucher.record-supporting-petty-cash-transaction.n",
+        "text": "petty cash voucher",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, a selected combining form, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.petty",
+            "type": "stem",
+            "canonical": "petty",
+            "surface": "petty"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.cash",
+            "type": "stem",
+            "canonical": "cash",
+            "surface": "cash"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.voucher",
+            "type": "stem",
+            "canonical": "voucher",
+            "surface": "voucher"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "petty cash",
+            "rule": "word_boundary"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "petty cash voucher",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original office-communication draft. Language, records, privacy, access authority, financial scope, local workplace requirements, regional usage, and morphology require qualified review. No legal entitlement, record-disposal deadline, tax calculation, financial instruction, equipment repair, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "expense-category.classification-used-for-cost-records.n",
+      "text": "expense category",
+      "display_text": "expense category",
+      "pos": "noun",
+      "definition": "A classification used to group expenses for recording or review.",
+      "example": "Please confirm the expense category before submitting the claim.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "expense category"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional expense form with neutral classification choices.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "expense-category.classification-used-for-cost-records.n.analysis.v1",
+        "lexeme_id": "expense-category.classification-used-for-cost-records.n",
+        "text": "expense category",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, a selected combining form, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.expense",
+            "type": "stem",
+            "canonical": "expense",
+            "surface": "expense"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.category",
+            "type": "stem",
+            "canonical": "category",
+            "surface": "category"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "expense category",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original office-communication draft. Language, records, privacy, access authority, financial scope, local workplace requirements, regional usage, and morphology require qualified review. No legal entitlement, record-disposal deadline, tax calculation, financial instruction, equipment repair, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "invoice-number.identifier-assigned-to-invoice.n",
+      "text": "invoice number",
+      "display_text": "invoice number",
+      "pos": "noun",
+      "definition": "An identifier assigned to an invoice by its issuer.",
+      "example": "The invoice number is needed to locate the record.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "invoice number"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional invoice with an invented identifier highlighted.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "invoice-number.identifier-assigned-to-invoice.n.analysis.v1",
+        "lexeme_id": "invoice-number.identifier-assigned-to-invoice.n",
+        "text": "invoice number",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, a selected combining form, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.invoice",
+            "type": "stem",
+            "canonical": "invoice",
+            "surface": "invoice"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.number",
+            "type": "stem",
+            "canonical": "number",
+            "surface": "number"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "invoice number",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-irs-recordkeeping",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-govuk-company-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-cfpb-overdraft",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original office-communication draft. Language, records, privacy, access authority, financial scope, local workplace requirements, regional usage, and morphology require qualified review. No legal entitlement, record-disposal deadline, tax calculation, financial instruction, equipment repair, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "due-date.date-when-action-or-payment-is-required.n",
+      "text": "due date",
+      "display_text": "due date",
+      "pos": "noun",
+      "definition": "The date by which a specified action or payment is expected under the applicable arrangements.",
+      "example": "Ask the authorized reviewer to confirm the due date.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "due date"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional document showing an agreed due-date field without legal assumptions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "due-date.date-when-action-or-payment-is-required.n.analysis.v1",
+        "lexeme_id": "due-date.date-when-action-or-payment-is-required.n",
+        "text": "due date",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, a selected combining form, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.due",
+            "type": "stem",
+            "canonical": "due",
+            "surface": "due"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.date",
+            "type": "stem",
+            "canonical": "date",
+            "surface": "date"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "due date",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "sales-bls-sales-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-irs-recordkeeping",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-govuk-company-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-cfpb-overdraft",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-paralegals",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-lawyers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original office-communication draft. Language, records, privacy, access authority, financial scope, local workplace requirements, regional usage, and morphology require qualified review. No legal entitlement, record-disposal deadline, tax calculation, financial instruction, equipment repair, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "payment-approval.authorization-to-make-specified-payment.n",
+      "text": "payment approval",
+      "display_text": "payment approval",
+      "pos": "noun",
+      "definition": "Authorization to make a particular payment under the relevant rules.",
+      "example": "The invoice is waiting for payment approval.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "payment approval"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional payment review with approval pending and no real account details.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "payment-approval.authorization-to-make-specified-payment.n.analysis.v1",
+        "lexeme_id": "payment-approval.authorization-to-make-specified-payment.n",
+        "text": "payment approval",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, a selected combining form, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.pay",
+            "type": "stem",
+            "canonical": "pay",
+            "surface": "pay"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ment.suffix",
+            "type": "suffix",
+            "canonical": "ment",
+            "surface": "ment"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.approval",
+            "type": "stem",
+            "canonical": "approval",
+            "surface": "approval"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "payment",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "payment approval",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-irs-recordkeeping",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-govuk-company-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-cfpb-overdraft",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original office-communication draft. Language, records, privacy, access authority, financial scope, local workplace requirements, regional usage, and morphology require qualified review. No legal entitlement, record-disposal deadline, tax calculation, financial instruction, equipment repair, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "purchase-approval.authorization-to-make-specified-purchase.n",
+      "text": "purchase approval",
+      "display_text": "purchase approval",
+      "pos": "noun",
+      "definition": "Authorization to make a specified purchase within the relevant scope or limits.",
+      "example": "Purchase approval does not confirm that the item has arrived.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "purchase approval"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional purchasing authorization with scope distinct from delivery status.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "purchase-approval.authorization-to-make-specified-purchase.n.analysis.v1",
+        "lexeme_id": "purchase-approval.authorization-to-make-specified-purchase.n",
+        "text": "purchase approval",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, a selected combining form, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.purchase",
+            "type": "stem",
+            "canonical": "purchase",
+            "surface": "purchase"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.approval",
+            "type": "stem",
+            "canonical": "approval",
+            "surface": "approval"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "purchase approval",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original office-communication draft. Language, records, privacy, access authority, financial scope, local workplace requirements, regional usage, and morphology require qualified review. No legal entitlement, record-disposal deadline, tax calculation, financial instruction, equipment repair, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    }
+  ]
+}

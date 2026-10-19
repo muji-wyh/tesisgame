@@ -1,0 +1,104 @@
+{
+  "schema": 1,
+  "id": "wrong_bag_persisted_source",
+  "specification": "wrong_bag_persisted_input",
+  "classification": "semantic_guard_with_rebound_fixture_envelopes",
+  "expected": "reject",
+  "mutation": "Rehash altered source bytes but leave the genuine success receipt source identity.",
+  "synthetic_in_memory_only": true,
+  "source_sha256": "022fc186186ade95d6d58908932db5520652f39a1417255c3c5080a4e4841f1b",
+  "actual_preparation_input": {
+    "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+    "bytes": 1191,
+    "raw_sha256": "f8a61b805220a2d6e64788a92960a35bd280af3c45b1f265dbdcf91955b81549"
+  },
+  "opened": false,
+  "recheck_passed": false,
+  "passed": true,
+  "virtual_io": {
+    "imports": [
+      "node:fs",
+      "node:path",
+      "node:crypto",
+      "node:assert/strict"
+    ],
+    "file_reads": 12497,
+    "directory_reads": 1,
+    "existence_reads": 0,
+    "denied": []
+  },
+  "virtual_changes": [
+    {
+      "path": "build/professional-english/foundation02-fifth10-actual-binding-independent-review-r01/review.json",
+      "original": {
+        "path": "build/professional-english/foundation02-fifth10-actual-binding-independent-review-r01/review.json",
+        "bytes": 8270,
+        "raw_sha256": "0dccddda14c35f3c5d90b69aa53623a8f99a91addfcc706ea0400adb3b09cc7c"
+      },
+      "fixture": {
+        "path": "build/professional-english/foundation02-fifth10-actual-binding-independent-review-r01/review.json",
+        "bytes": 8270,
+        "raw_sha256": "6ccd3669a9458b05f56d2c8b023558d20f0fef4f29bac5c276e821d54bdcb210"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+      "original": {
+        "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+        "bytes": 3187477,
+        "raw_sha256": "7323bcb1baac6ea85817169bcc90325f9b54d587b19d4895ca3106ee7af0e015"
+      },
+      "fixture": {
+        "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+        "bytes": 3187477,
+        "raw_sha256": "ecb7313d42e6eaa4e2d136123724004922aca5be96a709dacba6e08de8935d48"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+      "original": {
+        "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+        "bytes": 1191,
+        "raw_sha256": "f8a61b805220a2d6e64788a92960a35bd280af3c45b1f265dbdcf91955b81549"
+      },
+      "fixture": {
+        "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+        "bytes": 1191,
+        "raw_sha256": "fda42d2255ea3c2e718fb5dc17b14a37dce527668c4ac834d38744c8220d4172"
+      },
+      "scope": "memory_only"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-persisted-validation-r02/invoke.cjs",
+      "original": {
+        "path": "build/professional-english/shopping-bag-persisted-validation-r02/invoke.cjs",
+        "bytes": 5916,
+        "raw_sha256": "6e138489e51f4789c1f2fd6a4039aa7e2f1af44ec435ff4309c33e568053bac5"
+      },
+      "fixture": {
+        "path": "build/professional-english/shopping-bag-persisted-validation-r02/invoke.cjs",
+        "bytes": 5948,
+        "raw_sha256": "18bad6bd138ecf623e042606de03b9f0e27a2ea15039ec74b1d5e041bbd72126"
+      },
+      "scope": "memory_only"
+    }
+  ],
+  "rejection": {
+    "name": "AssertionError",
+    "code": "ERR_ASSERTION",
+    "message": "Expected values to be strictly equal:\n+ actual - expected\n\n+ '18bad6bd138ecf623e042606de03b9f0e27a2ea15039ec74b1d5e041bbd72126'\n- '6e138489e51f4789c1f2fd6a4039aa7e2f1af44ec435ff4309c33e568053bac5'\n",
+    "stack": "node:assert:152\n  throw new AssertionError(obj);\n  ^\n\nAssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ '18bad6bd138ecf623e042606de03b9f0e27a2ea15039ec74b1d5e041bbd72126'\n- '6e138489e51f4789c1f2fd6a4039aa7e2f1af44ec435ff4309c33e568053bac5'\n\n    at successfulPredecessor (fifth10-frozen-binding.cjs:121:12)\n    at Object.openSession (fifth10-frozen-binding.cjs:194:15)\n    at fifth10-memory-guard-call.cjs:1:44\n    at Script.runInContext (node:vm:149:12)\n    at run (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:428:82)\n    at Object.open (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:430:12)\n    at main (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:229:19)\n    at Object.<anonymous> (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-preparation-guard-proposal-r02\\guard.cjs:584:1)\n    at Module._compile (node:internal/modules/cjs/loader:1804:14)\n    at Object..js (node:internal/modules/cjs/loader:1936:10)"
+  },
+  "expected_assertion": {
+    "line": 121,
+    "column_start": 5,
+    "column_end": 78,
+    "source_fragment": "assert.equal(stage.persisted_source.raw_sha256, persisted.source_sha256);"
+  },
+  "actual_first_binding_frame": {
+    "line": 121,
+    "column": 12
+  }
+}

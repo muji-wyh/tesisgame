@@ -1,0 +1,262 @@
+{
+  "schema": 1,
+  "kind": "static_evidence_summary_not_projection_execution",
+  "original_context_files": 355,
+  "context_paths_beyond_800_pin_union": [
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-independent-review-2026-10-17/review.json",
+      "expected_historical_sha256": "2aaac3d8672600001faa104594a221ed1d079caf9723cc5495d1172de7fb0c4d",
+      "current_sha256": "2aaac3d8672600001faa104594a221ed1d079caf9723cc5495d1172de7fb0c4d"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-research-2026-10-17/candidate-ledger.json",
+      "expected_historical_sha256": "939bfedea01a17bce2bf97b29dcc607d29423a8622b855107e73b4402b2fa026",
+      "current_sha256": "939bfedea01a17bce2bf97b29dcc607d29423a8622b855107e73b4402b2fa026"
+    },
+    {
+      "path": "docs/content-review/foundation-module02-language-third10-research-2026-10-17/context-screen.json",
+      "expected_historical_sha256": "ca6775e8ac2a10fad0ef761a73004956873c97866cff138e08879ee2fe044c0c",
+      "current_sha256": "ca6775e8ac2a10fad0ef761a73004956873c97866cff138e08879ee2fe044c0c"
+    }
+  ],
+  "historical_raw_byte_differences": [
+    {
+      "path": "data/professional/lexemes/foundation-module02.json",
+      "historical_sha256": "03953236a30d636a7d6db0f0f921d076910886e1f2f1834730ba1302b5b0ac41",
+      "current_sha256": "bec08364a841f92351d04cd4c891bbd9d7de6dbf00f9949cc58f18e2551962ad"
+    },
+    {
+      "path": "data/professional/sources.json",
+      "historical_sha256": "148f9191f91891a564bb79dbce428c60b3b4b1a07e1374135cc0d6a0619165b9",
+      "current_sha256": "268caddf5f9acb1d806729200b1edf6ffe4d4dec7a737d1f57d176238500ae58"
+    }
+  ],
+  "memberships": 200,
+  "containing_modules": 20,
+  "surface_expression_entries": 130,
+  "surface_pairs": 139,
+  "derivative_expressions": 42,
+  "focus_expressions": 4,
+  "related_entry_boundaries": 63,
+  "inherited_expression_holds": 17,
+  "containing_module_expressions": 10,
+  "additional_foundation_preservation": [
+    "expr.foundation.module02.04",
+    "expr.foundation.module02.05",
+    "expr.foundation.module02.07",
+    "expr.foundation.module02.08"
+  ],
+  "prior_lexical_holds": [
+    "collect.gather.v",
+    "notify.inform.v",
+    "postpone.delay-until-later.v",
+    "verify.establish-accuracy.v"
+  ],
+  "accepted_entries": [
+    {
+      "id": "submit.send-for-consideration.v",
+      "decision": "accept_exact_language_projection",
+      "before_fields": {
+        "definition": "To send or present something for review, decision, or processing.",
+        "example": "Please submit the request before Friday.",
+        "difficulty": "A2"
+      },
+      "accepted_fields": {
+        "definition": "To send a document, request, or proposal for someone to review or decide on.",
+        "example": "Please submit the request before Friday.",
+        "difficulty": "B2"
+      },
+      "changed_fields": [
+        "definition",
+        "difficulty"
+      ],
+      "source_ids": [
+        "foundation02-language-fourth10-oxford-submit",
+        "foundation02-language-fourth10-collins-submit"
+      ]
+    },
+    {
+      "id": "approve.authorize.v",
+      "decision": "accept_exact_language_projection",
+      "before_fields": {
+        "definition": "To officially agree to or accept something.",
+        "example": "The manager will approve the revised schedule.",
+        "difficulty": "A2"
+      },
+      "accepted_fields": {
+        "definition": "To officially agree to or accept something.",
+        "example": "The manager will approve the revised schedule.",
+        "difficulty": "B2"
+      },
+      "changed_fields": [
+        "difficulty"
+      ],
+      "source_ids": [
+        "foundation02-language-fourth10-oxford-approve",
+        "foundation02-language-fourth10-collins-approve"
+      ]
+    },
+    {
+      "id": "reject.decline-acceptance.v",
+      "decision": "accept_exact_language_projection",
+      "before_fields": {
+        "definition": "To decide not to accept a proposal, request, or item.",
+        "example": "The team may reject a proposal that misses the requirements.",
+        "difficulty": "A2"
+      },
+      "accepted_fields": {
+        "definition": "To decide not to accept a proposal, request, or item.",
+        "example": "The team may reject a proposal that does not meet the requirements.",
+        "difficulty": "B1"
+      },
+      "changed_fields": [
+        "example",
+        "difficulty"
+      ],
+      "source_ids": [
+        "foundation02-language-fourth10-oxford-reject",
+        "foundation02-language-fourth10-collins-reject"
+      ]
+    },
+    {
+      "id": "sign.write-name.v",
+      "decision": "accept_exact_language_projection",
+      "before_fields": {
+        "definition": "To write one's name on a document as a form of identification or agreement.",
+        "example": "Please sign the attendance sheet.",
+        "difficulty": "A2"
+      },
+      "accepted_fields": {
+        "definition": "To write one's name on a document as a form of identification or agreement.",
+        "example": "Please sign the attendance sheet.",
+        "difficulty": "A2"
+      },
+      "changed_fields": [],
+      "source_ids": [
+        "foundation02-language-fourth10-oxford-sign",
+        "foundation02-language-fourth10-collins-sign"
+      ]
+    },
+    {
+      "id": "delay.late-occurrence.n",
+      "decision": "accept_exact_language_projection",
+      "before_fields": {
+        "definition": "A period of waiting caused by something happening later than expected.",
+        "example": "There is a short delay with the delivery.",
+        "difficulty": "A2"
+      },
+      "accepted_fields": {
+        "definition": "A period of waiting caused by something happening later than expected.",
+        "example": "There is a short delay with the delivery.",
+        "difficulty": "A2"
+      },
+      "changed_fields": [],
+      "source_ids": [
+        "foundation02-language-fourth10-oxford-delay",
+        "foundation02-language-fourth10-collins-delay"
+      ]
+    },
+    {
+      "id": "error.mistake.n",
+      "decision": "accept_exact_language_projection",
+      "before_fields": {
+        "definition": "Something incorrect in information, work, or a system's operation.",
+        "example": "There is an error in the telephone number.",
+        "difficulty": "A2"
+      },
+      "accepted_fields": {
+        "definition": "Something incorrect in information, work, or a system's operation.",
+        "example": "There is an error in the telephone number.",
+        "difficulty": "A2"
+      },
+      "changed_fields": [],
+      "source_ids": [
+        "foundation02-language-fourth10-oxford-error",
+        "foundation02-language-fourth10-collins-error"
+      ]
+    },
+    {
+      "id": "fault.equipment-defect.n",
+      "decision": "accept_exact_language_projection",
+      "before_fields": {
+        "definition": "A defect that prevents equipment or a system from working properly.",
+        "example": "The printer has developed a fault.",
+        "difficulty": "A2"
+      },
+      "accepted_fields": {
+        "definition": "A defect that prevents equipment or a system from working properly.",
+        "example": "The printer has developed a fault.",
+        "difficulty": "B2"
+      },
+      "changed_fields": [
+        "difficulty"
+      ],
+      "source_ids": [
+        "foundation02-language-fourth10-oxford-fault",
+        "foundation02-language-fourth10-collins-fault"
+      ]
+    },
+    {
+      "id": "damage.physical-harm.n",
+      "decision": "accept_exact_language_projection",
+      "before_fields": {
+        "definition": "Physical harm that makes something less useful or less sound.",
+        "example": "The box arrived with visible damage.",
+        "difficulty": "A2"
+      },
+      "accepted_fields": {
+        "definition": "Physical harm that makes something less useful or less sound.",
+        "example": "The box arrived with visible damage.",
+        "difficulty": "B1"
+      },
+      "changed_fields": [
+        "difficulty"
+      ],
+      "source_ids": [
+        "foundation02-language-fourth10-oxford-damage",
+        "foundation02-language-fourth10-collins-damage"
+      ]
+    },
+    {
+      "id": "shortage.insufficient-supply.n",
+      "decision": "accept_exact_language_projection",
+      "before_fields": {
+        "definition": "A situation in which there is not enough of something needed.",
+        "example": "A shortage of packaging has slowed the dispatch.",
+        "difficulty": "A2"
+      },
+      "accepted_fields": {
+        "definition": "A situation in which there is not enough of something needed.",
+        "example": "A shortage of packaging has slowed the dispatch.",
+        "difficulty": "B2"
+      },
+      "changed_fields": [
+        "difficulty"
+      ],
+      "source_ids": [
+        "foundation02-language-fourth10-oxford-shortage",
+        "foundation02-language-fourth10-collins-shortage"
+      ]
+    },
+    {
+      "id": "missing.not-present.adj",
+      "decision": "accept_exact_language_projection",
+      "before_fields": {
+        "definition": "Not present where expected or needed.",
+        "example": "One page is missing from the document.",
+        "difficulty": "A2"
+      },
+      "accepted_fields": {
+        "definition": "Not present where expected or needed.",
+        "example": "One page is missing from the document.",
+        "difficulty": "A2"
+      },
+      "changed_fields": [],
+      "source_ids": [
+        "foundation02-language-fourth10-oxford-missing",
+        "foundation02-language-fourth10-collins-missing"
+      ]
+    }
+  ],
+  "implementation_run": false
+}

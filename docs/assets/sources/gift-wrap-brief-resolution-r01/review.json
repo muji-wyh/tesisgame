@@ -1,0 +1,256 @@
+{
+  "schema": 1,
+  "author": "/root/recover_delivery",
+  "status": "frozen_brief_resolution_and_raster_candidate_recommendation_no_promotion",
+  "sense_id": "gift-wrap.wrapping-paper.n",
+  "scope": {
+    "shared_files_edited": false,
+    "r03_modified": false,
+    "project_or_helper_code_executed": false,
+    "native_game_run": false,
+    "production_promotion": false,
+    "broad_source_search": false,
+    "exact_candidate_lineage_traced": true,
+    "credentials_login_purchase": false
+  },
+  "sense": {
+    "text": "gift wrap",
+    "definition": "Decorative paper used to cover a present.",
+    "accepted_forms": [
+      "gift wrap",
+      "wrapping paper"
+    ],
+    "meaning": "The decorative paper material, not a completed present, ribbon or the action of wrapping.",
+    "source_path": "data/professional/lexemes/retail-pilot.json",
+    "source_line": 6320
+  },
+  "brief_origin": {
+    "finding": "The inspected evidence identifies the exact three-object arrangement as an AI-authored editorial composition, not a recorded human requirement.",
+    "earlier_brief": "A present partly wrapped in patterned paper.",
+    "current_brief": "Show a large loose sheet and partly unrolled roll of decorative paper beside one partly wrapped present, with the paper as the main subject. Use a cheerful repeating motif without text. Reject a completed gift box alone, a wrapping action close-up, a ribbon-only picture, or patterned cloth.",
+    "evidence": [
+      {
+        "path": "build/professional-english/retail-module03-review/REVIEW-HANDOFF.md",
+        "lines": [
+          3,
+          10,
+          968
+        ],
+        "sha256": "c4b2cf89f5acc71dfbaeed4895ca94dccac06f422c369bf8cb02cafe73932cb8",
+        "finding": "Identifies the editorial proposal as agent-authored, proposes replacing fifty generic briefs, and contains the exact three-object brief."
+      },
+      {
+        "path": "build/professional-english/retail-module03-review/proposal.json",
+        "sha256": "f956d5bb3ceba023ad9770312ba9c8da00111a91a825c9605c5f6d59bdc21296",
+        "finding": "Raw file hash matches the accepted proposal hash recorded in integrated editorial provenance."
+      },
+      {
+        "path": "data/professional/provenance/retail-module03-editorial-2026-10-16.json",
+        "lines": [
+          5,
+          9599,
+          9718
+        ],
+        "sha256": "6dbe389c89159020c3abc593185aa2441a4a047281fd5ae6d8d9ddc40c04a62a",
+        "finding": "Acceptance is explicitly an independent AI editorial review; prior and replacement briefs are preserved."
+      },
+      {
+        "path": "docs/assets/sources/professional-retail-ava/bag-wrap/listening-approval-2026-10-16.json",
+        "lines": [
+          12,
+          28
+        ],
+        "finding": "Recorded human approval concerns pronunciation, speed and voice and applies only to exact WAV bytes; it is not picture-composition approval."
+      },
+      {
+        "path": "AGENTS.md",
+        "line": 3,
+        "finding": "General source-asset and art-direction requirements do not prescribe a gift-wrap object arrangement."
+      },
+      {
+        "path": "docs/assets/art-direction.md",
+        "finding": "Requires inspected, suitably licensed sourced assets, distinct acquisition states and honest pending status; no three-object gift-wrap composition is prescribed."
+      }
+    ],
+    "limit": "No human instruction demanding all three objects was found in the inspected records. Unavailable conversation history was not searched, so this is not proof that no such message ever existed.",
+    "proposed_brief": "Show decorative gift-wrapping paper as the dominant subject, preferably a partly unrolled roll with a broad visible paper tail and a cheerful text-free pattern. Make the paper edge and rolled layers clear. A present may provide optional context. Exclude cloth, ribbon-only imagery, completed gifts alone and distracting clutter.",
+    "reason": "A single well-chosen patterned roll directly depicts the selected material sense. Requiring a separate sheet and partly wrapped present is unnecessary to that sense and can reduce legibility in small image boxes."
+  },
+  "candidate": {
+    "id": "freesvg-187259",
+    "title": "Wraping Paper",
+    "creator": "j4p4n",
+    "source_url": "https://freesvg.org/index.php/wraping-paper",
+    "published_raster_url": "https://freesvg.org/img/1576573760wrapingpaper.png",
+    "metadata_evidence": "Saved primary HTML identifies this exact PNG as itemprop contentUrl and separately names /storage/img/thumb/1576573760wrapingpaper.png as thumbnailUrl. The page displays the same content PNG.",
+    "license": "CC0 1.0 Universal / Public Domain",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "terms_url": "https://freesvg.org/pages/terms-and-conditions",
+    "license_assessment": "The primary listing marks the illustration Public Domain and links CC0. The site's Terms define images to include photographs, vectors, drawings and illustrations, and expressly permit downloading and using those images under CC0. CC0 section 2 covers any current or future medium. This supports using the published raster representation itself; it does not depend on successful acquisition of the SVG.",
+    "exact_short_terms_quotes": [
+      "\"Images\" includes photographs, vectors, drawings, and illustrations.",
+      "You may download and use images"
+    ],
+    "license_limits": "Retain source/creator/license provenance. CC0 does not supply trademark rights or imply endorsement; the inspected illustration contains no person, logo or visible text. No mandatory attribution is stated, but project attribution is retained.",
+    "attribution": "Wraping Paper by j4p4n, FreeSVG, CC0 1.0. Published raster retained unchanged; review derivative crops transparent margins only.",
+    "raster": {
+      "path": "docs/assets/sources/gift-wrap-brief-resolution-r01/freesvg-187259-displayed-raster.png",
+      "bytes": 1442999,
+      "sha256": "da47681a1d8721d1c177772be79bec683a09315a025aa4375379889f2ec27b7a",
+      "dimensions": [
+        600,
+        600
+      ],
+      "acquisition_status": "acquired_published_raster_under_CC0_not_integrated",
+      "original_pixels_preserved": true,
+      "acquisition_detail": "This exact 600x600 source PNG was downloaded in r03 and copied byte-for-byte into this evidence packet. Its existing local bytes are now explicitly verified against the primary contentUrl and image-wide CC0 terms. This is actual raster acquisition, not vector acquisition or production integration."
+    },
+    "crop": {
+      "path": "docs/assets/sources/gift-wrap-brief-resolution-r01/freesvg-187259-alpha-crop.png",
+      "bytes": 36970,
+      "sha256": "c97a15eac5680c4ffaf0d70f3c6b7a740fd86a4a804c3d517e13f21d52caf789",
+      "dimensions": [
+        600,
+        173
+      ],
+      "source_rect_xywh": [
+        0,
+        217,
+        600,
+        173
+      ],
+      "rgba_pixel_mismatches": 0,
+      "adaptation": "Exact rectangular crop to all alpha greater than zero pixels; removes transparent padding only. No repainting, new objects, recoloring, stretching or removed visible pixels.",
+      "status": "Review derivative only, not integrated"
+    },
+    "animations": [],
+    "animation_note": "One static raster frame was inspected. No vector layers, rigging or animation assets were acquired.",
+    "lineage": {
+      "freesvg_parent_url": "https://freesvg.org/paper-roll-vector-clip-art",
+      "freesvg_parent_description": "The source parent is described as a tissue/cleaning paper roll and tagged for toilet paper. j4p4n explicitly describes adding color and dots to symbolize wrapping paper for birthdays or Christmas.",
+      "related_openclipart_url": "https://openclipart.org/detail/323996/wraping-paper-roll",
+      "related_openclipart_creator": "j4p4n",
+      "related_openclipart_upload_date": "2020-09-24",
+      "related_openclipart_parent_url": "https://openclipart.org/detail/81079/paper-roll",
+      "related_openclipart_parent_creator": "pixzain",
+      "relationship_limit": "The matching title, creator, wrapping-paper description and paper-roll parent identify a strong lineage lead. The OpenClipart SVG/PNG bytes were not acquired, so exact equality with the FreeSVG graphic is not claimed.",
+      "retrieval_result": "Ordinary OpenClipart detail, SVG download and 800px raster requests timed out. No credentials/API access or prior failed FreeSVG download route was used. No SVG exists in this packet.",
+      "visual_implication": "The decorative pattern must remain perceptible so the roll does not collapse to a generic or tissue-paper cue at very small size."
+    }
+  },
+  "visual_review": {
+    "sheet": {
+      "path": "build/professional-english/retail-term-art-review/gift-wrap-brief-resolution-r01/brief-resolution-size-inspection.png",
+      "bytes": 285310,
+      "sha256": "c4a886408e607de3bef3d879efaf64f6b0ba9819fe3b83cbb8f944e13043af2a"
+    },
+    "method": "Static System.Drawing high-quality fit of actual source pixels on the source card fill #fffef9. Subject rectangles reflect source dimensions; no game code or helper code was executed.",
+    "basis": [
+      {
+        "path": "scripts/word_card.gd",
+        "lines": [
+          103,
+          112,
+          116,
+          117,
+          118,
+          119,
+          171
+        ],
+        "meaning": "72px nominal minimum, keep-aspect-centered fit, 12px horizontal and 10px vertical padding; normal card fill."
+      },
+      {
+        "path": "scripts/memory_garden.gd",
+        "lines": [
+          234,
+          573,
+          578
+        ],
+        "meaning": "44px nominal card minimum with adaptive card dimensions; this is a minimum scenario, not a claim about every viewport."
+      },
+      {
+        "path": "scripts/professional_word_library.gd",
+        "lines": [
+          95,
+          231
+        ],
+        "meaning": "Keep-aspect-centered fit and 150 physical-pixel target height. The inspection uses factor 1 and assumes a 280px width; actual native layout remains unverified."
+      }
+    ],
+    "observations": [
+      {
+        "context": "72x72 card; 48x52 image box",
+        "unchanged_visible_subject_px": [
+          48,
+          13.84
+        ],
+        "cropped_visible_subject_px": [
+          48,
+          13.84
+        ],
+        "finding": "The roll core and colored pattern are small. Root and this reviewer find 48px isolated identification weak; do not enable isolated picture scoring. Transparent crop alone does not enlarge the width-limited silhouette."
+      },
+      {
+        "context": "44x44 card; 20x24 image box",
+        "unchanged_visible_subject_px": [
+          20,
+          5.77
+        ],
+        "cropped_visible_subject_px": [
+          20,
+          5.77
+        ],
+        "finding": "The artwork is a tiny pale roll; dots and paper edges are not dependable isolated-answer cues. Do not infer isolated picture eligibility from a larger preview."
+      },
+      {
+        "context": "Library inspection scenario; 280x150 image box",
+        "unchanged_visible_subject_px": [
+          150,
+          43.25
+        ],
+        "cropped_visible_subject_px": [
+          280,
+          80.73
+        ],
+        "finding": "The exact alpha crop noticeably improves use of the wide box. The broad patterned tail, thin edge and layered roll are clear, with no gift box or ribbon competing for attention."
+      },
+      {
+        "context": "Coloured gift paper photo by Asta, already acquired under CC BY 2.0",
+        "finding": "The image depicts real patterned sheets, but overlaps and dense patterns resemble fabric or wallpaper swatches at card size. It also has visible brand text near the upper edge. It is weaker than the isolated roll for this sense and is not recommended as the primary word image."
+      }
+    ],
+    "actual_game_render": false,
+    "native_device_acceptance": false
+  },
+  "recommendation": {
+    "brief": "Adopt the proposed material-focused brief as an editorial correction after root review. Do not keep the exact three-object arrangement as an unproven human requirement.",
+    "specific_asset": "Use the licensed FreeSVG displayed PNG as the concrete raster candidate and the exact alpha-crop derivative for a larger contextual/library preview.",
+    "isolated_picture_scoring": "Disable isolated picture scoring for this candidate in any eventual integration. Both the static review and Codex root visual inspection find 48px and 20px isolated identification weak. Do not approve Match, Memory, Pop, Jelly or Word Jelly routes on this artwork. The current shared eligibility fields were not edited by this packet.",
+    "sheets_photo": "Do not select the sheets photo as the primary word image.",
+    "svg": "No SVG is needed to establish the published raster's reuse permission. Preserve the honest raster-only state; no vector acquisition is claimed.",
+    "remaining_root_work": "Independently verify the saved packet and any eventual native contextual/library display. Root owns brief/eligibility changes, integration and persisted verification. Keep isolated picture scoring disabled; do not invent a Phrase route or imply course/module readiness.",
+    "primary_contextual_still": "Recommended: yes, as a sourced primary contextual/library still alongside the term and definition. No rotation, repainting or subject editing is needed. Use the reviewed alpha crop when root integrates, retaining the unchanged source raster and its provenance."
+  },
+  "preservation": {
+    "r03_frozen_inventory_files_verified": 15,
+    "r03_all_match": true,
+    "shared_retail_pilot_hash_unchanged_during_observation": true,
+    "approved_audio_unchanged": true,
+    "check_path": "build/professional-english/retail-term-art-review/gift-wrap-brief-resolution-r01/preservation-check.json",
+    "r03_check_path": "build/professional-english/retail-term-art-review/gift-wrap-brief-resolution-r01/r03-inventory-preservation.json"
+  },
+  "supporting_files": [
+    "build/professional-english/retail-term-art-review/gift-wrap-brief-resolution-r01/freesvg-wraping-paper-page.html",
+    "build/professional-english/retail-term-art-review/gift-wrap-brief-resolution-r01/freesvg-terms.html",
+    "build/professional-english/retail-term-art-review/gift-wrap-brief-resolution-r01/source-retrievals.json",
+    "build/professional-english/retail-term-art-review/gift-wrap-brief-resolution-r01/raster-inspection-metadata.json"
+  ],
+  "cc0_evidence_retention": "The official CC0 legal code was read and the relevant medium-independent grant is summarized above with its exact URL. The complete raw HTML response is not retained; retrieval status/hash remains in source-retrievals.json.",
+  "art_direction_assessment": {
+    "acceptable_primary_contextual_still": true,
+    "reason": "The art direction requires suitable sourced production assets and honest inspection/acquisition states, and does not mandate photographic or 3D treatment for word pictures. This is an acquired authored illustration with curved paper shading, visible rolled layers, a broad unrolled tail and a repeating pattern. Its subject detail is materially stronger than a flat geometric placeholder. The soft pink/green palette reads calmly against the current #fffef9 card fill, while the layered core and patterned tail remain legible in the larger contextual view.",
+    "style_limit": "This is a simple still clipart asset, not photorealistic art or an animated production model. It should not be presented as containing layers, rigging, animation or vector scalability. Its pale thin silhouette is unsuitable as the sole small scored cue.",
+    "context": "Display with the selected noun and definition. The general example mentions blue paper; this pink illustration depicts the noun category, not the exact event described by that sentence.",
+    "root_review": "Codex root independently inspected the crop sheet and accepted the contextual/library direction, while requiring 48px/20px isolated identification to remain disabled. This is AI review, not human picture approval."
+  }
+}

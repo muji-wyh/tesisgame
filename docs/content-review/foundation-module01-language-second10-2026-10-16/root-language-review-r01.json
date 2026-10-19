@@ -1,0 +1,88 @@
+{
+  "schema": 1,
+  "status": "root_scoped_language_acceptance_pending_guarded_delivery",
+  "date": "2026-10-16T10:18:28.109Z",
+  "reviewer": "Codex root (independent AI review; not human or specialist approval)",
+  "root_review_recorded": true,
+  "parent_review_path": "build/professional-english/foundation-module01-language-review/second10/independent-review-r01/language-review-proposal.json",
+  "parent_review_raw_sha256": "849fb6af65055e74802af8ad24ade1740dc4a9e75f7cfce38d205d2e06911202",
+  "parent_review_json_sha256": "04fa8aa0c3f831e0aea367475f8fa8b2a9a5927281e482df979fc28e2f865fa7",
+  "variant_proposal_path": "build/professional-english/foundation-module01-language-review/second10/coordinator-spelling-r01/variant-proposal.json",
+  "variant_proposal_raw_sha256": "4bb9d2f31a6711f5d3a1c7f8fb4eff2b50f54fbc67cb4333d7ea266f711a2be2",
+  "variant_proposal_json_sha256": "66f576cd9e7b273de97450ee6afe79a565cb383b9db79cf8d22b88e2cd655371",
+  "accepted_candidates": [
+    {
+      "id": "contractor.contracted-worker.n",
+      "candidate_json_sha256": "4f6ec0efd0ca9b8f2ca9f1970ac6b567492a4809a28986b4d236d1437cd58653",
+      "scope": "Ordinary language wording, original example, editorial difficulty and accepted spelling only"
+    },
+    {
+      "id": "trainee.learner-worker.n",
+      "candidate_json_sha256": "90604b7f38911cb12f5608e9713d52333cd3d299cfa4bf4e3d0296bbfcf6cbad",
+      "scope": "Ordinary language wording, original example, editorial difficulty and accepted spelling only"
+    },
+    {
+      "id": "receptionist.front-desk-worker.n",
+      "candidate_json_sha256": "1eb80dd9c38f3e64f69562011adef87b1718dfff52371b7084332ec1deff3cb8",
+      "scope": "Ordinary language wording, original example, editorial difficulty and accepted spelling only"
+    },
+    {
+      "id": "coordinator.organizer.n",
+      "candidate_json_sha256": "4418216d47c4ddf15bd3b253d8951ff1fabf3ee0e491c6a3d9fe3cb66b0e1047",
+      "scope": "Ordinary language wording, original example, editorial difficulty and accepted spelling only"
+    },
+    {
+      "id": "contact.helpful-person.n",
+      "candidate_json_sha256": "e67647e2e5aa5eb1cdee63d2ebe32c566e5829a42dd0129569700d3add77e41e",
+      "scope": "Ordinary language wording, original example, editorial difficulty and accepted spelling only"
+    },
+    {
+      "id": "supplier.goods-provider.n",
+      "candidate_json_sha256": "ae508d67fa10c89e4f2ea38ecb809e6e950353dc0e52ffe2dc44933cb32f9977",
+      "scope": "Ordinary language wording, original example, editorial difficulty and accepted spelling only"
+    },
+    {
+      "id": "schedule.time-plan.n",
+      "candidate_json_sha256": "fb97ddd2f62349a22376bc6e48cb437e8fe6da6d2c395645843435d479a59f9b",
+      "scope": "Ordinary language wording, original example, editorial difficulty and accepted spelling only"
+    },
+    {
+      "id": "shift.work-period.n",
+      "candidate_json_sha256": "5fbd3e81f008cf8427a80df6bba64fbde588bfc247cdf257c063a03a5a9c7bc7",
+      "scope": "Ordinary language wording, original example, editorial difficulty and accepted spelling only"
+    },
+    {
+      "id": "appointment.arranged-meeting.n",
+      "candidate_json_sha256": "0bfd474d1d6a522c988e86e9b24fd96bd3fa657f4e9a47c46a2a57016b0c4295",
+      "scope": "Ordinary language wording, original example, editorial difficulty and accepted spelling only"
+    },
+    {
+      "id": "meeting.work-discussion.n",
+      "candidate_json_sha256": "c32fc272ee904d2399be0b27fdfd41b94d07182804682134ad41d80c50d44684",
+      "scope": "Ordinary language wording, original example, editorial difficulty and accepted spelling only"
+    }
+  ],
+  "decision": "Accept all ten exact candidates at the declared teaching scope, using the separately reviewed co-ordinator spelling addition for coordinator. Preserve the parent coordinator hold as historical evidence.",
+  "root_direct_source_crosschecks": [
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/coordinator",
+      "finding": "The organizer noun explicitly lists co-ordinator as an additional British spelling. No selected headword CEFR was observed; the footer level belongs to another word."
+    },
+    {
+      "url": "https://www.collinsdictionary.com/dictionary/english/contact",
+      "finding": "The useful-person sense carries B1+; communication verb A2 belongs to a different meaning. B2 remains a bounded curriculum placement, not a conversion or source label."
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/shift_1",
+      "finding": "The selected work-period sense has Business b1. This supports the scoped editorial B1 choice while the independent record retains the differing Collins B2 observation."
+    }
+  ],
+  "limits": [
+    "All original examples and intended sense boundaries were inspected. The independent reviewer fresh-checked all thirteen supporting pages; root directly crosschecked the three stated cases.",
+    "Accept the refined contact B2 and shift B1 decisions as editorial placements. Contractor and supplier A2, coordinator B1 and meeting course-floor A2 remain explicit curriculum judgments, without source CEFR certification.",
+    "Retain all expression binding holds, including six unresolved supplier contexts, and all domain, media, morphology, practice-mode, membership and release gates.",
+    "Coordinator regions remain general. The British label describes the added spelling; it does not restrict the canonical sense or create another morphology graph or recording.",
+    "This record does not apply content, run tests, bind a baseline, approve a module or authorize deployment. Delivery must preserve current preimages and exact scoped fields."
+  ],
+  "production_mutated": false
+}

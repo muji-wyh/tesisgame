@@ -1,0 +1,139 @@
+{
+  "schema": 1,
+  "status": "raw_source_observations_not_execution",
+  "reviewer": "/root/recover_delivery",
+  "inspected_input_count": 13,
+  "dependency_summaries": [
+    {
+      "path": "tools/validate-professional-content.cjs",
+      "requires": [
+        "node:fs",
+        "node:path",
+        "node:crypto",
+        "../web/professional-media.js",
+        "./validate-theme-motion.cjs",
+        "./professional-picture-pools.cjs"
+      ],
+      "filesystem_methods": [
+        "existsSync",
+        "readFileSync",
+        "realpathSync"
+      ],
+      "raw_line_anchored_test_calls": 0
+    },
+    {
+      "path": "tools/validate-theme-motion.cjs",
+      "requires": [],
+      "filesystem_methods": [],
+      "raw_line_anchored_test_calls": 0
+    },
+    {
+      "path": "tools/professional-picture-pools.cjs",
+      "requires": [],
+      "filesystem_methods": [],
+      "raw_line_anchored_test_calls": 0
+    },
+    {
+      "path": "web/professional-media.js",
+      "requires": [],
+      "filesystem_methods": [],
+      "raw_line_anchored_test_calls": 0
+    },
+    {
+      "path": "tests/professional-content.test.cjs",
+      "requires": [
+        "node:test",
+        "node:assert/strict",
+        "node:path",
+        "node:fs",
+        "node:os",
+        "node:crypto",
+        "../tools/validate-professional-content.cjs",
+        "node:util"
+      ],
+      "filesystem_methods": [
+        "copyFileSync",
+        "cpSync",
+        "existsSync",
+        "mkdirSync",
+        "mkdtempSync",
+        "readFileSync",
+        "readdirSync",
+        "rmSync",
+        "writeFileSync"
+      ],
+      "raw_line_anchored_test_calls": 174
+    },
+    {
+      "path": "tests/professional-retail-morphology.test.cjs",
+      "requires": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:crypto",
+        "../tools/validate-professional-content.cjs",
+        "node:util"
+      ],
+      "filesystem_methods": [
+        "readFileSync",
+        "readdirSync"
+      ],
+      "raw_line_anchored_test_calls": 38
+    },
+    {
+      "path": "tests/professional-retail-media.test.cjs",
+      "requires": [
+        "node:test",
+        "node:assert/strict",
+        "node:fs",
+        "node:path",
+        "node:crypto",
+        "../tools/validate-professional-content.cjs"
+      ],
+      "filesystem_methods": [
+        "readFileSync",
+        "readdirSync",
+        "statSync"
+      ],
+      "raw_line_anchored_test_calls": 25
+    }
+  ],
+  "callback_accounting": {
+    "content": {
+      "raw_declarations": 174,
+      "two_declarations_repeated_for_ten_courses": 2,
+      "baseline_callbacks": 192,
+      "authored_additions": 5,
+      "expected_projected_callbacks": 197
+    },
+    "morphology": {
+      "baseline_callbacks": 38,
+      "authored_additions": 2,
+      "expected_projected_callbacks": 40
+    },
+    "media": {
+      "baseline_callbacks": 25,
+      "authored_additions": 1,
+      "expected_projected_callbacks": 26
+    },
+    "expected_total": 263,
+    "execution_observed": false
+  },
+  "missing_filesystem_operation": {
+    "operation": "cpSync",
+    "runner_proxy_line": 89,
+    "required_by": "tests/professional-content.test.cjs",
+    "required_at_line": 1421,
+    "fixture": "local Home previews enforce provenance, dimensions, size, and scope without releasing the full theme",
+    "frozen_transform_mentions_cpSync": false,
+    "expected_source_consequence": "The projected filesystem proxy throws before this retained callback completes."
+  },
+  "actual_preparation_inputs_inspected": false,
+  "source_modules_imported": false,
+  "syntax_checks_run": false,
+  "source_or_test_execution": false,
+  "actual_binding_accepted": false,
+  "preparation_execution_accepted": false,
+  "production_mutated": false
+}

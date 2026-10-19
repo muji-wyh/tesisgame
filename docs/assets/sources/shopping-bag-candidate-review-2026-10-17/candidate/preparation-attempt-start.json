@@ -1,0 +1,7 @@
+{
+  "schema": 1,
+  "started_at": "2026-10-16T20:47:54.636Z",
+  "proposal_inventory_sha256": "409de482e4c7067494aa8f10201f3dcb4dcc29bdc5c3bb9cdb46a4748467e426",
+  "baseline_receipt_sha256": "509d64c10012756c7d44d0cdf6fb9b204a3c1cbfe1c4e0e76434ea2af36a33f8",
+  "scope": "Scratch-only input freeze. Preserve this marker if interrupted."
+}

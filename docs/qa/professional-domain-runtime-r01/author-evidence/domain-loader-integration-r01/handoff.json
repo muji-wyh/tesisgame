@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "status": "implementation_frozen_pending_independent_review_and_execution",
+  "completed_at": "2026-10-16T19:35:44.1335074Z",
+  "files": [
+    {
+      "path": "scripts/professional_round_loader.gd",
+      "bytes": 10408,
+      "sha256": "83186aeb5c993e6dcd544f71e6939de8a3b08ab60b3fc610987b22bf94d3182d"
+    },
+    {
+      "path": "tests/godot/professional_round_loader_tests.gd",
+      "bytes": 24170,
+      "sha256": "99904fff2e23cd83976647c89990a76c7786f91ba51feb2108983833a01ae96d"
+    }
+  ],
+  "preimages_verified": 2,
+  "production_files_edited_by_assignment": [
+    "scripts/professional_round_loader.gd",
+    "tests/godot/professional_round_loader_tests.gd"
+  ],
+  "evidence": [
+    "source_reading",
+    "textual_diff",
+    "raw_file_hashing"
+  ],
+  "dispatch": {
+    "native": false,
+    "tests": false,
+    "build": false,
+    "syntax": false
+  },
+  "runtime_acceptance": false,
+  "test_command": "node tools/run-godot.cjs --headless --path . --script res://tests/godot/professional_round_loader_tests.gd"
+}

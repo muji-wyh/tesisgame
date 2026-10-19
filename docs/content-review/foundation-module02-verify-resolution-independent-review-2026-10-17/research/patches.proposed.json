@@ -1,0 +1,48 @@
+{
+  "status": "research_only_not_an_installable_patch",
+  "old_object_sha256": "d900dc371a4f37e536e5b252470b50fc85e988fc799ab279f2ef836e9ea43e9a",
+  "proposed_new_object_sha256": "55863911bc60ebf5368d660615a8fce964e224194a8bfd436fdde55d9c914aad",
+  "before_expression_object_sha256": "ccd764a43dd2503bf77bb1b654e73a0ab742e439df7cb3ef623b9e0af7d366c4",
+  "proposed_expression_object_sha256": "c578dec25399c372607843812c30e063865e77174836e9005ecf04f5f9f78ff5",
+  "operation": "reviewed_new_identity_substitution_with_durable_old_object_retirement",
+  "lexical_changed_top_level_keys": [
+    "id",
+    "text",
+    "display_text",
+    "definition",
+    "example",
+    "difficulty",
+    "accepted_forms",
+    "media",
+    "morphology",
+    "references",
+    "editorial_notes"
+  ],
+  "expression_changed_top_level_keys": [
+    "text",
+    "meaning",
+    "context",
+    "tokens",
+    "focus_lexeme_ids",
+    "references"
+  ],
+  "lexical_unchanged_projections": [
+    "pos",
+    "practice_modes",
+    "media.audio",
+    "media.image fields other than brief",
+    "review"
+  ],
+  "phrase_unchanged_projections": [
+    "id",
+    "practice_modes",
+    "media",
+    "review",
+    "existing references prefix"
+  ],
+  "source_registry_baseline": null,
+  "compiled_registry_baseline": null,
+  "test_baselines": null,
+  "release_revision": null,
+  "deferred_reason": "Actual shared baselines and new revision must follow the completed fourth-ten delivery and independent acceptance. This packet runs no project code and contains no integration command."
+}

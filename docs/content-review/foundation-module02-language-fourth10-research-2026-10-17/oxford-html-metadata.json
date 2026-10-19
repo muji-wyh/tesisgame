@@ -1,0 +1,808 @@
+{
+  "schema": 1,
+  "status": "source_metadata_observations_not_independent_acceptance",
+  "method": "Direct original-publisher HTTP retrieval; page bodies discarded after minimal attribute and hash extraction. Meanings and usage separately read via the web connector. No text, images or audio imported.",
+  "script_raw_sha256": "89a69381b876d3d59a142d5b50f906a901c341d298e332ae94b36973877250b2",
+  "recorded_at": "2026-10-16T19:09:22.192Z",
+  "observations": [
+    {
+      "term": "submit",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/submit",
+      "response_url": "https://www.oxfordlearnersdictionaries.com/definition/english/submit",
+      "consulted_at": "2026-10-16T19:09:20.860Z",
+      "http_status": 200,
+      "content_type": "text/html;charset=UTF-8",
+      "raw_body_bytes": 96509,
+      "raw_body_sha256": "4a2d86db72c031b3076c883e51548c82ca3b439390efadd813556021ffd3403d",
+      "sense_elements": [
+        {
+          "html_offset": 59438,
+          "attributes": {
+            "class": "sense",
+            "ox3000": "y",
+            "sensenum": "1",
+            "id": "submit_sng_1",
+            "cefr": "b2"
+          }
+        },
+        {
+          "html_offset": 63647,
+          "attributes": {
+            "class": "sense",
+            "sensenum": "2",
+            "id": "submit_sng_2",
+            "cefr": "c1"
+          }
+        },
+        {
+          "html_offset": 67109,
+          "attributes": {
+            "class": "sense",
+            "id": "submit_sng_3",
+            "sensenum": "3",
+            "cefr": "c2"
+          }
+        }
+      ],
+      "level_elements": [
+        {
+          "html_offset": 59438,
+          "attributes": {
+            "class": "sense",
+            "ox3000": "y",
+            "sensenum": "1",
+            "id": "submit_sng_1",
+            "cefr": "b2"
+          }
+        },
+        {
+          "html_offset": 63647,
+          "attributes": {
+            "class": "sense",
+            "sensenum": "2",
+            "id": "submit_sng_2",
+            "cefr": "c1"
+          }
+        },
+        {
+          "html_offset": 67109,
+          "attributes": {
+            "class": "sense",
+            "id": "submit_sng_3",
+            "sensenum": "3",
+            "cefr": "c2"
+          }
+        }
+      ],
+      "source_page_retained": false
+    },
+    {
+      "term": "approve",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/approve",
+      "response_url": "https://www.oxfordlearnersdictionaries.com/definition/english/approve",
+      "consulted_at": "2026-10-16T19:09:20.967Z",
+      "http_status": 200,
+      "content_type": "text/html;charset=UTF-8",
+      "raw_body_bytes": 88549,
+      "raw_body_sha256": "6c8ef1489630cfbccb16dd42cab0c4189118efbeec32621e13ff76c1bcb0f67a",
+      "sense_elements": [
+        {
+          "html_offset": 60342,
+          "attributes": {
+            "class": "sense",
+            "cefr": "b2",
+            "id": "approve_sng_1",
+            "sensenum": "1",
+            "ox3000": "y"
+          }
+        },
+        {
+          "html_offset": 64887,
+          "attributes": {
+            "class": "sense",
+            "id": "approve_sng_2",
+            "sensenum": "2",
+            "cefr": "b2",
+            "ox3000": "y"
+          }
+        },
+        {
+          "html_offset": 70330,
+          "attributes": {
+            "class": "sense",
+            "ox3000": "y",
+            "id": "approve_sng_3",
+            "sensenum": "3",
+            "cefr": "b2"
+          }
+        }
+      ],
+      "level_elements": [
+        {
+          "html_offset": 60342,
+          "attributes": {
+            "class": "sense",
+            "cefr": "b2",
+            "id": "approve_sng_1",
+            "sensenum": "1",
+            "ox3000": "y"
+          }
+        },
+        {
+          "html_offset": 64887,
+          "attributes": {
+            "class": "sense",
+            "id": "approve_sng_2",
+            "sensenum": "2",
+            "cefr": "b2",
+            "ox3000": "y"
+          }
+        },
+        {
+          "html_offset": 70330,
+          "attributes": {
+            "class": "sense",
+            "ox3000": "y",
+            "id": "approve_sng_3",
+            "sensenum": "3",
+            "cefr": "b2"
+          }
+        }
+      ],
+      "source_page_retained": false
+    },
+    {
+      "term": "reject",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/reject_1",
+      "response_url": "https://www.oxfordlearnersdictionaries.com/definition/english/reject_1",
+      "consulted_at": "2026-10-16T19:09:20.969Z",
+      "http_status": 200,
+      "content_type": "text/html;charset=UTF-8",
+      "raw_body_bytes": 91650,
+      "raw_body_sha256": "7150a027207bb99ff6346a59dd3428e131239960a9dfc93dc787a99c6af81e4b",
+      "sense_elements": [
+        {
+          "html_offset": 60029,
+          "attributes": {
+            "class": "sense",
+            "ox3000": "y",
+            "sensenum": "1",
+            "cefr": "b1",
+            "id": "reject_sng_1"
+          }
+        },
+        {
+          "html_offset": 65735,
+          "attributes": {
+            "class": "sense",
+            "ox3000": "y",
+            "id": "reject_sng_2",
+            "cefr": "b1",
+            "sensenum": "2"
+          }
+        },
+        {
+          "html_offset": 68077,
+          "attributes": {
+            "class": "sense",
+            "cefr": "b1",
+            "sensenum": "3",
+            "id": "reject_sng_3",
+            "ox3000": "y"
+          }
+        },
+        {
+          "html_offset": 70045,
+          "attributes": {
+            "class": "sense",
+            "id": "reject_sng_4",
+            "cefr": "b1",
+            "sensenum": "4",
+            "ox3000": "y"
+          }
+        },
+        {
+          "html_offset": 73296,
+          "attributes": {
+            "class": "sense",
+            "ox3000": "y",
+            "sensenum": "5",
+            "cefr": "b1",
+            "id": "reject_sng_5"
+          }
+        }
+      ],
+      "level_elements": [
+        {
+          "html_offset": 60029,
+          "attributes": {
+            "class": "sense",
+            "ox3000": "y",
+            "sensenum": "1",
+            "cefr": "b1",
+            "id": "reject_sng_1"
+          }
+        },
+        {
+          "html_offset": 65735,
+          "attributes": {
+            "class": "sense",
+            "ox3000": "y",
+            "id": "reject_sng_2",
+            "cefr": "b1",
+            "sensenum": "2"
+          }
+        },
+        {
+          "html_offset": 68077,
+          "attributes": {
+            "class": "sense",
+            "cefr": "b1",
+            "sensenum": "3",
+            "id": "reject_sng_3",
+            "ox3000": "y"
+          }
+        },
+        {
+          "html_offset": 70045,
+          "attributes": {
+            "class": "sense",
+            "id": "reject_sng_4",
+            "cefr": "b1",
+            "sensenum": "4",
+            "ox3000": "y"
+          }
+        },
+        {
+          "html_offset": 73296,
+          "attributes": {
+            "class": "sense",
+            "ox3000": "y",
+            "sensenum": "5",
+            "cefr": "b1",
+            "id": "reject_sng_5"
+          }
+        }
+      ],
+      "source_page_retained": false
+    },
+    {
+      "term": "sign",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/sign_2",
+      "response_url": "https://www.oxfordlearnersdictionaries.com/definition/english/sign_2",
+      "consulted_at": "2026-10-16T19:09:21.490Z",
+      "http_status": 200,
+      "content_type": "text/html;charset=UTF-8",
+      "raw_body_bytes": 111482,
+      "raw_body_sha256": "d1391144c23eaf4a69e3af3ddd577968351b661d64c16fb7feeb9c7c1d06ea2c",
+      "sense_elements": [
+        {
+          "html_offset": 60030,
+          "attributes": {
+            "class": "sense",
+            "ox3000": "y",
+            "cefr": "a2",
+            "id": "sign_sng_7",
+            "sensenum": "1"
+          }
+        },
+        {
+          "html_offset": 65897,
+          "attributes": {
+            "class": "sense",
+            "cefr": "c1",
+            "id": "sign_sng_8",
+            "sensenum": "2"
+          }
+        },
+        {
+          "html_offset": 67865,
+          "attributes": {
+            "class": "sense",
+            "sensenum": "3",
+            "id": "sign_sng_9"
+          }
+        },
+        {
+          "html_offset": 69506,
+          "attributes": {
+            "class": "sense",
+            "id": "sign_sng_10",
+            "sensenum": "4"
+          }
+        },
+        {
+          "html_offset": 70970,
+          "attributes": {
+            "class": "sense",
+            "id": "sign_sng_12"
+          }
+        },
+        {
+          "html_offset": 77935,
+          "attributes": {
+            "class": "sense",
+            "id": "sign_sng_13",
+            "fkcefr": "c2"
+          }
+        },
+        {
+          "html_offset": 79077,
+          "attributes": {
+            "class": "sense",
+            "id": "sign_sng_14"
+          }
+        }
+      ],
+      "level_elements": [
+        {
+          "html_offset": 60030,
+          "attributes": {
+            "class": "sense",
+            "ox3000": "y",
+            "cefr": "a2",
+            "id": "sign_sng_7",
+            "sensenum": "1"
+          }
+        },
+        {
+          "html_offset": 65897,
+          "attributes": {
+            "class": "sense",
+            "cefr": "c1",
+            "id": "sign_sng_8",
+            "sensenum": "2"
+          }
+        },
+        {
+          "html_offset": 77807,
+          "attributes": {
+            "class": "idm",
+            "id": "sign_idm_5",
+            "cefr": "c2"
+          }
+        },
+        {
+          "html_offset": 77935,
+          "attributes": {
+            "class": "sense",
+            "id": "sign_sng_13",
+            "fkcefr": "c2"
+          }
+        }
+      ],
+      "source_page_retained": false
+    },
+    {
+      "term": "delay",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/delay_1",
+      "response_url": "https://www.oxfordlearnersdictionaries.com/definition/english/delay_1",
+      "consulted_at": "2026-10-16T19:09:21.491Z",
+      "http_status": 200,
+      "content_type": "text/html;charset=UTF-8",
+      "raw_body_bytes": 81845,
+      "raw_body_sha256": "4ddef81bd0500bed5639f5858d3f83b155fbe5798e4427591bcca0c015964646",
+      "sense_elements": [
+        {
+          "html_offset": 53134,
+          "attributes": {
+            "class": "sense",
+            "sensenum": "1",
+            "cefr": "b2",
+            "id": "delay_sng_1",
+            "ox3000": "y"
+          }
+        },
+        {
+          "html_offset": 63015,
+          "attributes": {
+            "class": "sense",
+            "ox3000": "y",
+            "sensenum": "2",
+            "id": "delay_sng_2",
+            "cefr": "b2"
+          }
+        }
+      ],
+      "level_elements": [
+        {
+          "html_offset": 53134,
+          "attributes": {
+            "class": "sense",
+            "sensenum": "1",
+            "cefr": "b2",
+            "id": "delay_sng_1",
+            "ox3000": "y"
+          }
+        },
+        {
+          "html_offset": 63015,
+          "attributes": {
+            "class": "sense",
+            "ox3000": "y",
+            "sensenum": "2",
+            "id": "delay_sng_2",
+            "cefr": "b2"
+          }
+        }
+      ],
+      "source_page_retained": false
+    },
+    {
+      "term": "error",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/error",
+      "response_url": "https://www.oxfordlearnersdictionaries.com/definition/english/error",
+      "consulted_at": "2026-10-16T19:09:21.491Z",
+      "http_status": 200,
+      "content_type": "text/html;charset=UTF-8",
+      "raw_body_bytes": 89421,
+      "raw_body_sha256": "42de8277170c89591ffc206c9ab9d66250222ba595836fb491fca0504bd51a26",
+      "sense_elements": [
+        {
+          "html_offset": 53914,
+          "attributes": {
+            "class": "sense",
+            "fkcefr": "a2",
+            "id": "error_sng_1"
+          }
+        },
+        {
+          "html_offset": 67818,
+          "attributes": {
+            "class": "sense",
+            "id": "error_sng_2"
+          }
+        },
+        {
+          "html_offset": 68808,
+          "attributes": {
+            "class": "sense",
+            "id": "trial_sng_8"
+          }
+        }
+      ],
+      "level_elements": [
+        {
+          "html_offset": 53914,
+          "attributes": {
+            "class": "sense",
+            "fkcefr": "a2",
+            "id": "error_sng_1"
+          }
+        }
+      ],
+      "source_page_retained": false
+    },
+    {
+      "term": "fault",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/fault_1",
+      "response_url": "https://www.oxfordlearnersdictionaries.com/definition/english/fault_1",
+      "consulted_at": "2026-10-16T19:09:21.740Z",
+      "http_status": 200,
+      "content_type": "text/html;charset=UTF-8",
+      "raw_body_bytes": 94372,
+      "raw_body_sha256": "cf22c9f80fe02b2aea14d74347e7d94500d3a68580e5b8f565d6ac886725ee80",
+      "sense_elements": [
+        {
+          "html_offset": 53533,
+          "attributes": {
+            "class": "sense",
+            "ox3000": "y",
+            "cefr": "b2",
+            "id": "fault_sng_1",
+            "sensenum": "1"
+          }
+        },
+        {
+          "html_offset": 58714,
+          "attributes": {
+            "class": "sense",
+            "id": "fault_sng_2",
+            "sensenum": "2",
+            "cefr": "b2",
+            "ox3000": "y"
+          }
+        },
+        {
+          "html_offset": 62420,
+          "attributes": {
+            "class": "sense",
+            "ox3000": "y",
+            "sensenum": "3",
+            "cefr": "b2",
+            "id": "fault_sng_3"
+          }
+        },
+        {
+          "html_offset": 67705,
+          "attributes": {
+            "class": "sense",
+            "cefr": "c2",
+            "sensenum": "4",
+            "id": "fault_sng_4"
+          }
+        },
+        {
+          "html_offset": 70427,
+          "attributes": {
+            "class": "sense",
+            "sensenum": "5",
+            "cefr": "c2",
+            "id": "fault_sng_5"
+          }
+        },
+        {
+          "html_offset": 73153,
+          "attributes": {
+            "class": "sense",
+            "id": "find_sng_23"
+          }
+        },
+        {
+          "html_offset": 73931,
+          "attributes": {
+            "class": "sense",
+            "id": "fault_sng_6"
+          }
+        }
+      ],
+      "level_elements": [
+        {
+          "html_offset": 53533,
+          "attributes": {
+            "class": "sense",
+            "ox3000": "y",
+            "cefr": "b2",
+            "id": "fault_sng_1",
+            "sensenum": "1"
+          }
+        },
+        {
+          "html_offset": 58714,
+          "attributes": {
+            "class": "sense",
+            "id": "fault_sng_2",
+            "sensenum": "2",
+            "cefr": "b2",
+            "ox3000": "y"
+          }
+        },
+        {
+          "html_offset": 62420,
+          "attributes": {
+            "class": "sense",
+            "ox3000": "y",
+            "sensenum": "3",
+            "cefr": "b2",
+            "id": "fault_sng_3"
+          }
+        },
+        {
+          "html_offset": 67705,
+          "attributes": {
+            "class": "sense",
+            "cefr": "c2",
+            "sensenum": "4",
+            "id": "fault_sng_4"
+          }
+        },
+        {
+          "html_offset": 70427,
+          "attributes": {
+            "class": "sense",
+            "sensenum": "5",
+            "cefr": "c2",
+            "id": "fault_sng_5"
+          }
+        }
+      ],
+      "source_page_retained": false
+    },
+    {
+      "term": "damage",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/damage_1",
+      "response_url": "https://www.oxfordlearnersdictionaries.com/definition/english/damage_1",
+      "consulted_at": "2026-10-16T19:09:21.741Z",
+      "http_status": 200,
+      "content_type": "text/html;charset=UTF-8",
+      "raw_body_bytes": 87471,
+      "raw_body_sha256": "1ec41151412ad6d24cf40e80fb9ef0b510a93ce24a5f4f3755b41363a21f0e1f",
+      "sense_elements": [
+        {
+          "html_offset": 53453,
+          "attributes": {
+            "class": "sense",
+            "sensenum": "1",
+            "cefr": "b1",
+            "id": "damage_sng_1",
+            "ox3000": "y"
+          }
+        },
+        {
+          "html_offset": 60233,
+          "attributes": {
+            "class": "sense",
+            "ox3000": "y",
+            "id": "damage_sng_2",
+            "sensenum": "2",
+            "cefr": "b2"
+          }
+        },
+        {
+          "html_offset": 64138,
+          "attributes": {
+            "class": "sense",
+            "cefr": "c1",
+            "sensenum": "3",
+            "id": "damage_sng_3"
+          }
+        },
+        {
+          "html_offset": 68697,
+          "attributes": {
+            "class": "sense",
+            "id": "damage_sng_4"
+          }
+        }
+      ],
+      "level_elements": [
+        {
+          "html_offset": 53453,
+          "attributes": {
+            "class": "sense",
+            "sensenum": "1",
+            "cefr": "b1",
+            "id": "damage_sng_1",
+            "ox3000": "y"
+          }
+        },
+        {
+          "html_offset": 60233,
+          "attributes": {
+            "class": "sense",
+            "ox3000": "y",
+            "id": "damage_sng_2",
+            "sensenum": "2",
+            "cefr": "b2"
+          }
+        },
+        {
+          "html_offset": 64138,
+          "attributes": {
+            "class": "sense",
+            "cefr": "c1",
+            "sensenum": "3",
+            "id": "damage_sng_3"
+          }
+        }
+      ],
+      "source_page_retained": false
+    },
+    {
+      "term": "shortage",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/shortage",
+      "response_url": "https://www.oxfordlearnersdictionaries.com/definition/english/shortage",
+      "consulted_at": "2026-10-16T19:09:21.741Z",
+      "http_status": 200,
+      "content_type": "text/html;charset=UTF-8",
+      "raw_body_bytes": 73201,
+      "raw_body_sha256": "6942e97423d22cd6ea80a65949322573778f8dcc044bf875a9c280f8fa8e8a64",
+      "sense_elements": [
+        {
+          "html_offset": 53292,
+          "attributes": {
+            "class": "sense",
+            "id": "shortage_sng_1",
+            "fkcefr": "b2"
+          }
+        }
+      ],
+      "level_elements": [
+        {
+          "html_offset": 53292,
+          "attributes": {
+            "class": "sense",
+            "id": "shortage_sng_1",
+            "fkcefr": "b2"
+          }
+        }
+      ],
+      "source_page_retained": false
+    },
+    {
+      "term": "missing",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/missing",
+      "response_url": "https://www.oxfordlearnersdictionaries.com/definition/english/missing",
+      "consulted_at": "2026-10-16T19:09:21.986Z",
+      "http_status": 200,
+      "content_type": "text/html;charset=UTF-8",
+      "raw_body_bytes": 83693,
+      "raw_body_sha256": "dcad26d12b4461f764022c2b620a904136b23bd1dafa23e9d056891ee2126b99",
+      "sense_elements": [
+        {
+          "html_offset": 53249,
+          "attributes": {
+            "class": "sense",
+            "ox3000": "y",
+            "cefr": "a2",
+            "sensenum": "1",
+            "id": "missing_sng_1"
+          }
+        },
+        {
+          "html_offset": 57776,
+          "attributes": {
+            "class": "sense",
+            "ox3000": "y",
+            "sensenum": "2",
+            "cefr": "a2",
+            "id": "missing_sng_2"
+          }
+        },
+        {
+          "html_offset": 59989,
+          "attributes": {
+            "class": "sense",
+            "sensenum": "3",
+            "cefr": "a2",
+            "id": "missing_sng_3",
+            "ox3000": "y"
+          }
+        },
+        {
+          "html_offset": 62292,
+          "attributes": {
+            "class": "sense",
+            "sensenum": "4",
+            "cefr": "a2",
+            "id": "missing_sng_4",
+            "ox3000": "y"
+          }
+        }
+      ],
+      "level_elements": [
+        {
+          "html_offset": 53249,
+          "attributes": {
+            "class": "sense",
+            "ox3000": "y",
+            "cefr": "a2",
+            "sensenum": "1",
+            "id": "missing_sng_1"
+          }
+        },
+        {
+          "html_offset": 57776,
+          "attributes": {
+            "class": "sense",
+            "ox3000": "y",
+            "sensenum": "2",
+            "cefr": "a2",
+            "id": "missing_sng_2"
+          }
+        },
+        {
+          "html_offset": 59989,
+          "attributes": {
+            "class": "sense",
+            "sensenum": "3",
+            "cefr": "a2",
+            "id": "missing_sng_3",
+            "ox3000": "y"
+          }
+        },
+        {
+          "html_offset": 62292,
+          "attributes": {
+            "class": "sense",
+            "sensenum": "4",
+            "cefr": "a2",
+            "id": "missing_sng_4",
+            "ox3000": "y"
+          }
+        }
+      ],
+      "source_page_retained": false
+    }
+  ]
+}

@@ -1,0 +1,1715 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "respiratory-system.body-system-supporting-breathing-and-gas-exchange.n",
+      "text": "respiratory system",
+      "display_text": "respiratory system",
+      "pos": "noun",
+      "definition": "The body structures involved in breathing and gas exchange.",
+      "example": "The diagram shows the main parts of the respiratory system.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "respiratory system"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An accurate educational respiratory-system illustration with upper airways and lungs in context, requiring anatomy review.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "respiratory-system.body-system-supporting-breathing-and-gas-exchange.n.analysis.v1",
+        "lexeme_id": "respiratory-system.body-system-supporting-breathing-and-gas-exchange.n",
+        "text": "respiratory system",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.respiratory",
+            "type": "stem",
+            "canonical": "respiratory",
+            "surface": "respiratory"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.system",
+            "type": "stem",
+            "canonical": "system",
+            "surface": "system"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "respiratory system",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "cardiovascular-system.heart-and-blood-vessel-system.n",
+      "text": "cardiovascular system",
+      "display_text": "cardiovascular system",
+      "pos": "noun",
+      "definition": "The heart and blood vessels that circulate blood through the body.",
+      "example": "The explanation focused on the cardiovascular system.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "cardiovascular system"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An accurate educational diagram of the heart and circulation, without implying all arteries contain oxygen-rich blood.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "cardiovascular-system.heart-and-blood-vessel-system.n.analysis.v1",
+        "lexeme_id": "cardiovascular-system.heart-and-blood-vessel-system.n",
+        "text": "cardiovascular system",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.cardiovascular",
+            "type": "stem",
+            "canonical": "cardiovascular",
+            "surface": "cardiovascular"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.system",
+            "type": "stem",
+            "canonical": "system",
+            "surface": "system"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "cardiovascular system",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "digestive-system.body-system-processing-food-and-absorbing-nutrients.n",
+      "text": "digestive system",
+      "display_text": "digestive system",
+      "pos": "noun",
+      "definition": "The body structures involved in processing food, absorbing nutrients, and eliminating digestive waste.",
+      "example": "The clinician used a digestive system diagram.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "digestive system"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An anatomically accurate digestive-system illustration showing the tract and associated organs, without a disease claim.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "digestive-system.body-system-processing-food-and-absorbing-nutrients.n.analysis.v1",
+        "lexeme_id": "digestive-system.body-system-processing-food-and-absorbing-nutrients.n",
+        "text": "digestive system",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.digestive",
+            "type": "stem",
+            "canonical": "digestive",
+            "surface": "digestive"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.system",
+            "type": "stem",
+            "canonical": "system",
+            "surface": "system"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "digestive system",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "nervous-system.body-system-receiving-processing-and-transmitting-signals.n",
+      "text": "nervous system",
+      "display_text": "nervous system",
+      "pos": "noun",
+      "definition": "The network of structures that receives, processes, and transmits signals to coordinate body functions.",
+      "example": "The nervous system includes the brain, spinal cord, and peripheral nerves.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "nervous system"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An accurate nervous-system overview with central and peripheral components clearly shown.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "nervous-system.body-system-receiving-processing-and-transmitting-signals.n.analysis.v1",
+        "lexeme_id": "nervous-system.body-system-receiving-processing-and-transmitting-signals.n",
+        "text": "nervous system",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.nervous",
+            "type": "stem",
+            "canonical": "nervous",
+            "surface": "nervous"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.system",
+            "type": "stem",
+            "canonical": "system",
+            "surface": "system"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "nervous system",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "urinary-system.body-system-producing-storing-and-eliminating-urine.n",
+      "text": "urinary system",
+      "display_text": "urinary system",
+      "pos": "noun",
+      "definition": "The body structures that produce, transport, store, and eliminate urine.",
+      "example": "The urinary system diagram helped explain the examination.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "urinary system"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A medically reviewed illustration of kidneys, ureters, bladder and urethra without procedural detail.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "urinary-system.body-system-producing-storing-and-eliminating-urine.n.analysis.v1",
+        "lexeme_id": "urinary-system.body-system-producing-storing-and-eliminating-urine.n",
+        "text": "urinary system",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.urinary",
+            "type": "stem",
+            "canonical": "urinary",
+            "surface": "urinary"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.system",
+            "type": "stem",
+            "canonical": "system",
+            "surface": "system"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "urinary system",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "musculoskeletal-system.bones-muscles-and-associated-supporting-structures.n",
+      "text": "musculoskeletal system",
+      "display_text": "musculoskeletal system",
+      "pos": "noun",
+      "definition": "The bones, muscles, joints, and associated structures that support the body and enable movement.",
+      "example": "The assessment concerns the musculoskeletal system.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "musculoskeletal system"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An accurate integrated view of major muscles and supporting skeletal structures, with a respectful educational presentation.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "musculoskeletal-system.bones-muscles-and-associated-supporting-structures.n.analysis.v1",
+        "lexeme_id": "musculoskeletal-system.bones-muscles-and-associated-supporting-structures.n",
+        "text": "musculoskeletal system",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.musculoskeletal",
+            "type": "stem",
+            "canonical": "musculoskeletal",
+            "surface": "musculoskeletal"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.system",
+            "type": "stem",
+            "canonical": "system",
+            "surface": "system"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "musculoskeletal system",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "endocrine-system.hormone-producing-glands-and-related-tissues.n",
+      "text": "endocrine system",
+      "display_text": "endocrine system",
+      "pos": "noun",
+      "definition": "The glands and other tissues that produce hormones involved in regulating body functions.",
+      "example": "The specialist discussed the endocrine system.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "endocrine system"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An educational endocrine-system overview with accurately positioned glands, without assigning a diagnosis to the viewer.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "endocrine-system.hormone-producing-glands-and-related-tissues.n.analysis.v1",
+        "lexeme_id": "endocrine-system.hormone-producing-glands-and-related-tissues.n",
+        "text": "endocrine system",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.endocrine",
+            "type": "stem",
+            "canonical": "endocrine",
+            "surface": "endocrine"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.system",
+            "type": "stem",
+            "canonical": "system",
+            "surface": "system"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "endocrine system",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "immune-system.body-defenses-against-harmful-agents-and-abnormal-cells.n",
+      "text": "immune system",
+      "display_text": "immune system",
+      "pos": "noun",
+      "definition": "The cells, tissues, and processes that help defend the body against harmful agents and abnormal cells.",
+      "example": "The explanation describes a role of the immune system.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "immune system"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A contextual educational immune-system illustration, avoiding a simplistic single-organ representation.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "immune-system.body-defenses-against-harmful-agents-and-abnormal-cells.n.analysis.v1",
+        "lexeme_id": "immune-system.body-defenses-against-harmful-agents-and-abnormal-cells.n",
+        "text": "immune system",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.immune",
+            "type": "stem",
+            "canonical": "immune",
+            "surface": "immune"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.system",
+            "type": "stem",
+            "canonical": "system",
+            "surface": "system"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "immune system",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "bloodstream.blood-circulating-through-body.n",
+      "text": "bloodstream",
+      "display_text": "bloodstream",
+      "pos": "noun",
+      "definition": "The blood circulating through the body's blood vessels.",
+      "example": "The diagram follows a substance through the bloodstream.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "bloodstream"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A medically accurate cross-section of flowing blood within a vessel, without microscopic scale confusion.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "bloodstream.blood-circulating-through-body.n.analysis.v1",
+        "lexeme_id": "bloodstream.blood-circulating-through-body.n",
+        "text": "bloodstream",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.blood",
+            "type": "stem",
+            "canonical": "blood",
+            "surface": "blood"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.stream",
+            "type": "stem",
+            "canonical": "stream",
+            "surface": "stream"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "bloodstream",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "connective-tissue.tissue-supporting-connecting-or-binding-body-structures.n",
+      "text": "connective tissue",
+      "display_text": "connective tissue",
+      "pos": "noun",
+      "definition": "Body tissue that supports, connects, or binds other tissues and structures.",
+      "example": "The ligament is a type of connective tissue.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "connective tissue"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clearly labeled educational connective-tissue illustration in an anatomical context, with qualified review required.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "connective-tissue.tissue-supporting-connecting-or-binding-body-structures.n.analysis.v1",
+        "lexeme_id": "connective-tissue.tissue-supporting-connecting-or-binding-body-structures.n",
+        "text": "connective tissue",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.connective",
+            "type": "stem",
+            "canonical": "connective",
+            "surface": "connective"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.tissue",
+            "type": "stem",
+            "canonical": "tissue",
+            "surface": "tissue"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "connective tissue",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "mucous-membrane.moist-lining-of-certain-body-cavities-and-passages.n",
+      "text": "mucous membrane",
+      "display_text": "mucous membrane",
+      "pos": "noun",
+      "definition": "A moist tissue lining in certain body cavities and passages that open to the exterior.",
+      "example": "The report describes the appearance of the mucous membrane.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "mucous membrane"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A non-graphic anatomical illustration of a mucosal lining, with location and scale clear.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "mucous-membrane.moist-lining-of-certain-body-cavities-and-passages.n.analysis.v1",
+        "lexeme_id": "mucous-membrane.moist-lining-of-certain-body-cavities-and-passages.n",
+        "text": "mucous membrane",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.mucous",
+            "type": "stem",
+            "canonical": "mucous",
+            "surface": "mucous"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.membrane",
+            "type": "stem",
+            "canonical": "membrane",
+            "surface": "membrane"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "mucous membrane",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "airway.passage-through-which-air-moves-during-breathing.n",
+      "text": "airway",
+      "display_text": "airway",
+      "pos": "noun",
+      "definition": "A passage through which air moves into or out of the lungs.",
+      "example": "The diagram identifies the upper airway.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "airway"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A medically reviewed side-view airway illustration with its relation to the digestive passage clearly distinguished.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "airway.passage-through-which-air-moves-during-breathing.n.analysis.v1",
+        "lexeme_id": "airway.passage-through-which-air-moves-during-breathing.n",
+        "text": "airway",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Explicit structural candidate only. Modern boundaries, lexicalized meaning and the few classical combinations require qualified language review; the consulted word-part table does not approve the complete analysis. Intact terms remain null unless explicitly analyzed. Atomic exposure is not scored spelling mastery.",
+          "references": [
+            "clinical-medline-word-parts"
+          ]
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.air",
+            "type": "stem",
+            "canonical": "air",
+            "surface": "air"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.way",
+            "type": "stem",
+            "canonical": "way",
+            "surface": "way"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "airway",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "esophagus.muscular-tube-carrying-swallowed-material-to-stomach.n",
+      "text": "esophagus",
+      "display_text": "esophagus",
+      "pos": "noun",
+      "definition": "The muscular tube that carries swallowed material from the throat to the stomach.",
+      "example": "The clinician pointed to the esophagus on the diagram.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "esophagus",
+        "oesophagus"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An accurate side-view illustration highlighting the esophagus separately from the trachea.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "trachea.airway-tube-between-larynx-and-main-bronchi.n",
+      "text": "trachea",
+      "display_text": "trachea",
+      "pos": "noun",
+      "definition": "The airway tube extending from the larynx to the main bronchi.",
+      "example": "The image shows the trachea dividing into the main bronchi.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "trachea"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An anatomical diagram showing the trachea and its division above the lungs, without invasive equipment.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "professional.trachea.airway-tube-between-larynx-and-main-bronchi.n.morphology.v1",
+        "lexeme_id": "trachea.airway-tube-between-larynx-and-main-bronchi.n",
+        "text": "trachea",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.trachea",
+            "canonical": "trachea",
+            "surface": "trachea",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Pending Professional English review. Explicit sense comparison: Both nouns name the airway tube toward the lungs. The professional anatomical endpoints clarify the same whole scientific borrowing. Inherited Growth rationale: The breathing-tube noun is a whole scientific borrowing, with no detachable English ending. The Growth AI editorial status is not transferred. External sources listed here are inherited repository records, not newly consulted in this pass.",
+          "references": [
+            "https://openlibrary-repo.ecampusontario.ca/jspui/bitstream/123456789/497/6/Essentials-of-Linguistics-1539375829.html"
+          ],
+          "provenance": {
+            "corpus": "Growth",
+            "file": "data/vocabulary/morphology/age-11.json",
+            "entry_id": "trachea",
+            "analysis_id": "growth.trachea.analysis.v1",
+            "analysis_sha256": "3e1ad38ceb2a2b40ea08b3e360b75c79df45e03d065a8f5d4d595b3509aea2fc",
+            "source_review_status": "reviewed"
+          },
+          "source_consultation": "inherited_repository_record_not_newly_consulted_in_this_pass"
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Clinical Medicine communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not clinical training, medical advice, legal advice or a diagnostic tool. No treatment, diagnostic threshold, test-selection algorithm, consent authority, result interpretation or clinical procedure is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    }
+  ]
+}

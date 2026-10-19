@@ -1,0 +1,10 @@
+{
+  "ok": true,
+  "process_closed": true,
+  "checks": 21,
+  "failed": 0,
+  "log_sha256": "12f7594f5e612bbf2883e36653e39022721ed1f9a980568de19687fc2fcd3a54",
+  "report_sha256": "53787be5e07f4508a1e7742ec2af968b1885c35e72a09ea8780985e4557c9dc4",
+  "candidate_matches_prior": true,
+  "production_changed": false
+}

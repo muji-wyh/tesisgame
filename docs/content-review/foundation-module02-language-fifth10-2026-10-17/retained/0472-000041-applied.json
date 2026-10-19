@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 41,
+  "status": "applied",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "355e79070225133ab616f3d2a1121b5f6e293c73988a5cc2d29f24ae5988117f",
+  "recorded_at": "2026-10-16T22:48:03.666Z",
+  "index": 19,
+  "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/entry-preimage.json"
+}

@@ -1,0 +1,86 @@
+{
+  "schema": 1,
+  "status": "exact_shared_test_replacements_prepared",
+  "patches": [
+    {
+      "file": "tests/professional-content.test.cjs",
+      "before_sha256": "6cc20ad953645ecf4961dfff2fd22f9cdd2ed5c4d6e3c9d100e938902fd3e9f0",
+      "after_sha256": "471f1eee4c01ffd0a0f9a43db0692311774afd5996ba29f5865d4674ec38ab19",
+      "before_artifact": "professional-content.test.cjs.before",
+      "after_artifact": "professional-content.test.cjs.after",
+      "exact_anchor_edits": [
+        {
+          "before": "function beforeFoundation02FirstLanguage(entry) {",
+          "after": "const attendanceLanguageRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/foundation-module01-attendance-language-2026-10-17.json'), 'utf8'));\nfunction beforeAttendanceLanguage(entry) {\n  const patch = attendanceLanguageRecord.patches.find(item => item.id === entry.id);\n  if (!patch) return entry;\n  // Only exact historical or later accepted entries may cross this chronology boundary.\n  if (require('node:util').isDeepStrictEqual(entry, patch.before)) return structuredClone(patch.before);\n  assert.deepEqual(entry, patch.after, entry.id + ': exact later independently accepted attendance language and metadata delta');\n  return structuredClone(patch.before);\n}\nfunction beforeFoundation02FirstLanguage(entry) {\n  entry = beforeAttendanceLanguage(entry);",
+          "count": 1
+        },
+        {
+          "before": "...foundation02FirstLanguageRecord.patches].map(item => item.id)",
+          "after": "...foundation02FirstLanguageRecord.patches, ...attendanceLanguageRecord.patches].map(item => item.id)",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(result.summary.reviewed_lexemes, 121);",
+          "after": "assert.equal(result.summary.reviewed_lexemes, 122);",
+          "count": 1
+        },
+        {
+          "before": "test('Foundation third ten retain the entire attendance hold and literal source difficulty evidence'",
+          "after": "test('Foundation third ten retain the historical attendance hold and literal source difficulty evidence'",
+          "count": 1
+        },
+        {
+          "before": "assert.deepEqual(source.lexemes.find(entry=>entry.id===held.id),held.value);",
+          "after": "assert.deepEqual(beforeAttendanceLanguage(source.lexemes.find(entry=>entry.id===held.id)),held.value);",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(hash(source.lexemes.find(e=>e.id===r.protected_context.attendance.id)),r.protected_context.attendance.json_sha256);",
+          "after": "assert.equal(hash(beforeAttendanceLanguage(source.lexemes.find(e=>e.id===r.protected_context.attendance.id))),r.protected_context.attendance.json_sha256);",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(source.lexemes.find(e=>e.id==='attendance.presence-record.n').review.language,'pending');",
+          "after": "assert.equal(beforeAttendanceLanguage(source.lexemes.find(e=>e.id==='attendance.presence-record.n')).review.language,'pending');",
+          "count": 1
+        },
+        {
+          "before": "for(const row of c.related_entries)assert.equal(hash(source.lexemes.find(e=>e.id===row.id)),row.json_sha256,row.id);",
+          "after": "for(const row of c.related_entries)assert.equal(hash(beforeAttendanceLanguage(source.lexemes.find(e=>e.id===row.id))),row.json_sha256,row.id);",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(hash(source.lexemes.filter(e=>!selected.has(e.id))),r.lineage.other_lexemes_json_sha256);",
+          "after": "assert.equal(hash(source.lexemes.map(beforeAttendanceLanguage).filter(e=>!selected.has(e.id))),r.lineage.other_lexemes_json_sha256);",
+          "count": 1
+        }
+      ],
+      "appended_tests": 5,
+      "projected_callbacks_passed": 35,
+      "syntax_valid": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "before_sha256": "5344e7ab7c62e62640f3c9047f602f0434be6d584430c08e65ae50dbeb9c210c",
+      "after_sha256": "47474805af1db61c9a2bc944395f5790a5853c73420b02f29563559b2b1a4459",
+      "before_artifact": "professional-retail-morphology.test.cjs.before",
+      "after_artifact": "professional-retail-morphology.test.cjs.after",
+      "exact_anchor_edits": [
+        {
+          "before": "function beforeFoundation02FirstLanguage(entry) {",
+          "after": "const attendanceLanguageRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/foundation-module01-attendance-language-2026-10-17.json'), 'utf8'));\nfunction beforeAttendanceLanguage(entry) {\n  const patch = attendanceLanguageRecord.patches.find(item => item.id === entry.id);\n  if (!patch) return entry;\n  // Only exact historical or later accepted entries may cross this chronology boundary.\n  if (require('node:util').isDeepStrictEqual(entry, patch.before)) return structuredClone(patch.before);\n  assert.deepEqual(entry, patch.after, entry.id + ': exact later independently accepted attendance language and metadata delta');\n  return structuredClone(patch.before);\n}\nfunction beforeFoundation02FirstLanguage(entry) {\n  entry = beforeAttendanceLanguage(entry);",
+          "count": 1
+        },
+        {
+          "before": "assert.deepEqual(data.lexemes.find(item=>item.id===attendance.id),attendance.value);",
+          "after": "assert.deepEqual(beforeAttendanceLanguage(data.lexemes.find(item=>item.id===attendance.id)),attendance.value);",
+          "count": 1
+        }
+      ],
+      "appended_tests": 1,
+      "projected_callbacks_passed": 7,
+      "syntax_valid": true
+    }
+  ],
+  "production_mutated": false
+}

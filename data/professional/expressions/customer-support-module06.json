@@ -1,0 +1,1606 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.customer_support.module06.01",
+      "text": "Active listening and empathy can build trust; check what the customer means after an open-ended question.",
+      "meaning": "Connect attentive listening with understanding and trust.",
+      "context": "An agent checks the meaning of a customer's response.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Active",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "listening",
+          "start": 7,
+          "end": 16
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "empathy",
+          "start": 21,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "can",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "build",
+          "start": 33,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "trust",
+          "start": 39,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": ";",
+          "start": 44,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "check",
+          "start": 46,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "what",
+          "start": 52,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": "customer",
+          "start": 61,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": "means",
+          "start": 70,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": "after",
+          "start": 76,
+          "end": 81
+        },
+        {
+          "index": 14,
+          "text": "an",
+          "start": 82,
+          "end": 84
+        },
+        {
+          "index": 15,
+          "text": "open-ended",
+          "start": 85,
+          "end": 95
+        },
+        {
+          "index": 16,
+          "text": "question",
+          "start": 96,
+          "end": 104
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 104,
+          "end": 105
+        }
+      ],
+      "focus_lexeme_ids": [
+        "active-listening.attentive-listening-with-understanding-checks.n",
+        "open-ended-question.question-inviting-expanded-answer.n",
+        "empathy.understanding-another-experience.n",
+        "trust.confidence-in-person-or-relationship.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module06.02",
+      "text": "Use a closed question for a specific detail and a relevant probing question when more explanation is needed.",
+      "meaning": "Distinguish question purposes.",
+      "context": "A trainer discusses a sample conversation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Use",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "a",
+          "start": 4,
+          "end": 5
+        },
+        {
+          "index": 2,
+          "text": "closed",
+          "start": 6,
+          "end": 12
+        },
+        {
+          "index": 3,
+          "text": "question",
+          "start": 13,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "for",
+          "start": 22,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "a",
+          "start": 26,
+          "end": 27
+        },
+        {
+          "index": 6,
+          "text": "specific",
+          "start": 28,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": "detail",
+          "start": 37,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": "a",
+          "start": 48,
+          "end": 49
+        },
+        {
+          "index": 10,
+          "text": "relevant",
+          "start": 50,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": "probing",
+          "start": 59,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "question",
+          "start": 67,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": "when",
+          "start": 76,
+          "end": 80
+        },
+        {
+          "index": 14,
+          "text": "more",
+          "start": 81,
+          "end": 85
+        },
+        {
+          "index": 15,
+          "text": "explanation",
+          "start": 86,
+          "end": 97
+        },
+        {
+          "index": 16,
+          "text": "is",
+          "start": 98,
+          "end": 100
+        },
+        {
+          "index": 17,
+          "text": "needed",
+          "start": 101,
+          "end": 107
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 107,
+          "end": 108
+        }
+      ],
+      "focus_lexeme_ids": [
+        "closed-question.question-with-limited-response-options.n",
+        "probing-question.question-seeking-relevant-further-detail.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module06.03",
+      "text": "Please use plain language, a comfortable pace, and a respectful tone of voice, with repetition if requested.",
+      "meaning": "Adapt communication to the customer's stated needs.",
+      "context": "An agent practices clear spoken explanations.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "use",
+          "start": 7,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "plain",
+          "start": 11,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "language",
+          "start": 17,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 25,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "a",
+          "start": 27,
+          "end": 28
+        },
+        {
+          "index": 6,
+          "text": "comfortable",
+          "start": 29,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "pace",
+          "start": 41,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 45,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 10,
+          "text": "a",
+          "start": 51,
+          "end": 52
+        },
+        {
+          "index": 11,
+          "text": "respectful",
+          "start": 53,
+          "end": 63
+        },
+        {
+          "index": 12,
+          "text": "tone",
+          "start": 64,
+          "end": 68
+        },
+        {
+          "index": 13,
+          "text": "of",
+          "start": 69,
+          "end": 71
+        },
+        {
+          "index": 14,
+          "text": "voice",
+          "start": 72,
+          "end": 77
+        },
+        {
+          "index": 15,
+          "text": ",",
+          "start": 77,
+          "end": 78
+        },
+        {
+          "index": 16,
+          "text": "with",
+          "start": 79,
+          "end": 83
+        },
+        {
+          "index": 17,
+          "text": "repetition",
+          "start": 84,
+          "end": 94
+        },
+        {
+          "index": 18,
+          "text": "if",
+          "start": 95,
+          "end": 97
+        },
+        {
+          "index": 19,
+          "text": "requested",
+          "start": 98,
+          "end": 107
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 107,
+          "end": 108
+        }
+      ],
+      "focus_lexeme_ids": [
+        "plain-language.clear-language-for-intended-audience.n",
+        "pace.speed-of-speaking-or-proceeding.n",
+        "tone-of-voice.vocal-quality-conveying-attitude.n",
+        "repetition.saying-or-doing-again.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module06.04",
+      "text": "A pause can allow processing time and help us check a misunderstanding.",
+      "meaning": "Allow time and confirm understanding.",
+      "context": "An agent reflects on a fictional interaction.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "A",
+          "start": 0,
+          "end": 1
+        },
+        {
+          "index": 1,
+          "text": "pause",
+          "start": 2,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "can",
+          "start": 8,
+          "end": 11
+        },
+        {
+          "index": 3,
+          "text": "allow",
+          "start": 12,
+          "end": 17
+        },
+        {
+          "index": 4,
+          "text": "processing",
+          "start": 18,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "time",
+          "start": 29,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 34,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "help",
+          "start": 38,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "us",
+          "start": 43,
+          "end": 45
+        },
+        {
+          "index": 9,
+          "text": "check",
+          "start": 46,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "a",
+          "start": 52,
+          "end": 53
+        },
+        {
+          "index": 11,
+          "text": "misunderstanding",
+          "start": 54,
+          "end": 70
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 70,
+          "end": 71
+        }
+      ],
+      "focus_lexeme_ids": [
+        "pause.brief-break-in-activity-or-speech.n",
+        "processing-time.time-to-understand-and-respond.n",
+        "misunderstanding.incorrect-understanding-of-meaning.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module06.05",
+      "text": "My apology acknowledges the inconvenience and frustration in your complaint; let us clarify the expectation about the next update.",
+      "meaning": "Acknowledge the concern and clarify the next update.",
+      "context": "An agent responds without promising an unconfirmed outcome.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "My",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "apology",
+          "start": 3,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "acknowledges",
+          "start": 11,
+          "end": 23
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "inconvenience",
+          "start": 28,
+          "end": 41
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 6,
+          "text": "frustration",
+          "start": 46,
+          "end": 57
+        },
+        {
+          "index": 7,
+          "text": "in",
+          "start": 58,
+          "end": 60
+        },
+        {
+          "index": 8,
+          "text": "your",
+          "start": 61,
+          "end": 65
+        },
+        {
+          "index": 9,
+          "text": "complaint",
+          "start": 66,
+          "end": 75
+        },
+        {
+          "index": 10,
+          "text": ";",
+          "start": 75,
+          "end": 76
+        },
+        {
+          "index": 11,
+          "text": "let",
+          "start": 77,
+          "end": 80
+        },
+        {
+          "index": 12,
+          "text": "us",
+          "start": 81,
+          "end": 83
+        },
+        {
+          "index": 13,
+          "text": "clarify",
+          "start": 84,
+          "end": 91
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 92,
+          "end": 95
+        },
+        {
+          "index": 15,
+          "text": "expectation",
+          "start": 96,
+          "end": 107
+        },
+        {
+          "index": 16,
+          "text": "about",
+          "start": 108,
+          "end": 113
+        },
+        {
+          "index": 17,
+          "text": "the",
+          "start": 114,
+          "end": 117
+        },
+        {
+          "index": 18,
+          "text": "next",
+          "start": 118,
+          "end": 122
+        },
+        {
+          "index": 19,
+          "text": "update",
+          "start": 123,
+          "end": 129
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 129,
+          "end": 130
+        }
+      ],
+      "focus_lexeme_ids": [
+        "inconvenience.difficulty-or-trouble-caused-to-someone.n",
+        "frustration.feeling-when-progress-or-needs-are-blocked.n",
+        "expectation.belief-about-what-will-happen.n",
+        "apology.expression-of-regret.n",
+        "complaint.expression-of-dissatisfaction.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module06.06",
+      "text": "Courtesy and patience support honest reassurance about the steps we have actually confirmed.",
+      "meaning": "Discuss respectful service language.",
+      "context": "A team reviews a response draft.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Courtesy",
+          "start": 0,
+          "end": 8
+        },
+        {
+          "index": 1,
+          "text": "and",
+          "start": 9,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "patience",
+          "start": 13,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "support",
+          "start": 22,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": "honest",
+          "start": 30,
+          "end": 36
+        },
+        {
+          "index": 5,
+          "text": "reassurance",
+          "start": 37,
+          "end": 48
+        },
+        {
+          "index": 6,
+          "text": "about",
+          "start": 49,
+          "end": 54
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 55,
+          "end": 58
+        },
+        {
+          "index": 8,
+          "text": "steps",
+          "start": 59,
+          "end": 64
+        },
+        {
+          "index": 9,
+          "text": "we",
+          "start": 65,
+          "end": 67
+        },
+        {
+          "index": 10,
+          "text": "have",
+          "start": 68,
+          "end": 72
+        },
+        {
+          "index": 11,
+          "text": "actually",
+          "start": 73,
+          "end": 81
+        },
+        {
+          "index": 12,
+          "text": "confirmed",
+          "start": 82,
+          "end": 91
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 91,
+          "end": 92
+        }
+      ],
+      "focus_lexeme_ids": [
+        "courtesy.polite-and-considerate-behavior.n",
+        "patience.ability-to-allow-time-without-irritation.n",
+        "reassurance.honest-support-that-reduces-worry.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module06.07",
+      "text": "The acknowledgment confirms receipt; the summary and confirmation message explain the agreed details.",
+      "meaning": "Distinguish receiving a request from confirming its outcome.",
+      "context": "An agent explains three message purposes.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "acknowledgment",
+          "start": 4,
+          "end": 18
+        },
+        {
+          "index": 2,
+          "text": "confirms",
+          "start": 19,
+          "end": 27
+        },
+        {
+          "index": 3,
+          "text": "receipt",
+          "start": 28,
+          "end": 35
+        },
+        {
+          "index": 4,
+          "text": ";",
+          "start": 35,
+          "end": 36
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 37,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "summary",
+          "start": 41,
+          "end": 48
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 8,
+          "text": "confirmation",
+          "start": 53,
+          "end": 65
+        },
+        {
+          "index": 9,
+          "text": "message",
+          "start": 66,
+          "end": 73
+        },
+        {
+          "index": 10,
+          "text": "explain",
+          "start": 74,
+          "end": 81
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 82,
+          "end": 85
+        },
+        {
+          "index": 12,
+          "text": "agreed",
+          "start": 86,
+          "end": 92
+        },
+        {
+          "index": 13,
+          "text": "details",
+          "start": 93,
+          "end": 100
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 100,
+          "end": 101
+        }
+      ],
+      "focus_lexeme_ids": [
+        "acknowledgment.recognition-of-message-or-concern.n",
+        "summary.brief-account-of-main-points.n",
+        "confirmation-message.message-confirming-checked-detail-or-arrangement.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module06.08",
+      "text": "May I confirm your choice of preferred contact method and a suitable callback window?",
+      "meaning": "Confirm the customer's communication preference.",
+      "context": "An agent agrees on how and when to make contact.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "May",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "I",
+          "start": 4,
+          "end": 5
+        },
+        {
+          "index": 2,
+          "text": "confirm",
+          "start": 6,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "your",
+          "start": 14,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "choice",
+          "start": 19,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "of",
+          "start": 26,
+          "end": 28
+        },
+        {
+          "index": 6,
+          "text": "preferred",
+          "start": 29,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "contact",
+          "start": 39,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "method",
+          "start": 47,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "a",
+          "start": 58,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "suitable",
+          "start": 60,
+          "end": 68
+        },
+        {
+          "index": 12,
+          "text": "callback",
+          "start": 69,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": "window",
+          "start": 78,
+          "end": 84
+        },
+        {
+          "index": 14,
+          "text": "?",
+          "start": 84,
+          "end": 85
+        }
+      ],
+      "focus_lexeme_ids": [
+        "preferred-contact-method.chosen-way-to-receive-contact.n",
+        "callback-window.agreed-period-for-return-call.n",
+        "choice.selection-between-options.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module06.09",
+      "text": "An interpreter may help with a language barrier; discuss the interpreter request, accessibility request, and any alternative format with the customer.",
+      "meaning": "Discuss the support chosen by the customer.",
+      "context": "An agent clarifies language and accessibility requests.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "An",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "interpreter",
+          "start": 3,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "may",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "help",
+          "start": 19,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "with",
+          "start": 24,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "a",
+          "start": 29,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "language",
+          "start": 31,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "barrier",
+          "start": 40,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": ";",
+          "start": 47,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "discuss",
+          "start": 49,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": "interpreter",
+          "start": 61,
+          "end": 72
+        },
+        {
+          "index": 12,
+          "text": "request",
+          "start": 73,
+          "end": 80
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 80,
+          "end": 81
+        },
+        {
+          "index": 14,
+          "text": "accessibility",
+          "start": 82,
+          "end": 95
+        },
+        {
+          "index": 15,
+          "text": "request",
+          "start": 96,
+          "end": 103
+        },
+        {
+          "index": 16,
+          "text": ",",
+          "start": 103,
+          "end": 104
+        },
+        {
+          "index": 17,
+          "text": "and",
+          "start": 105,
+          "end": 108
+        },
+        {
+          "index": 18,
+          "text": "any",
+          "start": 109,
+          "end": 112
+        },
+        {
+          "index": 19,
+          "text": "alternative",
+          "start": 113,
+          "end": 124
+        },
+        {
+          "index": 20,
+          "text": "format",
+          "start": 125,
+          "end": 131
+        },
+        {
+          "index": 21,
+          "text": "with",
+          "start": 132,
+          "end": 136
+        },
+        {
+          "index": 22,
+          "text": "the",
+          "start": 137,
+          "end": 140
+        },
+        {
+          "index": 23,
+          "text": "customer",
+          "start": 141,
+          "end": 149
+        },
+        {
+          "index": 24,
+          "text": ".",
+          "start": 149,
+          "end": 150
+        }
+      ],
+      "focus_lexeme_ids": [
+        "alternative-format.different-information-presentation-format.n",
+        "interpreter-request.language-support-request.n",
+        "accessibility-request.request-for-access-support-or-change.n",
+        "language-barrier.communication-difficulty-from-language-difference.n",
+        "interpreter.spoken-language-communication-professional.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.customer_support.module06.10",
+      "text": "Our de-escalation and expectation management should support inclusion, preserve dignity, and respect each personal boundary.",
+      "meaning": "Respect participation, dignity, and personal limits during a difficult conversation.",
+      "context": "An agent reviews inclusive communication practices.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Our",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "de-escalation",
+          "start": 4,
+          "end": 17
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 18,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "expectation",
+          "start": 22,
+          "end": 33
+        },
+        {
+          "index": 4,
+          "text": "management",
+          "start": 34,
+          "end": 44
+        },
+        {
+          "index": 5,
+          "text": "should",
+          "start": 45,
+          "end": 51
+        },
+        {
+          "index": 6,
+          "text": "support",
+          "start": 52,
+          "end": 59
+        },
+        {
+          "index": 7,
+          "text": "inclusion",
+          "start": 60,
+          "end": 69
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 69,
+          "end": 70
+        },
+        {
+          "index": 9,
+          "text": "preserve",
+          "start": 71,
+          "end": 79
+        },
+        {
+          "index": 10,
+          "text": "dignity",
+          "start": 80,
+          "end": 87
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 87,
+          "end": 88
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 89,
+          "end": 92
+        },
+        {
+          "index": 13,
+          "text": "respect",
+          "start": 93,
+          "end": 100
+        },
+        {
+          "index": 14,
+          "text": "each",
+          "start": 101,
+          "end": 105
+        },
+        {
+          "index": 15,
+          "text": "personal",
+          "start": 106,
+          "end": 114
+        },
+        {
+          "index": 16,
+          "text": "boundary",
+          "start": 115,
+          "end": 123
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 123,
+          "end": 124
+        }
+      ],
+      "focus_lexeme_ids": [
+        "de-escalation.effort-to-reduce-tension-or-conflict.n",
+        "expectation-management.clarifying-realistic-service-expectations.n",
+        "dignity.inherent-worth-and-respect.n",
+        "personal-boundary.limit-on-interpersonal-contact.n",
+        "inclusion.meaningful-participation-and-belonging.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "ombudsman-complaint-principles",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    }
+  ]
+}

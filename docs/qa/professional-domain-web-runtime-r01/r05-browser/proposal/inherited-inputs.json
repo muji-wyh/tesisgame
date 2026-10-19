@@ -1,0 +1,248 @@
+{
+  "schema": 1,
+  "status": "exact_inherited_r04_inputs_for_browser_only_supplement",
+  "captured_at": "2026-10-16T20:56:11.940Z",
+  "root_relative": true,
+  "files": [
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/README.md",
+      "bytes": 2926,
+      "sha256": "d261521563fc684a3e6fd3891fb20179e19720c6119e76b0fa075c15f5e9f047"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/assemble-r04-proposal-attempt02.cjs",
+      "bytes": 20562,
+      "sha256": "7dcd632783552e237ceaea0348a6d2e7599d3d0eb9506b5494f76e79f11c4f61"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/assemble-r04-proposal.cjs",
+      "bytes": 19819,
+      "sha256": "472f18a609fa5e51ebf94b1bee39f9ce085d49c7505272af50053fc09da5987d"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/assembly-attempt02-result.json",
+      "bytes": 621,
+      "sha256": "dac1f121c7cac7b66e178f09d23736e6b2f5c27aad6a3ee598318799a3ddaa56"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/assembly-attempt02-start.json",
+      "bytes": 558,
+      "sha256": "eccf69b7dce0ff46f6fa516fff9433a62829791db5db46f9a256acb4b9da7819"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/assembly-failure.json",
+      "bytes": 1109,
+      "sha256": "b71c40bcf845428ddf74e3e80b5e86c1cd770fef9420c2cc1caa53a88da72b7c"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/assembly-start.json",
+      "bytes": 350,
+      "sha256": "d65face779ab5f87a181d59cc8b83ea9a098e9f504284ff00d1e1a3598e0fb5a"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/browser/console.json",
+      "bytes": 1081,
+      "sha256": "718aa474eaeb0782570bb4deffc91996a0ee4929dfd075f70f5fb00f8c57e3ac"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/browser/failure.png",
+      "bytes": 15957,
+      "sha256": "6676f3ef2ee73507f1d8c1e603abf59029e1083a3064d819d4276617a12e2fb9"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/browser/receipt.json",
+      "bytes": 11630,
+      "sha256": "79e7c9ddb6efff1fbbc17201bc20029fbf92379b138f62d50bb920ad90021e6f"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/export-receipt.json",
+      "bytes": 175806,
+      "sha256": "6af2c3e988b0cec313f8ff73d51d2416618d4cca3ca5302b7a0e8d3198c452bb"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/preparation.json",
+      "bytes": 89329,
+      "sha256": "8ffbd226d6a95332723c04ffbf02e2ebfedd0cb4ffb0fe6922c85bf97d069800"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/project/project.godot",
+      "bytes": 577,
+      "sha256": "af1c083a12258e060a07c020531c83c7ade2eca336674f58a283e2a2d9a49e82"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/web/index.audio.position.worklet.js",
+      "bytes": 2973,
+      "sha256": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/web/index.audio.worklet.js",
+      "bytes": 7298,
+      "sha256": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/web/index.html",
+      "bytes": 4869,
+      "sha256": "49d50d73655a10c8ce93045d2d491e0740d31837742032bc690989dd879b5177"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/web/index.js",
+      "bytes": 281121,
+      "sha256": "3e39bb03d73bdfbf927ffb0b58d4a07ef3359c436ae6dca9add84076865cebaf"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/web/index.pck",
+      "bytes": 1526148,
+      "sha256": "2ddb1228eaf5126e5983a849edfa2a7be42a2a61f1bdeefe586c15995fc9c01f"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/web/index.png",
+      "bytes": 21443,
+      "sha256": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/web/index.wasm",
+      "bytes": 39509339,
+      "sha256": "7eda98958eb09135a1acb54a4323a00b1a55af1997f15fa1cdc2b93e3df46656"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/web/professional-media.js",
+      "bytes": 11851,
+      "sha256": "db9ac8f3aeaaafb8f1ac411a56d56f0bfd6d8ad2862348868d42666d3021630a"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/web/professional-media/202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76.png",
+      "bytes": 357001,
+      "sha256": "202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/web/professional-media/3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3.wav",
+      "bytes": 82598,
+      "sha256": "3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/web/professional-media/8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8.png",
+      "bytes": 79563,
+      "sha256": "8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/web/professional-media/afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c.png",
+      "bytes": 120608,
+      "sha256": "afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/web/professional-media/b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae.png",
+      "bytes": 91063,
+      "sha256": "b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/web/professional-media/eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe.png",
+      "bytes": 148338,
+      "sha256": "eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/web/professional-progress.js",
+      "bytes": 19082,
+      "sha256": "e1b1ae3f2045c3bfaa4fde84703f30617547817a9409d602444d2c2e4f1ec8c9"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/browser.cjs",
+      "bytes": 10662,
+      "sha256": "275de78a9848f12aea3f4f2fa1536407ab6f19078cfa36e20c2699c57eaf2e87"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/common.cjs",
+      "bytes": 2232,
+      "sha256": "8417a3ea866a452c48a7f72ec28a6608a4a2318cbd97a67ce61a8172c8fbb4fa"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/export-closure-review.json",
+      "bytes": 39925,
+      "sha256": "194fbdbf556e3de96252b3b0d0873ed21cf43e5f0462885826a75a4420d6443e"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/export.cjs",
+      "bytes": 4794,
+      "sha256": "a119a8bc698e7b498cbb1786a9ffc2553182f57a65a8f95b9d041ac673afb6c5"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/export_presets.cfg",
+      "bytes": 1886,
+      "sha256": "a23abc51c30a07c464fc9a78c5779f0d4c36c90f0a86461911f755f95fecc685"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/fixture_main.gd",
+      "bytes": 8424,
+      "sha256": "d9f7e94ca3f1aefbceec41a48456177c7fac3c7d74319c5e383ed2428061a579"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/inventory.json",
+      "bytes": 4200,
+      "sha256": "3014a945f6da95c09cf9e885f170184d467a51fae3dfb855047b124743732e36"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/main.tscn",
+      "bytes": 286,
+      "sha256": "46ef50eac9560c19392b5103a966bcefcd9341167af0535bdce438e4723118b7"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/predecessor-output-inventory.json",
+      "bytes": 323374,
+      "sha256": "af1ca28d2c684d60125a63c1b47453f7e165121442a1f478fd010906ec793dcd"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/prepare.cjs",
+      "bytes": 5512,
+      "sha256": "496375f5078ae00b7fe75468176710363eb51fc02982ccdf987ee5a878485232"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/project.godot",
+      "bytes": 577,
+      "sha256": "af1c083a12258e060a07c020531c83c7ade2eca336674f58a283e2a2d9a49e82"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/shell.html",
+      "bytes": 4646,
+      "sha256": "26ca9e6017a4307dda0033f7a0253f9e188eb4e9617acd1654a330c33c03699d"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/source-references.json",
+      "bytes": 11730,
+      "sha256": "549140e0cb645496c3ba1c5b9b1e5e5474dfff65d0c22eec9cbb041297927b46"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/static-closure-review.json",
+      "bytes": 22804,
+      "sha256": "9ddd9d588bdb298e0d87cef2f5b3bd69a1e1796163c7a0185acc4f0c3ede1e3a"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/verify_pack.gd",
+      "bytes": 722,
+      "sha256": "2e58f414b36fc2822d35d7b2845ff24468513c43025cd4f21fed173e0825ff1d"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-root-r04/browser/execution.log",
+      "bytes": 1999,
+      "sha256": "35f4fcdf3bfeab44e144bcda44b2bd199eeff51de79d680f09ba7a17ca0618d1"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-root-r04/browser/receipt.json",
+      "bytes": 1094,
+      "sha256": "2f6db8e28da3e97ace2fb9730974f22fe2a40e6ac9917e84a0c0016ef702dbf8"
+    },
+    {
+      "path": "docs/qa/professional-domain-web-runtime-r01/r04-export-review/inspection-r04.json",
+      "bytes": 321660,
+      "sha256": "90675e73a961fe7c7d3ac648d101f4b2f11bf2f053c1bd113e0094bfe014fb5c"
+    },
+    {
+      "path": "docs/qa/professional-domain-web-runtime-r01/r04-export-review/inventory.json",
+      "bytes": 3399,
+      "sha256": "f1d7fb8c643932508dd113bab3201dde65d0e75e73c17acae27042a8026f963a"
+    },
+    {
+      "path": "docs/qa/professional-domain-web-runtime-r01/r04-export-review/review.json",
+      "bytes": 3096,
+      "sha256": "84fa176e1bfbb090bdab117096d58e54eecbc8271e7473017e63dd01110a9cd0"
+    }
+  ]
+}

@@ -1,0 +1,1162 @@
+{
+  "date": "2026-10-16",
+  "status": "previously_acquired_sources_copied_to_scratch_inspection_only",
+  "sense_id": "shelf.storage-surface.n",
+  "definition": "A flat horizontal board or surface fixed above the floor or within a frame to hold objects.",
+  "example": "The top shelf holds the larger boxes.",
+  "approved_brief": "Show one clearly emphasized horizontal shelf within a simple shelving frame, carrying a few boxes with space above and below it. Use lighting and a close crop to identify that single support surface without a printed word or colored label. Reject an entire aisle, a freestanding table, or a wall cabinet. Inspect the Mini Market shelf lead and avoid overfilling it.",
+  "source": "https://kenney.nl/assets/mini-market",
+  "creator": "Kenney",
+  "additional_credits": [
+    "Fleur Keijsers",
+    "Guus Vermeulen"
+  ],
+  "license": "CC0 1.0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "local_version": "Mini Market 1.0; license creation date 2024-10-25 15:22; acquired local All-in-1 3.7.0 library",
+  "files": [
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/shelf-boxes.glb",
+      "retained_path": "source/original/shelf-boxes.glb",
+      "bytes": 56780,
+      "sha256": "3f340fe9207a4b85739d8d11104cf5b4cad3a130afcbfc1fadb47c17d6a9e210"
+    },
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Previews/shelf-boxes.png",
+      "retained_path": "source/previews/shelf-boxes.png",
+      "bytes": 1670,
+      "sha256": "14fd460f0ee5e89a1578dcd0a2df2eaf4993ddf33c319263f2e4b7886d10f149"
+    },
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/shelf-bags.glb",
+      "retained_path": "source/original/shelf-bags.glb",
+      "bytes": 78444,
+      "sha256": "17725a5f680aff17dbc6ac3398ef0339d78b5b76bbfaa29292a5084479c4bd69"
+    },
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Previews/shelf-bags.png",
+      "retained_path": "source/previews/shelf-bags.png",
+      "bytes": 1642,
+      "sha256": "46e40596013d48f77ca5b2b94f45d5e1eac7311f39bc3d6ec5d17a340cf5364e"
+    },
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/shelf-end.glb",
+      "retained_path": "source/original/shelf-end.glb",
+      "bytes": 44560,
+      "sha256": "9a6f4528ae127689d538de0fa45c07f58538c8572a1b858cc5e40caceb7d2c69"
+    },
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Previews/shelf-end.png",
+      "retained_path": "source/previews/shelf-end.png",
+      "bytes": 1584,
+      "sha256": "c0d81fac0f320851977108a7becd35e369238528d21ce155db66da953b34c32a"
+    },
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Models/GLB format/Textures/colormap.png",
+      "retained_path": "source/original/Textures/colormap.png",
+      "bytes": 8706,
+      "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e"
+    },
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/License.txt",
+      "retained_path": "source/License.txt",
+      "bytes": 767,
+      "sha256": "5ee4df809330c05896f223c97f250cc1bdc13b46a370eb464533c85c94146070"
+    },
+    {
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Market/Overview.html",
+      "retained_path": "source/Overview.html",
+      "bytes": 6652,
+      "sha256": "58dee631a02b854f1b511d6184302f06647ac908ad560039ad3c4d0aad1011c8"
+    }
+  ],
+  "models": {
+    "shelf-boxes": {
+      "asset": {
+        "generator": "UnityGLTF",
+        "version": "2.0"
+      },
+      "nodes": [
+        {
+          "children": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "mesh": 0,
+          "name": "shelf-boxes"
+        },
+        {
+          "mesh": 1,
+          "translation": [
+            0.203938976,
+            0.175000012,
+            0.15
+          ],
+          "name": "carton"
+        },
+        {
+          "mesh": 2,
+          "translation": [
+            -7.936507e-9,
+            0.175000012,
+            0.15
+          ],
+          "name": "carton"
+        },
+        {
+          "mesh": 3,
+          "translation": [
+            -0.203939,
+            0.175000012,
+            0.15
+          ],
+          "name": "carton"
+        },
+        {
+          "mesh": 4,
+          "rotation": [
+            0,
+            -1,
+            0,
+            0
+          ],
+          "scale": [
+            -1,
+            1,
+            1
+          ],
+          "translation": [
+            0.203938976,
+            0.175000012,
+            -0.15
+          ],
+          "name": "carton"
+        },
+        {
+          "mesh": 5,
+          "rotation": [
+            0,
+            -1,
+            0,
+            0
+          ],
+          "scale": [
+            -1,
+            1,
+            1
+          ],
+          "translation": [
+            -7.936369e-9,
+            0.175000012,
+            -0.15
+          ],
+          "name": "carton"
+        },
+        {
+          "mesh": 6,
+          "rotation": [
+            0,
+            -1,
+            0,
+            0
+          ],
+          "scale": [
+            -1,
+            1,
+            1
+          ],
+          "translation": [
+            -0.203939,
+            0.175000012,
+            -0.15
+          ],
+          "name": "carton"
+        },
+        {
+          "mesh": 7,
+          "translation": [
+            -0.1755,
+            0.55,
+            0.15
+          ],
+          "name": "box"
+        },
+        {
+          "mesh": 8,
+          "translation": [
+            0.175499991,
+            0.55,
+            0.15
+          ],
+          "name": "box"
+        },
+        {
+          "mesh": 9,
+          "translation": [
+            -0.1755,
+            0.55,
+            -0.15
+          ],
+          "name": "box"
+        },
+        {
+          "mesh": 10,
+          "translation": [
+            0.175499991,
+            0.55,
+            -0.15
+          ],
+          "name": "box"
+        }
+      ],
+      "meshes": [
+        {
+          "name": "shelf-boxes",
+          "primitives": [
+            {
+              "vertex_count": 284,
+              "bounds": {
+                "min": [
+                  -0.4000000059604645,
+                  0,
+                  -0.3500000238418579
+                ],
+                "max": [
+                  0.4000000059604645,
+                  0.8000000715255737,
+                  0.3500000238418579
+                ]
+              },
+              "material": 0
+            }
+          ]
+        },
+        {
+          "name": "carton",
+          "primitives": [
+            {
+              "vertex_count": 58,
+              "bounds": {
+                "min": [
+                  -0.07696950435638428,
+                  0,
+                  -0.07696950435638428
+                ],
+                "max": [
+                  0.07696950435638428,
+                  0.2863926291465759,
+                  0.07696950435638428
+                ]
+              },
+              "material": 0
+            }
+          ]
+        },
+        {
+          "name": "carton",
+          "primitives": [
+            {
+              "vertex_count": 58,
+              "bounds": {
+                "min": [
+                  -0.07696950435638428,
+                  0,
+                  -0.07696950435638428
+                ],
+                "max": [
+                  0.07696950435638428,
+                  0.2863926291465759,
+                  0.07696950435638428
+                ]
+              },
+              "material": 0
+            }
+          ]
+        },
+        {
+          "name": "carton",
+          "primitives": [
+            {
+              "vertex_count": 58,
+              "bounds": {
+                "min": [
+                  -0.07696950435638428,
+                  0,
+                  -0.07696950435638428
+                ],
+                "max": [
+                  0.07696950435638428,
+                  0.2863926291465759,
+                  0.07696950435638428
+                ]
+              },
+              "material": 0
+            }
+          ]
+        },
+        {
+          "name": "carton",
+          "primitives": [
+            {
+              "vertex_count": 58,
+              "bounds": {
+                "min": [
+                  -0.07696950435638428,
+                  0,
+                  -0.07696950435638428
+                ],
+                "max": [
+                  0.07696950435638428,
+                  0.2863926291465759,
+                  0.07696950435638428
+                ]
+              },
+              "material": 0
+            }
+          ]
+        },
+        {
+          "name": "carton",
+          "primitives": [
+            {
+              "vertex_count": 58,
+              "bounds": {
+                "min": [
+                  -0.07696950435638428,
+                  0,
+                  -0.07696950435638428
+                ],
+                "max": [
+                  0.07696950435638428,
+                  0.2863926291465759,
+                  0.07696950435638428
+                ]
+              },
+              "material": 0
+            }
+          ]
+        },
+        {
+          "name": "carton",
+          "primitives": [
+            {
+              "vertex_count": 58,
+              "bounds": {
+                "min": [
+                  -0.07696950435638428,
+                  0,
+                  -0.07696950435638428
+                ],
+                "max": [
+                  0.07696950435638428,
+                  0.2863926291465759,
+                  0.07696950435638428
+                ]
+              },
+              "material": 0
+            }
+          ]
+        },
+        {
+          "name": "box",
+          "primitives": [
+            {
+              "vertex_count": 56,
+              "bounds": {
+                "min": [
+                  -0.12449999898672104,
+                  0,
+                  -0.05000000074505806
+                ],
+                "max": [
+                  0.12449999898672104,
+                  0.30000001192092896,
+                  0.05000000074505806
+                ]
+              },
+              "material": 0
+            }
+          ]
+        },
+        {
+          "name": "box",
+          "primitives": [
+            {
+              "vertex_count": 56,
+              "bounds": {
+                "min": [
+                  -0.12449999898672104,
+                  0,
+                  -0.05000000074505806
+                ],
+                "max": [
+                  0.12449999898672104,
+                  0.30000001192092896,
+                  0.05000000074505806
+                ]
+              },
+              "material": 0
+            }
+          ]
+        },
+        {
+          "name": "box",
+          "primitives": [
+            {
+              "vertex_count": 56,
+              "bounds": {
+                "min": [
+                  -0.12449999898672104,
+                  0,
+                  -0.05000000074505806
+                ],
+                "max": [
+                  0.12449999898672104,
+                  0.30000001192092896,
+                  0.05000000074505806
+                ]
+              },
+              "material": 0
+            }
+          ]
+        },
+        {
+          "name": "box",
+          "primitives": [
+            {
+              "vertex_count": 56,
+              "bounds": {
+                "min": [
+                  -0.12449999898672104,
+                  0,
+                  -0.05000000074505806
+                ],
+                "max": [
+                  0.12449999898672104,
+                  0.30000001192092896,
+                  0.05000000074505806
+                ]
+              },
+              "material": 0
+            }
+          ]
+        }
+      ],
+      "materials": [
+        {
+          "pbrMetallicRoughness": {
+            "baseColorTexture": {
+              "index": 0,
+              "extensions": {
+                "KHR_texture_transform": {
+                  "texCoord": 0
+                }
+              }
+            },
+            "metallicFactor": 0
+          },
+          "doubleSided": true,
+          "name": "colormap"
+        }
+      ],
+      "images": [
+        {
+          "uri": "Textures/colormap.png",
+          "name": "colormap"
+        }
+      ],
+      "animations": [],
+      "skins": []
+    },
+    "shelf-bags": {
+      "asset": {
+        "generator": "UnityGLTF",
+        "version": "2.0"
+      },
+      "nodes": [
+        {
+          "children": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "mesh": 0,
+          "name": "shelf-bags"
+        },
+        {
+          "mesh": 1,
+          "rotation": [
+            0.49999997,
+            0,
+            0,
+            0.8660254
+          ],
+          "translation": [
+            0.175499991,
+            0.672441959,
+            0.112075664
+          ],
+          "name": "bag"
+        },
+        {
+          "mesh": 2,
+          "rotation": [
+            0.49999997,
+            0,
+            0,
+            0.8660254
+          ],
+          "translation": [
+            -0.1755,
+            0.672441959,
+            0.112075657
+          ],
+          "name": "bag"
+        },
+        {
+          "mesh": 3,
+          "rotation": [
+            0.49999997,
+            0,
+            0,
+            0.8660254
+          ],
+          "translation": [
+            0.175499991,
+            0.29744193,
+            0.112075664
+          ],
+          "name": "bag"
+        },
+        {
+          "mesh": 4,
+          "rotation": [
+            0.49999997,
+            0,
+            0,
+            0.8660254
+          ],
+          "translation": [
+            -0.1755,
+            0.297441959,
+            0.112075657
+          ],
+          "name": "bag"
+        },
+        {
+          "mesh": 5,
+          "rotation": [
+            0,
+            -0.8660254,
+            0.49999997,
+            0
+          ],
+          "scale": [
+            -1,
+            1,
+            1
+          ],
+          "translation": [
+            -0.1755,
+            0.672441959,
+            -0.112075664
+          ],
+          "name": "bag"
+        },
+        {
+          "mesh": 6,
+          "rotation": [
+            0,
+            -0.8660254,
+            0.49999997,
+            0
+          ],
+          "scale": [
+            -1,
+            1,
+            1
+          ],
+          "translation": [
+            0.175499991,
+            0.672441959,
+            -0.112075664
+          ],
+          "name": "bag"
+        },
+        {
+          "mesh": 7,
+          "rotation": [
+            0,
+            -0.8660254,
+            0.49999997,
+            0
+          ],
+          "scale": [
+            -1,
+            1,
+            1
+          ],
+          "translation": [
+            -0.1755,
+            0.297441959,
+            -0.112075664
+          ],
+          "name": "bag"
+        },
+        {
+          "mesh": 8,
+          "rotation": [
+            0,
+            -0.8660254,
+            0.49999997,
+            0
+          ],
+          "scale": [
+            -1,
+            1,
+            1
+          ],
+          "translation": [
+            0.175499991,
+            0.29744193,
+            -0.112075664
+          ],
+          "name": "bag"
+        }
+      ],
+      "meshes": [
+        {
+          "name": "shelf-bags",
+          "primitives": [
+            {
+              "vertex_count": 284,
+              "bounds": {
+                "min": [
+                  -0.4000000059604645,
+                  0,
+                  -0.3500000238418579
+                ],
+                "max": [
+                  0.4000000059604645,
+                  0.8000000715255737,
+                  0.3500000238418579
+                ]
+              },
+              "material": 0
+            }
+          ]
+        },
+        {
+          "name": "bag",
+          "primitives": [
+            {
+              "vertex_count": 128,
+              "bounds": {
+                "min": [
+                  -0.12449999153614044,
+                  0,
+                  -0.17499999701976776
+                ],
+                "max": [
+                  0.12449999153614044,
+                  0.13700000941753387,
+                  0.17499999701976776
+                ]
+              },
+              "material": 0
+            }
+          ]
+        },
+        {
+          "name": "bag",
+          "primitives": [
+            {
+              "vertex_count": 128,
+              "bounds": {
+                "min": [
+                  -0.12449999153614044,
+                  0,
+                  -0.17499999701976776
+                ],
+                "max": [
+                  0.12449999153614044,
+                  0.13700000941753387,
+                  0.17499999701976776
+                ]
+              },
+              "material": 0
+            }
+          ]
+        },
+        {
+          "name": "bag",
+          "primitives": [
+            {
+              "vertex_count": 128,
+              "bounds": {
+                "min": [
+                  -0.12449999153614044,
+                  7.219114108078224e-16,
+                  -0.17499999701976776
+                ],
+                "max": [
+                  0.12449999153614044,
+                  0.13700000941753387,
+                  0.17499999701976776
+                ]
+              },
+              "material": 0
+            }
+          ]
+        },
+        {
+          "name": "bag",
+          "primitives": [
+            {
+              "vertex_count": 128,
+              "bounds": {
+                "min": [
+                  -0.12449999153614044,
+                  0,
+                  -0.17499999701976776
+                ],
+                "max": [
+                  0.12449999153614044,
+                  0.13700000941753387,
+                  0.17499999701976776
+                ]
+              },
+              "material": 0
+            }
+          ]
+        },
+        {
+          "name": "bag",
+          "primitives": [
+            {
+              "vertex_count": 128,
+              "bounds": {
+                "min": [
+                  -0.12449999153614044,
+                  0,
+                  -0.17499999701976776
+                ],
+                "max": [
+                  0.12449999153614044,
+                  0.13700000941753387,
+                  0.17499999701976776
+                ]
+              },
+              "material": 0
+            }
+          ]
+        },
+        {
+          "name": "bag",
+          "primitives": [
+            {
+              "vertex_count": 128,
+              "bounds": {
+                "min": [
+                  -0.12449999153614044,
+                  0,
+                  -0.17499999701976776
+                ],
+                "max": [
+                  0.12449999153614044,
+                  0.13700000941753387,
+                  0.17499999701976776
+                ]
+              },
+              "material": 0
+            }
+          ]
+        },
+        {
+          "name": "bag",
+          "primitives": [
+            {
+              "vertex_count": 128,
+              "bounds": {
+                "min": [
+                  -0.12449999153614044,
+                  0,
+                  -0.17499999701976776
+                ],
+                "max": [
+                  0.12449999153614044,
+                  0.13700000941753387,
+                  0.17499999701976776
+                ]
+              },
+              "material": 0
+            }
+          ]
+        },
+        {
+          "name": "bag",
+          "primitives": [
+            {
+              "vertex_count": 128,
+              "bounds": {
+                "min": [
+                  -0.12449999153614044,
+                  7.219114108078224e-16,
+                  -0.17499999701976776
+                ],
+                "max": [
+                  0.12449999153614044,
+                  0.13700000941753387,
+                  0.17499999701976776
+                ]
+              },
+              "material": 0
+            }
+          ]
+        }
+      ],
+      "materials": [
+        {
+          "pbrMetallicRoughness": {
+            "baseColorTexture": {
+              "index": 0,
+              "extensions": {
+                "KHR_texture_transform": {
+                  "texCoord": 0
+                }
+              }
+            },
+            "metallicFactor": 0
+          },
+          "doubleSided": true,
+          "name": "colormap"
+        }
+      ],
+      "images": [
+        {
+          "uri": "Textures/colormap.png",
+          "name": "colormap"
+        }
+      ],
+      "animations": [],
+      "skins": []
+    },
+    "shelf-end": {
+      "asset": {
+        "generator": "UnityGLTF",
+        "version": "2.0"
+      },
+      "nodes": [
+        {
+          "children": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "mesh": 0,
+          "name": "shelf-end"
+        },
+        {
+          "mesh": 1,
+          "translation": [
+            0.203939,
+            0.55,
+            -0.2011095
+          ],
+          "name": "bottle"
+        },
+        {
+          "mesh": 2,
+          "translation": [
+            -6.789585e-9,
+            0.55,
+            -0.2011095
+          ],
+          "name": "bottle"
+        },
+        {
+          "mesh": 3,
+          "translation": [
+            -0.203939,
+            0.55,
+            -0.2011095
+          ],
+          "name": "bottle"
+        },
+        {
+          "mesh": 4,
+          "translation": [
+            0.203938976,
+            0.175000012,
+            -0.2011095
+          ],
+          "name": "carton"
+        },
+        {
+          "mesh": 5,
+          "translation": [
+            -7.936507e-9,
+            0.175000012,
+            -0.201109484
+          ],
+          "name": "carton"
+        },
+        {
+          "mesh": 6,
+          "translation": [
+            -0.203939,
+            0.175000012,
+            -0.201109484
+          ],
+          "name": "carton"
+        },
+        {
+          "mesh": 7,
+          "scale": [
+            1,
+            1,
+            0.5
+          ],
+          "translation": [
+            7.76996e-9,
+            0.8,
+            -0.351109535
+          ],
+          "name": "Group"
+        }
+      ],
+      "meshes": [
+        {
+          "name": "shelf-end",
+          "primitives": [
+            {
+              "vertex_count": 160,
+              "bounds": {
+                "min": [
+                  -0.4000000059604645,
+                  -1.6653345369377348e-16,
+                  -0.401109516620636
+                ],
+                "max": [
+                  0.4000000059604645,
+                  0.8000000715255737,
+                  -0.001109480857849121
+                ]
+              },
+              "material": 0
+            }
+          ]
+        },
+        {
+          "name": "bottle",
+          "primitives": [
+            {
+              "vertex_count": 112,
+              "bounds": {
+                "min": [
+                  -0.06799999624490738,
+                  0,
+                  -0.06799999624490738
+                ],
+                "max": [
+                  0.06799999624490738,
+                  0.2719999849796295,
+                  0.06799999624490738
+                ]
+              },
+              "material": 0
+            }
+          ]
+        },
+        {
+          "name": "bottle",
+          "primitives": [
+            {
+              "vertex_count": 112,
+              "bounds": {
+                "min": [
+                  -0.06799999624490738,
+                  0,
+                  -0.06799999624490738
+                ],
+                "max": [
+                  0.06799999624490738,
+                  0.2719999849796295,
+                  0.06799999624490738
+                ]
+              },
+              "material": 0
+            }
+          ]
+        },
+        {
+          "name": "bottle",
+          "primitives": [
+            {
+              "vertex_count": 112,
+              "bounds": {
+                "min": [
+                  -0.06799999624490738,
+                  0,
+                  -0.06799999624490738
+                ],
+                "max": [
+                  0.06799999624490738,
+                  0.2719999849796295,
+                  0.06799999624490738
+                ]
+              },
+              "material": 0
+            }
+          ]
+        },
+        {
+          "name": "carton",
+          "primitives": [
+            {
+              "vertex_count": 58,
+              "bounds": {
+                "min": [
+                  -0.07696950435638428,
+                  0,
+                  -0.07696950435638428
+                ],
+                "max": [
+                  0.07696950435638428,
+                  0.2863926291465759,
+                  0.07696950435638428
+                ]
+              },
+              "material": 0
+            }
+          ]
+        },
+        {
+          "name": "carton",
+          "primitives": [
+            {
+              "vertex_count": 58,
+              "bounds": {
+                "min": [
+                  -0.07696950435638428,
+                  0,
+                  -0.07696950435638428
+                ],
+                "max": [
+                  0.07696950435638428,
+                  0.2863926291465759,
+                  0.07696950435638428
+                ]
+              },
+              "material": 0
+            }
+          ]
+        },
+        {
+          "name": "carton",
+          "primitives": [
+            {
+              "vertex_count": 58,
+              "bounds": {
+                "min": [
+                  -0.07696950435638428,
+                  0,
+                  -0.07696950435638428
+                ],
+                "max": [
+                  0.07696950435638428,
+                  0.2863926291465759,
+                  0.07696950435638428
+                ]
+              },
+              "material": 0
+            }
+          ]
+        },
+        {
+          "name": "Group",
+          "primitives": [
+            {
+              "vertex_count": 20,
+              "bounds": {
+                "min": [
+                  -0.32499998807907104,
+                  0,
+                  -0.050000011920928955
+                ],
+                "max": [
+                  0.32499998807907104,
+                  0.2500000298023224,
+                  0.050000011920928955
+                ]
+              },
+              "material": 0
+            }
+          ]
+        }
+      ],
+      "materials": [
+        {
+          "pbrMetallicRoughness": {
+            "baseColorTexture": {
+              "index": 0,
+              "extensions": {
+                "KHR_texture_transform": {
+                  "texCoord": 0
+                }
+              }
+            },
+            "metallicFactor": 0
+          },
+          "doubleSided": true,
+          "name": "colormap"
+        }
+      ],
+      "images": [
+        {
+          "uri": "Textures/colormap.png",
+          "name": "colormap"
+        }
+      ],
+      "animations": [],
+      "skins": []
+    }
+  },
+  "available_animations": [],
+  "scope": "Original 64px source previews are not new renders, integrated art, or approval. These three models are static; the pack-wide animation total does not apply to them.",
+  "adaptations_planned": [
+    "Inspect original shelf-boxes in several native views before selecting composition.",
+    "Candidate may hide separate source carton and rear box nodes to leave a few boxes on one emphasized shelf. Preserve shelf geometry, source materials, source textures, and visible source object transforms.",
+    "Use camera, studio lighting, transparent crop and resize only after source review.",
+    "Inspect real minimum WordCard sizes and matched/unmatched states before recommending."
+  ],
+  "production_changes": false,
+  "source_preview_inspection": {
+    "date": "2026-10-16",
+    "observed": [
+      "All original previews show clean pastel low-poly retail display geometry, compatible with the existing Mini Market cart and basket.",
+      "shelf-boxes has two product levels and appears crowded in the original view. Its source node split permits hiding product children without replacing artwork.",
+      "shelf-bags depicts bagged goods, and shelf-end depicts bottles/cartons plus a colored header. These are weaker matches to the specific few-boxes brief.",
+      "The original colormap is a texture atlas containing color swatches and gradients; it has no printed word."
+    ],
+    "selected_lead": "shelf-boxes for original native inspection; no composition or image acceptance yet",
+    "other_source_status": "Originals retained for source comparison only."
+  }
+}

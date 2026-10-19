@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "status": "source_copy_preparation_failed",
+  "recorded_at": "2026-10-16T18:17:21.246Z",
+  "tool_output_chunk": "d269ff",
+  "cause": "The inline source rewrite compared escaped control characters instead of literal JavaScript source. It failed before any source file was written. The subsequent accidental launch found no module. No baseline, tests or production changes resulted.",
+  "source_files_written": 0,
+  "baseline_created": false,
+  "new_test_execution": false,
+  "production_mutated": false
+}

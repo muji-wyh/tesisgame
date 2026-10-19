@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "command": [
+    "C:\\nvm4w\\nodejs\\node.exe",
+    "build/professional-english/domain-runtime-web-fixture-r04/browser.cjs"
+  ],
+  "inputs": [
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/inventory.json",
+      "sha256": "3014a945f6da95c09cf9e885f170184d467a51fae3dfb855047b124743732e36"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-fixture-r04/source-references.json",
+      "sha256": "549140e0cb645496c3ba1c5b9b1e5e5474dfff65d0c22eec9cbb041297927b46"
+    }
+  ],
+  "started_at": "2026-10-16T20:47:10.611Z",
+  "finished_at": "2026-10-16T20:47:49.617Z",
+  "exit_code": 1,
+  "signal": null,
+  "error": null,
+  "log_sha256": "35f4fcdf3bfeab44e144bcda44b2bd199eeff51de79d680f09ba7a17ca0618d1",
+  "stage_source_before": "275de78a9848f12aea3f4f2fa1536407ab6f19078cfa36e20c2699c57eaf2e87",
+  "stage_source_after": "275de78a9848f12aea3f4f2fa1536407ab6f19078cfa36e20c2699c57eaf2e87",
+  "inputs_unchanged": true,
+  "ok": false,
+  "scope": "One isolated synthetic Web fixture stage. No production curriculum acceptance."
+}

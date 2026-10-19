@@ -1,0 +1,48 @@
+{
+  "status": "exact_basket_image_brief_and_note_integration_proposal_pending_descriptor_acceptance",
+  "sense_id": "shopping-basket.store-container.n",
+  "file": "data/professional/lexemes/retail-pilot.json",
+  "protected_scope": "Only this entry media.image including the explicitly approved empty-basket brief and the exact editorial_notes replacement may change. All other entry fields, note content, other entries, audio, morphology, course/module status and theme metadata remain outside this delta.",
+  "preimage_hash_method": "SHA-256 over UTF-8 JSON.stringify(value), native property order and no trailing newline",
+  "current_full_file_sha256": "12c40ed580248dcdecbfa7504ef57e33c792c8ba8a4a250bebf2c722b5cb1f3b",
+  "current_entry_sha256": "8ce7021f9ab782bb70991e6807afb7454ae74143b9feaa34ef214cba53d822c0",
+  "image_preimage_sha256": "6b39475b29a1d63c10c457d06d78285cf744768727e0f2133e918efd11e5505c",
+  "image_after_sha256": "c42e46b66006a37da97d49473123642dd0da7fd86e065cdc2c162d5640b9b017",
+  "editorial_notes_preimage_sha256": "e55c4f7ead2a30aa62b1767a2492f54f11214f1d9271ecaf693ff6b41b316ce4",
+  "editorial_notes_after_sha256": "00f2dddc74113bf6329347659ef358fabb3daa324f5f8ab0c1b2f7913e68f947",
+  "original_candidate_receipt_sha256": "0d7aa8f8ce232983cb44eb8368672f8d894d25ec007b63da9ff88ffe9ec4c592",
+  "candidate": {
+    "path": "build/professional-english/retail-term-art-review/shopping-basket/candidate/shopping-basket.png",
+    "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+    "bytes": 105604
+  },
+  "target_image": "professional-media/fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3.png",
+  "resource": {
+    "id": "sha256:fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+    "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+    "kind": "image",
+    "format": "png",
+    "path": "professional-media/fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3.png",
+    "width": 512,
+    "height": 454,
+    "compressed_bytes": 105604,
+    "decoded_bytes": 1859584
+  },
+  "exact_image_delta": "entry-image.after.json",
+  "exact_brief_delta": "brief.delta.json",
+  "exact_note_delta": "editorial-note.delta.json",
+  "suitability_proposal": "asset-provenance.json",
+  "validation": {
+    "schema_errors": [],
+    "entry_fields_outside_image_and_exact_note_identical": true,
+    "source_hashes_verified": 3
+  },
+  "plan": [
+    "Root reviews this exact descriptor/brief/note delta before mutation.",
+    "Art owner copies only exact accepted PNG bytes and durable provenance, preserving original brief/history.",
+    "Content owner applies exact image/note delta after checking preimages; no other gates are promoted.",
+    "After the native slot is released, verify persisted descriptor through actual raw loader/cache/WordArt/WordCard and release path. Actual incomplete modules must remain rejected.",
+    "Content owner runs the appropriate content checks after serialized deltas."
+  ],
+  "verification_manifest_scope": "One image inspection inventory, not a production module manifest and not a playable module."
+}

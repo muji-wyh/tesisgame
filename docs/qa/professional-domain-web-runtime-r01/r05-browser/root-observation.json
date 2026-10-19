@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "reviewer": "root",
+  "time": "2026-10-16T21:01:49.485Z",
+  "ok": true,
+  "receipt": {
+    "path": "build/professional-english/domain-runtime-web-browser-r05/attempt-001/browser/receipt.json",
+    "bytes": 82314,
+    "sha256": "3734fd8a9db5baa583821aefcbc109397b153fdfc4492d2d4d952a044f89ffbc"
+  },
+  "screenshot_viewed": {
+    "path": "build/professional-english/domain-runtime-web-browser-r05/attempt-001/browser/phrase-runtime.png",
+    "bytes": 98211,
+    "sha256": "e4ddb21af911d064bbe4c9a9f3a20c6ece3514e9b925565e93b1a3cc6cc1ca9c"
+  },
+  "visual_observation": "All eight normal HTML buttons are visibly above the canvas, and the real sourced store illustration is visible inside the fixture canvas. Screenshot is warm claimed state, not full gameplay or timing evidence.",
+  "cold": {
+    "policy_reads": 5,
+    "manifest_reads": 1,
+    "media_requests": 6,
+    "resources": 6,
+    "resident_bytes": 17798266
+  },
+  "warm": {
+    "policy_reads": 0,
+    "manifest_reads": 0,
+    "media_requests": 6
+  },
+  "final": {
+    "owner_alive": false,
+    "cache_alive": false,
+    "leases": 0,
+    "closed": true,
+    "pending": 0,
+    "callbacks": 0,
+    "timers": 0,
+    "progress_requests": 14,
+    "progress_completions": 14,
+    "held_released": 1,
+    "page_errors": 0
+  },
+  "limits": [
+    "full game_ui.new_round and view teardown",
+    "other five real modes",
+    "accepted answer/wallet/outbox settlement",
+    "physical devices",
+    "audibility",
+    "performance and memory targets",
+    "Disposal captures 17,798,266 bytes in six pinned cache resources before freeing the cache object; dead owner/cache checks do not measure browser heap reclamation.",
+    "Fixture uses synthetic ready phrase content; production still has zero ready modules.",
+    "The policy change is only in the copied fixture shell; this is not a new Godot export or a production source change."
+  ]
+}

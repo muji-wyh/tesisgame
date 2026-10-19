@@ -206,7 +206,7 @@ func refresh(palette: Dictionary, selected: bool, matched: bool, wrong: bool, lo
 	match_mark.pair_number = pair_index + 1 if matched else 0
 	match_mark.tint = pair_tint
 	match_mark.active = matched and pair_focused
-	match_mark.visible = matched
+	match_mark.visible = matched and not _professional_word_face()
 	match_mark.queue_redraw()
 	picture.modulate.a = 0.68 if matched else 1.0
 	word_label.modulate.a = 0.75 if matched else 1.0
@@ -347,12 +347,49 @@ func _fit_text() -> void:
 	var font_size: int = clampi(int(minf(size.x * 0.36, size.y * 0.52)), 20, 64)
 	var minimum_font: int = 12
 	var available_width: float = word_label.size.x if size.x < 72 else size.x - 18
-	while font_size > minimum_font and font.get_string_size(word_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > available_width:
-		font_size -= 1
+	if card_data.get("word", {}).get("track") == "professional":
+		var display_scale: float = Style.ui_scale(self)
+		var inset: float = 6 / display_scale
+		available_width = maxf(1, size.x - inset * 2)
+		var available_height: float = maxf(1, size.y - inset * 2)
+		minimum_font = ceili(16 / display_scale)
+		font_size = maxi(font_size, minimum_font)
+		# Preserve full terms and wrap at spaces, never inside an arbitrary spelling chunk.
+		word_label.autowrap_mode = TextServer.AUTOWRAP_WORD
+		word_label.add_theme_constant_override("line_spacing", 0)
+		word_label.offset_left = inset
+		word_label.offset_right = -inset
+		word_label.offset_top = inset
+		word_label.offset_bottom = -inset
+		while font_size > minimum_font:
+			var measured: Vector2 = font.get_multiline_string_size(word_label.text, HORIZONTAL_ALIGNMENT_CENTER, available_width, font_size)
+			if measured.x <= available_width and measured.y <= available_height:
+				break
+			font_size -= 1
+	else:
+		while font_size > minimum_font and font.get_string_size(word_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > available_width:
+			font_size -= 1
 	if word_label.get_theme_font_size("font_size") != font_size:
 		word_label.add_theme_font_size_override("font_size", font_size)
+	if card_data.get("word", {}).get("track") == "professional":
+		# Label includes its own rounded line height and spacing after text shaping.
+		# The font's multiline estimate alone can leave the last line clipped.
+		while font_size > minimum_font and (word_label.get_visible_line_count() < word_label.get_line_count() \
+				or word_label.get_line_count() * word_label.get_line_height() > word_label.size.y):
+			font_size -= 1
+			word_label.add_theme_font_size_override("font_size", font_size)
+		if word_label.get_visible_line_count() < word_label.get_line_count():
+			# Compact phone cards retain the readable font and use the font's own leading.
+			var display_scale: float = Style.ui_scale(self)
+			var text_height: float = word_label.get_line_count() * word_label.get_line_height()
+			var vertical_inset: float = maxf(0, floorf((size.y - text_height) * display_scale * 0.5)) / display_scale
+			word_label.offset_top = vertical_inset
+			word_label.offset_bottom = -vertical_inset
 	# Short Memory cards need a smaller corner mark to leave the word readable.
 	if match_mark != null:
+		# Professional word faces retain their matched border, tint and face state.
+		# Keep the pair badge on the picture partner so it cannot cover any letters.
+		match_mark.visible = _feedback_state == "matched" and not _professional_word_face()
 		if _back != null:
 			var scale: float = Style.ui_scale(self)
 			var side: float = minf(22 / scale, minf(size.x, size.y) * 0.3)
@@ -366,3 +403,7 @@ func _fit_text() -> void:
 		match_mark.offset_right = -4 if short_card else -8
 		match_mark.offset_top = 0 if short_card else 8
 		match_mark.offset_bottom = 14 if short_card else 36
+
+
+func _professional_word_face() -> bool:
+	return card_data.get("word", {}).get("track") == "professional" and card_data.get("kind") == "word"

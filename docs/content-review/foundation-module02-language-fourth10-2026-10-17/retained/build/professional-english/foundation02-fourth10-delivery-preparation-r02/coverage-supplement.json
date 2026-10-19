@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "status": "pre_execution_exact_id_coverage_supplement",
+  "recorded_at": "2026-10-16T21:12:06.786Z",
+  "author_source_before_sha256": "ca74606235ce905a2d566d62dc84de3c5525dfd9d70f9acd76413eaec9430c6e",
+  "author_source_after_sha256": "ca74606235ce905a2d566d62dc84de3c5525dfd9d70f9acd76413eaec9430c6e",
+  "retained_initial_derivation_sha256": "317d94037e9ccd27a6c38feb34bb199fec697d61f0f22ddbb1a4b6b2b181164c",
+  "input_sources": [
+    {
+      "path": "test-transforms.cjs",
+      "raw_sha256": "8c7d14a179b193bc8d107956e17cdc93d5bf24b02a227c5428b2b0b8c900f786"
+    },
+    {
+      "path": "prepare.cjs",
+      "raw_sha256": "5f72577a8651ed37c1bc7b6df0a66ad745645f65a6a060e022e967b031656790"
+    }
+  ],
+  "output_sources": [
+    {
+      "path": "test-transforms.cjs",
+      "bytes": 23426,
+      "raw_sha256": "7886b3c0d03766f2f0a3f460e6e2cbf391384338fe747f8defa2ce308d1d4dc9"
+    },
+    {
+      "path": "prepare.cjs",
+      "bytes": 9161,
+      "raw_sha256": "612d9b98fd62b62492f7140a034ccb29a8c75fb07fc2937fa6b7787e35c98621"
+    }
+  ],
+  "edits": [
+    {
+      "file": "test-transforms.cjs",
+      "before": "test('Foundation02 fourth-ten language leaves exact morphology, media and historical Foundation donors unchanged', () => {\n",
+      "after": "test('Foundation02 fourth-ten language leaves exact morphology, media and historical Foundation donors unchanged', () => {\n  assert.deepEqual(foundation02FourthLanguageRecord.patches.map(p=>p.id),['submit.send-for-consideration.v','approve.authorize.v','reject.decline-acceptance.v','sign.write-name.v','delay.late-occurrence.n','error.mistake.n','fault.equipment-defect.n','damage.physical-harm.n','shortage.insufficient-supply.n','missing.not-present.adj']);\n",
+      "count": 1
+    },
+    {
+      "file": "prepare.cjs",
+      "before": "'revision-derivation.json', 'freeze-inputs.cjs', 'author-inventory.json']",
+      "after": "'revision-derivation.json', 'author-coverage-r02.cjs', 'coverage-supplement.json', 'freeze-inputs.cjs', 'author-inventory.json']",
+      "count": 1
+    }
+  ],
+  "reason": "Explicit ten-ID coverage before the patch loop prevents any unexpected non-sign ID from inheriting a default count rule. The five histories remain explicit and ordered.",
+  "candidate_implementation_executed_before_edit": false,
+  "production_mutated": false,
+  "shared_tests_mutated": false,
+  "project_modules_imported": false,
+  "preparation_dispatched": false,
+  "tests_or_native_dispatched": false
+}

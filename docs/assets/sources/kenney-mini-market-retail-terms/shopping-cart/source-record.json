@@ -1,0 +1,145 @@
+{
+  "status": "scratch_source_inspection_then_one_candidate_only",
+  "sense_id": "shopping-cart.store-trolley.n",
+  "approved_brief": "Show a full-size retail trolley in a three-quarter side view with basket, push handle, lower frame, and four wheels legible. Keep it mostly empty so its structure is visible. Exclude a hand-carried basket, flat warehouse trolley, wheelchair, or online cart icon. Inspect the Mini Market shopping-cart lead before rendering.",
+  "approval": "Root authorized this exact first-term brief after reading its definition, example and source scope; the full fifty-entry proposal remains separate.",
+  "source": "https://kenney.nl/assets/mini-market",
+  "creator": "Kenney; Fleur Keijsers; Guus Vermeulen",
+  "license": "CC0 1.0",
+  "acquisition_status": "Existing acquired and retained source; not integrated or reviewed as term media.",
+  "files": [
+    {
+      "path": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/shopping-cart.glb",
+      "sha256": "8933fdece5c43b619ea6902fa03a5fea9f490486048ae7543cc8b03ee98c98dd",
+      "bytes": 34832
+    },
+    {
+      "path": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/Textures/colormap.png",
+      "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e",
+      "bytes": 8706
+    },
+    {
+      "path": "docs/assets/sources/kenney-mini-market-retail-theme/License.txt",
+      "sha256": "5ee4df809330c05896f223c97f250cc1bdc13b46a370eb464533c85c94146070",
+      "bytes": 767
+    }
+  ],
+  "model_structure": {
+    "meshes": 1,
+    "nodes": [
+      {
+        "mesh": 0,
+        "name": "shopping-cart"
+      }
+    ],
+    "skins": [],
+    "animations": [],
+    "images": [
+      {
+        "uri": "Textures/colormap.png",
+        "name": "colormap"
+      }
+    ],
+    "materials": [
+      {
+        "pbrMetallicRoughness": {
+          "baseColorTexture": {
+            "index": 0,
+            "extensions": {
+              "KHR_texture_transform": {
+                "texCoord": 0
+              }
+            }
+          },
+          "metallicFactor": 0
+        },
+        "doubleSided": true,
+        "name": "colormap"
+      }
+    ],
+    "accessors": [
+      {
+        "type": "VEC3",
+        "componentType": 5126,
+        "count": 638,
+        "min": [
+          -0.15000000596046448,
+          0,
+          -0.25391489267349243
+        ],
+        "max": [
+          0.15000000596046448,
+          0.390559583902359,
+          0.22500000894069672
+        ]
+      },
+      {
+        "type": "VEC3",
+        "componentType": 5126,
+        "count": 638,
+        "min": [
+          -1.0000001192092896,
+          -1,
+          -1.0000001192092896
+        ],
+        "max": [
+          1.0000001192092896,
+          1,
+          1.0000001192092896
+        ]
+      },
+      {
+        "type": "VEC4",
+        "componentType": 5126,
+        "count": 638,
+        "min": [
+          -1.0000001192092896,
+          -0.258819043636322,
+          -1.0000001192092896,
+          -1
+        ],
+        "max": [
+          1.0000001192092896,
+          0.258819043636322,
+          1.0000001192092896,
+          1
+        ]
+      },
+      {
+        "type": "VEC2",
+        "componentType": 5126,
+        "count": 638,
+        "min": [
+          0.09375,
+          0.5249999761581421
+        ],
+        "max": [
+          0.59375,
+          0.9750000238418579
+        ]
+      },
+      {
+        "type": "SCALAR",
+        "componentType": 5123,
+        "count": 1152,
+        "min": [
+          0
+        ],
+        "max": [
+          637
+        ]
+      }
+    ]
+  },
+  "available_animations": [],
+  "planned_adaptations": [
+    "Unaltered source geometry/materials in a dedicated three-quarter camera",
+    "Static studio lighting, transparent background, no added procedural machine parts",
+    "Final still inspected at exact minimum actual Match126x72 and Memory144x74 card sizes, including matched badge/tint"
+  ],
+  "limitations": [
+    "Source mesh is a static cart; no invented wheels, frame, contents or articulation",
+    "No curriculum, media or recognition approval; one scratch candidate awaits root inspection",
+    "No production term media or review gate changes"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "schema": 1,
+  "started_at": "2026-10-16T20:24:40.964Z",
+  "script_sha256": "8ca8d1dd88f9833272d66d4d69879a4ba54ca85903baaff3309ec96a477e4ae1",
+  "attempt": 1,
+  "method": "Read-only JSON and SHA256 comparison; write new evidence only under this directory.",
+  "production_dispatch": false
+}

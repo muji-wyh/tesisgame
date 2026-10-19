@@ -1,0 +1,863 @@
+{
+  "schema": 1,
+  "status": "independent_contract_target_and_evidence_inspection_passed",
+  "reviewer": "Codex runtime_recovery",
+  "recorded_at": "2026-10-16T22:43:29.9610838Z",
+  "contract": {
+    "path": "build/professional-english/shopping-bag-root-commit-r01/contract.json",
+    "bytes": 58680,
+    "sha256": "94d2dd3c166a57f4dc5ec7e456944edf4f131e6769ebce4385b4977414f9ee0b"
+  },
+  "draft": {
+    "path": "build/professional-english/shopping-bag-root-commit-r01/input.draft.json",
+    "bytes": 61149,
+    "sha256": "730fa89a0f066d8d7f74193e1cb9e80b61309e4ebaacdd78a629a0c7ff8ae77b"
+  },
+  "target_manifest": {
+    "path": "build/professional-english/shopping-bag-root-commit-r01/target-manifest.json",
+    "bytes": 52694,
+    "sha256": "16c0ace567f602e9ea05cc3d82609bd8387dc6abe3e41bb60ac643edf42505a2"
+  },
+  "encoded_contract_hash_matches": true,
+  "draft_contract_exact": true,
+  "token_hash_matches": true,
+  "target_counts": {
+    "total": 153,
+    "replacements": 4,
+    "absent_additions": 149,
+    "extra_evidence": 119,
+    "noops": 0
+  },
+  "independently_reconstructed_target_sha256": "16c0ace567f602e9ea05cc3d82609bd8387dc6abe3e41bb60ac643edf42505a2",
+  "source_descriptor_occurrences": 227,
+  "unique_raw_descriptors_checked": 155,
+  "required_source_witnesses": 7,
+  "target_evidence_overlaps": 0,
+  "path_or_link_failures": 0,
+  "target_preconditions": [
+    {
+      "path": "data/professional/lexemes/retail-pilot.json",
+      "condition": "exact_preimage",
+      "passed": true
+    },
+    {
+      "path": "tests/professional-content.test.cjs",
+      "condition": "exact_preimage",
+      "passed": true
+    },
+    {
+      "path": "tests/professional-retail-morphology.test.cjs",
+      "condition": "exact_preimage",
+      "passed": true
+    },
+    {
+      "path": "tests/professional-retail-media.test.cjs",
+      "condition": "exact_preimage",
+      "passed": true
+    },
+    {
+      "path": "professional-media/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "data/professional/provenance/retail-shopping-bag-image-2026-10-17.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/professional-retail-shopping-bag.md",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/actual-baseline-binding.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-committed-state.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/attempt-001/command-1.log",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/attempt-001/command-2.log",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/attempt-001/command-3.log",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/attempt-001/command-4.log",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/attempt-001/receipt.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/attempt-001/start.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/invoke.cjs",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/independent-proposal-review/review.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/author-proposal.cjs",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/entry-afterimage.proposed.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/entry-preimage.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/evidence-lock.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/generation-observation.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/image-descriptor.proposed.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/integration-plan.md",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/inventory.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/media/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/patch.proposed.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/production-document-template.md",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/production-provenance-template.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/protected-media-observation.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/README.md",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/rebase-contract.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/resource.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/test-delta-plan.md",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/author-inventory.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r01/dependency-supplement.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-preparation-source-review-r02/final-source-review.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-root-preparation-r02/invoke.cjs",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-root-preparation-r02/input.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-root-preparation-r02/prepared-inspection.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-root-preparation-r02/attempt-001/start.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-root-preparation-r02/attempt-001/receipt.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-root-preparation-r02/attempt-001/command-1.log",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-root-preparation-r02/attempt-001/command-2.log",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-root-preparation-r02/attempt-001/command-3.log",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/preparation-receipt.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/execution-end.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/execution-start.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/production-document.prepared.md",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/production-provenance.prepared.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-content.test.cjs.after",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-content.test.cjs.before",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-retail-media.test.cjs.after",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-retail-media.test.cjs.before",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-retail-morphology.test.cjs.after",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-retail-morphology.test.cjs.before",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/projection-observation.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retail-pilot.json.after",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retail-pilot.json.before",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/000.bin",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/001.bin",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/002.bin",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/003.bin",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/004.bin",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/005.bin",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/006.bin",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/007.bin",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/008.bin",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/009.bin",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/010.bin",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/011.bin",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/012.bin",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/013.bin",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/014.bin",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/015.bin",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/016.bin",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/017.bin",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/018.bin",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/019.bin",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/020.bin",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/021.bin",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/022.bin",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/023.bin",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/024.bin",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/025.bin",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/026.bin",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/target-plan.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/test-edit-ledger.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/CALL-GRAPH.md",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/README.md",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/TRANSACTION.md",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/actual-baseline-binding.template.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/author-final-binding-r02.cjs",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/author-final-binding-r03.cjs",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/author-final-binding.cjs",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/authoring-failure-r01.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/authoring-failure-r02.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/before-final-binding/CALL-GRAPH.md",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/before-final-binding/README.md",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/before-final-binding/TRANSACTION.md",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/before-final-binding/actual-baseline-binding.template.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/before-final-binding/inventory.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/before-final-binding/prepare.cjs",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/before-final-binding/test-transforms.cjs",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/prepare.cjs",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/retained-evidence-allowlist.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/retained-evidence-pins.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/test-transforms.cjs",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r01/run.cjs",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r01/input.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r01/attempt-001/start.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r01/attempt-001/receipt.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-preparation-source-review-r02/candidate-dispatch-review-r01.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r02/r01-failure-inspection.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r02/authoring-failure-r01.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r02/dependency-supplement.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r02/run.cjs",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r02/input.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-preparation-source-review-r02/candidate-r03-recursive-dependency-supplement.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r03/candidate-r03-recursive-dependency-supplement.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-preparation-source-review-r02/candidate-r03-derived-path-coverage.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r03/candidate-r03-derived-path-coverage.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-preparation-source-review-r02/candidate-r03-derived-recursive-supplement.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r03/candidate-r03-derived-recursive-supplement.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r03/dependency-supplement.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r03/run.cjs",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r03/input.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r03/attempt-001/start.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r03/attempt-001/receipt.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-preparation-source-review-r02/candidate-dispatch-review-r03.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-final-artifacts-r01/finalize.cjs",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-final-artifacts-r01/candidate-command-witness.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-preparation-source-review-r02/finalizer-source-review-r01.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-final-artifacts-r01/input.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-preparation-source-review-r02/candidate-dispatch-review-r02.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-preparation-source-review-r02/finalizer-input-review-r01.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-preparation-source-review-r02/finalizer-output-review-r01.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-final-artifacts-r01/output/additional-retained-files.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-final-artifacts-r01/output/receipt.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-commit-independent-review-r01/source-review.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-commit-independent-review-r01/inspection.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-commit-independent-review-r01/inventory.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-commit-independent-review-r01/guard-wrapper-source-review.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-commit-independent-review-r01/guard-wrapper-review-inventory.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-commit-proposal-r01/commit.cjs",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-commit-proposal-r01/guard-probe.cjs",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-commit-proposal-r01/author-inventory.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-commit-proposal-r01/probe-inventory.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-commit-proposal-r01/README.md",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-commit-proposal-r01/GUARD-PROBE.md",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-commit-proposal-r01/input.template.json",
+      "condition": "absent",
+      "passed": true
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-root-guard-r01/invoke.cjs",
+      "condition": "absent",
+      "passed": true
+    }
+  ],
+  "finalizer_reviews": [
+    {
+      "path": "build/professional-english/shopping-bag-preparation-source-review-r02/finalizer-input-review-r01.json",
+      "bytes": 45091,
+      "sha256": "f667b9eb3363500f5b7e6dbfc763559024b8076903d5b7dd57cd16d1c55fd97b"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-preparation-source-review-r02/finalizer-output-review-r01.json",
+      "bytes": 2204,
+      "sha256": "f862d5299f71d0c06ae4e05b4b7605246cf8ab310b606b1eec2737b3d8b1143f"
+    }
+  ],
+  "finalizer_output_receipt": {
+    "path": "build/professional-english/shopping-bag-final-artifacts-r01/output/receipt.json",
+    "bytes": 933,
+    "sha256": "335a506fab04693264326416e294c466c7820ba52bdc32044c209e8cb9da858c"
+  },
+  "finalized": [
+    {
+      "target": "data/professional/provenance/retail-shopping-bag-image-2026-10-17.json",
+      "source": {
+        "path": "build/professional-english/shopping-bag-final-artifacts-r01/output/production-provenance.final.json",
+        "bytes": 126206,
+        "sha256": "2fdd0ad9c9526a7c1dad5b490bdb0a9663c0b8b2e1aa321f373d9c63d8e63880"
+      }
+    },
+    {
+      "target": "docs/assets/professional-retail-shopping-bag.md",
+      "source": {
+        "path": "build/professional-english/shopping-bag-final-artifacts-r01/output/production-document.final.md",
+        "bytes": 5734,
+        "sha256": "107aa26fded69319e27f87902c1570973845b3a40474ae10b982d26c1c944070"
+      }
+    }
+  ],
+  "finalizer_mapping_exact": 101,
+  "retained_provenance_mappings": 128,
+  "prior_retained_files_verified": 0,
+  "hold_review": {
+    "path": "build/professional-english/shopping-bag-preparation-source-review-r02/candidate-dispatch-review-r02.json",
+    "bytes": 1884,
+    "sha256": "072493c31fc50f1ae54c7c919da1c6a88e92c6dbf70951c8154fd55e1dee3b5e"
+  },
+  "actual_success_fields_false_or_null": true,
+  "fresh_absent_state": [
+    "build/professional-english/transactions/shopping-bag-image-r01",
+    "build/professional-english/shopping-bag-root-commit-r01/execution-r01",
+    "build/professional-english/transactions/active-transaction.json",
+    "build/professional-english/shopping-bag-root-guard-r01/attempt-001"
+  ],
+  "execution": {
+    "inspection": "PowerShell/.NET raw source, path, JSON and hash inspection only",
+    "project_source_imported": false,
+    "project_tests_executed": false,
+    "probe_executed": false,
+    "native_executed": false,
+    "transaction_executed": false,
+    "production_mutated": false
+  }
+}

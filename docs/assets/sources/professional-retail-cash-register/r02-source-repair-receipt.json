@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-10-16T11:44:26.301Z",
+  "status": "static_r02_sources_prepared_production_unread_and_unfrozen",
+  "predecessor_inputs_unchanged": {
+    "render-and-check.gd": "f67176238f8a6d0d70650c45a88fa78702af92eabe6ddd7b8e536b3cf31c3e71",
+    "run-candidate.cjs": "31b06c45046f5018beeb7b6193f60220f91be517902389d63b50849d49aee6ca",
+    "prepare-candidate.cjs": "c958f92677a17b40771a196b13b63f51a61e8fc15905b17f52af74078962a4f8",
+    "make-review-aids.py": "91f7e8eeb04790bafba518dd87b558ce96c947afb8b5e63b0b9a2a61e277db5e",
+    "README.md": "879e5da801e181708f6a563903a40586e7586c4819a9aeffd71ae609d3fb532a"
+  },
+  "outputs": {
+    "render-and-check.gd": "38e323ae30d3312f8ba1fcb6b3cf58cb1fdb22094a40d813ad6cd884417b8441",
+    "run-candidate.cjs": "feaef5eb7aab508836c5ee1547e7ab83e045f136f9672f66ae804112be555ea4",
+    "prepare-candidate.cjs": "189d86baae618e533a520155112ba262db68b2afbdfeacf5fa22a211d556e526",
+    "make-review-aids.py": "91f7e8eeb04790bafba518dd87b558ce96c947afb8b5e63b0b9a2a61e277db5e",
+    "README.md": "d907375fb399bde23a4f75b525ecaeec9d6b5f479f4af2d595d2c03654c794ea",
+    "recovery-note.json": "c53eff4acace2a4646f882dceb961974171140371c59ad7d5b8ee25c0ba50f96"
+  },
+  "previous_native_log_sha256": "e0428fa91c9f7d5b3e4a78de94696ee75e916066a13f3eeef50e289de4e91825",
+  "native_execution": false,
+  "production_snapshot_taken": false,
+  "production_writes": false,
+  "next_dependency": "Root handoff of successful R26 validation receipt hash"
+}

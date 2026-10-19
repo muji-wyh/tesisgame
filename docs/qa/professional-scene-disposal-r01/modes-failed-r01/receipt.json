@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "started_at": "2026-10-16T19:53:12.719Z",
+  "finished_at": "2026-10-16T19:53:45.819Z",
+  "results": [
+    {
+      "label": "professional_scene_modes_disposal-syntax",
+      "command": [
+        "godot",
+        "--headless",
+        "--path",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+        "--check-only",
+        "--script",
+        "res://tests/godot/professional_scene_modes_disposal_tests.gd"
+      ],
+      "started_at": "2026-10-16T19:53:12.721Z",
+      "finished_at": "2026-10-16T19:53:14.545Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log_sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d",
+      "ok": true
+    },
+    {
+      "label": "professional_scene_modes_disposal-runtime",
+      "command": [
+        "godot",
+        "--headless",
+        "--path",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+        "--script",
+        "res://tests/godot/professional_scene_modes_disposal_tests.gd"
+      ],
+      "started_at": "2026-10-16T19:53:14.548Z",
+      "finished_at": "2026-10-16T19:53:45.526Z",
+      "exit_code": 1,
+      "signal": null,
+      "error": null,
+      "log_sha256": "a4a06716d42fb191d16bda7c29a778e157132456146e952d14107c93176f8c0b",
+      "ok": false
+    }
+  ],
+  "planned_executions": 2,
+  "inputs_unchanged": true,
+  "input_count": 271,
+  "ok": false,
+  "scope": "Other five actual Professional views and late browser publisher disposal, after final exit guard. No compiled Web success, curriculum, media approval, physical-device, performance or acoustic acceptance."
+}

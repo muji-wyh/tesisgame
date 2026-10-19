@@ -1,0 +1,15 @@
+{
+  "id": "inform.give-information.v",
+  "text": "inform",
+  "display_text": "inform",
+  "pos": "verb",
+  "definition": "To give someone information about something.",
+  "example": "Please inform the team if the meeting time changes.",
+  "difficulty": "B2",
+  "accepted_forms": [
+    "inform"
+  ],
+  "regions": [
+    "general"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "status": "final_artifacts_prepared_no_production_mutation",
+  "candidate_receipt": {
+    "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r03/attempt-001/receipt.json",
+    "raw_sha256": "9a5ee12cf7ac2c4f6f6e41e7a05357a365eab570a5da1d4ce2a696143c73c121"
+  },
+  "outputs": [
+    {
+      "file": "production-provenance.final.json",
+      "sha256": "2fdd0ad9c9526a7c1dad5b490bdb0a9663c0b8b2e1aa321f373d9c63d8e63880"
+    },
+    {
+      "file": "production-document.final.md",
+      "sha256": "107aa26fded69319e27f87902c1570973845b3a40474ae10b982d26c1c944070"
+    },
+    {
+      "file": "additional-retained-files.json",
+      "sha256": "5e6fc0bb60079eb18cb5341ed2c812aad931c40747d4419f529ac24ce003925a"
+    }
+  ],
+  "production_mutated": false,
+  "actual_commit_claimed": false,
+  "persisted_validation_claimed": false
+}

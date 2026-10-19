@@ -1,0 +1,992 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.nursing.equipment.01",
+      "text": "Where is the clean wheelchair kept?",
+      "meaning": "Ask where an available mobility chair is stored.",
+      "context": "A staff member asks a colleague about equipment.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Where",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "is",
+          "start": 6,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 9,
+          "end": 12
+        },
+        {
+          "index": 3,
+          "text": "clean",
+          "start": 13,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "wheelchair",
+          "start": 19,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "kept",
+          "start": 30,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "?",
+          "start": 34,
+          "end": 35
+        }
+      ],
+      "focus_lexeme_ids": [
+        "wheelchair.mobility-chair.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Original authored workplace expression; language and domain review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.equipment.02",
+      "text": "The call button is beside your bed.",
+      "meaning": "Describe the location of a control for requesting help.",
+      "context": "A nurse introduces a patient to the room.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "call",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "button",
+          "start": 9,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "is",
+          "start": 16,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "beside",
+          "start": 19,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "your",
+          "start": 26,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "bed",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": ".",
+          "start": 34,
+          "end": 35
+        }
+      ],
+      "focus_lexeme_ids": [
+        "call-button.assistance-control.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Original authored workplace expression; language and domain review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.equipment.03",
+      "text": "Could you bring another blanket, please?",
+      "meaning": "Politely request an additional warm covering.",
+      "context": "A patient or colleague asks for a comfort item.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Could",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "you",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "bring",
+          "start": 10,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "another",
+          "start": 16,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "blanket",
+          "start": 24,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 31,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "please",
+          "start": 33,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "?",
+          "start": 39,
+          "end": 40
+        }
+      ],
+      "focus_lexeme_ids": [
+        "blanket.bed-covering.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Original authored workplace expression; language and domain review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.equipment.04",
+      "text": "The patient room is at the end of the corridor.",
+      "meaning": "Give directions to a room used for patient care.",
+      "context": "A staff member assists a visitor.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "patient",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "room",
+          "start": 12,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "is",
+          "start": 17,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "at",
+          "start": 20,
+          "end": 22
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 23,
+          "end": 26
+        },
+        {
+          "index": 6,
+          "text": "end",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 7,
+          "text": "of",
+          "start": 31,
+          "end": 33
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 34,
+          "end": 37
+        },
+        {
+          "index": 9,
+          "text": "corridor",
+          "start": 38,
+          "end": 46
+        },
+        {
+          "index": 10,
+          "text": ".",
+          "start": 46,
+          "end": 47
+        }
+      ],
+      "focus_lexeme_ids": [
+        "patient-room.hospital-room.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Original authored workplace expression; language and domain review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.equipment.05",
+      "text": "The thermometer is missing from the tray.",
+      "meaning": "Report that an expected instrument is not present.",
+      "context": "A staff member checks equipment availability.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "thermometer",
+          "start": 4,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "is",
+          "start": 16,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "missing",
+          "start": 19,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "from",
+          "start": 27,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "tray",
+          "start": 36,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": ".",
+          "start": 40,
+          "end": 41
+        }
+      ],
+      "focus_lexeme_ids": [
+        "thermometer.temperature-device.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Original authored workplace expression; language and domain review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.equipment.06",
+      "text": "The family is waiting in the waiting room.",
+      "meaning": "Explain where visitors are currently sitting.",
+      "context": "Staff coordinate communication with a patient's family.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "family",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "is",
+          "start": 11,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "waiting",
+          "start": 14,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "in",
+          "start": 22,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 25,
+          "end": 28
+        },
+        {
+          "index": 6,
+          "text": "waiting",
+          "start": 29,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": "room",
+          "start": 37,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": ".",
+          "start": 41,
+          "end": 42
+        }
+      ],
+      "focus_lexeme_ids": [
+        "waiting-room.visitor-area.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Original authored workplace expression; language and domain review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.equipment.07",
+      "text": "Please ask at the nurses' station.",
+      "meaning": "Direct someone to the nursing staff work area.",
+      "context": "A visitor needs help finding a member of staff.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "ask",
+          "start": 7,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "at",
+          "start": 11,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 4,
+          "text": "nurses",
+          "start": 18,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "'",
+          "start": 24,
+          "end": 25
+        },
+        {
+          "index": 6,
+          "text": "station",
+          "start": 26,
+          "end": 33
+        },
+        {
+          "index": 7,
+          "text": ".",
+          "start": 33,
+          "end": 34
+        }
+      ],
+      "focus_lexeme_ids": [
+        "nurses-station.work-area.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Original authored workplace expression; language and domain review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.equipment.08",
+      "text": "The supply room has extra disposable gloves.",
+      "meaning": "Explain where additional protective supplies are kept.",
+      "context": "Colleagues discuss stock availability.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "supply",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "room",
+          "start": 11,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "has",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "extra",
+          "start": 20,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "disposable",
+          "start": 26,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "gloves",
+          "start": 37,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": ".",
+          "start": 43,
+          "end": 44
+        }
+      ],
+      "focus_lexeme_ids": [
+        "supply-room.equipment-storage.n",
+        "disposable-glove.protective-covering.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Original authored workplace expression; language and domain review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.equipment.09",
+      "text": "This patient monitor needs an equipment check.",
+      "meaning": "Report that a device requires attention.",
+      "context": "A staff member raises an equipment concern without prescribing a procedure.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "This",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "patient",
+          "start": 5,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "monitor",
+          "start": 13,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "needs",
+          "start": 21,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "an",
+          "start": 27,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "equipment",
+          "start": 30,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "check",
+          "start": 40,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": ".",
+          "start": 45,
+          "end": 46
+        }
+      ],
+      "focus_lexeme_ids": [
+        "patient-monitor.observation-device.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Original authored workplace expression; language and domain review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.equipment.10",
+      "text": "The privacy curtain is closed.",
+      "meaning": "Describe the current position of a screening curtain.",
+      "context": "Staff communicate about a patient's surroundings.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "privacy",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "curtain",
+          "start": 12,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "is",
+          "start": 20,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "closed",
+          "start": 23,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": ".",
+          "start": 29,
+          "end": 30
+        }
+      ],
+      "focus_lexeme_ids": [
+        "privacy-curtain.room-divider.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "openstax-vital-signs",
+          "status": "pending_term_check",
+          "scope": "Original authored workplace expression; language and domain review remain pending."
+        }
+      ]
+    }
+  ]
+}

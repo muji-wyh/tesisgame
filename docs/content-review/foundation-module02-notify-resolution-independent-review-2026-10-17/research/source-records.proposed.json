@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "status": "unregistered_author_source_row_proposal_pending_independent_review",
+  "sources": [
+    {
+      "id": "foundation02-notify-resolution-oxford-inform",
+      "title": "Oxford Advanced Learner's Dictionary: inform giving-information verb",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/inform",
+      "status": "consulted",
+      "consulted_on": "2026-10-17",
+      "scope": "Author consultation of selected sense 1 and recipient-of/about/that/if patterns only. Fresh selected tag inform_sng_1 carries cefr=b2. Proposed meaning, original example and editorial B2 require independent review. Inform on, inform oneself and influencing a decision are excluded. No publisher sentence, exercise, image or recording is imported. Morphology, clinical context, all media, the whole expression and release acceptance are not granted.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation02-notify-resolution-collins-inform",
+      "title": "Collins COBUILD Dictionary: inform giving-information verb",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/inform",
+      "status": "consulted",
+      "consulted_on": "2026-10-17",
+      "scope": "Author consultation of the selected giving-information verb, explicitly B1+, and recipient constructions. The literal B1+ observation supports a bounded proposed B2 editorial placement alongside Oxford selected-sense B2; it is not rounded or generalized to all senses. Whole-entry language approval, reporting-on and influence meanings, morphology, specialist context, media and the full expression remain outside this consultation.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation02-notify-resolution-cefrj-v15",
+      "title": "The CEFR-J Wordlist Version 1.5: inform verb row",
+      "publisher": "Tono Laboratory, Tokyo University of Foreign Studies; Open Language Profiles distribution",
+      "url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/cefrj-vocabulary-profile-1.5.csv",
+      "status": "consulted",
+      "consulted_on": "2026-10-17",
+      "scope": "Fresh exact inform verb B1 row at physical line 3499 is headword/POS support only. Cite The CEFR-J Wordlist Version 1.5, compiled by Yukio Tono, Tokyo University of Foreign Studies. Repository terms permit research/commercial use without charge with proper citation; the separate Octanove terms are excluded. Only the selected row and metadata are retained. No selected-sense, sentence, morphology, media or course acceptance follows. The absent notify verb row does not prove a level.",
+      "asset_license": null,
+      "assets_acquired": false
+    }
+  ]
+}

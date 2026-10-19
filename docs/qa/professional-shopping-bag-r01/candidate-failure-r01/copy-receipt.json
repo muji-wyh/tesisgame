@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "status": "exact_failed_candidate_evidence_copied",
+  "files": [
+    {
+      "source": "build/professional-english/shopping-bag-projected-validation-r01/run.cjs",
+      "path": "run.cjs",
+      "bytes": 7657,
+      "sha256": "815e2387471801fbaeb148a1c27a668265fe352a6b3875b37b381b948bf03073"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-projected-validation-r01/input.json",
+      "path": "input.json",
+      "bytes": 755325,
+      "sha256": "e391994e98771ff5148da8b8ff85fd55b6e5af885d8a371333a4a876a388e484"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-projected-validation-r01/attempt-001/start.json",
+      "path": "attempt-001/start.json",
+      "bytes": 235,
+      "sha256": "f9605aa728ec270ddb3fc9051ccc6ba00c6a9ca60712eceeef9b5c15576e9130"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-projected-validation-r01/attempt-001/receipt.json",
+      "path": "attempt-001/receipt.json",
+      "bytes": 63055,
+      "sha256": "e5d4b2cf9a9ac657b92404f4f4f0b7a57ed460f058fc30ee550a92734d26a978"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-preparation-source-review-r02/final-source-review.json",
+      "path": "source-review.json",
+      "bytes": 7382,
+      "sha256": "52425b72e4f13b010e047f9ac4a7ec4342aa15fd8a1c6f9aa00506b0c1384814"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-preparation-source-review-r02/candidate-dispatch-review-r01.json",
+      "path": "dispatch-review.json",
+      "bytes": 7270,
+      "sha256": "6c6992a4c1171b542d2c1e10bc1318cd75be11b56f0dbf0715cb4dea58cbe992"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-projected-validation-r02/r01-failure-inspection.json",
+      "path": "root-failure-inspection.json",
+      "bytes": 653,
+      "sha256": "dcc7f076095c0fd5bee53fb0a50ad9e39dc0b2e95016322e0b8e54fdc3ba43a5"
+    }
+  ],
+  "readme": {
+    "path": "README.md",
+    "sha256": "160f06b1e572f4c794579959494152c6f494fad0fca8cd2c3008b259caa2089b"
+  },
+  "production_modified": false
+}

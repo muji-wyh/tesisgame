@@ -1,0 +1,59 @@
+{
+  "schema": 1,
+  "status": "prepared_nine_language_delivery_unbound_no_production_writes",
+  "checks": 2414,
+  "production_content_written": false,
+  "shared_tests_mutated": false,
+  "native_executed": false,
+  "tests_executed": false,
+  "baseline_bound": false,
+  "root_acceptance_raw_sha256": "7963a7d82f34d00af2b54a6b25a8b9d1b631e8f9c0a56438e61e95c28b211e8c",
+  "independent_review_raw_sha256": "5c2b512b3869514919f24f7e1ac569436d8e9487edf5d7572ea9f5702fb6dde6",
+  "delivery_proposal_raw_sha256": "08b5ac43650b8f03b5b2c5f7d893f8e068973bb7736275e4e4001f3d78afaaed",
+  "durable_history_draft_raw_sha256": "cce236a0e3b899a81958857ddccc982b59da1c480164ca74ecab9f30f7a25a70",
+  "scratch_preview_receipt_raw_sha256": "5708ae5b5b305e5d6493c100a7baab492f61342556be828972f57e9b38def187",
+  "helper": {
+    "helper_source": "build/professional-english/retail-module03-morphology-review/fifth10/serializer-review-r01/guarded-transaction.cjs",
+    "helper_raw_sha256": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6",
+    "helper_validation": {
+      "path": "build/professional-english/retail-module03-morphology-review/fifth10/serializer-review-r01/validation-attempt-XE9O6l/receipt.json",
+      "raw_sha256": "abd19b9952fe3085ef8cab5b87e430ef442780ed05f3a9a2105f909f968a9bae",
+      "tests": 20,
+      "pass": 20,
+      "fail": 0
+    },
+    "adapter_source": "build/professional-english/retail-term-art-review/counter-r01/delivery-r02/transaction-plan.cjs",
+    "adapter_raw_sha256": "dca101335d6c1f9bdc379f566c1d048e094638371e720f7afde2398ca1ab1ea2",
+    "adapter_validation": {
+      "path": "build/professional-english/retail-term-art-review/counter-r01/delivery-r02/adapter-tests-r02/result.json",
+      "raw_sha256": "61764fb1c4587e19d88a27d9494988539a17336cf0687baa792fc5e214c0a38d",
+      "assertions": 32,
+      "failures": 0
+    },
+    "scope": "Byte-identical reused guarded helper and plan adapter. Earlier scratch fault-test receipts remain evidence; this Foundation language package performs no native run or rerun of those fixtures.",
+    "copied_origin_record": {
+      "path": "build/professional-english/retail-audio-review/counter-checkout-acquired-r01/delivery-r01/helper-origin.json",
+      "raw_sha256": "ca9fc913ac187268813e900f55e3748e4317944a29ed43f0578aa3ce18dc012d"
+    }
+  },
+  "delivery_files": {
+    "delivery-lib.cjs": "d00c8aeef136d9e8c1e6dcc0f64bbb356948232e4f4b4ed1a70a930b2f0ec074",
+    "bind-current-baseline.cjs": "52fbf36d5564ad93359efdf2ac918296f0946668eaa97b12ea672355ae207291",
+    "integrate-reviewed.cjs": "ee0bd1d2e39bb79968944dc2fbe4725a797f5381b89cc2fdf42122bf9fd9de85",
+    "transaction-plan.cjs": "dca101335d6c1f9bdc379f566c1d048e094638371e720f7afde2398ca1ab1ea2",
+    "guarded-transaction.cjs": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6",
+    "helper-origin.json": "27d5dd2d62ed8cfdae225489fc059a2cb774122a42c7343e7257886ccfc73a3a",
+    "persisted-test-transforms.cjs": "2a1a4a7dc73aef0933915a5ca6a75fe9736c92fa600a4dc6e20e473b50133d2e",
+    "update-persisted-tests.cjs": "688acb59afce8d66c14052810e3d499140d3de96ea3d60c4a425fad14e773035",
+    "prepare-delivery.cjs": "6204af71b013c89fdd9bf032c85ae707d891b4a6e2e675f022d11dc838a2609f",
+    "HANDOFF.md": "a6a2051d97505842b45ed6813a618b3a6fed487382b24a00ad53dbc63edf44b2",
+    "durable-history-draft.md": "fe5880dd64cd8aeda0ac04f633baaf793c791ca1726fe1a52aeaab551d162af8",
+    "preparation-lineage.json": "02f86ef01dcd40775aec4c53e1b91d6698f15e3e7c3f9042dad78d595fb30838"
+  },
+  "accepted": 9,
+  "held": 1,
+  "registered_source_additions": 9,
+  "retained_consulted_pages": 12,
+  "expression_mutations": 0,
+  "limits": "Read-only structural preparation and syntax checks only. Root owns baseline selection, all transactions and post-integration Node/native validation."
+}

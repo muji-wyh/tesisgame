@@ -5,6 +5,11 @@ signal mode_requested(id: String)
 signal sound_toggled
 signal collection_requested
 signal theme_requested(id: String)
+signal learning_context_selected(context: Dictionary)
+signal learning_continue_requested(context: Dictionary)
+signal learning_retry_requested
+signal learning_cancel_requested
+signal learning_course_selected(course_id: String)
 
 const Style = preload("res://scripts/ui_style.gd")
 const Data = preload("res://scripts/game_data.gd")
@@ -15,8 +20,11 @@ const CoinCounter = preload("res://scripts/coin_counter.gd")
 const ResultScroll = preload("res://scripts/result_scroll.gd")
 const ModePreview = preload("res://scripts/game_mode_preview.gd")
 const GrowthMeterShader = preload("res://scripts/home_growth_meter.gdshader")
+const LearningSelector = preload("res://scripts/learning_path_selector.gd")
+const LearningThemeArt = preload("res://scripts/learning_theme_art.gd")
+const Context = preload("res://scripts/learning_context.gd")
 const CATALOG := [
-	{"id": "word_jelly", "title": "Jelly Words", "copy": "Join letters.\nOpen treasure chests.", "detail": "BUILD WORDS · OPEN CHESTS", "tint": Color("#eee5f4")},
+	{"id": "word_jelly", "title": "Jelly Words", "copy": "Explore word parts.\nCollect whole words.", "detail": "BUILD WORDS · OPEN CHESTS", "tint": Color("#eee5f4")},
 	{"id": "match", "title": "Match", "copy": "Match a picture\nto its word.", "detail": "5 PAIRS", "tint": Color("#e6efe3")},
 	{"id": "memory", "title": "Memory", "copy": "Remember, flip,\nfind the pair.", "detail": "NO TIMER", "tint": Color("#f2e9d8")},
 	{"id": "pop", "title": "Voice Pop", "copy": "Say the word.\nPop flying cards.", "detail": "50 SECONDS · MIC", "tint": Color("#e3eef1")},
@@ -61,6 +69,15 @@ var _factor := 1.0
 var _muted := false
 var _keyboard_focus_visible := false
 var _available := Vector2(1280, 800)
+var learning: LearningSelector
+var _learning_catalog: RefCounted
+var _learning_selection: Dictionary = {}
+var _learning_palette: Dictionary = {}
+var _learning_initialized := false
+var _continuation: Dictionary = {}
+var _continue_round: Button
+var _professional_library_available := false
+var _learning_art: LearningThemeArt
 
 
 func _init() -> void:
@@ -90,6 +107,23 @@ func _init() -> void:
 	_body.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.add_child(_body)
+	_continue_round = Button.new()
+	_continue_round.name = "ContinueCurrentRound"
+	UiClick.bind_button(_continue_round)
+	_continue_round.pressed.connect(func() -> void: learning_continue_requested.emit(_continuation.duplicate(true)))
+	_body.add_child(_continue_round)
+	_continue_round.hide()
+	_learning_art = LearningThemeArt.new()
+	_learning_art.name = "WorkplacePreview"
+	_body.add_child(_learning_art)
+	learning = LearningSelector.new()
+	_body.add_child(learning)
+	learning.context_selected.connect(func(context: Dictionary) -> void: learning_context_selected.emit(context))
+	learning.continue_requested.connect(func(context: Dictionary) -> void: learning_continue_requested.emit(context))
+	learning.retry_requested.connect(func() -> void: learning_retry_requested.emit())
+	learning.cancel_requested.connect(func() -> void: learning_cancel_requested.emit())
+	learning.course_selected.connect(func(id: String) -> void: learning_course_selected.emit(id))
+	learning.browsing_changed.connect(func(_screen: String) -> void: _sync_learning_layout())
 	_hero = Control.new()
 	_hero.name = "HomeWelcome"
 	_hero.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -114,6 +148,7 @@ func _init() -> void:
 	for entry: Dictionary in CATALOG:
 		_add_game_card(entry)
 	_build_theme_choices()
+	_theme_choices.hide()
 	_footer = HBoxContainer.new()
 	_body.add_child(_footer)
 	collection_button = Button.new()
@@ -271,7 +306,7 @@ func configure_theme(id: String, disabled: bool, save_failed: bool) -> void:
 
 
 func _style_surface() -> void:
-	var surface := Style.box(Style.PAPER.lerp(Data.theme(_theme_id).background, 0.16), Color.TRANSPARENT, 0, 0)
+	var surface := Style.box(Style.PAPER.lerp(_learning_palette.get("background", Data.theme(_theme_id).background), 0.16), Color.TRANSPARENT, 0, 0)
 	surface.set_content_margin_all(0)
 	add_theme_stylebox_override("panel", surface)
 
@@ -305,8 +340,34 @@ func _style_theme_choices() -> void:
 func _ready() -> void:
 	pip.name = "HomePip"
 	pip.set("accessibility_name", "Pip. Play a friendly gesture")
+	get_viewport().gui_focus_changed.connect(_home_focus_changed)
 	_sync_pip_visibility()
 	fit(_available, _factor)
+
+
+func _home_focus_changed(control: Control) -> void:
+	if _keyboard_focus_visible and is_visible_in_tree() and is_instance_valid(control) and scroll.is_ancestor_of(control):
+		_reveal_home_focus.call_deferred(control)
+
+
+func _reveal_home_focus(control: Control) -> void:
+	if not is_instance_valid(control) or not control.has_focus() or not control.is_visible_in_tree():
+		return
+	var viewport: Rect2 = scroll.get_global_rect()
+	var rect: Rect2 = control.get_global_rect()
+	var padding: float = 3.0 / _factor
+	var next: int = scroll.scroll_vertical
+	if rect.size.y + padding * 2.0 > viewport.size.y:
+		# A short landscape viewport cannot show a whole illustrated card.
+		# Start at its title/art instead of revealing only its final status line.
+		next += floori(rect.position.y - viewport.position.y - padding)
+	elif rect.end.y + padding > viewport.end.y:
+		next += ceili(rect.end.y + padding - viewport.end.y)
+	elif rect.position.y - padding < viewport.position.y:
+		next -= ceili(viewport.position.y - rect.position.y + padding)
+	# Native focus scrolling truncates fractional logical pixels. Round outward
+	# so a scaled Home does not leave the focused footer or its outline clipped.
+	scroll.scroll_vertical = clampi(next, 0, maxi(0, ceili(scroll.get_v_scroll_bar().max_value - scroll.get_v_scroll_bar().page)))
 
 
 func _add_game_card(entry: Dictionary) -> void:
@@ -446,6 +507,11 @@ func fit(available: Vector2, factor: float) -> void:
 	scroll.size = Vector2(content_width, maxf(1.0, available.y - scroll_top - edge))
 	_body.add_theme_constant_override("separation", ceili((12.0 if not wide else 16.0) / _factor))
 	_style_theme_choices()
+	learning.fit(_factor, wide)
+	Style.action_button(_continue_round, Style.GOOD)
+	_continue_round.custom_minimum_size.y = 48.0 / _factor
+	_continue_round.add_theme_font_size_override("font_size", ceili(14.0 / _factor))
+	_continue_round.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	grid.columns = 3 if wide else 2
 	grid.add_theme_constant_override("h_separation", ceili((14.0 if wide else 10.0) / _factor))
 	grid.add_theme_constant_override("v_separation", ceili((14.0 if wide else 10.0) / _factor))
@@ -458,6 +524,7 @@ func fit(available: Vector2, factor: float) -> void:
 	_style_footer()
 	_credit.add_theme_font_size_override("font_size", ceili(10.0 / _factor))
 	_layout_hero()
+	_sync_learning_layout()
 
 
 func _style_footer() -> void:
@@ -591,12 +658,17 @@ func snapshot() -> Dictionary:
 			"animating": tile.preview.is_processing(), "reduced_motion": tile.preview.reduced_motion,
 			"elapsed": tile.preview._elapsed, "duration": tile.preview.DURATION})
 	var viewport: Rect2 = scroll.get_global_rect()
-	for button: Button in theme_buttons + buttons + [collection_button, sound_button]:
+	for button: Button in theme_buttons + buttons + [collection_button, sound_button, _continue_round]:
 		var rect: Rect2 = button.get_global_rect()
 		controls.append({"name": str(button.name), "rect": _rect_values(rect), "disabled": button.disabled,
 			"visible": button.is_visible_in_tree() and viewport.intersects(rect), "fully_visible": viewport.encloses(rect),
 			"focused": button.has_focus(), "selected": button.button_pressed, "visible_rect": _rect_values(viewport.intersection(rect))})
-	return {"visible": is_visible_in_tree(), "current": _current, "controls": controls, "previews": previews,
+	for control: Control in learning.controls():
+		var rect: Rect2 = control.get_global_rect()
+		controls.append({"name": str(control.name), "rect": _rect_values(rect), "disabled": false,
+			"visible": viewport.intersects(rect), "fully_visible": viewport.encloses(rect),
+			"focused": control.has_focus(), "selected": false, "visible_rect": _rect_values(viewport.intersection(rect))})
+	return {"visible": is_visible_in_tree(), "current": _current, "controls": controls, "previews": previews, "learning": learning.snapshot(),
 		"keyboard_focus_visible": _keyboard_focus_visible,
 		"hero": {"title": heading.text, "goal": _journey_heading.text, "count": _journey_count.text, "ready": _growth.get("ready", false),
 			"completed": _growth.get("completed", false), "mastered": _growth.get("mastered", 0), "total": _growth.get("total", 0),
@@ -612,3 +684,78 @@ func snapshot() -> Dictionary:
 
 func _rect_values(rect: Rect2) -> Array:
 	return [rect.position.x, rect.position.y, rect.size.x, rect.size.y]
+
+
+func configure_learning(catalog: RefCounted, selection: Dictionary, state: Dictionary, continuation: Dictionary = {}, library_available: bool = false) -> void:
+	_professional_library_available = library_available
+	if _learning_catalog != catalog:
+		_learning_catalog = catalog
+		learning.configure(catalog)
+	_continuation = continuation.duplicate(true)
+	_continue_round.visible = not continuation.is_empty()
+	if not continuation.is_empty():
+		var title: String = "Grow with Pip"
+		var module_title: String = "Age " + str(continuation.module_id)
+		if continuation.track == "professional":
+			var course: Dictionary = catalog.course(continuation.course_id)
+			title = str(course.get("title", continuation.course_id))
+			for module in course.get("modules", []):
+				if module.id == continuation.module_id:
+					module_title = str(module.title)
+		_continue_round.text = "Continue · %s\n%s" % [title, module_title]
+	if not _learning_initialized or Context.identity(selection) != Context.identity(_learning_selection):
+		_learning_initialized = true
+		_learning_selection = selection.duplicate(true)
+		learning.set_selection(selection)
+	learning.set_progress(state.get("session", {}))
+	var phase: String = str(state.get("phase", "idle"))
+	var busy: bool = phase in ["media", "storage", "restoring"]
+	var message: String = str(state.get("error", ""))
+	if busy:
+		message = "Preparing your workplace pictures and sound..." if phase == "media" else "Loading your saved learning progress..."
+	learning.set_status(message, busy, phase == "failed" or phase == "ready")
+	_sync_learning_layout()
+
+
+func apply_learning_palette(palette: Dictionary) -> void:
+	_learning_palette = palette
+	_style_surface()
+
+
+func apply_learning_art(profile: Dictionary, reduced: bool) -> void:
+	_learning_art.show_profile(profile, "preview", reduced)
+	_sync_learning_layout()
+
+
+func _sync_learning_layout() -> void:
+	if not is_instance_valid(_hero) or not is_instance_valid(grid) or not is_instance_valid(collection_button):
+		return
+	var state: Dictionary = learning.snapshot()
+	var summary: bool = state.screen == "summary"
+	var css: Vector2 = _available * _factor
+	var preview_height: float = (72.0 if css.y <= 440.0 else 180.0 if css.x >= 800.0 else 150.0) / _factor
+	var layout_changed: bool = not is_equal_approx(_learning_art.custom_minimum_size.y, preview_height)
+	if layout_changed:
+		_learning_art.custom_minimum_size.y = preview_height
+	# Keep the current workplace identity while loading and recovery actions fit
+	# above the fold on compact phones and short landscape windows.
+	var needs_action: bool = state.busy or (state.retry and not str(state.status).is_empty())
+	var show_preview: bool = _learning_art.has_art() and not (css.y <= 600.0 and needs_action)
+	var growth_selected: bool = _learning_selection.get("track", "growth") == "growth"
+	layout_changed = layout_changed or _learning_art.visible != show_preview \
+		or _hero.visible != (summary and growth_selected) or grid.visible != summary \
+		or collection_button.visible != (growth_selected or _professional_library_available) or _theme_choices.visible
+	_learning_art.visible = show_preview
+	_hero.visible = summary and growth_selected
+	grid.visible = summary
+	collection_button.visible = growth_selected or _professional_library_available
+	_theme_choices.hide()
+	if layout_changed:
+		queue_sort()
+
+
+func learning_focus() -> Control:
+	if _continue_round.visible and not _continue_round.disabled:
+		return _continue_round
+	var available: Array[Control] = learning.controls()
+	return available[0] if not available.is_empty() else sound_button

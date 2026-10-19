@@ -13,7 +13,8 @@ test('Grow with Pip branding keeps the existing internal save identity', () => {
   const project = fs.readFileSync(path.join(root, 'project.godot'), 'utf8');
   assert.match(project, /^config\/name="Word Buddies"$/m);
   assert.match(shell, /wordBuddies\.medalProgress/);
-  assert.match(shell, /wordBuddies\.playroom/);
+  assert.doesNotMatch(shell, /(?:removeItem|setItem)\(['"]wordBuddies\.playroom['"]/,
+    'Automatic learning themes must not rewrite historical playroom data');
 });
 
 test('the web bootstrap references only existing script dependencies', () => {
@@ -23,6 +24,71 @@ test('the web bootstrap references only existing script dependencies', () => {
   for (const [, name] of dependencies.matchAll(/"([a-z_]+)"/g)) {
     assert.ok(fs.existsSync(path.join(root, 'scripts', `${name}.gd`)), `Missing startup dependency: ${name}`);
   }
+});
+
+function themeEntryHost({ selectedTheme = 'spring', reveal } = {}) {
+  const shell = fs.readFileSync(path.join(root, 'web', 'shell.html'), 'utf8');
+  const entry = shell.slice(shell.indexOf('      let nativeThemePresentation = null;'),
+    shell.indexOf("      enterButton.addEventListener('click'"));
+  const background = shell.slice(shell.indexOf('        background(color,'),
+    shell.indexOf('        observe(onHidden,'));
+  assert.ok(entry && background, 'Execute the maintained shell entry and native theme callback');
+  const meta = { content: '#152e29' }, properties = new Map(), outfits = [], reveals = [];
+  const state = {
+    failed: false, entered: false, selectedTheme,
+    loadingThemes: { spring: { background: '#effbef' }, ocean: { background: '#e7f8fa' } },
+    enterButton: { disabled: false },
+    document: { hidden: false, body: { style: {}, dataset: {} }, querySelector: () => meta },
+    container: { style: { setProperty: (name, value) => properties.set(name, value) } },
+    window: { removeEventListener() {} }, status: { hidden: false },
+    canvas: { inert: true, focus() {} }, interfaceClickSound: { play() {} },
+    gameAudioRecovery: { enter() {} }, speechDebug: { setAvailable() {} }, onSpeechDebug: null,
+    revealGame: theme => { reveals.push(theme); reveal?.(host); },
+    stopLoadingPlay() {}, onEngineFailure() {}, startupFailure(error) { throw error; },
+    setPipTheme: theme => outfits.push(theme)
+  };
+  const host = require('node:vm').runInNewContext(`${entry}\n({ enterGame, ${background} })`, state);
+  return { host, meta, properties, outfits, reveals, state };
+}
+
+test('native learning theme delivered before entry survives the loading screen reveal', () => {
+  const { host, meta, properties, outfits, reveals, state } = themeEntryHost();
+  host.background('#f4f5ef', '#587654', '#e1eadc', 'spring');
+  assert.equal(meta.content, '#152e29', 'The loading palette stays visible before entry');
+  assert.deepEqual(outfits, []);
+  host.enterGame(true);
+  assert.equal(meta.content, '#f4f5ef', 'Restored Growth must not revert to the legacy Spring palette');
+  assert.equal(state.document.body.style.backgroundColor, '#f4f5ef');
+  assert.equal(properties.get('--voice-accent'), '#587654');
+  assert.equal(properties.get('--voice-light'), '#e1eadc');
+  assert.deepEqual(outfits, ['spring']);
+  assert.deepEqual(reveals, ['spring']);
+  assert.equal(state.document.body.dataset.engineReady, 'true');
+  assert.equal(state.canvas.inert, false);
+  host.enterGame(true);
+  assert.deepEqual(reveals, ['spring'], 'Repeated entry cannot reveal the game again');
+});
+
+test('native themes delivered during and after reveal take precedence over earlier presentation', () => {
+  const { host, meta, outfits } = themeEntryHost({
+    reveal: nativeHost => nativeHost.background('#e8edf2', '#345678', '#abcdef', 'winter')
+  });
+  host.background('#f4f5ef', '#587654', '#e1eadc', 'spring');
+  host.enterGame(true);
+  assert.equal(meta.content, '#e8edf2');
+  assert.equal(outfits.at(-1), 'winter');
+  host.background('#f8eddf', '#764321', '#eadcba', 'autumn');
+  assert.equal(meta.content, '#f8eddf');
+  assert.equal(outfits.at(-1), 'autumn');
+});
+
+test('entry without a native theme callback falls back to the selected loading palette', () => {
+  const { host, meta, reveals, state } = themeEntryHost({ selectedTheme: 'ocean' });
+  host.enterGame(true);
+  assert.equal(meta.content, '#e7f8fa');
+  assert.deepEqual(reveals, ['ocean']);
+  assert.equal(state.document.body.dataset.engineReady, 'true');
+  assert.equal(state.status.hidden, true);
 });
 
 test('the delivery preset exports a single-threaded Godot Web game with JSON data', () => {
@@ -42,8 +108,8 @@ test('the delivery preset exports a single-threaded Godot Web game with JSON dat
   assert.match(preset, /html\/custom_html_shell="res:\/\/web\/shell\.html"/);
   assert.match(preset, /html\/canvas_resize_policy=0/);
   assert.match(preset, /html\/focus_canvas_on_start=false/);
-  assert.match(preset, /html\/experimental_virtual_keyboard=false/,
-    'The removed profile editor no longer requires the native keyboard bridge');
+  assert.match(preset, /html\/experimental_virtual_keyboard=true/,
+    'Career and module-word search require the mobile virtual keyboard bridge');
   const excluded = preset.match(/^exclude_filter="([^"]*)"$/m)[1].split(',');
   for (const word of JSON.parse(fs.readFileSync(path.join(root, 'words.json'), 'utf8'))) {
     const pictures = word.image ? [`assets/images/word-library/${word.id}.webp`, `assets/images/word-motion/${word.id}.webp`] : [];
@@ -156,15 +222,21 @@ test('accessible help describes current paid items, Home navigation and Jelly se
   assert.doesNotMatch(help, /\bFX\b|season menu|Reduce motion button|sound and motion on Home|until you choose a preference|without a penalty|Y or Menu for More|fresh Match round after the card games/i);
   assert.match(help, /device.*reduced-motion/i);
   assert.match(help, /Keep trying until every pair is matched/);
-  assert.match(help, /Match hints cost 100, 150, then 200 coins per round/);
+  assert.match(help, /Match hints cost 100 coins for the first use, 150 for the second, and 200 for every later use in the round/);
   assert.match(help, /first Memory peek in each round is free[\s\S]*second costs 100 coins, the third 200, and every later peek 300/);
-  assert.match(help, /Games and themes can only be changed from Home/);
-  assert.match(help, /On Home, LB and RB change the theme/);
+  assert.match(help, /Themes follow your selected learning path and career automatically/);
+  assert.match(help, /failed or cancelled course download preserves your previous round/);
+  assert.match(help, /independently of Pip's growth/);
   assert.match(help, /fresh round in the same game: Match, Memory, or Phrase Builder/);
   assert.match(help, /Keyboard or controller activation opens a Keep playing \/ Finish confirmation/);
   assert.match(help, /settlement dialog over the frozen board, even when no chest was earned/);
-  assert.match(help, /ca onto t makes cat, but t onto ca cannot merge/);
-  assert.match(help, /merge is allowed only when the combined spelling is a complete word/);
+  assert.doesNotMatch(help, /ca onto t|letter parts fall|choose Spring, Summer|50 for two original parts or 100/);
+  assert.match(help, /help and -ful make helpful/);
+  assert.match(help, /Partial forms give no completed-word reward/);
+  assert.match(help, /Atomic words such as cat arrive as one complete jelly/);
+  assert.match(help, /exposure, not spelling mastery/);
+  assert.match(help, /50 bonus coins regardless of its number of parts or occupied cells/);
+  assert.match(help, /Read pauses play and shows the full spelling/);
   assert.match(help, /Collect gathers all ready words one at a time at 120 ms intervals, without word pronunciation/);
   assert.match(help, /Auto merge costs 600, 900, then 1200 coins/);
   assert.match(help, /Treasure costs 200, 300, then 400 coins[\s\S]*2 to 8 chest fragments/);
@@ -175,7 +247,7 @@ test('accessible help describes current paid items, Home navigation and Jelly se
 test('the web shell retires Talk Quest without accessing or clearing its saved progress', () => {
   const shell = fs.readFileSync(path.join(root, 'web', 'shell.html'), 'utf8');
   const help = shell.match(/<p\b[^>]*id="help"[^>]*>([\s\S]*?)<\/p>/)?.[1];
-  assert.match(help, /Choose Match, Memory, Voice Pop, Phrase Builder, Jelly Match, or Jelly Words\./);
+  assert.match(help, /choose Match, Memory, Voice Pop, Phrase Builder, Jelly Match, or Jelly Words\./i);
   assert.doesNotMatch(shell, /Talk Quest|quest-status|createQuestHost|questHost|questProgress|saveQuestProgress|questStatus|observeQuestSpeech|questTargets?/);
   assert.doesNotMatch(shell, /wordBuddies\.talkQuest|localStorage\.clear\s*\(/,
     'Retired adventure progress stays on the device and is neither read nor erased');
@@ -247,7 +319,8 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
   fixture.writeImport('assets/audio/coins/collect.wav');
   fixture.writeImport('assets/audio/coins/release.wav');
   fixture.writeImport('assets/audio/jelly-finish/ready.ogg');
-  for (const cue of ['clear', 'land', 'danger']) fixture.writeImport(`assets/audio/jelly-match/${cue}.wav`);
+  for (const cue of ['collect-do', 'collect-re', 'collect-mi', 'collect-fa', 'collect-sol', 'collect-la', 'collect-ti',
+    'land', 'danger']) fixture.writeImport(`assets/audio/jelly-match/${cue}.wav`);
   for (const cue of ['contact', 'merge-together-v3']) fixture.writeImport(`assets/imported-audio/jelly-interaction/${cue}.wav`);
   require('./helpers/pair-feedback-assets.cjs').pairFeedbackFixture(fixture.directory, fixture.writeImport);
   require('./helpers/ui-click-assets.cjs').uiClickFixture(fixture.directory, fixture.writeImport);
@@ -257,13 +330,18 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
     fixture.writeImport(`assets/audio/bgm/${theme}.wav`);
   }
   const required = collectRequiredAudio(fixture.directory);
-  assert.equal(required.length, 373);
+  assert.equal(required.length, 379);
   assert.equal(fs.existsSync(path.join(fixture.directory, 'assets/audio/chests')), false,
     'Packaging succeeds without the archived theme recordings');
   assert.ok(required.every(asset => !asset.source.startsWith('res://assets/audio/chests/')),
     'The reviewed shared bank replaces every former theme-specific chest cue');
-  assert.equal(required.filter(asset => /\/(jelly-match|jelly-interaction|jelly-finish)\//.test(asset.source)).length, 6,
+  assert.equal(required.filter(asset => /\/(jelly-match|jelly-interaction|jelly-finish)\//.test(asset.source)).length, 12,
     'Every Jelly cue is required in the startup pack');
+  assert.deepEqual(required.filter(asset => asset.source.includes('/jelly-match/collect-')).map(asset => asset.source),
+    ['do', 're', 'mi', 'fa', 'sol', 'la', 'ti'].map(note => `res://assets/audio/jelly-match/collect-${note}.wav`),
+    'Every collection note ships in the startup pack');
+  assert.ok(required.every(asset => asset.source !== 'res://assets/audio/jelly-match/clear.wav'),
+    'The legacy collection source is no longer required at runtime');
   assert.deepEqual(required.slice(-4), reference);
   assert.ok(required.some(asset => asset.source === 'res://assets/audio/sfx/pop-launch.wav'),
     'The source-checkout launch fallback also ships in the startup pack');

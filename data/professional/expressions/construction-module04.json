@@ -1,0 +1,1634 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.construction_trades.module04.01",
+      "text": "The specification lists cement for one item, concrete for another, and mortar for the masonry joints.",
+      "meaning": "Distinguish different construction materials in a specification.",
+      "context": "Reading material descriptions without giving mixture or application instructions.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "specification",
+          "start": 4,
+          "end": 17
+        },
+        {
+          "index": 2,
+          "text": "lists",
+          "start": 18,
+          "end": 23
+        },
+        {
+          "index": 3,
+          "text": "cement",
+          "start": 24,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": "for",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "one",
+          "start": 35,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "item",
+          "start": 39,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 43,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "concrete",
+          "start": 45,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "for",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "another",
+          "start": 58,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 65,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 67,
+          "end": 70
+        },
+        {
+          "index": 13,
+          "text": "mortar",
+          "start": 71,
+          "end": 77
+        },
+        {
+          "index": 14,
+          "text": "for",
+          "start": 78,
+          "end": 81
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 82,
+          "end": 85
+        },
+        {
+          "index": 16,
+          "text": "masonry",
+          "start": 86,
+          "end": 93
+        },
+        {
+          "index": 17,
+          "text": "joints",
+          "start": 94,
+          "end": 100
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 100,
+          "end": 101
+        }
+      ],
+      "focus_lexeme_ids": [
+        "cement.powdered-binder-used-in-construction-mixtures.n",
+        "concrete.construction-material-with-binder-water-and-aggregate.n",
+        "mortar.binding-mixture-used-between-masonry-units.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-electricians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module04.02",
+      "text": "The grout, tile, and adhesive references must match the reviewed finish specification.",
+      "meaning": "Check the identities of products in a finishing system.",
+      "context": "Discussing product records before specialist review.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "grout",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": ",",
+          "start": 9,
+          "end": 10
+        },
+        {
+          "index": 3,
+          "text": "tile",
+          "start": 11,
+          "end": 15
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 15,
+          "end": 16
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 6,
+          "text": "adhesive",
+          "start": 21,
+          "end": 29
+        },
+        {
+          "index": 7,
+          "text": "references",
+          "start": 30,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": "must",
+          "start": 41,
+          "end": 45
+        },
+        {
+          "index": 9,
+          "text": "match",
+          "start": 46,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 11,
+          "text": "reviewed",
+          "start": 56,
+          "end": 64
+        },
+        {
+          "index": 12,
+          "text": "finish",
+          "start": 65,
+          "end": 71
+        },
+        {
+          "index": 13,
+          "text": "specification",
+          "start": 72,
+          "end": 85
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 85,
+          "end": 86
+        }
+      ],
+      "focus_lexeme_ids": [
+        "grout.material-used-to-fill-joints-or-voids.n",
+        "tile.thin-unit-used-to-cover-building-surface.n",
+        "adhesive.substance-used-to-bond-surfaces.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-electricians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module04.03",
+      "text": "The delivery record lists sand and gravel as aggregate, with the stone finish recorded separately.",
+      "meaning": "Distinguish granular material categories from a separate finishing material.",
+      "context": "Reconciling a fictional material delivery with its record.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "delivery",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "record",
+          "start": 13,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "lists",
+          "start": 20,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "sand",
+          "start": 26,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "gravel",
+          "start": 35,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "as",
+          "start": 42,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "aggregate",
+          "start": 45,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 54,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": "with",
+          "start": 56,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 61,
+          "end": 64
+        },
+        {
+          "index": 12,
+          "text": "stone",
+          "start": 65,
+          "end": 70
+        },
+        {
+          "index": 13,
+          "text": "finish",
+          "start": 71,
+          "end": 77
+        },
+        {
+          "index": 14,
+          "text": "recorded",
+          "start": 78,
+          "end": 86
+        },
+        {
+          "index": 15,
+          "text": "separately",
+          "start": 87,
+          "end": 97
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 97,
+          "end": 98
+        }
+      ],
+      "focus_lexeme_ids": [
+        "sand.fine-granular-mineral-material.n",
+        "gravel.coarse-loose-rock-particles.n",
+        "aggregate.granular-material-used-in-construction.n",
+        "stone.natural-rock-used-as-building-material.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-electricians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module04.04",
+      "text": "The brick sample, plywood grade, and plasterboard type are still awaiting confirmation.",
+      "meaning": "Report unresolved material selections.",
+      "context": "Updating the team on material-review status.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "brick",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "sample",
+          "start": 10,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 16,
+          "end": 17
+        },
+        {
+          "index": 4,
+          "text": "plywood",
+          "start": 18,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "grade",
+          "start": 26,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 31,
+          "end": 32
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 33,
+          "end": 36
+        },
+        {
+          "index": 8,
+          "text": "plasterboard",
+          "start": 37,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": "type",
+          "start": 50,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "are",
+          "start": 55,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": "still",
+          "start": 59,
+          "end": 64
+        },
+        {
+          "index": 12,
+          "text": "awaiting",
+          "start": 65,
+          "end": 73
+        },
+        {
+          "index": 13,
+          "text": "confirmation",
+          "start": 74,
+          "end": 86
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 86,
+          "end": 87
+        }
+      ],
+      "focus_lexeme_ids": [
+        "brick.small-masonry-unit-used-in-building.n",
+        "plywood.wood-panel-made-of-bonded-veneer-layers.n",
+        "plasterboard.panel-with-gypsum-core-and-facing-layers.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-electricians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module04.05",
+      "text": "The paint, primer, varnish, and sealant each have a separate product reference.",
+      "meaning": "Identify distinct coating and sealing products.",
+      "context": "Checking a product schedule without recommending compatibility.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "paint",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": ",",
+          "start": 9,
+          "end": 10
+        },
+        {
+          "index": 3,
+          "text": "primer",
+          "start": 11,
+          "end": 17
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 17,
+          "end": 18
+        },
+        {
+          "index": 5,
+          "text": "varnish",
+          "start": 19,
+          "end": 26
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 26,
+          "end": 27
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 8,
+          "text": "sealant",
+          "start": 32,
+          "end": 39
+        },
+        {
+          "index": 9,
+          "text": "each",
+          "start": 40,
+          "end": 44
+        },
+        {
+          "index": 10,
+          "text": "have",
+          "start": 45,
+          "end": 49
+        },
+        {
+          "index": 11,
+          "text": "a",
+          "start": 50,
+          "end": 51
+        },
+        {
+          "index": 12,
+          "text": "separate",
+          "start": 52,
+          "end": 60
+        },
+        {
+          "index": 13,
+          "text": "product",
+          "start": 61,
+          "end": 68
+        },
+        {
+          "index": 14,
+          "text": "reference",
+          "start": 69,
+          "end": 78
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 78,
+          "end": 79
+        }
+      ],
+      "focus_lexeme_ids": [
+        "paint.coating-material-applied-to-surface.n",
+        "primer.preparatory-coating-applied-before-later-coats.n",
+        "varnish.coating-forming-usually-transparent-protective-film.n",
+        "sealant.material-used-to-close-gaps-against-passage.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-electricians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module04.06",
+      "text": "The drawing shows the gutter and downpipe, but the pipe fitting reference is missing.",
+      "meaning": "Report incomplete drainage-component information.",
+      "context": "Requesting clarification of a fictional drawing.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "drawing",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "shows",
+          "start": 12,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 18,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "gutter",
+          "start": 22,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "downpipe",
+          "start": 33,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 41,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "but",
+          "start": 43,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 10,
+          "text": "pipe",
+          "start": 51,
+          "end": 55
+        },
+        {
+          "index": 11,
+          "text": "fitting",
+          "start": 56,
+          "end": 63
+        },
+        {
+          "index": 12,
+          "text": "reference",
+          "start": 64,
+          "end": 73
+        },
+        {
+          "index": 13,
+          "text": "is",
+          "start": 74,
+          "end": 76
+        },
+        {
+          "index": 14,
+          "text": "missing",
+          "start": 77,
+          "end": 84
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 84,
+          "end": 85
+        }
+      ],
+      "focus_lexeme_ids": [
+        "gutter.channel-collecting-water-from-roof.n",
+        "downpipe.pipe-carrying-roof-water-downward.n",
+        "pipe.hollow-tube-carrying-fluid.n",
+        "fitting.pipe-connection-component.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-electricians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module04.07",
+      "text": "The valve, cable, and conduit details have been referred to the appropriate trade teams.",
+      "meaning": "Explain who will review different service components.",
+      "context": "Coordinating plumbing and electrical information.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "valve",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": ",",
+          "start": 9,
+          "end": 10
+        },
+        {
+          "index": 3,
+          "text": "cable",
+          "start": 11,
+          "end": 16
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 16,
+          "end": 17
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 18,
+          "end": 21
+        },
+        {
+          "index": 6,
+          "text": "conduit",
+          "start": 22,
+          "end": 29
+        },
+        {
+          "index": 7,
+          "text": "details",
+          "start": 30,
+          "end": 37
+        },
+        {
+          "index": 8,
+          "text": "have",
+          "start": 38,
+          "end": 42
+        },
+        {
+          "index": 9,
+          "text": "been",
+          "start": 43,
+          "end": 47
+        },
+        {
+          "index": 10,
+          "text": "referred",
+          "start": 48,
+          "end": 56
+        },
+        {
+          "index": 11,
+          "text": "to",
+          "start": 57,
+          "end": 59
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 13,
+          "text": "appropriate",
+          "start": 64,
+          "end": 75
+        },
+        {
+          "index": 14,
+          "text": "trade",
+          "start": 76,
+          "end": 81
+        },
+        {
+          "index": 15,
+          "text": "teams",
+          "start": 82,
+          "end": 87
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 87,
+          "end": 88
+        }
+      ],
+      "focus_lexeme_ids": [
+        "valve.device-controlling-fluid-flow.n",
+        "cable.insulated-conductor-or-conductor-group-for-power-or-signals.n",
+        "conduit.protective-channel-for-electrical-wiring.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-electricians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module04.08",
+      "text": "The fastener list gives separate specifications for each nail, screw, bolt, nut, and washer.",
+      "meaning": "Explain that different fasteners have distinct recorded requirements.",
+      "context": "Checking a component schedule without specifying installation values.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "fastener",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "list",
+          "start": 13,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "gives",
+          "start": 18,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "separate",
+          "start": 24,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "specifications",
+          "start": 33,
+          "end": 47
+        },
+        {
+          "index": 6,
+          "text": "for",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 7,
+          "text": "each",
+          "start": 52,
+          "end": 56
+        },
+        {
+          "index": 8,
+          "text": "nail",
+          "start": 57,
+          "end": 61
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 61,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "screw",
+          "start": 63,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 68,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": "bolt",
+          "start": 70,
+          "end": 74
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 74,
+          "end": 75
+        },
+        {
+          "index": 14,
+          "text": "nut",
+          "start": 76,
+          "end": 79
+        },
+        {
+          "index": 15,
+          "text": ",",
+          "start": 79,
+          "end": 80
+        },
+        {
+          "index": 16,
+          "text": "and",
+          "start": 81,
+          "end": 84
+        },
+        {
+          "index": 17,
+          "text": "washer",
+          "start": 85,
+          "end": 91
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 91,
+          "end": 92
+        }
+      ],
+      "focus_lexeme_ids": [
+        "fastener.device-used-to-join-or-secure-parts.n",
+        "nail.pointed-fastener-usually-driven-into-material.n",
+        "screw.threaded-fastener-turned-into-mating-material.n",
+        "bolt.threaded-fastener-used-with-nut-or-threaded-hole.n",
+        "nut.threaded-fastener.n",
+        "washer.thin-piece-distributing-fastener-load-or-spacing-parts.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-electricians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module04.09",
+      "text": "The anchor, bracket, and hinge references need checking against the current detail.",
+      "meaning": "Identify component references requiring review.",
+      "context": "Coordinating a drawing clarification.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "anchor",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": ",",
+          "start": 10,
+          "end": 11
+        },
+        {
+          "index": 3,
+          "text": "bracket",
+          "start": 12,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 19,
+          "end": 20
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 21,
+          "end": 24
+        },
+        {
+          "index": 6,
+          "text": "hinge",
+          "start": 25,
+          "end": 30
+        },
+        {
+          "index": 7,
+          "text": "references",
+          "start": 31,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": "need",
+          "start": 42,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "checking",
+          "start": 47,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": "against",
+          "start": 56,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": "current",
+          "start": 68,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": "detail",
+          "start": 76,
+          "end": 82
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 82,
+          "end": 83
+        }
+      ],
+      "focus_lexeme_ids": [
+        "anchor.fixing-device.n",
+        "bracket.projecting-support-or-connecting-component.n",
+        "hinge.joint-allowing-connected-parts-to-pivot.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-electricians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module04.10",
+      "text": "The beam, joist, and lintel references are clear, but the insulation specification is missing.",
+      "meaning": "Distinguish complete structural references from missing material information.",
+      "context": "Reporting a document gap without judging structural adequacy.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "beam",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": ",",
+          "start": 8,
+          "end": 9
+        },
+        {
+          "index": 3,
+          "text": "joist",
+          "start": 10,
+          "end": 15
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 15,
+          "end": 16
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 6,
+          "text": "lintel",
+          "start": 21,
+          "end": 27
+        },
+        {
+          "index": 7,
+          "text": "references",
+          "start": 28,
+          "end": 38
+        },
+        {
+          "index": 8,
+          "text": "are",
+          "start": 39,
+          "end": 42
+        },
+        {
+          "index": 9,
+          "text": "clear",
+          "start": 43,
+          "end": 48
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 48,
+          "end": 49
+        },
+        {
+          "index": 11,
+          "text": "but",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 13,
+          "text": "insulation",
+          "start": 58,
+          "end": 68
+        },
+        {
+          "index": 14,
+          "text": "specification",
+          "start": 69,
+          "end": 82
+        },
+        {
+          "index": 15,
+          "text": "is",
+          "start": 83,
+          "end": 85
+        },
+        {
+          "index": 16,
+          "text": "missing",
+          "start": 86,
+          "end": 93
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 93,
+          "end": 94
+        }
+      ],
+      "focus_lexeme_ids": [
+        "beam.structural-member-carrying-load-across-span.n",
+        "joist.repeated-member-supporting-floor-or-ceiling.n",
+        "lintel.member-supporting-construction-above-opening.n",
+        "insulation.material-reducing-transfer-of-heat-sound-or-electricity.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-electricians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

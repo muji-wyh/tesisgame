@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "status": "UNBOUND_TEMPLATE_DO_NOT_DISPATCH",
+  "entrypoint": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/prepare.cjs",
+  "output": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01",
+  "dispatcher": null,
+  "preparation_author": "/root/recover_delivery",
+  "root_selected_actual_baseline": false,
+  "execute_project_tests": false,
+  "binding": null,
+  "source_inventory": null,
+  "independent_source_review": null
+}

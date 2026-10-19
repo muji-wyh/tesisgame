@@ -1,0 +1,2077 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "showroom.space-for-displaying-products-to-customers.n",
+      "text": "showroom",
+      "display_text": "showroom",
+      "pos": "noun",
+      "definition": "A room or area where products are displayed for customers to inspect.",
+      "example": "The showroom has several models to compare.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "showroom"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A welcoming product showroom with a customer comparing two displayed office chairs with a representative.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "showroom.space-for-displaying-products-to-customers.n.analysis.v1",
+        "lexeme_id": "showroom.space-for-displaying-products-to-customers.n",
+        "text": "showroom",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored candidate word boundaries, compounds or affixes. Exact reconstruction is structural evidence only, not linguistic approval. Intact stems, metaphorical compounds, spelling allomorphs, lexicalization and deeper analyses require qualified review. No length, syllable, midpoint or automatic suffix split; null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.show",
+            "type": "stem",
+            "canonical": "show",
+            "surface": "show"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.room",
+            "type": "stem",
+            "canonical": "room",
+            "surface": "room"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "showroom",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Sales & Marketing communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal, financial, privacy, investment, statistical, or compliance advice. No advertising claim, permission, universal metric formula, sales result, contractual entitlement, or process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "display-stand.structure-supporting-items-for-display.n",
+      "text": "display stand",
+      "display_text": "display stand",
+      "pos": "noun",
+      "definition": "A structure that holds items where people can see them.",
+      "example": "The new brochure is on the display stand.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "display stand"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A freestanding tiered brochure display with visible supports and neatly presented material.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "display-stand.structure-supporting-items-for-display.n.analysis.v1",
+        "lexeme_id": "display-stand.structure-supporting-items-for-display.n",
+        "text": "display stand",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored candidate word boundaries, compounds or affixes. Exact reconstruction is structural evidence only, not linguistic approval. Intact stems, metaphorical compounds, spelling allomorphs, lexicalization and deeper analyses require qualified review. No length, syllable, midpoint or automatic suffix split; null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.display",
+            "type": "stem",
+            "canonical": "display",
+            "surface": "display"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.stand",
+            "type": "stem",
+            "canonical": "stand",
+            "surface": "stand"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "display stand",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Sales & Marketing communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal, financial, privacy, investment, statistical, or compliance advice. No advertising claim, permission, universal metric formula, sales result, contractual entitlement, or process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "sample-case.portable-case-holding-product-examples.n",
+      "text": "sample case",
+      "display_text": "sample case",
+      "pos": "noun",
+      "definition": "A portable case used to carry and present product samples.",
+      "example": "The representative opened the sample case.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "sample case"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An open fitted carrying case holding distinct material and product samples beside a representative.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "sample-case.portable-case-holding-product-examples.n.analysis.v1",
+        "lexeme_id": "sample-case.portable-case-holding-product-examples.n",
+        "text": "sample case",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored candidate word boundaries, compounds or affixes. Exact reconstruction is structural evidence only, not linguistic approval. Intact stems, metaphorical compounds, spelling allomorphs, lexicalization and deeper analyses require qualified review. No length, syllable, midpoint or automatic suffix split; null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.sample",
+            "type": "stem",
+            "canonical": "sample",
+            "surface": "sample"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "growth.part.case.container",
+            "type": "stem",
+            "canonical": "case",
+            "surface": "case"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "sample case",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Sales & Marketing communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal, financial, privacy, investment, statistical, or compliance advice. No advertising claim, permission, universal metric formula, sales result, contractual entitlement, or process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "demonstration-area.space-set-aside-for-showing-product-use.n",
+      "text": "demonstration area",
+      "display_text": "demonstration area",
+      "pos": "noun",
+      "definition": "A space set aside for showing how a product works.",
+      "example": "We will meet in the demonstration area.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "demonstration area"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A showroom corner with a demonstrator showing an office device to two visitors, separated from storage.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "demonstration-area.space-set-aside-for-showing-product-use.n.analysis.v1",
+        "lexeme_id": "demonstration-area.space-set-aside-for-showing-product-use.n",
+        "text": "demonstration area",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored candidate word boundaries, compounds or affixes. Exact reconstruction is structural evidence only, not linguistic approval. Intact stems, metaphorical compounds, spelling allomorphs, lexicalization and deeper analyses require qualified review. No length, syllable, midpoint or automatic suffix split; null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.demonstration",
+            "type": "stem",
+            "canonical": "demonstration",
+            "surface": "demonstration"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.area",
+            "type": "stem",
+            "canonical": "area",
+            "surface": "area"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "demonstration area",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Sales & Marketing communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal, financial, privacy, investment, statistical, or compliance advice. No advertising claim, permission, universal metric formula, sales result, contractual entitlement, or process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "business-card.small-card-with-professional-contact-details.n",
+      "text": "business card",
+      "display_text": "business card",
+      "pos": "noun",
+      "definition": "A small card displaying a person's or organization's professional contact details.",
+      "example": "Her business card includes the company website.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "business card"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A person handing a clearly visible business card with fictional name, role and contact details to a customer.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "business-card.small-card-with-professional-contact-details.n.analysis.v1",
+        "lexeme_id": "business-card.small-card-with-professional-contact-details.n",
+        "text": "business card",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored candidate word boundaries, compounds or affixes. Exact reconstruction is structural evidence only, not linguistic approval. Intact stems, metaphorical compounds, spelling allomorphs, lexicalization and deeper analyses require qualified review. No length, syllable, midpoint or automatic suffix split; null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.business",
+            "type": "stem",
+            "canonical": "business",
+            "surface": "business"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.card",
+            "type": "stem",
+            "canonical": "card",
+            "surface": "card"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "business card",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Sales & Marketing communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal, financial, privacy, investment, statistical, or compliance advice. No advertising claim, permission, universal metric formula, sales result, contractual entitlement, or process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "flyer.single-sheet-promotional-handout.n",
+      "text": "flyer",
+      "display_text": "flyer",
+      "pos": "noun",
+      "definition": "A single sheet presenting brief information, often about an event or offer.",
+      "example": "The flyer announces the showroom opening.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "flyer"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A single loose printed promotional sheet being offered at a welcome desk, distinct from a folded brochure.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "flyer.single-sheet-promotional-handout.n.analysis.v1",
+        "lexeme_id": "flyer.single-sheet-promotional-handout.n",
+        "text": "flyer",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored candidate word boundaries, compounds or affixes. Exact reconstruction is structural evidence only, not linguistic approval. Intact stems, metaphorical compounds, spelling allomorphs, lexicalization and deeper analyses require qualified review. No length, syllable, midpoint or automatic suffix split; null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.fly",
+            "type": "stem",
+            "canonical": "fly",
+            "surface": "fly"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.er.suffix",
+            "type": "suffix",
+            "canonical": "er",
+            "surface": "er"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "flyer",
+            "rule": "suffix_attachment"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Sales & Marketing communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal, financial, privacy, investment, statistical, or compliance advice. No advertising claim, permission, universal metric formula, sales result, contractual entitlement, or process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "poster.large-printed-sheet-for-display.n",
+      "text": "poster",
+      "display_text": "poster",
+      "pos": "noun",
+      "definition": "A large printed sheet designed to communicate information when displayed.",
+      "example": "The poster shows the dates of the trade show.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "poster"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A large promotional sheet fixed to a showroom wall, shown in relation to people for scale.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "poster.large-printed-sheet-for-display.n.analysis.v1",
+        "lexeme_id": "poster.large-printed-sheet-for-display.n",
+        "text": "poster",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored candidate word boundaries, compounds or affixes. Exact reconstruction is structural evidence only, not linguistic approval. Intact stems, metaphorical compounds, spelling allomorphs, lexicalization and deeper analyses require qualified review. No length, syllable, midpoint or automatic suffix split; null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.post",
+            "type": "stem",
+            "canonical": "post",
+            "surface": "post"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.er.suffix",
+            "type": "suffix",
+            "canonical": "er",
+            "surface": "er"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "poster",
+            "rule": "suffix_attachment"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Sales & Marketing communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal, financial, privacy, investment, statistical, or compliance advice. No advertising claim, permission, universal metric formula, sales result, contractual entitlement, or process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "banner.long-display-strip-carrying-message.n",
+      "text": "banner",
+      "display_text": "banner",
+      "pos": "noun",
+      "definition": "A long strip of material or a similar display area carrying a visible message.",
+      "example": "The banner welcomes visitors to the event.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "banner"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A physical fabric event banner stretched above an entrance, with readable fictional event wording.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "banner.long-display-strip-carrying-message.n.analysis.v1",
+        "lexeme_id": "banner.long-display-strip-carrying-message.n",
+        "text": "banner",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored candidate word boundaries, compounds or affixes. Exact reconstruction is structural evidence only, not linguistic approval. Intact stems, metaphorical compounds, spelling allomorphs, lexicalization and deeper analyses require qualified review. No length, syllable, midpoint or automatic suffix split; null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.banner",
+            "type": "atomic",
+            "canonical": "banner",
+            "surface": "banner"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Sales & Marketing communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal, financial, privacy, investment, statistical, or compliance advice. No advertising claim, permission, universal metric formula, sales result, contractual entitlement, or process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "catalog.organized-listing-of-products-or-services.n",
+      "text": "catalog",
+      "display_text": "catalog",
+      "pos": "noun",
+      "definition": "An organized listing of products or services with information about them.",
+      "example": "The catalog includes sizes and available colors.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "catalog",
+        "catalogue"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An open printed product catalog showing several organized product listings and an index.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Sales & Marketing communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal, financial, privacy, investment, statistical, or compliance advice. No advertising claim, permission, universal metric formula, sales result, contractual entitlement, or process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "price-list.listing-of-products-or-services-and-prices.n",
+      "text": "price list",
+      "display_text": "price list",
+      "pos": "noun",
+      "definition": "A listing of products or services and their stated prices.",
+      "example": "Please use the current price list.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "price list"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A current fictional price list pairing clearly identifiable products with prices and an effective date.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "price-list.listing-of-products-or-services-and-prices.n.analysis.v1",
+        "lexeme_id": "price-list.listing-of-products-or-services-and-prices.n",
+        "text": "price list",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored candidate word boundaries, compounds or affixes. Exact reconstruction is structural evidence only, not linguistic approval. Intact stems, metaphorical compounds, spelling allomorphs, lexicalization and deeper analyses require qualified review. No length, syllable, midpoint or automatic suffix split; null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.price",
+            "type": "stem",
+            "canonical": "price",
+            "surface": "price"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.list",
+            "type": "stem",
+            "canonical": "list",
+            "surface": "list"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "price list",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Sales & Marketing communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal, financial, privacy, investment, statistical, or compliance advice. No advertising claim, permission, universal metric formula, sales result, contractual entitlement, or process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "order-form.form-for-requesting-specified-goods-or-services.n",
+      "text": "order form",
+      "display_text": "order form",
+      "pos": "noun",
+      "definition": "A form used to request specified goods or services.",
+      "example": "The order form has separate fields for item and quantity.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "order form"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional customer order form with product, quantity and contact fields, beside the products being requested.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "order-form.form-for-requesting-specified-goods-or-services.n.analysis.v1",
+        "lexeme_id": "order-form.form-for-requesting-specified-goods-or-services.n",
+        "text": "order form",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored candidate word boundaries, compounds or affixes. Exact reconstruction is structural evidence only, not linguistic approval. Intact stems, metaphorical compounds, spelling allomorphs, lexicalization and deeper analyses require qualified review. No length, syllable, midpoint or automatic suffix split; null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.order",
+            "type": "stem",
+            "canonical": "order",
+            "surface": "order"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.form",
+            "type": "stem",
+            "canonical": "form",
+            "surface": "form"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "order form",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Sales & Marketing communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal, financial, privacy, investment, statistical, or compliance advice. No advertising claim, permission, universal metric formula, sales result, contractual entitlement, or process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "packaging.materials-used-to-contain-protect-or-present-product.n",
+      "text": "packaging",
+      "display_text": "packaging",
+      "pos": "noun",
+      "definition": "Materials used to contain, protect or present a product.",
+      "example": "The packaging protects the sample during transport.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "packaging"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A product shown with its fitted inner support and outer package, distinguishing the materials from the product.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "packaging.materials-used-to-contain-protect-or-present-product.n.analysis.v1",
+        "lexeme_id": "packaging.materials-used-to-contain-protect-or-present-product.n",
+        "text": "packaging",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored candidate word boundaries, compounds or affixes. Exact reconstruction is structural evidence only, not linguistic approval. Intact stems, metaphorical compounds, spelling allomorphs, lexicalization and deeper analyses require qualified review. No length, syllable, midpoint or automatic suffix split; null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.package",
+            "type": "stem",
+            "canonical": "package",
+            "surface": "packag"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "packaging",
+            "rule": "drop_final_e_before_suffix"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Sales & Marketing communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal, financial, privacy, investment, statistical, or compliance advice. No advertising claim, permission, universal metric formula, sales result, contractual entitlement, or process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "display-cabinet.cabinet-for-presenting-visible-items.n",
+      "text": "display cabinet",
+      "display_text": "display cabinet",
+      "pos": "noun",
+      "definition": "A cabinet designed to present items while keeping them enclosed.",
+      "example": "The sample watches are in the display cabinet.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "display cabinet"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A glass-fronted cabinet containing clearly visible sample products, with its enclosing doors in view.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "display-cabinet.cabinet-for-presenting-visible-items.n.analysis.v1",
+        "lexeme_id": "display-cabinet.cabinet-for-presenting-visible-items.n",
+        "text": "display cabinet",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored candidate word boundaries, compounds or affixes. Exact reconstruction is structural evidence only, not linguistic approval. Intact stems, metaphorical compounds, spelling allomorphs, lexicalization and deeper analyses require qualified review. No length, syllable, midpoint or automatic suffix split; null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.display",
+            "type": "stem",
+            "canonical": "display",
+            "surface": "display"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.cabinet",
+            "type": "stem",
+            "canonical": "cabinet",
+            "surface": "cabinet"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "display cabinet",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Sales & Marketing communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal, financial, privacy, investment, statistical, or compliance advice. No advertising claim, permission, universal metric formula, sales result, contractual entitlement, or process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "lighting.arrangement-or-provision-of-light-in-space.n",
+      "text": "lighting",
+      "display_text": "lighting",
+      "pos": "noun",
+      "definition": "The provision or arrangement of light in a space.",
+      "example": "The showroom lighting makes the colors easier to compare.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "lighting"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A showroom display lit by visible ceiling and display lamps, with an adjacent dim section for context.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "lighting.arrangement-or-provision-of-light-in-space.n.analysis.v1",
+        "lexeme_id": "lighting.arrangement-or-provision-of-light-in-space.n",
+        "text": "lighting",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored candidate word boundaries, compounds or affixes. Exact reconstruction is structural evidence only, not linguistic approval. Intact stems, metaphorical compounds, spelling allomorphs, lexicalization and deeper analyses require qualified review. No length, syllable, midpoint or automatic suffix split; null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.light",
+            "type": "stem",
+            "canonical": "light",
+            "surface": "light"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "lighting",
+            "rule": "suffix_attachment"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Sales & Marketing communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal, financial, privacy, investment, statistical, or compliance advice. No advertising claim, permission, universal metric formula, sales result, contractual entitlement, or process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "presentation-slide.single-page-of-visual-presentation.n",
+      "text": "presentation slide",
+      "display_text": "presentation slide",
+      "pos": "noun",
+      "definition": "One page of visual material shown as part of a presentation.",
+      "example": "This presentation slide compares the two service packages.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "presentation slide"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A presenter indicating one projected slide in a visible multi-slide presentation sequence.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "presentation-slide.single-page-of-visual-presentation.n.analysis.v1",
+        "lexeme_id": "presentation-slide.single-page-of-visual-presentation.n",
+        "text": "presentation slide",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored candidate word boundaries, compounds or affixes. Exact reconstruction is structural evidence only, not linguistic approval. Intact stems, metaphorical compounds, spelling allomorphs, lexicalization and deeper analyses require qualified review. No length, syllable, midpoint or automatic suffix split; null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.presentation",
+            "type": "stem",
+            "canonical": "presentation",
+            "surface": "presentation"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.slide",
+            "type": "stem",
+            "canonical": "slide",
+            "surface": "slide"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "presentation slide",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Sales & Marketing communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal, financial, privacy, investment, statistical, or compliance advice. No advertising claim, permission, universal metric formula, sales result, contractual entitlement, or process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "product-photograph.photograph-showing-product.n",
+      "text": "product photograph",
+      "display_text": "product photograph",
+      "pos": "noun",
+      "definition": "A photograph made to show a product.",
+      "example": "We need a product photograph of the new model.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "product photograph"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A photographer capturing a clearly identifiable product, with its resulting photograph visible alongside.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "product-photograph.photograph-showing-product.n.analysis.v1",
+        "lexeme_id": "product-photograph.photograph-showing-product.n",
+        "text": "product photograph",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored candidate word boundaries, compounds or affixes. Exact reconstruction is structural evidence only, not linguistic approval. Intact stems, metaphorical compounds, spelling allomorphs, lexicalization and deeper analyses require qualified review. No length, syllable, midpoint or automatic suffix split; null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.product",
+            "type": "stem",
+            "canonical": "product",
+            "surface": "product"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.photograph",
+            "type": "stem",
+            "canonical": "photograph",
+            "surface": "photograph"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "product photograph",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Sales & Marketing communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal, financial, privacy, investment, statistical, or compliance advice. No advertising claim, permission, universal metric formula, sales result, contractual entitlement, or process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "swatch.small-sample-of-material-or-color.n",
+      "text": "swatch",
+      "display_text": "swatch",
+      "pos": "noun",
+      "definition": "A small sample used to show a material, color or finish.",
+      "example": "The customer compared a fabric swatch with the chair.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "swatch"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fan of small fabric swatches held against a full-size chair, preserving texture and color differences.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "swatch.small-sample-of-material-or-color.n.analysis.v1",
+        "lexeme_id": "swatch.small-sample-of-material-or-color.n",
+        "text": "swatch",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored candidate word boundaries, compounds or affixes. Exact reconstruction is structural evidence only, not linguistic approval. Intact stems, metaphorical compounds, spelling allomorphs, lexicalization and deeper analyses require qualified review. No length, syllable, midpoint or automatic suffix split; null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.swatch",
+            "type": "atomic",
+            "canonical": "swatch",
+            "surface": "swatch"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Sales & Marketing communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal, financial, privacy, investment, statistical, or compliance advice. No advertising claim, permission, universal metric formula, sales result, contractual entitlement, or process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    },
+    {
+      "id": "trade-booth.display-space-at-trade-event.n",
+      "text": "trade booth",
+      "display_text": "trade booth",
+      "pos": "noun",
+      "definition": "An allocated display space for an organization at a trade event.",
+      "example": "Our trade booth is near the main entrance.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "trade booth"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A staffed, bounded trade-show booth with product displays and neighboring booths visible for context.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "trade-booth.display-space-at-trade-event.n.analysis.v1",
+        "lexeme_id": "trade-booth.display-space-at-trade-event.n",
+        "text": "trade booth",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Individually authored candidate word boundaries, compounds or affixes. Exact reconstruction is structural evidence only, not linguistic approval. Intact stems, metaphorical compounds, spelling allomorphs, lexicalization and deeper analyses require qualified review. No length, syllable, midpoint or automatic suffix split; null remains distinct from an atomic decision.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.trade",
+            "type": "stem",
+            "canonical": "trade",
+            "surface": "trade"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.booth",
+            "type": "stem",
+            "canonical": "booth",
+            "surface": "booth"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "trade booth",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original Sales & Marketing communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not legal, financial, privacy, investment, statistical, or compliance advice. No advertising claim, permission, universal metric formula, sales result, contractual entitlement, or process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+    }
+  ]
+}

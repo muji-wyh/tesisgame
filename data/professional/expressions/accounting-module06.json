@@ -1,0 +1,1704 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.accounting_finance.module06.01",
+      "text": "Please match the invoice to the purchase order and delivery note before sending the records for review.",
+      "meaning": "Request a comparison of related transaction documents.",
+      "context": "Preparing supplier documents for authorized review.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "match",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "invoice",
+          "start": 17,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "to",
+          "start": 25,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "purchase",
+          "start": 32,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "order",
+          "start": 41,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "delivery",
+          "start": 51,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "note",
+          "start": 60,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "before",
+          "start": 65,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "sending",
+          "start": 72,
+          "end": 79
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 80,
+          "end": 83
+        },
+        {
+          "index": 14,
+          "text": "records",
+          "start": 84,
+          "end": 91
+        },
+        {
+          "index": 15,
+          "text": "for",
+          "start": 92,
+          "end": 95
+        },
+        {
+          "index": 16,
+          "text": "review",
+          "start": 96,
+          "end": 102
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 102,
+          "end": 103
+        }
+      ],
+      "focus_lexeme_ids": [
+        "invoice.commercial-document-itemizing-amounts-due.n",
+        "purchase-order.buyer-order-document.n",
+        "delivery-note.delivered-goods-document.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-irs-recordkeeping",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-govuk-company-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-cfpb-overdraft",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module06.02",
+      "text": "The deposit is an advance payment, while the receipt shows that payment was made.",
+      "meaning": "Distinguish an amount paid in advance from its payment record.",
+      "context": "Explaining a fictional booking transaction.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "deposit",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "is",
+          "start": 12,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "an",
+          "start": 15,
+          "end": 17
+        },
+        {
+          "index": 4,
+          "text": "advance",
+          "start": 18,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "payment",
+          "start": 26,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 33,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "while",
+          "start": 35,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 9,
+          "text": "receipt",
+          "start": 45,
+          "end": 52
+        },
+        {
+          "index": 10,
+          "text": "shows",
+          "start": 53,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": "that",
+          "start": 59,
+          "end": 63
+        },
+        {
+          "index": 12,
+          "text": "payment",
+          "start": 64,
+          "end": 71
+        },
+        {
+          "index": 13,
+          "text": "was",
+          "start": 72,
+          "end": 75
+        },
+        {
+          "index": 14,
+          "text": "made",
+          "start": 76,
+          "end": 80
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 80,
+          "end": 81
+        }
+      ],
+      "focus_lexeme_ids": [
+        "deposit.advance-part-payment.n",
+        "receipt.purchase-record.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-irs-recordkeeping",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-govuk-company-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-cfpb-overdraft",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module06.03",
+      "text": "The check has a reference number that links it to the remittance advice.",
+      "meaning": "Identify the records associated with a payment.",
+      "context": "Reviewing a fictional customer payment.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "check",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "has",
+          "start": 10,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 14,
+          "end": 15
+        },
+        {
+          "index": 4,
+          "text": "reference",
+          "start": 16,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "number",
+          "start": 26,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "that",
+          "start": 33,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "links",
+          "start": 38,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "it",
+          "start": 44,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "to",
+          "start": 47,
+          "end": 49
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 11,
+          "text": "remittance",
+          "start": 54,
+          "end": 64
+        },
+        {
+          "index": 12,
+          "text": "advice",
+          "start": 65,
+          "end": 71
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 71,
+          "end": 72
+        }
+      ],
+      "focus_lexeme_ids": [
+        "check.written-order-directing-bank-to-pay-specified-amount.n",
+        "reference-number.record-reference-code.n",
+        "remittance-advice.notice-identifying-payment-and-items-it-covers.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-irs-recordkeeping",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-govuk-company-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-cfpb-overdraft",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module06.04",
+      "text": "The pro forma invoice is preliminary; please confirm which invoice date applies to the final document.",
+      "meaning": "Distinguish a preliminary document from a final invoice.",
+      "context": "Clarifying a fictional order record.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "pro",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "forma",
+          "start": 8,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "invoice",
+          "start": 14,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "is",
+          "start": 22,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "preliminary",
+          "start": 25,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": ";",
+          "start": 36,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "please",
+          "start": 38,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "confirm",
+          "start": 45,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "which",
+          "start": 53,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "invoice",
+          "start": 59,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": "date",
+          "start": 67,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "applies",
+          "start": 72,
+          "end": 79
+        },
+        {
+          "index": 13,
+          "text": "to",
+          "start": 80,
+          "end": 82
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 83,
+          "end": 86
+        },
+        {
+          "index": 15,
+          "text": "final",
+          "start": 87,
+          "end": 92
+        },
+        {
+          "index": 16,
+          "text": "document",
+          "start": 93,
+          "end": 101
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 101,
+          "end": 102
+        }
+      ],
+      "focus_lexeme_ids": [
+        "pro-forma-invoice.preliminary-document-showing-proposed-transaction-details.n",
+        "invoice-date.date-shown-as-date-of-invoice.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-irs-recordkeeping",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-govuk-company-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-cfpb-overdraft",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module06.05",
+      "text": "Please explain the credit note and debit note by reference to their issuer and stated purpose.",
+      "meaning": "Request context for two adjustment documents.",
+      "context": "Referring a document query for review.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "explain",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "credit",
+          "start": 19,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "note",
+          "start": 26,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "debit",
+          "start": 35,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "note",
+          "start": 41,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "by",
+          "start": 46,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "reference",
+          "start": 49,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "to",
+          "start": 59,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": "their",
+          "start": 62,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": "issuer",
+          "start": 68,
+          "end": 74
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 14,
+          "text": "stated",
+          "start": 79,
+          "end": 85
+        },
+        {
+          "index": 15,
+          "text": "purpose",
+          "start": 86,
+          "end": 93
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 93,
+          "end": 94
+        }
+      ],
+      "focus_lexeme_ids": [
+        "credit-note.document-recording-reduction-in-amount-previously-invoiced.n",
+        "debit-note.document-notifying-debit-adjustment-or-additional-amount.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-irs-recordkeeping",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-govuk-company-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-cfpb-overdraft",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module06.06",
+      "text": "The bank reconciliation explains the deposit in transit and the outstanding check at the stated date.",
+      "meaning": "Describe the timing items in a reconciliation.",
+      "context": "Reading an illustrative bank reconciliation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "bank",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "reconciliation",
+          "start": 9,
+          "end": 23
+        },
+        {
+          "index": 3,
+          "text": "explains",
+          "start": 24,
+          "end": 32
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 33,
+          "end": 36
+        },
+        {
+          "index": 5,
+          "text": "deposit",
+          "start": 37,
+          "end": 44
+        },
+        {
+          "index": 6,
+          "text": "in",
+          "start": 45,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "transit",
+          "start": 48,
+          "end": 55
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "outstanding",
+          "start": 64,
+          "end": 75
+        },
+        {
+          "index": 11,
+          "text": "check",
+          "start": 76,
+          "end": 81
+        },
+        {
+          "index": 12,
+          "text": "at",
+          "start": 82,
+          "end": 84
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 85,
+          "end": 88
+        },
+        {
+          "index": 14,
+          "text": "stated",
+          "start": 89,
+          "end": 95
+        },
+        {
+          "index": 15,
+          "text": "date",
+          "start": 96,
+          "end": 100
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 100,
+          "end": 101
+        }
+      ],
+      "focus_lexeme_ids": [
+        "bank-reconciliation.comparison-explaining-differences-between-bank-and-book-records.n",
+        "deposit-in-transit.deposit-recorded-by-entity-not-yet-shown-by-bank.n",
+        "outstanding-check.issued-check-not-yet-cleared-through-bank.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-irs-recordkeeping",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-govuk-company-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-cfpb-overdraft",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module06.07",
+      "text": "The bank statement shows an overdraft; its closing balance differs from the ledger balance because of a documented reconciling item.",
+      "meaning": "Explain a stated difference between two records.",
+      "context": "Reviewing an illustrative timing difference.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "bank",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "statement",
+          "start": 9,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "shows",
+          "start": 19,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "an",
+          "start": 25,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "overdraft",
+          "start": 28,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": ";",
+          "start": 37,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "its",
+          "start": 39,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "closing",
+          "start": 43,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "balance",
+          "start": 51,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "differs",
+          "start": 59,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": "from",
+          "start": 67,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 72,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": "ledger",
+          "start": 76,
+          "end": 82
+        },
+        {
+          "index": 14,
+          "text": "balance",
+          "start": 83,
+          "end": 90
+        },
+        {
+          "index": 15,
+          "text": "because",
+          "start": 91,
+          "end": 98
+        },
+        {
+          "index": 16,
+          "text": "of",
+          "start": 99,
+          "end": 101
+        },
+        {
+          "index": 17,
+          "text": "a",
+          "start": 102,
+          "end": 103
+        },
+        {
+          "index": 18,
+          "text": "documented",
+          "start": 104,
+          "end": 114
+        },
+        {
+          "index": 19,
+          "text": "reconciling",
+          "start": 115,
+          "end": 126
+        },
+        {
+          "index": 20,
+          "text": "item",
+          "start": 127,
+          "end": 131
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 131,
+          "end": 132
+        }
+      ],
+      "focus_lexeme_ids": [
+        "bank-statement.bank-record-of-account-transactions-and-balances.n",
+        "overdraft.bank-payment-beyond-available-account-funds.n",
+        "closing-balance.account-balance-at-end-of-period.n",
+        "ledger-balance.balance-shown-in-organizations-ledger.n",
+        "reconciling-item.item-explaining-difference-between-compared-records.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-irs-recordkeeping",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-govuk-company-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-cfpb-overdraft",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module06.08",
+      "text": "The payment run has its own review record; please investigate the unallocated payment separately.",
+      "meaning": "Distinguish grouped payment processing from an unresolved payment allocation.",
+      "context": "Coordinating an authorized account review.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "payment",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "run",
+          "start": 12,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "has",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "its",
+          "start": 20,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "own",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 6,
+          "text": "review",
+          "start": 28,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "record",
+          "start": 35,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": ";",
+          "start": 41,
+          "end": 42
+        },
+        {
+          "index": 9,
+          "text": "please",
+          "start": 43,
+          "end": 49
+        },
+        {
+          "index": 10,
+          "text": "investigate",
+          "start": 50,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "unallocated",
+          "start": 66,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": "payment",
+          "start": 78,
+          "end": 85
+        },
+        {
+          "index": 14,
+          "text": "separately",
+          "start": 86,
+          "end": 96
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 96,
+          "end": 97
+        }
+      ],
+      "focus_lexeme_ids": [
+        "payment-run.grouped-processing-of-selected-payments.n",
+        "unallocated-payment.payment-not-yet-assigned-to-specific-amount-due.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-irs-recordkeeping",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-govuk-company-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-cfpb-overdraft",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module06.09",
+      "text": "The statement of account shows a partial payment and the credit period agreed for the remaining amount.",
+      "meaning": "Describe the stated account position and terms.",
+      "context": "Explaining a fictional account summary.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "statement",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "of",
+          "start": 14,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "account",
+          "start": 17,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "shows",
+          "start": 25,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "a",
+          "start": 31,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "partial",
+          "start": 33,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "payment",
+          "start": 41,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "credit",
+          "start": 57,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "period",
+          "start": 64,
+          "end": 70
+        },
+        {
+          "index": 12,
+          "text": "agreed",
+          "start": 71,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": "for",
+          "start": 78,
+          "end": 81
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 82,
+          "end": 85
+        },
+        {
+          "index": 15,
+          "text": "remaining",
+          "start": 86,
+          "end": 95
+        },
+        {
+          "index": 16,
+          "text": "amount",
+          "start": 96,
+          "end": 102
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 102,
+          "end": 103
+        }
+      ],
+      "focus_lexeme_ids": [
+        "statement-of-account.summary-of-account-transactions-and-balance.n",
+        "partial-payment.payment-covering-only-part-of-amount-due.n",
+        "credit-period.time-allowed-before-payment-becomes-due.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-irs-recordkeeping",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-govuk-company-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-cfpb-overdraft",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.accounting_finance.module06.10",
+      "text": "The aging report supports the collection activity review; the disputed amount still needs clarification.",
+      "meaning": "Connect an account-age report to a respectful follow-up review.",
+      "context": "Reviewing outstanding fictional customer amounts.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "aging",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "report",
+          "start": 10,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "supports",
+          "start": 17,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "collection",
+          "start": 30,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "activity",
+          "start": 41,
+          "end": 49
+        },
+        {
+          "index": 7,
+          "text": "review",
+          "start": 50,
+          "end": 56
+        },
+        {
+          "index": 8,
+          "text": ";",
+          "start": 56,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": "disputed",
+          "start": 62,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": "amount",
+          "start": 71,
+          "end": 77
+        },
+        {
+          "index": 12,
+          "text": "still",
+          "start": 78,
+          "end": 83
+        },
+        {
+          "index": 13,
+          "text": "needs",
+          "start": 84,
+          "end": 89
+        },
+        {
+          "index": 14,
+          "text": "clarification",
+          "start": 90,
+          "end": 103
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 103,
+          "end": 104
+        }
+      ],
+      "focus_lexeme_ids": [
+        "aging-report.report-grouping-outstanding-amounts-by-age.n",
+        "collection-activity.work-to-follow-up-on-amounts-due.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-irs-recordkeeping",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-govuk-company-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-cfpb-overdraft",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

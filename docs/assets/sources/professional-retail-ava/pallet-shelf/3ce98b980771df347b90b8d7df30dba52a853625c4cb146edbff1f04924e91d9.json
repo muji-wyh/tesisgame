@@ -1,0 +1,27 @@
+{
+  "status": "acquired_candidate",
+  "identity": {
+    "schema": 1,
+    "provider": "Microsoft Edge TTS",
+    "client": {
+      "name": "edge-tts",
+      "version": "7.3.1"
+    },
+    "profile": {
+      "voice": "en-US-AvaNeural",
+      "rate": "-15%",
+      "pitch": "+8Hz",
+      "volume": "+0%"
+    },
+    "synthesis_text": "shelf.",
+    "format": "22050-hz-pcm16-mono-no-effects"
+  },
+  "source_mp3_sha256": "7f5dcccc927e4272316f2956a9cfa27c88a28e6d76223673f4c679019dddce54",
+  "wav_sha256": "778fcf9304a06cd7ed04566cdc1f9bf28997bfbdbcd6e757f20ff9c3cb6282e3",
+  "bytes": 82598,
+  "creator": "Microsoft Ava Neural; project-authored term text",
+  "rights": "Microsoft Services Agreement applies; client software licensing is separate.",
+  "processing": "MP3 decoded/resampled to PCM16 mono 22050 Hz; no effects or trimming.",
+  "pronunciation_and_listening_review": "pending",
+  "production_integrated": false
+}

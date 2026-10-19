@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "status": "consulted_source_rows_proposed_not_installed",
+  "sources": [
+    {
+      "id": "foundation02-collect-repair-oxford-collect",
+      "title": "Oxford Advanced Learner's Dictionary: collect, gathering sense",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/collect_1",
+      "status": "consulted",
+      "consulted_on": "2026-10-17",
+      "scope": "Fresh gathering sense 1 consultation supports intentional gathering from several sources and the object plus from pattern. Raw collect_sng_2 records cefr=a2. Pickup sense 4 is separate and records cefr=b1; British labels appear on person-pickup examples. The unrelated footer level is excluded. This new B1 teaching proposal is not Oxford B1 certification of gathering and remains unaccepted. No publisher definition, example, image or audio is imported.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation02-collect-repair-collins-collect",
+      "title": "Collins COBUILD: collect, gathering sense",
+      "publisher": "HarperCollins",
+      "url": "https://www.collinsdictionary.com/dictionary/english/collect",
+      "status": "consulted",
+      "consulted_on": "2026-10-17",
+      "scope": "Fresh rendered COBUILD sense 1 is the multiple-source gathering verb and displays B1. Separate pickup sense 3 displays A2 and British usage with an American preference for pick up; American dictionary sections also include fetching, so pickup is not impossible in American English. The direct HTTP request returned 403; successful rendered consultation is distinct. This source supports proposed editorial B1 but grants no independent language, expression, morphology, domain, visual, listening or release acceptance. No publisher pages or media are retained.",
+      "asset_license": null,
+      "assets_acquired": false
+    }
+  ],
+  "final_order_and_shared_sources_hash": null
+}

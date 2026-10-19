@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "status": "fresh_independent_source_observations_not_final_candidate_acceptance",
+  "reviewer": "Codex root",
+  "date_local": "2026-10-17",
+  "research_inventory_sha256": "f98bb9a53ddc26382c3ed9aa0df1af03991e26223077389a569dd9896beee1b9",
+  "sources": [
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/ensure",
+      "tool_reference": "turn785082view0",
+      "observation": "The selected outcome sense supports ensure that. Its certainty topic is rendered B2. Insure is explicitly admitted especially in North American English. The author-recorded fkcefr=b2 attribute was not independently fetched by this reviewer."
+    },
+    {
+      "url": "https://www.collinsdictionary.com/dictionary/english/ensure",
+      "tool_reference": "turn785082view1",
+      "observation": "The selected COBUILD outcome sense is B2 and formal. The separate Collins English Dictionary heading admits especially US insure. Insurance/protection meanings remain separate from this selected outcome sense."
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/verify",
+      "tool_reference": "turn785082view2",
+      "observation": "The selected checking sense has a rendered Scientific research C1 topic. The second showing/stating sense is separate. Unrelated footer B2 is not evidence for the target. Both author-recorded cefr=c1 attributes remain author evidence."
+    }
+  ],
+  "candidate_observations": [
+    "The new definition and reference-number example express responsibility for a required result, a distinct objective from establishing truth or accuracy. The proposed formal B2 item is relevant to shared workplace instructions.",
+    "The ensure-only accepted_forms array needs an explicit regional-form decision. Both freshly consulted dictionaries admit insure in this sense especially in North American/US usage. The approved specification requires relevant accepted variants. A later reviewer should produce an exact variant-aware candidate or document exercise-specific justification; do not silently mark the regional form incorrect.",
+    "The proposed phrase naturally coordinates examination, correction and ensuring inclusion before submission. Exact final phrase acceptance must bind the actual delivered error/submit entries after fourth10, not promote the research's pending snapshots.",
+    "Retiring verify from active membership requires a distinct new sense, preserved old object/holds outside active catalog files, unchanged old progress and no verify-to-ensure alias. The current orphan validator means an unassigned verify object cannot remain in active lexeme sources.",
+    "A fresh coordinated requirements revision is necessary before activating the changed sentence. No old expression completion or skill history transfers. Remaining verify surface uses remain a separate readability/domain review queue."
+  ],
+  "raw_publisher_bodies_retrieved_or_archived": false,
+  "cefrj_freshly_consulted_by_this_reviewer": false,
+  "final_candidate_accepted": false,
+  "production_modified": false,
+  "project_tests_or_native_dispatched": false
+}

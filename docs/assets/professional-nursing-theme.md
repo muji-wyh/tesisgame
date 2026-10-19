@@ -1,0 +1,21 @@
+# Nursing full-theme integration
+
+Four exact sourced artwork PNGs are integrated and reviewed. Ambient motion is ready after bounded-clip and real native production-path verification. The Nursing theme is ready after independent final acceptance of its complete artwork and native presentation. Nursing courses, modules, lesson media, and language/domain/morphology gates remain unchanged.
+
+The [source record](sources/innerscene-kenney-nursing-theme/SOURCE.md), [source inventory](sources/innerscene-kenney-nursing-theme/source-inventory.json), [file mapping](sources/innerscene-kenney-nursing-theme/file-destinations.json) and [theme resource inventory](sources/innerscene-kenney-nursing-theme/theme-resource-inventory.json) record eleven original acquired CC0 models by Innerscene and Kenney. No listing preview is integrated artwork. Source files, textures and licenses retain exact bytes.
+
+The static original models include no animation clips. The authored curtain motion has sixteen samples at 2 FPS over eight seconds, with frame zero for reduced motion. Only the lower 45 percent bends by at most 0.02 meters; the upper textile, 29 hardware meshes, room and furniture stay fixed. The source material and UVs are retained, with documented cap-normal correction and side subdivision. This is an illustrative empty care setting, not clinical procedure guidance or cloth simulation.
+
+Independent source, rest/extreme-pose and native frame review plus measured timing is recorded in the preserved derivation evidence. The root accepted all four target-size six-game Main contacts and card states. Lessons and speech state in those screenshots are explicit synthetic presentation fixtures, not Nursing curriculum acceptance. Home has separate actual Main/production-catalog evidence with the unchanged approved static preview. No continuous audiovisual playback, audio listening, real microphone or browser/export validation is claimed.
+
+Production verification reads the persisted descriptors and exact production-root PNG bytes through the real catalog, raw loader, cache and scoped consumers, with no review/status override. It verifies all sixteen atlas frames, eight-second timing, reduced motion, hidden pause, visible resume, role crossfade and complete teardown. The 1024-square rendered rest view matches the accepted full source composition byte for byte in RGB.
+
+The four theme resources total 772,803 encoded and 32,275,456 decoded bytes. Grouped version 2 lesson manifests validate 32 MiB decoded per bundle, 10 MiB encoded per module, and 128 MiB residency. The four theme files leave 1,278,976 decoded bytes only within their own 32 MiB bundle; lesson assets can occupy separate validated bundles. This theme-only version 1 inspection inventory is not a production module manifest. Actual combined lesson inventories and all bundle memberships must pass validation before a module becomes ready; packaging still exports only resources referenced by ready modules.
+
+The existing Home preview, palette, spring audio, royal chest, reward namespace and 200 ms transition are preserved. Integration and native evidence is frozen under build/professional-english/nursing-theme-review/integration/review-receipt.json; all failed earlier runs and original candidates remain unchanged.
+
+## Recorded full-theme acceptance
+
+On 2026-10-16, the root reviewer independently accepted the final Home preview contacts, both new production rest views, verifier/integration evidence and the previously accepted source/motion/Main contacts. Only professional_nursing.status changed from pending to ready. All ten Nursing modules remain pending and the actual production catalog rejects all sixty module/mode combinations.
+
+The [immutable acceptance receipt](sources/innerscene-kenney-nursing-theme/theme-acceptance-2026-10-16.json) preserves the exact profile preimage, scoped decision, asset hashes, native evidence and closed-module checks. Earlier integration/proposal records intentionally preserve their historical pending status. No preview or source media was regenerated or recompressed. This acceptance does not promote any curriculum, lesson asset, medical procedure, browser export, audio listening or continuous audiovisual review.

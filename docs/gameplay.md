@@ -174,25 +174,27 @@ A failed save keeps settlement open for retry.
 
 ## Jelly Words
 
-Join letter chunks on a six-column board. Dragging `ca` onto `t` makes `cat`:
-the dragged chunk comes first, and the joined spelling must be an exact word
-in the current learning-age vocabulary. Both bodies flow into one larger jelly
-near the drop target. A completed word can join another piece only when their
-combination is also a valid word. Invalid combinations separate with elastic
-feedback and a negative sound, without creating a merged body.
+Join authored word parts on a six-column board. For example, dragging `tooth`
+onto `brush` makes the reviewed age-seven word `toothbrush`. The dragged part
+comes first, and every join must follow the word's authored composition. Both
+bodies flow into one larger jelly near the drop target. A legal intermediate
+can keep merging along its authored graph. Atomic words such as `cat` arrive
+whole. Invalid combinations separate with elastic feedback and a negative
+sound, without creating a merged body.
 
 Jellies can move to another position where they fit. Unsupported bodies fall
 vertically onto the next support or floor, including after a supporting word is
 collected or dragged away. Held bodies and active merges finish before their
 deferred fall. Larger bodies and long text wrap across rows when needed.
 
-At rest, exact-word partners share a painted color, including partners in the
-upcoming preview. Other pairs use different hues. Picking up a chunk updates
-the hints: targets that complete a word in the dragged order share its color,
-glow and gently pulse. This handles chunks with several correct partners, such
-as `ca` with either `t` or `n`. Reverse-only partners keep their resting paint
-and receive no highlight: dragging `t` does not cue `ca`, because `tca` is not
-a word. All jellies still react to physical contact, including invalid pairs.
+At rest, compatible authored partners share a painted color, including partners
+in the upcoming preview. Other pairs use different hues. Picking up a part
+updates the hints: legal targets in the dragged order share its color, glow and
+gently pulse. The age-seven `tooth` part can join either `brush` or `paste` when
+those words are in the round. Reverse-only partners keep their resting paint
+and receive no highlight: dragging `brush` does not cue `tooth`, because the
+authored graph requires `tooth` first. All jellies still react to physical
+contact, including invalid pairs.
 
 Automatic batches start 20 seconds apart. Every four successfully collected words
 reduce the next cycle's interval by two seconds, reaching a ten-second minimum

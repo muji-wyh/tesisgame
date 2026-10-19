@@ -1,0 +1,32 @@
+[
+  {
+    "requested_url": "https://3dicons.co/icons/f71a3e-bag?angle=dynamic",
+    "final_url": "https://3dicons.co/icons/f71a3e-bag?angle=dynamic",
+    "http_status": 200,
+    "retrieved_at_utc": "2026-10-16T20:27:38.779391+00:00",
+    "retained_path": "source-evidence/icon-page.html",
+    "bytes": 73501,
+    "sha256": "4e3fa8944f1c528f496f165cf189d719614d8377684ec699af6135751d389aac",
+    "content_type": "text/html; charset=utf-8"
+  },
+  {
+    "requested_url": "https://old.3dicons.co/",
+    "final_url": "https://old.3dicons.co/",
+    "http_status": 200,
+    "retrieved_at_utc": "2026-10-16T20:27:39.320407+00:00",
+    "retained_path": "source-evidence/library-v1-license-page.html",
+    "bytes": 71695,
+    "sha256": "096190ee4db963fbe0373a6cb37ca7411835bdfa38d3e4150b5bf0d349be3cdc",
+    "content_type": "text/html; charset=utf-8"
+  },
+  {
+    "requested_url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+    "final_url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+    "http_status": 200,
+    "retrieved_at_utc": "2026-10-16T20:27:39.753397+00:00",
+    "retained_path": "source-evidence/CC0-1.0-legalcode.txt",
+    "bytes": 7048,
+    "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+    "content_type": "text/plain; charset=utf-8"
+  }
+]

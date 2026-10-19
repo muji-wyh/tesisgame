@@ -1,0 +1,78 @@
+{
+  "schema": 1,
+  "status": "independent_machine_scope_and_decision_checks_passed",
+  "date": "2026-10-16",
+  "reviewer": "Codex nursing_theme (independent AI editorial language review; not human or subject-matter approval)",
+  "checks_passed": 6180,
+  "input_json_sha256": {
+    "preimages.json": "4d3b13cdfeb480e350f202636d8124a04a060bd3ca512421be1e661ded7819b6",
+    "source-consultations.json": "535cffd40469c13ecdc6fac19a4b431dac54c1e2851500cb7d2f039dd6b9d71c",
+    "expression-use-review.json": "f6d9383ae00ba7588b64a4931a49e0c2873c50a2835e7aa02977c99a1b74fec5",
+    "language-ledger.json": "8775abfc0238763817545f4799ed00d846a436f4d563e6a3d1123a991cd9aae1",
+    "structural-audit.json": "20535604d98d6d40372e268da36ac0b458c92e57743b2507692eb83a45ca8036"
+  },
+  "input_raw_sha256": {
+    "HANDOFF.md": "587f713907c8f9a1e76ee128f1b6bcf44a21397c30ce0a98574628c468817868",
+    "capture-preimages.cjs": "3467ff0460058a114a1951330fb811b917441aa116c6cb8e74625fe677b0fe5a",
+    "decision-notes.cjs": "f2a1c18f012e5c80d86b264006d89737abb23930fa157f8eada944326b862bf7",
+    "expression-notes.cjs": "aa9175186256c1603bb884cef009e584a3a0deb42be806440b3e42dcfc845e48",
+    "expression-use-review.json": "1b5c19f9776352882abfcfe91727655d00292d62b8e211aaa2409c30b5d99cb7",
+    "language-ledger.json": "ae141726bb134d922ca46e54c2bc2810a73b78e39927f82f0bc36f688771ebb0",
+    "preimages.json": "07fb0682ff86c5a8a52c971ea89d1320d0024efce4ef2eb16e2cdfee595d0ec7",
+    "prepare-ledger.cjs": "cbe8a92f07d8f0a365701498bfdf8df3a24836f4f9726e940ee2a63096c445b6",
+    "source-consultations.json": "2857963a531c9bae1bf6690ca17766e40b7ba259de105466570606136b9476df",
+    "source-notes.cjs": "e257af3b8a99371a0427f271873f1a6c1c3142606a977195693cbcea338ab55e",
+    "structural-audit.json": "0668419df2a465081c02d2f9503aa375493269f11c0855ffc688e64fa53d8e38",
+    "root-review-r01/source-crosschecks.json": "44b1aaa7eca4e28a4f2ae81fc0092848bba25a1e14f21b9f48b5ac32817f954a",
+    "client-refinement-review-r01/decision.json": "18100efe6daca59ac0119c63789e688c6476ae9763f2faa7055e2c670aab7cce",
+    "client-refinement-review-r01/source-consultation.json": "813a736b52dadabc160d93b349c43523a44168529c2453edb40e29a03ced0e24",
+    "client-refinement-review-r01/README.md": "52441e59181509c3c1153fa90c7abc014df547704fac97f2e554869342994041"
+  },
+  "review_dependency_raw_sha256": {
+    "tools/validate-professional-content.cjs": "a59598faf3ee917a738fe2c2dfc661ad03b7d6c325e7a3a2dc02a093e6e736cd",
+    "data/professional/schemas/lexeme.schema.json": "8837fa8779894d7b0d67e9e46d97aefdd7e952b476715df436db03ead4b4ff60",
+    "data/professional/schemas/common.schema.json": "4d27b5255e854f57be7a1778bc3aec6c467d0777c44f79ec8219ae617f6c8113",
+    "data/professional/schemas/morphology.schema.json": "5248a5e3fbbbcc70b63dbb13072f6ae0148a6ba2871eb9e44739bb94f4bbda6c",
+    "docs/plans/2026-10-15-professional-english-and-morphology.md": "2248f6b2ce2cc2bf62940535ff150c0af72a18149ac05dd5036ba163ccf1a476"
+  },
+  "proposal_json_sha256": "356e4c3d7e6c81c1a121582f53825959b16bc455b0d5a5cef6268b6a237c397f",
+  "source_provenance_json_sha256": "33a6b77804616c4dd72f3fa5b4b7b2c78ef98251cc61c2107e7ac7b880e83223",
+  "context_audit_json_sha256": "c1ec442ee349e88e1228fb145e97cb5e2e8a10e4e2c6924d2f1ea10cce4bf7bf",
+  "counts": {
+    "selected_entries": 10,
+    "full_language_acceptance_proposals": 9,
+    "full_language_holds": 1,
+    "author_candidate_schema_errors": 0,
+    "reviewed_candidate_schema_errors": 0,
+    "selected_memberships": 200,
+    "complete_protected_entries": 187,
+    "neighboring_entries": 88,
+    "complete_protected_expressions": 169,
+    "matching_expressions": 167,
+    "expression_memberships": 357,
+    "selected_focus_expressions": 8,
+    "other_local_expressions": 2,
+    "modules": 126,
+    "existing_source_records": 158,
+    "growth_files": 10,
+    "fresh_source_pages": 12,
+    "software_manager_exclusions": 3,
+    "visitor_channel_holds": 2,
+    "client_definition_refinements": 1
+  },
+  "scoped_records_exact_before_and_after": true,
+  "frozen_evidence_files_preserved": 15,
+  "registry_hashes_informational": {
+    "capture": "284918768ad2df30585d0efa3ab099a1bfa58ee22d9fc71afa00ae334f81042d",
+    "review_start": "af2c950cf3c7d2d22e487817526d464e96956ac2c7df40bd890783bd3dd73bdf",
+    "review_end": "af2c950cf3c7d2d22e487817526d464e96956ac2c7df40bd890783bd3dd73bdf"
+  },
+  "production_mutated": false,
+  "shared_tests_mutated": false,
+  "native_runtime_executed": false,
+  "limits": [
+    "Machine assertions validate scope and exact decisions; linguistic judgments are individually documented in the proposal.",
+    "No production gate was promoted, no serializer supplied and no native or shared test suite was executed.",
+    "Full language acceptance is scoped AI editorial evidence and does not imply human, legal, clinical, safety, morphology or media approval."
+  ]
+}

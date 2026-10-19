@@ -1,0 +1,84 @@
+{
+  "schema": 1,
+  "status": "source_revision_required_actual_binding_unbound",
+  "reviewer": "Codex morph_review, independent of source author Codex runtime_recovery",
+  "source_inventory": {
+    "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/source-inventory.json",
+    "bytes": 2485,
+    "raw_sha256": "21df8c149742cb4fc63acecb033bfb7d499e10310b5467c8ff81bd715db73598"
+  },
+  "actual_binding": null,
+  "preparation_execution_accepted": false,
+  "projected_afterimages_accepted": false,
+  "source_only_inspection_completed": true,
+  "findings": [
+    {
+      "id": "F01",
+      "priority": 1,
+      "file": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/binding.cjs",
+      "line": 37,
+      "title": "Accept the actual bag committed-receipt schema explicitly",
+      "finding": "successfulPredecessor unconditionally dereferences commit.result.status and commit.result.committed for both predecessors. The frozen shopping-bag commit source emits top-level status, committed, plan_sha256, prepared_sha256, state and target_manifest with no result object. Root confirmed that its planned actual bag receipt uses this top-level shape. Selecting that genuine receipt therefore throws before opening the preparation session, even after successful bag persistence.",
+      "required_change": "Create a fresh source revision with explicit predecessor-specific receipt validation: retain the actual accepted fourth10 schema and validate the bag top-level committed fields. Bind the actual persisted schema when it exists. Do not manufacture a wrapper or alter a genuine receipt to satisfy r02.",
+      "evidence": {
+        "bag_commit_source": "build/professional-english/shopping-bag-commit-proposal-r01/commit.cjs",
+        "bag_commit_source_sha256": "b522c987354d2e526cc9194b0dd5239b2592b07aa30f4ddd7bd16261e2c3c087",
+        "actual_bag_commit_or_persisted_success_claimed_by_this_review": false
+      }
+    },
+    {
+      "id": "F02",
+      "priority": 2,
+      "file": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/binding.cjs",
+      "line": 94,
+      "title": "Require an identified independent source and binding reviewer",
+      "finding": "The review gate verifies status, two hashes and preparation_execution_accepted but never checks reviewer identity. A review with no reviewer, an empty reviewer, or the preparation author's own identity satisfies this gate. That fails the documented independent source-and-binding acceptance contract and repeats a guard class already treated as material in earlier delivery work.",
+      "required_change": "Require a nonempty reviewer identity distinct from the preparation author, and bind the applicable author/reviewer roles explicitly. Apply the repository's dispatcher separation rule if required by the final root contract. Include negative guard evidence for missing, empty and author-self reviewer values before actual preparation.",
+      "method": "Static control-flow inspection only; no forged review was written and no guard code was executed."
+    },
+    {
+      "id": "F03",
+      "priority": 2,
+      "file": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/binding.cjs",
+      "line": 30,
+      "title": "Bind predecessor journals and the complete bag installed-target set to their commits",
+      "finding": "The gate accepts any separately pinned journal whose status is committed; it does not require that journal's hash, prepared identity or plan identity to match the selected commit. Nonempty caller-authored success_assertions can check only a generic status. The installed_targets loop later requires just a nonempty list containing five named files and verifies those selected pins; it does not compare the list with the complete authoritative bag target_manifest. A partial installed list or unrelated committed journal can therefore satisfy the executable gate despite the documented complete predecessor contract.",
+      "required_change": "In the fresh predecessor-specific validator, require the committed-state hash named by each receipt, matching prepared/plan identity, and exact equality of bag installed targets with the receipt's complete target_manifest including byte lengths and afterimage hashes. Allow a durable journal-copy path only through an explicit exact-content binding. Keep caller success_assertions as additional checks, not substitutes for these mandatory relationships.",
+      "related_lines": [33, 39, 52, 104, 105, 106],
+      "method": "Static control-flow and receipt-contract inspection only. Actual binding remains unselected."
+    }
+  ],
+  "supported_source_findings": [
+    "All thirteen source-inventory members match the frozen inventory. The accepted context copy is byte-identical to the durable proposal.",
+    "Eight complete before/after entries, sixteen consulted-only source records, exact accepted metadata decisions and literal source observations match the durable proposal and independent review. The content delta is four definitions, one example and five difficulty changes; forms, regions, practice modes, morphology and media remain exact.",
+    "Six complete holds and protected context group counts remain explicit. Fifty full donor rows match their original history-file rows and indices, with exactly one matching identity per group. All thirty-nine evidence/history pins checked by the static capture match.",
+    "All eighteen exact source anchors occur once in the author-selected bag scratch afterimages/native source. This does not bind the later actual installed tests.",
+    "The added lexical boundary restores only exact complete fifth10 before/after objects. It enters the existing fourth10 Foundation chain; no bag reversal is added there. Existing bag helpers remain byte-preserved by an explicit transform assertion.",
+    "The sixteen-source suffix is removed before the fourth10 and third10 suffixes. The old negative mutation offsets are shifted by sixteen while retaining their original assertions. Media history restores only fifth10 lexemes/sources while retaining the delivered bag.",
+    "The content transform preserves historical fourth10 counts via fifth10-only restoration, retains the existing Foundation/bag aggregate routes, and adds a missing fifth10 map at the fourth10 all-other boundary. Its fourth10 historical audit restores bag once and fifth10 once; its new previous-registry test retains the bag.",
+    "The native source inserts one fifth10 call and one fifth10 boundary before fourth10 reversal. It retains exact object, hold, donor, pending morphology and clone-independence checks. No native source was compiled or executed.",
+    "Preparation writes only a fixed single-use scratch directory after its current gate. It emits exact before/after artifacts, a complete target-set comparison, separate deferred final metadata and individually retained evidence. No production commit exists in these sources."
+  ],
+  "static_capture": {
+    "script": "capture.ps1",
+    "script_sha256": "a3111a9a66c08350fb71c678324ef40842487cfd93e693d81f8f5acbd6b48588",
+    "inspection": "capture-attempt-r01/inspection.json",
+    "inspection_sha256": "0440f986b2826f7df0d43f8f8cf65b91a2923fccd93e12a3ff9c2569d1a2cf96",
+    "inputs": "capture-attempt-r01/inputs.json",
+    "inputs_sha256": "2c95ee9e07187164636730f4ffd1b108f807346a28974a1a2d228e7e25732857",
+    "comparisons_passed": 261,
+    "comparisons_failed": 0,
+    "measured_inputs": 74,
+    "all_measured_inputs_rehashed_unchanged": true,
+    "exact_design_anchors": 18,
+    "strict_bag_helpers_inspected": 3
+  },
+  "limitations": [
+    "This is source-only review. Successful raw comparisons do not override the three source findings or authorize preparation.",
+    "No actual post-bag baseline, final count, final test preimage, complete live registry or independent final binding is selected. The current scratch bag afterimages are design references only.",
+    "No proposal/project module was imported, no transformer was executed, and no syntax check, test callback, validator, native process, guard probe, build, browser or transaction ran. The only executed code was this review's independent raw-file/JSON/literal-search capture.",
+    "The code paths were inspected statically; root-owned guards and projected checks remain necessary. In particular, final filesystem safety and complete validator/test dependency closure remain separate acceptance work.",
+    "No new language, morphology, media, expression, specialist, participant, ready-module or release acceptance is provided. Existing failures and immutable source snapshots remain unchanged."
+  ],
+  "required_next_step": "Preserve r02, author a fresh revision resolving F01-F03, independently inspect that source and its eventual actual post-bag binding, then let root own the one-shot preparation and later verification stages."
+}

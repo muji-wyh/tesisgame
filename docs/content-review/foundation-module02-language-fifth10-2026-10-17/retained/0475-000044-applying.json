@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 44,
+  "status": "applying",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "30510ec3536b40accbecf59a84f709932e698a34227ae22cc4c9e234799c9026",
+  "recorded_at": "2026-10-16T22:48:03.910Z",
+  "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/generation-observation.json",
+  "work": "work/a9d4500a-f68a-4756-9f18-2044ebf13fb2.bin"
+}

@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-10-16T20:56:25.380Z",
+  "source_sha256": "fd50917549ee2a40f63db12d2ed4bdc0c7be8a9893ecb8ea740c4dd35a3ebf87",
+  "requests": [
+    {
+      "id": "O-postpone",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/postpone",
+      "sense": "postpone_sng_1"
+    },
+    {
+      "id": "O-unsafe",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/unsafe",
+      "sense": "unsafe_sng_1"
+    },
+    {
+      "id": "O-hazard",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/hazard_1",
+      "sense": "hazard_sng_1"
+    },
+    {
+      "id": "P-CSV",
+      "url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/cefrj-vocabulary-profile-1.5.csv"
+    },
+    {
+      "id": "P-TERMS",
+      "url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/README.md"
+    },
+    {
+      "id": "P-METHOD",
+      "url": "https://www.cefr-j.org/download.html"
+    },
+    {
+      "id": "L-HAZARD",
+      "url": "https://www.teachingenglish.org.uk/teaching-resources/teaching-secondary/uk-history-and-literature/first-world-war/joining-british"
+    }
+  ],
+  "scope": "Fresh independent HTTP reference consultations. Only hashes, response metadata, three selected sense attributes and three English profile rows are retained. No full remote text or media is retained."
+}

@@ -1,0 +1,2988 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "bread.baked-dough-food.n",
+      "text": "bread",
+      "display_text": "bread",
+      "pos": "noun",
+      "definition": "A food made by baking a dough, commonly based on flour and liquid.",
+      "example": "The server checked which bread the guest requested.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "bread"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A recognizable loaf and slice without dietary claims.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "bread.baked-dough-food.n.analysis.v1",
+        "lexeme_id": "bread.baked-dough-food.n",
+        "text": "bread",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.bread",
+            "type": "atomic",
+            "canonical": "bread",
+            "surface": "bread"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "flour.finely-ground-food-powder.n",
+      "text": "flour",
+      "display_text": "flour",
+      "pos": "noun",
+      "definition": "A finely ground powder made from grain or another food source and used as an ingredient.",
+      "example": "The cook checked the flour's product label.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "flour"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An unbranded flour bag and a small mound of flour.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "flour.finely-ground-food-powder.n.analysis.v1",
+        "lexeme_id": "flour.finely-ground-food-powder.n",
+        "text": "flour",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.flour",
+            "type": "atomic",
+            "canonical": "flour",
+            "surface": "flour"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "rice.cereal-grain-food.n",
+      "text": "rice",
+      "display_text": "rice",
+      "pos": "noun",
+      "definition": "The edible grains of a rice plant, used as food.",
+      "example": "The order includes rice.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "rice"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A bowl of recognizable rice grains.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "rice.cereal-grain-food.n.analysis.v1",
+        "lexeme_id": "rice.cereal-grain-food.n",
+        "text": "rice",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.rice",
+            "type": "atomic",
+            "canonical": "rice",
+            "surface": "rice"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "pasta.shaped-dough-food.n",
+      "text": "pasta",
+      "display_text": "pasta",
+      "pos": "noun",
+      "definition": "A food made from dough formed into shapes and usually cooked before serving.",
+      "example": "The guest asked which pasta was available.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "pasta"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Several recognizable pasta shapes without ingredient guarantees.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "potato.edible-starchy-tuber.n",
+      "text": "potato",
+      "display_text": "potato",
+      "pos": "noun",
+      "definition": "The edible starchy underground tuber of a potato plant.",
+      "example": "The cook requested a potato from the ingredient list.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "potato"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A whole potato with recognizable skin texture.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "tomato.edible-tomato-fruit.n",
+      "text": "tomato",
+      "display_text": "tomato",
+      "pos": "noun",
+      "definition": "The edible fruit of a tomato plant, often used as a vegetable in cooking.",
+      "example": "She checked the tomato variety named in the recipe.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "tomato"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A ripe tomato with a green stem.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "onion.edible-layered-bulb.n",
+      "text": "onion",
+      "display_text": "onion",
+      "pos": "noun",
+      "definition": "An edible bulb with layers and a strong characteristic flavor.",
+      "example": "The recipe includes onion.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "onion"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A whole onion and a non-graphic cut section showing layers.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "onion.edible-layered-bulb.n.analysis.v1",
+        "lexeme_id": "onion.edible-layered-bulb.n",
+        "text": "onion",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.onion",
+            "type": "atomic",
+            "canonical": "onion",
+            "surface": "onion"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "garlic.flavoring-bulb-with-cloves.n",
+      "text": "garlic",
+      "display_text": "garlic",
+      "pos": "noun",
+      "definition": "A bulb divided into cloves and used to flavor food.",
+      "example": "The worker checked whether garlic was included.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "garlic"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A garlic bulb with separate cloves.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "garlic.flavoring-bulb-with-cloves.n.analysis.v1",
+        "lexeme_id": "garlic.flavoring-bulb-with-cloves.n",
+        "text": "garlic",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.garlic",
+            "type": "atomic",
+            "canonical": "garlic",
+            "surface": "garlic"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "carrot.edible-carrot-root.n",
+      "text": "carrot",
+      "display_text": "carrot",
+      "pos": "noun",
+      "definition": "The edible root of a carrot plant.",
+      "example": "The cook asked for the carrot listed in the recipe.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "carrot"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A whole carrot with a small leafy top.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "carrot.edible-carrot-root.n.analysis.v1",
+        "lexeme_id": "carrot.edible-carrot-root.n",
+        "text": "carrot",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.carrot",
+            "type": "atomic",
+            "canonical": "carrot",
+            "surface": "carrot"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "lettuce.leafy-salad-vegetable.n",
+      "text": "lettuce",
+      "display_text": "lettuce",
+      "pos": "noun",
+      "definition": "A plant whose leaves are commonly eaten as salad.",
+      "example": "The server checked which lettuce was available.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "lettuce"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A recognizable head of lettuce.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "lettuce.leafy-salad-vegetable.n.analysis.v1",
+        "lexeme_id": "lettuce.leafy-salad-vegetable.n",
+        "text": "lettuce",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.lettuce",
+            "type": "atomic",
+            "canonical": "lettuce",
+            "surface": "lettuce"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "mushroom.edible-fungal-fruiting-body.n",
+      "text": "mushroom",
+      "display_text": "mushroom",
+      "pos": "noun",
+      "definition": "A fungal fruiting body sold or identified as suitable for food; many wild fungi are not edible.",
+      "example": "The chef checked the supplied mushroom product.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "mushroom"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A familiar cultivated food mushroom with no foraging implication.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "bean.edible-bean-seed.n",
+      "text": "bean",
+      "display_text": "bean",
+      "pos": "noun",
+      "definition": "An edible seed of a bean plant used as food.",
+      "example": "The recipe identifies the type of bean required.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "bean"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A bowl of common food beans with a product label.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "bean.edible-bean-seed.n.analysis.v1",
+        "lexeme_id": "bean.edible-bean-seed.n",
+        "text": "bean",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.bean",
+            "type": "atomic",
+            "canonical": "bean",
+            "surface": "bean"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "lentil.small-edible-pulse-seed.n",
+      "text": "lentil",
+      "display_text": "lentil",
+      "pos": "noun",
+      "definition": "A small lens-shaped edible seed used as a pulse.",
+      "example": "The dish contains lentil as an ingredient.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "lentil"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A small bowl of recognizable lentils.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "professional.lentil.small-edible-pulse-seed.n.morphology.v1",
+        "lexeme_id": "lentil.small-edible-pulse-seed.n",
+        "text": "lentil",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.lentil",
+            "canonical": "lentil",
+            "surface": "lentil",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Pending Professional English review. Explicit sense comparison: Both nouns name the edible pulse seed. The professional entry gives botanical detail without changing the inherited whole-form seed identity. Inherited Growth rationale: The soup-seed noun is one borrowed base. The Growth AI editorial status is not transferred. External sources listed here are inherited repository records, not newly consulted in this pass.",
+          "references": [
+            "https://openlibrary-repo.ecampusontario.ca/jspui/bitstream/123456789/497/6/Essentials-of-Linguistics-1539375829.html"
+          ],
+          "provenance": {
+            "corpus": "Growth",
+            "file": "data/vocabulary/morphology/age-10.json",
+            "entry_id": "lentil",
+            "analysis_id": "growth.lentil.analysis.v1",
+            "analysis_sha256": "7a562cf935a530b07b37b09674c4fb3b8126e6da54da2165b77d6c3200447462",
+            "source_review_status": "reviewed"
+          },
+          "source_consultation": "inherited_repository_record_not_newly_consulted_in_this_pass"
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "milk.animal-milk-food.n",
+      "text": "milk",
+      "display_text": "milk",
+      "pos": "noun",
+      "definition": "A liquid produced by mammals and used as a food or ingredient.",
+      "example": "The worker checked whether the recipe contained milk.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "milk"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An unbranded dairy-milk container with an ingredient label.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "milk.animal-milk-food.n.analysis.v1",
+        "lexeme_id": "milk.animal-milk-food.n",
+        "text": "milk",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.milk",
+            "type": "atomic",
+            "canonical": "milk",
+            "surface": "milk"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "cream.milk-fat-rich-food.n",
+      "text": "cream",
+      "display_text": "cream",
+      "pos": "noun",
+      "definition": "A dairy product containing a relatively high proportion of milk fat.",
+      "example": "The recipe specifies cream.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "cream"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A small dairy-cream container without nutritional claims.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "cream.milk-fat-rich-food.n.analysis.v1",
+        "lexeme_id": "cream.milk-fat-rich-food.n",
+        "text": "cream",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.cream",
+            "type": "atomic",
+            "canonical": "cream",
+            "surface": "cream"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "butter.churned-milk-fat-food.n",
+      "text": "butter",
+      "display_text": "butter",
+      "pos": "noun",
+      "definition": "A food made mainly from milk fat, commonly by churning cream.",
+      "example": "The worker checked the butter's ingredient information.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "butter"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A wrapped block of butter on a dish.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "butter.churned-milk-fat-food.n.analysis.v1",
+        "lexeme_id": "butter.churned-milk-fat-food.n",
+        "text": "butter",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.butter",
+            "type": "atomic",
+            "canonical": "butter",
+            "surface": "butter"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "cheese.curd-based-dairy-food.n",
+      "text": "cheese",
+      "display_text": "cheese",
+      "pos": "noun",
+      "definition": "A food made by processing milk curds, available in many varieties.",
+      "example": "The guest asked which cheese the dish contains.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "cheese"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A familiar cheese portion with a fictional product label.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "cheese.curd-based-dairy-food.n.analysis.v1",
+        "lexeme_id": "cheese.curd-based-dairy-food.n",
+        "text": "cheese",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.cheese",
+            "type": "atomic",
+            "canonical": "cheese",
+            "surface": "cheese"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "yogurt.cultured-milk-food.n",
+      "text": "yogurt",
+      "display_text": "yogurt",
+      "pos": "noun",
+      "definition": "A food made by fermenting milk with suitable bacterial cultures.",
+      "example": "The worker checked the yogurt product label.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "yogurt",
+        "yoghurt"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An unbranded yogurt pot without health claims.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "professional.yogurt.cultured-milk-food.n.morphology.v1",
+        "lexeme_id": "yogurt.cultured-milk-food.n",
+        "text": "yogurt",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.yogurt",
+            "canonical": "yogurt",
+            "surface": "yogurt",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Pending Professional English review. Explicit sense comparison: Both nouns name the cultured milk food. The professional fermentation detail does not change the food sense or the whole loanword decision. Inherited Growth rationale: The fermented-food noun is a whole loanword. The Growth AI editorial status is not transferred. External sources listed here are inherited repository records, not newly consulted in this pass.",
+          "references": [
+            "https://openlibrary-repo.ecampusontario.ca/jspui/bitstream/123456789/497/6/Essentials-of-Linguistics-1539375829.html"
+          ],
+          "provenance": {
+            "corpus": "Growth",
+            "file": "data/vocabulary/morphology/age-06.json",
+            "entry_id": "yogurt",
+            "analysis_id": "growth.yogurt.analysis.v1",
+            "analysis_sha256": "50055d6e86130f223084a4a87aad9a331949f59dd438875cd0609d42a6917772",
+            "source_review_status": "reviewed"
+          },
+          "source_consultation": "inherited_repository_record_not_newly_consulted_in_this_pass"
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "egg.bird-egg-food.n",
+      "text": "egg",
+      "display_text": "egg",
+      "pos": "noun",
+      "definition": "A bird's egg used as food, commonly a hen's egg.",
+      "example": "The allergy query concerns egg in the recipe.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "egg"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A whole hen's egg in a food context.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "egg.bird-egg-food.n.analysis.v1",
+        "lexeme_id": "egg.bird-egg-food.n",
+        "text": "egg",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.egg",
+            "type": "atomic",
+            "canonical": "egg",
+            "surface": "egg"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "chicken.chicken-meat-food.n",
+      "text": "chicken",
+      "display_text": "chicken",
+      "pos": "noun",
+      "definition": "Meat from a chicken used as food.",
+      "example": "The server checked which dish contained chicken.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "chicken"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A clearly labeled prepared chicken dish without raw-handling instructions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "professional.chicken.chicken-meat-food.n.morphology.v1",
+        "lexeme_id": "chicken.chicken-meat-food.n",
+        "text": "chicken",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.chicken",
+            "canonical": "chicken",
+            "surface": "chicken",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Pending Professional English review. Explicit sense comparison: Both entries explicitly select chicken meat as food. The source canonical identity is the meat sense rather than an animal-stage decomposition using chick. Inherited Growth rationale: The food sense is retained whole; chick plus a productive en suffix does not describe this meat sense. The Growth AI editorial status is not transferred. External sources listed here are inherited repository records, not newly consulted in this pass.",
+          "references": [
+            "https://openlibrary-repo.ecampusontario.ca/jspui/bitstream/123456789/497/6/Essentials-of-Linguistics-1539375829.html"
+          ],
+          "provenance": {
+            "corpus": "Growth",
+            "file": "data/vocabulary/morphology/age-04.json",
+            "entry_id": "chicken",
+            "analysis_id": "growth.chicken.analysis.v1",
+            "analysis_sha256": "3fe1b638f51a03519aef7f2d78aa2dd2ebc05df2a5eb8b54964e3b30f147615f",
+            "source_review_status": "reviewed"
+          },
+          "source_consultation": "inherited_repository_record_not_newly_consulted_in_this_pass"
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "beef.cattle-meat-food.n",
+      "text": "beef",
+      "display_text": "beef",
+      "pos": "noun",
+      "definition": "Meat from cattle used as food.",
+      "example": "The guest asked whether the dish contained beef.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "beef"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A labeled prepared beef dish without cooking claims.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "beef.cattle-meat-food.n.analysis.v1",
+        "lexeme_id": "beef.cattle-meat-food.n",
+        "text": "beef",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.beef",
+            "type": "atomic",
+            "canonical": "beef",
+            "surface": "beef"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "pork.pig-meat-food.n",
+      "text": "pork",
+      "display_text": "pork",
+      "pos": "noun",
+      "definition": "Meat from a pig used as food.",
+      "example": "The worker checked whether pork was an ingredient.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "pork"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A labeled prepared pork dish without stereotypes about preference.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "pork.pig-meat-food.n.analysis.v1",
+        "lexeme_id": "pork.pig-meat-food.n",
+        "text": "pork",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.pork",
+            "type": "atomic",
+            "canonical": "pork",
+            "surface": "pork"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "fish.fish-as-food.n",
+      "text": "fish",
+      "display_text": "fish",
+      "pos": "noun",
+      "definition": "Fish used as food, including many different species.",
+      "example": "The guest asked which fish was used in the dish.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "fish"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A labeled prepared fish dish without allergen-safety guarantees.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "fish.fish-as-food.n.analysis.v1",
+        "lexeme_id": "fish.fish-as-food.n",
+        "text": "fish",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.fish",
+            "type": "atomic",
+            "canonical": "fish",
+            "surface": "fish"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "shellfish.aquatic-invertebrates-as-food.n",
+      "text": "shellfish",
+      "display_text": "shellfish",
+      "pos": "noun",
+      "definition": "Aquatic invertebrates such as crustaceans or mollusks used as food; the grouping does not replace specific allergen information.",
+      "example": "The supervisor checked the particular shellfish species in the order.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "shellfish"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Clearly labeled common food shellfish without implying a single allergen category.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "shellfish.aquatic-invertebrates-as-food.n.analysis.v1",
+        "lexeme_id": "shellfish.aquatic-invertebrates-as-food.n",
+        "text": "shellfish",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.shell",
+            "type": "stem",
+            "canonical": "shell",
+            "surface": "shell"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.fish",
+            "type": "atomic",
+            "canonical": "fish",
+            "surface": "fish"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "shellfish",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "oil.edible-fat-liquid.n",
+      "text": "oil",
+      "display_text": "oil",
+      "pos": "noun",
+      "definition": "A liquid fat used as a food ingredient or in cooking.",
+      "example": "The cook checked the type of oil on the label.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "oil"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An unbranded edible-oil bottle with a product-type label.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "oil.edible-fat-liquid.n.analysis.v1",
+        "lexeme_id": "oil.edible-fat-liquid.n",
+        "text": "oil",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.oil",
+            "type": "atomic",
+            "canonical": "oil",
+            "surface": "oil"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "vinegar.acidic-food-liquid.n",
+      "text": "vinegar",
+      "display_text": "vinegar",
+      "pos": "noun",
+      "definition": "An acidic liquid used to flavor or prepare food.",
+      "example": "The recipe names the required vinegar.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "vinegar"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A recognizable vinegar bottle with a fictional label.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "professional.vinegar.acidic-food-liquid.n.morphology.v1",
+        "lexeme_id": "vinegar.acidic-food-liquid.n",
+        "text": "vinegar",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.vinegar",
+            "canonical": "vinegar",
+            "surface": "vinegar",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Pending Professional English review. Explicit sense comparison: Both nouns select the acidic liquid used in food preparation. Preserve the whole English loanword and do not turn its historical French components into English pieces. Inherited Growth rationale: The sour-liquid noun is a whole English loanword; its historical wine-and-sour formation is not a vin plus egar English exercise. The Growth AI editorial status is not transferred. External sources listed here are inherited repository records, not newly consulted in this pass.",
+          "references": [
+            "https://openlibrary-repo.ecampusontario.ca/jspui/bitstream/123456789/497/6/Essentials-of-Linguistics-1539375829.html"
+          ],
+          "provenance": {
+            "corpus": "Growth",
+            "file": "data/vocabulary/morphology/age-10.json",
+            "entry_id": "vinegar",
+            "analysis_id": "growth.vinegar.analysis.v1",
+            "analysis_sha256": "58d87961e05faa2abdd78ce4e270451f625bb2d282d230854b1c237fbf5eb5a5",
+            "source_review_status": "reviewed"
+          },
+          "source_consultation": "inherited_repository_record_not_newly_consulted_in_this_pass"
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "salt.culinary-sodium-chloride.n",
+      "text": "salt",
+      "display_text": "salt",
+      "pos": "noun",
+      "definition": "A crystalline substance made mainly of sodium chloride and used as a food ingredient.",
+      "example": "The cook checked the salt specified in the recipe.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "salt"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A small culinary salt container and crystals.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "salt.culinary-sodium-chloride.n.analysis.v1",
+        "lexeme_id": "salt.culinary-sodium-chloride.n",
+        "text": "salt",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.salt",
+            "type": "atomic",
+            "canonical": "salt",
+            "surface": "salt"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "sugar.sweet-crystalline-food-ingredient.n",
+      "text": "sugar",
+      "display_text": "sugar",
+      "pos": "noun",
+      "definition": "A sweet substance commonly used to flavor food, often supplied as crystals.",
+      "example": "The worker checked the sugar product on the list.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "sugar"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A sugar container and a spoonful of crystals.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "sugar.sweet-crystalline-food-ingredient.n.analysis.v1",
+        "lexeme_id": "sugar.sweet-crystalline-food-ingredient.n",
+        "text": "sugar",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.sugar",
+            "type": "atomic",
+            "canonical": "sugar",
+            "surface": "sugar"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "herb.culinary-leaf-or-soft-plant-part.n",
+      "text": "herb",
+      "display_text": "herb",
+      "pos": "noun",
+      "definition": "A plant leaf or other soft plant part used mainly to add flavor to food.",
+      "example": "The chef identified the herb in the dish.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "herb"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Clearly recognizable culinary herb leaves.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "herb.culinary-leaf-or-soft-plant-part.n.analysis.v1",
+        "lexeme_id": "herb.culinary-leaf-or-soft-plant-part.n",
+        "text": "herb",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.herb",
+            "type": "atomic",
+            "canonical": "herb",
+            "surface": "herb"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "spice.culinary-flavoring-plant-material.n",
+      "text": "spice",
+      "display_text": "spice",
+      "pos": "noun",
+      "definition": "Plant material such as a seed, bark, or root used mainly to add flavor to food.",
+      "example": "The worker asked which spice the recipe named.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "spice"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Several labeled culinary spice examples without health claims.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "spice.culinary-flavoring-plant-material.n.analysis.v1",
+        "lexeme_id": "spice.culinary-flavoring-plant-material.n",
+        "text": "spice",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.spice",
+            "type": "atomic",
+            "canonical": "spice",
+            "surface": "spice"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "sauce.food-accompanying-liquid-or-mixture.n",
+      "text": "sauce",
+      "display_text": "sauce",
+      "pos": "noun",
+      "definition": "A liquid or semi-liquid mixture served with or used in food.",
+      "example": "The guest asked which sauce came with the dish.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "sauce"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A small sauce bowl beside a labeled meal.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "sauce.food-accompanying-liquid-or-mixture.n.analysis.v1",
+        "lexeme_id": "sauce.food-accompanying-liquid-or-mixture.n",
+        "text": "sauce",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, spelling alternations, and an intact initialism. A qualified language reviewer must verify allomorphs, the depth of analysis of intact stems and lexicalized compounds, possessive-clitic teaching, and suitability for learning. Historical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.sauce",
+            "type": "atomic",
+            "canonical": "sauce",
+            "surface": "sauce"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Food-safety meaning, local requirements, role boundaries, regional vocabulary, and morphology require qualified review. No temperature, holding duration, chemical concentration, cooking procedure, allergen-safety guarantee, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    }
+  ]
+}

@@ -1,0 +1,157 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-10-16T20:56:47.673Z",
+  "reviewer": "Codex runtime_recovery independent AI language reviewer",
+  "source_before_sha256": "fd50917549ee2a40f63db12d2ed4bdc0c7be8a9893ecb8ea740c4dd35a3ebf87",
+  "source_after_sha256": "fd50917549ee2a40f63db12d2ed4bdc0c7be8a9893ecb8ea740c4dd35a3ebf87",
+  "source_unchanged": true,
+  "results": [
+    {
+      "id": "O-postpone",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/postpone",
+      "started_at": "2026-10-16T20:56:25.381Z",
+      "finished_at": "2026-10-16T20:56:26.271Z",
+      "final_url": "https://www.oxfordlearnersdictionaries.com/definition/english/postpone",
+      "http_status": 200,
+      "ok": true,
+      "bytes": 83786,
+      "raw_body_sha256": "59aeacad23ef2c5b99d53e8d94c57908326fcbabea310a0b344aeebe6f8beacf",
+      "content_type": "text/html;charset=UTF-8",
+      "complete_source_retained": false,
+      "media_acquired": false,
+      "literal_selected_attributes": {
+        "element_id": "postpone_sng_1",
+        "sense_number": null,
+        "cefr": null,
+        "fkcefr": "c1"
+      }
+    },
+    {
+      "id": "O-unsafe",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/unsafe",
+      "started_at": "2026-10-16T20:56:26.272Z",
+      "finished_at": "2026-10-16T20:56:26.508Z",
+      "final_url": "https://www.oxfordlearnersdictionaries.com/definition/english/unsafe",
+      "http_status": 200,
+      "ok": true,
+      "bytes": 72362,
+      "raw_body_sha256": "356cecef84384d0e2f162b2ef9741449ecbadee6ffe6593ea8ccb9452726aa67",
+      "content_type": "text/html;charset=UTF-8",
+      "complete_source_retained": false,
+      "media_acquired": false,
+      "literal_selected_attributes": {
+        "element_id": "unsafe_sng_1",
+        "sense_number": "1",
+        "cefr": null,
+        "fkcefr": null
+      }
+    },
+    {
+      "id": "O-hazard",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/hazard_1",
+      "started_at": "2026-10-16T20:56:26.509Z",
+      "finished_at": "2026-10-16T20:56:26.741Z",
+      "final_url": "https://www.oxfordlearnersdictionaries.com/definition/english/hazard_1",
+      "http_status": 200,
+      "ok": true,
+      "bytes": 76860,
+      "raw_body_sha256": "69236f320e414f876719848deacbbe2548eb6cb63f3126fbee5629cfea4807c4",
+      "content_type": "text/html;charset=UTF-8",
+      "complete_source_retained": false,
+      "media_acquired": false,
+      "literal_selected_attributes": {
+        "element_id": "hazard_sng_1",
+        "sense_number": null,
+        "cefr": null,
+        "fkcefr": "c1"
+      }
+    },
+    {
+      "id": "P-CSV",
+      "url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/cefrj-vocabulary-profile-1.5.csv",
+      "started_at": "2026-10-16T20:56:26.741Z",
+      "finished_at": "2026-10-16T20:56:26.970Z",
+      "final_url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/cefrj-vocabulary-profile-1.5.csv",
+      "http_status": 200,
+      "ok": true,
+      "bytes": 233214,
+      "raw_body_sha256": "b0dd3c635f1c9a4fdf1490c7e5b7c48e8bbe55b652ad0c9860a95f98e10ae498",
+      "content_type": "text/plain; charset=utf-8",
+      "complete_source_retained": false,
+      "media_acquired": false,
+      "selected_rows": [
+        {
+          "term": "postpone",
+          "matches": [
+            {
+              "line_number_1_based": 5160,
+              "csv": "postpone,verb,B2,,,"
+            }
+          ]
+        },
+        {
+          "term": "unsafe",
+          "matches": [
+            {
+              "line_number_1_based": 7341,
+              "csv": "unsafe,adjective,B2,,,"
+            }
+          ]
+        },
+        {
+          "term": "hazard",
+          "matches": [
+            {
+              "line_number_1_based": 3155,
+              "csv": "hazard,noun,B1,,,"
+            }
+          ]
+        }
+      ],
+      "version": "1.5",
+      "selected_sense_ids_present": false,
+      "productive_mastery_certification": false
+    },
+    {
+      "id": "P-TERMS",
+      "url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/README.md",
+      "started_at": "2026-10-16T20:56:26.989Z",
+      "finished_at": "2026-10-16T20:56:27.223Z",
+      "final_url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/README.md",
+      "http_status": 200,
+      "ok": true,
+      "bytes": 1956,
+      "raw_body_sha256": "8b69f7366fa3c7be328cb9ba02ceb7b3725697f36125bb75b85131d664b5e359",
+      "content_type": "text/plain; charset=utf-8",
+      "complete_source_retained": false,
+      "media_acquired": false
+    },
+    {
+      "id": "P-METHOD",
+      "url": "https://www.cefr-j.org/download.html",
+      "started_at": "2026-10-16T20:56:27.223Z",
+      "finished_at": "2026-10-16T20:56:27.665Z",
+      "final_url": "https://www.cefr-j.org/download.html",
+      "http_status": 200,
+      "ok": true,
+      "bytes": 70960,
+      "raw_body_sha256": "b44caaefa496adde0ef122bbea95dcaabbef5fee77d26de2c9611d2bb6284cdd",
+      "content_type": "text/html",
+      "complete_source_retained": false,
+      "media_acquired": false
+    },
+    {
+      "id": "L-HAZARD",
+      "url": "https://www.teachingenglish.org.uk/teaching-resources/teaching-secondary/uk-history-and-literature/first-world-war/joining-british",
+      "started_at": "2026-10-16T20:56:27.665Z",
+      "finished_at": "2026-10-16T20:56:47.673Z",
+      "ok": false,
+      "error": "TimeoutError: The operation was aborted due to timeout",
+      "complete_source_retained": false
+    }
+  ],
+  "production_mutated": false,
+  "tests_dispatched": false,
+  "native_dispatched": false,
+  "serializer_dispatched": false
+}

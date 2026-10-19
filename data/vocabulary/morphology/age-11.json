@@ -1,0 +1,3542 @@
+{
+  "schema": 1,
+  "revision": "growth-morphology-v1",
+  "age": 11,
+  "entries": [
+    {
+      "id": "rhinoceros",
+      "text": "rhinoceros",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The source identifies nose and horn constituents. The horn root has an explicitly recorded ceros realization in this borrowed animal name; neither piece is presented as an independent English word.",
+        "references": [
+          "anderson-morphology",
+          "mw-rhinoceros",
+          "mw-cerat-"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.rhinoceros.analysis.v1",
+        "lexeme_id": "rhinoceros",
+        "text": "rhinoceros",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.combining.rhino.nose",
+            "canonical": "rhino-",
+            "surface": "rhino",
+            "type": "combining_form",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.root.cerat.horn",
+            "canonical": "cerat",
+            "surface": "ceros",
+            "type": "root",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "rhinoceros",
+            "rule": "rhino-plus-horn-root-authored-ceros",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "chameleon",
+      "text": "chameleon",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The animal name is a whole modern loanword; its ancient ground-and-lion metaphor is not imposed as a current English animal compound.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.chameleon.analysis.v1",
+        "lexeme_id": "chameleon",
+        "text": "chameleon",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.chameleon",
+            "canonical": "chameleon",
+            "surface": "chameleon",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "armadillo",
+      "text": "armadillo",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The animal name is borrowed whole; its Spanish diminutive history is not treated as a productive English illo suffix.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.armadillo.analysis.v1",
+        "lexeme_id": "armadillo",
+        "text": "armadillo",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.armadillo",
+            "canonical": "armadillo",
+            "surface": "armadillo",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "porcupine",
+      "text": "porcupine",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The animal name is lexicalized from a borrowing; pork and the modern pine tree would give a misleading present-day decomposition.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.porcupine.analysis.v1",
+        "lexeme_id": "porcupine",
+        "text": "porcupine",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.porcupine",
+            "canonical": "porcupine",
+            "surface": "porcupine",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "centipede",
+      "text": "centipede",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The sourced animal name contains the hundred and foot elements. Its conventional name does not guarantee an exact count of one hundred legs.",
+        "references": [
+          "anderson-morphology",
+          "mw-centipede"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.centipede.analysis.v1",
+        "lexeme_id": "centipede",
+        "text": "centipede",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.combining.centi.hundred",
+            "canonical": "centi-",
+            "surface": "centi",
+            "type": "combining_form",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.combining.pede.foot",
+            "canonical": "-pede",
+            "surface": "pede",
+            "type": "combining_form",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "centipede",
+            "rule": "centi-hundred-plus-pede",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "anemone",
+      "text": "anemone",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The marine-animal name is a whole borrowed stem in this sense, distinct from the flower naming history.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.anemone.analysis.v1",
+        "lexeme_id": "anemone",
+        "text": "anemone",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.anemone",
+            "canonical": "anemone",
+            "surface": "anemone",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "nautilus",
+      "text": "nautilus",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The marine-animal noun is a whole borrowed singular form; us is not an English plural suffix.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.nautilus.analysis.v1",
+        "lexeme_id": "nautilus",
+        "text": "nautilus",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.nautilus",
+            "canonical": "nautilus",
+            "surface": "nautilus",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "plankton",
+      "text": "plankton",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The collective organism noun is one borrowed base, not plank plus ton.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.plankton.analysis.v1",
+        "lexeme_id": "plankton",
+        "text": "plankton",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.plankton",
+            "canonical": "plankton",
+            "surface": "plankton",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "stingray",
+      "text": "stingray",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The fish name combines its sting with ray in the marine-animal sense, not a beam of light.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.stingray.analysis.v1",
+        "lexeme_id": "stingray",
+        "text": "stingray",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.sting",
+            "canonical": "sting",
+            "surface": "sting",
+            "type": "compound",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.part.ray.fish",
+            "canonical": "ray",
+            "surface": "ray",
+            "type": "compound",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "stingray",
+            "rule": "authored-compound-concatenation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "swordfish",
+      "text": "swordfish",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The fish name compares its long bill to a sword; it retains the conventional animal compound.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.swordfish.analysis.v1",
+        "lexeme_id": "swordfish",
+        "text": "swordfish",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.sword",
+            "canonical": "sword",
+            "surface": "sword",
+            "type": "compound",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.fish",
+            "canonical": "fish",
+            "surface": "fish",
+            "type": "compound",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "swordfish",
+            "rule": "authored-compound-concatenation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "crutches",
+      "text": "crutches",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "Supports used for walking with an injury",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The walking supports are multiple crutches; plural -s has its es spelling after the crutch base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.crutches.analysis.v1",
+        "lexeme_id": "crutches",
+        "text": "crutches",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.crutch",
+            "canonical": "crutch",
+            "surface": "crutch",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.s.plural",
+            "canonical": "-s",
+            "surface": "es",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "crutches",
+            "rule": "crutch-plus-plural-es",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "crust",
+      "text": "crust",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "The hard outer layer of Earth",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The stored outer-Earth-layer noun is one base, extended from the ordinary hard-covering sense.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.crust.analysis.v1",
+        "lexeme_id": "crust",
+        "text": "crust",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.crust",
+            "canonical": "crust",
+            "surface": "crust",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "mantle",
+      "text": "mantle",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "The thick layer beneath Earth's crust",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The geological-layer noun is one lexical base, not mant plus le.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.mantle.analysis.v1",
+        "lexeme_id": "mantle",
+        "text": "mantle",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.mantle",
+            "canonical": "mantle",
+            "surface": "mantle",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "ozone",
+      "text": "ozone",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "A gas helping block harmful sunlight",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The gas name is one scientific borrowing; zone is not the geographic-region component here.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.ozone.analysis.v1",
+        "lexeme_id": "ozone",
+        "text": "ozone",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.ozone",
+            "canonical": "ozone",
+            "surface": "ozone",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "bedrock",
+      "text": "bedrock",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "The solid rock beneath loose soil",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The underlying rock layer uses bed in its geological layer sense, not the sleeping furniture.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.bedrock.analysis.v1",
+        "lexeme_id": "bedrock",
+        "text": "bedrock",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.part.bed.layer",
+            "canonical": "bed",
+            "surface": "bed",
+            "type": "compound",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.rock",
+            "canonical": "rock",
+            "surface": "rock",
+            "type": "compound",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "bedrock",
+            "rule": "authored-compound-concatenation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "subsoil",
+      "text": "subsoil",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "The layer of earth beneath topsoil",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The earth layer is under the topsoil; under-prefix sub- modifies soil.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.subsoil.analysis.v1",
+        "lexeme_id": "subsoil",
+        "text": "subsoil",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.affix.sub.under",
+            "canonical": "sub-",
+            "surface": "sub",
+            "type": "prefix",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.soil",
+            "canonical": "soil",
+            "surface": "soil",
+            "type": "stem",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "subsoil",
+            "rule": "sub-under-plus-soil",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "topsoil",
+      "text": "topsoil",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "The upper layer where many plants grow",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The soil occupies the top layer; both bases retain their ordinary spatial and material senses.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.topsoil.analysis.v1",
+        "lexeme_id": "topsoil",
+        "text": "topsoil",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.top",
+            "canonical": "top",
+            "surface": "top",
+            "type": "compound",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.soil",
+            "canonical": "soil",
+            "surface": "soil",
+            "type": "compound",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "topsoil",
+            "rule": "authored-compound-concatenation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "protein",
+      "text": "protein",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "A nutrient the body needs for growth",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The nutrient name is a lexicalized scientific term; its final in spelling alone does not establish an English derivation from a free prote base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.protein.analysis.v1",
+        "lexeme_id": "protein",
+        "text": "protein",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.protein",
+            "canonical": "protein",
+            "surface": "protein",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "carbohydrate",
+      "text": "carbohydrate",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "A nutrient that supplies the body energy",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The source formation combines carbon-related carbo- and chemical hydrate. Its historical naming theory is distinguished from the stored modern nutrient sense.",
+        "references": [
+          "anderson-morphology",
+          "wiktionary-carbohydrate"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.carbohydrate.analysis.v1",
+        "lexeme_id": "carbohydrate",
+        "text": "carbohydrate",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.combining.carbo.carbon",
+            "canonical": "carbo-",
+            "surface": "carbo",
+            "type": "combining_form",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.part.hydrate.chemical",
+            "canonical": "hydrate",
+            "surface": "hydrate",
+            "type": "stem",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "carbohydrate",
+            "rule": "carbo-plus-chemical-hydrate",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "grain",
+      "text": "grain",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "A small hard seed grown for food",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The food-seed noun is one stem.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.grain.analysis.v1",
+        "lexeme_id": "grain",
+        "text": "grain",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.grain",
+            "canonical": "grain",
+            "surface": "grain",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "poultry",
+      "text": "poultry",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "Farm birds raised for meat or eggs",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The farm-bird collective noun is lexicalized; a current free poult base is not required to explain its entire meaning.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.poultry.analysis.v1",
+        "lexeme_id": "poultry",
+        "text": "poultry",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.poultry",
+            "canonical": "poultry",
+            "surface": "poultry",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "bladder",
+      "text": "bladder",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "The organ that stores urine",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The urinary-organ noun is one stem; it is not an agent formed from a bladd verb.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.bladder.analysis.v1",
+        "lexeme_id": "bladder",
+        "text": "bladder",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.bladder",
+            "canonical": "bladder",
+            "surface": "bladder",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "kidney",
+      "text": "kidney",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "An organ that filters the blood",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The filtering-organ name is one lexical base; kid plus ney would invent the wrong internal structure.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.kidney.analysis.v1",
+        "lexeme_id": "kidney",
+        "text": "kidney",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.kidney",
+            "canonical": "kidney",
+            "surface": "kidney",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "lungs",
+      "text": "lungs",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "Organs used to breathe air",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The breathing organs use the current singular lung plus regular plural -s.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.lungs.analysis.v1",
+        "lexeme_id": "lungs",
+        "text": "lungs",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.lung",
+            "canonical": "lung",
+            "surface": "lung",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.s.plural",
+            "canonical": "-s",
+            "surface": "s",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "lungs",
+            "rule": "lung-plus-plural-s",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "muscle",
+      "text": "muscle",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "Body tissue that makes movement possible",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The movement-tissue noun is one borrowed stem; its historical mouse metaphor is not a productive contemporary compound.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.muscle.analysis.v1",
+        "lexeme_id": "muscle",
+        "text": "muscle",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.muscle",
+            "canonical": "muscle",
+            "surface": "muscle",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "spine",
+      "text": "spine",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "The backbone supporting the body",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The supporting-backbone noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.spine.analysis.v1",
+        "lexeme_id": "spine",
+        "text": "spine",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.spine",
+            "canonical": "spine",
+            "surface": "spine",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "trachea",
+      "text": "trachea",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "The tube carrying air toward the lungs",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The breathing-tube noun is a whole scientific borrowing, with no detachable English ending.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.trachea.analysis.v1",
+        "lexeme_id": "trachea",
+        "text": "trachea",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.trachea",
+            "canonical": "trachea",
+            "surface": "trachea",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "intestine",
+      "text": "intestine",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "A long tube that digests food",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The digestive-organ noun is one borrowed base; tine is not a tool prong in this word.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.intestine.analysis.v1",
+        "lexeme_id": "intestine",
+        "text": "intestine",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.intestine",
+            "canonical": "intestine",
+            "surface": "intestine",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "forearm",
+      "text": "forearm",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "The arm between elbow and wrist",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The front or distal portion of the arm uses fore- and arm, distinct from the numeral four.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.forearm.analysis.v1",
+        "lexeme_id": "forearm",
+        "text": "forearm",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.affix.fore.front",
+            "canonical": "fore-",
+            "surface": "fore",
+            "type": "prefix",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.arm",
+            "canonical": "arm",
+            "surface": "arm",
+            "type": "stem",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "forearm",
+            "rule": "fore-front-plus-arm",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "fingernail",
+      "text": "fingernail",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "The hard covering on a fingertip",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The hard covering is a nail on a finger; the body-part nail sense excludes a metal fastener.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.fingernail.analysis.v1",
+        "lexeme_id": "fingernail",
+        "text": "fingernail",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.finger",
+            "canonical": "finger",
+            "surface": "finger",
+            "type": "compound",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.part.nail.body",
+            "canonical": "nail",
+            "surface": "nail",
+            "type": "compound",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "fingernail",
+            "rule": "authored-compound-concatenation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "nostril",
+      "text": "nostril",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "One of the two nose openings",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The nose-opening noun is lexicalized; the historical second element is not the modern drill tool or a free tril word.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.nostril.analysis.v1",
+        "lexeme_id": "nostril",
+        "text": "nostril",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.nostril",
+            "canonical": "nostril",
+            "surface": "nostril",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "shin",
+      "text": "shin",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "The front of the lower leg",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The front-of-lower-leg noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.shin.analysis.v1",
+        "lexeme_id": "shin",
+        "text": "shin",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.shin",
+            "canonical": "shin",
+            "surface": "shin",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "thigh",
+      "text": "thigh",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "The leg between hip and knee",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The upper-leg noun is one base despite its multiple silent letters.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.thigh.analysis.v1",
+        "lexeme_id": "thigh",
+        "text": "thigh",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.thigh",
+            "canonical": "thigh",
+            "surface": "thigh",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "eyebrow",
+      "text": "eyebrow",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "Hair growing above an eye",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The hair-bearing brow above the eye forms a transparent body-part compound.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.eyebrow.analysis.v1",
+        "lexeme_id": "eyebrow",
+        "text": "eyebrow",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.eye",
+            "canonical": "eye",
+            "surface": "eye",
+            "type": "compound",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.part.brow.hair-ridge",
+            "canonical": "brow",
+            "surface": "brow",
+            "type": "compound",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "eyebrow",
+            "rule": "authored-compound-concatenation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "eyelash",
+      "text": "eyelash",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "A hair growing along an eyelid",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The eye-edge hair uses the hair sense of lash, not a whip stroke.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.eyelash.analysis.v1",
+        "lexeme_id": "eyelash",
+        "text": "eyelash",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.eye",
+            "canonical": "eye",
+            "surface": "eye",
+            "type": "compound",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.part.lash.hair",
+            "canonical": "lash",
+            "surface": "lash",
+            "type": "compound",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "eyelash",
+            "rule": "authored-compound-concatenation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "freckles",
+      "text": "freckles",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "Small brown spots on the skin",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The small skin spots use the complete singular freckle and plural -s.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.freckles.analysis.v1",
+        "lexeme_id": "freckles",
+        "text": "freckles",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.freckle",
+            "canonical": "freckle",
+            "surface": "freckle",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.s.plural",
+            "canonical": "-s",
+            "surface": "s",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "freckles",
+            "rule": "freckle-plus-plural-s",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "antelope",
+      "text": "antelope",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "A swift hoofed animal with horns",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The hoofed-animal name is one borrowed stem; ant is not its insect component.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.antelope.analysis.v1",
+        "lexeme_id": "antelope",
+        "text": "antelope",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.antelope",
+            "canonical": "antelope",
+            "surface": "antelope",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "anteater",
+      "text": "anteater",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "A mammal with a long narrow snout",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The mammal eats ants. Agent -er first forms eater, and ant supplies the food-object modifier.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.anteater.analysis.v1",
+        "lexeme_id": "anteater",
+        "text": "anteater",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.ant",
+            "canonical": "ant",
+            "surface": "ant",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.eat",
+            "canonical": "eat",
+            "surface": "eat",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part3",
+            "canonical_id": "english.affix.er.agent-instrument",
+            "canonical": "-er",
+            "surface": "er",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "eater",
+            "left": "part2",
+            "right": "part3",
+            "surface": "eater",
+            "rule": "eat-plus-agent-er",
+            "break_offsets": []
+          },
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "eater",
+            "surface": "anteater",
+            "rule": "ant-plus-eater",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "budgie",
+      "text": "budgie",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "A small colorful parakeet",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The clipped bird name is a whole current form; its informal ending does not make bud the plant-base meaning.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.budgie.analysis.v1",
+        "lexeme_id": "budgie",
+        "text": "budgie",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.budgie",
+            "canonical": "budgie",
+            "surface": "budgie",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "mussel",
+      "text": "mussel",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "A shellfish with two long dark shells",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The shellfish noun is one base, distinct from the similarly pronounced muscle.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.mussel.analysis.v1",
+        "lexeme_id": "mussel",
+        "text": "mussel",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.mussel",
+            "canonical": "mussel",
+            "surface": "mussel",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "oyster",
+      "text": "oyster",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "A shellfish with a rough uneven shell",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The shellfish name is one borrowed base; er does not mark an agent of an oyst action.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.oyster.analysis.v1",
+        "lexeme_id": "oyster",
+        "text": "oyster",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.oyster",
+            "canonical": "oyster",
+            "surface": "oyster",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "rattlesnake",
+      "text": "rattlesnake",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "A snake with a rattling tail tip",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The snake name combines its rattling tail feature with the animal head noun.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.rattlesnake.analysis.v1",
+        "lexeme_id": "rattlesnake",
+        "text": "rattlesnake",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.part.rattle.tail-sound",
+            "canonical": "rattle",
+            "surface": "rattle",
+            "type": "compound",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.snake",
+            "canonical": "snake",
+            "surface": "snake",
+            "type": "compound",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "rattlesnake",
+            "rule": "authored-compound-concatenation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "flipper",
+      "text": "flipper",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "A broad limb used for swimming",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The broad moving limb is an established flip-related instrument noun; the exact output doubles final p before -er.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.flipper.analysis.v1",
+        "lexeme_id": "flipper",
+        "text": "flipper",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.part.flip.move",
+            "canonical": "flip",
+            "surface": "flip",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.er.agent-instrument",
+            "canonical": "-er",
+            "surface": "er",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "flipper",
+            "rule": "flip-plus-instrument-er-double-p",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "horns",
+      "text": "horns",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "Hard pointed growths on an animal head",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The head growths are plural horns; the current singular animal-body sense is retained.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.horns.analysis.v1",
+        "lexeme_id": "horns",
+        "text": "horns",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.horn",
+            "canonical": "horn",
+            "surface": "horn",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.s.plural",
+            "canonical": "-s",
+            "surface": "s",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "horns",
+            "rule": "horn-plus-plural-s",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "mistletoe",
+      "text": "mistletoe",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "A plant with paired leaves and pale berries",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The plant name is lexicalized; modern foot toe is not its botanical component sense.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.mistletoe.analysis.v1",
+        "lexeme_id": "mistletoe",
+        "text": "mistletoe",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.mistletoe",
+            "canonical": "mistletoe",
+            "surface": "mistletoe",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "harvest",
+      "text": "harvest",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "The gathering of fully grown crops",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The crop-gathering noun is one base; vest is not clothing in this word.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.harvest.analysis.v1",
+        "lexeme_id": "harvest",
+        "text": "harvest",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.harvest",
+            "canonical": "harvest",
+            "surface": "harvest",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "weed",
+      "text": "weed",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "A plant growing where it is unwanted",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The unwanted-plant noun is one base, defined by its growing context rather than a suffix.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.weed.analysis.v1",
+        "lexeme_id": "weed",
+        "text": "weed",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.weed",
+            "canonical": "weed",
+            "surface": "weed",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "paramedic",
+      "text": "paramedic",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "A medical worker giving emergency care",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The sourced occupation joins para- in its associated medical-role sense and medic; it does not promise that the worker is a physician.",
+        "references": [
+          "anderson-morphology",
+          "mw-paramedic"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.paramedic.analysis.v1",
+        "lexeme_id": "paramedic",
+        "text": "paramedic",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.affix.para.associated",
+            "canonical": "para-",
+            "surface": "para",
+            "type": "prefix",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.medic",
+            "canonical": "medic",
+            "surface": "medic",
+            "type": "stem",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "paramedic",
+            "rule": "para-associated-plus-medic",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "therapist",
+      "text": "therapist",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "A specialist helping people develop communication skills",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The specialist provides therapy; -ist replaces the base final y in the exact output, preserving the stored communication-support role.",
+        "references": [
+          "anderson-morphology",
+          "wiktionary-therapist"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.therapist.analysis.v1",
+        "lexeme_id": "therapist",
+        "text": "therapist",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.therapy",
+            "canonical": "therapy",
+            "surface": "therapy",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.ist.specialist",
+            "canonical": "-ist",
+            "surface": "ist",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "therapist",
+            "rule": "therapy-plus-ist-y-loss",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "secretary",
+      "text": "secretary",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "A worker who organizes office information",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The modern office-worker noun is lexicalized; a person keeping a secret does not fully express the stored administrative role.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.secretary.analysis.v1",
+        "lexeme_id": "secretary",
+        "text": "secretary",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.secretary",
+            "canonical": "secretary",
+            "surface": "secretary",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "caretaker",
+      "text": "caretaker",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "A person who looks after a building",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The worker takes care of a building. Taker is formed from take and agent -er, then care supplies the object.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.caretaker.analysis.v1",
+        "lexeme_id": "caretaker",
+        "text": "caretaker",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.care",
+            "canonical": "care",
+            "surface": "care",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.take",
+            "canonical": "take",
+            "surface": "take",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part3",
+            "canonical_id": "english.affix.er.agent-instrument",
+            "canonical": "-er",
+            "surface": "er",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "taker",
+            "left": "part2",
+            "right": "part3",
+            "surface": "taker",
+            "rule": "take-plus-er-e-sharing",
+            "break_offsets": []
+          },
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "taker",
+            "surface": "caretaker",
+            "rule": "care-plus-taker",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "mechanic",
+      "text": "mechanic",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "A person who repairs vehicles",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The vehicle-repair worker noun is one modern base; a free mechan word is not fabricated.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.mechanic.analysis.v1",
+        "lexeme_id": "mechanic",
+        "text": "mechanic",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.mechanic",
+            "canonical": "mechanic",
+            "surface": "mechanic",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "greengrocer",
+      "text": "greengrocer",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "A person who sells fruit and vegetables",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The produce-selling occupation combines green in the fresh-produce sense and grocer; it does not require all sold fruit to be green.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.greengrocer.analysis.v1",
+        "lexeme_id": "greengrocer",
+        "text": "greengrocer",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.part.green.fresh-produce",
+            "canonical": "green",
+            "surface": "green",
+            "type": "compound",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.grocer",
+            "canonical": "grocer",
+            "surface": "grocer",
+            "type": "compound",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "greengrocer",
+            "rule": "authored-compound-concatenation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "porter",
+      "text": "porter",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "A hospital worker who moves equipment",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The hospital equipment-moving worker follows the attested carry-root history and agent ending. This is distinct from the homonymous gatekeeper and beer senses.",
+        "references": [
+          "anderson-morphology",
+          "mw-porter"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.porter.analysis.v1",
+        "lexeme_id": "porter",
+        "text": "porter",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.root.port.carry",
+            "canonical": "port",
+            "surface": "port",
+            "type": "root",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.er.agent-instrument",
+            "canonical": "-er",
+            "surface": "er",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "porter",
+            "rule": "carry-port-plus-agent-er",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "principal",
+      "text": "principal",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "The person in charge of a school",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The school-leader noun is a lexicalized rank name; it is not prince plus an adjective suffix in this sense.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.principal.analysis.v1",
+        "lexeme_id": "principal",
+        "text": "principal",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.principal",
+            "canonical": "principal",
+            "surface": "principal",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "inhaler",
+      "text": "inhaler",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "A device that delivers medicine for breathing",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The device enables inhaling medicine; instrument -er attaches to inhale with shared final e.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.inhaler.analysis.v1",
+        "lexeme_id": "inhaler",
+        "text": "inhaler",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.inhale",
+            "canonical": "inhale",
+            "surface": "inhale",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.er.agent-instrument",
+            "canonical": "-er",
+            "surface": "er",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "inhaler",
+            "rule": "inhale-plus-instrument-er-e-sharing",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "stethoscope",
+      "text": "stethoscope",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "An instrument for listening inside the body",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The sourced instrument contains the chest element stetho- and examining-instrument -scope; the selected listening function is preserved rather than replaced by sight alone.",
+        "references": [
+          "anderson-morphology",
+          "mw-stethoscope"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.stethoscope.analysis.v1",
+        "lexeme_id": "stethoscope",
+        "text": "stethoscope",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.combining.stetho.chest",
+            "canonical": "stetho-",
+            "surface": "stetho",
+            "type": "combining_form",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.combining.scope.examine",
+            "canonical": "-scope",
+            "surface": "scope",
+            "type": "combining_form",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "stethoscope",
+            "rule": "stetho-plus-scope",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "syringe",
+      "text": "syringe",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "A tube used to measure or inject liquid",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The liquid-delivery tool name is one borrowed stem, not syr plus inge.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.syringe.analysis.v1",
+        "lexeme_id": "syringe",
+        "text": "syringe",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.syringe",
+            "canonical": "syringe",
+            "surface": "syringe",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "sling",
+      "text": "sling",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "A support for an injured arm",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The injured-arm support noun is one base, distinct from the throwing action.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.sling.analysis.v1",
+        "lexeme_id": "sling",
+        "text": "sling",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.sling",
+            "canonical": "sling",
+            "surface": "sling",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "rash",
+      "text": "rash",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "An irritated patch on the skin",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The irritated-skin noun is one base, distinct from the hasty adjective.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.rash.analysis.v1",
+        "lexeme_id": "rash",
+        "text": "rash",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.rash",
+            "canonical": "rash",
+            "surface": "rash",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "scar",
+      "text": "scar",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "A mark left after a wound heals",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The healed-wound mark noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.scar.analysis.v1",
+        "lexeme_id": "scar",
+        "text": "scar",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.scar",
+            "canonical": "scar",
+            "surface": "scar",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "wheelchair",
+      "text": "wheelchair",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "A wheeled chair used for moving around",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The mobility chair has wheels; the two free noun bases remain distinct.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.wheelchair.analysis.v1",
+        "lexeme_id": "wheelchair",
+        "text": "wheelchair",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.wheel",
+            "canonical": "wheel",
+            "surface": "wheel",
+            "type": "compound",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.chair",
+            "canonical": "chair",
+            "surface": "chair",
+            "type": "compound",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "wheelchair",
+            "rule": "authored-compound-concatenation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "adapt",
+      "text": "adapt",
+      "min_age": 11,
+      "part_of_speech": "verb",
+      "meaning": "Change to suit new conditions",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The current changing-to-suit-conditions sense belongs to the inherited ad- plus apt fit/suitable family. Newly consulted adapt history and the current suitable sense of apt support the graph. Apt is not the likely or quick-learning sense here, and ad- is not an advertisement word. This is a particular inherited formation rather than a productive rule for every adjective.",
+        "references": [
+          "anderson-morphology",
+          "mw-adapt-new",
+          "mw-apt-new",
+          "mw-ad-prefix-new",
+          "anderson-2e-roots-new"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.adapt.analysis.v1",
+        "lexeme_id": "adapt",
+        "text": "adapt",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "english.affix.ad.toward",
+            "type": "prefix",
+            "canonical": "ad-",
+            "surface": "ad",
+            "break_offsets": []
+          },
+          {
+            "id": "p2",
+            "canonical_id": "english.root.apt.fit",
+            "type": "root",
+            "canonical": "apt",
+            "surface": "apt",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "p1",
+            "right": "p2",
+            "surface": "adapt",
+            "rule": "authored-ad-plus-apt-fit",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "reflect",
+      "text": "reflect",
+      "min_age": 11,
+      "part_of_speech": "verb",
+      "meaning": "Think carefully about an experience",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The current thinking-carefully sense belongs to the inherited re- back plus flect bend family corroborated by reflect/deflect. The mental meaning remains the whole target, not a literal physical bending task. Flect is a bound family root. Current gameplay presents the authored surfaces without replacing the mental sense; any future component-meaning display must distinguish the historical family aid from that current meaning.",
+        "references": [
+          "anderson-morphology",
+          "mw-reflect-new",
+          "mw-deflect-new",
+          "mw-re-prefix-new",
+          "anderson-2e-roots-new"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.reflect.analysis.v1",
+        "lexeme_id": "reflect",
+        "text": "reflect",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "english.affix.re.back",
+            "type": "prefix",
+            "canonical": "re-",
+            "surface": "re",
+            "break_offsets": []
+          },
+          {
+            "id": "p2",
+            "canonical_id": "english.root.flect.bend",
+            "type": "root",
+            "canonical": "flect",
+            "surface": "flect",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "p1",
+            "right": "p2",
+            "surface": "reflect",
+            "rule": "authored-re-back-plus-bound-flect",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "summarize",
+      "text": "summarize",
+      "min_age": 11,
+      "part_of_speech": "verb",
+      "meaning": "Give the main points briefly",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The action makes a summary; the exact summarize spelling removes base y before verb-forming -ize.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.summarize.analysis.v1",
+        "lexeme_id": "summarize",
+        "text": "summarize",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.summary",
+            "canonical": "summary",
+            "surface": "summary",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.ize.make",
+            "canonical": "-ize",
+            "surface": "ize",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "summarize",
+            "rule": "summary-plus-ize-y-loss",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "reliable",
+      "text": "reliable",
+      "min_age": 11,
+      "part_of_speech": "adjective",
+      "meaning": "Able to be trusted consistently",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The trustworthy adjective means able to be relied on; the authored spelling changes y to i before -able.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.reliable.analysis.v1",
+        "lexeme_id": "reliable",
+        "text": "reliable",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.rely",
+            "canonical": "rely",
+            "surface": "rely",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.able.capable",
+            "canonical": "-able",
+            "surface": "able",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "reliable",
+            "rule": "rely-plus-able-y-to-i",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "accurate",
+      "text": "accurate",
+      "min_age": 11,
+      "part_of_speech": "adjective",
+      "meaning": "Correct and free from mistakes",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The correct-result adjective is one current base; there is no free accur verb to which ate is attached.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.accurate.analysis.v1",
+        "lexeme_id": "accurate",
+        "text": "accurate",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.accurate",
+            "canonical": "accurate",
+            "surface": "accurate",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "global",
+      "text": "global",
+      "min_age": 11,
+      "part_of_speech": "adjective",
+      "meaning": "Relating to the whole world",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The world-related adjective joins globe in its Earth sense and -al with final e removed; the component is distinct from the stored physical model.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.global.analysis.v1",
+        "lexeme_id": "global",
+        "text": "global",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.part.globe.earth",
+            "canonical": "globe",
+            "surface": "globe",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.al.relating",
+            "canonical": "-al",
+            "surface": "al",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "global",
+            "rule": "globe-plus-al-e-loss",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "research",
+      "text": "research",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "Careful study to learn new information",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The documented surface analysis is re- plus search. The close-examination sense motivates the intensive reading here, while the historical source marks that force as tentative; this is not the productive again prefix.",
+        "references": [
+          "anderson-morphology",
+          "wiktionary-research",
+          "etymonline-research"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.research.analysis.v1",
+        "lexeme_id": "research",
+        "text": "research",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.affix.re.intensive",
+            "canonical": "re-",
+            "surface": "re",
+            "type": "prefix",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.search",
+            "canonical": "search",
+            "surface": "search",
+            "type": "stem",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "research",
+            "rule": "intensive-re-plus-search",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "source",
+      "text": "source",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "Where information or something comes from",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The origin noun is one base; its e is part of the spelling rather than a meaningful suffix.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.source.analysis.v1",
+        "lexeme_id": "source",
+        "text": "source",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.source",
+            "canonical": "source",
+            "surface": "source",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "knowledge",
+      "text": "knowledge",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "What someone has learned and understands",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The understanding noun is lexicalized; ledge in its modern shelf sense is not a constituent alongside know.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.knowledge.analysis.v1",
+        "lexeme_id": "knowledge",
+        "text": "knowledge",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.knowledge",
+            "canonical": "knowledge",
+            "surface": "knowledge",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "resource",
+      "text": "resource",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "Something useful that people can draw on",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The useful-supply noun is one current base; it does not mean a source repeated by re-.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.resource.analysis.v1",
+        "lexeme_id": "resource",
+        "text": "resource",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.resource",
+            "canonical": "resource",
+            "surface": "resource",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "process",
+      "text": "process",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "A series of actions or changes",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The action-sequence noun is one base; a free cess word is not invented.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.process.analysis.v1",
+        "lexeme_id": "process",
+        "text": "process",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.process",
+            "canonical": "process",
+            "surface": "process",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "data",
+      "text": "data",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "Facts or measurements collected for study",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The collected-information noun is a lexicalized English form; its Latin plural history is not converted into a detachable English a suffix.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.data.analysis.v1",
+        "lexeme_id": "data",
+        "text": "data",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.data",
+            "canonical": "data",
+            "surface": "data",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "empathy",
+      "text": "empathy",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "Understanding how another person feels",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The sourced formation contains the in-prefix with its em allomorph and the feeling element; the stored understanding-another-person sense remains the whole meaning.",
+        "references": [
+          "anderson-morphology",
+          "mw-empathy"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.empathy.analysis.v1",
+        "lexeme_id": "empathy",
+        "text": "empathy",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.affix.en.in",
+            "canonical": "en-",
+            "surface": "em",
+            "type": "prefix",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.combining.pathy.feeling",
+            "canonical": "-pathy",
+            "surface": "pathy",
+            "type": "combining_form",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "empathy",
+            "rule": "en-in-em-allomorph-plus-pathy",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "responsibility",
+      "text": "responsibility",
+      "min_age": 11,
+      "part_of_speech": "noun",
+      "meaning": "A duty to take care of something",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The sourced responsible-plus-ity relation uses the authored responsibil- base realization, preserving the duty noun rather than inventing a new word boundary.",
+        "references": [
+          "anderson-morphology",
+          "wiktionary-responsibility"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.responsibility.analysis.v1",
+        "lexeme_id": "responsibility",
+        "text": "responsibility",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.responsible",
+            "canonical": "responsible",
+            "surface": "responsible",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.ity.quality",
+            "canonical": "-ity",
+            "surface": "ity",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "responsibility",
+            "rule": "responsible-plus-ity-authored-responsibil",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "ok": true,
+  "finished_at": "2026-10-16T19:58:15.643Z",
+  "baseline_raw_sha256": "59c33da6c2a31ac2ea3f67bed20966e32f174030c07b16600d13b6f46e3f73e5",
+  "summary": {
+    "selected_entries": 10,
+    "memberships": 200,
+    "containing_modules": 20,
+    "expressions_scanned": 1620,
+    "surface_hit_expressions": 90,
+    "surface_pairs": 100,
+    "derivative_hit_expressions": 81,
+    "focus_expressions": 4,
+    "related_identities": 46,
+    "inherited_expression_holds": 17,
+    "prior_lexical_holds": 4,
+    "source_files": 350
+  },
+  "observed_status": {
+    "senses": 4939,
+    "language_reviewed": 317,
+    "whole_entry_reviewed": 130,
+    "foundation02_language_reviewed": 18,
+    "ready_modules": 0
+  }
+}

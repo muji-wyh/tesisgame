@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "status": "frozen_independent_language_context_acceptance_not_integrated",
+  "artifacts": [
+    {
+      "path": "capture-review.cjs",
+      "bytes": 11864,
+      "raw_sha256": "2b2351d421defe473be820009febac16fd77049638f1a5948e01bdb41bf09f6d"
+    },
+    {
+      "path": "review.json",
+      "bytes": 8150,
+      "raw_sha256": "19b19830a1c4f02153892f5f95fc1caa604af4474219876b7712beec80ac7747"
+    },
+    {
+      "path": "input-measurement.json",
+      "bytes": 69837,
+      "raw_sha256": "50267200587257102428d32e124e8d911488a05a199794ed331b2b087c48c7e7"
+    }
+  ],
+  "self_excluded": true
+}

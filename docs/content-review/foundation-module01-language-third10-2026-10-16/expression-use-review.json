@@ -1,0 +1,4227 @@
+{
+  "schema": 1,
+  "status": "frozen_scoped_context_observations_not_acceptance",
+  "date": "2026-10-16",
+  "production_mutated": false,
+  "preimages_json_sha256": "ce53eb62283f4d4df70686d4bf6a176b5c2aaedbbe737323f9ebd725d9145b9d",
+  "discovery": {
+    "fields": [
+      "text",
+      "focus_lexeme_ids"
+    ],
+    "forms": {
+      "deadline": "deadlines?",
+      "break": "breaks?|breaking|broke|broken",
+      "overtime": "overtime",
+      "attendance": "attendances?",
+      "availability": "availability|availabilities",
+      "calendar": "calendars?",
+      "agenda": "agendas?",
+      "invitation": "invitations?",
+      "update": "updates?|updated|updating",
+      "reminder": "reminders?"
+    },
+    "inflected_verb_hits_included_for_explicit_exclusion": true,
+    "new_bindings_inferred": false
+  },
+  "inspection": "Every captured expression text, meaning, context and focus list, every related entry, and all four remaining local expressions were read. Expanded break and update inflections were captured for explicit exclusion. Textual matching never creates a binding.",
+  "unique_expressions": 53,
+  "containing_module_memberships": 186,
+  "selected_focus_expressions": 6,
+  "classification_legend": {
+    "focus": {
+      "classification": "existing_selected_focus_ordinary_noun_sense",
+      "binding": "Retain the exact existing scored binding without granting language acceptance."
+    },
+    "background": {
+      "classification": "compatible_ordinary_background_noun",
+      "binding": "Retain compatible background use; add no scored binding."
+    },
+    "compound": {
+      "classification": "compatible_constituent_of_independent_complete_term",
+      "binding": "Retain the complete term; constituent compatibility does not accept the full term or add a selected binding."
+    },
+    "domain_compound": {
+      "classification": "compatible_constituent_with_domain_boundary",
+      "binding": "Keep the complete care or booking term and all domain limits; add no binding or specialist acceptance."
+    },
+    "verb": {
+      "classification": "excluded_update_verb_or_participle",
+      "binding": "Exclude the action or inflected verb from the selected information-report noun."
+    },
+    "damage": {
+      "classification": "excluded_damage_or_failure_adjective",
+      "binding": "Exclude broken objects or links from the selected work-pause noun."
+    },
+    "structural": {
+      "classification": "excluded_structural_or_financial_break_term",
+      "binding": "Exclude pagination and break-even concepts from the selected work pause."
+    },
+    "resource": {
+      "classification": "excluded_resource_availability",
+      "binding": "Resource availability is outside the selected person free-time sense."
+    },
+    "system": {
+      "classification": "excluded_system_availability",
+      "binding": "Preserve the separate technical system-access sense and its existing focus."
+    },
+    "software_change": {
+      "classification": "excluded_version_control_change_set",
+      "binding": "A pushed change set does not bind the selected current-information report noun."
+    },
+    "hold_report_or_change": {
+      "classification": "unresolved_report_or_revision",
+      "binding": "The wording permits an information report or a change/version/action. Hold any new selected report-noun binding."
+    },
+    "hold_expected_or_actual": {
+      "classification": "unresolved_expected_or_actual_attendance_list",
+      "binding": "The list does not establish actual presence, a headcount or a valid quorum. Preserve it without a selected presence binding."
+    },
+    "hold_resource_calendar": {
+      "classification": "unresolved_bookable_date_grid_or_event_organizer",
+      "binding": "The resource-status calendar does not by itself establish the selected planned-event organizer scope. Hold new binding."
+    }
+  },
+  "classification_counts": {
+    "focus": {
+      "expressions": 6,
+      "occurrences": 8
+    },
+    "background": {
+      "expressions": 3,
+      "occurrences": 3
+    },
+    "compound": {
+      "expressions": 5,
+      "occurrences": 5
+    },
+    "domain_compound": {
+      "expressions": 2,
+      "occurrences": 2
+    },
+    "verb": {
+      "expressions": 11,
+      "occurrences": 11
+    },
+    "damage": {
+      "expressions": 8,
+      "occurrences": 8
+    },
+    "structural": {
+      "expressions": 2,
+      "occurrences": 2
+    },
+    "resource": {
+      "expressions": 12,
+      "occurrences": 12
+    },
+    "system": {
+      "expressions": 1,
+      "occurrences": 1
+    },
+    "software_change": {
+      "expressions": 1,
+      "occurrences": 1
+    },
+    "hold_report_or_change": {
+      "expressions": 3,
+      "occurrences": 3
+    },
+    "hold_expected_or_actual": {
+      "expressions": 1,
+      "occurrences": 1
+    },
+    "hold_resource_calendar": {
+      "expressions": 1,
+      "occurrences": 1
+    }
+  },
+  "uses": [
+    {
+      "id": "expr.foundation.module01.01",
+      "resource": "res://data/professional/expressions/foundation-module01.json",
+      "before_expression_json_sha256": "75530b832965c8750c17ae358f94cf27091e0d5123e5e4bee726ccf4d2654a9b",
+      "after_expression_json_sha256": "75530b832965c8750c17ae358f94cf27091e0d5123e5e4bee726ccf4d2654a9b",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "Please send your availability so our coordinator can update the team schedule.",
+      "meaning": "Ask colleagues for times when they can take part.",
+      "context": "A team is arranging shared work.",
+      "focus_lexeme_ids": [
+        "availability.free-time.n",
+        "coordinator.organizer.n",
+        "team.working-group.n",
+        "schedule.time-plan.n"
+      ],
+      "selected_focus_ids": [
+        "availability.free-time.n"
+      ],
+      "literal_selected_ids": [
+        "availability.free-time.n",
+        "update.current-information.n"
+      ],
+      "locations": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "individual_observation": "Availability describes when colleagues are free and is already scored. Update is a transitive action on the team schedule, not the selected report noun; the same sentence must retain this distinction.",
+      "matches": [
+        {
+          "selected_id": "availability.free-time.n",
+          "authored_classification_code": "focus",
+          "classification": "existing_selected_focus_ordinary_noun_sense",
+          "binding": "Retain the exact existing scored binding without granting language acceptance.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-availability",
+            "foundation01-language-third10-collins-availability"
+          ]
+        },
+        {
+          "selected_id": "update.current-information.n",
+          "authored_classification_code": "verb",
+          "classification": "excluded_update_verb_or_participle",
+          "binding": "Exclude the action or inflected verb from the selected information-report noun.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-update",
+            "foundation01-language-third10-collins-update"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.foundation.module01.02",
+      "resource": "res://data/professional/expressions/foundation-module01.json",
+      "before_expression_json_sha256": "d3c5f147ac5981bdff53d7be8fdd29e3d920de844a6cf5b479c7c19ef3cdb39d",
+      "after_expression_json_sha256": "d3c5f147ac5981bdff53d7be8fdd29e3d920de844a6cf5b479c7c19ef3cdb39d",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "My shift includes a break before my appointment with the manager.",
+      "meaning": "Describe a rest period and a meeting within a work schedule.",
+      "context": "A worker discusses the day's arrangements.",
+      "focus_lexeme_ids": [
+        "break.work-pause.n",
+        "appointment.arranged-meeting.n",
+        "manager.work-leader.n",
+        "shift.work-period.n"
+      ],
+      "selected_focus_ids": [
+        "break.work-pause.n"
+      ],
+      "literal_selected_ids": [
+        "break.work-pause.n"
+      ],
+      "locations": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "individual_observation": "The break is a short pause inside the shift before an appointment. Keep the existing selected focus without inferring the length, payment or legal entitlement to a break.",
+      "matches": [
+        {
+          "selected_id": "break.work-pause.n",
+          "authored_classification_code": "focus",
+          "classification": "existing_selected_focus_ordinary_noun_sense",
+          "binding": "Retain the exact existing scored binding without granting language acceptance.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-break"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.foundation.module01.05",
+      "resource": "res://data/professional/expressions/foundation-module01.json",
+      "before_expression_json_sha256": "cff75c7772c9d2cf1badccb8c2bb4256e4030168290ef7b3ee38a1db495a7671",
+      "after_expression_json_sha256": "cff75c7772c9d2cf1badccb8c2bb4256e4030168290ef7b3ee38a1db495a7671",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "Please ask your supervisor for permission to change the task's deadline and priority.",
+      "meaning": "Check authority before changing when work is due or how important it is.",
+      "context": "A worker reviews a task's arrangements.",
+      "focus_lexeme_ids": [
+        "supervisor.work-overseer.n",
+        "permission.authorized-consent.n",
+        "task.work-item.n",
+        "deadline.final-time.n",
+        "priority.relative-importance.n"
+      ],
+      "selected_focus_ids": [
+        "deadline.final-time.n"
+      ],
+      "literal_selected_ids": [
+        "deadline.final-time.n"
+      ],
+      "locations": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "individual_observation": "Deadline is the task completion limit. The request preserves its supervisor/permission qualification; lexical compatibility does not certify personal authority or allow the date to change.",
+      "matches": [
+        {
+          "selected_id": "deadline.final-time.n",
+          "authored_classification_code": "focus",
+          "classification": "existing_selected_focus_ordinary_noun_sense",
+          "binding": "Retain the exact existing scored binding without granting language acceptance.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-deadline",
+            "foundation01-language-third10-collins-deadline"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.foundation.module01.06",
+      "resource": "res://data/professional/expressions/foundation-module01.json",
+      "before_expression_json_sha256": "312d0e26f4aa60be51bcc585a4462f6ae0e32c5fad90addf0869b089e6c9824a",
+      "after_expression_json_sha256": "312d0e26f4aa60be51bcc585a4462f6ae0e32c5fad90addf0869b089e6c9824a",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "The client's address is included in the invitation.",
+      "meaning": "Explain where to find a client's location details.",
+      "context": "A colleague prepares for a client visit.",
+      "focus_lexeme_ids": [
+        "client.service-customer.n",
+        "address.postal-location.n",
+        "invitation.attendance-request.n"
+      ],
+      "selected_focus_ids": [
+        "invitation.attendance-request.n"
+      ],
+      "literal_selected_ids": [
+        "invitation.attendance-request.n"
+      ],
+      "locations": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "individual_observation": "A written invitation carries address information while remaining a request to attend. Retain the existing focus and privacy boundaries; a material card or the address itself is not a new answer.",
+      "matches": [
+        {
+          "selected_id": "invitation.attendance-request.n",
+          "authored_classification_code": "focus",
+          "classification": "existing_selected_focus_ordinary_noun_sense",
+          "binding": "Retain the exact existing scored binding without granting language acceptance.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-invitation",
+            "foundation01-language-third10-collins-invitation"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.foundation.module01.09",
+      "resource": "res://data/professional/expressions/foundation-module01.json",
+      "before_expression_json_sha256": "ccfc504a119e5ff35556644c43135ea1f006c0e22b6da42c8a74c151f427e6d0",
+      "after_expression_json_sha256": "ccfc504a119e5ff35556644c43135ea1f006c0e22b6da42c8a74c151f427e6d0",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "The agenda includes a discussion of customer feedback and a supplier update.",
+      "meaning": "Describe the planned subjects of a meeting.",
+      "context": "A team prepares to review service and deliveries.",
+      "focus_lexeme_ids": [
+        "agenda.meeting-plan.n",
+        "discussion.consideration-talk.n",
+        "customer.buyer.n",
+        "feedback.response-information.n",
+        "supplier.goods-provider.n",
+        "update.current-information.n"
+      ],
+      "selected_focus_ids": [
+        "agenda.meeting-plan.n",
+        "update.current-information.n"
+      ],
+      "literal_selected_ids": [
+        "agenda.meeting-plan.n",
+        "update.current-information.n"
+      ],
+      "locations": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "individual_observation": "Agenda is the meeting-topic list and supplier update is a report discussed at the meeting. Both existing focus bindings fit; the supplier goods-versus-services boundary remains governed by its separate review.",
+      "matches": [
+        {
+          "selected_id": "agenda.meeting-plan.n",
+          "authored_classification_code": "focus",
+          "classification": "existing_selected_focus_ordinary_noun_sense",
+          "binding": "Retain the exact existing scored binding without granting language acceptance.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-agenda"
+          ]
+        },
+        {
+          "selected_id": "update.current-information.n",
+          "authored_classification_code": "focus",
+          "classification": "existing_selected_focus_ordinary_noun_sense",
+          "binding": "Retain the exact existing scored binding without granting language acceptance.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-update",
+            "foundation01-language-third10-collins-update"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.foundation.module01.10",
+      "resource": "res://data/professional/expressions/foundation-module01.json",
+      "before_expression_json_sha256": "c1742076917fc4a8085d894d5edbf3ff0912638995504403b359a9d157c9c1a7",
+      "after_expression_json_sha256": "c1742076917fc4a8085d894d5edbf3ff0912638995504403b359a9d157c9c1a7",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "Please check the calendar, location, and time zone before accepting the invitation.",
+      "meaning": "Ask someone to verify the details of an event.",
+      "context": "Colleagues work in different locations.",
+      "focus_lexeme_ids": [
+        "calendar.date-organizer.n",
+        "location.place.n",
+        "time-zone.regional-time.n",
+        "invitation.attendance-request.n"
+      ],
+      "selected_focus_ids": [
+        "calendar.date-organizer.n",
+        "invitation.attendance-request.n"
+      ],
+      "literal_selected_ids": [
+        "calendar.date-organizer.n",
+        "invitation.attendance-request.n"
+      ],
+      "locations": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ],
+      "individual_observation": "The organizer and event request fit their existing selected bindings. Checking location and time zone does not imply acceptance or valid access rights.",
+      "matches": [
+        {
+          "selected_id": "calendar.date-organizer.n",
+          "authored_classification_code": "focus",
+          "classification": "existing_selected_focus_ordinary_noun_sense",
+          "binding": "Retain the exact existing scored binding without granting language acceptance.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-calendar",
+            "foundation01-language-third10-collins-calendar"
+          ]
+        },
+        {
+          "selected_id": "invitation.attendance-request.n",
+          "authored_classification_code": "focus",
+          "classification": "existing_selected_focus_ordinary_noun_sense",
+          "binding": "Retain the exact existing scored binding without granting language acceptance.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-invitation",
+            "foundation01-language-third10-collins-invitation"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.foundation.module02.06",
+      "resource": "res://data/professional/expressions/foundation-module02.json",
+      "before_expression_json_sha256": "609f79f61e04b9e9688afb71fd785a3c7e9572369759519a75b6bf112fa3654c",
+      "after_expression_json_sha256": "609f79f61e04b9e9688afb71fd785a3c7e9572369759519a75b6bf112fa3654c",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "Please report the fault and ask the authorized team to replace the broken handle.",
+      "meaning": "Request reporting and authorized attention to a damaged item.",
+      "context": "A worker communicates an equipment problem without giving repair instructions.",
+      "focus_lexeme_ids": [
+        "report.give-information.v",
+        "fault.equipment-defect.n",
+        "replace.put-instead.v",
+        "broken.not-working.adj"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "break.work-pause.n"
+      ],
+      "locations": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module02"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module02"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module02"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module02"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module02"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module02"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module02"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module02"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module02"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module02"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module02"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module02"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module02"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module02"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module02"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module02"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module02"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module02"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module02"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module02"
+        }
+      ],
+      "individual_observation": "Broken is the damaged-handle adjective. It is not a rest-pause noun despite its inflectional relation to break.",
+      "matches": [
+        {
+          "selected_id": "break.work-pause.n",
+          "authored_classification_code": "damage",
+          "classification": "excluded_damage_or_failure_adjective",
+          "binding": "Exclude broken objects or links from the selected work-pause noun.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-break"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.retail.module04.07",
+      "resource": "res://data/professional/expressions/retail-module04.json",
+      "before_expression_json_sha256": "d424f069b1ea648effbf3fa72d405e8d32dde039b28cb18dc49dfed9311b2820",
+      "after_expression_json_sha256": "d424f069b1ea648effbf3fa72d405e8d32dde039b28cb18dc49dfed9311b2820",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "The carton contains a glass bowl wrapped in tissue paper and bubble wrap; please report the broken seal.",
+      "meaning": "Describe packaging and report a damaged closure.",
+      "context": "A worker inspects delivered merchandise without deciding its suitability for sale.",
+      "focus_lexeme_ids": [
+        "carton.packaging-box.n",
+        "glass.transparent-hard-material.n",
+        "tissue-paper.thin-wrapping-paper.n",
+        "bubble-wrap.air-pocket-packaging.n",
+        "seal.closure-strip.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "break.work-pause.n"
+      ],
+      "locations": [
+        {
+          "course_id": "retail",
+          "module_id": "module04"
+        }
+      ],
+      "individual_observation": "Broken describes a damaged packaging seal. The full packaging and closure terms stay exact; no pause meaning is present.",
+      "matches": [
+        {
+          "selected_id": "break.work-pause.n",
+          "authored_classification_code": "damage",
+          "classification": "excluded_damage_or_failure_adjective",
+          "binding": "Exclude broken objects or links from the selected work-pause noun.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-break"
+          ]
+        }
+      ],
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.retail.module09.02",
+      "resource": "res://data/professional/expressions/retail-module09.json",
+      "before_expression_json_sha256": "3c54e28c1b0b16da5d9ff80b259269782e1acfc53b332accfaa361bdb9476b0c",
+      "after_expression_json_sha256": "3c54e28c1b0b16da5d9ff80b259269782e1acfc53b332accfaa361bdb9476b0c",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "Check the promotion calendar, choose the filter and sort order, then add the approved item to the online basket.",
+      "meaning": "Review offer timing and the displayed selection.",
+      "context": "A worker checks the applicable promotional schedule.",
+      "focus_lexeme_ids": [
+        "filter.result-limiting-control.n",
+        "sort-order.display-sequence.n",
+        "online-basket.selected-purchase-list.n",
+        "promotion-calendar.offer-schedule.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "calendar.date-organizer.n"
+      ],
+      "locations": [
+        {
+          "course_id": "retail",
+          "module_id": "module09"
+        }
+      ],
+      "individual_observation": "Promotion calendar is a complete dated activity-plan term. Calendar is semantically compatible in this term, but its product promotion, filter and purchase context receives no new focus binding.",
+      "matches": [
+        {
+          "selected_id": "calendar.date-organizer.n",
+          "authored_classification_code": "compound",
+          "classification": "compatible_constituent_of_independent_complete_term",
+          "binding": "Retain the complete term; constituent compatibility does not accept the full term or add a selected binding.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-calendar",
+            "foundation01-language-third10-collins-calendar"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.retail.module10.10",
+      "resource": "res://data/professional/expressions/retail-module10.json",
+      "before_expression_json_sha256": "2c7aa7447745e4875baf9ef64720321fb06a65234924e486ebda6af37d97441b",
+      "after_expression_json_sha256": "2c7aa7447745e4875baf9ef64720321fb06a65234924e486ebda6af37d97441b",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "Confirm stock availability, price integrity, and the promotion end date before the product launch and clearance event.",
+      "meaning": "Check stock, pricing, and offer timing before planned events.",
+      "context": "A team reviews event information against the current arrangements.",
+      "focus_lexeme_ids": [
+        "stock-availability.goods-ready-for-sale.n",
+        "price-integrity.consistent-correct-pricing.n",
+        "product-launch.new-product-introduction.n",
+        "clearance-event.stock-reduction-sale.n",
+        "promotion-end-date.offer-finishing-date.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "availability.free-time.n"
+      ],
+      "locations": [
+        {
+          "course_id": "retail",
+          "module_id": "module10"
+        }
+      ],
+      "individual_observation": "Stock availability concerns goods ready to supply, not the times a person is free. Product launch timing does not change that referent.",
+      "matches": [
+        {
+          "selected_id": "availability.free-time.n",
+          "authored_classification_code": "resource",
+          "classification": "excluded_resource_availability",
+          "binding": "Resource availability is outside the selected person free-time sense.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-availability",
+            "foundation01-language-third10-collins-availability"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.software_data.module04.06",
+      "resource": "res://data/professional/expressions/software-data-module04.json",
+      "before_expression_json_sha256": "bf7241f01db28027d0b43d2d18a40d214ea5457b7b513299552ec655760e15a8",
+      "after_expression_json_sha256": "bf7241f01db28027d0b43d2d18a40d214ea5457b7b513299552ec655760e15a8",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "The loop evaluates the condition and updates the list and array.",
+      "meaning": "Describe a repeated operation and the collections it changes.",
+      "context": "A developer explains a data-processing step.",
+      "focus_lexeme_ids": [
+        "loop.repeated-code-structure.n",
+        "condition.evaluated-decision-test.n",
+        "list.ordered-collection.n",
+        "array.indexed-value-collection.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "update.current-information.n"
+      ],
+      "locations": [
+        {
+          "course_id": "software_data",
+          "module_id": "module04"
+        }
+      ],
+      "individual_observation": "Updates is a finite verb acting on data structures. Neither the action nor the list or array is the selected information-report noun.",
+      "matches": [
+        {
+          "selected_id": "update.current-information.n",
+          "authored_classification_code": "verb",
+          "classification": "excluded_update_verb_or_participle",
+          "binding": "Exclude the action or inflected verb from the selected information-report noun.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-update",
+            "foundation01-language-third10-collins-update"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.software_data.module05.09",
+      "resource": "res://data/professional/expressions/software-data-module05.json",
+      "before_expression_json_sha256": "66f5b03ae1f027c0243608a936c6894eeddacc0c9a5a03ec8c1369c325b70f84",
+      "after_expression_json_sha256": "66f5b03ae1f027c0243608a936c6894eeddacc0c9a5a03ec8c1369c325b70f84",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "Fetch the remote information, stash unfinished work, and decide whether to pull, rebase, or merge; then stage reviewed changes and push the agreed update.",
+      "meaning": "Discuss distinct version-control actions.",
+      "context": "A developer confirms the agreed workflow before updating a shared repository.",
+      "focus_lexeme_ids": [
+        "fetch.retrieve-remote-data.v",
+        "pull.retrieve-and-integrate-changes.v",
+        "rebase.reapply-commits-on-base.v",
+        "merge.combine-change-sets.v",
+        "stash.temporarily-save-working-changes.v",
+        "stage.select-next-commit-content.v",
+        "push.send-version-control-changes.v"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "update.current-information.n"
+      ],
+      "locations": [
+        {
+          "course_id": "software_data",
+          "module_id": "module05"
+        }
+      ],
+      "individual_observation": "The agreed update pushed through version control is a change set. News or progress reports are not the object implied by these version-control operations.",
+      "matches": [
+        {
+          "selected_id": "update.current-information.n",
+          "authored_classification_code": "software_change",
+          "classification": "excluded_version_control_change_set",
+          "binding": "A pushed change set does not bind the selected current-information report noun.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-update",
+            "foundation01-language-third10-collins-update"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.software_data.module08.10",
+      "resource": "res://data/professional/expressions/software-data-module08.json",
+      "before_expression_json_sha256": "452b192b99e55cd8acb38b7724e22c1c6b3dce70d1ce46276f3bd3b56afb49d0",
+      "after_expression_json_sha256": "452b192b99e55cd8acb38b7724e22c1c6b3dce70d1ce46276f3bd3b56afb49d0",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "Confirm the backup, recovery point objective, and recovery time objective before reviewing availability and resilience.",
+      "meaning": "Ask for restoration targets and evidence to be reviewed.",
+      "context": "A team plans a fictional recovery exercise.",
+      "focus_lexeme_ids": [
+        "backup.recovery-copy.n",
+        "recovery-point-objective.target-data-recovery-window.n",
+        "recovery-time-objective.target-service-restoration-time.n",
+        "availability.usable-system-access.n",
+        "resilience.disruption-recovery-capability.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "availability.free-time.n"
+      ],
+      "locations": [
+        {
+          "course_id": "software_data",
+          "module_id": "module08"
+        }
+      ],
+      "individual_observation": "Availability is explicitly the system-access sense, with restoration targets and resilience. Preserve the existing separate scored system noun.",
+      "matches": [
+        {
+          "selected_id": "availability.free-time.n",
+          "authored_classification_code": "system",
+          "classification": "excluded_system_availability",
+          "binding": "Preserve the separate technical system-access sense and its existing focus.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-availability",
+            "foundation01-language-third10-collins-availability"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.nursing.module10.10",
+      "resource": "res://data/professional/expressions/nursing-module10.json",
+      "before_expression_json_sha256": "6c244b638c09ae7ea218d7bdbea7a6e867bea4453527a729e68d9710077042f7",
+      "after_expression_json_sha256": "6c244b638c09ae7ea218d7bdbea7a6e867bea4453527a729e68d9710077042f7",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "The team reviewed bed availability, staffing level, workload, caseload, skill mix, supervision, and accountability.",
+      "meaning": "Discuss the resources and responsibilities of a service.",
+      "context": "A fictional team-planning meeting.",
+      "focus_lexeme_ids": [
+        "bed-availability.usable-care-bed-status.n",
+        "staffing-level.available-staff-amount-and-composition.n",
+        "workload.amount-of-assigned-work.n",
+        "caseload.assigned-cases-or-patients.n",
+        "skill-mix.combination-of-staff-capabilities.n",
+        "supervision.oversight-and-professional-support.n",
+        "accountability.answerability-for-professional-actions.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "availability.free-time.n"
+      ],
+      "locations": [
+        {
+          "course_id": "nursing",
+          "module_id": "module10"
+        }
+      ],
+      "individual_observation": "Bed availability is the status of suitable staffed care beds. Staff resources in the same sentence do not make this person free-time vocabulary or authorize bed allocation.",
+      "matches": [
+        {
+          "selected_id": "availability.free-time.n",
+          "authored_classification_code": "resource",
+          "classification": "excluded_resource_availability",
+          "binding": "Resource availability is outside the selected person free-time sense.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-availability",
+            "foundation01-language-third10-collins-availability"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.caregiving.module05.07",
+      "resource": "res://data/professional/expressions/caregiving-module05.json",
+      "before_expression_json_sha256": "b38375691bf381e56a82d43662b65abb8d30a9308f5b89a558840f0ea0d0fa22",
+      "after_expression_json_sha256": "b38375691bf381e56a82d43662b65abb8d30a9308f5b89a558840f0ea0d0fa22",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "If you choose to walk there, I can accompany you; you may decline the invitation or choose somewhere to sit or stand.",
+      "meaning": "Offer company while respecting movement and participation choices.",
+      "context": "A person decides whether to attend an activity.",
+      "focus_lexeme_ids": [
+        "accompany.go-with-person.v",
+        "decline.refuse-transaction.v",
+        "walk.move-by-stepping.v",
+        "sit.take-seated-position.v",
+        "stand.be-upright-on-feet.v"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "invitation.attendance-request.n"
+      ],
+      "locations": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module05"
+        }
+      ],
+      "individual_observation": "The offer to accompany someone and their right to decline fit an ordinary participation request. Preserve autonomy and the actual movement verbs; do not add a scored invitation binding.",
+      "matches": [
+        {
+          "selected_id": "invitation.attendance-request.n",
+          "authored_classification_code": "background",
+          "classification": "compatible_ordinary_background_noun",
+          "binding": "Retain compatible background use; add no scored binding.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-invitation",
+            "foundation01-language-third10-collins-invitation"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.caregiving.module08.06",
+      "resource": "res://data/professional/expressions/caregiving-module08.json",
+      "before_expression_json_sha256": "0ab410d7c3fe688a4052a3163d1c3c530945802e36769ff2163e15ca91599d52",
+      "after_expression_json_sha256": "0ab410d7c3fe688a4052a3163d1c3c530945802e36769ff2163e15ca91599d52",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "Please explain the difference between a medication reminder and medicine administration in my assigned role.",
+      "meaning": "Clarify medicine-related role boundaries.",
+      "context": "A worker asks the responsible professional before accepting a task.",
+      "focus_lexeme_ids": [
+        "medication-reminder.prompt-about-planned-medicine-use.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "reminder.memory-prompt.n"
+      ],
+      "locations": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module08"
+        }
+      ],
+      "individual_observation": "Medication reminder contains the ordinary prompt meaning within a separately scoped care term. Its explicit distinction from medicine administration and role limits must remain exact.",
+      "matches": [
+        {
+          "selected_id": "reminder.memory-prompt.n",
+          "authored_classification_code": "domain_compound",
+          "classification": "compatible_constituent_with_domain_boundary",
+          "binding": "Keep the complete care or booking term and all domain limits; add no binding or specialist acceptance.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-reminder",
+            "foundation01-language-third10-collins-reminder"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.food_service.module04.02",
+      "resource": "res://data/professional/expressions/food-service-module04.json",
+      "before_expression_json_sha256": "fdb1748c897b2368abfca21a8a4eecbe0c06eb44756fb85e9e1f40c66cd78d63",
+      "after_expression_json_sha256": "fdb1748c897b2368abfca21a8a4eecbe0c06eb44756fb85e9e1f40c66cd78d63",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "The food label shows the net weight and pack size for each unit; please report the broken seal.",
+      "meaning": "Read stock-unit information and report a damaged closure.",
+      "context": "A worker checks packaged food without deciding its suitability.",
+      "focus_lexeme_ids": [
+        "food-label.packaged-food-information-label.n",
+        "net-weight.contents-weight.n",
+        "pack-size.package-quantity.n",
+        "unit.single-stock-item.n",
+        "seal.closure-strip.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "break.work-pause.n"
+      ],
+      "locations": [
+        {
+          "course_id": "food_service",
+          "module_id": "module04"
+        }
+      ],
+      "individual_observation": "Broken modifies the package seal and denotes damage, unrelated to a work pause.",
+      "matches": [
+        {
+          "selected_id": "break.work-pause.n",
+          "authored_classification_code": "damage",
+          "classification": "excluded_damage_or_failure_adjective",
+          "binding": "Exclude broken objects or links from the selected work-pause noun.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-break"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.food_service.module07.06",
+      "resource": "res://data/professional/expressions/food-service-module07.json",
+      "before_expression_json_sha256": "0985ea33dd67daede9304a2b14b7b488be28ca8f6d28dce2d491daba6f80fb6c",
+      "after_expression_json_sha256": "0985ea33dd67daede9304a2b14b7b488be28ca8f6d28dce2d491daba6f80fb6c",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "The preparation list names each preparation station; please check stock availability, the remaining supply, and the reorder point before requesting ingredients.",
+      "meaning": "Review assigned preparation and supply information.",
+      "context": "A worker checks available quantities and the recorded replenishment trigger.",
+      "focus_lexeme_ids": [
+        "preparation-list.list-of-planned-preparation-tasks.n",
+        "preparation-station.assigned-food-preparation-area.n",
+        "stock-availability.goods-ready-for-sale.n",
+        "supply.available-quantity.n",
+        "reorder-point.replenishment-trigger-level.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "availability.free-time.n"
+      ],
+      "locations": [
+        {
+          "course_id": "food_service",
+          "module_id": "module07"
+        }
+      ],
+      "individual_observation": "The availability is of stock and ingredients. Reorder and supply conditions remain separate complete terms, not human scheduling.",
+      "matches": [
+        {
+          "selected_id": "availability.free-time.n",
+          "authored_classification_code": "resource",
+          "classification": "excluded_resource_availability",
+          "binding": "Resource availability is outside the selected person free-time sense.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-availability",
+            "foundation01-language-third10-collins-availability"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.food_service.module08.09",
+      "resource": "res://data/professional/expressions/food-service-module08.json",
+      "before_expression_json_sha256": "1af090a12de0320627e61378440e04ae7eb797a47cc97ac9fc7be2eae0cb5b22",
+      "after_expression_json_sha256": "1af090a12de0320627e61378440e04ae7eb797a47cc97ac9fc7be2eae0cb5b22",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "I reported the broken glass, sharp edge, spill, slip, trip, and any injury through the local safety process.",
+      "meaning": "Report observed hazards, loss of footing, and physical harm.",
+      "context": "A worker records separate safety concerns without inferring an injury.",
+      "focus_lexeme_ids": [
+        "broken-glass.glass-fragments.n",
+        "sharp-edge.cutting-boundary.n",
+        "spill.escaped-liquid-or-material.n",
+        "slip.loss-of-footing.n",
+        "trip.stumble-on-obstacle.n",
+        "injury.physical-harm.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "break.work-pause.n"
+      ],
+      "locations": [
+        {
+          "course_id": "food_service",
+          "module_id": "module08"
+        }
+      ],
+      "individual_observation": "Broken glass is the existing physical-fragments term. Reporting hazards does not invoke a rest break or provide a handling procedure.",
+      "matches": [
+        {
+          "selected_id": "break.work-pause.n",
+          "authored_classification_code": "damage",
+          "classification": "excluded_damage_or_failure_adjective",
+          "binding": "Exclude broken objects or links from the selected work-pause noun.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-break"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.food_service.module09.04",
+      "resource": "res://data/professional/expressions/food-service-module09.json",
+      "before_expression_json_sha256": "03007a67a98d6c9fcb1450d711c692c92fa9b841d655d653f451e1e4359a4cd0",
+      "after_expression_json_sha256": "03007a67a98d6c9fcb1450d711c692c92fa9b841d655d653f451e1e4359a4cd0",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "Please confirm the recipe card and menu revision before using the software menu in this browser tab to update the display.",
+      "meaning": "Check the current references before changing displayed information.",
+      "context": "A worker distinguishes a software command list from a restaurant menu version.",
+      "focus_lexeme_ids": [
+        "recipe-card.recorded-recipe-reference.n",
+        "menu-revision.change-to-menu-version.n",
+        "menu.interface-command-list.n",
+        "browser.web-access-program.n",
+        "tab.interface-page-selector.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "update.current-information.n"
+      ],
+      "locations": [
+        {
+          "course_id": "food_service",
+          "module_id": "module09"
+        }
+      ],
+      "individual_observation": "Update the display is an action changing displayed material. Recipe and menu references do not turn it into a progress-report noun.",
+      "matches": [
+        {
+          "selected_id": "update.current-information.n",
+          "authored_classification_code": "verb",
+          "classification": "excluded_update_verb_or_participle",
+          "binding": "Exclude the action or inflected verb from the selected information-report noun.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-update",
+            "foundation01-language-third10-collins-update"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.customer_support.module04.06",
+      "resource": "res://data/professional/expressions/customer-support-module04.json",
+      "before_expression_json_sha256": "74139b7fee4445e60f2966e9e08c871c8589f5159b2c31e72001f55437f57f1d",
+      "after_expression_json_sha256": "74139b7fee4445e60f2966e9e08c871c8589f5159b2c31e72001f55437f57f1d",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "I will check the service plan, any service fee, and stock availability for the replacement accessory.",
+      "meaning": "Check service coverage and replacement availability.",
+      "context": "An agent investigates a replacement request without promising availability.",
+      "focus_lexeme_ids": [
+        "service-plan.defined-service-package.n",
+        "service-fee.service-charge.n",
+        "stock-availability.goods-ready-for-sale.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "availability.free-time.n"
+      ],
+      "locations": [
+        {
+          "course_id": "customer_support",
+          "module_id": "module04"
+        }
+      ],
+      "individual_observation": "Stock availability refers to a replacement accessory that may be supplied. It does not describe when the support worker is free.",
+      "matches": [
+        {
+          "selected_id": "availability.free-time.n",
+          "authored_classification_code": "resource",
+          "classification": "excluded_resource_availability",
+          "binding": "Resource availability is outside the selected person free-time sense.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-availability",
+            "foundation01-language-third10-collins-availability"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.customer_support.module06.05",
+      "resource": "res://data/professional/expressions/customer-support-module06.json",
+      "before_expression_json_sha256": "f02669bd4bbf073ad8f0e04c611be6f9ebc2337c1676950f786f6257008e6105",
+      "after_expression_json_sha256": "f02669bd4bbf073ad8f0e04c611be6f9ebc2337c1676950f786f6257008e6105",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "My apology acknowledges the inconvenience and frustration in your complaint; let us clarify the expectation about the next update.",
+      "meaning": "Acknowledge the concern and clarify the next update.",
+      "context": "An agent responds without promising an unconfirmed outcome.",
+      "focus_lexeme_ids": [
+        "inconvenience.difficulty-or-trouble-caused-to-someone.n",
+        "frustration.feeling-when-progress-or-needs-are-blocked.n",
+        "expectation.belief-about-what-will-happen.n",
+        "apology.expression-of-regret.n",
+        "complaint.expression-of-dissatisfaction.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "update.current-information.n"
+      ],
+      "locations": [
+        {
+          "course_id": "customer_support",
+          "module_id": "module06"
+        }
+      ],
+      "individual_observation": "The expected next update is a progress communication to the complainant. Preserve the existing apology and expectation vocabulary and add no response-time promise or scored binding.",
+      "matches": [
+        {
+          "selected_id": "update.current-information.n",
+          "authored_classification_code": "background",
+          "classification": "compatible_ordinary_background_noun",
+          "binding": "Retain compatible background use; add no scored binding.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-update",
+            "foundation01-language-third10-collins-update"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.customer_support.module07.08",
+      "resource": "res://data/professional/expressions/customer-support-module07.json",
+      "before_expression_json_sha256": "0a38463bfd52d25680849405bf15a98fb53ab40029e6b89f20115da28d5240a3",
+      "after_expression_json_sha256": "0a38463bfd52d25680849405bf15a98fb53ab40029e6b89f20115da28d5240a3",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "The verified status page describes the service outage and the time of its latest update.",
+      "meaning": "Refer to current published service information.",
+      "context": "An agent checks a reported interruption.",
+      "focus_lexeme_ids": [
+        "status-page.page-reporting-service-condition.n",
+        "service-outage.period-of-service-unavailability.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "update.current-information.n"
+      ],
+      "locations": [
+        {
+          "course_id": "customer_support",
+          "module_id": "module07"
+        }
+      ],
+      "individual_observation": "The time of the latest update on a status page could refer to a report posted there or to the act/version of changing the page. Preserve the phrase without selecting the Foundation report noun as a new binding.",
+      "matches": [
+        {
+          "selected_id": "update.current-information.n",
+          "authored_classification_code": "hold_report_or_change",
+          "classification": "unresolved_report_or_revision",
+          "binding": "The wording permits an information report or a change/version/action. Hold any new selected report-noun binding.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-update",
+            "foundation01-language-third10-collins-update"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.office_admin.module06.01",
+      "resource": "res://data/professional/expressions/office-admin-module06.json",
+      "before_expression_json_sha256": "dbfd21b16edbc1015e913a25a8baed4d1b45d80cd68bcb8009f754c93d9e0331",
+      "after_expression_json_sha256": "dbfd21b16edbc1015e913a25a8baed4d1b45d80cd68bcb8009f754c93d9e0331",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "The meeting invitation includes the meeting link; share the meeting password only through the approved route.",
+      "meaning": "Distinguish meeting information from protected access information.",
+      "context": "Preparing an authorized online invitation.",
+      "focus_lexeme_ids": [
+        "meeting-invitation.request-to-attend-specified-meeting.n",
+        "meeting-link.address-for-joining-online-meeting.n",
+        "meeting-password.secret-required-for-meeting-entry.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "invitation.attendance-request.n"
+      ],
+      "locations": [
+        {
+          "course_id": "office_admin",
+          "module_id": "module06"
+        }
+      ],
+      "individual_observation": "Meeting invitation is a complete event-request term. The link and password are access information and do not become accepted invitation answers or approved sharing routes.",
+      "matches": [
+        {
+          "selected_id": "invitation.attendance-request.n",
+          "authored_classification_code": "compound",
+          "classification": "compatible_constituent_of_independent_complete_term",
+          "binding": "Retain the complete term; constituent compatibility does not accept the full term or add a selected binding.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-invitation",
+            "foundation01-language-third10-collins-invitation"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.office_admin.module06.03",
+      "resource": "res://data/professional/expressions/office-admin-module06.json",
+      "before_expression_json_sha256": "bd4231be7e702337352f157433c82f674167146f79b0d4efb81770e12f3abe1c",
+      "after_expression_json_sha256": "bd4231be7e702337352f157433c82f674167146f79b0d4efb81770e12f3abe1c",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "The chairperson will check the attendance list and confirm the quorum under the meeting rules.",
+      "meaning": "Refer formal participation requirements to the applicable rules.",
+      "context": "Preparing a formal meeting.",
+      "focus_lexeme_ids": [
+        "chairperson.person-leading-meeting-proceedings.n",
+        "attendance-list.list-of-people-attending-event.n",
+        "quorum.minimum-participation-for-valid-business.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "attendance.presence-record.n"
+      ],
+      "locations": [
+        {
+          "course_id": "office_admin",
+          "module_id": "module06"
+        }
+      ],
+      "individual_observation": "The attendance-list entry explicitly permits an expected or an actual list. Checking it for quorum does not itself resolve the list type, actual presence, numbers or valid participation; no new ordinary-presence binding is inferred.",
+      "matches": [
+        {
+          "selected_id": "attendance.presence-record.n",
+          "authored_classification_code": "hold_expected_or_actual",
+          "classification": "unresolved_expected_or_actual_attendance_list",
+          "binding": "The list does not establish actual presence, a headcount or a valid quorum. Preserve it without a selected presence binding.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-attendance",
+            "foundation01-language-third10-collins-attendance"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.office_admin.module09.04",
+      "resource": "res://data/professional/expressions/office-admin-module09.json",
+      "before_expression_json_sha256": "9635acd563c6d1afca3a06a7cb49b539736ac162906f0ca5913bc1084a3e296a",
+      "after_expression_json_sha256": "9635acd563c6d1afca3a06a7cb49b539736ac162906f0ca5913bc1084a3e296a",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "The footer and page break need review before the appendix is distributed.",
+      "meaning": "Request a check of lower-page content and pagination.",
+      "context": "Preparing a final document review.",
+      "focus_lexeme_ids": [
+        "footer.content-at-bottom-of-page.n",
+        "page-break.marker-starting-content-on-new-page.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "break.work-pause.n"
+      ],
+      "locations": [
+        {
+          "course_id": "office_admin",
+          "module_id": "module09"
+        }
+      ],
+      "individual_observation": "Page break is a pagination marker, not a pause for rest. The actual footer and appendix terms remain independent.",
+      "matches": [
+        {
+          "selected_id": "break.work-pause.n",
+          "authored_classification_code": "structural",
+          "classification": "excluded_structural_or_financial_break_term",
+          "binding": "Exclude pagination and break-even concepts from the selected work pause.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-break"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.office_admin.module10.07",
+      "resource": "res://data/professional/expressions/office-admin-module10.json",
+      "before_expression_json_sha256": "52d5e8a3dca9136ab99a353b276ef6f652831e2f56ea5cab0e6a01dedcef2321",
+      "after_expression_json_sha256": "52d5e8a3dca9136ab99a353b276ef6f652831e2f56ea5cab0e6a01dedcef2321",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "The leave request is pending; confirm the decision before updating the staff rota.",
+      "meaning": "Distinguish a request from approved time away.",
+      "context": "Coordinating staffing records.",
+      "focus_lexeme_ids": [
+        "leave-request.request-for-authorized-time-away.n",
+        "pending.awaiting-decision-or-action.a",
+        "staff-rota.staff-duty-schedule.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "update.current-information.n"
+      ],
+      "locations": [
+        {
+          "course_id": "office_admin",
+          "module_id": "module10"
+        }
+      ],
+      "individual_observation": "Updating the rota is a revision action after a leave decision. Preserve the distinction between a pending request and approval; no report noun is scored.",
+      "matches": [
+        {
+          "selected_id": "update.current-information.n",
+          "authored_classification_code": "verb",
+          "classification": "excluded_update_verb_or_participle",
+          "binding": "Exclude the action or inflected verb from the selected information-report noun.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-update",
+            "foundation01-language-third10-collins-update"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.warehouse_logistics.module07.05",
+      "resource": "res://data/professional/expressions/warehouse-module07.json",
+      "before_expression_json_sha256": "7c28247ecfa0d85bb5b347c503bd0d0a5a341144f71e4966078c6e0e5891282a",
+      "after_expression_json_sha256": "7c28247ecfa0d85bb5b347c503bd0d0a5a341144f71e4966078c6e0e5891282a",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "Check how the local system distinguishes available stock, allocated stock, and a stock reservation when reporting stock availability.",
+      "meaning": "Clarify the meaning of available stock in the local system.",
+      "context": "A worker reviews inventory status before promising supply.",
+      "focus_lexeme_ids": [
+        "available-stock.inventory-eligible-for-stated-demand.n",
+        "allocated-stock.inventory-assigned-to-specific-demand.n",
+        "stock-reservation.arrangement-holding-stock-for-demand.n",
+        "stock-availability.goods-ready-for-sale.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "availability.free-time.n"
+      ],
+      "locations": [
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module07"
+        }
+      ],
+      "individual_observation": "Stock availability is a local inventory status distinct from allocation and reservation. It cannot bind the person free-time noun or establish stock eligibility by itself.",
+      "matches": [
+        {
+          "selected_id": "availability.free-time.n",
+          "authored_classification_code": "resource",
+          "classification": "excluded_resource_availability",
+          "binding": "Resource availability is outside the selected person free-time sense.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-availability",
+            "foundation01-language-third10-collins-availability"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.warehouse_logistics.module10.06",
+      "resource": "res://data/professional/expressions/warehouse-module10.json",
+      "before_expression_json_sha256": "fd0836da556e765fa143b3c5aca100f70281786db6618fb83837a36505d9f1ea",
+      "after_expression_json_sha256": "fd0836da556e765fa143b3c5aca100f70281786db6618fb83837a36505d9f1ea",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "The transport planner needs the updated arrival information before reviewing the plan.",
+      "meaning": "Describe information needed for a planning decision.",
+      "context": "Coordinating a changed delivery.",
+      "focus_lexeme_ids": [
+        "transport-planner.person-planning-transport-arrangements.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "update.current-information.n"
+      ],
+      "locations": [
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module10"
+        }
+      ],
+      "individual_observation": "Updated is a participial modifier of arrival information. The revised information is not an occurrence of the selected countable report noun.",
+      "matches": [
+        {
+          "selected_id": "update.current-information.n",
+          "authored_classification_code": "verb",
+          "classification": "excluded_update_verb_or_participle",
+          "binding": "Exclude the action or inflected verb from the selected information-report noun.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-update",
+            "foundation01-language-third10-collins-update"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.hospitality_tourism.module05.03",
+      "resource": "res://data/professional/expressions/hospitality-module05.json",
+      "before_expression_json_sha256": "bdab3f7c96c21f63bf7300978cb5ad54a553ce8d1fe3074d1e9287f0dc1c0f02",
+      "after_expression_json_sha256": "bdab3f7c96c21f63bf7300978cb5ad54a553ce8d1fe3074d1e9287f0dc1c0f02",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "I will forward your message, follow up with the responsible team, escalate unresolved concerns, and respond with the update they confirm.",
+      "meaning": "Pass a message onward and seek authorized follow-up.",
+      "context": "A worker coordinates a concern through the agreed route.",
+      "focus_lexeme_ids": [
+        "follow-up.take-further-action-on-earlier-matter.v",
+        "respond.give-reply-or-reaction.v",
+        "forward.send-received-message-onward.v",
+        "escalate.refer-for-higher-or-specialist-attention.v"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "update.current-information.n"
+      ],
+      "locations": [
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module05"
+        }
+      ],
+      "individual_observation": "Responding with a confirmed update fits a progress report. Keep its responsible-team confirmation and escalation conditions; do not add an approved service outcome.",
+      "matches": [
+        {
+          "selected_id": "update.current-information.n",
+          "authored_classification_code": "background",
+          "classification": "compatible_ordinary_background_noun",
+          "binding": "Retain compatible background use; add no scored binding.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-update",
+            "foundation01-language-third10-collins-update"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.hospitality_tourism.module05.09",
+      "resource": "res://data/professional/expressions/hospitality-module05.json",
+      "before_expression_json_sha256": "f9d55ff97de5081a1373165a15761c6b1af639aa3b8fb1d696c3596e24632cca",
+      "after_expression_json_sha256": "f9d55ff97de5081a1373165a15761c6b1af639aa3b8fb1d696c3596e24632cca",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "Check availability before you book a stay, reserve the requested item, upgrade the room, or extend the visit; confirm the applicable terms.",
+      "meaning": "Distinguish arranging a stay from holding an item and changing a booking.",
+      "context": "A worker checks availability and actual conditions before promising a service.",
+      "focus_lexeme_ids": [
+        "upgrade.change-booking-to-higher-service-category.v",
+        "extend.increase-agreed-duration-or-period.v",
+        "book.arrange-reservation-for-service-or-place.v",
+        "reserve.hold-for-customer.v"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "availability.free-time.n"
+      ],
+      "locations": [
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module05"
+        }
+      ],
+      "individual_observation": "The prospective stay, item and room establish booking-resource availability. The unspecified resource is not a person free-time sense.",
+      "matches": [
+        {
+          "selected_id": "availability.free-time.n",
+          "authored_classification_code": "resource",
+          "classification": "excluded_resource_availability",
+          "binding": "Resource availability is outside the selected person free-time sense.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-availability",
+            "foundation01-language-third10-collins-availability"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.hospitality_tourism.module06.02",
+      "resource": "res://data/professional/expressions/hospitality-module06.json",
+      "before_expression_json_sha256": "8ebe133fe5a115cda9776f0edbc5aa3418893af70ab933951db0bfd9b7f95cfd",
+      "after_expression_json_sha256": "8ebe133fe5a115cda9776f0edbc5aa3418893af70ab933951db0bfd9b7f95cfd",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "Room availability does not confirm a specific room allocation or room block.",
+      "meaning": "Distinguish availability from an assigned or held group of rooms.",
+      "context": "Clarifying reservation records.",
+      "focus_lexeme_ids": [
+        "room-availability.status-of-rooms-eligible-for-booking-or-use.n",
+        "room-allocation.assignment-of-specific-room-to-booking.n",
+        "room-block.group-of-rooms-held-for-defined-booking-purpose.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "availability.free-time.n"
+      ],
+      "locations": [
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module06"
+        }
+      ],
+      "individual_observation": "Room availability is explicitly different from allocation and a room block. All three resource terms remain separate from personal scheduling.",
+      "matches": [
+        {
+          "selected_id": "availability.free-time.n",
+          "authored_classification_code": "resource",
+          "classification": "excluded_resource_availability",
+          "binding": "Resource availability is outside the selected person free-time sense.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-availability",
+            "foundation01-language-third10-collins-availability"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.hospitality_tourism.module06.07",
+      "resource": "res://data/professional/expressions/hospitality-module06.json",
+      "before_expression_json_sha256": "2c3ccdfe042d74736b49478fd706b38464a248f3e7f61685ade0c979f2114104",
+      "after_expression_json_sha256": "2c3ccdfe042d74736b49478fd706b38464a248f3e7f61685ade0c979f2114104",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "Check the booking channel, booking confirmation, and refund policy before referring the cancellation deadline or cancellation fee question.",
+      "meaning": "Check the actual booking records and payment-return terms.",
+      "context": "A worker refers conditions for review without limiting applicable legal rights.",
+      "focus_lexeme_ids": [
+        "booking-channel.route-through-which-reservation-is-made.n",
+        "booking-confirmation.message-recording-confirmed-reservation-details.n",
+        "cancellation-deadline.time-limit-for-stated-cancellation-condition.n",
+        "cancellation-fee.charge-associated-with-cancelling-arrangement.n",
+        "refund-policy.money-return-rules.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "deadline.final-time.n"
+      ],
+      "locations": [
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module06"
+        }
+      ],
+      "individual_observation": "Cancellation deadline contains a time limit within a complete booking-condition term. The lexical observation determines no fee, refund right, contract term or jurisdiction.",
+      "matches": [
+        {
+          "selected_id": "deadline.final-time.n",
+          "authored_classification_code": "domain_compound",
+          "classification": "compatible_constituent_with_domain_boundary",
+          "binding": "Keep the complete care or booking term and all domain limits; add no binding or specialist acceptance.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-deadline",
+            "foundation01-language-third10-collins-deadline"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.hospitality_tourism.module09.02",
+      "resource": "res://data/professional/expressions/hospitality-module09.json",
+      "before_expression_json_sha256": "945805d1df567b62ae9a663a6ca83996e4283d06ec6f84cca2b9a90715d03193",
+      "after_expression_json_sha256": "945805d1df567b62ae9a663a6ca83996e4283d06ec6f84cca2b9a90715d03193",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "Ask the systems contact whether the channel manager and booking engine have received the approved update.",
+      "meaning": "Refer distribution and reservation-software questions to the responsible role.",
+      "context": "Reviewing an online booking issue.",
+      "focus_lexeme_ids": [
+        "channel-manager.software-coordinating-room-sales-across-booking-channels.n",
+        "booking-engine.software-supporting-online-reservation-creation.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "update.current-information.n"
+      ],
+      "locations": [
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module09"
+        }
+      ],
+      "individual_observation": "Systems receiving an approved update may receive software, configuration or booking-data changes, or a current-information message. The wording alone does not choose the selected report noun; leave the binding unresolved.",
+      "matches": [
+        {
+          "selected_id": "update.current-information.n",
+          "authored_classification_code": "hold_report_or_change",
+          "classification": "unresolved_report_or_revision",
+          "binding": "The wording permits an information report or a change/version/action. Hold any new selected report-noun binding.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-update",
+            "foundation01-language-third10-collins-update"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.hospitality_tourism.module09.08",
+      "resource": "res://data/professional/expressions/hospitality-module09.json",
+      "before_expression_json_sha256": "136839c87d9798221ce4edf1d1581e6f7f42b4007e431a8cda08f84f66ad3d9c",
+      "after_expression_json_sha256": "136839c87d9798221ce4edf1d1581e6f7f42b4007e431a8cda08f84f66ad3d9c",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "Check the rate code and availability calendar before confirming the proposed booking amendment.",
+      "meaning": "Compare pricing and availability before a reservation change.",
+      "context": "Reviewing an amendment request.",
+      "focus_lexeme_ids": [
+        "rate-code.identifier-for-accommodation-pricing-arrangement.n",
+        "availability-calendar.calendar-showing-bookable-resources-over-time.n",
+        "booking-amendment.change-to-reservation-details-under-agreed-process.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "availability.free-time.n",
+        "calendar.date-organizer.n"
+      ],
+      "locations": [
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module09"
+        }
+      ],
+      "individual_observation": "The availability calendar shows resource-booking status. Availability is not personal free time; the grid may show bookable dates rather than planned events, so do not assume this complete term establishes the selected event-organizer scope.",
+      "matches": [
+        {
+          "selected_id": "availability.free-time.n",
+          "authored_classification_code": "resource",
+          "classification": "excluded_resource_availability",
+          "binding": "Resource availability is outside the selected person free-time sense.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-availability",
+            "foundation01-language-third10-collins-availability"
+          ]
+        },
+        {
+          "selected_id": "calendar.date-organizer.n",
+          "authored_classification_code": "hold_resource_calendar",
+          "classification": "unresolved_bookable_date_grid_or_event_organizer",
+          "binding": "The resource-status calendar does not by itself establish the selected planned-event organizer scope. Hold new binding.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-calendar",
+            "foundation01-language-third10-collins-calendar"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.transport_delivery.module04.02",
+      "resource": "res://data/professional/expressions/transport-module04.json",
+      "before_expression_json_sha256": "27c664f117ee70493324bba0dbe1e2f0885e5b4313fd4df191f2e8d3c6a7abcf",
+      "after_expression_json_sha256": "27c664f117ee70493324bba0dbe1e2f0885e5b4313fd4df191f2e8d3c6a7abcf",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "The seal is broken, and the label does not match the consignment record.",
+      "meaning": "Describe observed packaging and identification differences.",
+      "context": "Reporting a shipment discrepancy.",
+      "focus_lexeme_ids": [
+        "seal.closure-strip.n",
+        "label.attached-information-marker.n",
+        "consignment.sent-goods-group.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "break.work-pause.n"
+      ],
+      "locations": [
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module04"
+        }
+      ],
+      "individual_observation": "Broken is the seal-condition adjective. Preserve the observed discrepancy without adding a cause or a rest-pause meaning.",
+      "matches": [
+        {
+          "selected_id": "break.work-pause.n",
+          "authored_classification_code": "damage",
+          "classification": "excluded_damage_or_failure_adjective",
+          "binding": "Exclude broken objects or links from the selected work-pause noun.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-break"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.transport_delivery.module06.05",
+      "resource": "res://data/professional/expressions/transport-module06.json",
+      "before_expression_json_sha256": "c94f1fbf00f5479fdaad67f6b11e56610717f29fec8f940422bbe2636506f47c",
+      "after_expression_json_sha256": "c94f1fbf00f5479fdaad67f6b11e56610717f29fec8f940422bbe2636506f47c",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "The route plan has a new route sequence, so the estimated time of arrival needs updating.",
+      "meaning": "Connect a changed stop order with a revised estimate.",
+      "context": "Coordinating a schedule change.",
+      "focus_lexeme_ids": [
+        "route-plan.documented-arrangement-for-journey-path-and-stops.n",
+        "route-sequence.order-of-stops-on-planned-journey.n",
+        "estimated-time-of-arrival.predicted-clock-time-of-reaching-destination.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "update.current-information.n"
+      ],
+      "locations": [
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module06"
+        }
+      ],
+      "individual_observation": "Needs updating describes revision of an estimated arrival time after route changes. It does not name a report or promise a delivery time.",
+      "matches": [
+        {
+          "selected_id": "update.current-information.n",
+          "authored_classification_code": "verb",
+          "classification": "excluded_update_verb_or_participle",
+          "binding": "Exclude the action or inflected verb from the selected information-report noun.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-update",
+            "foundation01-language-third10-collins-update"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.transport_delivery.module06.10",
+      "resource": "res://data/professional/expressions/transport-module06.json",
+      "before_expression_json_sha256": "a41934e18391b828e984908c842f1a4319e4b25aa7097a8f1dfd06f9ed258723",
+      "after_expression_json_sha256": "a41934e18391b828e984908c842f1a4319e4b25aa7097a8f1dfd06f9ed258723",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "Please confirm vehicle availability and the relevant route restriction before assigning the journey.",
+      "meaning": "Check whether a proposed vehicle and route are suitable.",
+      "context": "Reviewing a planned vehicle assignment.",
+      "focus_lexeme_ids": [
+        "vehicle-availability.whether-vehicle-is-free-and-eligible-for-assignment.n",
+        "route-restriction.condition-limiting-use-of-route.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "availability.free-time.n"
+      ],
+      "locations": [
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module06"
+        }
+      ],
+      "individual_observation": "The noun describes a vehicle that is free and suitable for assignment. A vehicle availability term is not the selected person scheduling noun.",
+      "matches": [
+        {
+          "selected_id": "availability.free-time.n",
+          "authored_classification_code": "resource",
+          "classification": "excluded_resource_availability",
+          "binding": "Resource availability is outside the selected person free-time sense.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-availability",
+            "foundation01-language-third10-collins-availability"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.transport_delivery.module08.10",
+      "resource": "res://data/professional/expressions/transport-module08.json",
+      "before_expression_json_sha256": "d2ece1c7cd179f48e41f2f99fbe1891df98d1789ad1c7a7c1b30201c449cca26",
+      "after_expression_json_sha256": "d2ece1c7cd179f48e41f2f99fbe1891df98d1789ad1c7a7c1b30201c449cca26",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "The damage report describes broken glass and a sharp edge without assuming how the damage happened.",
+      "meaning": "Record what was observed without inventing a cause.",
+      "context": "Passing an item-damage report for review.",
+      "focus_lexeme_ids": [
+        "damage-report.record-describing-observed-harm-to-item-or-vehicle.n",
+        "broken-glass.glass-fragments.n",
+        "sharp-edge.cutting-boundary.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "break.work-pause.n"
+      ],
+      "locations": [
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module08"
+        }
+      ],
+      "individual_observation": "Broken glass denotes fragments within an observation-only damage report. Preserve the explicit lack of a causal assumption.",
+      "matches": [
+        {
+          "selected_id": "break.work-pause.n",
+          "authored_classification_code": "damage",
+          "classification": "excluded_damage_or_failure_adjective",
+          "binding": "Exclude broken objects or links from the selected work-pause noun.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-break"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.transport_delivery.module09.01",
+      "resource": "res://data/professional/expressions/transport-module09.json",
+      "before_expression_json_sha256": "9142f6cc41208d2a25f0c3da674c83c17e3f0a6e305cdf5fa794351d17c564c0",
+      "after_expression_json_sha256": "9142f6cc41208d2a25f0c3da674c83c17e3f0a6e305cdf5fa794351d17c564c0",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "The dashboard shows a notification, but the delivery status has not yet updated.",
+      "meaning": "Distinguish an alert from the recorded delivery stage.",
+      "context": "Reviewing application information while stationary.",
+      "focus_lexeme_ids": [
+        "dashboard.information-display.n",
+        "notification.system-alert-message.n",
+        "delivery-status.recorded-current-stage-or-outcome-of-delivery.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "update.current-information.n"
+      ],
+      "locations": [
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module09"
+        }
+      ],
+      "individual_observation": "Has not yet updated is an intransitive change-of-record verb. The presence of a notification does not establish a new progress-report noun or successful synchronization.",
+      "matches": [
+        {
+          "selected_id": "update.current-information.n",
+          "authored_classification_code": "verb",
+          "classification": "excluded_update_verb_or_participle",
+          "binding": "Exclude the action or inflected verb from the selected information-report noun.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-update",
+            "foundation01-language-third10-collins-update"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.transport_delivery.module09.06",
+      "resource": "res://data/professional/expressions/transport-module09.json",
+      "before_expression_json_sha256": "bd3cf48603c49c520bd9fdebaefc365741ef911bd00f79def7d246efa60488f8",
+      "after_expression_json_sha256": "bd3cf48603c49c520bd9fdebaefc365741ef911bd00f79def7d246efa60488f8",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "The delivery app is in offline mode, so confirm which actions are available and which updates are waiting.",
+      "meaning": "Check actual application behavior without assuming automatic synchronization.",
+      "context": "Handling a connectivity problem while stationary.",
+      "focus_lexeme_ids": [
+        "delivery-app.application-supporting-delivery-work.n",
+        "offline-mode.application-operation-without-live-network-connection.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "update.current-information.n"
+      ],
+      "locations": [
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module09"
+        }
+      ],
+      "individual_observation": "Waiting updates in an offline application may be queued record changes or communications. The instruction explicitly asks about actual behavior; it does not settle report versus synchronization change.",
+      "matches": [
+        {
+          "selected_id": "update.current-information.n",
+          "authored_classification_code": "hold_report_or_change",
+          "classification": "unresolved_report_or_revision",
+          "binding": "The wording permits an information report or a change/version/action. Hold any new selected report-noun binding.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-update",
+            "foundation01-language-third10-collins-update"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.transport_delivery.module10.07",
+      "resource": "res://data/professional/expressions/transport-module10.json",
+      "before_expression_json_sha256": "31ad9f1e1c03d73ddfa76452593914d33fc744be5fbef6b0dea1b7c8d6e794a1",
+      "after_expression_json_sha256": "31ad9f1e1c03d73ddfa76452593914d33fc744be5fbef6b0dea1b7c8d6e794a1",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "The fleet manager will review vehicle availability before the driver handover.",
+      "meaning": "Identify the person responsible for reviewing the fleet assignment.",
+      "context": "Coordinating a vehicle change.",
+      "focus_lexeme_ids": [
+        "fleet-manager.person-managing-group-of-work-vehicles.n",
+        "driver-handover.transfer-of-relevant-information-between-drivers.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "availability.free-time.n"
+      ],
+      "locations": [
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module10"
+        }
+      ],
+      "individual_observation": "Vehicle availability is a fleet-resource condition. The manager and driver mentioned nearby do not change its referent to human free time.",
+      "matches": [
+        {
+          "selected_id": "availability.free-time.n",
+          "authored_classification_code": "resource",
+          "classification": "excluded_resource_availability",
+          "binding": "Resource availability is outside the selected person free-time sense.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-availability",
+            "foundation01-language-third10-collins-availability"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.transport_delivery.module10.08",
+      "resource": "res://data/professional/expressions/transport-module10.json",
+      "before_expression_json_sha256": "b2628f994b10ddf4b866bd24bf248e10fa0dcadf466f62d6357c146f58938845",
+      "after_expression_json_sha256": "b2628f994b10ddf4b866bd24bf248e10fa0dcadf466f62d6357c146f58938845",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "The delivery round and its handover checklist have been updated for the next shift.",
+      "meaning": "Connect the planned series of stops with the handover information.",
+      "context": "Preparing a shift handover.",
+      "focus_lexeme_ids": [
+        "delivery-round.series-of-delivery-stops-on-one-work-journey.n",
+        "handover-checklist.list-of-information-to-confirm-during-work-transfer.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "update.current-information.n"
+      ],
+      "locations": [
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module10"
+        }
+      ],
+      "individual_observation": "Have been updated is a passive revision of the delivery round and checklist. The sentence preserves work-transfer information but does not instantiate the report noun.",
+      "matches": [
+        {
+          "selected_id": "update.current-information.n",
+          "authored_classification_code": "verb",
+          "classification": "excluded_update_verb_or_participle",
+          "binding": "Exclude the action or inflected verb from the selected information-report noun.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-update",
+            "foundation01-language-third10-collins-update"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.it_support.module10.10",
+      "resource": "res://data/professional/expressions/it-support-module10.json",
+      "before_expression_json_sha256": "5eaf8b5598cd587ef095ea8d282019ae47551c6c8ef14409dd2894da00c8ee21",
+      "after_expression_json_sha256": "5eaf8b5598cd587ef095ea8d282019ae47551c6c8ef14409dd2894da00c8ee21",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "The outage notice will be updated when service restoration has been verified.",
+      "meaning": "The service communication will reflect a confirmed return to the defined working condition.",
+      "context": "Communicating service progress",
+      "focus_lexeme_ids": [
+        "outage-notice.message-informing-users-of-service-unavailability.n",
+        "service-restoration.return-of-service-to-defined-working-condition.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "update.current-information.n"
+      ],
+      "locations": [
+        {
+          "course_id": "it_support",
+          "module_id": "module10"
+        }
+      ],
+      "individual_observation": "Will be updated is a passive action on the outage notice after verified restoration. It does not certify restoration or supply the selected countable noun.",
+      "matches": [
+        {
+          "selected_id": "update.current-information.n",
+          "authored_classification_code": "verb",
+          "classification": "excluded_update_verb_or_participle",
+          "binding": "Exclude the action or inflected verb from the selected information-report noun.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-update",
+            "foundation01-language-third10-collins-update"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.education_childcare.module09.01",
+      "resource": "res://data/professional/expressions/education-module09.json",
+      "before_expression_json_sha256": "2aecfe86272c61756847108cbb7e0d2aca1543c97bd46150c299bc2be7f6c2d3",
+      "after_expression_json_sha256": "2aecfe86272c61756847108cbb7e0d2aca1543c97bd46150c299bc2be7f6c2d3",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "The attendance register shows the absence and late arrival separately, and the absence note records the information supplied.",
+      "meaning": "Distinguish attendance states from the explanation received.",
+      "context": "Checking attendance records.",
+      "focus_lexeme_ids": [
+        "attendance-register.record-of-presence-and-absence.n",
+        "absence.not-being-present-at-expected-session.n",
+        "late-arrival.arrival-after-expected-time.n",
+        "absence-note.message-explaining-reported-absence.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "attendance.presence-record.n"
+      ],
+      "locations": [
+        {
+          "course_id": "education_childcare",
+          "module_id": "module09"
+        }
+      ],
+      "individual_observation": "Attendance register is a record of presence and absence; the sentence separates absence and late arrival. The ordinary presence relation is compatible, but the register is a distinct document and no attendance totals or safeguarding decisions are inferred.",
+      "matches": [
+        {
+          "selected_id": "attendance.presence-record.n",
+          "authored_classification_code": "compound",
+          "classification": "compatible_constituent_of_independent_complete_term",
+          "binding": "Retain the complete term; constituent compatibility does not accept the full term or add a selected binding.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-attendance",
+            "foundation01-language-third10-collins-attendance"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.hr_recruitment.module06.06",
+      "resource": "res://data/professional/expressions/hr-module06.json",
+      "before_expression_json_sha256": "83c4814b409ea0775a89e85fad68ba48b8687d3429d42eb231a3985370ee31d5",
+      "after_expression_json_sha256": "83c4814b409ea0775a89e85fad68ba48b8687d3429d42eb231a3985370ee31d5",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "The interview invitation includes the interview schedule and a contact for questions.",
+      "meaning": "Explain the practical information supplied to a candidate.",
+      "context": "Preparing a clear invitation.",
+      "focus_lexeme_ids": [
+        "interview-invitation.request-for-candidate-to-attend-interview.n",
+        "interview-schedule.planned-times-and-arrangements-for-interviews.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "invitation.attendance-request.n"
+      ],
+      "locations": [
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module06"
+        }
+      ],
+      "individual_observation": "Interview invitation is a complete request to attend. Its scheduling and contact details remain separate terms; an invitation is not a job offer or consent to disclose data.",
+      "matches": [
+        {
+          "selected_id": "invitation.attendance-request.n",
+          "authored_classification_code": "compound",
+          "classification": "compatible_constituent_of_independent_complete_term",
+          "binding": "Retain the complete term; constituent compatibility does not accept the full term or add a selected binding.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-invitation",
+            "foundation01-language-third10-collins-invitation"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.hr_recruitment.module10.10",
+      "resource": "res://data/professional/expressions/hr-module10.json",
+      "before_expression_json_sha256": "2a5ccd451bdae0e26547710364be4a1ab3db11c99920dc3388250e173b721544",
+      "after_expression_json_sha256": "2a5ccd451bdae0e26547710364be4a1ab3db11c99920dc3388250e173b721544",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "The management report includes the staffing forecast and recruitment update.",
+      "meaning": "Identify information used in a planning report.",
+      "context": "Preparing an evidence-based discussion.",
+      "focus_lexeme_ids": [
+        "management-report.report-prepared-to-support-management-understanding-or-decisions.n",
+        "staffing-forecast.estimate-of-future-workforce-requirements-or-availability.n",
+        "recruitment-update.current-information-about-hiring-progress.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "update.current-information.n"
+      ],
+      "locations": [
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module10"
+        }
+      ],
+      "individual_observation": "Recruitment update is a current-information report inside a management report. Preserve the complete hiring-context term and the distinction from a staffing forecast.",
+      "matches": [
+        {
+          "selected_id": "update.current-information.n",
+          "authored_classification_code": "compound",
+          "classification": "compatible_constituent_of_independent_complete_term",
+          "binding": "Retain the complete term; constituent compatibility does not accept the full term or add a selected binding.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-update",
+            "foundation01-language-third10-collins-update"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.construction_trades.module07.01",
+      "resource": "res://data/professional/expressions/construction-module07.json",
+      "before_expression_json_sha256": "a8b6feb4c5d02e4f87546ef4929242d3cf3300821d4b77f8a5e28f8ed47ce6a9",
+      "after_expression_json_sha256": "a8b6feb4c5d02e4f87546ef4929242d3cf3300821d4b77f8a5e28f8ed47ce6a9",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "The work package and work sequence need updating after the change to material availability.",
+      "meaning": "Explain why planning records require coordination.",
+      "context": "Discussing a schedule change before work arrangements are revised.",
+      "focus_lexeme_ids": [
+        "work-package.defined-group-of-tasks-delivered-together.n",
+        "work-sequence.planned-order-of-work-activities.n",
+        "material-availability.readiness-of-required-materials-for-use.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "availability.free-time.n",
+        "update.current-information.n"
+      ],
+      "locations": [
+        {
+          "course_id": "construction_trades",
+          "module_id": "module07"
+        }
+      ],
+      "individual_observation": "Material availability concerns resources for construction. Updating is the planning-record revision verb; neither occurrence supports a new personal free-time or progress-report noun binding.",
+      "matches": [
+        {
+          "selected_id": "availability.free-time.n",
+          "authored_classification_code": "resource",
+          "classification": "excluded_resource_availability",
+          "binding": "Resource availability is outside the selected person free-time sense.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-availability",
+            "foundation01-language-third10-collins-availability"
+          ]
+        },
+        {
+          "selected_id": "update.current-information.n",
+          "authored_classification_code": "verb",
+          "classification": "excluded_update_verb_or_participle",
+          "binding": "Exclude the action or inflected verb from the selected information-report noun.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-update",
+            "foundation01-language-third10-collins-update"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.cleaning_facilities.module08.06",
+      "resource": "res://data/professional/expressions/cleaning-module08.json",
+      "before_expression_json_sha256": "4aeaef00383f53bcb7ffdc96931cd65902e1a79c92fa0690245996328307e20e",
+      "after_expression_json_sha256": "4aeaef00383f53bcb7ffdc96931cd65902e1a79c92fa0690245996328307e20e",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "The report notes suspected sharps, broken glass, and a bodily fluid concern; contaminated waste needs the appropriate review.",
+      "meaning": "Report potentially harmful materials without handling instructions.",
+      "context": "Preparing a factual concern report.",
+      "focus_lexeme_ids": [
+        "sharps.objects-capable-of-puncturing-or-cutting-skin.n",
+        "broken-glass.glass-fragments.n",
+        "bodily-fluid.fluid-produced-by-human-body.n",
+        "contaminated-waste.waste-containing-unwanted-or-potentially-harmful-material.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "break.work-pause.n"
+      ],
+      "locations": [
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module08"
+        }
+      ],
+      "individual_observation": "Broken glass is a physical hazard term. The suspected materials and review requirements remain exact; no work pause or handling instruction is inferred.",
+      "matches": [
+        {
+          "selected_id": "break.work-pause.n",
+          "authored_classification_code": "damage",
+          "classification": "excluded_damage_or_failure_adjective",
+          "binding": "Exclude broken objects or links from the selected work-pause noun.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-break"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.sales_marketing.module06.02",
+      "resource": "res://data/professional/expressions/sales-module06.json",
+      "before_expression_json_sha256": "d72a900b63dde35fd0a203675318a740fb69607bdbc6ae5264b0a1d8718ad0d0",
+      "after_expression_json_sha256": "d72a900b63dde35fd0a203675318a740fb69607bdbc6ae5264b0a1d8718ad0d0",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "Please confirm stock availability before we issue the purchase order.",
+      "meaning": "Ask for supply information before ordering.",
+      "context": "Coordinating a prospective goods order.",
+      "focus_lexeme_ids": [
+        "stock-availability.goods-ready-for-sale.n",
+        "purchase-order.buyer-order-document.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "availability.free-time.n"
+      ],
+      "locations": [
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module06"
+        }
+      ],
+      "individual_observation": "Stock availability is the ability to supply goods before an order. Personal free time and purchasing authorization are not established.",
+      "matches": [
+        {
+          "selected_id": "availability.free-time.n",
+          "authored_classification_code": "resource",
+          "classification": "excluded_resource_availability",
+          "binding": "Resource availability is outside the selected person free-time sense.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-availability",
+            "foundation01-language-third10-collins-availability"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.sales_marketing.module08.07",
+      "resource": "res://data/professional/expressions/sales-module08.json",
+      "before_expression_json_sha256": "c96fd89b008f97664645a8acec1407ebc7f738ba7d4a438d34bfe93c233e30f2",
+      "after_expression_json_sha256": "c96fd89b008f97664645a8acec1407ebc7f738ba7d4a438d34bfe93c233e30f2",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "Please report the broken link and incorrect price before publishing the corrected page.",
+      "meaning": "Ask a colleague to flag specific content problems.",
+      "context": "Checking a product page.",
+      "focus_lexeme_ids": [
+        "broken-link.link-that-does-not-reach-intended-working-destination.n",
+        "incorrect-price.displayed-or-recorded-price-that-is-wrong.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "break.work-pause.n"
+      ],
+      "locations": [
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module08"
+        }
+      ],
+      "individual_observation": "Broken link denotes a nonworking electronic link. It is a damage/failure adjective inside a complete term, not a rest break.",
+      "matches": [
+        {
+          "selected_id": "break.work-pause.n",
+          "authored_classification_code": "damage",
+          "classification": "excluded_damage_or_failure_adjective",
+          "binding": "Exclude broken objects or links from the selected work-pause noun.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-break"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.accounting_finance.module07.06",
+      "resource": "res://data/professional/expressions/accounting-module07.json",
+      "before_expression_json_sha256": "6da99d9acaac5f59672e7a9c2711cd9e7cdbf90e4d0ecad64b6f834f58b8a483",
+      "after_expression_json_sha256": "6da99d9acaac5f59672e7a9c2711cd9e7cdbf90e4d0ecad64b6f834f58b8a483",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "The break-even point depends on the contribution margin and the other assumptions in this model.",
+      "meaning": "Explain that a model result depends on its inputs and scope.",
+      "context": "Reviewing a planning example.",
+      "focus_lexeme_ids": [
+        "break-even-point.activity-level-at-which-total-revenue-equals-total-cost.n",
+        "contribution-margin.revenue-remaining-after-variable-costs.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "break.work-pause.n"
+      ],
+      "locations": [
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module07"
+        }
+      ],
+      "individual_observation": "Break-even point is a complete financial model concept. Neither its spelling nor the model reference instantiates a rest pause; the assumptions remain explicit.",
+      "matches": [
+        {
+          "selected_id": "break.work-pause.n",
+          "authored_classification_code": "structural",
+          "classification": "excluded_structural_or_financial_break_term",
+          "binding": "Exclude pagination and break-even concepts from the selected work pause.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-break"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    },
+    {
+      "id": "expr.accounting_finance.module10.05",
+      "resource": "res://data/professional/expressions/accounting-module10.json",
+      "before_expression_json_sha256": "bf837f660ca0b1d3293a7a285fd25a4cb219247eb80cccca7bc1584a6e2bef2c",
+      "after_expression_json_sha256": "bf837f660ca0b1d3293a7a285fd25a4cb219247eb80cccca7bc1584a6e2bef2c",
+      "action": "retain_exact_no_language_or_domain_acceptance",
+      "text": "The variance explanation describes what changed, and the forecast revision shows the updated expectation.",
+      "meaning": "Distinguish an explanation of results from a revised estimate.",
+      "context": "Reviewing a management report.",
+      "focus_lexeme_ids": [
+        "variance-explanation.account-of-reasons-for-difference-from-comparison-amount.n",
+        "forecast-revision.change-to-previous-forecast-based-on-updated-information.n"
+      ],
+      "selected_focus_ids": [],
+      "literal_selected_ids": [
+        "update.current-information.n"
+      ],
+      "locations": [
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module10"
+        }
+      ],
+      "individual_observation": "Updated modifies a revised forecast expectation. It is not a countable progress report and does not validate the estimate.",
+      "matches": [
+        {
+          "selected_id": "update.current-information.n",
+          "authored_classification_code": "verb",
+          "classification": "excluded_update_verb_or_participle",
+          "binding": "Exclude the action or inflected verb from the selected information-report noun.",
+          "source_record_ids": [
+            "foundation01-language-third10-oxford-update",
+            "foundation01-language-third10-collins-update"
+          ]
+        }
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "new_scored_bindings": [],
+      "scope": "Actual text, meaning, context and focus were inspected only for the selected noun senses. Full original records are frozen in preimages; all fields remain exact and no complete-expression acceptance is granted."
+    }
+  ],
+  "other_local_expressions": [
+    {
+      "id": "expr.foundation.module01.03",
+      "before_expression_json_sha256": "01664621e324c463010588edb45013f9dec0f25c3ac3d2340ad6b71529d2e36e",
+      "after_expression_json_sha256": "01664621e324c463010588edb45013f9dec0f25c3ac3d2340ad6b71529d2e36e",
+      "text": "The receptionist will welcome the visitor and make a brief introduction.",
+      "context": "A workplace prepares for a visitor.",
+      "action": "retain_exact",
+      "individual_observation": "Welcoming a visitor and giving an introduction contain none of the selected ten nouns. Preserve the full expression and existing front-desk vocabulary without inferring an invitation."
+    },
+    {
+      "id": "expr.foundation.module01.04",
+      "before_expression_json_sha256": "8995bb591db9297f41c968ba04851173c46955dcdd6aee56f449160fac2c7d14",
+      "after_expression_json_sha256": "8995bb591db9297f41c968ba04851173c46955dcdd6aee56f449160fac2c7d14",
+      "text": "Our employer has invited every employee and contractor to the meeting.",
+      "context": "An organization announces an inclusive meeting.",
+      "action": "retain_exact",
+      "individual_observation": "Invited is a verb and is not a literal invitation noun occurrence under the declared matching rule. The existing employer, employee, contractor and meeting focus stays exact."
+    },
+    {
+      "id": "expr.foundation.module01.07",
+      "before_expression_json_sha256": "d3549b07652a0f71782cd68620a47d09f76787c13e519dfd826b797909efe704",
+      "after_expression_json_sha256": "d3549b07652a0f71782cd68620a47d09f76787c13e519dfd826b797909efe704",
+      "text": "My colleague is our contact for questions about each department's role and responsibility.",
+      "context": "A new worker learns whom to ask about team responsibilities.",
+      "action": "retain_exact",
+      "individual_observation": "The useful-person contact and organizational roles contain none of the selected ten nouns. Keep the exact earlier language decisions and expression bindings."
+    },
+    {
+      "id": "expr.foundation.module01.08",
+      "before_expression_json_sha256": "12e2ccf8e04e5ff4f4b2a8e091aa9438b57c1b5ed50a23703daca02b785d018a",
+      "after_expression_json_sha256": "12e2ccf8e04e5ff4f4b2a8e091aa9438b57c1b5ed50a23703daca02b785d018a",
+      "text": "The voicemail message gives my extension; I also sent an email about our phone call.",
+      "context": "A worker follows up on a telephone conversation.",
+      "action": "retain_exact",
+      "individual_observation": "Telephone and electronic-message channels contain no selected ten noun occurrence. A message is not automatically an update or reminder."
+    }
+  ],
+  "related_entry_boundaries": [
+    {
+      "id": "meeting-room.discussion-space.n",
+      "text": "meeting room",
+      "definition": "A room used for group discussions or presentations.",
+      "example": "The review will take place in the meeting room.",
+      "accepted_forms": [
+        "meeting room"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "9d53d3f02bfc2a8f7397f1bd62a5e49e0200f40b01ff34c47baf1534df63e35a",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "associated_place_record_or_access",
+      "observation": "A place, record, access item or furnishing associated with meetings remains a complete term of its own kind. It is neither the meeting event nor an agenda or invitation merely because the words are related."
+    },
+    {
+      "id": "schedule.time-plan.n",
+      "text": "schedule",
+      "definition": "A plan showing when activities are expected to happen.",
+      "example": "The schedule includes a short team meeting.",
+      "accepted_forms": [
+        "schedule"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "f31d76fb9e60fc033b74c421590d7bca11e7aa0a2406673d444c4130e8866f40",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "distinct_time_plan",
+      "observation": "This is an independently defined time plan, not automatically a calendar artifact or an agenda. Preserve its full entry, exact existing second10 decisions where present and any local or financial requirements."
+    },
+    {
+      "id": "meeting.work-discussion.n",
+      "text": "meeting",
+      "definition": "An arranged gathering where people discuss matters or make decisions.",
+      "example": "The meeting will last twenty minutes.",
+      "accepted_forms": [
+        "meeting"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "e7ed016b8eb989c765f44554ea1c5d35a42430a36d65fb6bfd57a66f4b1df9e1",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "distinct_event",
+      "observation": "An arranged event or specialized discussion remains separate from its topic list, invitation, attendance state and progress reports. Preserve the exact event definition, any existing acceptance, and specialist gates."
+    },
+    {
+      "id": "promotion-calendar.offer-schedule.n",
+      "text": "promotion calendar",
+      "definition": "A schedule showing when promotional activities take place.",
+      "example": "The promotion calendar includes next month's event.",
+      "accepted_forms": [
+        "promotion calendar"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "62c34bdaac957d3a115694996568f59a199e706fbd8e923cdabecc6310bfb454",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "compatible_calendar_term",
+      "observation": "A dated plan for a defined activity can contain the ordinary organizer meaning. Keep the specialized complete term independent; it does not approve promotions, publication, accounting deadlines or new scoring bindings."
+    },
+    {
+      "id": "stock-availability.goods-ready-for-sale.n",
+      "text": "stock availability",
+      "definition": "Whether and where goods are available to supply or sell.",
+      "example": "The customer asked us to confirm stock availability.",
+      "accepted_forms": [
+        "stock availability"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "3febb119894d7cc695cf725774b59b319ebc8f8576d0ec2b56c500183cba82e7",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "resource_availability_excluded",
+      "observation": "The available referent is goods, resources or an offering, not a person free to participate. Exact resource eligibility and any operational conditions remain protected; no human-scheduling binding is inferred."
+    },
+    {
+      "id": "availability.usable-system-access.n",
+      "text": "availability",
+      "definition": "The extent to which a system or information can be accessed and used when required.",
+      "example": "The monitoring report describes the service's availability.",
+      "accepted_forms": [
+        "availability"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "3e552f33ce9a434fdd81441462dbc7552b3ad8c244294f97dcb5d1d9a524fe04",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "system_availability_excluded",
+      "observation": "This neighboring entry is the explicit system-access availability sense. Shared spelling cannot transfer its scored identity, definition or technical review to personal free time."
+    },
+    {
+      "id": "bed-availability.usable-care-bed-status.n",
+      "text": "bed availability",
+      "definition": "The availability of suitable staffed beds for a defined care need.",
+      "example": "The receiving team confirmed bed availability.",
+      "accepted_forms": [
+        "bed availability"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "3c497478dd5f28f7f0e96abc1683e88ac6f7e178db0c49d0b5342c9d004822f9",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "resource_availability_excluded",
+      "observation": "The available referent is goods, resources or an offering, not a person free to participate. Exact resource eligibility and any operational conditions remain protected; no human-scheduling binding is inferred."
+    },
+    {
+      "id": "medication-reminder.prompt-about-planned-medicine-use.n",
+      "text": "medication reminder",
+      "definition": "A prompt concerning planned medicine use, distinct from administering or deciding on treatment.",
+      "example": "She asked whether a medication reminder was part of the agreed role.",
+      "accepted_forms": [
+        "medication reminder"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "cb5807ddfce3fedd867aba85a52f743a530ab663698671bdf296f07583d56f7c",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "domain_prompt",
+      "observation": "The ordinary prompt relation fits, but this complete care term explicitly excludes administration and treatment decisions. Preserve all role limits and clinical gates."
+    },
+    {
+      "id": "review-meeting.meeting-to-reconsider-arrangements.n",
+      "text": "review meeting",
+      "definition": "A meeting to consider how arrangements are working and whether changes are needed.",
+      "example": "She asked to include her own goals in the review meeting.",
+      "accepted_forms": [
+        "review meeting"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "196ae36e998a0f265ee68b11fbda0fb47912db3511ba23a1db5f5e8f07a7cab9",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "distinct_event",
+      "observation": "An arranged event or specialized discussion remains separate from its topic list, invitation, attendance state and progress reports. Preserve the exact event definition, any existing acceptance, and specialist gates."
+    },
+    {
+      "id": "cleaning-schedule.planned-cleaning-task-record.n",
+      "text": "cleaning schedule",
+      "definition": "A plan stating cleaning tasks, responsibilities, and when they should be carried out.",
+      "example": "The worker checked the current cleaning schedule.",
+      "accepted_forms": [
+        "cleaning schedule"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "c4dbf8bd8240c6bc60679eed3c6f49365ac5c3c3fc8cdcbfc4ffe675c073e7da",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "distinct_time_plan",
+      "observation": "This is an independently defined time plan, not automatically a calendar artifact or an agenda. Preserve its full entry, exact existing second10 decisions where present and any local or financial requirements."
+    },
+    {
+      "id": "meeting-minutes.written-record-of-meeting-business.n",
+      "text": "meeting minutes",
+      "definition": "A written record of a meeting's business, decisions, and agreed actions.",
+      "example": "Please check the draft meeting minutes for accuracy.",
+      "accepted_forms": [
+        "meeting minutes"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "7abced86d64536a683a69fe39bfb148b6e7b217e0b7a5f381946de0228e7af91",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "associated_place_record_or_access",
+      "observation": "A place, record, access item or furnishing associated with meetings remains a complete term of its own kind. It is neither the meeting event nor an agenda or invitation merely because the words are related."
+    },
+    {
+      "id": "retention-schedule.rules-for-keeping-and-disposing-records.n",
+      "text": "retention schedule",
+      "definition": "A documented set of rules for keeping record categories and their authorized eventual disposition.",
+      "example": "Check the approved retention schedule and any applicable hold before proposing disposal.",
+      "accepted_forms": [
+        "retention schedule"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "148fa264df697b277c16b0ccb7bcc40c29dc0c0cf37d8b1254b9eb1725f3c2c8",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "rules_not_simple_calendar",
+      "observation": "This complete records-disposition term is a set of rules, not automatically an event organizer. Its holds and authorization conditions stay exact."
+    },
+    {
+      "id": "meeting-invitation.request-to-attend-specified-meeting.n",
+      "text": "meeting invitation",
+      "definition": "A message inviting someone to attend a meeting with relevant details.",
+      "example": "The meeting invitation includes the time zone and access arrangements.",
+      "accepted_forms": [
+        "meeting invitation"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "d7cf204eab0ee10f294c0b7dfe695e0de018332ddef1b65e77682564de5ca2ab",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "compatible_invitation_term",
+      "observation": "The ordinary attendance request occurs within a separately authored complete term. The term supplies no automatic access authority, hiring commitment or extra accepted spelling."
+    },
+    {
+      "id": "meeting-link.address-for-joining-online-meeting.n",
+      "text": "meeting link",
+      "definition": "An electronic address used to reach an online meeting.",
+      "example": "Please share the meeting link only with the intended attendees.",
+      "accepted_forms": [
+        "meeting link"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "7d170471b81e5baf531ba07cc1882c3daf1faaab3742b73feb7c9f8e5542c6f0",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "associated_place_record_or_access",
+      "observation": "A place, record, access item or furnishing associated with meetings remains a complete term of its own kind. It is neither the meeting event nor an agenda or invitation merely because the words are related."
+    },
+    {
+      "id": "meeting-password.secret-required-for-meeting-entry.n",
+      "text": "meeting password",
+      "definition": "A secret value used to restrict entry to an online meeting.",
+      "example": "Use the approved channel for the meeting password.",
+      "accepted_forms": [
+        "meeting password"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "0d41317006f3ef00bd96178ea223e4c5e27d47ab48c69bfa525878040a0478b4",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "associated_place_record_or_access",
+      "observation": "A place, record, access item or furnishing associated with meetings remains a complete term of its own kind. It is neither the meeting event nor an agenda or invitation merely because the words are related."
+    },
+    {
+      "id": "attendance-list.list-of-people-attending-event.n",
+      "text": "attendance list",
+      "definition": "A list identifying people expected to attend or recorded as attending an event.",
+      "example": "Please confirm whether this is the expected or actual attendance list.",
+      "accepted_forms": [
+        "attendance list"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "80b1254a240869a5568f83842aad7a9507f61b5c82f368dbfb9cde3b2a8a33e7",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "expected_actual_hold",
+      "observation": "The entry permits expected attendees or actual recorded attendance. That distinction cannot be collapsed into actual presence or used to certify a quorum or headcount."
+    },
+    {
+      "id": "hybrid-meeting.meeting-with-in-person-and-remote-attendance.n",
+      "text": "hybrid meeting",
+      "definition": "A meeting with both people in a shared physical location and people joining remotely.",
+      "example": "Plan how each person can contribute to the hybrid meeting.",
+      "accepted_forms": [
+        "hybrid meeting"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "1f4b1403b65129f27f0bdfe2561bc9d2de0949a71ee87297f03040cf5ce71ee3",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "distinct_event",
+      "observation": "An arranged event or specialized discussion remains separate from its topic list, invitation, attendance state and progress reports. Preserve the exact event definition, any existing acceptance, and specialist gates."
+    },
+    {
+      "id": "recurring-meeting.meeting-repeated-on-planned-schedule.n",
+      "text": "recurring meeting",
+      "definition": "A meeting arranged to repeat according to a schedule.",
+      "example": "Check the time zone for each recurring meeting occurrence.",
+      "accepted_forms": [
+        "recurring meeting"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "460a0b42fe81d80e3ca3e82b5f8255683d8e6a637930a415e0a6ade6e2103c36",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "distinct_event",
+      "observation": "An arranged event or specialized discussion remains separate from its topic list, invitation, attendance state and progress reports. Preserve the exact event definition, any existing acceptance, and specialist gates."
+    },
+    {
+      "id": "page-break.marker-starting-content-on-new-page.n",
+      "text": "page break",
+      "definition": "A document marker that starts following content on a new page.",
+      "example": "A page break separates the appendix from the main report.",
+      "accepted_forms": [
+        "page break"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "fcff4afa4a7daafbaf73e366a81dae8fe55c3aedb9c8bef437b5597b9342c43b",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "non_pause_break_excluded",
+      "observation": "The structural or financial complete term is unrelated to the selected work-pause noun. Shared letters provide no sense or answer equivalence."
+    },
+    {
+      "id": "room-availability.status-of-rooms-eligible-for-booking-or-use.n",
+      "text": "room availability",
+      "definition": "The status of rooms that can be booked or used under the provider's current arrangements.",
+      "example": "Please check room availability for the requested dates.",
+      "accepted_forms": [
+        "room availability"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "1b7c90ee588a5f007acfb689d5de1f43a4558cd94f4c9e54b825bfa00a004b78",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "resource_availability_excluded",
+      "observation": "The available referent is goods, resources or an offering, not a person free to participate. Exact resource eligibility and any operational conditions remain protected; no human-scheduling binding is inferred."
+    },
+    {
+      "id": "cancellation-deadline.time-limit-for-stated-cancellation-condition.n",
+      "text": "cancellation deadline",
+      "definition": "The time limit relevant to a stated cancellation condition under the booking arrangements and applicable law.",
+      "example": "Confirm the time zone and terms linked to the cancellation deadline.",
+      "accepted_forms": [
+        "cancellation deadline"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "7066d3a7fae11df8fd0605b08969db3ad0d559c50d924caad3f1d53e80fa6776",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "qualified_deadline",
+      "observation": "A time limit is present inside a distinct complete term. Preserve contractual or application conditions and do not infer legal deadlines, extensions or permissions."
+    },
+    {
+      "id": "availability-calendar.calendar-showing-bookable-resources-over-time.n",
+      "text": "availability calendar",
+      "definition": "A calendar showing when resources or services are available for booking under current records.",
+      "example": "Check the availability calendar before proposing new dates.",
+      "accepted_forms": [
+        "availability calendar"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "e7e94bd1c93f12c15600a3d63e0c2426054ab815b56938633ca88da6176299a5",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "resource_calendar_hold",
+      "observation": "A grid of bookable resources need not record planned events. Resource availability is excluded from the person sense, and the calendar relation remains bounded without accepting the complete term."
+    },
+    {
+      "id": "vehicle-availability.whether-vehicle-is-free-and-eligible-for-assignment.n",
+      "text": "vehicle availability",
+      "definition": "Whether a vehicle is available and suitable to be assigned at a stated time.",
+      "example": "The planner is checking vehicle availability for the afternoon.",
+      "accepted_forms": [
+        "vehicle availability"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "921f38c2dcbf39e6721c68ed427e1c794c22f7a60d4872778900a8bdecc93433",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "resource_availability_excluded",
+      "observation": "The available referent is goods, resources or an offering, not a person free to participate. Exact resource eligibility and any operational conditions remain protected; no human-scheduling binding is inferred."
+    },
+    {
+      "id": "handover-meeting.meeting-for-transfer-of-work-information-and-responsibility.n",
+      "text": "handover meeting",
+      "definition": "A meeting held to transfer relevant information and responsibility for ongoing work.",
+      "example": "The handover meeting covers the open issue and the next responsible contact.",
+      "accepted_forms": [
+        "handover meeting"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "ee5cef6fc0ac2b23dde9261a5a4430bf1fca2132cb0a9d0a32a97ae291afa446",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "distinct_event",
+      "observation": "An arranged event or specialized discussion remains separate from its topic list, invitation, attendance state and progress reports. Preserve the exact event definition, any existing acceptance, and specialist gates."
+    },
+    {
+      "id": "visual-timetable.schedule-presented-with-visible-sequence-cues.n",
+      "text": "visual timetable",
+      "definition": "A schedule presented with pictures, symbols, or other visible cues.",
+      "example": "The visual timetable shows a change in the afternoon plan.",
+      "accepted_forms": [
+        "visual timetable"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "fa45d95b6447259cb9738a719c70edcf4c87b5fbe5fb89dd006bfe9ca7ee7eee",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "distinct_time_plan",
+      "observation": "This is an independently defined time plan, not automatically a calendar artifact or an agenda. Preserve its full entry, exact existing second10 decisions where present and any local or financial requirements."
+    },
+    {
+      "id": "attendance-register.record-of-presence-and-absence.n",
+      "text": "attendance register",
+      "definition": "A record showing who is present or absent for a specified session.",
+      "example": "The educator checked the attendance register.",
+      "accepted_forms": [
+        "attendance register"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "8bb1e31609114490a8bfd3520d4b21bc29e034ca6383ef84a266f48cf496b977",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "record_distinct_from_presence",
+      "observation": "This is a document recording presence and absence. The source-compatible presence relation does not make the document itself the selected attendance noun or validate its contents."
+    },
+    {
+      "id": "supervision-meeting.planned-discussion-with-designated-professional-supervisor.n",
+      "text": "supervision meeting",
+      "definition": "A planned discussion with a designated supervisor about work, support, and relevant responsibilities.",
+      "example": "The educator prepared questions for the supervision meeting.",
+      "accepted_forms": [
+        "supervision meeting"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "a66cf1ba45da4736f3cf68cd1457a94412fa4d85ce63b4534ea8fc09f66051b4",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "distinct_event",
+      "observation": "An arranged event or specialized discussion remains separate from its topic list, invitation, attendance state and progress reports. Preserve the exact event definition, any existing acceptance, and specialist gates."
+    },
+    {
+      "id": "maintenance-schedule.plan-of-timing-for-maintenance-work.n",
+      "text": "maintenance schedule",
+      "definition": "A plan showing when maintenance work is due or arranged.",
+      "example": "The office checked the maintenance schedule for the equipment.",
+      "accepted_forms": [
+        "maintenance schedule"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "8bc3f50964e0938ad18c2a01c024023c55861448313f90b4606c451b4349f3e1",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "distinct_time_plan",
+      "observation": "This is an independently defined time plan, not automatically a calendar artifact or an agenda. Preserve its full entry, exact existing second10 decisions where present and any local or financial requirements."
+    },
+    {
+      "id": "meeting-table.table-around-which-people-meet.n",
+      "text": "meeting table",
+      "definition": "A table arranged for people to sit around during a meeting.",
+      "example": "The meeting table has six seats.",
+      "accepted_forms": [
+        "meeting table"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "7a5df544363857f2cf69822f7ad9adbdc297dc624bd7d38da6f068d5d8c33206",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "associated_place_record_or_access",
+      "observation": "A place, record, access item or furnishing associated with meetings remains a complete term of its own kind. It is neither the meeting event nor an agenda or invitation merely because the words are related."
+    },
+    {
+      "id": "application-deadline.last-time-set-for-receiving-applications.n",
+      "text": "application deadline",
+      "definition": "The last date or time set for receiving applications.",
+      "example": "The application deadline is stated in the advertisement.",
+      "accepted_forms": [
+        "application deadline"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "e68c285ad92d844341d0854e9afae83f2f92ecd7eaf802d989e594090cb7cecf",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "qualified_deadline",
+      "observation": "A time limit is present inside a distinct complete term. Preserve contractual or application conditions and do not infer legal deadlines, extensions or permissions."
+    },
+    {
+      "id": "interview-invitation.request-for-candidate-to-attend-interview.n",
+      "text": "interview invitation",
+      "definition": "A request for a candidate to attend an interview.",
+      "example": "The interview invitation includes the location and contact details.",
+      "accepted_forms": [
+        "interview invitation"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "6eb891a2385d17247374200137243f41690a53ce5635625da2417c40a002afe7",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "compatible_invitation_term",
+      "observation": "The ordinary attendance request occurs within a separately authored complete term. The term supplies no automatic access authority, hiring commitment or extra accepted spelling."
+    },
+    {
+      "id": "interview-schedule.planned-times-and-arrangements-for-interviews.n",
+      "text": "interview schedule",
+      "definition": "A plan of times and arrangements for interviews.",
+      "example": "The coordinator updated the interview schedule.",
+      "accepted_forms": [
+        "interview schedule"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "860bfb94182f475a353199a9b3f040bad0c65fb32d9680edf31d7dcd95726459",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "distinct_time_plan",
+      "observation": "This is an independently defined time plan, not automatically a calendar artifact or an agenda. Preserve its full entry, exact existing second10 decisions where present and any local or financial requirements."
+    },
+    {
+      "id": "candidate-availability.times-when-candidate-can-participate-or-start.n",
+      "text": "candidate availability",
+      "definition": "The times when a candidate can participate or begin work.",
+      "example": "The coordinator asked about candidate availability.",
+      "accepted_forms": [
+        "candidate availability"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "9057646279aaad04bc7f7a828f6103f5d8e44f5bac27f050177bc9ae469cc152",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "compatible_person_availability",
+      "observation": "This is the person scheduling sense inside a distinct recruitment term. It does not promise participation, employability, an offer or a work start date."
+    },
+    {
+      "id": "flexible-schedule.work-schedule-allowing-agreed-variation-in-times.n",
+      "text": "flexible schedule",
+      "definition": "A work schedule allowing agreed variation in working times.",
+      "example": "The employee requested a flexible schedule.",
+      "accepted_forms": [
+        "flexible schedule"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "9fc990c5a2d35b1b316a7e300052497c30d86d37cdb7350ce7bab59a867fff0d",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "distinct_time_plan",
+      "observation": "This is an independently defined time plan, not automatically a calendar artifact or an agenda. Preserve its full entry, exact existing second10 decisions where present and any local or financial requirements."
+    },
+    {
+      "id": "return-to-work-meeting.discussion-about-resuming-work-after-absence.n",
+      "text": "return-to-work meeting",
+      "definition": "A discussion about resuming work after an absence.",
+      "example": "The return-to-work meeting will include support arrangements.",
+      "accepted_forms": [
+        "return-to-work meeting"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "6329ecd5c0df7b1456b93d33432933bd050219d2df205d9e5a4d9cb6378798b4",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "distinct_event",
+      "observation": "An arranged event or specialized discussion remains separate from its topic list, invitation, attendance state and progress reports. Preserve the exact event definition, any existing acceptance, and specialist gates."
+    },
+    {
+      "id": "recruitment-update.current-information-about-hiring-progress.n",
+      "text": "recruitment update",
+      "definition": "Current information about hiring progress.",
+      "example": "The recruiter sent a recruitment update to the hiring manager.",
+      "accepted_forms": [
+        "recruitment update"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "431ff369ff04e3902d801bee2a578c8f6ccddb90de5c4608b47ba917c8fab97a",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "compatible_report_term",
+      "observation": "A current-information hiring report fits the selected noun relation. Preserve the complete term and all hiring/privacy gates."
+    },
+    {
+      "id": "consultation-meeting.meeting-to-seek-views-or-information-about-matter.n",
+      "text": "consultation meeting",
+      "definition": "A meeting to seek views or information about a matter.",
+      "example": "The consultation meeting will discuss the proposed changes.",
+      "accepted_forms": [
+        "consultation meeting"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "f3c9460c94f2c519e71a4eceecfbc74f0d8b802fbc0e4334d2b9dcec9ad6bd74",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "distinct_event",
+      "observation": "An arranged event or specialized discussion remains separate from its topic list, invitation, attendance state and progress reports. Preserve the exact event definition, any existing acceptance, and specialist gates."
+    },
+    {
+      "id": "policy-update.change-or-new-information-about-organizational-policy.n",
+      "text": "policy update",
+      "definition": "A change or new information about an organizational policy.",
+      "example": "The policy update identifies what has changed.",
+      "accepted_forms": [
+        "policy update"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "ceaffb154f95443dec2179e46d16710934a3774cfe42654e0de556d5cb7c3e1b",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "report_change_hold",
+      "observation": "The complete entry expressly allows a policy change or information about it. Do not erase that alternative by binding every occurrence to the Foundation report noun."
+    },
+    {
+      "id": "material-availability.readiness-of-required-materials-for-use.n",
+      "text": "material availability",
+      "definition": "The extent to which required materials are available for use at the needed time.",
+      "example": "The work plan depends on material availability.",
+      "accepted_forms": [
+        "material availability"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "430b016b6713153758527f9dfa3521ef1b29466e5de9ea5dbe742a6f9eeebef9",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "resource_availability_excluded",
+      "observation": "The available referent is goods, resources or an offering, not a person free to participate. Exact resource eligibility and any operational conditions remain protected; no human-scheduling binding is inferred."
+    },
+    {
+      "id": "equipment-availability.readiness-of-required-equipment-for-allocation.n",
+      "text": "equipment availability",
+      "definition": "The extent to which required equipment is available for allocation at the needed time.",
+      "example": "The equipment availability needs confirmation before scheduling.",
+      "accepted_forms": [
+        "equipment availability"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "45ee571e24ffd8e16390e214b512607dbadbeda9290829b75b8ca074c7bacdfa",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "resource_availability_excluded",
+      "observation": "The available referent is goods, resources or an offering, not a person free to participate. Exact resource eligibility and any operational conditions remain protected; no human-scheduling binding is inferred."
+    },
+    {
+      "id": "site-meeting.meeting-about-construction-site-work-and-coordination.n",
+      "text": "site meeting",
+      "definition": "A meeting about construction site work, information, and coordination.",
+      "example": "The site meeting will cover the unresolved drawing query.",
+      "accepted_forms": [
+        "site meeting"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "485f476f5bad526787902e03ef0717d44793d52239fa273b84d21c62b1d64d4f",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "distinct_event",
+      "observation": "An arranged event or specialized discussion remains separate from its topic list, invitation, attendance state and progress reports. Preserve the exact event definition, any existing acceptance, and specialist gates."
+    },
+    {
+      "id": "break-room.room-for-staff-rest-breaks.n",
+      "text": "break room",
+      "definition": "A room where staff can spend rest or meal breaks.",
+      "example": "The team booked access to the break room.",
+      "accepted_forms": [
+        "break room"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "6cdc3b6fc34c4d832cf08709dd8fa8a73c850de00861a9ae77a080e879d3be9f",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "place_for_pause",
+      "observation": "The room is a place for rest or meal pauses. It is not itself a break and does not establish employee rest entitlements."
+    },
+    {
+      "id": "production-schedule.timing-and-sequence-of-manufacturing-work.n",
+      "text": "production schedule",
+      "definition": "A plan showing the timing and sequence of manufacturing work.",
+      "example": "The production schedule has been revised for the maintenance window.",
+      "accepted_forms": [
+        "production schedule"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "72c11875d099d6f0e4cfc247533352552200e36ba4e0c9d1c5a7318c87f7ba65",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "distinct_time_plan",
+      "observation": "This is an independently defined time plan, not automatically a calendar artifact or an agenda. Preserve its full entry, exact existing second10 decisions where present and any local or financial requirements."
+    },
+    {
+      "id": "production-meeting.meeting-to-coordinate-manufacturing-work-and-progress.n",
+      "text": "production meeting",
+      "definition": "A meeting to coordinate manufacturing work and review its progress.",
+      "example": "The production meeting will cover the revised schedule.",
+      "accepted_forms": [
+        "production meeting"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "d84971bae4fa8809701e819984cd1b389ca117f558532d8cf8e9f512d69624b4",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "distinct_event",
+      "observation": "An arranged event or specialized discussion remains separate from its topic list, invitation, attendance state and progress reports. Preserve the exact event definition, any existing acceptance, and specialist gates."
+    },
+    {
+      "id": "maintenance-meeting.meeting-to-coordinate-equipment-care-and-repair-work.n",
+      "text": "maintenance meeting",
+      "definition": "A meeting to coordinate equipment care and repair work.",
+      "example": "The maintenance meeting will review the unresolved faults.",
+      "accepted_forms": [
+        "maintenance meeting"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "993b85181ef7346b582dac929c57cac125229bc9ac5133bf29d241bc3e5de8d5",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "distinct_event",
+      "observation": "An arranged event or specialized discussion remains separate from its topic list, invitation, attendance state and progress reports. Preserve the exact event definition, any existing acceptance, and specialist gates."
+    },
+    {
+      "id": "quality-meeting.meeting-to-review-quality-requirements-evidence-and-actions.n",
+      "text": "quality meeting",
+      "definition": "A meeting to review quality requirements, evidence, and related actions.",
+      "example": "The quality meeting will review the nonconformance report.",
+      "accepted_forms": [
+        "quality meeting"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "97358131a41926945a97602ed6af99438c58fc7dd24069fa7d463b184864b3a4",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "distinct_event",
+      "observation": "An arranged event or specialized discussion remains separate from its topic list, invitation, attendance state and progress reports. Preserve the exact event definition, any existing acceptance, and specialist gates."
+    },
+    {
+      "id": "campaign-schedule.timetable-of-campaign-activities.n",
+      "text": "campaign schedule",
+      "definition": "A timetable showing when campaign activities are planned.",
+      "example": "The campaign schedule places the event after the email launch.",
+      "accepted_forms": [
+        "campaign schedule"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "624fda136393da2a310a050bcc68f78ebef5f5c15f7012c0b6d4112731e9819d",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "distinct_time_plan",
+      "observation": "This is an independently defined time plan, not automatically a calendar artifact or an agenda. Preserve its full entry, exact existing second10 decisions where present and any local or financial requirements."
+    },
+    {
+      "id": "content-calendar.schedule-for-preparing-and-publishing-content.n",
+      "text": "content calendar",
+      "definition": "A schedule for preparing and publishing content.",
+      "example": "The content calendar shows who owns each article.",
+      "accepted_forms": [
+        "content calendar"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "f68911beb1b99e192a96ebfc6bf081c694ec6ed747d57a3821381c757d91c123",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "compatible_calendar_term",
+      "observation": "A dated plan for a defined activity can contain the ordinary organizer meaning. Keep the specialized complete term independent; it does not approve promotions, publication, accounting deadlines or new scoring bindings."
+    },
+    {
+      "id": "availability-statement.statement-about-when-or-whether-offering-can-be-supplied.n",
+      "text": "availability statement",
+      "definition": "A statement about when or whether an offering can be supplied.",
+      "example": "The availability statement should match the current stock record.",
+      "accepted_forms": [
+        "availability statement"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "42f7b81bea6ef795d76d1601ad8ecb83e428701f7baecdd3255b64a23537a5ae",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "resource_availability_excluded",
+      "observation": "The available referent is goods, resources or an offering, not a person free to participate. Exact resource eligibility and any operational conditions remain protected; no human-scheduling binding is inferred."
+    },
+    {
+      "id": "renewal-reminder.message-about-upcoming-renewal.n",
+      "text": "renewal reminder",
+      "definition": "A message about an upcoming renewal.",
+      "example": "The renewal reminder includes the relevant date and options.",
+      "accepted_forms": [
+        "renewal reminder"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "0367d570f2c5094ebfb2e0af753760c0c868cd11f9b3185e4241aa2f903a0924",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "compatible_prompt_term",
+      "observation": "An upcoming-renewal message fits the prompting relation but remains a separate term. It determines no renewal obligation, payment or cancellation right."
+    },
+    {
+      "id": "break-even-point.activity-level-at-which-total-revenue-equals-total-cost.n",
+      "text": "break-even point",
+      "definition": "The activity level at which total revenue equals total cost under the stated assumptions.",
+      "example": "The break-even point changes when the cost assumptions change.",
+      "accepted_forms": [
+        "break-even point"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "835698920bdf72eafd3af43c833c6f0066aabdfd58687373f497da85d1c4c79b",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "non_pause_break_excluded",
+      "observation": "The structural or financial complete term is unrelated to the selected work-pause noun. Shared letters provide no sense or answer equivalence."
+    },
+    {
+      "id": "depreciation-schedule.table-of-tangible-asset-cost-allocation-over-useful-life.n",
+      "text": "depreciation schedule",
+      "definition": "A table showing the allocation of a tangible asset's depreciable amount over its useful life.",
+      "example": "The depreciation schedule states the method and useful-life estimate.",
+      "accepted_forms": [
+        "depreciation schedule"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "5174378da8c19453ef40632c4e73495afa5ba05f326a378130de7717f9aa4fa9",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "financial_table",
+      "observation": "These are complete financial tables, not automatically date-organizer calendars or ordinary activity plans. Preserve their exact British spelling variants, distinct definitions and financial gates."
+    },
+    {
+      "id": "amortization-schedule.table-of-intangible-asset-amount-allocation-over-useful-life.n",
+      "text": "amortization schedule",
+      "definition": "A table showing the allocation of an intangible asset's amortizable amount over its useful life.",
+      "example": "The amortization schedule relates to the software asset, not the loan repayments.",
+      "accepted_forms": [
+        "amortization schedule",
+        "amortisation schedule"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "bf26853f7183ef02588d84ff598a1a05ee8a012122d1e118aca62107092e395d",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "financial_table",
+      "observation": "These are complete financial tables, not automatically date-organizer calendars or ordinary activity plans. Preserve their exact British spelling variants, distinct definitions and financial gates."
+    },
+    {
+      "id": "accrual-schedule.supporting-table-of-amounts-recognized-before-related-cash-or-document.n",
+      "text": "accrual schedule",
+      "definition": "A supporting table of amounts recognized for a period before the related cash movement or document is received.",
+      "example": "The accrual schedule explains the estimated service cost for this period.",
+      "accepted_forms": [
+        "accrual schedule"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "430945a8256a513344c7f8decf62ebea370dac36aea32427db470bc3adb7a5b3",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "financial_table",
+      "observation": "These are complete financial tables, not automatically date-organizer calendars or ordinary activity plans. Preserve their exact British spelling variants, distinct definitions and financial gates."
+    },
+    {
+      "id": "prepayment-schedule.table-tracking-amounts-paid-in-advance-and-their-period-allocation.n",
+      "text": "prepayment schedule",
+      "definition": "A table tracking amounts paid in advance and how they relate to later periods.",
+      "example": "The prepayment schedule separates this month's portion from the remaining balance.",
+      "accepted_forms": [
+        "prepayment schedule"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "d8bdb56a1399f91ff33f24293d22b1f1073a8dd4993ecb80b034aa0c8a4a8802",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "financial_table",
+      "observation": "These are complete financial tables, not automatically date-organizer calendars or ordinary activity plans. Preserve their exact British spelling variants, distinct definitions and financial gates."
+    },
+    {
+      "id": "loan-schedule.table-of-loan-balances-and-related-payment-details-over-time.n",
+      "text": "loan schedule",
+      "definition": "A table showing loan balances and related payment details over time.",
+      "example": "The loan schedule separates principal and interest in the stated arrangement.",
+      "accepted_forms": [
+        "loan schedule"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "16bd4a535b104d17956d2b13d559d7df5b53bddc4bc5cc25aa93285e0e467375",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "financial_table",
+      "observation": "These are complete financial tables, not automatically date-organizer calendars or ordinary activity plans. Preserve their exact British spelling variants, distinct definitions and financial gates."
+    },
+    {
+      "id": "close-calendar.schedule-of-period-end-accounting-tasks-and-deadlines.n",
+      "text": "close calendar",
+      "definition": "A schedule of period-end accounting tasks and deadlines.",
+      "example": "The close calendar gives separate dates for preparation and review.",
+      "accepted_forms": [
+        "close calendar"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "0f57af50541fca33381db4c469285041e2ad3fe108a3896ccde403a43d6d97c5",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "compatible_calendar_term",
+      "observation": "A dated plan for a defined activity can contain the ordinary organizer meaning. Keep the specialized complete term independent; it does not approve promotions, publication, accounting deadlines or new scoring bindings."
+    },
+    {
+      "id": "payment-schedule.timetable-of-planned-or-agreed-payments.n",
+      "text": "payment schedule",
+      "definition": "A timetable of planned or agreed payments.",
+      "example": "The payment schedule states the amount and date for each payment.",
+      "accepted_forms": [
+        "payment schedule"
+      ],
+      "regions": [
+        "general"
+      ],
+      "json_sha256": "249f3f80579eb5d437724549350ea08126aea93f3b46b8892b37b87ead02dab8",
+      "action": "retain_exact_context_only_not_complete_lexeme_acceptance",
+      "classification": "distinct_time_plan",
+      "observation": "This is an independently defined time plan, not automatically a calendar artifact or an agenda. Preserve its full entry, exact existing second10 decisions where present and any local or financial requirements."
+    }
+  ],
+  "scope_limits": [
+    "Additional working hours do not imply pay, entitlement, a legal rate or authority to assign work.",
+    "Breaks remain distinct from damaged objects, nonworking links, pagination and break-even analysis.",
+    "Attendance presence, documents, expected participation and numbers present remain distinct.",
+    "Person free time stays distinct from resource availability and technical uptime.",
+    "Software, record and configuration changes do not automatically become current-information reports; three expression contexts and the related policy-update term retain ambiguity.",
+    "Invitation requests, calendar artifacts, meeting-topic lists and reminders remain distinct from access authority, acceptance of requests and operational instructions.",
+    "Medication reminders and qualified deadlines retain complete-term identities and every specialist gate."
+  ]
+}

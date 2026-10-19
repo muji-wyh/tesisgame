@@ -1,0 +1,134 @@
+{
+  "schema": 1,
+  "status": "exact_actual_commit_and_guard_evidence_copied",
+  "files": [
+    {
+      "source": "build/professional-english/shopping-bag-root-commit-r01/execution-r01/receipt.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/receipt.json",
+      "bytes": 59877,
+      "sha256": "b5b263fda99813d9c45564d5fdc35a8b437f5a3a91ec60b06eb1b00e45ddb681"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-root-commit-r01/execution-r01/start.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/start.json",
+      "bytes": 545,
+      "sha256": "5b2cb547906487b74a2ac8a850fa3659cca7c62afe48803fe35f4241a2699be9"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-root-commit-r01/execution-r01/intent.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/intent.json",
+      "bytes": 55905,
+      "sha256": "8037929441cbca3a01cccd455acd0d832e55478ea0d2bec94a64326c601a0352"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-root-commit-r01/input.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/input.json",
+      "bytes": 61362,
+      "sha256": "4db261a88a139983a7a783da551ecb389788e59a6e8fb333ec8862145a81a0e5"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-root-commit-r01/contract.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/contract.json",
+      "bytes": 58680,
+      "sha256": "94d2dd3c166a57f4dc5ec7e456944edf4f131e6769ebce4385b4977414f9ee0b"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-root-commit-r01/target-manifest.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/target-manifest.json",
+      "bytes": 52694,
+      "sha256": "16c0ace567f602e9ea05cc3d82609bd8387dc6abe3e41bb60ac643edf42505a2"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-root-commit-r01/postcommit-inspection.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/postcommit-inspection.json",
+      "bytes": 810,
+      "sha256": "e43521c514acab7f2e3e32c99f2c77b120dca5b192b4bd6457a086b9a61af664"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-root-commit-r01/command-witness.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/command-witness.json",
+      "bytes": 523,
+      "sha256": "6b28432c772853529450959c26f9f25395cbe5729124276eb2201f5b03c7d84a"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-root-guard-r01/attempt-001/start.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/guard/start.json",
+      "bytes": 408,
+      "sha256": "3f7597e74287106f6cc39edb38ac4bf9424d9fd636e9d22e480a85f740a2720c"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-root-guard-r01/attempt-001/receipt.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/guard/receipt.json",
+      "bytes": 4160638,
+      "sha256": "85b6c2259d0b19fb4977fad8b7b3d83ae7c9e0dd6ed4a4def7d7e47be90148ee"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-commit-independent-review-r01/exact-contract-data-inspection.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/independent-review/exact-contract-data-inspection.json",
+      "bytes": 4155,
+      "sha256": "3fbfbb1a9fbbbe0e58cc8bdf6689f75e1f67dc0c00e4cd89910c0693c8113f93"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-commit-independent-review-r01/exact-contract-review-inventory.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/independent-review/exact-contract-review-inventory.json",
+      "bytes": 1694,
+      "sha256": "856b500ad7081a6f8d1ce8f6c2a4503906269acc759306cc0472df3ca62e33c5"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-commit-independent-review-r01/exact-contract-review.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/independent-review/exact-contract-review.json",
+      "bytes": 5622,
+      "sha256": "c63d6251c69be7eb028e12540900e66ab19b559a507200bc1661bc16a9b600ef"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-commit-independent-review-r01/exact-contract-target-inspection-r02.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/independent-review/exact-contract-target-inspection-r02.json",
+      "bytes": 40147,
+      "sha256": "97281e23663f3a28526d7108a85568aa96416ada8bb8cb10e3e0ed09838e7163"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-commit-independent-review-r01/exact-contract-target-inspection.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/independent-review/exact-contract-target-inspection.json",
+      "bytes": 39560,
+      "sha256": "45342071f6cf6243d5cd563be8adf1c179248138a06ec2e5c59dcacd6d3c18f1"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-commit-independent-review-r01/guard-wrapper-review-inventory.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/independent-review/guard-wrapper-review-inventory.json",
+      "bytes": 694,
+      "sha256": "d2b505c502f5930cddaced894997b982e74e249351a5e0ad49b4c3ee610cab95"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-commit-independent-review-r01/guard-wrapper-source-review.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/independent-review/guard-wrapper-source-review.json",
+      "bytes": 4518,
+      "sha256": "24fda5acf522c3503ed5011135be5d320632afa8b2b289afde2fe9c79796e29d"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-commit-independent-review-r01/inspection.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/independent-review/inspection.json",
+      "bytes": 18142,
+      "sha256": "7946b3eafb4874256ec8bc7c08fc560ba88b9a74e042ac7d185905801d7e4024"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-commit-independent-review-r01/inventory.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/independent-review/inventory.json",
+      "bytes": 919,
+      "sha256": "f99e091e7ece2a899df31fd6e50ef5b79054d678cc9849d01a516f4ed554c2d5"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-commit-independent-review-r01/source-review.json",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/independent-review/source-review.json",
+      "bytes": 5427,
+      "sha256": "4fdfdd1a4dc4037711c4c6666ed4beec2842da373fb63beb72e84602391cea8b"
+    },
+    {
+      "source": "build/professional-english/shopping-bag-commit-independent-review-r01/SOURCE-REVIEW.md",
+      "target": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/independent-review/SOURCE-REVIEW.md",
+      "bytes": 2321,
+      "sha256": "1da2c424e915a1090e1f220820a919c9d8c77a0644b517477d0538cb6c163da8"
+    }
+  ],
+  "production_changes_already_committed": true,
+  "persisted_validation_claimed": false
+}

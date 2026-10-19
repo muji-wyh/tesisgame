@@ -1,0 +1,92 @@
+{
+  "schema": 1,
+  "status": "explicit_independently_reviewed_composite_baseline_configuration",
+  "baseline": {
+    "path": "build/professional-english/continuation-baseline-r32-composite-r02/baseline.json",
+    "raw_sha256": "8d1092228ca051afab40af995d1e1e24da8f0c0af8defbaea18019042d09e54e"
+  },
+  "verifier": {
+    "path": "build/professional-english/continuation-baseline-r32-composite-r02/verify.cjs",
+    "raw_sha256": "5f9ce40d0261e7ed6492ecadbdd54ef71f1ff6d1d514dd92f01193dc1df3c4df"
+  },
+  "independent_review": {
+    "path": "build/professional-english/continuation-baseline-r32-composite-r02-independent-review-r01/review.json",
+    "raw_sha256": "c908c393dfc88398f45c957d02cd9602ea94b917455b7015559c9a6502d968ee"
+  },
+  "pinned_files": [
+    {
+      "path": "build/professional-english/continuation-baseline-r32-composite-r02/baseline.json",
+      "raw_sha256": "8d1092228ca051afab40af995d1e1e24da8f0c0af8defbaea18019042d09e54e"
+    },
+    {
+      "path": "build/professional-english/continuation-baseline-r32-composite-r02/verify.cjs",
+      "raw_sha256": "5f9ce40d0261e7ed6492ecadbdd54ef71f1ff6d1d514dd92f01193dc1df3c4df"
+    },
+    {
+      "path": "build/professional-english/continuation-baseline-r32-composite-r02/build-baseline.cjs",
+      "raw_sha256": "e9001ada10b2f08f937ac42c3a1b0c57a7f58ad4c3ba74d54f5c498e425312c9"
+    },
+    {
+      "path": "build/professional-english/continuation-baseline-r32-composite-r02/preparation-attempt-001.json",
+      "raw_sha256": "09f5fb053f619e2ae6b763280adfea9d9c9559e3df124b903e02dde0ef16713e"
+    },
+    {
+      "path": "build/professional-english/continuation-baseline-r32-composite-r01/failure.json",
+      "raw_sha256": "f03900353533e7a30b8bee87858a441a7c52f4ad574c2942c8478d5a73254858"
+    },
+    {
+      "path": "build/professional-english/continuation-baseline-r32-composite-r01/verify.cjs",
+      "raw_sha256": "0931067900fd9af432c395b04d3a6767484dc313a64c96b26522754e46c66262"
+    },
+    {
+      "path": "build/professional-english/continuation-baseline-r32-composite-r01/build-baseline.cjs",
+      "raw_sha256": "ef7639b9fee10fb391671a867c0d534286768602be025306bcd5eaddc972480a"
+    },
+    {
+      "path": "build/professional-english/continuation-validation-r32.json",
+      "raw_sha256": "951167226fbfa4e362dbb415146385785fdc682115e0591b28e3cb30f81253d9"
+    },
+    {
+      "path": "build/professional-english/r32-native-attendance-correction-r01/receipt.json",
+      "raw_sha256": "87eb0fbefbf573c68fbd06f7c539a11c1c3c2b7fe1913b31a62bf994476013db"
+    },
+    {
+      "path": "build/professional-english/r32-native-attendance-correction-r01-independent-review-r01/review.json",
+      "raw_sha256": "6e585823e4aa9a3ae936887579e587c20c5e4e7ba34e9272b3cd2e41645a0e56"
+    },
+    {
+      "path": "build/professional-english/r32-native-attendance-correction-r01/execution-inputs.json",
+      "raw_sha256": "dfd859293e087f3bd66e63af901406ae90bc052d57bfe3ae940cc33c7da6b266"
+    },
+    {
+      "path": "build/professional-english/r32-native-attendance-correction-r01/validate.cjs",
+      "raw_sha256": "eb015cbdc1d4378833e1dbda093396b894b52688c68364c5011ca647dc0f3748"
+    },
+    {
+      "path": "build/professional-english/r32-native-attendance-correction-r01/professional_retail_morphology_tests.before.gd",
+      "raw_sha256": "3e000bea8af8529f4b215576f70b5a46ba7b734455cb518b8c2d56261e403dc9"
+    },
+    {
+      "path": "build/professional-english/continuation-node-r32.log",
+      "raw_sha256": "082d59aaaf9df94e862637df5c2980c57d3c2f8081baa509a3a5ade5f6c75ed7"
+    },
+    {
+      "path": "build/professional-english/r32-native-attendance-correction-r01/native.log",
+      "raw_sha256": "dd51e93694bb3822ff769a49c4d32718bd7b9c3525d8adfa502eed8e634309da"
+    },
+    {
+      "path": "build/professional-english/continuation-native-audio-r32.log",
+      "raw_sha256": "334e8ab10b0870d68f4df789af320c1402efb89517f2666ad72f730c7c3c49a6"
+    },
+    {
+      "path": "build/professional-english/continuation-native-r32.log",
+      "raw_sha256": "cca44d8b7dee87fa51c2d9dd49769f2b52071fd483c88a589551ef58477c3a4b"
+    },
+    {
+      "path": "build/professional-english/continuation-baseline-r32-composite-r02-independent-review-r01/review.json",
+      "raw_sha256": "c908c393dfc88398f45c957d02cd9602ea94b917455b7015559c9a6502d968ee"
+    }
+  ],
+  "full_combined_validation_of_current_state": false,
+  "new_test_execution": false
+}

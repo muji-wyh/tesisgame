@@ -1,0 +1,234 @@
+{
+	"alpha_bounds": [
+		61,
+		247,
+		646,
+		393
+	],
+	"camera": {
+		"lighting": {
+			"ambient_energy": 0.35,
+			"directional_energy": 0.65,
+			"directional_rotation": [
+				-50,
+				-35,
+				0
+			]
+		},
+		"orthographic_size": 0.98,
+		"position": [
+			0.9,
+			1.8,
+			4
+		],
+		"target": [
+			0,
+			0.66,
+			0
+		]
+	},
+	"candidate_sha256": "bddc3c2dd3b889c785195a572b95a33455c047e097e927232c735b3b43a24f04",
+	"candidate_size": [
+		512,
+		309
+	],
+	"checks": [
+		{
+			"check": "Render background has alpha zero",
+			"passed": true
+		},
+		{
+			"check": "match-unmatched: exact minimum card size",
+			"passed": true
+		},
+		{
+			"check": "match-unmatched: actual inset picture size",
+			"passed": true
+		},
+		{
+			"check": "match-unmatched: correct picture badge visibility",
+			"passed": true
+		},
+		{
+			"check": "match-unmatched: correct picture alpha",
+			"passed": true
+		},
+		{
+			"check": "match-unmatched: visible picture face",
+			"passed": true
+		},
+		{
+			"check": "match-matched: exact minimum card size",
+			"passed": true
+		},
+		{
+			"check": "match-matched: actual inset picture size",
+			"passed": true
+		},
+		{
+			"check": "match-matched: correct picture badge visibility",
+			"passed": true
+		},
+		{
+			"check": "match-matched: correct picture alpha",
+			"passed": true
+		},
+		{
+			"check": "match-matched: visible picture face",
+			"passed": true
+		},
+		{
+			"check": "memory-unmatched: exact minimum card size",
+			"passed": true
+		},
+		{
+			"check": "memory-unmatched: actual inset picture size",
+			"passed": true
+		},
+		{
+			"check": "memory-unmatched: correct picture badge visibility",
+			"passed": true
+		},
+		{
+			"check": "memory-unmatched: correct picture alpha",
+			"passed": true
+		},
+		{
+			"check": "memory-unmatched: visible picture face",
+			"passed": true
+		},
+		{
+			"check": "memory-matched: exact minimum card size",
+			"passed": true
+		},
+		{
+			"check": "memory-matched: actual inset picture size",
+			"passed": true
+		},
+		{
+			"check": "memory-matched: correct picture badge visibility",
+			"passed": true
+		},
+		{
+			"check": "memory-matched: correct picture alpha",
+			"passed": true
+		},
+		{
+			"check": "memory-matched: visible picture face",
+			"passed": true
+		}
+	],
+	"crop": [
+		45,
+		231,
+		678,
+		409
+	],
+	"failed": 0,
+	"focus_rectangle": [
+		0,
+		0,
+		768,
+		640
+	],
+	"measurements": [
+		{
+			"badge_visible": false,
+			"card_script": "res://scripts/word_card.gd",
+			"card_size": [
+				126.0,
+				72.0
+			],
+			"image_render_size": [
+				86.1618122977346,
+				52.0
+			],
+			"picture_alpha": 1.0,
+			"picture_size": [
+				102.0,
+				52.0
+			],
+			"state": "match-unmatched",
+			"texture_delivery": "Direct scratch ImageTexture assignment after real WordCard setup; not the production media loader."
+		},
+		{
+			"badge_visible": true,
+			"card_script": "res://scripts/word_card.gd",
+			"card_size": [
+				126.0,
+				72.0
+			],
+			"image_render_size": [
+				86.1618122977346,
+				52.0
+			],
+			"picture_alpha": 0.680000007152557,
+			"picture_size": [
+				102.0,
+				52.0
+			],
+			"state": "match-matched",
+			"texture_delivery": "Direct scratch ImageTexture assignment after real WordCard setup; not the production media loader."
+		},
+		{
+			"badge_visible": false,
+			"card_script": "res://scripts/word_card.gd",
+			"card_size": [
+				144.0,
+				74.0
+			],
+			"image_render_size": [
+				89.4757281553398,
+				54.0
+			],
+			"picture_alpha": 1.0,
+			"picture_size": [
+				120.0,
+				54.0
+			],
+			"state": "memory-unmatched",
+			"texture_delivery": "Direct scratch ImageTexture assignment after real WordCard setup; not the production media loader."
+		},
+		{
+			"badge_visible": true,
+			"card_script": "res://scripts/word_card.gd",
+			"card_size": [
+				144.0,
+				74.0
+			],
+			"image_render_size": [
+				89.4757281553398,
+				54.0
+			],
+			"picture_alpha": 0.680000007152557,
+			"picture_size": [
+				120.0,
+				54.0
+			],
+			"state": "memory-matched",
+			"texture_delivery": "Direct scratch ImageTexture assignment after real WordCard setup; not the production media loader."
+		}
+	],
+	"model_sha256": "3f340fe9207a4b85739d8d11104cf5b4cad3a130afcbfc1fadb47c17d6a9e210",
+	"omitted_source_nodes": [
+		"carton",
+		"carton2",
+		"carton3",
+		"carton4",
+		"carton5",
+		"carton6",
+		"box3",
+		"box4"
+	],
+	"palette": "Current production Retail profile over Spring defaults, as in Main",
+	"preserved_visible_nodes": [
+		"shelf-boxes",
+		"box",
+		"box2"
+	],
+	"raw_size": [
+		768,
+		768
+	],
+	"scope": "One source-rendered scratch term candidate and exact actual native WordCard size/state QA; no recognition acceptance, no curriculum approval, no production integration."
+}

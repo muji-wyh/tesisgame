@@ -1,0 +1,1455 @@
+{
+  "schema": 1,
+  "date": "2026-10-16",
+  "scope": "Root independently reviewed six exact bound-family graphs, current Growth meanings and new source scope, individual reasons for nine unresolved analyses, existing UI word-part wording and runtime per-entry quarantine. Source-based AI editorial acceptance; no human or professional qualification claim.",
+  "accepted_field_report_json_sha256": "6815ecd833860a8930483a433f457c6b2432dfb30bf6cebd151a552c85075830",
+  "accepted_variant_receipt_json_sha256": "61ce1c0e26329bdafee1e00e215b95fc55284c50e759442e86bf841c40e12a60",
+  "baseline_overlay_sha256": "a9f3c77f96445db35483892c7036a5b1e014ccd98a222da62fd9dafeb461c04c",
+  "resulting_overlay_sha256": "939195d78185488afd218e110d700c234361db5679802c9ac72eee3dfef7fab9",
+  "reviewer": "Codex (AI editorial review; not human approval)",
+  "interpretation": "The previous reviewed labels and analyses below are preserved as withdrawn history, not current approval. Six analyses receive a new term-specific editorial review; nine unresolved analyses are pending without playable graphs.",
+  "newly_consulted_sources": {
+    "mw-receive-new": {
+      "title": "Merriam-Webster: receive",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/receive",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The current sense includes getting something given or sent. The history traces French receivre to Latin re- plus capere, take; the children's history distinguishes the historical back sense."
+    },
+    "mw-conceive-new": {
+      "title": "Merriam-Webster: conceive",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/conceive",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The companion history traces French conceivre to Latin com- plus capere, take. This supports the ceive family correspondence without making ceive a free English verb."
+    },
+    "mw-re-prefix-new": {
+      "title": "Merriam-Webster: re-",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/re-",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Prefix entry, senses 1 and 2",
+      "evidence": "The prefix distinguishes again from back/backward. The revised receive and reflect candidates select the historical back identity, not a productive repetition claim."
+    },
+    "pbs-bound-ceive-new": {
+      "title": "Crash Course Linguistics, episode 2: Morphology",
+      "author": "Crash Course Linguistics, published by PBS",
+      "url": "https://www.pbs.org/video/morphology-j8k5re/",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Transcript, bound-root discussion",
+      "evidence": "The transcript explicitly uses receive, deceive, perceive, and conceive to illustrate the bound root ceive. It distinguishes structural recurrence from an independently usable English meaning. The take gloss in the proposal is historical evidence from the dictionary, not a claim that ceive is a standalone word."
+    },
+    "anderson-2e-roots-new": {
+      "title": "Essentials of Linguistics, 2nd edition, section 5.2: Roots, bases, and affixes",
+      "author": "Catherine Anderson, Bronwyn Bjorkman, Derek Denis, Julianne Doner, Margaret Grant, Nathan Sanders, and Ai Taniguchi",
+      "url": "https://socialsci.libretexts.org/Bookshelves/Linguistics/Essentials_of_Linguistics_2e_(Anderson_et_al.)/05:_Morphology/5.02:_Roots_bases_and_affixes",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Affixes vs roots; Free and bound morphemes",
+      "evidence": "The author text distinguishes roots from bases and affixes and recognizes bound roots. It also separates historical source-language complexity from a contemporary speaker's analysis, using library and nation as examples. Neither free-base absence nor historical complexity alone decides a teaching graph."
+    },
+    "mw-explore-new": {
+      "title": "Merriam-Webster: explore",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/explore",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The history identifies ex- plus plorare cry out. The selected examining/learning sense is semantically distant; historical segmentation alone does not settle an appropriate modern teaching graph."
+    },
+    "mw-separate-new": {
+      "title": "Merriam-Webster: separate",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/separate",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The history identifies se- apart plus parare prepare/procure. That prepare root differs from the equal par root in compare; a spelling-only shared canonical identity would be wrong."
+    },
+    "mw-ate-suffix-new": {
+      "title": "Merriam-Webster: -ate",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/-ate",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Verb suffix and Word History",
+      "evidence": "The dictionary distinguishes a verb-forming suffix and traces it to Latin participial morphology. This is background evidence for investigate, separate, and estimate research, not term-level authorization for automatic splitting."
+    },
+    "mw-connect-new": {
+      "title": "Merriam-Webster: connect",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/connect",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The dictionary includes both joining physical things and establishing communications. Its history identifies com- plus Latin nectere, bind."
+    },
+    "mw-com-prefix-new": {
+      "title": "Merriam-Webster: com-",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/com-",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Prefix entry and listed variants",
+      "evidence": "The prefix expresses with/together and explicitly lists con- as a variant. This supports com-/con in connect."
+    },
+    "mw-compare-new": {
+      "title": "Merriam-Webster: compare",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/compare",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The current comparison sense matches the target. The history identifies com- plus par equal through comparare; this is distinct from English pare trim and the prepare root in separate."
+    },
+    "mw-multiply-new": {
+      "title": "Merriam-Webster: multiply",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/multiply",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The arithmetic verb is traced through French multiplier and Latin multiplicare to multiplex. This establishes the multiple family but not a direct English multi plus the layer verb ply exercise."
+    },
+    "mw-multiple-new": {
+      "title": "Merriam-Webster: multiple",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/multiple",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The history identifies Latin multi- plus -plex meaning fold. The relationship to multiply is documented, while the exact English plex/plic/ply realization remains to be authored."
+    },
+    "mw-divide-new": {
+      "title": "Merriam-Webster: divide",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/divide",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The arithmetic sense is explicit. The history identifies dis- plus a Latin -videre separate root, distinct from Latin videre see. No free English vide is needed for a possible bound-root analysis."
+    },
+    "mw-attract-new": {
+      "title": "Merriam-Webster: attract",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/attract",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The attention-drawing sense is explicit. The history identifies Latin ad- plus trahere and the participial form attractus, supporting at- plus the tract pull family."
+    },
+    "mw-subtract-new": {
+      "title": "Merriam-Webster: subtract",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/subtract",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The history gives subtractus from subtrahere, with sub- and the same trahere draw base. This confirms the shared historical tract identity with attract."
+    },
+    "mw-ad-prefix-new": {
+      "title": "Merriam-Webster: ad-",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/ad-",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Prefix entry and listed variants",
+      "evidence": "The prefix means to/toward and explicitly has an at- variant before t. This supports ad-/at in attract and ad- in adapt."
+    },
+    "mw-include-new": {
+      "title": "Merriam-Webster: include",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/include",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The history identifies Latin in- plus claudere, close. The current membership sense and include spelling support the inherited clude realization rather than a free English word."
+    },
+    "mw-exclude-new": {
+      "title": "Merriam-Webster: exclude",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/exclude",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The companion history identifies ex- plus the same Latin claudere close base. The include/exclude family supports a shared bound clude realization."
+    },
+    "mw-suggest-new": {
+      "title": "Merriam-Webster: suggest",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/suggest",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The proposing sense is explicit. The history identifies sub- plus gerere carry via the participial form suggestus. The sug-/gest realization is a valid research lead, not evidence for unrelated modern sug or gest words."
+    },
+    "mw-retire-new": {
+      "title": "Merriam-Webster: retire",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/retire",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The history identifies French re- plus tirer draw. The career-ending sense must not be analyzed using modern tire fatigue; a draw-root proposal needs explicit treatment of the historical tire/tir realization."
+    },
+    "mw-investigate-new": {
+      "title": "Merriam-Webster: investigate",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/investigate",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The history derives the word through investigatus/investigare from in- and vestigium, footprint or track. It establishes a real historical family but does not by itself settle the intended English three-part graph."
+    },
+    "mw-vestige-new": {
+      "title": "Merriam-Webster: vestige",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/vestige",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The history independently traces vestige to Latin vestigium, footprint or trace. The relation is real; the precise vestig/vestige realization and English investigate suffix analysis still require a decision."
+    },
+    "mw-estimate-new": {
+      "title": "Merriam-Webster: estimate",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/estimate",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The history gives Latin aestimatus/aestimare value or estimate. It confirms a historical verbal formation but does not settle whether the intended English lesson should expose estim plus -ate."
+    },
+    "mw-reflect-new": {
+      "title": "Merriam-Webster: reflect",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/reflect",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The dictionary includes careful thought as well as physical reflection. Its history identifies re- plus flectere, bend; the mental sense remains the whole target meaning."
+    },
+    "mw-deflect-new": {
+      "title": "Merriam-Webster: deflect",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/deflect",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The companion history identifies de- plus flectere, bend. It supplies a second current English member of the flect family."
+    },
+    "mw-adapt-new": {
+      "title": "Merriam-Webster: adapt",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/adapt",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Word History and relevant current sense",
+      "evidence": "The history identifies ad- plus aptare, related to aptus suitable or prepared. This supports the fitting root family rather than the unrelated advertisement noun ad."
+    },
+    "mw-apt-new": {
+      "title": "Merriam-Webster: apt",
+      "author": "Merriam-Webster editors",
+      "url": "https://www.merriam-webster.com/dictionary/apt",
+      "consulted": "2026-10-16",
+      "consultation_status": "newly_consulted_page_body_in_revision_pass",
+      "sections": "Adjective senses, especially suitability",
+      "evidence": "The current adjective includes suitability for a purpose, confirming the fit/suitable identity selected for apt rather than its likely or quick-learning senses."
+    }
+  },
+  "changes": [
+    {
+      "entry_id": "attract",
+      "path": "data/vocabulary/morphology/age-09.json",
+      "before_entry_sha256": "0662aa27f24e3fafccadcc4b663e640ab005389df3c2758086b9214b654f2c8d",
+      "after_entry_sha256": "29073b6e534eb1846124b8efa8d7d7aa499cf6c7c1faf77d1670d7950bc9c6f9",
+      "changed_fields": [
+        "review",
+        "analysis"
+      ],
+      "disposition": "replace_with_new_source_based_ai_editorial_analysis",
+      "before_entry": {
+        "id": "attract",
+        "text": "attract",
+        "min_age": 9,
+        "part_of_speech": "verb",
+        "meaning": "Draw someone closer or get their attention",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "The attention-drawing verb is one current stem; tract meaning a land area is not its component sense.",
+          "references": [
+            "anderson-morphology"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.attract.analysis.v1",
+          "lexeme_id": "attract",
+          "text": "attract",
+          "kind": "atomic",
+          "parts": [
+            {
+              "id": "whole",
+              "canonical_id": "growth.attract",
+              "canonical": "attract",
+              "surface": "attract",
+              "type": "atomic",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "whole"
+          ]
+        }
+      },
+      "after_entry": {
+        "id": "attract",
+        "text": "attract",
+        "min_age": 9,
+        "part_of_speech": "verb",
+        "meaning": "Draw someone closer or get their attention",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "The current drawing-closer or attention-drawing sense belongs to the inherited ad-/at- plus tract pull family. Newly consulted attract/subtract histories and the ad- allomorph entry support the exact two-part graph. Tract means the pull root here, not a land area. Whole-word meaning remains authoritative; literal historical glosses do not replace it.",
+          "references": [
+            "anderson-morphology",
+            "mw-attract-new",
+            "mw-subtract-new",
+            "mw-ad-prefix-new",
+            "anderson-2e-roots-new"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.attract.analysis.v1",
+          "lexeme_id": "attract",
+          "text": "attract",
+          "kind": "morphological",
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "english.affix.ad.toward",
+              "type": "prefix",
+              "canonical": "ad-",
+              "surface": "at",
+              "break_offsets": []
+            },
+            {
+              "id": "p2",
+              "canonical_id": "english.root.tract.pull",
+              "type": "root",
+              "canonical": "tract",
+              "surface": "tract",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [
+            {
+              "id": "whole",
+              "left": "p1",
+              "right": "p2",
+              "surface": "attract",
+              "rule": "authored-ad-at-allomorph-plus-tract",
+              "break_offsets": []
+            }
+          ],
+          "roots": [
+            "whole"
+          ]
+        }
+      }
+    },
+    {
+      "entry_id": "connect",
+      "path": "data/vocabulary/morphology/age-08.json",
+      "before_entry_sha256": "2ab1022f383c3dc5050403bdd625398be518a316aa258795a10e7883a7128385",
+      "after_entry_sha256": "2063e25e990097e081a987cdb1e776563f9879636fddc31ac6e9224a1247bcd8",
+      "changed_fields": [
+        "review",
+        "analysis"
+      ],
+      "disposition": "replace_with_new_source_based_ai_editorial_analysis",
+      "before_entry": {
+        "id": "connect",
+        "text": "connect",
+        "min_age": 8,
+        "part_of_speech": "verb",
+        "meaning": "Join things or ideas together",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "The linking verb is lexicalized; no free nect base is invented.",
+          "references": [
+            "anderson-morphology"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.connect.analysis.v1",
+          "lexeme_id": "connect",
+          "text": "connect",
+          "kind": "atomic",
+          "parts": [
+            {
+              "id": "whole",
+              "canonical_id": "growth.connect",
+              "canonical": "connect",
+              "surface": "connect",
+              "type": "atomic",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "whole"
+          ]
+        }
+      },
+      "after_entry": {
+        "id": "connect",
+        "text": "connect",
+        "min_age": 8,
+        "part_of_speech": "verb",
+        "meaning": "Join things or ideas together",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "The current joining-things-or-ideas sense belongs to the inherited com-/con- plus nect bind/join family. Newly consulted connect history and the com- variant entry support the exact graph. Nect is a bound root, so absence of a free nect word cannot establish atomicity. The current linking sense remains the whole meaning.",
+          "references": [
+            "anderson-morphology",
+            "mw-connect-new",
+            "mw-com-prefix-new",
+            "anderson-2e-roots-new"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.connect.analysis.v1",
+          "lexeme_id": "connect",
+          "text": "connect",
+          "kind": "morphological",
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "english.affix.com.together",
+              "type": "prefix",
+              "canonical": "com-",
+              "surface": "con",
+              "break_offsets": []
+            },
+            {
+              "id": "p2",
+              "canonical_id": "english.root.nect.bind",
+              "type": "root",
+              "canonical": "nect",
+              "surface": "nect",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [
+            {
+              "id": "whole",
+              "left": "p1",
+              "right": "p2",
+              "surface": "connect",
+              "rule": "authored-com-con-allomorph-plus-nect",
+              "break_offsets": []
+            }
+          ],
+          "roots": [
+            "whole"
+          ]
+        }
+      }
+    },
+    {
+      "entry_id": "include",
+      "path": "data/vocabulary/morphology/age-09.json",
+      "before_entry_sha256": "7ccb5abef1cd01981c725594a0a0ea40da4dfd3deae39af0a8017d7bf30360b2",
+      "after_entry_sha256": "cf7688b3c1bf9f10c58c3ce2a2ae7e464859f7e0a873afa07a6ee68eac0e2d87",
+      "changed_fields": [
+        "review",
+        "analysis"
+      ],
+      "disposition": "replace_with_new_source_based_ai_editorial_analysis",
+      "before_entry": {
+        "id": "include",
+        "text": "include",
+        "min_age": 9,
+        "part_of_speech": "verb",
+        "meaning": "Have something as one part",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "The membership verb is a whole current base; a historical enclosure analysis would not use a current free clude word.",
+          "references": [
+            "anderson-morphology"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.include.analysis.v1",
+          "lexeme_id": "include",
+          "text": "include",
+          "kind": "atomic",
+          "parts": [
+            {
+              "id": "whole",
+              "canonical_id": "growth.include",
+              "canonical": "include",
+              "surface": "include",
+              "type": "atomic",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "whole"
+          ]
+        }
+      },
+      "after_entry": {
+        "id": "include",
+        "text": "include",
+        "min_age": 9,
+        "part_of_speech": "verb",
+        "meaning": "Have something as one part",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "The current membership sense belongs to the inherited in- plus clude close/enclose family corroborated by include and exclude. This in- means inside, not negative in-. Clude is bound; the whole meaning does not require physically enclosing a person or object. Historical component glosses do not replace the current membership meaning.",
+          "references": [
+            "anderson-morphology",
+            "mw-include-new",
+            "mw-exclude-new",
+            "anderson-2e-roots-new"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.include.analysis.v1",
+          "lexeme_id": "include",
+          "text": "include",
+          "kind": "morphological",
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "english.affix.in.inside",
+              "type": "prefix",
+              "canonical": "in-",
+              "surface": "in",
+              "break_offsets": []
+            },
+            {
+              "id": "p2",
+              "canonical_id": "english.root.clude.close",
+              "type": "root",
+              "canonical": "clude",
+              "surface": "clude",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [
+            {
+              "id": "whole",
+              "left": "p1",
+              "right": "p2",
+              "surface": "include",
+              "rule": "authored-in-plus-bound-clude",
+              "break_offsets": []
+            }
+          ],
+          "roots": [
+            "whole"
+          ]
+        }
+      }
+    },
+    {
+      "entry_id": "receive",
+      "path": "data/vocabulary/morphology/age-07.json",
+      "before_entry_sha256": "9ae0386fa6b071294e504ea1e759fb8e56b40e6e2b0fa0dea35cb232bad7a749",
+      "after_entry_sha256": "15b0f52fc43a28bf93833bbad857df1ce5076f65afcd37d5ac092a6f2efd3f67",
+      "changed_fields": [
+        "review",
+        "analysis"
+      ],
+      "disposition": "replace_with_new_source_based_ai_editorial_analysis",
+      "before_entry": {
+        "id": "receive",
+        "text": "receive",
+        "min_age": 7,
+        "part_of_speech": "verb",
+        "meaning": "Get something another person gives",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "The getting verb is a modern lexical base; initial re does not mean doing a ceive action again.",
+          "references": [
+            "anderson-morphology"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.receive.analysis.v1",
+          "lexeme_id": "receive",
+          "text": "receive",
+          "kind": "atomic",
+          "parts": [
+            {
+              "id": "whole",
+              "canonical_id": "growth.receive",
+              "canonical": "receive",
+              "surface": "receive",
+              "type": "atomic",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "whole"
+          ]
+        }
+      },
+      "after_entry": {
+        "id": "receive",
+        "text": "receive",
+        "min_age": 7,
+        "part_of_speech": "verb",
+        "meaning": "Get something another person gives",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "The current getting-something-given sense has an inherited re- plus bound ceive family. Newly consulted receive/conceive histories and the linguistic bound-root example support the graph. Re.back is historical here: receive does not mean receiving again or necessarily taking something back. Ceive take is an ancestry gloss, not an independently usable English word. Current gameplay presents the authored surfaces without a false literal gloss; any future component-meaning display must retain this historical distinction.",
+          "references": [
+            "anderson-morphology",
+            "mw-receive-new",
+            "mw-conceive-new",
+            "mw-re-prefix-new",
+            "pbs-bound-ceive-new",
+            "anderson-2e-roots-new"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.receive.analysis.v1",
+          "lexeme_id": "receive",
+          "text": "receive",
+          "kind": "morphological",
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "english.affix.re.back",
+              "type": "prefix",
+              "canonical": "re-",
+              "surface": "re",
+              "break_offsets": []
+            },
+            {
+              "id": "p2",
+              "canonical_id": "english.root.ceive.take",
+              "type": "root",
+              "canonical": "ceive",
+              "surface": "ceive",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [
+            {
+              "id": "whole",
+              "left": "p1",
+              "right": "p2",
+              "surface": "receive",
+              "rule": "authored-re-back-plus-bound-ceive",
+              "break_offsets": []
+            }
+          ],
+          "roots": [
+            "whole"
+          ]
+        }
+      }
+    },
+    {
+      "entry_id": "reflect",
+      "path": "data/vocabulary/morphology/age-11.json",
+      "before_entry_sha256": "79733dff7091947b266704db1ff8a4f61b2fe744ddbf263bb4b47287b7ab25e9",
+      "after_entry_sha256": "65d3f825be23a0e31ffa398bca6414523d1f79d230f592670fc13b22668aba27",
+      "changed_fields": [
+        "review",
+        "analysis"
+      ],
+      "disposition": "replace_with_new_source_based_ai_editorial_analysis",
+      "before_entry": {
+        "id": "reflect",
+        "text": "reflect",
+        "min_age": 11,
+        "part_of_speech": "verb",
+        "meaning": "Think carefully about an experience",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "The thinking-carefully sense is lexicalized; a literal light-bending root exercise would replace the selected mental action.",
+          "references": [
+            "anderson-morphology"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.reflect.analysis.v1",
+          "lexeme_id": "reflect",
+          "text": "reflect",
+          "kind": "atomic",
+          "parts": [
+            {
+              "id": "whole",
+              "canonical_id": "growth.reflect",
+              "canonical": "reflect",
+              "surface": "reflect",
+              "type": "atomic",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "whole"
+          ]
+        }
+      },
+      "after_entry": {
+        "id": "reflect",
+        "text": "reflect",
+        "min_age": 11,
+        "part_of_speech": "verb",
+        "meaning": "Think carefully about an experience",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "The current thinking-carefully sense belongs to the inherited re- back plus flect bend family corroborated by reflect/deflect. The mental meaning remains the whole target, not a literal physical bending task. Flect is a bound family root. Current gameplay presents the authored surfaces without replacing the mental sense; any future component-meaning display must distinguish the historical family aid from that current meaning.",
+          "references": [
+            "anderson-morphology",
+            "mw-reflect-new",
+            "mw-deflect-new",
+            "mw-re-prefix-new",
+            "anderson-2e-roots-new"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.reflect.analysis.v1",
+          "lexeme_id": "reflect",
+          "text": "reflect",
+          "kind": "morphological",
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "english.affix.re.back",
+              "type": "prefix",
+              "canonical": "re-",
+              "surface": "re",
+              "break_offsets": []
+            },
+            {
+              "id": "p2",
+              "canonical_id": "english.root.flect.bend",
+              "type": "root",
+              "canonical": "flect",
+              "surface": "flect",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [
+            {
+              "id": "whole",
+              "left": "p1",
+              "right": "p2",
+              "surface": "reflect",
+              "rule": "authored-re-back-plus-bound-flect",
+              "break_offsets": []
+            }
+          ],
+          "roots": [
+            "whole"
+          ]
+        }
+      }
+    },
+    {
+      "entry_id": "adapt",
+      "path": "data/vocabulary/morphology/age-11.json",
+      "before_entry_sha256": "334773ce50f48847645aeb29039c7a65824e1936140c67b3909674a06812ee34",
+      "after_entry_sha256": "ef0169ca94dfacafff96319fff8802afb33b6cf1d77506f1a8e847bf0f732fd2",
+      "changed_fields": [
+        "review",
+        "analysis"
+      ],
+      "disposition": "replace_with_new_source_based_ai_editorial_analysis",
+      "before_entry": {
+        "id": "adapt",
+        "text": "adapt",
+        "min_age": 11,
+        "part_of_speech": "verb",
+        "meaning": "Change to suit new conditions",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "The conditions-adjusting action is one current verb base; ad is not an advertisement component.",
+          "references": [
+            "anderson-morphology"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.adapt.analysis.v1",
+          "lexeme_id": "adapt",
+          "text": "adapt",
+          "kind": "atomic",
+          "parts": [
+            {
+              "id": "whole",
+              "canonical_id": "growth.adapt",
+              "canonical": "adapt",
+              "surface": "adapt",
+              "type": "atomic",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "whole"
+          ]
+        }
+      },
+      "after_entry": {
+        "id": "adapt",
+        "text": "adapt",
+        "min_age": 11,
+        "part_of_speech": "verb",
+        "meaning": "Change to suit new conditions",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "The current changing-to-suit-conditions sense belongs to the inherited ad- plus apt fit/suitable family. Newly consulted adapt history and the current suitable sense of apt support the graph. Apt is not the likely or quick-learning sense here, and ad- is not an advertisement word. This is a particular inherited formation rather than a productive rule for every adjective.",
+          "references": [
+            "anderson-morphology",
+            "mw-adapt-new",
+            "mw-apt-new",
+            "mw-ad-prefix-new",
+            "anderson-2e-roots-new"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.adapt.analysis.v1",
+          "lexeme_id": "adapt",
+          "text": "adapt",
+          "kind": "morphological",
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "english.affix.ad.toward",
+              "type": "prefix",
+              "canonical": "ad-",
+              "surface": "ad",
+              "break_offsets": []
+            },
+            {
+              "id": "p2",
+              "canonical_id": "english.root.apt.fit",
+              "type": "root",
+              "canonical": "apt",
+              "surface": "apt",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [
+            {
+              "id": "whole",
+              "left": "p1",
+              "right": "p2",
+              "surface": "adapt",
+              "rule": "authored-ad-plus-apt-fit",
+              "break_offsets": []
+            }
+          ],
+          "roots": [
+            "whole"
+          ]
+        }
+      }
+    },
+    {
+      "entry_id": "compare",
+      "path": "data/vocabulary/morphology/age-08.json",
+      "before_entry_sha256": "50e74fe05cf1a5f4f96b2922854e1567893c54eb29951d65233cb1cce1719de3",
+      "after_entry_sha256": "d83eeed1b976b96d7ca55c105523d38f9239c9850562dc5935af0319d8d01b45",
+      "changed_fields": [
+        "review",
+        "analysis"
+      ],
+      "disposition": "withdraw_old_analysis_and_reopen_pending",
+      "before_entry": {
+        "id": "compare",
+        "text": "compare",
+        "min_age": 8,
+        "part_of_speech": "verb",
+        "meaning": "Look for similarities and differences",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "The similarity-checking verb is one base; com and pare are not assigned their unrelated modern senses.",
+          "references": [
+            "anderson-morphology"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.compare.analysis.v1",
+          "lexeme_id": "compare",
+          "text": "compare",
+          "kind": "atomic",
+          "parts": [
+            {
+              "id": "whole",
+              "canonical_id": "growth.compare",
+              "canonical": "compare",
+              "surface": "compare",
+              "type": "atomic",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "whole"
+          ]
+        }
+      },
+      "after_entry": {
+        "id": "compare",
+        "text": "compare",
+        "min_age": 8,
+        "part_of_speech": "verb",
+        "meaning": "Look for similarities and differences",
+        "review": {
+          "status": "pending",
+          "reason": "Reopened after new term-specific evidence: The com- plus par equal family is documented, so the prior no-modern-com/pare argument is insufficient. Hold until the exact English par/pare realization and learner-level comparison meaning are authored and independently checked. Do not confuse equal par with pare trim or prepare par in separate."
+        }
+      }
+    },
+    {
+      "entry_id": "investigate",
+      "path": "data/vocabulary/morphology/age-10.json",
+      "before_entry_sha256": "ac9cc14e38b13a4226823e3bb93b36df541272484363c5c5b286da2db6a5d278",
+      "after_entry_sha256": "1569c1254a5c84049a71846764d83107ae25677cb8ed65bfb38786c7d6dbbf11",
+      "changed_fields": [
+        "review",
+        "analysis"
+      ],
+      "disposition": "withdraw_old_analysis_and_reopen_pending",
+      "before_entry": {
+        "id": "investigate",
+        "text": "investigate",
+        "min_age": 10,
+        "part_of_speech": "verb",
+        "meaning": "Examine something to find out more",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "The examining verb is lexicalized; no free investig word is fabricated for a suffix puzzle.",
+          "references": [
+            "anderson-morphology"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.investigate.analysis.v1",
+          "lexeme_id": "investigate",
+          "text": "investigate",
+          "kind": "atomic",
+          "parts": [
+            {
+              "id": "whole",
+              "canonical_id": "growth.investigate",
+              "canonical": "investigate",
+              "surface": "investigate",
+              "type": "atomic",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "whole"
+          ]
+        }
+      },
+      "after_entry": {
+        "id": "investigate",
+        "text": "investigate",
+        "min_age": 10,
+        "part_of_speech": "verb",
+        "meaning": "Examine something to find out more",
+        "review": {
+          "status": "pending",
+          "reason": "Reopened after new term-specific evidence: The in- and vestigium track family is documented. Hold the prior whole-form proposal and do not yet serialize in + vestig + -ate: the exact English stem realization, prefix contribution, and inherited verbal ending require a term-specific graph decision."
+        }
+      }
+    },
+    {
+      "entry_id": "suggest",
+      "path": "data/vocabulary/morphology/age-09.json",
+      "before_entry_sha256": "f48ed757b230b451d94e2bd88f2380573034d0693dbf32787a656981d1356210",
+      "after_entry_sha256": "23405551ee864d3c8bac1a75ab310f7222e28610757769efd7e486621b3a52a9",
+      "changed_fields": [
+        "review",
+        "analysis"
+      ],
+      "disposition": "withdraw_old_analysis_and_reopen_pending",
+      "before_entry": {
+        "id": "suggest",
+        "text": "suggest",
+        "min_age": 9,
+        "part_of_speech": "verb",
+        "meaning": "Put forward an idea to consider",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "The proposing verb is a whole borrowed stem, not a current sug plus gest construction.",
+          "references": [
+            "anderson-morphology"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.suggest.analysis.v1",
+          "lexeme_id": "suggest",
+          "text": "suggest",
+          "kind": "atomic",
+          "parts": [
+            {
+              "id": "whole",
+              "canonical_id": "growth.suggest",
+              "canonical": "suggest",
+              "surface": "suggest",
+              "type": "atomic",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "whole"
+          ]
+        }
+      },
+      "after_entry": {
+        "id": "suggest",
+        "text": "suggest",
+        "min_age": 9,
+        "part_of_speech": "verb",
+        "meaning": "Put forward an idea to consider",
+        "review": {
+          "status": "pending",
+          "reason": "Reopened after new term-specific evidence: The sub-/gerere family and suggestus are documented. Hold while the sug-/gest allomorphs and the furnish/propose semantic development are checked as teaching units; the old whole-form justification cannot be based on missing free sug or gest words."
+        }
+      }
+    },
+    {
+      "entry_id": "explore",
+      "path": "data/vocabulary/morphology/age-07.json",
+      "before_entry_sha256": "aa7aee2cc012f7acbb8cf352591eecc7e868affef3972900e001d1406c9d676c",
+      "after_entry_sha256": "842f45109c608bb9d43edb074c673617ac8690edee22dc792d051009ce0fc67c",
+      "changed_fields": [
+        "review",
+        "analysis"
+      ],
+      "disposition": "withdraw_old_analysis_and_reopen_pending",
+      "before_entry": {
+        "id": "explore",
+        "text": "explore",
+        "min_age": 7,
+        "part_of_speech": "verb",
+        "meaning": "Look around to learn about something",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "The investigating verb is one modern base, without a free plore root.",
+          "references": [
+            "anderson-morphology"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.explore.analysis.v1",
+          "lexeme_id": "explore",
+          "text": "explore",
+          "kind": "atomic",
+          "parts": [
+            {
+              "id": "whole",
+              "canonical_id": "growth.explore",
+              "canonical": "explore",
+              "surface": "explore",
+              "type": "atomic",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "whole"
+          ]
+        }
+      },
+      "after_entry": {
+        "id": "explore",
+        "text": "explore",
+        "min_age": 7,
+        "part_of_speech": "verb",
+        "meaning": "Look around to learn about something",
+        "review": {
+          "status": "pending",
+          "reason": "Reopened after new term-specific evidence: The ex-/plorare cry-out history is documented but distant from the target examining/learning sense. Hold both a reflexive whole-form declaration and a literal out-plus-cry exercise. A reviewer must decide contemporary learner depth with the explore/exploration family and historical opacity made explicit."
+        }
+      }
+    },
+    {
+      "entry_id": "separate",
+      "path": "data/vocabulary/morphology/age-07.json",
+      "before_entry_sha256": "fc3c49bec0298a10ebba34b603f9a5c86d7f35ea62d98d788356e1706cdb41f8",
+      "after_entry_sha256": "19e0b1ad9732e1aab335600b1e85c3506ab9f76abe3ca39c326ad96bdfb0f5b9",
+      "changed_fields": [
+        "review",
+        "analysis"
+      ],
+      "disposition": "withdraw_old_analysis_and_reopen_pending",
+      "before_entry": {
+        "id": "separate",
+        "text": "separate",
+        "min_age": 7,
+        "part_of_speech": "verb",
+        "meaning": "Move things apart from each other",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "The moving-apart verb is one modern base; there is no independent separ word in this sense.",
+          "references": [
+            "anderson-morphology"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.separate.analysis.v1",
+          "lexeme_id": "separate",
+          "text": "separate",
+          "kind": "atomic",
+          "parts": [
+            {
+              "id": "whole",
+              "canonical_id": "growth.separate",
+              "canonical": "separate",
+              "surface": "separate",
+              "type": "atomic",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "whole"
+          ]
+        }
+      },
+      "after_entry": {
+        "id": "separate",
+        "text": "separate",
+        "min_age": 7,
+        "part_of_speech": "verb",
+        "meaning": "Move things apart from each other",
+        "review": {
+          "status": "pending",
+          "reason": "Reopened after new term-specific evidence: The se- apart plus parare prepare family is documented. Hold until the English se/par/ate realization and nonliteral prepare element are resolved. A future par.prepare identity must stay separate from par.equal in compare."
+        }
+      }
+    },
+    {
+      "entry_id": "multiply",
+      "path": "data/vocabulary/morphology/age-08.json",
+      "before_entry_sha256": "4d8432a7e33ee9ab6fcd04e083a6e1e1285cc969359129f096f0f84db75e636f",
+      "after_entry_sha256": "7389fb7862be5673c2c562dd340b7c66ffe28655d4aef84a6f9f4acb1badea74",
+      "changed_fields": [
+        "review",
+        "analysis"
+      ],
+      "disposition": "withdraw_old_analysis_and_reopen_pending",
+      "before_entry": {
+        "id": "multiply",
+        "text": "multiply",
+        "min_age": 8,
+        "part_of_speech": "verb",
+        "meaning": "Add equal groups to find a total",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "The arithmetic verb is lexicalized; the modern ply layering verb does not explain its full mathematical meaning.",
+          "references": [
+            "anderson-morphology"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.multiply.analysis.v1",
+          "lexeme_id": "multiply",
+          "text": "multiply",
+          "kind": "atomic",
+          "parts": [
+            {
+              "id": "whole",
+              "canonical_id": "growth.multiply",
+              "canonical": "multiply",
+              "surface": "multiply",
+              "type": "atomic",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "whole"
+          ]
+        }
+      },
+      "after_entry": {
+        "id": "multiply",
+        "text": "multiply",
+        "min_age": 8,
+        "part_of_speech": "verb",
+        "meaning": "Add equal groups to find a total",
+        "review": {
+          "status": "pending",
+          "reason": "Reopened after new term-specific evidence: The multi-/plex fold family is documented through multiple and multiplicare. Hold while plex/plic/ply and the verb ending are resolved. Neither a missing free arithmetic ply nor the existence of the modern layer verb settles the graph."
+        }
+      }
+    },
+    {
+      "entry_id": "divide",
+      "path": "data/vocabulary/morphology/age-08.json",
+      "before_entry_sha256": "3ceee158c44a4a0d6499e09f74a0b24b6d4004e86683ecd7993311c53d60432c",
+      "after_entry_sha256": "a9f86f00c71eb913f597b7b22b1058376f24c4048442d7a7a0fcf63133e60e8a",
+      "changed_fields": [
+        "review",
+        "analysis"
+      ],
+      "disposition": "withdraw_old_analysis_and_reopen_pending",
+      "before_entry": {
+        "id": "divide",
+        "text": "divide",
+        "min_age": 8,
+        "part_of_speech": "verb",
+        "meaning": "Split a number into equal groups",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "The arithmetic-splitting verb is a modern base; vide is not a free current word in this sense.",
+          "references": [
+            "anderson-morphology"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.divide.analysis.v1",
+          "lexeme_id": "divide",
+          "text": "divide",
+          "kind": "atomic",
+          "parts": [
+            {
+              "id": "whole",
+              "canonical_id": "growth.divide",
+              "canonical": "divide",
+              "surface": "divide",
+              "type": "atomic",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "whole"
+          ]
+        }
+      },
+      "after_entry": {
+        "id": "divide",
+        "text": "divide",
+        "min_age": 8,
+        "part_of_speech": "verb",
+        "meaning": "Split a number into equal groups",
+        "review": {
+          "status": "pending",
+          "reason": "Reopened after new term-specific evidence: The dictionary identifies dis- plus a separate-root -videre. Hold until di/dis and vid/vide are authored and independently checked; do not confuse this root with Latin videre see. Lack of a free English vide cannot justify atomic status."
+        }
+      }
+    },
+    {
+      "entry_id": "estimate",
+      "path": "data/vocabulary/morphology/age-10.json",
+      "before_entry_sha256": "d5e4994a557038c6d224cb20799076e74c7eb8eacba2816597320b2478c1a887",
+      "after_entry_sha256": "0e0c975ac51edbf86bf6ea704057a9b7935014fc0ff3a259138c821fb0fe2b78",
+      "changed_fields": [
+        "review",
+        "analysis"
+      ],
+      "disposition": "withdraw_old_analysis_and_reopen_pending",
+      "before_entry": {
+        "id": "estimate",
+        "text": "estimate",
+        "min_age": 10,
+        "part_of_speech": "verb",
+        "meaning": "Make a careful approximate calculation",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "The approximate-calculation verb is one current lexical base, not estim plus the eating verb ate.",
+          "references": [
+            "anderson-morphology"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.estimate.analysis.v1",
+          "lexeme_id": "estimate",
+          "text": "estimate",
+          "kind": "atomic",
+          "parts": [
+            {
+              "id": "whole",
+              "canonical_id": "growth.estimate",
+              "canonical": "estimate",
+              "surface": "estimate",
+              "type": "atomic",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "whole"
+          ]
+        }
+      },
+      "after_entry": {
+        "id": "estimate",
+        "text": "estimate",
+        "min_age": 10,
+        "part_of_speech": "verb",
+        "meaning": "Make a careful approximate calculation",
+        "review": {
+          "status": "pending",
+          "reason": "Reopened after new term-specific evidence: The Latin aestimare/aestimatus family is established. Hold the old whole-form rationale while a reviewer determines whether estim and -ate are appropriate English teaching units; not having a free estim word is not decisive."
+        }
+      }
+    },
+    {
+      "entry_id": "retire",
+      "path": "data/vocabulary/morphology/age-09.json",
+      "before_entry_sha256": "1a154adfc92775ed5156f59954e2fc69af06f109d4cc18a495f987223443aad8",
+      "after_entry_sha256": "9c3c7a517ab961ecac1ef00dbdc39d481c1d60da1925c8cf297065168a5a9001",
+      "changed_fields": [
+        "review",
+        "analysis"
+      ],
+      "disposition": "withdraw_old_analysis_and_reopen_pending",
+      "before_entry": {
+        "id": "retire",
+        "text": "retire",
+        "min_age": 9,
+        "part_of_speech": "verb",
+        "meaning": "Stop working after a long career",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex (AI editorial review; not human approval)",
+          "date": "2026-10-16",
+          "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+          "rationale": "The career-ending verb is a whole borrowed base; re- plus the fatigue verb tire would teach the wrong meaning.",
+          "references": [
+            "anderson-morphology",
+            "mw-retire"
+          ]
+        },
+        "analysis": {
+          "schema": 1,
+          "id": "growth.retire.analysis.v1",
+          "lexeme_id": "retire",
+          "text": "retire",
+          "kind": "atomic",
+          "parts": [
+            {
+              "id": "whole",
+              "canonical_id": "growth.retire",
+              "canonical": "retire",
+              "surface": "retire",
+              "type": "atomic",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "whole"
+          ]
+        }
+      },
+      "after_entry": {
+        "id": "retire",
+        "text": "retire",
+        "min_age": 9,
+        "part_of_speech": "verb",
+        "meaning": "Stop working after a long career",
+        "review": {
+          "status": "pending",
+          "reason": "Reopened after new term-specific evidence: New consultation establishes re- plus French tirer draw. Hold the prior whole-form proposal until historical tir/tire draw and career withdrawal are explicitly assessed. The unrelated English fatigue verb cannot serve as the component, but that does not make the word morphologically indivisible."
+        }
+      }
+    }
+  ]
+}

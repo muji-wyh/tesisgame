@@ -1,0 +1,4344 @@
+{
+  "schema": 1,
+  "revision": "growth-morphology-v1",
+  "age": 10,
+  "entries": [
+    {
+      "id": "submarine",
+      "text": "submarine",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The sea-vessel noun derives from the undersea adjective, formed with under-prefix sub- and marine in its sea-related sense.",
+        "references": [
+          "anderson-morphology",
+          "wiktionary-submarine"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.submarine.analysis.v1",
+        "lexeme_id": "submarine",
+        "text": "submarine",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.affix.sub.under",
+            "canonical": "sub-",
+            "surface": "sub",
+            "type": "prefix",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.part.marine.sea",
+            "canonical": "marine",
+            "surface": "marine",
+            "type": "stem",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "submarine",
+            "rule": "sub-under-plus-marine",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "woodpecker",
+      "text": "woodpecker",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The bird pecks wood; agent -er first forms pecker, then wood supplies the object of its action.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.woodpecker.analysis.v1",
+        "lexeme_id": "woodpecker",
+        "text": "woodpecker",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.wood",
+            "canonical": "wood",
+            "surface": "wood",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.peck",
+            "canonical": "peck",
+            "surface": "peck",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part3",
+            "canonical_id": "english.affix.er.agent-instrument",
+            "canonical": "-er",
+            "surface": "er",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "pecker",
+            "left": "part2",
+            "right": "part3",
+            "surface": "pecker",
+            "rule": "peck-plus-agent-er",
+            "break_offsets": []
+          },
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "pecker",
+            "surface": "woodpecker",
+            "rule": "wood-plus-pecker",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "pelican",
+      "text": "pelican",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The bird name is one borrowed animal stem, not peli plus can.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.pelican.analysis.v1",
+        "lexeme_id": "pelican",
+        "text": "pelican",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.pelican",
+            "canonical": "pelican",
+            "surface": "pelican",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "artichoke",
+      "text": "artichoke",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The vegetable name is a whole loanword; the ending is not the English action choke.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.artichoke.analysis.v1",
+        "lexeme_id": "artichoke",
+        "text": "artichoke",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.artichoke",
+            "canonical": "artichoke",
+            "surface": "artichoke",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "asparagus",
+      "text": "asparagus",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The vegetable noun is a whole borrowed stem; final s is not its English plural suffix.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.asparagus.analysis.v1",
+        "lexeme_id": "asparagus",
+        "text": "asparagus",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.asparagus",
+            "canonical": "asparagus",
+            "surface": "asparagus",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "eggplant",
+      "text": "eggplant",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The established vegetable name compares the fruit of some varieties to eggs; the plant component is the organism noun, not the stored planting verb.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.eggplant.analysis.v1",
+        "lexeme_id": "eggplant",
+        "text": "eggplant",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.egg",
+            "canonical": "egg",
+            "surface": "egg",
+            "type": "compound",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.part.plant.organism",
+            "canonical": "plant",
+            "surface": "plant",
+            "type": "compound",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "eggplant",
+            "rule": "authored-compound-concatenation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "cinnamon",
+      "text": "cinnamon",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The spice name is one lexical base with no current English affix boundary.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.cinnamon.analysis.v1",
+        "lexeme_id": "cinnamon",
+        "text": "cinnamon",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.cinnamon",
+            "canonical": "cinnamon",
+            "surface": "cinnamon",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "pistachio",
+      "text": "pistachio",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The edible seed name is one borrowed base, not pistach plus io.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.pistachio.analysis.v1",
+        "lexeme_id": "pistachio",
+        "text": "pistachio",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.pistachio",
+            "canonical": "pistachio",
+            "surface": "pistachio",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "hazelnut",
+      "text": "hazelnut",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The edible nut comes from the hazel tree; the plant sense of hazel is selected.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.hazelnut.analysis.v1",
+        "lexeme_id": "hazelnut",
+        "text": "hazelnut",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.part.hazel.tree",
+            "canonical": "hazel",
+            "surface": "hazel",
+            "type": "compound",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.nut",
+            "canonical": "nut",
+            "surface": "nut",
+            "type": "compound",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "hazelnut",
+            "rule": "authored-compound-concatenation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "raspberry",
+      "text": "raspberry",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The attested first base is the dialect fruit noun rasp, not the modern scraping tool or harsh voice. The conventional fruit name retains that exact sense.",
+        "references": [
+          "anderson-morphology",
+          "mw-raspberry"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.raspberry.analysis.v1",
+        "lexeme_id": "raspberry",
+        "text": "raspberry",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.part.rasp.fruit",
+            "canonical": "rasp",
+            "surface": "rasp",
+            "type": "compound",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.berry",
+            "canonical": "berry",
+            "surface": "berry",
+            "type": "compound",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "raspberry",
+            "rule": "authored-compound-concatenation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "blueberry",
+      "text": "blueberry",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The berry name combines its usual blue appearance with the free berry noun.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.blueberry.analysis.v1",
+        "lexeme_id": "blueberry",
+        "text": "blueberry",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.blue",
+            "canonical": "blue",
+            "surface": "blue",
+            "type": "compound",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.berry",
+            "canonical": "berry",
+            "surface": "berry",
+            "type": "compound",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "blueberry",
+            "rule": "authored-compound-concatenation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "grapefruit",
+      "text": "grapefruit",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The conventional citrus name contains grape and fruit as naming components; it is not defined as a cultivar of grape.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.grapefruit.analysis.v1",
+        "lexeme_id": "grapefruit",
+        "text": "grapefruit",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.grape",
+            "canonical": "grape",
+            "surface": "grape",
+            "type": "compound",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.fruit",
+            "canonical": "fruit",
+            "surface": "fruit",
+            "type": "compound",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "grapefruit",
+            "rule": "authored-compound-concatenation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "pretzel",
+      "text": "pretzel",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The baked-food name is a whole borrowed noun; no English pretz base is invented.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.pretzel.analysis.v1",
+        "lexeme_id": "pretzel",
+        "text": "pretzel",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.pretzel",
+            "canonical": "pretzel",
+            "surface": "pretzel",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "earwig",
+      "text": "earwig",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A small insect with tail pincers",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The historical second element meant insect, not the modern hairpiece wig. The insect name stays whole to avoid this misleading modern compound and the false ear-invasion story.",
+        "references": [
+          "anderson-morphology",
+          "mw-earwig"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.earwig.analysis.v1",
+        "lexeme_id": "earwig",
+        "text": "earwig",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.earwig",
+            "canonical": "earwig",
+            "surface": "earwig",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "ferret",
+      "text": "ferret",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A long slender playful mammal",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The mammal name is one lexical base, not ferr plus a diminutive suffix exercise.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.ferret.analysis.v1",
+        "lexeme_id": "ferret",
+        "text": "ferret",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.ferret",
+            "canonical": "ferret",
+            "surface": "ferret",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "gnat",
+      "text": "gnat",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A very small flying insect",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The small insect name is a whole base despite its silent initial consonant.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.gnat.analysis.v1",
+        "lexeme_id": "gnat",
+        "text": "gnat",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.gnat",
+            "canonical": "gnat",
+            "surface": "gnat",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "mole",
+      "text": "mole",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A small dark spot on the skin",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The stored skin-spot sense is one noun base, distinct from the burrowing animal.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.mole.analysis.v1",
+        "lexeme_id": "mole",
+        "text": "mole",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.mole",
+            "canonical": "mole",
+            "surface": "mole",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "moth",
+      "text": "moth",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "An insect often active at night",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The nocturnal insect noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.moth.analysis.v1",
+        "lexeme_id": "moth",
+        "text": "moth",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.moth",
+            "canonical": "moth",
+            "surface": "moth",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "shrew",
+      "text": "shrew",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A tiny mammal with pointed snout",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The pointed-snouted mammal noun is one base, not a past-tense verb.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.shrew.analysis.v1",
+        "lexeme_id": "shrew",
+        "text": "shrew",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.shrew",
+            "canonical": "shrew",
+            "surface": "shrew",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "shrimp",
+      "text": "shrimp",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A small edible shellfish with a curved body",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The shellfish noun is one base; its final p is not a meaningful ending.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.shrimp.analysis.v1",
+        "lexeme_id": "shrimp",
+        "text": "shrimp",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.shrimp",
+            "canonical": "shrimp",
+            "surface": "shrimp",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "skunk",
+      "text": "skunk",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A striped mammal with strong smelling spray",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The striped mammal name is a whole English loanword.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.skunk.analysis.v1",
+        "lexeme_id": "skunk",
+        "text": "skunk",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.skunk",
+            "canonical": "skunk",
+            "surface": "skunk",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "slug",
+      "text": "slug",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A soft crawling animal without shell",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The shell-less crawling animal is one base, distinct from the blow or metal-piece senses.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.slug.analysis.v1",
+        "lexeme_id": "slug",
+        "text": "slug",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.slug",
+            "canonical": "slug",
+            "surface": "slug",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "stag",
+      "text": "stag",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "An adult male deer with antlers",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The adult male-deer noun is a single base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.stag.analysis.v1",
+        "lexeme_id": "stag",
+        "text": "stag",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.stag",
+            "canonical": "stag",
+            "surface": "stag",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "stoat",
+      "text": "stoat",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A slender mammal with a long body",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The slender mammal name is one lexical base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.stoat.analysis.v1",
+        "lexeme_id": "stoat",
+        "text": "stoat",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.stoat",
+            "canonical": "stoat",
+            "surface": "stoat",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "vulture",
+      "text": "vulture",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A large bird that eats carrion",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The carrion-eating bird name is a whole modern stem; no free vult base is invented.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.vulture.analysis.v1",
+        "lexeme_id": "vulture",
+        "text": "vulture",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.vulture",
+            "canonical": "vulture",
+            "surface": "vulture",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "wasp",
+      "text": "wasp",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A narrow waisted stinging insect",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The stinging insect noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.wasp.analysis.v1",
+        "lexeme_id": "wasp",
+        "text": "wasp",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.wasp",
+            "canonical": "wasp",
+            "surface": "wasp",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "wood",
+      "text": "wood",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "The hard material inside a tree",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The tree-material noun is one base, distinct from the wooded-area plural.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.wood.analysis.v1",
+        "lexeme_id": "wood",
+        "text": "wood",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.wood",
+            "canonical": "wood",
+            "surface": "wood",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "wool",
+      "text": "wool",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "Soft fiber from a sheep coat",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The sheep-fiber noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.wool.analysis.v1",
+        "lexeme_id": "wool",
+        "text": "wool",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.wool",
+            "canonical": "wool",
+            "surface": "wool",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "almond",
+      "text": "almond",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "An oval nut with brown skin",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The nut name is one borrowed lexical base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.almond.analysis.v1",
+        "lexeme_id": "almond",
+        "text": "almond",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.almond",
+            "canonical": "almond",
+            "surface": "almond",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "apricot",
+      "text": "apricot",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A small soft orange fruit",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The orange fruit name is a whole loanword, not apri plus cot.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.apricot.analysis.v1",
+        "lexeme_id": "apricot",
+        "text": "apricot",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.apricot",
+            "canonical": "apricot",
+            "surface": "apricot",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "bacon",
+      "text": "bacon",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "Thin slices of cured pork",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The cured-pork noun is one base, not bac plus on.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.bacon.analysis.v1",
+        "lexeme_id": "bacon",
+        "text": "bacon",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.bacon",
+            "canonical": "bacon",
+            "surface": "bacon",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "bagel",
+      "text": "bagel",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A firm bread roll with a hole",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The bread-roll noun is a whole English loanword.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.bagel.analysis.v1",
+        "lexeme_id": "bagel",
+        "text": "bagel",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.bagel",
+            "canonical": "bagel",
+            "surface": "bagel",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "beetroot",
+      "text": "beetroot",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A dark red edible root",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The edible vegetable is the root of the beet plant.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.beetroot.analysis.v1",
+        "lexeme_id": "beetroot",
+        "text": "beetroot",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.beet",
+            "canonical": "beet",
+            "surface": "beet",
+            "type": "compound",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.root",
+            "canonical": "root",
+            "surface": "root",
+            "type": "compound",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "beetroot",
+            "rule": "authored-compound-concatenation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "blackberry",
+      "text": "blackberry",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A dark juicy fruit with small bumps",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The conventional fruit name combines its dark appearance and berry, without making a botanical classification claim.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.blackberry.analysis.v1",
+        "lexeme_id": "blackberry",
+        "text": "blackberry",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.black",
+            "canonical": "black",
+            "surface": "black",
+            "type": "compound",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.berry",
+            "canonical": "berry",
+            "surface": "berry",
+            "type": "compound",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "blackberry",
+            "rule": "authored-compound-concatenation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "blackcurrant",
+      "text": "blackcurrant",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A small dark purple berry",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The dark fresh berry uses the fresh-currant sense, explicitly distinct from the stored Growth dried-grape currant.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.blackcurrant.analysis.v1",
+        "lexeme_id": "blackcurrant",
+        "text": "blackcurrant",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.black",
+            "canonical": "black",
+            "surface": "black",
+            "type": "compound",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.part.currant.fresh-berry",
+            "canonical": "currant",
+            "surface": "currant",
+            "type": "compound",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "blackcurrant",
+            "rule": "authored-compound-concatenation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "cabbage",
+      "text": "cabbage",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A vegetable with tightly packed leaves",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The leaf-vegetable name is lexicalized; cab plus an age suffix would assign unrelated meanings.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.cabbage.analysis.v1",
+        "lexeme_id": "cabbage",
+        "text": "cabbage",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.cabbage",
+            "canonical": "cabbage",
+            "surface": "cabbage",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "cashew",
+      "text": "cashew",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A curved creamy colored nut",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The curved-nut name is one borrowed base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.cashew.analysis.v1",
+        "lexeme_id": "cashew",
+        "text": "cashew",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.cashew",
+            "canonical": "cashew",
+            "surface": "cashew",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "cauliflower",
+      "text": "cauliflower",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A vegetable with clustered white florets",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The sourced formation uses the cabbage or stalk element cauli- with its linking vowel and flower; cauli is not misrepresented as a free English word.",
+        "references": [
+          "anderson-morphology",
+          "wiktionary-cauliflower"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.cauliflower.analysis.v1",
+        "lexeme_id": "cauliflower",
+        "text": "cauliflower",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.combining.cauli.cabbage",
+            "canonical": "cauli-",
+            "surface": "cauli",
+            "type": "combining_form",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.flower",
+            "canonical": "flower",
+            "surface": "flower",
+            "type": "stem",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "cauliflower",
+            "rule": "cauli-cabbage-plus-flower",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "celery",
+      "text": "celery",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A vegetable with crisp green stalks",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The stalk vegetable name is lexicalized; it is not a craft suffix applied to cel.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.celery.analysis.v1",
+        "lexeme_id": "celery",
+        "text": "celery",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.celery",
+            "canonical": "celery",
+            "surface": "celery",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "chapati",
+      "text": "chapati",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A thin round unleavened flatbread",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The flatbread noun is a whole borrowed form.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.chapati.analysis.v1",
+        "lexeme_id": "chapati",
+        "text": "chapati",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.chapati",
+            "canonical": "chapati",
+            "surface": "chapati",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "croissant",
+      "text": "croissant",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A flaky crescent shaped bread",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The crescent-shaped bread name is a whole English loanword; no English croiss verb is invented.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.croissant.analysis.v1",
+        "lexeme_id": "croissant",
+        "text": "croissant",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.croissant",
+            "canonical": "croissant",
+            "surface": "croissant",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "currant",
+      "text": "currant",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A small dried grape used in baking",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The stored dried-grape sense is one lexical base, distinct from the fresh berry sense used in blackcurrant.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.currant.analysis.v1",
+        "lexeme_id": "currant",
+        "text": "currant",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.currant",
+            "canonical": "currant",
+            "surface": "currant",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "fennel",
+      "text": "fennel",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A vegetable with feathery leaves",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The feathery-leaved vegetable name is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.fennel.analysis.v1",
+        "lexeme_id": "fennel",
+        "text": "fennel",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.fennel",
+            "canonical": "fennel",
+            "surface": "fennel",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "fig",
+      "text": "fig",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A soft fruit containing tiny seeds",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The fruit noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.fig.analysis.v1",
+        "lexeme_id": "fig",
+        "text": "fig",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.fig",
+            "canonical": "fig",
+            "surface": "fig",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "garlic",
+      "text": "garlic",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A strong flavored bulb used in cooking",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The bulb-food noun is a whole modern stem; historic spear-and-leek elements are not imposed as current free parts.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.garlic.analysis.v1",
+        "lexeme_id": "garlic",
+        "text": "garlic",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.garlic",
+            "canonical": "garlic",
+            "surface": "garlic",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "gooseberry",
+      "text": "gooseberry",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A small round fruit with tart flavor",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The conventional name has the sourced goose-plus-berry form; uncertain earlier folk-etymological history is not presented as an animal-origin claim.",
+        "references": [
+          "anderson-morphology",
+          "wiktionary-gooseberry"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.gooseberry.analysis.v1",
+        "lexeme_id": "gooseberry",
+        "text": "gooseberry",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.goose",
+            "canonical": "goose",
+            "surface": "goose",
+            "type": "compound",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.berry",
+            "canonical": "berry",
+            "surface": "berry",
+            "type": "compound",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "gooseberry",
+            "rule": "authored-compound-concatenation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "kiwi",
+      "text": "kiwi",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A fuzzy brown fruit with green flesh",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The stored fruit sense is a lexical base borrowed through its conventional name, distinct from the bird.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.kiwi.analysis.v1",
+        "lexeme_id": "kiwi",
+        "text": "kiwi",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.kiwi",
+            "canonical": "kiwi",
+            "surface": "kiwi",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "leek",
+      "text": "leek",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A vegetable with long layered leaves",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The layered-leaf vegetable noun is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.leek.analysis.v1",
+        "lexeme_id": "leek",
+        "text": "leek",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.leek",
+            "canonical": "leek",
+            "surface": "leek",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "lentil",
+      "text": "lentil",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A small flat seed used in soups",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The soup-seed noun is one borrowed base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.lentil.analysis.v1",
+        "lexeme_id": "lentil",
+        "text": "lentil",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.lentil",
+            "canonical": "lentil",
+            "surface": "lentil",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "lime",
+      "text": "lime",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A small green citrus fruit",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The citrus fruit noun is one base, distinct from the mineral and color uses.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.lime.analysis.v1",
+        "lexeme_id": "lime",
+        "text": "lime",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.lime",
+            "canonical": "lime",
+            "surface": "lime",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "marshmallow",
+      "text": "marshmallow",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A soft airy sweet treat",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The sweet name comes from the marsh-growing mallow plant name. This historical naming relation does not imply that modern sweets contain the plant.",
+        "references": [
+          "anderson-morphology",
+          "wiktionary-marshmallow"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.marshmallow.analysis.v1",
+        "lexeme_id": "marshmallow",
+        "text": "marshmallow",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.marsh",
+            "canonical": "marsh",
+            "surface": "marsh",
+            "type": "compound",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.part.mallow.plant",
+            "canonical": "mallow",
+            "surface": "mallow",
+            "type": "compound",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "marshmallow",
+            "rule": "authored-compound-concatenation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "noodles",
+      "text": "noodles",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "Long thin strips of cooked dough",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The food contains multiple noodle strips; the complete noodle base receives regular plural -s.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.noodles.analysis.v1",
+        "lexeme_id": "noodles",
+        "text": "noodles",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.noodle",
+            "canonical": "noodle",
+            "surface": "noodle",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.s.plural",
+            "canonical": "-s",
+            "surface": "s",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "noodles",
+            "rule": "noodle-plus-plural-s",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "olive",
+      "text": "olive",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A small fruit used to make oil",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The oil-producing fruit name is one base, not o plus the adjective live.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.olive.analysis.v1",
+        "lexeme_id": "olive",
+        "text": "olive",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.olive",
+            "canonical": "olive",
+            "surface": "olive",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "omelet",
+      "text": "omelet",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "Beaten eggs cooked in a pan",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The egg-dish noun preserves its existing spelling as one borrowed base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.omelet.analysis.v1",
+        "lexeme_id": "omelet",
+        "text": "omelet",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.omelet",
+            "canonical": "omelet",
+            "surface": "omelet",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "parsnip",
+      "text": "parsnip",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A pale root vegetable like a carrot",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The root vegetable name is lexicalized; the modern cutting verb snip is not its word-forming component.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.parsnip.analysis.v1",
+        "lexeme_id": "parsnip",
+        "text": "parsnip",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.parsnip",
+            "canonical": "parsnip",
+            "surface": "parsnip",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "pecan",
+      "text": "pecan",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A nut with a ridged brown shell",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The ridged-shell nut name is a whole English loanword, not pe plus can.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.pecan.analysis.v1",
+        "lexeme_id": "pecan",
+        "text": "pecan",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.pecan",
+            "canonical": "pecan",
+            "surface": "pecan",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "porridge",
+      "text": "porridge",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A warm cereal cooked until soft",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The cooked cereal name is one modern base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.porridge.analysis.v1",
+        "lexeme_id": "porridge",
+        "text": "porridge",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.porridge",
+            "canonical": "porridge",
+            "surface": "porridge",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "raisin",
+      "text": "raisin",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A dried sweet grape",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The dried-grape noun is one borrowed base, not a phonetic rendering of raising.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.raisin.analysis.v1",
+        "lexeme_id": "raisin",
+        "text": "raisin",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.raisin",
+            "canonical": "raisin",
+            "surface": "raisin",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "ravioli",
+      "text": "ravioli",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "Small pasta pockets filled with food",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The filled-pasta noun is a borrowed food name; its Italian plural ending is not taught as productive English inflection.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.ravioli.analysis.v1",
+        "lexeme_id": "ravioli",
+        "text": "ravioli",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.ravioli",
+            "canonical": "ravioli",
+            "surface": "ravioli",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "rhubarb",
+      "text": "rhubarb",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A plant with tart edible stalks",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The edible-stalk plant noun is lexicalized; the barbed-object noun barb does not explain its English meaning.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.rhubarb.analysis.v1",
+        "lexeme_id": "rhubarb",
+        "text": "rhubarb",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.rhubarb",
+            "canonical": "rhubarb",
+            "surface": "rhubarb",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "salami",
+      "text": "salami",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A firm seasoned sliced sausage",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The sliced-sausage noun is a borrowed food name; final i is not an English plural suffix.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.salami.analysis.v1",
+        "lexeme_id": "salami",
+        "text": "salami",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.salami",
+            "canonical": "salami",
+            "surface": "salami",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "satsuma",
+      "text": "satsuma",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A small citrus fruit easy to peel",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The easy-peeling citrus name is a whole eponymic borrowing.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.satsuma.analysis.v1",
+        "lexeme_id": "satsuma",
+        "text": "satsuma",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.satsuma",
+            "canonical": "satsuma",
+            "surface": "satsuma",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "spinach",
+      "text": "spinach",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A vegetable with dark green leaves",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The leafy vegetable name is one borrowed base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.spinach.analysis.v1",
+        "lexeme_id": "spinach",
+        "text": "spinach",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.spinach",
+            "canonical": "spinach",
+            "surface": "spinach",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "turnip",
+      "text": "turnip",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A round root vegetable with pale flesh",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The root vegetable name is lexicalized; turn plus nip would falsely import two unrelated modern actions.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.turnip.analysis.v1",
+        "lexeme_id": "turnip",
+        "text": "turnip",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.turnip",
+            "canonical": "turnip",
+            "surface": "turnip",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "vinegar",
+      "text": "vinegar",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A sour liquid used in cooking",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The sour-liquid noun is a whole English loanword; its historical wine-and-sour formation is not a vin plus egar English exercise.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.vinegar.analysis.v1",
+        "lexeme_id": "vinegar",
+        "text": "vinegar",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.vinegar",
+            "canonical": "vinegar",
+            "surface": "vinegar",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "walnut",
+      "text": "walnut",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A nut with a wrinkled shell",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The original first element meant foreign; modern wal is not an independent word. This nut name stays whole instead of inventing a wall or walk component.",
+        "references": [
+          "anderson-morphology",
+          "mw-walnut"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.walnut.analysis.v1",
+        "lexeme_id": "walnut",
+        "text": "walnut",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.walnut",
+            "canonical": "walnut",
+            "surface": "walnut",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "wafer",
+      "text": "wafer",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A thin crisp sweet biscuit",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The crisp-biscuit noun is lexicalized; it is not an agent from an invented waf verb.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.wafer.analysis.v1",
+        "lexeme_id": "wafer",
+        "text": "wafer",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.wafer",
+            "canonical": "wafer",
+            "surface": "wafer",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "hatch",
+      "text": "hatch",
+      "min_age": 10,
+      "part_of_speech": "verb",
+      "meaning": "Come out of an egg",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The stored coming-out-of-an-egg action is one uninflected verb stem.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.hatch.analysis.v1",
+        "lexeme_id": "hatch",
+        "text": "hatch",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.hatch",
+            "canonical": "hatch",
+            "surface": "hatch",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "pointed",
+      "text": "pointed",
+      "min_age": 10,
+      "part_of_speech": "adjective",
+      "meaning": "Ending in a sharp tip",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The shape adjective means having or ending in a point; this tip noun is distinct from the stored finger-pointing verb.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.pointed.analysis.v1",
+        "lexeme_id": "pointed",
+        "text": "pointed",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.part.point.tip",
+            "canonical": "point",
+            "surface": "point",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.ed.having",
+            "canonical": "-ed",
+            "surface": "ed",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "pointed",
+            "rule": "point-plus-having-ed",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "core",
+      "text": "core",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "The innermost part of Earth",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The Earth-center noun is one base, distinct from a verb about removing fruit cores.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.core.analysis.v1",
+        "lexeme_id": "core",
+        "text": "core",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.core",
+            "canonical": "core",
+            "surface": "core",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "fat",
+      "text": "fat",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A nutrient that stores energy",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The stored nutrient noun is one base, distinct from the body-size adjective.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.fat.analysis.v1",
+        "lexeme_id": "fat",
+        "text": "fat",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.fat",
+            "canonical": "fat",
+            "surface": "fat",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "scarecrow",
+      "text": "scarecrow",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A figure that keeps birds from crops",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The field figure is intended to scare crows and other crop-eating birds; the verb-object compound preserves both meanings.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.scarecrow.analysis.v1",
+        "lexeme_id": "scarecrow",
+        "text": "scarecrow",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.scare",
+            "canonical": "scare",
+            "surface": "scare",
+            "type": "compound",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.crow",
+            "canonical": "crow",
+            "surface": "crow",
+            "type": "compound",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "scarecrow",
+            "rule": "authored-compound-concatenation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "address",
+      "text": "address",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "The location of a page on the internet",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The internet-location noun is a whole modern stem; ad plus dress would assign unrelated components.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.address.analysis.v1",
+        "lexeme_id": "address",
+        "text": "address",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.address",
+            "canonical": "address",
+            "surface": "address",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "palette",
+      "text": "palette",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A board used for mixing paint",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The paint-mixing board noun is one borrowed base; it is distinct from pallet and palatal word families.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.palette.analysis.v1",
+        "lexeme_id": "palette",
+        "text": "palette",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.palette",
+            "canonical": "palette",
+            "surface": "palette",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "vacuum",
+      "text": "vacuum",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A machine that sucks up dust and dirt",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The stored cleaning-machine noun is a lexicalized name, with no productive English vacu plus um construction.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.vacuum.analysis.v1",
+        "lexeme_id": "vacuum",
+        "text": "vacuum",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.vacuum",
+            "canonical": "vacuum",
+            "surface": "vacuum",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "bingo",
+      "text": "bingo",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A game matching called numbers",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The number-matching game name is one base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.bingo.analysis.v1",
+        "lexeme_id": "bingo",
+        "text": "bingo",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.bingo",
+            "canonical": "bingo",
+            "surface": "bingo",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "darts",
+      "text": "darts",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A game throwing pointed pieces at targets",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The game name is lexicalized as a plural-form activity; it is kept whole rather than defined as a mere count of projectiles.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.darts.analysis.v1",
+        "lexeme_id": "darts",
+        "text": "darts",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.darts",
+            "canonical": "darts",
+            "surface": "darts",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "judo",
+      "text": "judo",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A sport using throws and controlled holds",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The martial-art name is a whole English loanword; its Japanese internal structure is not treated as productive English affixes.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.judo.analysis.v1",
+        "lexeme_id": "judo",
+        "text": "judo",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.judo",
+            "canonical": "judo",
+            "surface": "judo",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "rugby",
+      "text": "rugby",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A team sport with an oval ball",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The team sport name is one eponymic lexical base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.rugby.analysis.v1",
+        "lexeme_id": "rugby",
+        "text": "rugby",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.rugby",
+            "canonical": "rugby",
+            "surface": "rugby",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "beansprout",
+      "text": "beansprout",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A newly sprouted bean eaten as food",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The edible growth is a sprout from a bean; the original closed spelling is preserved.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.beansprout.analysis.v1",
+        "lexeme_id": "beansprout",
+        "text": "beansprout",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.bean",
+            "canonical": "bean",
+            "surface": "bean",
+            "type": "compound",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.sprout",
+            "canonical": "sprout",
+            "surface": "sprout",
+            "type": "compound",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "beansprout",
+            "rule": "authored-compound-concatenation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "blinds",
+      "text": "blinds",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "Adjustable strips that cover a window",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The window-cover noun blind takes plural -s; its base is the furnishing noun rather than the vision adjective.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.blinds.analysis.v1",
+        "lexeme_id": "blinds",
+        "text": "blinds",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.part.blind.window-cover",
+            "canonical": "blind",
+            "surface": "blind",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.s.plural",
+            "canonical": "-s",
+            "surface": "s",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "blinds",
+            "rule": "blind-window-cover-plus-plural-s",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "kennel",
+      "text": "kennel",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A shelter or boarding place for dogs",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The dog-shelter noun is one borrowed base.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.kennel.analysis.v1",
+        "lexeme_id": "kennel",
+        "text": "kennel",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.kennel",
+            "canonical": "kennel",
+            "surface": "kennel",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "parade",
+      "text": "parade",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "An organized procession through public streets",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The procession noun is one lexical base, not par plus ade.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.parade.analysis.v1",
+        "lexeme_id": "parade",
+        "text": "parade",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.parade",
+            "canonical": "parade",
+            "surface": "parade",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "investigate",
+      "text": "investigate",
+      "min_age": 10,
+      "part_of_speech": "verb",
+      "meaning": "Examine something to find out more",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The individually attested family combines in- into with vestig track/trace and inherited verbal -ate. The teaching source explicitly lists vestig in investigate and vestige. The graph first builds the bound stem investig, then the complete verb; investig is not presented as an independent English word. Both proposed routes into English, borrowing and back-formation from investigation, share this family, so the graph does not assert a unique chronology. The selected careful inquiry sense remains authoritative; there is no clothing vest root or invented free vestigate requirement.",
+        "references": [
+          "anderson-morphology",
+          "mw-investigate-new",
+          "mw-vestige-new",
+          "mw-ate-suffix-new",
+          "etym-investigate-hold9",
+          "thoughtful-vestig-hold9",
+          "etym-ate-hold9",
+          "anderson-2e-roots-new"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.investigate.analysis.v1",
+        "lexeme_id": "investigate",
+        "text": "investigate",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.affix.in.inside",
+            "type": "prefix",
+            "canonical": "in-",
+            "surface": "in",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.root.vestig.track",
+            "type": "root",
+            "canonical": "vestig",
+            "surface": "vestig",
+            "break_offsets": []
+          },
+          {
+            "id": "part3",
+            "canonical_id": "english.affix.ate.verb",
+            "type": "suffix",
+            "canonical": "-ate",
+            "surface": "ate",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "bound_stem",
+            "left": "part1",
+            "right": "part2",
+            "surface": "investig",
+            "rule": "authored-bound-stem-investig",
+            "break_offsets": []
+          },
+          {
+            "id": "whole",
+            "left": "bound_stem",
+            "right": "part3",
+            "rule": "authored-investig-bound-stem-plus-verbal-ate",
+            "surface": "investigate",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "estimate",
+      "text": "estimate",
+      "min_age": 10,
+      "part_of_speech": "verb",
+      "meaning": "Make a careful approximate calculation",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The history gives the aestimare/aestimatus valuing and appraising family, realized as estim in this inherited English form. The University of Michigan resource specifically identifies estimate as a verbal -ate example and contrasts it with the noun pronunciation. This term-level evidence supports estim plus -ate rather than a spelling-only suffix guess. Estim is bound, and no independent estim word is required. The selected informed approximation sense remains the whole meaning; the graph does not substitute the respectful-admiration sense of esteem or invent an es- prefix.",
+        "references": [
+          "anderson-morphology",
+          "mw-estimate-new",
+          "mw-ate-suffix-new",
+          "etym-estimate-hold9",
+          "etym-ate-hold9",
+          "michigan-ate-hold9",
+          "anderson-2e-roots-new"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.estimate.analysis.v1",
+        "lexeme_id": "estimate",
+        "text": "estimate",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.root.estim.value",
+            "type": "root",
+            "canonical": "estim",
+            "surface": "estim",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.ate.verb",
+            "type": "suffix",
+            "canonical": "-ate",
+            "surface": "ate",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "rule": "authored-estim-value-plus-verbal-ate",
+            "surface": "estimate",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "classify",
+      "text": "classify",
+      "min_age": 10,
+      "part_of_speech": "verb",
+      "meaning": "Arrange things in groups by features",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The action puts items into classes or groups; the group sense and verb-forming -ify supply the formation.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.classify.analysis.v1",
+        "lexeme_id": "classify",
+        "text": "classify",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.part.class.group",
+            "canonical": "class",
+            "surface": "class",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.ify.make",
+            "canonical": "-ify",
+            "surface": "ify",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "classify",
+            "rule": "class-group-plus-ify",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "support",
+      "text": "support",
+      "min_age": 10,
+      "part_of_speech": "verb",
+      "meaning": "Give help or provide evidence",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The helping or evidential-support verb is a whole modern base; port is not a harbor in this sense.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.support.analysis.v1",
+        "lexeme_id": "support",
+        "text": "support",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.support",
+            "canonical": "support",
+            "surface": "support",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "achieve",
+      "text": "achieve",
+      "min_age": 10,
+      "part_of_speech": "verb",
+      "meaning": "Succeed in reaching a goal",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The goal-reaching verb is one lexical stem, with no productive a plus chieve split.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.achieve.analysis.v1",
+        "lexeme_id": "achieve",
+        "text": "achieve",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.achieve",
+            "canonical": "achieve",
+            "surface": "achieve",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "reduce",
+      "text": "reduce",
+      "min_age": 10,
+      "part_of_speech": "verb",
+      "meaning": "Make an amount smaller",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The making-smaller verb is one modern base; re does not mean doing a duce action again.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.reduce.analysis.v1",
+        "lexeme_id": "reduce",
+        "text": "reduce",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.reduce",
+            "canonical": "reduce",
+            "surface": "reduce",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "increase",
+      "text": "increase",
+      "min_age": 10,
+      "part_of_speech": "verb",
+      "meaning": "Make an amount larger",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The making-larger verb is lexicalized; the fold noun crease does not supply its meaning.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.increase.analysis.v1",
+        "lexeme_id": "increase",
+        "text": "increase",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.increase",
+            "canonical": "increase",
+            "surface": "increase",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "responsible",
+      "text": "responsible",
+      "min_age": 10,
+      "part_of_speech": "adjective",
+      "meaning": "Trusted to take care of duties",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The source explicitly permits the surface analysis response plus -ible, with final e removed. The stored trusted-with-duties meaning preserves answerability rather than merely responding to a sound.",
+        "references": [
+          "anderson-morphology",
+          "wiktionary-responsible"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.responsible.analysis.v1",
+        "lexeme_id": "responsible",
+        "text": "responsible",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.part.response.answerability",
+            "canonical": "response",
+            "surface": "response",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.ible.capable",
+            "canonical": "-ible",
+            "surface": "ible",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "responsible",
+            "rule": "response-plus-ible-e-loss",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "independent",
+      "text": "independent",
+      "min_age": 10,
+      "part_of_speech": "adjective",
+      "meaning": "Able to act without help",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The negating prefix applies to the complete dependent adjective: able to act without depending on help.",
+        "references": [
+          "anderson-morphology",
+          "wiktionary-independent"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.independent.analysis.v1",
+        "lexeme_id": "independent",
+        "text": "independent",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.affix.in.not",
+            "canonical": "in-",
+            "surface": "in",
+            "type": "prefix",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "growth.dependent",
+            "canonical": "dependent",
+            "surface": "dependent",
+            "type": "stem",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "independent",
+            "rule": "in-not-plus-dependent",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "evidence",
+      "text": "evidence",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "Information that helps show what is true",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The truth-supporting information noun is a whole base; an independent evid stem is not invented.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.evidence.analysis.v1",
+        "lexeme_id": "evidence",
+        "text": "evidence",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.evidence",
+            "canonical": "evidence",
+            "surface": "evidence",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "culture",
+      "text": "culture",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "Shared ways of living and creating",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The shared-way-of-life noun is one lexical base; cult in its current organization sense does not explain it.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.culture.analysis.v1",
+        "lexeme_id": "culture",
+        "text": "culture",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.culture",
+            "canonical": "culture",
+            "surface": "culture",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "tradition",
+      "text": "tradition",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A custom passed between generations",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The inherited-custom noun is lexicalized; a free tradit verb is not invented.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.tradition.analysis.v1",
+        "lexeme_id": "tradition",
+        "text": "tradition",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.tradition",
+            "canonical": "tradition",
+            "surface": "tradition",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "information",
+      "text": "information",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "Facts or knowledge about something",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The sourced current analysis joins inform and noun-forming -ation while retaining the stored knowledge-and-facts sense.",
+        "references": [
+          "anderson-morphology",
+          "wiktionary-information"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.information.analysis.v1",
+        "lexeme_id": "information",
+        "text": "information",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.inform",
+            "canonical": "inform",
+            "surface": "inform",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.ation.action-result",
+            "canonical": "-ation",
+            "surface": "ation",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "information",
+            "rule": "inform-plus-ation",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "climate",
+      "text": "climate",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "The usual weather of a place",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The usual-weather noun is a whole base, not cli plus mate.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.climate.analysis.v1",
+        "lexeme_id": "climate",
+        "text": "climate",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.climate",
+            "canonical": "climate",
+            "surface": "climate",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "method",
+      "text": "method",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A particular way of doing something",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The procedure noun is one lexical base; meth and od are not current meaning-bearing components here.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.method.analysis.v1",
+        "lexeme_id": "method",
+        "text": "method",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.method",
+            "canonical": "method",
+            "surface": "method",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "challenge",
+      "text": "challenge",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A task needing effort or skill",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The difficult-task noun is one modern stem with no detachable productive affix.",
+        "references": [
+          "anderson-morphology"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.challenge.analysis.v1",
+        "lexeme_id": "challenge",
+        "text": "challenge",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "growth.challenge",
+            "canonical": "challenge",
+            "surface": "challenge",
+            "type": "atomic",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "curiosity",
+      "text": "curiosity",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "A wish to learn or understand",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The sourced word-family analysis uses curious plus quality -ity; the exact curiosity spelling explicitly realizes the curios- base allomorph.",
+        "references": [
+          "anderson-morphology",
+          "wiktionary-curiosity"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.curiosity.analysis.v1",
+        "lexeme_id": "curiosity",
+        "text": "curiosity",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.curious",
+            "canonical": "curious",
+            "surface": "curious",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.ity.quality",
+            "canonical": "-ity",
+            "surface": "ity",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "curiosity",
+            "rule": "curious-plus-ity-authored-curios-allomorph",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    },
+    {
+      "id": "communication",
+      "text": "communication",
+      "min_age": 10,
+      "part_of_speech": "noun",
+      "meaning": "The sharing of ideas or information",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex (AI editorial review; not human approval)",
+        "date": "2026-10-16",
+        "method": "Individual contemporary-sense analysis with named framework and lexical evidence; no suffix inference or generated review.",
+        "rationale": "The sourced formation joins communicate and action noun -ion with final e removed, preserving the sharing-information meaning.",
+        "references": [
+          "anderson-morphology",
+          "wiktionary-communication"
+        ]
+      },
+      "analysis": {
+        "schema": 1,
+        "id": "growth.communication.analysis.v1",
+        "lexeme_id": "communication",
+        "text": "communication",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "growth.communicate",
+            "canonical": "communicate",
+            "surface": "communicate",
+            "type": "stem",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.affix.ion.action-result",
+            "canonical": "-ion",
+            "surface": "ion",
+            "type": "suffix",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "surface": "communication",
+            "rule": "communicate-plus-ion-e-loss",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ]
+      }
+    }
+  ]
+}

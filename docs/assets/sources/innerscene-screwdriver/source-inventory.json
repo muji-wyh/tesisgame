@@ -1,0 +1,72 @@
+{
+  "folder": "innerscene-screwdriver",
+  "source_url": "https://www.innerscene.com/tools/library/3d-parts/driver-hand-screwdriver-61ecc731",
+  "download_url": "https://www.innerscene.com/api/library/driver-hand-screwdriver-61ecc731/download",
+  "filename": "hand-screwdriver-tool.glb",
+  "bytes": 112496,
+  "sha256": "b4dba1bd38e34e80fbe27d9ed563fed1b0162c73994d155158ce728bc71fdaca",
+  "creator": "Innerscene",
+  "acquired_on": "2026-10-16",
+  "license": "CC0-1.0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "terms_url": "https://www.innerscene.com/tools/library/terms",
+  "acquisition_status": "downloaded_from_original_source_for_review",
+  "conversion_status": "original_GLB_loaded_without_geometry_or_material_substitution",
+  "integration_status": "source_used_in_integrated_static_home_preview",
+  "review_status": "actual_source_and_composition_renders_inspected_at_phone_size",
+  "mesh_count": 5,
+  "node_count": 6,
+  "triangle_count": 1596,
+  "vertex_count": 1096,
+  "material_count": 3,
+  "image_count": 4,
+  "external_dependencies": [],
+  "available_animations": [],
+  "skin_count": 0,
+  "asset_metadata": {
+    "generator": "Khronos glTF Blender I/O v5.2.40",
+    "version": "2.0"
+  },
+  "extras": {},
+  "node_names": [
+    "Amber screwdriver grip",
+    "Flattened screwdriver tip",
+    "Grip flute",
+    "Grip flute.001",
+    "Long driver steel shaft",
+    "Driver Hand"
+  ],
+  "material_names": [
+    "Utility orange polymer",
+    "Satin galvanized steel",
+    "Charcoal fine-textured powdercoat"
+  ],
+  "source_sha256_verified": true,
+  "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+  "review": {
+    "original_model_views": [
+      "screwdriver-source-front-phone.png",
+      "screwdriver-source-rear-phone.png"
+    ],
+    "derived_composition": [
+      "it-support-full.png",
+      "it-support-preview.png",
+      "it-support-phone.png"
+    ],
+    "source_resolution": [
+      1280,
+      800
+    ],
+    "preview_resolution": [
+      512,
+      320
+    ],
+    "phone_resolution": [
+      296,
+      185
+    ],
+    "visual_observation": "The orange handle and narrow steel shaft are coherent in both source views; it remains a supporting bench detail in the room.",
+    "limitations": "Static illustration source; no rig or animation clips. Full course and theme readiness is not implied."
+  },
+  "integration_scope": "Original GLB retained outside Web export; the reviewed static Home PNG derivative is integrated. Full theme and course readiness remain separate."
+}

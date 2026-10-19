@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "status": "author_read_only_source_text_and_json_observations_not_execution",
+  "author": "/root/recover_delivery",
+  "built_in_import_literals": [
+    "node:fs",
+    "node:path",
+    "node:crypto",
+    "node:assert/strict"
+  ],
+  "unchanged_prior_helper_members": 7,
+  "unchanged_frozen_preparation_r03_members": 17,
+  "supplement_input_files_rehashed": 182,
+  "supplement_inventory_roots": 13,
+  "explicit_runtime_dependency_paths": 961,
+  "bag_collections_observed_from_sealed_input_json": {
+    "expected_inputs": 11740,
+    "evidence_files": 579,
+    "overlapping_paths": 89,
+    "overlap_conflicts": 0,
+    "evidence_only_paths": 490,
+    "complete_union_paths": 12230
+  },
+  "source_text_correspondence": "The entire copied section from function at through inspectAndProject remains byte-identical to frozen helper r01. Only main orchestration changes; no source imports or execution.",
+  "helper_or_guard_execution_performed": false,
+  "syntax_or_project_tests_run": false,
+  "actual_binding_created": false,
+  "production_mutated": false
+}

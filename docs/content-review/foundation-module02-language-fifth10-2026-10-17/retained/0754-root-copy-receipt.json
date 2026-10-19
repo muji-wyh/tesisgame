@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "status": "verified_exact_immutable_copy",
+  "source": "build/professional-english/foundation02-fifth10-independent-review-r01",
+  "source_inventory_sha256": "34cf5ea6b3406f6618b298c432f9e9c47d2c01fe9b2eabdb6a5e3566f28263f0",
+  "copied_at": "2026-10-16T20:26:46.786Z",
+  "production_mutated": false,
+  "new_acceptance": false,
+  "files": [
+    {
+      "path": "inventory.json",
+      "bytes": 1572,
+      "sha256": "34cf5ea6b3406f6618b298c432f9e9c47d2c01fe9b2eabdb6a5e3566f28263f0"
+    },
+    {
+      "path": "README.md",
+      "bytes": 4211,
+      "sha256": "c6b4562629e7964032fe61fe269c85b6a85e688373e9a83e30adf8285babf923"
+    },
+    {
+      "path": "assemble-independent-review.cjs",
+      "bytes": 45810,
+      "sha256": "8ca8d1dd88f9833272d66d4d69879a4ba54ca85903baaff3309ec96a477e4ae1"
+    },
+    {
+      "path": "assembly-result.json",
+      "bytes": 1202,
+      "sha256": "fb94a6c37a89dc3b793b3c166b17d395f317884969d93295fecaaa4b23b0cd36"
+    },
+    {
+      "path": "assembly-start.json",
+      "bytes": 296,
+      "sha256": "29808ea081c4ec7171e42fd30139f469d07b945331b10cbec8cf85b300fba03d"
+    },
+    {
+      "path": "context-review.json",
+      "bytes": 465569,
+      "sha256": "44e3d928da7a4fc06db061c9090480d9182ae2f24698d3d4de7caab4e9549037"
+    },
+    {
+      "path": "input-audit.json",
+      "bytes": 197057,
+      "sha256": "5033253372dc4cb1834355d7d94e372ac70740b94a949d044171db575be59200"
+    },
+    {
+      "path": "review-ledger.json",
+      "bytes": 80788,
+      "sha256": "92c5b326565f95d9dacb8c11f8ca6684b5c39200b4ebcae57f3108a3c7a720b1"
+    },
+    {
+      "path": "source-observations.json",
+      "bytes": 40272,
+      "sha256": "db1c2b165a7696e7ae9e5292ceb51de0de8db6e57b85fe63b424a499504b6562"
+    }
+  ]
+}

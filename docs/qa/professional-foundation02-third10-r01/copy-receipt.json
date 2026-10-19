@@ -1,0 +1,63 @@
+{
+  "schema": 1,
+  "status": "exact_persisted_validation_evidence_copied",
+  "inputs_independently_rehashed": 686,
+  "files": [
+    {
+      "source": "build/professional-english/foundation02-third10-persisted-validation-r01/invoke.cjs",
+      "path": "docs/qa/professional-foundation02-third10-r01/invoke.cjs",
+      "sha256": "3582fb89265590dd9d0c323b477b6956ce82f4739fcbef4e526ac9db079d0314",
+      "bytes": 4529
+    },
+    {
+      "source": "build/professional-english/foundation02-third10-persisted-validation-r01/source-review.json",
+      "path": "docs/qa/professional-foundation02-third10-r01/source-review.json",
+      "sha256": "3c78c938e2ee0374cde51ea078d0c00b30e6ff154d579682486055a2adf212f8",
+      "bytes": 810
+    },
+    {
+      "source": "build/professional-english/foundation02-third10-persisted-validation-r01/attempt-001/start.json",
+      "path": "docs/qa/professional-foundation02-third10-r01/attempt-001/start.json",
+      "sha256": "540a33d87769d9202ebbb1c2c5828bcd5f9e7ffaa40cb7fb5d56b58898fce1ab",
+      "bytes": 85433
+    },
+    {
+      "source": "build/professional-english/foundation02-third10-persisted-validation-r01/attempt-001/receipt.json",
+      "path": "docs/qa/professional-foundation02-third10-r01/attempt-001/receipt.json",
+      "sha256": "509d64c10012756c7d44d0cdf6fb9b204a3c1cbfe1c4e0e76434ea2af36a33f8",
+      "bytes": 2816
+    },
+    {
+      "source": "build/professional-english/foundation02-third10-persisted-validation-r01/attempt-001/command-1.log",
+      "path": "docs/qa/professional-foundation02-third10-r01/attempt-001/command-1.log",
+      "sha256": "00800ad6139ddb4f9836c27309c2e3f73dbcd14e9d38f86099dd9cdaf96554d3",
+      "bytes": 591
+    },
+    {
+      "source": "build/professional-english/foundation02-third10-persisted-validation-r01/attempt-001/command-2.log",
+      "path": "docs/qa/professional-foundation02-third10-r01/attempt-001/command-2.log",
+      "sha256": "20c016aeb906f07f939b8199db26857b10202efae48ec77075fef92d57333f82",
+      "bytes": 24098
+    },
+    {
+      "source": "build/professional-english/foundation02-third10-persisted-validation-r01/attempt-001/command-3.log",
+      "path": "docs/qa/professional-foundation02-third10-r01/attempt-001/command-3.log",
+      "sha256": "e3d9702396ad1581242c30762bf38a29e2fdba813db35be19060646bb32bf028",
+      "bytes": 130
+    },
+    {
+      "source": "build/professional-english/foundation02-third10-persisted-validation-r01/attempt-001/command-4.log",
+      "path": "docs/qa/professional-foundation02-third10-r01/attempt-001/command-4.log",
+      "sha256": "899fc4405b303da4c304f337feddfb9116f2d4bf678ea482effca4a15b86614a",
+      "bytes": 238
+    },
+    {
+      "source": "build/professional-english/foundation02-third10-root-commit-r01/committed-inspection.json",
+      "path": "docs/qa/professional-foundation02-third10-r01/committed-inspection.json",
+      "sha256": "6518469e508c7d08b7cf2387ba55b307a198642bc7a2e911d1fd555bd20d008b",
+      "bytes": 1430
+    }
+  ],
+  "tests_replayed": false,
+  "production_mutated": false
+}

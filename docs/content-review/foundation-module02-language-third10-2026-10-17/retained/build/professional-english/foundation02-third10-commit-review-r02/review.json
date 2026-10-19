@@ -1,0 +1,122 @@
+{
+  "schema": 1,
+  "status": "approved_for_root_guarded_commit",
+  "reviewer": "Codex disposal_test_review",
+  "reviewed_at": "2026-10-16T20:38:49.013963Z",
+  "authors": [
+    "Codex recover_delivery",
+    "Codex root"
+  ],
+  "independent_of_proposal_authors": true,
+  "proposal_inventory": {
+    "path": "build/professional-english/foundation02-third10-commit-proposal-r02/author-inventory.json",
+    "sha256": "174d4f9e7b1570a6199361f5fd3ab8e750e9bf3619ca0080b22653d1ba52bd35"
+  },
+  "prepared_binding": {
+    "path": "build/professional-english/foundation02-third10-prepared-review-r01/binding.json",
+    "sha256": "3139e35a051f9fd4eb38dfca0b122fedc87bf602784c621ce56415006c37ad44"
+  },
+  "reviewed_files": [
+    {
+      "path": "build/professional-english/foundation02-third10-commit-proposal-r02/INPUTS.md",
+      "sha256": "f737e4cfcc3596d746eea48dcc819998c87d81e49c1eb84d2124f292f12b9081"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-proposal-r02/commit.cjs",
+      "sha256": "20ff01bea2ea5027abbe7d02459a9e6caf24e74ea85d22e678bc813545476824"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-proposal-r02/committed-evidence.test.cjs",
+      "sha256": "7b3bb20de53ac5cc50f3632ae7f5a6e945abfaabe91ab76a762b78be8fd5219a"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-proposal-r02/evidence-contract.cjs",
+      "sha256": "6ab049a0544a0b5cc6e2db711bbdc91b6c84f9ec4ef68846c9180b355504e18c"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-proposal-r02/root-commit-input.example.json",
+      "sha256": "809ed1296b0221fad47fc8cc1383d87bb07f4c703fb0e34a39ee0cecb48c353c"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-proposal-r02/author-inventory.json",
+      "sha256": "174d4f9e7b1570a6199361f5fd3ab8e750e9bf3619ca0080b22653d1ba52bd35"
+    }
+  ],
+  "guard_probe_evidence": {
+    "path": "build/professional-english/foundation02-third10-commit-review-r01/execution-foundation02-third10-commit-proposal-r02/result.json",
+    "sha256": "7abb85e5c5b6e2a8cb38d344655198176e2eb7a2e532ecbf8a462ac34d20bf6c"
+  },
+  "evidence_files": [
+    {
+      "path": "build/professional-english/foundation02-third10-commit-review-r02/static-review.json",
+      "sha256": "ce0f56c110873fa4fb49b43bec2004987dc28e0bcb329b3f0befaf997c55d8a8"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-review-r02/evidence-verification.json",
+      "sha256": "0e6dfdd49382e271fc046cbac02e3d35a4b304db01adabf875dfe59298ee1645"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-review-r02/README.md",
+      "sha256": "9b6ecc91d57e9f629bd351ccd57ac661cf8e42929713e17666207667087bfef1"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-review-r01/probe.cjs",
+      "sha256": "3625a6202b7a22b95f19982ec84ee74839acb437ea92975eaa8f6d9f14c94ec2"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-review-r01/inventory.json",
+      "sha256": "827b5cdfd2fc2ca486734b4713c306aedee34159d3f7ec4e81705e7d121ea0d3"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-review-r01/review.json",
+      "sha256": "e599598db023bd1d34448e07010917647a62c2aee6a62844543f956ea5fb7cae"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-review-r01/README.md",
+      "sha256": "b2f278380172c6d01253838bada2f83fc6cc91fe0bffb23b605966e3d1c6199b"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-review-r01/execution-foundation02-third10-commit-proposal-r01/start.json",
+      "sha256": "18a56787e2274695ffb641d40c29ad460acf2f9fbf8ce7ec861b95507f7f5893"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-review-r01/execution-foundation02-third10-commit-proposal-r01/result.json",
+      "sha256": "cb83dc13933486d7ce6c7d9a78ea37dc490609281bb2f50800bcc42ec7b6663d"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-review-r01/execution-foundation02-third10-commit-proposal-r02/start.json",
+      "sha256": "43a47a7098f8f4b4148ce287bb02690e42b5cdcd9c42cb3274372fc79c738af2"
+    },
+    {
+      "path": "build/professional-english/foundation02-third10-commit-review-r01/execution-foundation02-third10-commit-proposal-r02/result.json",
+      "sha256": "7abb85e5c5b6e2a8cb38d344655198176e2eb7a2e532ecbf8a462ac34d20bf6c"
+    }
+  ],
+  "static_blockers": [],
+  "measured_cases": 18,
+  "measured_cases_passed": 18,
+  "inherited_case_results": [],
+  "real_files_unchanged_in_probe": 707,
+  "same_current_files_independently_rehashed": 707,
+  "reviewer_executed_modules_or_tests": false,
+  "reviewer_mutated_production": false,
+  "approval_scope": "Exact root-owned one-shot guarded commit of the five reviewed prepared afterimages and bounded provenance/evidence outputs; this approval does not certify a production commit has occurred.",
+  "retained_failure": {
+    "path": "build/professional-english/foundation02-third10-commit-review-r01/execution-foundation02-third10-commit-proposal-r01/result.json",
+    "sha256": "cb83dc13933486d7ce6c7d9a78ea37dc490609281bb2f50800bcc42ec7b6663d",
+    "disposition": "Preserved r01 rejection; not relabeled as passing or used as successful r02 evidence."
+  },
+  "required_root_actions": [
+    "Use a fresh root manifest with exact proposal, prepared binding, copied-input inventory and this review hash.",
+    "Serialize the content mutation window and provide its token while letting all current guards recheck actual inputs and absent destinations.",
+    "On any failure retain evidence and do not replay or automatically recover.",
+    "After a successful real journal commit, complete separate persisted evidence, audit, affected Node and native morphology checks with fresh root witnesses."
+  ],
+  "limitations": [
+    "Memory-only filesystem execution is not native transaction or power-loss verification.",
+    "The general helper overlap limitation remains explicitly characterized; exact scoped generated destinations have no ancestor-file overlap.",
+    "Normalized author-name exclusion is source-reviewed and is not identity authentication.",
+    "The post-plan comparison is source-reviewed; no separate negative execution for that redundant metadata field is claimed.",
+    "No human, specialist, media, runtime, browser, whole-module or release acceptance is granted."
+  ]
+}

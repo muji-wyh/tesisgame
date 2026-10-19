@@ -1,0 +1,20 @@
+{
+  "status": "prepared-not-executed",
+  "artifacts": [
+    {
+      "path": "inputs.json",
+      "bytes": 2425,
+      "sha256": "be3a8242157e173c2acdd3c744f03f7dfdc5892b92c1f41fd18a3ab0e6b44602"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2665,
+      "sha256": "de8c15c82b44d980198817188c47946c6fddf69fafa11be32668705f1ef137bc"
+    },
+    {
+      "path": "test-source.gd.txt",
+      "bytes": 11004,
+      "sha256": "cf86ac8d35282b834986e962ef8f44360e06cd3eef56c2d1972731b90a7e9a13"
+    }
+  ]
+}

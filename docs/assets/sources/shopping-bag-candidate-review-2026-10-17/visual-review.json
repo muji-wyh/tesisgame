@@ -1,0 +1,257 @@
+{
+  "schema": 1,
+  "status": "candidate_and_brief_accepted_for_scoped_production_proposal",
+  "reviewer": "Codex root independent visual review",
+  "review_date": "2026-10-17",
+  "sense_id": "shopping-bag.goods-carrier.n",
+  "native_receipt_sha256": "48b8553e2b9e4f5eed52340d833608baf10fb1c4140b1d380db1a75d4aa0d62d",
+  "native_report_sha256": "b66061388d92cca865e2e49207a24b01d92001465e4d33b0768b893b65cf852e",
+  "source_inventory_sha256": "39acb66b86d26ab894da4b0862e59ab2886d98f6133f6bc05d5630dae79a0931",
+  "candidate_sha256": "f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+  "source_original_viewed": {
+    "path": "docs/assets/sources/shopping-bag-additional-leads-2026-10-17/acquired/3dicons-bag-dynamic-color.png",
+    "displayed_from_2400_as_1600": true
+  },
+  "native_contact_sheet": {
+    "path": "candidate/output/actual-wordcard-comparison.png",
+    "sha256": "4bace55f87ae52a5f241d4bba383a00b242dac03d3acd06e89cbcfe3a07c9902",
+    "reviewed_at_original_1188_by_860_pixels": true
+  },
+  "checks": 534,
+  "failures": 0,
+  "brief_revision_accepted": true,
+  "original_brief": "Show a reusable fabric shopping bag upright with two handles and a few purchased items peeking above the opening. Make the flexible sides and carrying handles clearly distinct from a rigid shopping basket. Reject a backpack, paper-only carrier definition, wheeled trolley, or decorative gift bag that obscures the intended shopping use.",
+  "accepted_brief": "Show a plain open retail shopping bag upright in a three-quarter view, with a tall solid-sided body, two separate loop handles and a visible opening. Preserve the inspected 3dicons dynamic color source. Keep the tall solid body and paired loops visually distinct from the accepted squat slotted shopping basket. Exclude wheels, backpack straps, a closed top, a bow, a gift tag, tissue paper and gift-specific decoration. The illustration does not narrow the definition to a particular material or require visible contents.",
+  "image_visually_accepted": true,
+  "production_integrated": false,
+  "definition_unchanged": "A bag used to carry purchased items.",
+  "observations": [
+    "At native comparison size the solid tall body, near and far loop handles, and dark open cavity remain visible.",
+    "The bag is distinct from the accepted squat slotted basket through silhouette and handle construction, independent of orange versus green color.",
+    "All five Match pair tints, focused and settled, leave the bag and basket outlines and openings visible; numbered badges do not cover the identifying cues.",
+    "Memory unmatched and generic-check matched states preserve the same cues at current full opacity.",
+    "The separately labeled 0.68 stress rows are lighter but preserve the body and opening. They are not current caller presentation.",
+    "The original source, 414x512 crop and native captures show no gift tag, bow, branding or decorative fill."
+  ],
+  "limitations": [
+    "An empty generic bag cannot prove shopping use independently of context; gift bags may share this form.",
+    "Fabric, flexibility and visible purchases from the old brief are not depicted and are not claimed. The accepted broader carrier definition is unchanged.",
+    "This is an AI visual/editorial decision at the captured component sizes, not human participant recognition or responsive full-board acceptance.",
+    "No source model or animation was acquired. No audio was played, changed or newly approved.",
+    "Production image metadata, final packaging and persisted delivery still require a separate scoped implementation and verification."
+  ],
+  "protected_production_files": 1444,
+  "all_production_sources_unchanged": true,
+  "capture_decisions": [
+    {
+      "file": "bag-match-unmatched.png",
+      "sha256": "589d32067f659d535329968025ac659aa45a655d04cfe8b04a3000d74b4af843",
+      "scope": "current_caller_equivalent",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    },
+    {
+      "file": "basket-match-unmatched.png",
+      "sha256": "fc39c372a23a33e1c2663e503ed20fb055e093f1c834d255706df6bfb9deb83b",
+      "scope": "current_caller_equivalent",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    },
+    {
+      "file": "bag-memory-unmatched.png",
+      "sha256": "65de6273f16b5e6f5321db4424a8a3555e9a075c2210135a563e4a0886ccf51f",
+      "scope": "current_caller_equivalent",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    },
+    {
+      "file": "basket-memory-unmatched.png",
+      "sha256": "9aad34703dd9102b8bb27e937ebaba3c630c5b4f7e44914b0cc53f32994505cd",
+      "scope": "current_caller_equivalent",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    },
+    {
+      "file": "bag-memory-matched.png",
+      "sha256": "17ec116670baa733175a647a64f571263466d8e86cb41af85999658e53baceb3",
+      "scope": "current_caller_equivalent",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    },
+    {
+      "file": "basket-memory-matched.png",
+      "sha256": "edee4b6c7ae74f9f6be6be8af47fba5d35f8b6e074d04d4a41ef393ab2a4a69b",
+      "scope": "current_caller_equivalent",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    },
+    {
+      "file": "bag-match-pair-1-settled.png",
+      "sha256": "32e0ca6eeca3a75b8c37499e7342e3a6675ba4deea294bf5629f70a93d294461",
+      "scope": "current_caller_equivalent",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    },
+    {
+      "file": "basket-match-pair-1-settled.png",
+      "sha256": "1ed1784ba9fd4912dc6270c085648f6b910b9f8926e32d83d042ff1bd794034d",
+      "scope": "current_caller_equivalent",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    },
+    {
+      "file": "bag-match-pair-1-focused.png",
+      "sha256": "432b2dd990d1e8158c7e0cd3ff23586054a8c03879a3992a0c4f44be7b207d44",
+      "scope": "current_caller_equivalent",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    },
+    {
+      "file": "basket-match-pair-1-focused.png",
+      "sha256": "b9986ca90e941bc7d638a4b2545d54364a705b15b45224cb39d1e06fda35a920",
+      "scope": "current_caller_equivalent",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    },
+    {
+      "file": "bag-match-pair-2-settled.png",
+      "sha256": "58c00eefb13791189284b7e79bd592074f24c8c819714e416e037876721006cc",
+      "scope": "current_caller_equivalent",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    },
+    {
+      "file": "basket-match-pair-2-settled.png",
+      "sha256": "acebb9d49869287f79e6804d311c9b6271439aa452cd6b51f6b532e9fcca1e10",
+      "scope": "current_caller_equivalent",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    },
+    {
+      "file": "bag-match-pair-2-focused.png",
+      "sha256": "1d2ae1d47cf11462e8ab1c1b149fd2281a25dd4fa384a39ad8a0395ea16a0f86",
+      "scope": "current_caller_equivalent",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    },
+    {
+      "file": "basket-match-pair-2-focused.png",
+      "sha256": "5246f1f3df898e65b1bf6c2712f8048a4520668f650c81b04cc6c216e1e604d6",
+      "scope": "current_caller_equivalent",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    },
+    {
+      "file": "bag-match-pair-3-settled.png",
+      "sha256": "c4358b9eba92dcc3e81346f6f5ed624a3922260d621e1f5055415f4b9b90d715",
+      "scope": "current_caller_equivalent",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    },
+    {
+      "file": "basket-match-pair-3-settled.png",
+      "sha256": "8dcab2213e629f774440d099cfa4ac5485628a0dbd6d5a52d735feb65db09310",
+      "scope": "current_caller_equivalent",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    },
+    {
+      "file": "bag-match-pair-3-focused.png",
+      "sha256": "f45bd06126c283f0b6b1f968fd5b8e686636a20057b303fb3e7bf5abe41158f2",
+      "scope": "current_caller_equivalent",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    },
+    {
+      "file": "basket-match-pair-3-focused.png",
+      "sha256": "887870975002ce0f0295327feea0a8bea910697de828f507a6721c9b89cb6e64",
+      "scope": "current_caller_equivalent",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    },
+    {
+      "file": "bag-match-pair-4-settled.png",
+      "sha256": "e9265d5a554ba8ecc3d7ad2bad6a8b94a791fef8339f383e1c93ee83f056b631",
+      "scope": "current_caller_equivalent",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    },
+    {
+      "file": "basket-match-pair-4-settled.png",
+      "sha256": "491244a8a067a212c727f77ee604eda09e4209e3b013ec68080a18cb4d230cc7",
+      "scope": "current_caller_equivalent",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    },
+    {
+      "file": "bag-match-pair-4-focused.png",
+      "sha256": "8cf8833e1b1febc2c1cae51c8284747f22c49327a1b1443b7fe2c1d5c8875d0f",
+      "scope": "current_caller_equivalent",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    },
+    {
+      "file": "basket-match-pair-4-focused.png",
+      "sha256": "1eb9ca0950e780739c1e299229d4f12eb463e530185265ca23e45759cdb00a1a",
+      "scope": "current_caller_equivalent",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    },
+    {
+      "file": "bag-match-pair-5-settled.png",
+      "sha256": "2d7d8caa3b7fcc13752a279789f3296b608230a978251d67634af808be4ebfb6",
+      "scope": "current_caller_equivalent",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    },
+    {
+      "file": "basket-match-pair-5-settled.png",
+      "sha256": "75fe38b5667f5e63515be0e2242d0c25e27f70cbabc1d396bfc08d79ac8f2211",
+      "scope": "current_caller_equivalent",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    },
+    {
+      "file": "bag-match-pair-5-focused.png",
+      "sha256": "d66a2a4bdda1f4daededf07f092e33e58f691216fedf30cdf68b77aa496219e3",
+      "scope": "current_caller_equivalent",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    },
+    {
+      "file": "basket-match-pair-5-focused.png",
+      "sha256": "6b5bc60fa5866a2d693e441fd94f659d121770b00218b29a2663420364057be4",
+      "scope": "current_caller_equivalent",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    },
+    {
+      "file": "bag-match-stress-068.png",
+      "sha256": "1e19307a045adc83c27b3c5a32865d32953186f63e100cf5a9380f7383394d94",
+      "scope": "wordcard_only_conservative_stress",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    },
+    {
+      "file": "basket-match-stress-068.png",
+      "sha256": "832db177c0c22ceb309f258690bb7ec785479dd1527860bb090e1176fcc6317f",
+      "scope": "wordcard_only_conservative_stress",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    },
+    {
+      "file": "bag-memory-stress-068.png",
+      "sha256": "edd6074c945551f6dec0a9db660fce80f26a2d598e6f731ccf8d727f5daa9698",
+      "scope": "wordcard_only_conservative_stress",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    },
+    {
+      "file": "basket-memory-stress-068.png",
+      "sha256": "eb6992c06abd32ee2e23efb8864941277e95735b1f0134212125ea1b830b5d13",
+      "scope": "wordcard_only_conservative_stress",
+      "cues_visible": true,
+      "badge_obscures_identifying_cues": false
+    }
+  ]
+}

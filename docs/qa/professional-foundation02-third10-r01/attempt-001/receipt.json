@@ -1,0 +1,80 @@
+{
+  "schema": 1,
+  "ok": true,
+  "started_at": "2026-10-16T20:43:28.371Z",
+  "finished_at": "2026-10-16T20:46:38.402Z",
+  "source_before": "3582fb89265590dd9d0c323b477b6956ce82f4739fcbef4e526ac9db079d0314",
+  "source_after": "3582fb89265590dd9d0c323b477b6956ce82f4739fcbef4e526ac9db079d0314",
+  "committed_receipt": {
+    "path": "docs/content-review/foundation-module02-language-third10-2026-10-17/commit-receipt.json",
+    "sha256": "e247462f7d41a03b2b00b1dee17314987954d26df82f4b6949ddc2982fbbea35"
+  },
+  "checked_inputs": 686,
+  "original_baseline_paths": 680,
+  "additional_candidate_paths": 5,
+  "new_provenance_paths": 1,
+  "commands": [
+    {
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.exe",
+        "tools/validate-professional-content.cjs"
+      ],
+      "started_at": "2026-10-16T20:43:29.349Z",
+      "finished_at": "2026-10-16T20:43:32.535Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log": "command-1.log",
+      "log_sha256": "00800ad6139ddb4f9836c27309c2e3f73dbcd14e9d38f86099dd9cdaf96554d3"
+    },
+    {
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.exe",
+        "--test",
+        "tests/professional-content.test.cjs",
+        "tests/professional-retail-morphology.test.cjs"
+      ],
+      "started_at": "2026-10-16T20:43:34.153Z",
+      "finished_at": "2026-10-16T20:46:16.890Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log": "command-2.log",
+      "log_sha256": "20c016aeb906f07f939b8199db26857b10202efae48ec77075fef92d57333f82"
+    },
+    {
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.exe",
+        "tools/run-godot.cjs",
+        "--headless",
+        "--path",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+        "--script",
+        "res://tests/godot/professional_retail_morphology_tests.gd"
+      ],
+      "started_at": "2026-10-16T20:46:18.947Z",
+      "finished_at": "2026-10-16T20:46:28.220Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log": "command-3.log",
+      "log_sha256": "e3d9702396ad1581242c30762bf38a29e2fdba813db35be19060646bb32bf028"
+    },
+    {
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.exe",
+        "--test",
+        "docs/content-review/foundation-module02-language-third10-2026-10-17/committed-evidence.test.cjs"
+      ],
+      "started_at": "2026-10-16T20:46:30.247Z",
+      "finished_at": "2026-10-16T20:46:37.190Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log": "command-4.log",
+      "log_sha256": "899fc4405b303da4c304f337feddfb9116f2d4bf678ea482effca4a15b86614a"
+    }
+  ],
+  "error": null,
+  "scope": "Fresh persisted draft audit, affected Node suites, native morphology and committed-journal evidence; no full-game, browser, human, specialist, media or module readiness claim."
+}

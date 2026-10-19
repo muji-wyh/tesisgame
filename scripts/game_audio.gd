@@ -30,6 +30,15 @@ const FRAGMENT_ARRIVE_PATH := "res://assets/audio/fragments/arrive.wav"
 const FRAGMENT_CHANNELS := 4
 const FRAGMENT_GAIN := 0.45
 const FRAGMENT_MIN_INTERVAL_MS := 60
+const JELLY_COLLECTION_PATHS := [
+	"res://assets/audio/jelly-match/collect-do.wav",
+	"res://assets/audio/jelly-match/collect-re.wav",
+	"res://assets/audio/jelly-match/collect-mi.wav",
+	"res://assets/audio/jelly-match/collect-fa.wav",
+	"res://assets/audio/jelly-match/collect-sol.wav",
+	"res://assets/audio/jelly-match/collect-la.wav",
+	"res://assets/audio/jelly-match/collect-ti.wav",
+]
 const JELLY_PATHS := {
 	"finish_ready": "res://assets/audio/jelly-finish/ready.ogg",
 	"pick": UI_CLICK_PATH,
@@ -37,7 +46,6 @@ const JELLY_PATHS := {
 	"land": "res://assets/audio/jelly-match/land.wav",
 	"contact": "res://assets/imported-audio/jelly-interaction/contact.wav",
 	"merge": "res://assets/imported-audio/jelly-interaction/merge-together-v3.wav",
-	"pop": "res://assets/audio/jelly-match/clear.wav",
 	"danger": "res://assets/audio/jelly-match/danger.wav",
 	"reward": "res://assets/imported-audio/chest-reference/reward.wav",
 	"assemble": "res://assets/imported-audio/chest-reference/step-detail.wav",
@@ -71,6 +79,7 @@ const POP_SLICE_PATHS := [
 ]
 const ChestSoundBank = preload("res://scripts/chest_sound_bank.gd")
 const ChestFeel = preload("res://scripts/chest_feel.gd")
+const ProfessionalMedia = preload("res://scripts/professional_media_access.gd")
 const CHEST_EVENT_CHANNELS := 3
 
 signal status_changed(message: String)
@@ -126,6 +135,7 @@ var _jelly_players: Array[AudioStreamPlayer] = []
 var _jelly_gains: Dictionary = {}
 var _jelly_cues: Dictionary = {}
 var _jelly_next_player: int = 0
+var _jelly_collection_next_note: int = 0
 var _coin_players: Array[AudioStreamPlayer] = []
 var _coin_next_player: int = 0
 var _fragment_players: Array[AudioStreamPlayer] = []
@@ -136,6 +146,8 @@ var _fragment_last_ms: Dictionary = {}
 func _ready() -> void:
 	set_process(false)
 	_pop_slice_rng.randomize()
+	for path: String in JELLY_COLLECTION_PATHS:
+		_stream(path)
 	for path in POP_SLICE_PATHS:
 		if ResourceLoader.exists(path):
 			_pop_slice_paths.append(path)
@@ -349,7 +361,7 @@ func stop_pair_chest_discovery() -> void:
 
 
 func play_jelly_cue(cue_name: String) -> void:
-	if muted or not active or not available or not JELLY_PATHS.has(cue_name):
+	if muted or not active or not available or (cue_name != "pop" and not JELLY_PATHS.has(cue_name)):
 		return
 	if cue_name == "danger":
 		stop_jelly_danger()
@@ -375,7 +387,14 @@ func play_jelly_cue(cue_name: String) -> void:
 	_jelly_gains[player] = float(JELLY_GAINS[cue_name])
 	_jelly_cues[player] = cue_name
 	_update_jelly_gain()
-	_play(player, JELLY_PATHS[cue_name])
+	var path: String
+	if cue_name == "pop":
+		# Keep the seven-note cycle across pauses and mode changes.
+		path = JELLY_COLLECTION_PATHS[_jelly_collection_next_note]
+		_jelly_collection_next_note = (_jelly_collection_next_note + 1) % JELLY_COLLECTION_PATHS.size()
+	else:
+		path = JELLY_PATHS[cue_name]
+	_play(player, path)
 	set_process(true)
 
 
@@ -915,6 +934,10 @@ func _play(player: AudioStreamPlayer, path: String, loop: bool = false) -> void:
 
 
 func _stream(path: String, loop: bool = false) -> AudioStream:
+	if ProfessionalMedia.is_professional(path):
+		# The selected module was verified before play. Its lease owns this stream;
+		# retaining it in the permanent Growth cache would defeat media eviction.
+		return ProfessionalMedia.resource(path) as AudioStream
 	# Every recording is already in the startup pack. Loading a stream only
 	# reads local resources; gameplay never waits for an audio HTTP request.
 	if cache.has(path):
@@ -937,6 +960,8 @@ func _stream(path: String, loop: bool = false) -> AudioStream:
 func _stop(player: AudioStreamPlayer) -> void:
 	_playback_requests[player] = _playback_requests.get(player, 0) + 1
 	player.stop()
+	if player.stream != null and player.stream.has_meta("professional_media"):
+		player.stream = null
 	if player == voice:
 		_voice_finished()
 

@@ -1,0 +1,208 @@
+{
+  "schema": 1,
+  "status": "exact_actual_afterimage_and_independent_review_copies",
+  "dispatcher": "/root",
+  "preparation_targets": 823,
+  "preparation_artifacts": 833,
+  "retained_artifact_copies": "All 815 retained artifacts remain separately pinned by the exact preparation receipt and target plan; their production destinations are still absent.",
+  "files": [
+    {
+      "source": "build/professional-english/foundation02-fifth10-afterimage-independent-review-r01/callback-counts.json",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/001-callback-counts.json",
+      "bytes": 4408,
+      "raw_sha256": "939e4ac1756ad9342a41ffcf75a6099b87e8333bacb4449906652c1383c86db4"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-afterimage-independent-review-r01/inspect-afterimages.cjs",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/002-inspect-afterimages.cjs",
+      "bytes": 30980,
+      "raw_sha256": "9a45b9ed461e911551de319ca67e6e28cd6df652e9be2abfe5ec34c814d6acd5"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-afterimage-independent-review-r01/inspect-callback-counts.cjs",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/003-inspect-callback-counts.cjs",
+      "bytes": 4136,
+      "raw_sha256": "e02e0868c5da7726897eb1b253428ef9c1910f6da56ceef43f85b9adf6473e72"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-afterimage-independent-review-r01/inspection-r01/inputs.json",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/004-inputs.json",
+      "bytes": 2842202,
+      "raw_sha256": "91e999709105b405b4adfa7d1447d78e5a8d6bbe0ab04dc2d043977be633173a"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-afterimage-independent-review-r01/inspection-r01/inspection.json",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/005-inspection.json",
+      "bytes": 6629,
+      "raw_sha256": "14dc10157f4687cf1321bcd50f033a44a0b7e338dd99693c04cdd21dac5749d7"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-afterimage-independent-review-r01/inspection-r01/started.json",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/006-started.json",
+      "bytes": 156,
+      "raw_sha256": "db10b9fe6ec48bd96705d865685ed4d1d03c552d4a0d4351c15b70d14d71c9af"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-afterimage-independent-review-r01/inventory.json",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/007-inventory.json",
+      "bytes": 1740,
+      "raw_sha256": "91806cfe1ff7c559397e34e16a6b5b26038f3ae0402567d8b395016242279f30"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-afterimage-independent-review-r01/native-review.json",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/008-native-review.json",
+      "bytes": 9607,
+      "raw_sha256": "cbfb692c19949c7bd5d138b91343fef429b9f3bd70b11cfb7c810a92f13b1ffc"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-afterimage-independent-review-r01/projected-review.json",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/009-projected-review.json",
+      "bytes": 9600,
+      "raw_sha256": "65672f5349b942ae7d3b1c7f388d29561a141d0ddb58259511f6e7202ec4a854"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-afterimage-independent-review-r01/README.md",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/010-README.md",
+      "bytes": 3540,
+      "raw_sha256": "83abc324dfad67922bfcba2aa3b6bc7fa311091a8d36b9af7e0e6f05e18a31cd"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-afterimage-independent-review-r01/review.json",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/011-review.json",
+      "bytes": 9610,
+      "raw_sha256": "7815e8fa6bf31e99cdf0dbcc9fc6cb59d15e3e408083d3fd0c4bb98f1dd5e80f"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/execution-end.json",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/012-execution-end.json",
+      "bytes": 145,
+      "raw_sha256": "e4e00da38bd380589bd77ddfb73afd780b08a34faf73d25ba72d16db0fdfa407"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/execution-start.json",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/013-execution-start.json",
+      "bytes": 1140,
+      "raw_sha256": "dd274f943ceae234565618d9a6072a40a6e9be0995a154fb86d403eb18ca193e"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/foundation-module02.json.after",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/014-foundation-module02.json.after",
+      "bytes": 460847,
+      "raw_sha256": "7ae3603a41436cd58c65f5809e1a51938a027fb49d6fcd24c2b790237af4fcab"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/foundation-module02.json.before",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/015-foundation-module02.json.before",
+      "bytes": 372196,
+      "raw_sha256": "9f698ae9b2572d279709b521e6b7d490ffe3d05b1a8ed362add36e07fd4accbc"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/preparation-receipt.json",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/016-preparation-receipt.json",
+      "bytes": 137807,
+      "raw_sha256": "44074a72a3bed006177725c5d6a0303d80fa3c4cf792a425b08924dce8abdc8d"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/production-document.prepared.md",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/017-production-document.prepared.md",
+      "bytes": 1366,
+      "raw_sha256": "fd953c72a7a0ed679f10137c1429eef0e8c1a3cf16d4fe323831bed946239be6"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/production-provenance.prepared.json",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/018-production-provenance.prepared.json",
+      "bytes": 2954512,
+      "raw_sha256": "262310dbe488d24a120a4fe8ea4371e5611d8861f0b3399cdd0cd85c4a8f8679"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/professional_retail_morphology_tests.gd.after",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/019-professional_retail_morphology_tests.gd.after",
+      "bytes": 119226,
+      "raw_sha256": "1c290891fcfa4ad132d128e18f318fbe477888c976554b5830c279f0bbe06c43"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/professional_retail_morphology_tests.gd.before",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/020-professional_retail_morphology_tests.gd.before",
+      "bytes": 114792,
+      "raw_sha256": "db277170d8bc7285204b86784ba2f118cae8f01fa8311eb7ac55f5953cd039a0"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/professional-content.test.cjs.after",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/021-professional-content.test.cjs.after",
+      "bytes": 361493,
+      "raw_sha256": "a580a471118252ed764e86f3f1fceea457859b604c350ad2feaefe681584f2e2"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/professional-content.test.cjs.before",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/022-professional-content.test.cjs.before",
+      "bytes": 347272,
+      "raw_sha256": "0519ea34d948fa75bddc1e29cbfc70f97e7667a4495a947719fbd9ac36cabe28"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/professional-retail-media.test.cjs.after",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/023-professional-retail-media.test.cjs.after",
+      "bytes": 55641,
+      "raw_sha256": "92e002fb593c5429842cc7b66491652f32c97d21824f4c0a0dea4ec035b5ecbb"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/professional-retail-media.test.cjs.before",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/024-professional-retail-media.test.cjs.before",
+      "bytes": 52548,
+      "raw_sha256": "6a278d2dd88941a51e2b4b401af8e21893156c72fcb40a8e05ea7dd63e6e8ef7"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/professional-retail-morphology.test.cjs.after",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/025-professional-retail-morphology.test.cjs.after",
+      "bytes": 93105,
+      "raw_sha256": "997e15f9f0df2baac33813cb91ab3fba5bb694029afa9fdbdb094617ab9fc0cf"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/professional-retail-morphology.test.cjs.before",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/026-professional-retail-morphology.test.cjs.before",
+      "bytes": 89132,
+      "raw_sha256": "8280c7159fc3852cc9c5c80c6a17f0b3963ad8e66f5803adbcabe3d798702a29"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/projection-observation.json",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/027-projection-observation.json",
+      "bytes": 997,
+      "raw_sha256": "8a17f3c1ed0844c749b5b52387a5e5c56ff1e4c9bdfb01f8b170d415d9c17423"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/sources.json.after",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/028-sources.json.after",
+      "bytes": 943093,
+      "raw_sha256": "541b32c28f4ad5ebb5216c147fdb367d524f1f4d925d2f9968b01cf74664b799"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/sources.json.before",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/029-sources.json.before",
+      "bytes": 869470,
+      "raw_sha256": "310be48d81d29917146db162b26d9927007b68ed12380df4a113458d2de7b330"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/target-plan.json",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/030-target-plan.json",
+      "bytes": 376416,
+      "raw_sha256": "cd58e001bfdafac503a8bb9903d2a556afe592d2771244e779d3024b802ab9ac"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01/test-edit-ledger.json",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/031-test-edit-ledger.json",
+      "bytes": 14506,
+      "raw_sha256": "baa1435eb78230507f60d2906ce191af486371663bdc48249c2d6df6c674e767"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-projected-validation-r02/input.json",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/032-input.json",
+      "bytes": 2283626,
+      "raw_sha256": "ec33c157b371d368d0551a50fc768be5bc76eb4cff632158b16dc09212dd78a6"
+    },
+    {
+      "source": "build/professional-english/foundation02-fifth10-root-native-r01/input.json",
+      "target": "docs/qa/professional-foundation02-fifth10-r01/afterimages/033-input.json",
+      "bytes": 3218,
+      "raw_sha256": "58a00ee875f524d7a1561aebe46d2e6d3d6bb0a46a9a4cbe6b9c31dc51e44117"
+    }
+  ]
+}

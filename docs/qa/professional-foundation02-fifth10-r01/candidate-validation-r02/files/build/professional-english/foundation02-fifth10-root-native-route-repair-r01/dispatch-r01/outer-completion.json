@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "kind": "root_outer_process_completion",
+  "dispatcher": "/root",
+  "observed_at": "2026-10-17T00:07:34.668Z",
+  "session_id": 17180,
+  "tool": "write_stdin",
+  "chunk_id": "a4c83b",
+  "exit_code": 0,
+  "still_running": false,
+  "witness": {
+    "path": "build/professional-english/foundation02-fifth10-root-native-route-repair-r01/dispatch-r01/witness.json",
+    "bytes": 2558,
+    "raw_sha256": "72a06095d9e8c71cad165e228e8366a5d3e80f7419457968ac79a7fa51bee405"
+  },
+  "scope": "Root observed actual outer invocation completion. This is not afterimage or candidate-validation acceptance.",
+  "replay_allowed": false
+}

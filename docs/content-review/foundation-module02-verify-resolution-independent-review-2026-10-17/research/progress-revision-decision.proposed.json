@@ -1,0 +1,28 @@
+{
+  "status": "proposed_policy_not_implemented_or_accepted",
+  "old_sense_id": "verify.establish-accuracy.v",
+  "proposed_new_sense_id": "ensure.make-certain.v",
+  "actual_current_revision_observed": "professional-v1",
+  "proposed_future_revision": null,
+  "reason_new_identity": "Verify checks evidence for accuracy; ensure makes a required result/condition certain. These learning targets are different. Neither ensure, check nor confirm is a mastery alias for verify.",
+  "skill_history": "Retain every existing verify skill record and event unchanged under the old ID. Create no ensure history and copy no earned flags, streaks, exposures or rewards. New ensure skills must be earned independently and may then be shared across careers by its new canonical ID.",
+  "expression_history": "Keep expr.foundation.module02.04 as the module slot identity only under a fresh requirements namespace. Keep all old expression completion records and receipts untouched. Copy none into the new namespace. The changed text and new focus are materially different assessed requirements.",
+  "engine_observation": "Both inspected progress implementations keep skills by sense ID; expression completion uses course/module/requirements_revision plus expression ID. Requirement fingerprints include term IDs/skills and expression IDs, not expression text. Changing the term ID under professional-v1 conflicts with a visited fingerprint; changing only sentence text would escape that protection.",
+  "old_id_readability": "Inspected validate_progress functions validate historical skill-key syntax and evidence shape without requiring membership in the current registry. This suggests retired IDs can remain readable; runtime/persistence compatibility still requires later focused testing. No database was read or edited.",
+  "coordinated_release_scope": [
+    "Select an unused reviewed curriculum revision after all sibling content decisions settle.",
+    "Current validator requires all 20 course revisions to match the catalog revision and all 200 module requirement revisions to match their course. Update catalog, all courses/modules, generated manifests and compiled requirements/policies together.",
+    "Retain legacy saved requirements, skills, expression completions, module receipts, pending events/outbox and reward identities unchanged. Do not globally wipe or relabel history.",
+    "Handle an old active learning context or frozen round by explicit revision selection/reload; never silently score its verify answer as ensure.",
+    "Consider unaffected-module completion carry-forward separately; a global namespace change must not blindly copy changed assessments or erase historical achievements. No carry-forward is authorized by this packet."
+  ],
+  "test_requirements_for_future_implementation": [
+    "A legacy verify skill does not satisfy ensure.",
+    "Legacy module02 expression completion does not satisfy the rewritten expression in the new revision.",
+    "Legacy history and receipts remain byte-equivalent after load/save with new registry.",
+    "New ensure correct unassisted evidence is shared by new canonical ID across careers without affecting Growth.",
+    "Old pending/frozen events fail clearly or stay bound to their legacy context; rewards remain idempotent.",
+    "All 20 module02 membership substitutions preserve 50 unique terms and all 20 courses preserve 500 unique terms."
+  ],
+  "tests_run": false
+}

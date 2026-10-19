@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "started_at": "2026-10-16T22:47:13.405Z",
+  "dispatcher": "Codex root",
+  "input": {
+    "path": "build/professional-english/shopping-bag-root-commit-r01/input.json",
+    "sha256": "4db261a88a139983a7a783da551ecb389788e59a6e8fb333ec8862145a81a0e5"
+  },
+  "source_sha256": "b522c987354d2e526cc9194b0dd5239b2592b07aa30f4ddd7bd16261e2c3c087",
+  "exclusive_token_sha256": "3517894ad7911c7d5a5566f953f88b5623362865f849eb73621c7af32f094322",
+  "contract_sha256": "94d2dd3c166a57f4dc5ec7e456944edf4f131e6769ebce4385b4977414f9ee0b"
+}

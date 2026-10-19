@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "status": "frozen_unexecuted_projected_validation_source",
+  "author": "/root",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 2487,
+      "raw_sha256": "62a47b4c5b689ce413d565b39522d178f8246a5ef86cd9086f36c4836821e53a"
+    },
+    {
+      "path": "input.template.json",
+      "bytes": 595,
+      "raw_sha256": "d7ab762c3cad3fe2f0e734610f3a56a88f694ec3f022cef16a0b208f2e2af2ec"
+    },
+    {
+      "path": "revision-lineage.json",
+      "bytes": 2795,
+      "raw_sha256": "cab73e0d6473a36fbd06918ec6cd542948625348d28b5db3cdd0c3d6b9f4b52a"
+    },
+    {
+      "path": "run.cjs",
+      "bytes": 11683,
+      "raw_sha256": "7961b9c2e01a867d64f68ea4dbed83b9e58ff5025b71e8b986b50bc0f7f29f80"
+    }
+  ],
+  "execution": false,
+  "preparation_selected": false,
+  "source_only": true
+}

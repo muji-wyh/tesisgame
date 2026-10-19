@@ -1,0 +1,106 @@
+{
+  "status": "static_author_observations_not_project_validation",
+  "recorded_at": "2026-10-16T21:44:26.9414668Z",
+  "current_notify_snapshot_equals_historical_held_value": true,
+  "historical_notify_object_sha256": "7aaf8490d372bb3c8490c2824955a59e92c3d3dfe4416cb73d772cc6413a0cdc",
+  "seventeen_proposed_token_slices": [
+    {
+      "index": 0,
+      "offset_text": "Please",
+      "token_text": "Please"
+    },
+    {
+      "index": 1,
+      "offset_text": "contact",
+      "token_text": "contact"
+    },
+    {
+      "index": 2,
+      "offset_text": "the",
+      "token_text": "the"
+    },
+    {
+      "index": 3,
+      "offset_text": "supplier",
+      "token_text": "supplier"
+    },
+    {
+      "index": 4,
+      "offset_text": "to",
+      "token_text": "to"
+    },
+    {
+      "index": 5,
+      "offset_text": "confirm",
+      "token_text": "confirm"
+    },
+    {
+      "index": 6,
+      "offset_text": "the",
+      "token_text": "the"
+    },
+    {
+      "index": 7,
+      "offset_text": "delivery",
+      "token_text": "delivery"
+    },
+    {
+      "index": 8,
+      "offset_text": "time",
+      "token_text": "time"
+    },
+    {
+      "index": 9,
+      "offset_text": ",",
+      "token_text": ","
+    },
+    {
+      "index": 10,
+      "offset_text": "and",
+      "token_text": "and"
+    },
+    {
+      "index": 11,
+      "offset_text": "inform",
+      "token_text": "inform"
+    },
+    {
+      "index": 12,
+      "offset_text": "us",
+      "token_text": "us"
+    },
+    {
+      "index": 13,
+      "offset_text": "of",
+      "token_text": "of"
+    },
+    {
+      "index": 14,
+      "offset_text": "any",
+      "token_text": "any"
+    },
+    {
+      "index": 15,
+      "offset_text": "delay",
+      "token_text": "delay"
+    },
+    {
+      "index": 16,
+      "offset_text": ".",
+      "token_text": "."
+    }
+  ],
+  "proposed_source_ids_already_registered": [],
+  "canonical_caveat": {
+    "existing_id": "morph.inform",
+    "existing_lexeme": "informed-consent.informed-voluntary-care-agreement.n",
+    "existing_type": "stem",
+    "existing_review": "pending",
+    "proposed_atomic_id": "english.atomic.inform.give-information",
+    "canonical_family_acceptance": false
+  },
+  "project_modules_imported": false,
+  "tests_run": false,
+  "production_changed": false,
+  "user_saves_opened": false
+}

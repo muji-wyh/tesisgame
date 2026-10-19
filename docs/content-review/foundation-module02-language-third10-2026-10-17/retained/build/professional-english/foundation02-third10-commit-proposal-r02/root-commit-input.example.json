@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "status": "root_authorized_scoped_language_commit",
+  "repository_root": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame",
+  "exclusive_content_mutation_window": true,
+  "root_window_token_sha256": "ROOT_MUST_SUPPLY_SHA256_OF_ITS_EXACT_MUTATION_WINDOW_TOKEN",
+  "prepared_binding": {
+    "path": "build/professional-english/foundation02-third10-prepared-review-r01/binding.json",
+    "sha256": "3139e35a051f9fd4eb38dfca0b122fedc87bf602784c621ce56415006c37ad44"
+  },
+  "validation_witness": {
+    "path": "build/professional-english/foundation02-third10-scoped-validation-r01/root-witness.json",
+    "sha256": "8751130cf9903e8fee5641f4ab679528944332bdc479b28620b2f1a7630f215e"
+  },
+  "candidate_copied_inputs": {
+    "path": "build/professional-english/foundation02-third10-scoped-validation-r01/candidate/copied-inputs.json",
+    "sha256": "ROOT_MUST_SUPPLY_CURRENT_RAW_SHA256"
+  },
+  "proposal_inventory": {
+    "path": "build/professional-english/foundation02-third10-commit-proposal-r02/author-inventory.json",
+    "sha256": "ROOT_MUST_SUPPLY_FROZEN_PROPOSAL_INVENTORY_SHA256"
+  },
+  "commit_technical_review": {
+    "path": "ROOT_MUST_SUPPLY_SEPARATE_INDEPENDENT_REVIEW_PATH",
+    "sha256": "ROOT_MUST_SUPPLY_REVIEW_SHA256"
+  }
+}

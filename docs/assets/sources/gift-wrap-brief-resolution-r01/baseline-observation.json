@@ -1,0 +1,36 @@
+{
+  "captured_at": "2026-10-17T00:53:11.9331589Z",
+  "scope": "Current read-only baseline observation before brief-resolution evidence creation; not a repository-wide transaction snapshot.",
+  "files": [
+    {
+      "path": "data/professional/lexemes/retail-pilot.json",
+      "bytes": 360374,
+      "sha256": "e5029b78d5093acc9d35440df78a5e34e0fdd29d08a2617104a8f7c57efa0df2"
+    },
+    {
+      "path": "docs/assets/sources/gift-wrap-source-recovery-r03/source-review.json",
+      "bytes": 13171,
+      "sha256": "33825e802d458172e1db15d8d828dfc4063205b9a6b13a6311f2b2b5327f0fea"
+    },
+    {
+      "path": "docs/assets/sources/gift-wrap-source-recovery-r03/inventory.json",
+      "bytes": 1578,
+      "sha256": "d2700fbe9998c9542fea9886b5d72052c841678cff0708858be4787ccf194d9e"
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/gift-wrap-source-recovery-r03/inventory.json",
+      "bytes": 2003,
+      "sha256": "6a230be2d25605175923a3f6446e176f37864f1b2c7b9e3f8b11f9d45af1644d"
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/gift-wrap-source-recovery-r03/freesvg-187259-source-preview.png",
+      "bytes": 1442999,
+      "sha256": "da47681a1d8721d1c177772be79bec683a09315a025aa4375379889f2ec27b7a"
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/gift-wrap-source-recovery-r03/source-game-size-inspection.png",
+      "bytes": 346654,
+      "sha256": "1aea3147b62f7230fd5384aa44c82f9a6dc9e951a89fa388a6b45b1b211d9bba"
+    }
+  ]
+}

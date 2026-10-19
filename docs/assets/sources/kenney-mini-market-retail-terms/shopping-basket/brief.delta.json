@@ -1,0 +1,5 @@
+{
+  "before": "Use a three-quarter view of a compact rigid store basket with raised carrying handles and a few recognizable groceries below the rim. Handles and the small handheld scale should remain obvious. Reject wheels, fabric sides, a giant trolley, or a picnic-lid design. Inspect the Mini Market shopping-basket lead before rendering.",
+  "after": "Show an empty compact rigid retail shopping basket in a three-quarter view, with its raised hand-carry handle and open basket clearly visible at the actual minimum card size. Keep the handheld basket distinct from a wheeled shopping cart. Exclude wheels, fabric sides, a lid, and groceries that obscure the handle or opening. Use the inspected original Mini Market shopping-basket mesh without geometry or material changes.",
+  "reason": "Root accepted the narrow empty-basket adjustment after source inspection: the raised hand-carry handle, opening and absence of wheels should stay readable at minimum card size. Added groceries would obscure these cues. The original brief is preserved here and in the source record."
+}

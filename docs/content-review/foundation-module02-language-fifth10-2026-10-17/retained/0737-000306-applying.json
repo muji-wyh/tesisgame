@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 306,
+  "status": "applying",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "58721b3bdbb13648680d8e895bb66defcb528136ba961d4f124297af3e395bc4",
+  "recorded_at": "2026-10-16T22:49:19.685Z",
+  "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-root-guard-r01/invoke.cjs",
+  "work": "work/13f5db63-fb27-4395-b4a2-fe921b80584f.bin"
+}

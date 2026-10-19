@@ -1,0 +1,1594 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.clinical_medicine.module04.01",
+      "text": "Please explain how anatomy and physiology relate to the organ, tissue and cell shown here.",
+      "meaning": "Request an explanation linking structures and functions.",
+      "context": "Discussing an educational illustration.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "explain",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "how",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "anatomy",
+          "start": 19,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "physiology",
+          "start": 31,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "relate",
+          "start": 42,
+          "end": 48
+        },
+        {
+          "index": 7,
+          "text": "to",
+          "start": 49,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "organ",
+          "start": 56,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 61,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "tissue",
+          "start": 63,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 13,
+          "text": "cell",
+          "start": 74,
+          "end": 78
+        },
+        {
+          "index": 14,
+          "text": "shown",
+          "start": 79,
+          "end": 84
+        },
+        {
+          "index": 15,
+          "text": "here",
+          "start": 85,
+          "end": 89
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 89,
+          "end": 90
+        }
+      ],
+      "focus_lexeme_ids": [
+        "anatomy.body-structure-study.n",
+        "physiology.body-function-study.n",
+        "organ.body-functional-structure.n",
+        "tissue.body-cell-organization.n",
+        "cell.basic-living-unit.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module04.02",
+      "text": "The diagram distinguishes skin, muscle, bone, joint and tendon without showing a treatment procedure.",
+      "meaning": "Identify different anatomical structures.",
+      "context": "Reviewing an anatomy learning illustration.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "diagram",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "distinguishes",
+          "start": 12,
+          "end": 25
+        },
+        {
+          "index": 3,
+          "text": "skin",
+          "start": 26,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 30,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "muscle",
+          "start": 32,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 38,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "bone",
+          "start": 40,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 44,
+          "end": 45
+        },
+        {
+          "index": 9,
+          "text": "joint",
+          "start": 46,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 11,
+          "text": "tendon",
+          "start": 56,
+          "end": 62
+        },
+        {
+          "index": 12,
+          "text": "without",
+          "start": 63,
+          "end": 70
+        },
+        {
+          "index": 13,
+          "text": "showing",
+          "start": 71,
+          "end": 78
+        },
+        {
+          "index": 14,
+          "text": "a",
+          "start": 79,
+          "end": 80
+        },
+        {
+          "index": 15,
+          "text": "treatment",
+          "start": 81,
+          "end": 90
+        },
+        {
+          "index": 16,
+          "text": "procedure",
+          "start": 91,
+          "end": 100
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 100,
+          "end": 101
+        }
+      ],
+      "focus_lexeme_ids": [
+        "skin.body-outer-covering.n",
+        "muscle.contractile-body-tissue.n",
+        "bone.skeletal-structure.n",
+        "joint.bone-meeting-structure.n",
+        "tendon.muscle-attachment-tissue.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module04.03",
+      "text": "Please identify the ligament, artery, vein, capillary and nerve on this reviewed diagram.",
+      "meaning": "Request identification of distinct structures.",
+      "context": "Discussing an anatomically reviewed illustration.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "identify",
+          "start": 7,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "ligament",
+          "start": 20,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 28,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "artery",
+          "start": 30,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 36,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "vein",
+          "start": 38,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 42,
+          "end": 43
+        },
+        {
+          "index": 9,
+          "text": "capillary",
+          "start": 44,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": "nerve",
+          "start": 58,
+          "end": 63
+        },
+        {
+          "index": 12,
+          "text": "on",
+          "start": 64,
+          "end": 66
+        },
+        {
+          "index": 13,
+          "text": "this",
+          "start": 67,
+          "end": 71
+        },
+        {
+          "index": 14,
+          "text": "reviewed",
+          "start": 72,
+          "end": 80
+        },
+        {
+          "index": 15,
+          "text": "diagram",
+          "start": 81,
+          "end": 88
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 88,
+          "end": 89
+        }
+      ],
+      "focus_lexeme_ids": [
+        "ligament.joint-supporting-connective-tissue.n",
+        "artery.blood-vessel-away-from-heart.n",
+        "vein.blood-vessel-toward-heart.n",
+        "capillary.small-exchange-blood-vessel.n",
+        "nerve.signal-carrying-fiber-bundle.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module04.04",
+      "text": "The clinician used separate illustrations of the brain, heart, lung, liver and kidney.",
+      "meaning": "Describe the anatomical material used in a consultation.",
+      "context": "Recounting a patient explanation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "clinician",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "used",
+          "start": 14,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "separate",
+          "start": 19,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "illustrations",
+          "start": 28,
+          "end": 41
+        },
+        {
+          "index": 5,
+          "text": "of",
+          "start": 42,
+          "end": 44
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 7,
+          "text": "brain",
+          "start": 49,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 54,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "heart",
+          "start": 56,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 61,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "lung",
+          "start": 63,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 67,
+          "end": 68
+        },
+        {
+          "index": 13,
+          "text": "liver",
+          "start": 69,
+          "end": 74
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 15,
+          "text": "kidney",
+          "start": 79,
+          "end": 85
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 85,
+          "end": 86
+        }
+      ],
+      "focus_lexeme_ids": [
+        "brain.central-nervous-system-organ.n",
+        "heart.blood-pumping-organ.n",
+        "lung.breathing-gas-exchange-organ.n",
+        "liver.metabolic-body-organ.n",
+        "kidney.urine-forming-organ.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module04.05",
+      "text": "Please distinguish the bladder, stomach, intestine, pancreas and spleen on the diagram.",
+      "meaning": "Request clarification of organ locations and identities.",
+      "context": "Checking an educational illustration with a qualified reviewer.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "distinguish",
+          "start": 7,
+          "end": 18
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "bladder",
+          "start": 23,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 30,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "stomach",
+          "start": 32,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 39,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "intestine",
+          "start": 41,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 50,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "pancreas",
+          "start": 52,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 61,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "spleen",
+          "start": 65,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "on",
+          "start": 72,
+          "end": 74
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 14,
+          "text": "diagram",
+          "start": 79,
+          "end": 86
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 86,
+          "end": 87
+        }
+      ],
+      "focus_lexeme_ids": [
+        "bladder.urine-storage-organ.n",
+        "stomach.upper-digestive-organ.n",
+        "intestine.digestive-tube-section.n",
+        "pancreas.digestive-and-hormone-organ.n",
+        "spleen.blood-and-immune-organ.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module04.06",
+      "text": "The note names the diaphragm, pelvis, abdomen, chest and neck as different anatomical references.",
+      "meaning": "Distinguish structures and body regions in a note.",
+      "context": "Clarifying anatomical language.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "note",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "names",
+          "start": 9,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "diaphragm",
+          "start": 19,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 28,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "pelvis",
+          "start": 30,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 36,
+          "end": 37
+        },
+        {
+          "index": 8,
+          "text": "abdomen",
+          "start": 38,
+          "end": 45
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 45,
+          "end": 46
+        },
+        {
+          "index": 10,
+          "text": "chest",
+          "start": 47,
+          "end": 52
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 12,
+          "text": "neck",
+          "start": 57,
+          "end": 61
+        },
+        {
+          "index": 13,
+          "text": "as",
+          "start": 62,
+          "end": 64
+        },
+        {
+          "index": 14,
+          "text": "different",
+          "start": 65,
+          "end": 74
+        },
+        {
+          "index": 15,
+          "text": "anatomical",
+          "start": 75,
+          "end": 85
+        },
+        {
+          "index": 16,
+          "text": "references",
+          "start": 86,
+          "end": 96
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 96,
+          "end": 97
+        }
+      ],
+      "focus_lexeme_ids": [
+        "diaphragm.main-breathing-muscle.n",
+        "pelvis.lower-trunk-bony-region.n",
+        "abdomen.trunk-between-chest-and-pelvis.n",
+        "chest.upper-trunk-region.n",
+        "neck.head-trunk-connecting-region.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module04.07",
+      "text": "Does the note refer to the wrist or the ankle, and which side is described?",
+      "meaning": "Clarify the body region and side.",
+      "context": "Checking an examination note.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Does",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 5,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "note",
+          "start": 9,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "refer",
+          "start": 14,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "to",
+          "start": 20,
+          "end": 22
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 23,
+          "end": 26
+        },
+        {
+          "index": 6,
+          "text": "wrist",
+          "start": 27,
+          "end": 32
+        },
+        {
+          "index": 7,
+          "text": "or",
+          "start": 33,
+          "end": 35
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 9,
+          "text": "ankle",
+          "start": 40,
+          "end": 45
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 45,
+          "end": 46
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 12,
+          "text": "which",
+          "start": 51,
+          "end": 56
+        },
+        {
+          "index": 13,
+          "text": "side",
+          "start": 57,
+          "end": 61
+        },
+        {
+          "index": 14,
+          "text": "is",
+          "start": 62,
+          "end": 64
+        },
+        {
+          "index": 15,
+          "text": "described",
+          "start": 65,
+          "end": 74
+        },
+        {
+          "index": 16,
+          "text": "?",
+          "start": 74,
+          "end": 75
+        }
+      ],
+      "focus_lexeme_ids": [
+        "wrist.hand-forearm-joint-region.n",
+        "ankle.foot-leg-joint-region.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module04.08",
+      "text": "The illustration distinguishes the esophagus from the trachea and the airway.",
+      "meaning": "Separate the digestive passage from breathing structures.",
+      "context": "Discussing an anatomy illustration.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "illustration",
+          "start": 4,
+          "end": 16
+        },
+        {
+          "index": 2,
+          "text": "distinguishes",
+          "start": 17,
+          "end": 30
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 4,
+          "text": "esophagus",
+          "start": 35,
+          "end": 44
+        },
+        {
+          "index": 5,
+          "text": "from",
+          "start": 45,
+          "end": 49
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 7,
+          "text": "trachea",
+          "start": 54,
+          "end": 61
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 10,
+          "text": "airway",
+          "start": 70,
+          "end": 76
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 76,
+          "end": 77
+        }
+      ],
+      "focus_lexeme_ids": [
+        "esophagus.muscular-tube-carrying-swallowed-material-to-stomach.n",
+        "trachea.airway-tube-between-larynx-and-main-bronchi.n",
+        "airway.passage-through-which-air-moves-during-breathing.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module04.09",
+      "text": "The respiratory system and cardiovascular system have different roles that the clinician will explain.",
+      "meaning": "Request a clear explanation of body-system roles.",
+      "context": "Preparing an educational discussion.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "respiratory",
+          "start": 4,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "system",
+          "start": 16,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 23,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "cardiovascular",
+          "start": 27,
+          "end": 41
+        },
+        {
+          "index": 5,
+          "text": "system",
+          "start": 42,
+          "end": 48
+        },
+        {
+          "index": 6,
+          "text": "have",
+          "start": 49,
+          "end": 53
+        },
+        {
+          "index": 7,
+          "text": "different",
+          "start": 54,
+          "end": 63
+        },
+        {
+          "index": 8,
+          "text": "roles",
+          "start": 64,
+          "end": 69
+        },
+        {
+          "index": 9,
+          "text": "that",
+          "start": 70,
+          "end": 74
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 11,
+          "text": "clinician",
+          "start": 79,
+          "end": 88
+        },
+        {
+          "index": 12,
+          "text": "will",
+          "start": 89,
+          "end": 93
+        },
+        {
+          "index": 13,
+          "text": "explain",
+          "start": 94,
+          "end": 101
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 101,
+          "end": 102
+        }
+      ],
+      "focus_lexeme_ids": [
+        "respiratory-system.body-system-supporting-breathing-and-gas-exchange.n",
+        "cardiovascular-system.heart-and-blood-vessel-system.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module04.10",
+      "text": "Please explain the connective tissue and mucous membrane shown in this illustration.",
+      "meaning": "Request an explanation of tissue terms.",
+      "context": "Discussing a medically reviewed diagram.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "explain",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "connective",
+          "start": 19,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": "tissue",
+          "start": 30,
+          "end": 36
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 37,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "mucous",
+          "start": 41,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "membrane",
+          "start": 48,
+          "end": 56
+        },
+        {
+          "index": 8,
+          "text": "shown",
+          "start": 57,
+          "end": 62
+        },
+        {
+          "index": 9,
+          "text": "in",
+          "start": 63,
+          "end": 65
+        },
+        {
+          "index": 10,
+          "text": "this",
+          "start": 66,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": "illustration",
+          "start": 71,
+          "end": 83
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 83,
+          "end": 84
+        }
+      ],
+      "focus_lexeme_ids": [
+        "connective-tissue.tissue-supporting-connecting-or-binding-body-structures.n",
+        "mucous-membrane.moist-lining-of-certain-body-cavities-and-passages.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-imaging",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

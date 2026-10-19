@@ -1,0 +1,4316 @@
+[
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/bakery_sign_long_texture.png",
+    "bytes": 19297,
+    "sha256": "281dcc2cfd56d867966546c634a59dd7f08a9f719d12f75cb224b99baed504b7",
+    "compressed_bytes": 14180
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/bakery_sign_texture.png",
+    "bytes": 12099,
+    "sha256": "54eda70f9e116b2f20611fb781105af3e9ffc4eecd91442c6b2792b1d017aace",
+    "compressed_bytes": 10708
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/basket_A.fbx",
+    "bytes": 32124,
+    "sha256": "122820b21daaecb5b4b106e45c7c390c946a0003669c75bf7ba5c04e75758b44",
+    "compressed_bytes": 17840
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/basket_B.fbx",
+    "bytes": 27004,
+    "sha256": "9e6c0ecd2a953ec2e5b7717d93121c10526370a6598228cf568eaf44ba200e70",
+    "compressed_bytes": 12675
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/bread.fbx",
+    "bytes": 29564,
+    "sha256": "a8f384b390243cc85c7c6d115d1d016f872745416ab7f8184d1aafc8c46594f4",
+    "compressed_bytes": 15286
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/bread_oven.fbx",
+    "bytes": 57020,
+    "sha256": "63e02a6aafbaa5bc533d355a9ed088c66d3ba59a28641261e88c24eed6e13ebd",
+    "compressed_bytes": 33189
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/cash_register.fbx",
+    "bytes": 73708,
+    "sha256": "659f178270cf0b13c073546a7184c617c6cc0c3ab4d5bf225c92262ab895a0b2",
+    "compressed_bytes": 56432
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/chair.fbx",
+    "bytes": 33420,
+    "sha256": "6b0f4fe4a00717b8f1b57059eb5bce4a79c40eb1ad2160d8451f3a27154ef163",
+    "compressed_bytes": 19043
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/coffee_cup_takeaway.fbx",
+    "bytes": 25548,
+    "sha256": "bfbb8d75272fcfebcd589b2d6f29f23c963aeb1a39fc7861c6ae6231dbcccbbe",
+    "compressed_bytes": 11197
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/coffee_cup_takeaway_stacked.fbx",
+    "bytes": 35404,
+    "sha256": "6a7b9e4c4136ae32bedd0354087c7060e49c1ff18f5f9da6933d3a163e21c90e",
+    "compressed_bytes": 20882
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/coffee_machine.fbx",
+    "bytes": 59052,
+    "sha256": "fab64019f4537609725b9daba17013b20286d139c806e387ae2662f74a97c5ed",
+    "compressed_bytes": 42717
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/cookie.fbx",
+    "bytes": 32012,
+    "sha256": "9a854db89f2c4de8009606f0b955aac2fab3e0daf2270614be6e5f1903d3275a",
+    "compressed_bytes": 17660
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/cookie_jar.fbx",
+    "bytes": 29564,
+    "sha256": "ebabbefdc43eae1483ee2e71ebc5770cdda2d3c926ad5a3e25958569933754fe",
+    "compressed_bytes": 15233
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/countertop_closet_A_large.fbx",
+    "bytes": 21564,
+    "sha256": "697c502903876f112916e679c137fe91c55cacc21ec3e17bc0a1ce801fa2f1ac",
+    "compressed_bytes": 7144
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/countertop_closet_A_small.fbx",
+    "bytes": 21564,
+    "sha256": "18a082d1e5030930556ebb798488c972ab40c52252855ea4e69c5d228ce176cc",
+    "compressed_bytes": 7152
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/countertop_closet_B_large.fbx",
+    "bytes": 21308,
+    "sha256": "2e6bf5280225acb9f52eda7b03da372d3589d30f813f71c0e73a63cf503e881c",
+    "compressed_bytes": 6892
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/countertop_closet_B_small.fbx",
+    "bytes": 21292,
+    "sha256": "7bcf6e0a31b8d8b19807ea1b69d1e6ea73a524021154367e6e9c7081d4c1444f",
+    "compressed_bytes": 6883
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/countertop_corner_inner.fbx",
+    "bytes": 21292,
+    "sha256": "aee7c64e323bd71f69e903c2582a4a187ea252c03000070a6530419d85f146ce",
+    "compressed_bytes": 6872
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/countertop_counter_outer.fbx",
+    "bytes": 21244,
+    "sha256": "fbcec3eff9468a3d9a9444f9db3acff54afb9877b8d987557746cbbb99ac5db8",
+    "compressed_bytes": 6807
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/countertop_straight_A_large.fbx",
+    "bytes": 22076,
+    "sha256": "44ef7f216c838886d3ab59b45f31f5c7c03806ebe8a281c8d372437fdea4ab92",
+    "compressed_bytes": 7708
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/countertop_straight_A_short.fbx",
+    "bytes": 21708,
+    "sha256": "bd0c091c3b2c5c67079ede66527d56dfda8b54f9b3f5e4e4140f3a7328386cd3",
+    "compressed_bytes": 7319
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/countertop_straight_B_long.fbx",
+    "bytes": 21724,
+    "sha256": "85836998a735516eb560b42bfb4c4352cd7593543b3951b79840c7895d14599d",
+    "compressed_bytes": 7333
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/countertop_straight_B_short.fbx",
+    "bytes": 21372,
+    "sha256": "5f05ad0e4dfd7765bba35fb26acae360ddc0dcbb6dc9b35b846f6e08bae291ac",
+    "compressed_bytes": 6934
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/counter_table.fbx",
+    "bytes": 25884,
+    "sha256": "c8ce53eac0ca4d70156045c274a0e299729466c72aacc76ff16578bfcb7683d5",
+    "compressed_bytes": 11444
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/cream_puff.fbx",
+    "bytes": 27276,
+    "sha256": "1d661a988cc8ec6aa76d3cdffd4750ef032b77bb70242b0f1311fea6f323ea7f",
+    "compressed_bytes": 12966
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/curtains.fbx",
+    "bytes": 31980,
+    "sha256": "bd5f7528405587fb9be552c23186d9f0467dae2d757b5a3bc67d9f1c00b966ab",
+    "compressed_bytes": 17597
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/display_case_long.fbx",
+    "bytes": 31756,
+    "sha256": "f63940235bcf51f96241e4dba83b606040e9f839e520a45325c0eb5cad996e38",
+    "compressed_bytes": 15697
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/display_case_short.fbx",
+    "bytes": 30716,
+    "sha256": "28b689351ddb71bd74215e663b8eb03e0b6a35f3a0ead0947f0afb429b76da8d",
+    "compressed_bytes": 14651
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/door_modular.fbx",
+    "bytes": 29564,
+    "sha256": "aa4003b8d14c6389dd0359b211feaa0ebfc6c1509888d97ba3f80a3a3a37aa3b",
+    "compressed_bytes": 13514
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/dough_ball.fbx",
+    "bytes": 21388,
+    "sha256": "25849ed83fd4f6c287559714d8e8aad4301418f5545218a3ebd68cd02d6f5903",
+    "compressed_bytes": 6977
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/dough_rolled_A.fbx",
+    "bytes": 22284,
+    "sha256": "c6d09b208f0900a578c70402dc402e8e6f68602fb2cb8104b549ecc985cc58de",
+    "compressed_bytes": 7921
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/dough_rolled_B.fbx",
+    "bytes": 22508,
+    "sha256": "894f3090a4232f22a40753aecfa10a161cb9300b78da2d2c3a0fa402c75deb56",
+    "compressed_bytes": 8171
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/dough_roller.fbx",
+    "bytes": 27820,
+    "sha256": "c63ccb4193caeda68dd29fa99913d91c83a28876cb46fe536e2beca1a2abe2c7",
+    "compressed_bytes": 13398
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/egg_A.fbx",
+    "bytes": 23404,
+    "sha256": "a91b79398c8f4bbd7fd80586f7c14de2bfa4462e65d0287a995fd2fa59fe6450",
+    "compressed_bytes": 9053
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/egg_B.fbx",
+    "bytes": 23404,
+    "sha256": "d018040d594cf19626e1889383c30c6842095bf03f0a012cbc1e78e8591abba1",
+    "compressed_bytes": 9055
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/floor_connection.fbx",
+    "bytes": 23356,
+    "sha256": "9d91b47449093cd958616f11ef5c1a4758901d8cbe60c113a9ac0331763724cc",
+    "compressed_bytes": 8987
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/floor_tiled.fbx",
+    "bytes": 22604,
+    "sha256": "0940c6d38133581024eeebc01b4b4b5ef4ee0c45fd229aea77d651f9d472b805",
+    "compressed_bytes": 8159
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/floor_wood.fbx",
+    "bytes": 22700,
+    "sha256": "d4986eaa0ee49b28ad9456ccf06e6bac4d13a5e5178b62f699c60676e5e6c2c5",
+    "compressed_bytes": 8313
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/flour_sack_closed.fbx",
+    "bytes": 31004,
+    "sha256": "86b9486252f2c40c36473d812ac4ab2fafd7187cccb31a5e36ee5c8141ea63d8",
+    "compressed_bytes": 16641
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/flour_sack_open.fbx",
+    "bytes": 34380,
+    "sha256": "809a743a83efbfc33675d92bd08ab56164a15de1d8c846653347d3670422db47",
+    "compressed_bytes": 19999
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/macaron_blue.fbx",
+    "bytes": 28124,
+    "sha256": "754eec125a1d0f5b76b1b064e4f0c8291b06e66509e1b1257c9e6e5815845a65",
+    "compressed_bytes": 13658
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/macaron_pink.fbx",
+    "bytes": 28140,
+    "sha256": "d3768de65bb9f26a5883af73bed48826b7ccad17f4cd290b902c9bd0ed7b94fc",
+    "compressed_bytes": 13651
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/macaron_yellow.fbx",
+    "bytes": 28140,
+    "sha256": "04ab9669afeb40f446c832dd146c6effe26a57f9d9766e69ade6330db352402d",
+    "compressed_bytes": 13659
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/milk.fbx",
+    "bytes": 28652,
+    "sha256": "b341ec98d7b9253d9cff15bf5c88530255db7825a303d7bc861e8fa2b106db6a",
+    "compressed_bytes": 14284
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/mixing_bowl.fbx",
+    "bytes": 26732,
+    "sha256": "af102f735c3ca45774ccc0638f3bbbed9a2db3d0d1c8cbe19762decb6c41304e",
+    "compressed_bytes": 12372
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/mug_A_blue.fbx",
+    "bytes": 29372,
+    "sha256": "0fb4fbf18e3df8a32bcfccabb862f1aafcb23b12914b1c290866d57539a1a82d",
+    "compressed_bytes": 15040
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/mug_A_pink.fbx",
+    "bytes": 29436,
+    "sha256": "2f7c099297e46ae2ed005bc8d37cb54877101aeac030a7e4e8bbd2f3cff40e8a",
+    "compressed_bytes": 15112
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/mug_A_yellow.fbx",
+    "bytes": 29340,
+    "sha256": "7d8f91d68a1685c9fba935eb393df504faf03a8beb05b1069966878ece1960cb",
+    "compressed_bytes": 15004
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/mug_B.fbx",
+    "bytes": 30620,
+    "sha256": "91fa588a86510af51fadcd84366cdf9e71bfb9718ae20e74ecddd5906e9d2637",
+    "compressed_bytes": 16273
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/mug_B_stacked.fbx",
+    "bytes": 41468,
+    "sha256": "f5cb6b723bbd46466bd8e3f5ffae51717992fcd6a9431eab0fd92e2b07e2e371",
+    "compressed_bytes": 26853
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/pastry_stand_A.fbx",
+    "bytes": 30956,
+    "sha256": "a293175ab68819920db193c1dea331261a3ff32b616d5f6379b70008ef8a949b",
+    "compressed_bytes": 16621
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/pastry_stand_A_covered.fbx",
+    "bytes": 38524,
+    "sha256": "5926eaed6acc22b0fa77575877a73b55d94f7a9a0faf364cb9f08976d82323c8",
+    "compressed_bytes": 22395
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/pastry_stand_A_decorated.fbx",
+    "bytes": 56156,
+    "sha256": "c135c48b54e2bd0a15db91df68e00c0d8562453b1ee4784b6c608c350c272f8d",
+    "compressed_bytes": 41630
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/pastry_stand_B.fbx",
+    "bytes": 39788,
+    "sha256": "d641698d54ab7ec05f15c7a9b79581afb112ec62716e64f93f5946309ac9c037",
+    "compressed_bytes": 25327
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/pastry_stand_B_decorated.fbx",
+    "bytes": 67836,
+    "sha256": "3ed2a2a2bf6e6cf7d12468820da5014b1847b06ffdf12d327240e88ac6508066",
+    "compressed_bytes": 52490
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/plate.fbx",
+    "bytes": 30428,
+    "sha256": "d71a9a1764a3263afcbd72f4195904cab7c502617767fb12db6764f5431e70f3",
+    "compressed_bytes": 16079
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/plate_stacked.fbx",
+    "bytes": 37420,
+    "sha256": "e38ad53cd6fb99a6a7cd21e4b245ac1eb11c88223c4ede9ffb31108e43a35c88",
+    "compressed_bytes": 22997
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/pretzel.fbx",
+    "bytes": 38940,
+    "sha256": "758796596ff0360af2ddb0146c8e227e326b0d884f728901a87dae39f9d5e2e3",
+    "compressed_bytes": 24720
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/pricing_card.fbx",
+    "bytes": 25356,
+    "sha256": "6dc479d8e42986a39bd442d02694bcbaacd86567c116abddbec9038e61268bec",
+    "compressed_bytes": 11058
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/rug.fbx",
+    "bytes": 24076,
+    "sha256": "8c1095ffa960b235a553c8920fe14e3347035c587699457ad0b06db1f170be08",
+    "compressed_bytes": 9756
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/scale.fbx",
+    "bytes": 39868,
+    "sha256": "8e81bcb717eea8d673ebcd8fa82d312a7bbdd002f6e75149607a95fe67bb74f4",
+    "compressed_bytes": 25485
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/serving_tray.fbx",
+    "bytes": 27228,
+    "sha256": "891c144b6201291115c2e32171382f3f53d02b9a993169c2656c5704aefb1f21",
+    "compressed_bytes": 12912
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/stand_mixer.fbx",
+    "bytes": 69276,
+    "sha256": "8faa75a665594a3a6c3278bc68fd9391c935aaf8ecd4abfe2d457076c343481f",
+    "compressed_bytes": 51972
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/table_round_A.fbx",
+    "bytes": 28284,
+    "sha256": "070583e660c2d1f6a62a888af3077ae47b2570f53fbe2c3091e5547943a82653",
+    "compressed_bytes": 13947
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/table_round_B.fbx",
+    "bytes": 35740,
+    "sha256": "0409f85b9a2cf103c1ffc2397fb3e257880191be4bb983a0607e2af0d46b24ae",
+    "compressed_bytes": 21367
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/table_round_C.fbx",
+    "bytes": 32764,
+    "sha256": "7afdce8a2d345b010f7f4ac85ba4ce1330603b7978986d3d77de6f6c984b9831",
+    "compressed_bytes": 18331
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/tiny_treats_texture_1.png",
+    "bytes": 20974,
+    "sha256": "31e5c7c81bfba644a59797b1907519592c7728d4af98a705449975dd929482e5",
+    "compressed_bytes": 16533
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/tin_A_beige.fbx",
+    "bytes": 26220,
+    "sha256": "01b4d9034483debc16f8e8601be9e75e23b68df980be533601812db71cb6e56c",
+    "compressed_bytes": 11877
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/tin_A_brown.fbx",
+    "bytes": 26204,
+    "sha256": "6500c947ebaa2bc62eb15cfeeb826217ead18f1dc0ffaafb32e27127b0cdf4b4",
+    "compressed_bytes": 11878
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/tin_A_grey.fbx",
+    "bytes": 26204,
+    "sha256": "4831287cbb3f9c60b26d3e41a62e9ceb998bcda5e92da9a6d808c95342b55642",
+    "compressed_bytes": 11870
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/tin_B_beige.fbx",
+    "bytes": 26252,
+    "sha256": "f5c883e4e5b131cc8d995c8d08d3784b3504c9f8ff0ed36a8526d384fe80b1cb",
+    "compressed_bytes": 11914
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/tin_B_brown.fbx",
+    "bytes": 26236,
+    "sha256": "28b45696014fe465e5c6966659a064d38ef6bab12b58e2eeebdd5efe7f38deef",
+    "compressed_bytes": 11911
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/tin_B_grey.fbx",
+    "bytes": 26252,
+    "sha256": "d30a7e08713bfed35bf6eeb26551803d96cdeafd33ee25a1a84ffb3b736af968",
+    "compressed_bytes": 11907
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_modular_panelled_bakery_corner_inner_A.fbx",
+    "bytes": 20012,
+    "sha256": "73eebbea69f66d4dd4da27617eedaedc2f1849cc3c817bc96b6de9fef7dc74c0",
+    "compressed_bytes": 5351
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_modular_panelled_bakery_corner_inner_B.fbx",
+    "bytes": 24092,
+    "sha256": "1d7edcbdfba03fe625925649ed3dde0f36339bbf6d6955c48a3362b48d75c883",
+    "compressed_bytes": 9703
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_modular_panelled_bakery_corner_outer_A.fbx",
+    "bytes": 24636,
+    "sha256": "a800ebeadc5a4aead0c36bcd19e7f38440ea77fa3ee56ec690d43319b4b32f24",
+    "compressed_bytes": 10267
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_modular_panelled_bakery_corner_outer_B.fbx",
+    "bytes": 20108,
+    "sha256": "f180ab08955a15ee72e6b608a209ef82cba8a32bd137c605a3e705816a2fe459",
+    "compressed_bytes": 5449
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_modular_panelled_bakery_doorway.fbx",
+    "bytes": 20060,
+    "sha256": "4c1a77713db07da715c5f339dc49cb17631ba6667498ba7871fd9c0c90729a22",
+    "compressed_bytes": 5495
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_modular_panelled_bakery_half_corner_inner_A.fbx",
+    "bytes": 20092,
+    "sha256": "444b5da3083981426cf2dd3f681a76ad0380b4f51d0a0295f1f9a2d5cf56d6da",
+    "compressed_bytes": 5425
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_modular_panelled_bakery_half_corner_inner_B.fbx",
+    "bytes": 22956,
+    "sha256": "4962cda93df347e83f6335f94626e46bbbca829bfe051134140daf9a5ee82d9a",
+    "compressed_bytes": 8560
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_modular_panelled_bakery_half_corner_outer_A.fbx",
+    "bytes": 23452,
+    "sha256": "8804b2d6d53ca3e34b7a6841e2dd2c12d752d4c2df09267e02b013fd026701dd",
+    "compressed_bytes": 9073
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_modular_panelled_bakery_half_corner_outer_B.fbx",
+    "bytes": 20124,
+    "sha256": "f17cd990317250597a26d046ce4826076428c880bae6b81162a77bdcd95cb24e",
+    "compressed_bytes": 5469
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_modular_panelled_bakery_half_straight_A.fbx",
+    "bytes": 21548,
+    "sha256": "38f17041c0d6eb02030a9713c4000f0eb4910cfa01532e71bb1c902ef265eeb5",
+    "compressed_bytes": 7123
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_modular_panelled_bakery_half_straight_B.fbx",
+    "bytes": 19708,
+    "sha256": "314b99f5a9577aaa4390ce6d3e9ef401020591dd8fbea697901badd3f93aa94d",
+    "compressed_bytes": 4913
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_modular_panelled_bakery_straight_A.fbx",
+    "bytes": 22124,
+    "sha256": "2328ba4e480f36376cd076a5a0b17b993f94fdce11433acdecd9a478a29b8919",
+    "compressed_bytes": 7742
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_modular_panelled_bakery_straight_B.fbx",
+    "bytes": 19692,
+    "sha256": "f4019bd8935276f894af613797ba80d56ef88ff6edc940059eec9dbb6dd6a706",
+    "compressed_bytes": 4897
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_modular_panelled_bakery_window_full_center_A.fbx",
+    "bytes": 22028,
+    "sha256": "06b014b6463b18647b2454c8ffb7ae087d8bddcc62839bac36420ca35bf8af4c",
+    "compressed_bytes": 7632
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_modular_panelled_bakery_window_full_center_B.fbx",
+    "bytes": 19932,
+    "sha256": "c402c794dfd22fc3a84c51eb2c35743b4dad47dba087ec42896bacdd228a333f",
+    "compressed_bytes": 5263
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_modular_panelled_bakery_window_full_left_A.fbx",
+    "bytes": 22780,
+    "sha256": "bb1fbd34730d6731b4bc8fb0b49d271ad40b862019ae509f4558a61c68d22aee",
+    "compressed_bytes": 8397
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_modular_panelled_bakery_window_full_left_B.fbx",
+    "bytes": 20092,
+    "sha256": "e7274c5067690a8920aea36e114398100ddb250dfca673e6fa2309d5f83f9cc9",
+    "compressed_bytes": 5492
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_modular_panelled_bakery_window_full_right_A.fbx",
+    "bytes": 22764,
+    "sha256": "22ce410df09fac3c788a83a13ac09ecca329792b107e3499e517674f20092e74",
+    "compressed_bytes": 8374
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_modular_panelled_bakery_window_full_right_B.fbx",
+    "bytes": 20092,
+    "sha256": "2835a5b33bded7ac314044691145b10ee895e6d622f12bf355137023191f2cbe",
+    "compressed_bytes": 5502
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_modular_panelled_bakery_window_large_A.fbx",
+    "bytes": 23580,
+    "sha256": "9e37b2bfd8a5b89d514d5f3316158634c7844934c4c6b5b99264a13d004c0742",
+    "compressed_bytes": 9198
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_modular_panelled_bakery_window_large_B.fbx",
+    "bytes": 20348,
+    "sha256": "8c8b5ebf403e78219697eaa7cc096d569cfd1c1cb4a332594712beb31de95c9b",
+    "compressed_bytes": 5789
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_modular_panelled_bakery_window_small_A.fbx",
+    "bytes": 23532,
+    "sha256": "709b77bd04354e5b3703d3a4244e6475a8ffe8052b8d4e054623056bf312efb9",
+    "compressed_bytes": 9158
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_modular_panelled_bakery_window_small_B.fbx",
+    "bytes": 20348,
+    "sha256": "cd8df54a6556b795b433be11d37deb3b28d670af49af484ea44057ac4faa022a",
+    "compressed_bytes": 5788
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_panelled_bakery_corner_inner.fbx",
+    "bytes": 24172,
+    "sha256": "ccb9841d6159a2a1b98653e7a5d08f52456272343c73491bb4e2369d7979fa96",
+    "compressed_bytes": 9811
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_panelled_bakery_corner_outer.fbx",
+    "bytes": 24748,
+    "sha256": "3cbfec57febfcd54197be07ab02560196cf714eea9512c1f5e63a8f83a3bf646",
+    "compressed_bytes": 10397
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_panelled_bakery_doorway.fbx",
+    "bytes": 32716,
+    "sha256": "845935f52a2159b02296fbb103c6ebf200ea32d5d516fa167812d8fedc44459a",
+    "compressed_bytes": 14978
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_panelled_bakery_straight.fbx",
+    "bytes": 22044,
+    "sha256": "c7822404a8cf8c8f36a72b3130f32e8c9a69a5d04fdba84a887d3438bf941dad",
+    "compressed_bytes": 7675
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_panelled_bakery_window_full_center.fbx",
+    "bytes": 26604,
+    "sha256": "94c1da8cda62d40bb7beba0ba663a9bd71384eae49ea2a341820451d8659f2ca",
+    "compressed_bytes": 10541
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_panelled_bakery_window_full_left.fbx",
+    "bytes": 28348,
+    "sha256": "a907eb7b47eca70896aecb7f933dc4d62d9fb4da165d4c2644ca03c3b3115ad8",
+    "compressed_bytes": 12280
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_panelled_bakery_window_full_right.fbx",
+    "bytes": 28252,
+    "sha256": "e4436658694c7e1f87b9e461c108edf5f157cc855d04800345617c94a2ac0933",
+    "compressed_bytes": 12166
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_panelled_bakery_window_large.fbx",
+    "bytes": 29548,
+    "sha256": "d10e981180eac842caba33862a77be9e775299958356ffeb7c258a29736d9712",
+    "compressed_bytes": 13483
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_panelled_bakery_window_small.fbx",
+    "bytes": 29452,
+    "sha256": "36bd6a022b87c2f9342323a8fd390120fb2536deb832916374f9fc86ce72dada",
+    "compressed_bytes": 13377
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_shelf_bakery_A.fbx",
+    "bytes": 23260,
+    "sha256": "933f40919d0bfa140f82bec114c88a20b4835cdc0ff6b1c0e773f545f4a3ca1b",
+    "compressed_bytes": 8930
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_shelf_bakery_B.fbx",
+    "bytes": 25852,
+    "sha256": "f06bb699eb19e2b25715f0192f371f7d7b82f4c4a92a9ee6fafa3ebb30835844",
+    "compressed_bytes": 11533
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_shelf_bakery_C.fbx",
+    "bytes": 22188,
+    "sha256": "f475630aa2e514b86a5eb623a55d5734f274e4bb7876ee10fe534259de56a30f",
+    "compressed_bytes": 7824
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_shelf_bakery_end.fbx",
+    "bytes": 20332,
+    "sha256": "47317b3035403e1903a4ab1dba4c90498cc12efba68594d5a3e7a325c743f1a7",
+    "compressed_bytes": 5809
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_sign_large.fbx",
+    "bytes": 25196,
+    "sha256": "f165b8c0ca69e21793631d8aa8dbe70bd4eab416e21254795dba13d69aa3de65",
+    "compressed_bytes": 7920
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/wall_sign_small.fbx",
+    "bytes": 25420,
+    "sha256": "8419be1abca80fe54aee242022ffdc9ddfe65a6ed129c9d62339fdacb3082a89",
+    "compressed_bytes": 8211
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/whisk.fbx",
+    "bytes": 33452,
+    "sha256": "57a03baf7553572232f9988d2d949ad9f23f8f6e9dfffbabefddf814c6e1f484",
+    "compressed_bytes": 19189
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/window_full_center_modular.fbx",
+    "bytes": 23484,
+    "sha256": "4b58710fa613efcc1cc3a5296017c5d2fd3ec58fd0cfddf7673bf4b4ca3335f8",
+    "compressed_bytes": 7356
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/window_full_left_modular.fbx",
+    "bytes": 24252,
+    "sha256": "3a5c392482cea0e385887f1079ed82ffcd392bc832c4b29963f475d4411183d4",
+    "compressed_bytes": 8177
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/window_full_right_modular.fbx",
+    "bytes": 24268,
+    "sha256": "5560319a73ca3a7c2dc0b90aa8a2938ccfe913e258503ede1c7d46b5fd312a54",
+    "compressed_bytes": 8187
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/window_large_modular.fbx",
+    "bytes": 24844,
+    "sha256": "3b97cd889cf48e95775a118374b54a79bf7114ded56ff82768156c4a0b63c024",
+    "compressed_bytes": 8741
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx/window_small_modular.fbx",
+    "bytes": 24812,
+    "sha256": "8c32de3ccac77addfc9b038ec0073b113c8a95ee9852d85d02503a0295ed1c6e",
+    "compressed_bytes": 8722
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/bakery_sign_long_texture.png",
+    "bytes": 19297,
+    "sha256": "281dcc2cfd56d867966546c634a59dd7f08a9f719d12f75cb224b99baed504b7",
+    "compressed_bytes": 14180
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/bakery_sign_texture.png",
+    "bytes": 12099,
+    "sha256": "54eda70f9e116b2f20611fb781105af3e9ffc4eecd91442c6b2792b1d017aace",
+    "compressed_bytes": 10708
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/basket_A.fbx",
+    "bytes": 32396,
+    "sha256": "5d43f2c0e180d18b55b51a0bdade6f3edd67f3d0fa2e3b2c165f2bde28f35f2a",
+    "compressed_bytes": 18207
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/basket_B.fbx",
+    "bytes": 27068,
+    "sha256": "5c3b62a024cbf7cbd85f130b02c159fa91cc37f1fba3206553c484e7947dde1a",
+    "compressed_bytes": 12834
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/bread.fbx",
+    "bytes": 29532,
+    "sha256": "61cfbc7093ad2119f59a525d78f19fb114f3bb57cdf1300eaa5b387a33404776",
+    "compressed_bytes": 15338
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/bread_oven.fbx",
+    "bytes": 58780,
+    "sha256": "6f75863e8430463d66a0ba3f891bf0a0a1cc45603f4408b23b414a9fb7003168",
+    "compressed_bytes": 34737
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/cash_register.fbx",
+    "bytes": 73884,
+    "sha256": "65b582c7d812306727abcc730e110693eee2ca82daf86bbe7689a4ef9af7574f",
+    "compressed_bytes": 56672
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/chair.fbx",
+    "bytes": 33788,
+    "sha256": "f48e2ca32b12c9f4a2cd9df4dbe12fe73cdaaa672f887a7210e4d5c6c5ca27da",
+    "compressed_bytes": 19512
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/coffee_cup_takeaway.fbx",
+    "bytes": 25628,
+    "sha256": "59b65366dd86bddf01b6ee7016770abbd40e2c454c5faebb9b2cc8700a5dbee6",
+    "compressed_bytes": 11354
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/coffee_cup_takeaway_stacked.fbx",
+    "bytes": 35516,
+    "sha256": "25bd224818e2f1e827095f058fd6cfacd1958bc1f4e3263ccd22ae99a5209f17",
+    "compressed_bytes": 21083
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/coffee_machine.fbx",
+    "bytes": 59548,
+    "sha256": "7047c39cb3cf8794572783dfb00df624709fef18e721a325eeddbe58596feda3",
+    "compressed_bytes": 43327
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/cookie.fbx",
+    "bytes": 32172,
+    "sha256": "90442354a14894d1e7c60539952b140523878e05c6c772828906c8394a036e75",
+    "compressed_bytes": 17877
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/cookie_jar.fbx",
+    "bytes": 29644,
+    "sha256": "02b3f755c787f7ac8b3975e3e92f000050c167debb18ae5d3b996773aca35807",
+    "compressed_bytes": 15371
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/countertop_closet_A_large.fbx",
+    "bytes": 21788,
+    "sha256": "f67a881600323d5a434fc8272150ce66e2343d5632e8e4dccdd98807813fbfb0",
+    "compressed_bytes": 7479
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/countertop_closet_A_small.fbx",
+    "bytes": 21788,
+    "sha256": "d6d68b5868c16a41cddcb8d97beb701a5936dced93557907dcf1ac8bd9011528",
+    "compressed_bytes": 7481
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/countertop_closet_B_large.fbx",
+    "bytes": 21436,
+    "sha256": "0c33e3b385e0b237351e94cccb9c5f1aea5fd57109a6ac78618d6b6c670468b7",
+    "compressed_bytes": 7119
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/countertop_closet_B_small.fbx",
+    "bytes": 21388,
+    "sha256": "73dd0bf9458b9c7a5199260fed73dd694f583274d21d8d49abdca50253ac2a84",
+    "compressed_bytes": 7058
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/countertop_corner_inner.fbx",
+    "bytes": 21516,
+    "sha256": "21a3d6488778043910a49952d52d513b824d07c0c063fe67105e975141ce4ff5",
+    "compressed_bytes": 7205
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/countertop_counter_outer.fbx",
+    "bytes": 21340,
+    "sha256": "8909e358cb14c32f139cf0848362889e861c5c38cc827bdf030ba780ab8cd7be",
+    "compressed_bytes": 6996
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/countertop_straight_A_large.fbx",
+    "bytes": 22204,
+    "sha256": "031ca96d55b4485b1cca0a5e63af8a5b215052307f994ebc7288d019f8f252c4",
+    "compressed_bytes": 7918
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/countertop_straight_A_short.fbx",
+    "bytes": 21820,
+    "sha256": "7fd973636c9b54c6d15da1bc2573da2ef05a78091ae4bc204ccd815ca0e8d774",
+    "compressed_bytes": 7529
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/countertop_straight_B_long.fbx",
+    "bytes": 21884,
+    "sha256": "c2ac75716f5ca4150e434530a8503c313e78406be21e461ad76edc4393ae38f9",
+    "compressed_bytes": 7599
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/countertop_straight_B_short.fbx",
+    "bytes": 21500,
+    "sha256": "329745b37c576aa85e68fa9547a87ef75aa6c23e86aaee024d1117c75446604f",
+    "compressed_bytes": 7174
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/counter_table.fbx",
+    "bytes": 26108,
+    "sha256": "263dd56eb236c9e7b0489e009fc3c59f322c5b4dd097f80a06d8a8d80f70044f",
+    "compressed_bytes": 11769
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/cream_puff.fbx",
+    "bytes": 27196,
+    "sha256": "111d5f80185f15325aa91c1a5d2be232b1cf23a1da3a73fe7cee15b577f3a33c",
+    "compressed_bytes": 12961
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/curtains.fbx",
+    "bytes": 32924,
+    "sha256": "735bf47b3fc1ea074dcc9c12fb6e49cd8edc1d56cfa87cae05f1d3dccbcb5ee8",
+    "compressed_bytes": 18569
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/display_case_long.fbx",
+    "bytes": 32108,
+    "sha256": "b9632b00e71b0d88c3b12ad2614ec41c0c46e4e39fcd81ad2fc2d25e72759396",
+    "compressed_bytes": 16113
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/display_case_short.fbx",
+    "bytes": 30988,
+    "sha256": "25be0e5a3149f7d5b6da76be38218ced4a71b43fed32ddec09e7bc9e9397b5f7",
+    "compressed_bytes": 15015
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/door_modular.fbx",
+    "bytes": 29756,
+    "sha256": "d19d7e408e08c7625452084e2ad38715c0fedefb4b615f311610732a6445ff25",
+    "compressed_bytes": 13756
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/dough_ball.fbx",
+    "bytes": 21308,
+    "sha256": "9b2888630952124e2b41b7d15f124d1641684e7624a1bfcda70d10f9d515e38f",
+    "compressed_bytes": 6985
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/dough_rolled_A.fbx",
+    "bytes": 22540,
+    "sha256": "d42155ac7a9c6997c71b4599fe8a04972efcee437a68ab8272b391a4741e1c97",
+    "compressed_bytes": 8289
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/dough_rolled_B.fbx",
+    "bytes": 22652,
+    "sha256": "3ad69e523cc7fc5f307cc378df13059a95eece78223f0aa4755d6e14fb3d14c5",
+    "compressed_bytes": 8403
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/dough_roller.fbx",
+    "bytes": 27756,
+    "sha256": "4980f2b22733c8828ed16cdf789b720a502edb9befba9b4a73aebaec1b828c1e",
+    "compressed_bytes": 13411
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/egg_A.fbx",
+    "bytes": 23292,
+    "sha256": "4030a0f75318332386d559d25941e9da14a9c7c9ab038b2c71e3afc8fc4dc9c9",
+    "compressed_bytes": 9018
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/egg_B.fbx",
+    "bytes": 23292,
+    "sha256": "af6b45a75ea5e2cbb406dbef8c360df772465b859c88caa1a226c15d255bff7a",
+    "compressed_bytes": 9022
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/floor_connection.fbx",
+    "bytes": 23468,
+    "sha256": "0546ac49f66ad87df803536b2ac52f2b6d607731dd2056fad5d4fe99879f34b5",
+    "compressed_bytes": 9157
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/floor_tiled.fbx",
+    "bytes": 22572,
+    "sha256": "98ea26e5ffa08b35278b6176d38edf193a7bf7a20ec5eacc38f7a3d794f9b741",
+    "compressed_bytes": 8208
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/floor_wood.fbx",
+    "bytes": 22780,
+    "sha256": "95bf9d6143f1192fccf65d97ebece5600fde2b39160fa9674de941e187de6bb1",
+    "compressed_bytes": 8474
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/flour_sack_closed.fbx",
+    "bytes": 31004,
+    "sha256": "53d72b00975d1ae8813164a1adad1fb0fe2ee7819279a9d8f72050b953a83a22",
+    "compressed_bytes": 16718
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/flour_sack_open.fbx",
+    "bytes": 34396,
+    "sha256": "4f845ef35da4d36bb37626553d29bc26d56035399b01ab17237b71cc2130b373",
+    "compressed_bytes": 20125
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/macaron_blue.fbx",
+    "bytes": 28300,
+    "sha256": "8cd6f897adf2815a4154d4c3bb59c187caf112d1e6d5324b56f63e5e92d21b2a",
+    "compressed_bytes": 13993
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/macaron_pink.fbx",
+    "bytes": 28316,
+    "sha256": "13df637d6a3d8cd595325366e6c3d30abe9769b69e353067ea24c228698a817a",
+    "compressed_bytes": 13986
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/macaron_yellow.fbx",
+    "bytes": 28316,
+    "sha256": "426527d500c5af08d5a7e6e3a8c7dab88673b0ccd020f5d478bdc0aab8af503d",
+    "compressed_bytes": 13996
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/milk.fbx",
+    "bytes": 28716,
+    "sha256": "d0433046ac15071f84928c2f3596e66d8c667dffc9366346109e405a4f1afadf",
+    "compressed_bytes": 14415
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/mixing_bowl.fbx",
+    "bytes": 26716,
+    "sha256": "f7b7225661ed9eaee6fadcb1e7770200f61ffd7bdb056af3dfbdb5a24d2cbf63",
+    "compressed_bytes": 12436
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/mug_A_blue.fbx",
+    "bytes": 29564,
+    "sha256": "4fbb0aa9e9a1e03f3a8c44826c9b7221086114792b58736fb81b3dd029e0a08b",
+    "compressed_bytes": 15309
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/mug_A_pink.fbx",
+    "bytes": 29628,
+    "sha256": "91f626ffe8611260d66e140888b755d0a05a7f0708bef2199d11a2e60de5eef8",
+    "compressed_bytes": 15369
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/mug_A_yellow.fbx",
+    "bytes": 29532,
+    "sha256": "8bed5c8165bd0d9ad4b393b13cdb2aad9065ebe12feec6bede929d8fd110ecce",
+    "compressed_bytes": 15267
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/mug_B.fbx",
+    "bytes": 30828,
+    "sha256": "2899ab4b198422088ecfc7399f8036b28dfd938f14ad5c1325a3999f1c9cb54e",
+    "compressed_bytes": 16562
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/mug_B_stacked.fbx",
+    "bytes": 41708,
+    "sha256": "ad9d52475e1a42788743aad0611ec5e4ab131096bff8d2ce028ef71ab671de4e",
+    "compressed_bytes": 27211
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/pastry_stand_A.fbx",
+    "bytes": 31212,
+    "sha256": "93a70e8898fcdfa9a2fc56e45bf5f9345dfade8479ac9c76c391b6b2fb7962bd",
+    "compressed_bytes": 16977
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/pastry_stand_A_covered.fbx",
+    "bytes": 39068,
+    "sha256": "d1216c2aa6e36ea5867d99b4a2ada9092298443b913e15e2f404bef61590f0fd",
+    "compressed_bytes": 23056
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/pastry_stand_A_decorated.fbx",
+    "bytes": 56812,
+    "sha256": "6b4d3a83be25b4a2c23c9d54f0e89974cd57cf736a70f32ab6320298c2cab5cb",
+    "compressed_bytes": 42409
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/pastry_stand_B.fbx",
+    "bytes": 40284,
+    "sha256": "36baffcd519ecce0ec1a326c159034ceffe6125fedc3ff095332f1a83ab68e92",
+    "compressed_bytes": 25945
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/pastry_stand_B_decorated.fbx",
+    "bytes": 68620,
+    "sha256": "d9269df83996a09c9ff180868b408ada2ee7a0a5b8c677aaaaa605e3f43377de",
+    "compressed_bytes": 53511
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/plate.fbx",
+    "bytes": 30716,
+    "sha256": "5543430a852eb630932ddf41b8bd20a7a2321d0c891edfed4e8e9790ed52a5a9",
+    "compressed_bytes": 16448
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/plate_stacked.fbx",
+    "bytes": 37788,
+    "sha256": "bd16cdba46ecaea38cfe49e4cdcd271af1bc6d592e98f9d62d8d8cd2568de1a5",
+    "compressed_bytes": 23437
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/pretzel.fbx",
+    "bytes": 38860,
+    "sha256": "0208bb099640816c923a003c1d0c6db88ccd251cb157585294482eac8b23fcb7",
+    "compressed_bytes": 24729
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/pricing_card.fbx",
+    "bytes": 25292,
+    "sha256": "526d3f7c55ffb4366996a64877aa6031bb1e5600f5d5194ababefd250ffd4787",
+    "compressed_bytes": 11069
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/rug.fbx",
+    "bytes": 24156,
+    "sha256": "be07cdc6dbbd51c17a41e6c6d6303c58a5060f9696697381384e2df8ed75a2e2",
+    "compressed_bytes": 9923
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/scale.fbx",
+    "bytes": 39980,
+    "sha256": "aefdb48434536425fd13964647e05c9ab4df0f7a2c1c10b9dcc42254b13cd3d2",
+    "compressed_bytes": 25663
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/serving_tray.fbx",
+    "bytes": 27468,
+    "sha256": "56e3e9d6c3f4773e20fb40993d22563419b8d4aeb169e4f9361d2cdea60a2c1c",
+    "compressed_bytes": 13223
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/stand_mixer.fbx",
+    "bytes": 70028,
+    "sha256": "2745d13e6239b2dc10776ad5f005307300fcbd64c53a2ec1bc441e92251e4563",
+    "compressed_bytes": 52787
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/table_round_A.fbx",
+    "bytes": 28492,
+    "sha256": "855049579a4894930d48c681dc8fa79e30089468c18055c583f46f6a4ed6332d",
+    "compressed_bytes": 14223
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/table_round_B.fbx",
+    "bytes": 36092,
+    "sha256": "0390b6f988b74b70493c3dd73bb29175d9f6ae39acd378616efb5b602ad7a84c",
+    "compressed_bytes": 21730
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/table_round_C.fbx",
+    "bytes": 33292,
+    "sha256": "6b98776dcefde7773ac0cecb9d6081fd54914eaed973d60eb24edee04694c242",
+    "compressed_bytes": 18987
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/tiny_treats_texture_1.png",
+    "bytes": 20974,
+    "sha256": "31e5c7c81bfba644a59797b1907519592c7728d4af98a705449975dd929482e5",
+    "compressed_bytes": 16533
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/tin_A_beige.fbx",
+    "bytes": 26300,
+    "sha256": "aaa5bc5a87d014d8510409cd20007d0f8a79ac25bbc6aa9f2e178bf25c61a83b",
+    "compressed_bytes": 12051
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/tin_A_brown.fbx",
+    "bytes": 26284,
+    "sha256": "909d5794fff1b3582017a775bbc0e9d71cb28201df438b9afe163cb5b7a1818a",
+    "compressed_bytes": 12042
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/tin_A_grey.fbx",
+    "bytes": 26284,
+    "sha256": "baf72beb6689d741df9afb00c38f2c234f95ce6460673439a4dbfa78e62ee247",
+    "compressed_bytes": 12046
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/tin_B_beige.fbx",
+    "bytes": 26332,
+    "sha256": "3cbf022224277d6c3b4bcece2e2dbb8e233a3a2034aa082590ab920c11c0bca8",
+    "compressed_bytes": 12101
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/tin_B_brown.fbx",
+    "bytes": 26332,
+    "sha256": "6c3cc0e635fc67e9ce637c974153aba585af22a5b89f3e8b8de5c832f2d9fb76",
+    "compressed_bytes": 12105
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/tin_B_grey.fbx",
+    "bytes": 26348,
+    "sha256": "3bfbc28532446b0c2ceb6eb0a80757cc0e84ee27bcbf2a7fded10c710f59eb1d",
+    "compressed_bytes": 12105
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_modular_panelled_bakery_corner_inner_A.fbx",
+    "bytes": 20076,
+    "sha256": "3774aa18087ee0f54935a3eecd361f1b40fbd7fd692d044a4dcdeabecec6933f",
+    "compressed_bytes": 5514
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_modular_panelled_bakery_corner_inner_B.fbx",
+    "bytes": 24524,
+    "sha256": "db7b9d29f737dcd217efb177603a3a38daeead2a96163eff33a7768106f6c82d",
+    "compressed_bytes": 10235
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_modular_panelled_bakery_corner_outer_A.fbx",
+    "bytes": 25052,
+    "sha256": "59380ae9d7f118eea36ea304c8b00e7b8bf3db684a3caeeddaaffa87e56cee2a",
+    "compressed_bytes": 10773
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_modular_panelled_bakery_corner_outer_B.fbx",
+    "bytes": 20124,
+    "sha256": "5cd06c59904a11d7b56d432cbb1776d4996e7c561221fc96747cb2a0224c602a",
+    "compressed_bytes": 5564
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_modular_panelled_bakery_doorway.fbx",
+    "bytes": 20108,
+    "sha256": "354c2111677c5a88f2a36aef856352060bb2e6e4d6f077838955f3704732bc27",
+    "compressed_bytes": 5628
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_modular_panelled_bakery_half_corner_inner_A.fbx",
+    "bytes": 20076,
+    "sha256": "c28e16e62aa4e061b2d34f35887e4bc00a4c059e92368f017c19649cebfc6149",
+    "compressed_bytes": 5496
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_modular_panelled_bakery_half_corner_inner_B.fbx",
+    "bytes": 23180,
+    "sha256": "c5f986d2068be4291e3471279acabfb5b23256fd7b7759d86798f0e40cd0ef3f",
+    "compressed_bytes": 8889
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_modular_panelled_bakery_half_corner_outer_A.fbx",
+    "bytes": 23644,
+    "sha256": "2ddab27bd03773d10f235e2b655ede550b8b5a4d1111910433cfed7817149a87",
+    "compressed_bytes": 9363
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_modular_panelled_bakery_half_corner_outer_B.fbx",
+    "bytes": 20092,
+    "sha256": "5eba3d729d7a768c815dc084852e03e5f50c6b2c313d8fc8cedf5806addb1dd9",
+    "compressed_bytes": 5516
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_modular_panelled_bakery_half_straight_A.fbx",
+    "bytes": 21564,
+    "sha256": "eb402762c37ecceb57f6780e823af38032177192023db43b8539e6a2d2761529",
+    "compressed_bytes": 7233
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_modular_panelled_bakery_half_straight_B.fbx",
+    "bytes": 19660,
+    "sha256": "999ed5d5863221584e88d4038a7d30e7823885f610a727a80d6c558653cbb480",
+    "compressed_bytes": 4956
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_modular_panelled_bakery_straight_A.fbx",
+    "bytes": 22220,
+    "sha256": "3543b2c1a19c4d4a9ea553ffde41e4d0b6421dd27cf05cb0e3853a2d9ed2dccf",
+    "compressed_bytes": 7914
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_modular_panelled_bakery_straight_B.fbx",
+    "bytes": 19660,
+    "sha256": "d4a9800954e4541d0a90771cf51f7734139f43867e0366c1120f6197c94215d3",
+    "compressed_bytes": 4954
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_modular_panelled_bakery_window_full_center_A.fbx",
+    "bytes": 22156,
+    "sha256": "1593925ff5b0e03fc97c0d0d63dbb49c0a167c1fe34b7c9c881bae68a9f9d5a2",
+    "compressed_bytes": 7835
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_modular_panelled_bakery_window_full_center_B.fbx",
+    "bytes": 19916,
+    "sha256": "fe5a5dfbda8e77e1881d8a92b299ec36eafc77b30f27a2d01cbd28733eeec108",
+    "compressed_bytes": 5330
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_modular_panelled_bakery_window_full_left_A.fbx",
+    "bytes": 22956,
+    "sha256": "701a5eb35ffb70979471a800bec925da96c5084a7adc7c08c2f3073741e0e9ff",
+    "compressed_bytes": 8652
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_modular_panelled_bakery_window_full_left_B.fbx",
+    "bytes": 20108,
+    "sha256": "0caf72cf8557bc19995c4ff3be3482f2bcea4b2a4b1f8ccd594844e7e987038a",
+    "compressed_bytes": 5605
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_modular_panelled_bakery_window_full_right_A.fbx",
+    "bytes": 22988,
+    "sha256": "d7795bf28e42f0cda1245857d4ff57d71f685d30d7671ba407fa5db848552946",
+    "compressed_bytes": 8662
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_modular_panelled_bakery_window_full_right_B.fbx",
+    "bytes": 20124,
+    "sha256": "25b00db5a35573d1b3108d8b2223db4ffe721b17610713cca860752c36160ba5",
+    "compressed_bytes": 5628
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_modular_panelled_bakery_window_large_A.fbx",
+    "bytes": 23660,
+    "sha256": "cf2004caf231f1036c79833671d6fe7713e3a85856a10ea1574ccbd4e8e21143",
+    "compressed_bytes": 9363
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_modular_panelled_bakery_window_large_B.fbx",
+    "bytes": 20412,
+    "sha256": "b73335661a98f77b4db5d3897337b6bc3de70a2691cb5537d885cdf14aad36ed",
+    "compressed_bytes": 5974
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_modular_panelled_bakery_window_small_A.fbx",
+    "bytes": 23580,
+    "sha256": "c4a9a5478bf10c8e1b8186a08312b2027e0d4c3edd23ba867f554deacee702d5",
+    "compressed_bytes": 9301
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_modular_panelled_bakery_window_small_B.fbx",
+    "bytes": 20412,
+    "sha256": "fb0fcaf3ba966020d387d57827ea2bb2347bbb55b467256fee8aa91a43aa001e",
+    "compressed_bytes": 5965
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_panelled_bakery_corner_inner.fbx",
+    "bytes": 24620,
+    "sha256": "c288417dc47c85b169fce6ec539c5ecac8f5c7f167f3accdeeba1301d94bb5a2",
+    "compressed_bytes": 10349
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_panelled_bakery_corner_outer.fbx",
+    "bytes": 25164,
+    "sha256": "a968e01cdb8a55ebd68c897eef58ff31d3d41abfc560650f0713c45b09d71df6",
+    "compressed_bytes": 10914
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_panelled_bakery_doorway.fbx",
+    "bytes": 33100,
+    "sha256": "ba1d6f77692167fdc3e698a625cd3df90312d4b9449a7f3f819d682ba4ff75d5",
+    "compressed_bytes": 15448
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_panelled_bakery_straight.fbx",
+    "bytes": 22188,
+    "sha256": "755b496defe255bf8bf787e9ba82606ec4e3c219eac778c99f331b24160be8fd",
+    "compressed_bytes": 7897
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_panelled_bakery_window_full_center.fbx",
+    "bytes": 26956,
+    "sha256": "6552dd34793b7a5817dc19596fad590314db61093c0ecd274b6a9b688c06547d",
+    "compressed_bytes": 10966
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_panelled_bakery_window_full_left.fbx",
+    "bytes": 28812,
+    "sha256": "db7893048f717229719b05dd72dbe5a12ea2d4492653feae2ba3cf05b5d3b850",
+    "compressed_bytes": 12809
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_panelled_bakery_window_full_right.fbx",
+    "bytes": 28732,
+    "sha256": "d979c7983b59ce5421304b589d5f7c021c8744e9eacc9f492c22f56421cfb852",
+    "compressed_bytes": 12724
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_panelled_bakery_window_large.fbx",
+    "bytes": 29916,
+    "sha256": "ba6b8e2a16156494456de91f4815dda06b30feae32beb6d4aeed1abbcc2d5c0d",
+    "compressed_bytes": 13934
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_panelled_bakery_window_small.fbx",
+    "bytes": 29852,
+    "sha256": "3c59b725b9f84bad15608c397e8a9289d8a476683d8ad71013282f3d9dbb62ee",
+    "compressed_bytes": 13865
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_shelf_bakery_A.fbx",
+    "bytes": 23292,
+    "sha256": "3479af984b2da39ad0fc6305755cadbae2cda0478dcc6355b3af909c9ddfc9e2",
+    "compressed_bytes": 9028
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_shelf_bakery_B.fbx",
+    "bytes": 26028,
+    "sha256": "fed4986e69dab7ef3a3e86fc282c81855a900d438851d503fba45d76bd8e87a8",
+    "compressed_bytes": 11788
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_shelf_bakery_C.fbx",
+    "bytes": 22092,
+    "sha256": "dc7e15d61c90d470301b53f735aed9826fd34494afa73629df5343b5df515bb5",
+    "compressed_bytes": 7809
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_shelf_bakery_end.fbx",
+    "bytes": 20316,
+    "sha256": "90d1a58ba0242620f8842183a2468c0afde729c000f952855d8b3302afc0d470",
+    "compressed_bytes": 5882
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_sign_large.fbx",
+    "bytes": 25100,
+    "sha256": "e2ec866ea5c7addc598b025ebee4c2989b48147f8acd93a6ab50e1a412daeebd",
+    "compressed_bytes": 7939
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/wall_sign_small.fbx",
+    "bytes": 25372,
+    "sha256": "55312ed700ac29810622d9fa34c8b0bc0853063d6ddb5ad9baaaebd93ce3ba78",
+    "compressed_bytes": 8247
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/whisk.fbx",
+    "bytes": 33516,
+    "sha256": "21982627e77d3ea6d718b2a5b8da2a1a9a17075b5749d29deccd1ed6b0d91cf4",
+    "compressed_bytes": 19336
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/window_full_center_modular.fbx",
+    "bytes": 23548,
+    "sha256": "8a1500ef1eea8f2300c653b173c70cf310dd7134f566100e83cc0037bda1a1a1",
+    "compressed_bytes": 7493
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/window_full_left_modular.fbx",
+    "bytes": 24396,
+    "sha256": "541306512c4f2529c1278a78557263273c18d06b352c2145369ac531e0f97e9e",
+    "compressed_bytes": 8396
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/window_full_right_modular.fbx",
+    "bytes": 24348,
+    "sha256": "9920cec76eb00a392ea490abac4c601c5df6a6c742ae961d878c2eedee306ee1",
+    "compressed_bytes": 8332
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/window_large_modular.fbx",
+    "bytes": 24988,
+    "sha256": "cf17c6f02f53eaf52a199231f4e56bc979a45edc7649a6f6f884c31cf8325d6b",
+    "compressed_bytes": 8985
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/fbx(unity)/window_small_modular.fbx",
+    "bytes": 24940,
+    "sha256": "2c1326d62017e781ad11a0ea5d564f99f952f76a9eb4ea6756e7369f01a52804",
+    "compressed_bytes": 8932
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/bakery_sign_long_texture.png",
+    "bytes": 19297,
+    "sha256": "281dcc2cfd56d867966546c634a59dd7f08a9f719d12f75cb224b99baed504b7",
+    "compressed_bytes": 14180
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/bakery_sign_texture.png",
+    "bytes": 12099,
+    "sha256": "54eda70f9e116b2f20611fb781105af3e9ffc4eecd91442c6b2792b1d017aace",
+    "compressed_bytes": 10708
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/basket_A.bin",
+    "bytes": 18196,
+    "sha256": "19b8c77d06bbdba44e68ce6608083be4ae05be9125ce2311584b7e383e338b33",
+    "compressed_bytes": 7579
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/basket_A.gltf",
+    "bytes": 3533,
+    "sha256": "58c81d900e92ee19470dcc3a378f0fcc207108033108a2dd3ea5e5df8d664779",
+    "compressed_bytes": 784
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/basket_B.bin",
+    "bytes": 10408,
+    "sha256": "2c5544b02f0fd517a73d193d2bfe1e696dc95e125728c71ebde01d7e7f35039c",
+    "compressed_bytes": 3684
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/basket_B.gltf",
+    "bytes": 3495,
+    "sha256": "157e0aa074aa9afac641175e5aac52a03ebb4cf16b1720364e414f71f9e38a6b",
+    "compressed_bytes": 757
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/bread.bin",
+    "bytes": 8496,
+    "sha256": "1e9893d689a215000aa1f1321098c540ccbef9109197683d40d6fb6b896ef927",
+    "compressed_bytes": 6348
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/bread.gltf",
+    "bytes": 3546,
+    "sha256": "e673ad1ff2e90f62ea51a2eac0f25adc3d4483facee41685751dc78f49df80a6",
+    "compressed_bytes": 794
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/bread_oven.bin",
+    "bytes": 50396,
+    "sha256": "d98f0474528e6eefa6eb9f85676f80ef84c8beaafe96d5bf2cee96a6a57f733a",
+    "compressed_bytes": 14887
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/bread_oven.gltf",
+    "bytes": 11491,
+    "sha256": "da0b8640ceb6b840ee13e99dbc135148a53dc431a8fc8a098e906125e5885f1a",
+    "compressed_bytes": 1358
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/cash_register.bin",
+    "bytes": 75392,
+    "sha256": "137696f23abff07b2feb2342663174594a3cec7a6dadf691b7c365fcb6edca5e",
+    "compressed_bytes": 28790
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/cash_register.gltf",
+    "bytes": 6340,
+    "sha256": "43aed74637cf10432d996a18f03ed580f6cbc346b5f91d9592473370ed8ea1cc",
+    "compressed_bytes": 1100
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/chair.bin",
+    "bytes": 20368,
+    "sha256": "09c4a5d4ef9f5078f252e70077a272e276d6569ea22dfd875c5defc19ff355ec",
+    "compressed_bytes": 8065
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/chair.gltf",
+    "bytes": 3524,
+    "sha256": "1c2690853b31324b631ac72b4b3034208f4bdcf94059ba9174faf436ac9b9020",
+    "compressed_bytes": 783
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/coffee_cup_takeaway.bin",
+    "bytes": 8768,
+    "sha256": "0762008179b792a1fd831e6192e1161166c5aecd5e40eb8399d28f68d0fce821",
+    "compressed_bytes": 3661
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/coffee_cup_takeaway.gltf",
+    "bytes": 3562,
+    "sha256": "5b6584c02b3313034cf16beaa2545560313658f0609717afe8ce3f447edd6a25",
+    "compressed_bytes": 764
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/coffee_cup_takeaway_stacked.bin",
+    "bytes": 21088,
+    "sha256": "d8d5a8cab72043c59ef1d63c611e44b50bdbba7273c69b4bcc25ec47fe29118c",
+    "compressed_bytes": 9231
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/coffee_cup_takeaway_stacked.gltf",
+    "bytes": 3591,
+    "sha256": "4b1267301cdcbf1b9e9b021dffc07919c9fe953e731e1edb78257c0b1456f354",
+    "compressed_bytes": 785
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/coffee_machine.bin",
+    "bytes": 52756,
+    "sha256": "eec37d5515ccb23a61a97012669e84d55996204938d0dbd70a3e92ff5692483c",
+    "compressed_bytes": 22647
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/coffee_machine.gltf",
+    "bytes": 6012,
+    "sha256": "2b998a13bc13bbb779f6d7c9187816dc80949c929e957a1f66661929b43d71db",
+    "compressed_bytes": 1079
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/cookie.bin",
+    "bytes": 15488,
+    "sha256": "a5087eb36cb4aac0f607d8199a3aac2987dc3a2e746ca17ebafe1766eaf2b4b8",
+    "compressed_bytes": 7056
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/cookie.gltf",
+    "bytes": 3552,
+    "sha256": "a92fc43f2a906808604a2b7af31b08b4195a51f0278adb50b7b5636593c75cb7",
+    "compressed_bytes": 770
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/cookie_jar.bin",
+    "bytes": 11120,
+    "sha256": "a29b98ddc8626a9967f4fa2a7304cc94a05cc6029baca7adae4d8e9c0d6ac934",
+    "compressed_bytes": 6012
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/cookie_jar.gltf",
+    "bytes": 3536,
+    "sha256": "c3717f93705fc55d85d5997fc87f6f02201868612b1dee50fba8805b72cfd29a",
+    "compressed_bytes": 771
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/countertop_closet_A_large.bin",
+    "bytes": 4968,
+    "sha256": "3817e1756c991de3e9560525378660eba8c1befe4962454fd07be5387a73daa8",
+    "compressed_bytes": 1443
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/countertop_closet_A_large.gltf",
+    "bytes": 3593,
+    "sha256": "ca6590183e2c6e45b6ecaff6720047ed647d7874f3be290b0f97b31f6ff2f6fe",
+    "compressed_bytes": 791
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/countertop_closet_A_small.bin",
+    "bytes": 4968,
+    "sha256": "9ba977724fadf6bd36fbfda1d9042e089030caaee591bbde9f2ac2e7a94fe829",
+    "compressed_bytes": 1429
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/countertop_closet_A_small.gltf",
+    "bytes": 3595,
+    "sha256": "d7aea76c3f1b687e8f076f8ebb48d5ef749a47f3e79562528e1e1b9d8e0198cc",
+    "compressed_bytes": 791
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/countertop_closet_B_large.bin",
+    "bytes": 4192,
+    "sha256": "1d7dd61d2587c2dabc8ef89ab9258f29d251551d830afb31ac20d553b26ba605",
+    "compressed_bytes": 1283
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/countertop_closet_B_large.gltf",
+    "bytes": 3592,
+    "sha256": "b520e3c1fe9a58ac7105b781cbc8e7ae24354f6d38dbb1df11dcbe39e27752b2",
+    "compressed_bytes": 790
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/countertop_closet_B_small.bin",
+    "bytes": 4192,
+    "sha256": "471fc69b4a3f54bfd2af0420730f22e62859a7abb430b46ff557b3772d4abd08",
+    "compressed_bytes": 1273
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/countertop_closet_B_small.gltf",
+    "bytes": 3594,
+    "sha256": "bdbda20c31329a78dd14f86fd80fe3bf992e2312a9933d09eaf5c55db44433e6",
+    "compressed_bytes": 789
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/countertop_corner_inner.bin",
+    "bytes": 4100,
+    "sha256": "4f7bd8c992b9a9e976b9dfb730863f9f78a51f02d982295a009398de548da029",
+    "compressed_bytes": 1287
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/countertop_corner_inner.gltf",
+    "bytes": 3537,
+    "sha256": "15778a28edc72e5fecce6a288a839edf6f14822d12ebd169e85b7ca44ee8f1b8",
+    "compressed_bytes": 768
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/countertop_counter_outer.bin",
+    "bytes": 4092,
+    "sha256": "0e5a1b3fd3598bab915aee8fe168f1657567172798db801640a8484659d557aa",
+    "compressed_bytes": 1237
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/countertop_counter_outer.gltf",
+    "bytes": 3557,
+    "sha256": "d9c7b380b20f1bfffefef8a4b29f9ebf450265c21aeb78bb41a86e11834a781f",
+    "compressed_bytes": 768
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/countertop_straight_A_large.bin",
+    "bytes": 6152,
+    "sha256": "ce24ef389d2666117e2fec533b7f6659ad5d010ea5a0696471beb917befbd2b2",
+    "compressed_bytes": 1765
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/countertop_straight_A_large.gltf",
+    "bytes": 3519,
+    "sha256": "abb205a88046f9888f5d3ea63e608d73e092bf7f67ae57ba9ed26b2436d6fabe",
+    "compressed_bytes": 751
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/countertop_straight_A_short.bin",
+    "bytes": 5032,
+    "sha256": "f43120ec49d6bb913ad5870a7da03f856a40b16eb66f8df4eb7ff92df5f4d05a",
+    "compressed_bytes": 1518
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/countertop_straight_A_short.gltf",
+    "bytes": 3538,
+    "sha256": "739982b1e10414cfdcbad067bb559a0727e14295c5e3da46c511886a13f5e0e6",
+    "compressed_bytes": 760
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/countertop_straight_B_long.bin",
+    "bytes": 5288,
+    "sha256": "75bce91986810630504b00cfc202a67257a4a89e65e910564b31e7e09011e4e7",
+    "compressed_bytes": 1616
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/countertop_straight_B_long.gltf",
+    "bytes": 3516,
+    "sha256": "127318170dccfdafcc2a9e034e942409d0b8453022113c905860b521292a35bc",
+    "compressed_bytes": 749
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/countertop_straight_B_short.bin",
+    "bytes": 4168,
+    "sha256": "ae37372ae88eb67297571efd29c89a4660aa1ea6c55f5369cdbf42961027456c",
+    "compressed_bytes": 1350
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/countertop_straight_B_short.gltf",
+    "bytes": 3551,
+    "sha256": "8e647ec368330964930f1a32a1fea8f3e009ccf0e77693ca94f836ae8083209c",
+    "compressed_bytes": 775
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/counter_table.bin",
+    "bytes": 14840,
+    "sha256": "90bc81a2f7ee63c9bcb73e5829c50f70861a61be4b05dbb38151f6f4ce07b4f9",
+    "compressed_bytes": 3711
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/counter_table.gltf",
+    "bytes": 3511,
+    "sha256": "907465a546e391152d1f99c2a670965caf9c512a4a06ad735216e3bfb5f94704",
+    "compressed_bytes": 755
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/cream_puff.bin",
+    "bytes": 8928,
+    "sha256": "fa9c3df92b534a49c41c616b2b9db926906bc0c06dbe4c3ed721daebfcc5491e",
+    "compressed_bytes": 4462
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/cream_puff.gltf",
+    "bytes": 3558,
+    "sha256": "a005a74cf0aba14115aa7ebf881cc4dd7859fbd5fceeb6c498e86cc6f2f458a8",
+    "compressed_bytes": 794
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/curtains.bin",
+    "bytes": 20636,
+    "sha256": "cac862ffe5ffd012c248337e8d1e05767f893a5e9e5916a86ac3767b0e10d72a",
+    "compressed_bytes": 7292
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/curtains.gltf",
+    "bytes": 3553,
+    "sha256": "bd0772960dcd2c35b24885c8c07ec9907a93d7980d41648315588d6e169b24ae",
+    "compressed_bytes": 793
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/display_case_long.bin",
+    "bytes": 23876,
+    "sha256": "53272e1cec6f893c489794a705111340242a437e3a7194df66b434b52bf745b6",
+    "compressed_bytes": 7084
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/display_case_long.gltf",
+    "bytes": 6205,
+    "sha256": "f567189cdf2231f539fb77525ad3401a172d5f82ae33472f954009ca6e090547",
+    "compressed_bytes": 1014
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/display_case_short.bin",
+    "bytes": 20536,
+    "sha256": "7009ab5e23a4f5d025387deb7cf6d2e2e3151de050c06fa277249c30faa34e45",
+    "compressed_bytes": 6262
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/display_case_short.gltf",
+    "bytes": 6212,
+    "sha256": "082dca7f7a79fb91a6677a99c744f6e9cd34f6979620e7b59ca02ec036e8c01b",
+    "compressed_bytes": 1007
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/door_modular.bin",
+    "bytes": 13712,
+    "sha256": "31d9d87ab33fdc4ae83f6c06a5237c30131beb4ae80f9c07b34990bc4bd53b91",
+    "compressed_bytes": 4735
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/door_modular.gltf",
+    "bytes": 6237,
+    "sha256": "5d2c3ebd67de3659859f38ee7c03cff5c98a260933ff086993db827c2237f666",
+    "compressed_bytes": 1060
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/dough_ball.bin",
+    "bytes": 1824,
+    "sha256": "8e9794a27e7c2f9eacdbb8fe0ebea9163d3089cb7a0947b43cc985413a0e2ccf",
+    "compressed_bytes": 1072
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/dough_ball.gltf",
+    "bytes": 3549,
+    "sha256": "798b530cfee852cf74e9f4920ab0dc5ed1431e91b30b229280202012a7d7cc79",
+    "compressed_bytes": 761
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/dough_rolled_A.bin",
+    "bytes": 4192,
+    "sha256": "85847eb875f8fbb9baa079795eb89c5110ba1b23f2411bec33bc93936c5dfba0",
+    "compressed_bytes": 1910
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/dough_rolled_A.gltf",
+    "bytes": 3544,
+    "sha256": "f5d47bf83b21997769af32d95d7f09aa19bed1e1597bc5c0bc8b276719a46c18",
+    "compressed_bytes": 788
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/dough_rolled_B.bin",
+    "bytes": 4192,
+    "sha256": "5986ec3cfa700a17f8d7391f35fdb099f377a6d8690c3c66fc091d25950a9cd0",
+    "compressed_bytes": 2012
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/dough_rolled_B.gltf",
+    "bytes": 3545,
+    "sha256": "96c7e1c4c74ff01f30822244e1e0ee0c4906b50c0ef402f7525d3fd180c2a8be",
+    "compressed_bytes": 788
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/dough_roller.bin",
+    "bytes": 10528,
+    "sha256": "cb26b0119922f088f62cdff6d8f7149be45375fde9b6095502db2dae4f804924",
+    "compressed_bytes": 5009
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/dough_roller.gltf",
+    "bytes": 3564,
+    "sha256": "ab91d33bd3b7566a832b03e62b215ea55d1bec8e2e037043112a1e6ee6c9f170",
+    "compressed_bytes": 788
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/egg_A.bin",
+    "bytes": 3760,
+    "sha256": "9171c81967b3eaf1a13ee723f11db0a6c1842a3eca3407b519c649b90a0bbfec",
+    "compressed_bytes": 2138
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/egg_A.gltf",
+    "bytes": 3518,
+    "sha256": "08f6fe2c72d3c0ecb3e8cb2554dc2b646429fe95899f531def6973ddc28e3253",
+    "compressed_bytes": 770
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/egg_B.bin",
+    "bytes": 3760,
+    "sha256": "e3a845545b3aa1e68ccb32b3d30d8d02b78e0c5408a88eca33e0bea4a4226834",
+    "compressed_bytes": 2138
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/egg_B.gltf",
+    "bytes": 3518,
+    "sha256": "ad4a04e70ca5970115403ba1172390d2195d90b93f6bfa39c5bfe458abf672c7",
+    "compressed_bytes": 770
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/floor_connection.bin",
+    "bytes": 8372,
+    "sha256": "75431b3e6d2fba139adfef2f5309e47492cf49e3b8775dc055d2e07e1a9f6335",
+    "compressed_bytes": 2373
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/floor_connection.gltf",
+    "bytes": 3501,
+    "sha256": "efe86b7b24ffd16942b733843d1c63f2c29ff3af5e4eea03614ef0363b14a1f3",
+    "compressed_bytes": 743
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/floor_tiled.bin",
+    "bytes": 6204,
+    "sha256": "8f5cbf09c4c946f79c025a5e8e751c61545ca371b027049b380eab8ea78189e0",
+    "compressed_bytes": 1804
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/floor_tiled.gltf",
+    "bytes": 3487,
+    "sha256": "773f1c15ed8ec23454861f53fbda3b7fe593faac474386a4de71d901cef5963d",
+    "compressed_bytes": 750
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/floor_wood.bin",
+    "bytes": 7216,
+    "sha256": "c5573f50ad9937501276b6e5eb7710c2beec5bf5416418973b14822bdfd2e219",
+    "compressed_bytes": 1912
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/floor_wood.gltf",
+    "bytes": 3473,
+    "sha256": "e08651e7e4a3048c383aa396b6b418e12f3d55dd124058e086b42100911bd7f3",
+    "compressed_bytes": 740
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/flour_sack_closed.bin",
+    "bytes": 10656,
+    "sha256": "e096a115527097f45a32ebd914ea0cb332a785985764d09472311ef519ad1041",
+    "compressed_bytes": 6595
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/flour_sack_closed.gltf",
+    "bytes": 3580,
+    "sha256": "64ff57c10b073b30ecfa10ff30602a4f9bff6129a103c58fae2c9f65931620b6",
+    "compressed_bytes": 796
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/flour_sack_open.bin",
+    "bytes": 14592,
+    "sha256": "bb8288dd2623b75a1d8ef324e631a173a5ae7c3a39b9abbb98a8d76dc73dc70b",
+    "compressed_bytes": 9139
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/flour_sack_open.gltf",
+    "bytes": 3575,
+    "sha256": "9be148a967ccf7b3aa56707b5d3923fc5c14a1879cfb7d94bb6c45f656bb4239",
+    "compressed_bytes": 797
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/macaron_blue.bin",
+    "bytes": 10288,
+    "sha256": "85b8da95e380ae26e94760d2f5920562c22d47717eaf02905364dd5f0f691b82",
+    "compressed_bytes": 5105
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/macaron_blue.gltf",
+    "bytes": 3539,
+    "sha256": "6c6dd723538537645498ec9e86554a64ef4efde994098b2025ee8b9aed8f1e37",
+    "compressed_bytes": 779
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/macaron_pink.bin",
+    "bytes": 10288,
+    "sha256": "a594422bddc73174364006332d1468204e6c78fc0ad9c6995b598e1e3ef53ebc",
+    "compressed_bytes": 5111
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/macaron_pink.gltf",
+    "bytes": 3539,
+    "sha256": "53b936efcda66da3f3ed568fdc45f9f28f92bd45add2d5b2f8d5fc960071c0b8",
+    "compressed_bytes": 780
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/macaron_yellow.bin",
+    "bytes": 10288,
+    "sha256": "bfd87de5033781a6fc45b83756cba0a6c934991968e70fa0f6674ddeb950849a",
+    "compressed_bytes": 5108
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/macaron_yellow.gltf",
+    "bytes": 3545,
+    "sha256": "813dbffe4af07de8dce331bab7d5156cb46456365e2a260be7052272851abf75",
+    "compressed_bytes": 781
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/milk.bin",
+    "bytes": 13932,
+    "sha256": "f75f4619a65afc42ea00ec8a4604dde02bd94cf86a0a1d5f90602f4c66b0530a",
+    "compressed_bytes": 4919
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/milk.gltf",
+    "bytes": 3521,
+    "sha256": "4255ff22d1c58af2ade9504b8fb92e087d281ca80bdcd845dab8a35826e3ecbc",
+    "compressed_bytes": 767
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/mixing_bowl.bin",
+    "bytes": 9088,
+    "sha256": "2779e1da2f9d0f33020bc27644a843fe21d80aa4ec0162c41998d5d335cbcfc4",
+    "compressed_bytes": 4343
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/mixing_bowl.gltf",
+    "bytes": 3561,
+    "sha256": "2cadf09bcd61e483481966fb5aed1b25460fb4d72279ecb56f67a9f0282c0f4b",
+    "compressed_bytes": 791
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/mug_A_blue.bin",
+    "bytes": 12196,
+    "sha256": "990b875a6bc19c73d838155d467b334b8a249d8cdf8c340b5ef85d56ab6a0e8d",
+    "compressed_bytes": 6003
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/mug_A_blue.gltf",
+    "bytes": 3539,
+    "sha256": "f4ca70a3f11a01bd284acec2f17d9cbcd66dd0713b7f81745bf808aaa32da6fa",
+    "compressed_bytes": 775
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/mug_A_pink.bin",
+    "bytes": 12196,
+    "sha256": "2db9bf94439524382899a1443b88942214c53ecc4a28fb5451a431c408e9c70f",
+    "compressed_bytes": 6003
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/mug_A_pink.gltf",
+    "bytes": 3539,
+    "sha256": "68c5df4bd0d4d30bd0103f027704def273099f84e6b74bff64676e5834b474eb",
+    "compressed_bytes": 776
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/mug_A_yellow.bin",
+    "bytes": 12196,
+    "sha256": "3b940e048f10c3fb758fca2926fcb104600da14a6d60630af0f7ed0356fe3a70",
+    "compressed_bytes": 6007
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/mug_A_yellow.gltf",
+    "bytes": 3545,
+    "sha256": "0c81e31f4584ae9d6ea2834a0cbf80690bd0c5be895661e971cda128e31d02a5",
+    "compressed_bytes": 777
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/mug_B.bin",
+    "bytes": 15060,
+    "sha256": "583d801fdcbc6fd45d38e60d4f51c3490e162aedafd5967819ec916271b3f15f",
+    "compressed_bytes": 7203
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/mug_B.gltf",
+    "bytes": 3545,
+    "sha256": "59183f3ca011bd79255b2d5b452b87755ebc894bebabaafcd47e8deb238c1b5a",
+    "compressed_bytes": 788
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/mug_B_stacked.bin",
+    "bytes": 30120,
+    "sha256": "61e09caf91695080e5264250d69ab81553600017e8badcc64ba4cfc131d9b006",
+    "compressed_bytes": 13577
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/mug_B_stacked.gltf",
+    "bytes": 3571,
+    "sha256": "ff654ff5990668976b727862a0a5dcc3e4262ca018a2a8a287b574a268d64c98",
+    "compressed_bytes": 796
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/pastry_stand_A.bin",
+    "bytes": 18992,
+    "sha256": "595afb335914d2c270043e53147a898142567880d87821ff20ef318ff08d142c",
+    "compressed_bytes": 6924
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/pastry_stand_A.gltf",
+    "bytes": 3573,
+    "sha256": "0e28cd55e8a7f25f0bfa27ff586dacace3f0133d19047e6bd57749bce40068ed",
+    "compressed_bytes": 798
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/pastry_stand_A_covered.bin",
+    "bytes": 25872,
+    "sha256": "1b00331314bf144a18d3e5008c229df20d6bcbfa5237110980c506412de716a3",
+    "compressed_bytes": 10128
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/pastry_stand_A_covered.gltf",
+    "bytes": 6285,
+    "sha256": "6277d1fdc77da04a83695e373c9eaea2b80b702e9660844ecd5e82630107d9e8",
+    "compressed_bytes": 1053
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/pastry_stand_A_decorated.bin",
+    "bytes": 46896,
+    "sha256": "3b7f3479063c7e5fb42e8bc28030e899607dd21f57d97ca96c9bd44e4d270b43",
+    "compressed_bytes": 20628
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/pastry_stand_A_decorated.gltf",
+    "bytes": 3608,
+    "sha256": "2ccc862daef14d539010ce5f2f75a7a5d891013515c9fe557003160144864796",
+    "compressed_bytes": 809
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/pastry_stand_B.bin",
+    "bytes": 31712,
+    "sha256": "d6c8a1dcc70fdadb10b23720b5fd7e3c6674154c08efa53fb37da9169ce63915",
+    "compressed_bytes": 12083
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/pastry_stand_B.gltf",
+    "bytes": 3576,
+    "sha256": "bf47757a3c5d1183d6a761bb9441fa5ee97a7f4db3857f32bbc3c2bd1606a557",
+    "compressed_bytes": 800
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/pastry_stand_B_decorated.bin",
+    "bytes": 62576,
+    "sha256": "b606bc89c74cc5f2d007ceffa8e43b3aad952f2a9fce3d8a45e77542557db5b2",
+    "compressed_bytes": 27990
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/pastry_stand_B_decorated.gltf",
+    "bytes": 3611,
+    "sha256": "1e6c83be30db51edac2f11ed99226850107d67eec6c2cd6e97db3fc75196885e",
+    "compressed_bytes": 809
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/plate.bin",
+    "bytes": 16732,
+    "sha256": "cf86dc1db36f72d732aa39c7d0b382a201531042390daba7ba860f98f07d30e6",
+    "compressed_bytes": 7133
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/plate.gltf",
+    "bytes": 3503,
+    "sha256": "2dd551c3bea8ead16170133d192b86f9a7c6512ed4798268d0b7a7acad6b7892",
+    "compressed_bytes": 768
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/plate_stacked.bin",
+    "bytes": 27104,
+    "sha256": "97f27b8cfaefa04ab01e12f1d2ab773ae5f0f6fce4fbb18f3f2478cf919a00b3",
+    "compressed_bytes": 11554
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/plate_stacked.gltf",
+    "bytes": 3542,
+    "sha256": "8e3105a332962332a8ef144c25e3d1d97d9eb986befe1e974141fcbac0bab7bf",
+    "compressed_bytes": 785
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/pretzel.bin",
+    "bytes": 13704,
+    "sha256": "be9e6e3f60571523b5a167203cb32c34ecb8e62b154e7156c8e094fb083687dd",
+    "compressed_bytes": 11948
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/pretzel.gltf",
+    "bytes": 3554,
+    "sha256": "91cef0a3da9383dc4970a40fe95df5f954f3c4b2e45ee2ddc9937838784f55f8",
+    "compressed_bytes": 801
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/pricing_card.bin",
+    "bytes": 9500,
+    "sha256": "3db286fa731b7335b8fc93f76e701035cb91739410f7106e8035d094a6bbc426",
+    "compressed_bytes": 4250
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/pricing_card.gltf",
+    "bytes": 3565,
+    "sha256": "e8691b1c48bc5c0f22c4c7b29defe3ab9212c8c4dbdad0135624ae5ac4a90a17",
+    "compressed_bytes": 794
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/rug.bin",
+    "bytes": 8472,
+    "sha256": "ea61b48614eb075627acfb7131e62970d4fcab894ce58311068369584f8dd408",
+    "compressed_bytes": 2536
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/rug.gltf",
+    "bytes": 3501,
+    "sha256": "c6dc7013c5f214b43036c3cd3c2f07555afa4483635d636ebe4af0b15860206c",
+    "compressed_bytes": 773
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/scale.bin",
+    "bytes": 25596,
+    "sha256": "274d177f53d2ffe2177462c0e5062325593a78f16ab51308329faebfc7558947",
+    "compressed_bytes": 12341
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/scale.gltf",
+    "bytes": 3545,
+    "sha256": "9103d2b494b582e6f13760187744428a13b2ca9d045c2a8af495eea8f3f39f11",
+    "compressed_bytes": 798
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/serving_tray.bin",
+    "bytes": 11620,
+    "sha256": "bba801ccb2ffff15d399f680b9f0692c11c3735a084470795d7f3ad05820ac27",
+    "compressed_bytes": 4552
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/serving_tray.gltf",
+    "bytes": 3507,
+    "sha256": "c6718e854d4ba94e901d8f80115b4e2366b135fd07bd6caea6ebe75b4634dea4",
+    "compressed_bytes": 758
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/stand_mixer.bin",
+    "bytes": 55616,
+    "sha256": "35cd2c6c73069114ff008565801f602344efcc421e1cfd3d169a71104899f69c",
+    "compressed_bytes": 28315
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/stand_mixer.gltf",
+    "bytes": 7809,
+    "sha256": "fb7646df21fbed5e46a6aab5bcea1cb48e35b1388bff8ed8d0e2fd6b42a265a6",
+    "compressed_bytes": 1286
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/table_round_A.bin",
+    "bytes": 12968,
+    "sha256": "c66cb96c49dae23c24e4d5c3d4bdcbe4ab246d52fb996564ecc9bc59248c121e",
+    "compressed_bytes": 5171
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/table_round_A.gltf",
+    "bytes": 3486,
+    "sha256": "8818f8061e3a15f6a4c04f56b0b83879fc5ccf8cb11bb90fa8aedca5e39c254c",
+    "compressed_bytes": 741
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/table_round_B.bin",
+    "bytes": 25788,
+    "sha256": "5b433513b401f38c5a5bf68a277c634e4f875e3e54acea7f1c11d91d6c09164e",
+    "compressed_bytes": 10293
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/table_round_B.gltf",
+    "bytes": 3617,
+    "sha256": "5d36e351ac94f09aa08eda18fe61274792e91343507d8bf1d1c07020995bd59c",
+    "compressed_bytes": 780
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/table_round_C.bin",
+    "bytes": 20644,
+    "sha256": "14815e663569c38a62177d4368781c442e219db582f9b9bc40c48abfab12e25c",
+    "compressed_bytes": 7640
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/table_round_C.gltf",
+    "bytes": 3505,
+    "sha256": "74865861423b2d3d90018f62c8aafcd930609af1d672dc941a15797f3709ce74",
+    "compressed_bytes": 755
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/tiny_treats_texture_1.png",
+    "bytes": 20974,
+    "sha256": "31e5c7c81bfba644a59797b1907519592c7728d4af98a705449975dd929482e5",
+    "compressed_bytes": 16533
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/tin_A_beige.bin",
+    "bytes": 8320,
+    "sha256": "66ce850c9985d82bddf5958d34668fb318b776f8410e6e6543b56bff5e2a8435",
+    "compressed_bytes": 4248
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/tin_A_beige.gltf",
+    "bytes": 3540,
+    "sha256": "f1451e2c481306c70ba7d37e9346372f08344ce2b198c240f3ec5ab3f210e873",
+    "compressed_bytes": 780
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/tin_A_brown.bin",
+    "bytes": 8320,
+    "sha256": "e359e742d0ca6c98acd2d639b9e31fb7d1cd9a8724c8f41009d04bf4c81f96f3",
+    "compressed_bytes": 4248
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/tin_A_brown.gltf",
+    "bytes": 3540,
+    "sha256": "9da343053b3547c034abc14679941953ab52f1b3fa3f8c55fd775b794b0bb742",
+    "compressed_bytes": 781
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/tin_A_grey.bin",
+    "bytes": 8320,
+    "sha256": "bb2a9422d0c38b4c4763ea57209bf5773e9e7f95f75f0f2093e047ce2f2fbc39",
+    "compressed_bytes": 4250
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/tin_A_grey.gltf",
+    "bytes": 3537,
+    "sha256": "0562ef319be922a55dd711ef2b46ff86e0657630e5a3a45b930a07357b905393",
+    "compressed_bytes": 780
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/tin_B_beige.bin",
+    "bytes": 8512,
+    "sha256": "065dbaf7f8330eed365c4c5c3bbd9bdb622adf56d589823b9bf8b9bcd72827be",
+    "compressed_bytes": 4265
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/tin_B_beige.gltf",
+    "bytes": 3539,
+    "sha256": "e4c513c51c199655d0bf6dde3cee3a50d30e5077d708ca64d5630b6143e92729",
+    "compressed_bytes": 777
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/tin_B_brown.bin",
+    "bytes": 8512,
+    "sha256": "29641448e42917d0575844f0d2c9ebebf2a54cb46bef61b54d8fdf6b0dfa1a87",
+    "compressed_bytes": 4267
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/tin_B_brown.gltf",
+    "bytes": 3539,
+    "sha256": "3c17317e4b262ed75e96b90e6840296a8cd43fa9d12fb1a08a5943f01a3702d1",
+    "compressed_bytes": 778
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/tin_B_grey.bin",
+    "bytes": 8512,
+    "sha256": "7e5ff1b3a09f752b38a7927c0b50fd6d58e87217541b899b26c9c2211b5cfa43",
+    "compressed_bytes": 4270
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/tin_B_grey.gltf",
+    "bytes": 3536,
+    "sha256": "5b07531822600c11c0f79fbadb8d8f4e7f602a87dae3078eefcf2fffa58e621e",
+    "compressed_bytes": 777
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_corner_inner_A.bin",
+    "bytes": 1296,
+    "sha256": "dd32f780cc49bd31e3c1fc581c1948ecba6f7c9bbaaa1b6c87b0ffe87c6e0f31",
+    "compressed_bytes": 431
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_corner_inner_A.gltf",
+    "bytes": 3607,
+    "sha256": "75669ad642ed0d44a73a9debb2332b6e56f8dd4873a6276f6b22939eeeb721f3",
+    "compressed_bytes": 780
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_corner_inner_B.bin",
+    "bytes": 10384,
+    "sha256": "cc575442e1be06e9c897b8dfd9a1529d49889114e7716ff46b45be43d592d3ec",
+    "compressed_bytes": 2951
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_corner_inner_B.gltf",
+    "bytes": 3628,
+    "sha256": "63a9cf1d43ef89c5f589b0349090e80a8988f0341002781c804dac83e4898fd1",
+    "compressed_bytes": 809
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_corner_outer_A.bin",
+    "bytes": 11824,
+    "sha256": "97b0ab090b1c5574e90c4e16e36faae441770c38c1fa9bc1a1794b206044aad8",
+    "compressed_bytes": 3430
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_corner_outer_A.gltf",
+    "bytes": 3639,
+    "sha256": "aed7614b52903ef1404f5baff9512a5c0a00c1fabfa390dd24340c407cbd362a",
+    "compressed_bytes": 801
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_corner_outer_B.bin",
+    "bytes": 1296,
+    "sha256": "8b291006fa10718ac7536581010ad181c9c664bcbbc7056cd5eadcddf04b0e0b",
+    "compressed_bytes": 471
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_corner_outer_B.gltf",
+    "bytes": 3633,
+    "sha256": "a01ac876d7234f34bfacb27cda819c32412b578ffd52a4dcc165f84cb2d50b5c",
+    "compressed_bytes": 806
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_doorway.bin",
+    "bytes": 2100,
+    "sha256": "7f6bd111448e96412fec7adfe795e5f14b8e9efc85aa2d709bb93f7b9048ad0e",
+    "compressed_bytes": 538
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_doorway.gltf",
+    "bytes": 3558,
+    "sha256": "9b441bd8aabcaa78e00f7e95a13c6a0e457dacbcf1f193e602cdc61decbedfd5",
+    "compressed_bytes": 772
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_half_corner_inner_A.bin",
+    "bytes": 1296,
+    "sha256": "465cf39fc5c3e59d1439d39f83b051f6408ef6e3c3fee5ebca400916aedea57b",
+    "compressed_bytes": 454
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_half_corner_inner_A.gltf",
+    "bytes": 3622,
+    "sha256": "3f1d991086baaa920ff95185d219b81c4824aac859b6a8096c64ad7f1ea3e086",
+    "compressed_bytes": 784
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_half_corner_inner_B.bin",
+    "bytes": 7304,
+    "sha256": "61c9c6addda5cb2435587b53daa4160130a19881f00a362e02cc756fee1d450a",
+    "compressed_bytes": 2286
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_half_corner_inner_B.gltf",
+    "bytes": 3640,
+    "sha256": "3d18c3b40002c73c3dfc996cf781c34a8d106fe9351bed014b57cda39b863e1b",
+    "compressed_bytes": 809
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_half_corner_outer_A.bin",
+    "bytes": 8680,
+    "sha256": "909578ff3199cb0be01d5fb6f3c956aca219e66038abe02fecfe600dd323ff3b",
+    "compressed_bytes": 2694
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_half_corner_outer_A.gltf",
+    "bytes": 3652,
+    "sha256": "1ba1386f45402437e3052f3663c45df4e26d5025c792169fba455180804488d3",
+    "compressed_bytes": 804
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_half_corner_outer_B.bin",
+    "bytes": 1296,
+    "sha256": "536274b569455c7ffbfee2f16456d185d44a7da6fd1d219be39138d6e98e48a6",
+    "compressed_bytes": 477
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_half_corner_outer_B.gltf",
+    "bytes": 3649,
+    "sha256": "996d32aefc91049b0bab081fa720aa0c36c7866a13da416b52b53be985350048",
+    "compressed_bytes": 813
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_half_straight_A.bin",
+    "bytes": 4552,
+    "sha256": "fd0e73cdecb1d8b4e5bc9242151e89f7c123194b735874e9b1933f286c28be4a",
+    "compressed_bytes": 1430
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_half_straight_A.gltf",
+    "bytes": 3608,
+    "sha256": "5c1111393b1b1b2250d822a1c4233d9f019a6708b6342119c546a78c680b2df8",
+    "compressed_bytes": 790
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_half_straight_B.bin",
+    "bytes": 700,
+    "sha256": "51c4be8d9af7774799b27ec0a885fe90d74df59a5fb3786e690560aef063b04e",
+    "compressed_bytes": 206
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_half_straight_B.gltf",
+    "bytes": 3611,
+    "sha256": "41ba1939805c198bd068b7e9ae5e0bf92fc5a325cde85ebeaba03bd6d9a1ce65",
+    "compressed_bytes": 790
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_straight_A.bin",
+    "bytes": 6232,
+    "sha256": "f263caa030c6d2b13e4e922d0ac9edff8d6a19e5a8b0ff05d80265889571acc6",
+    "compressed_bytes": 1767
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_straight_A.gltf",
+    "bytes": 3590,
+    "sha256": "8a2f1c0f85e1db83d6f8ec7944e4b7dbe107379a14b73bc523e8f93393fba72c",
+    "compressed_bytes": 787
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_straight_B.bin",
+    "bytes": 700,
+    "sha256": "17033519a75f0b0cfdd5f16d45fe04888e504a40812e5b82ef8dbf286b2a6351",
+    "compressed_bytes": 201
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_straight_B.gltf",
+    "bytes": 3595,
+    "sha256": "40cf7b3cb8f18bbb268da2d42e9f5d1613b4ee1ebb96049f6f032dd4602880ed",
+    "compressed_bytes": 783
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_window_full_center_A.bin",
+    "bytes": 6628,
+    "sha256": "ca36a48f4a10e64c11c604d90acdd29823ee583761408e3fb75d117e64c1041d",
+    "compressed_bytes": 1851
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_window_full_center_A.gltf",
+    "bytes": 3636,
+    "sha256": "dc5fac36f806658bc5948115a789c96c23877edbc8c119359437017faf7fa247",
+    "compressed_bytes": 802
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_window_full_center_B.bin",
+    "bytes": 1400,
+    "sha256": "f41fadc46ff77da740e2ae17eaeddad2a48f66edafb13c7d5f109b89e6e5cf2b",
+    "compressed_bytes": 391
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_window_full_center_B.gltf",
+    "bytes": 3573,
+    "sha256": "54f006881dcb8e5dbf51eb6ed01d7eda8857de3eb9e9906f74fff4e89b3a7510",
+    "compressed_bytes": 758
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_window_full_left_A.bin",
+    "bytes": 8000,
+    "sha256": "7dd83f41eb70443e4f53dd44c3f443ef8c2ac5080af92b349455bad78aeb1ff0",
+    "compressed_bytes": 2279
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_window_full_left_A.gltf",
+    "bytes": 3630,
+    "sha256": "673141a22469a0dbdd0814acba5613ff48d2d00712868b8f88ecb2f6747cf190",
+    "compressed_bytes": 802
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_window_full_left_B.bin",
+    "bytes": 1640,
+    "sha256": "969ffb3be883b03436286eafc56b723acf946fe4c6dc84d54b4e69ae419da3cb",
+    "compressed_bytes": 526
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_window_full_left_B.gltf",
+    "bytes": 3567,
+    "sha256": "e742b1d768e3eda204a372ab15da0e3f7b32338958b41c722b4aedbced368468",
+    "compressed_bytes": 761
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_window_full_right_A.bin",
+    "bytes": 8000,
+    "sha256": "f3f6a349589bb9846e257167f4b8f869ee555fc66940e3a7f09316015b1e0fc6",
+    "compressed_bytes": 2250
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_window_full_right_A.gltf",
+    "bytes": 3633,
+    "sha256": "88e117faff4b78e189850bfb0c9c18ef96c79c8102e96a325bb70f946cedf9c5",
+    "compressed_bytes": 801
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_window_full_right_B.bin",
+    "bytes": 1640,
+    "sha256": "f3045bf2cb00ab071a6f5ebc015dcf75d0a9514957f00ccc3744fb352cedd0cb",
+    "compressed_bytes": 526
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_window_full_right_B.gltf",
+    "bytes": 3570,
+    "sha256": "58cd2436f77fc55196d863d3c27205ff9e09f1929472ccea25c7183f2a1d4fcb",
+    "compressed_bytes": 761
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_window_large_A.bin",
+    "bytes": 9244,
+    "sha256": "8329f47eb3bf4bee5d2d9d561e8ec8f9c98b7317db11ec5fd480ccf1cd799ac6",
+    "compressed_bytes": 2715
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_window_large_A.gltf",
+    "bytes": 3640,
+    "sha256": "3bd20aa6a39ffc59f0d811a0fe1cbf6a46b2d8ddb2618c63e7e112bad646722a",
+    "compressed_bytes": 810
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_window_large_B.bin",
+    "bytes": 1880,
+    "sha256": "633651189870d55dc59b43c4c773f9ffba4bfcd99715cae17975d28de254465f",
+    "compressed_bytes": 671
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_window_large_B.gltf",
+    "bytes": 3599,
+    "sha256": "37c2ed4fce429d5f1beaf8f73a01492e61539f57e379ca05506975b483293d26",
+    "compressed_bytes": 789
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_window_small_A.bin",
+    "bytes": 9244,
+    "sha256": "cc20fb2cac6dd97540f8bc24e6c05ff4befc0f59f4ca42c94c8656fa33c6bd5d",
+    "compressed_bytes": 2685
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_window_small_A.gltf",
+    "bytes": 3640,
+    "sha256": "1be5565998d0ccf91d5c7e348c84124cb10a346540a90793dfec5111c5ffed51",
+    "compressed_bytes": 809
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_window_small_B.bin",
+    "bytes": 1880,
+    "sha256": "50db108a251a3e8602bd5f15761c017cc9cafedb89f830872fa9a786f45ddb07",
+    "compressed_bytes": 667
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_modular_panelled_bakery_window_small_B.gltf",
+    "bytes": 3599,
+    "sha256": "d48079643f6147610c8a8aa945e62487939fe2fb964be108611e22d0f723b17d",
+    "compressed_bytes": 788
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_panelled_bakery_corner_inner.bin",
+    "bytes": 10956,
+    "sha256": "7c5097858b0c01bf7b74b58df212dba83a4b8bc412d2138011142d56d0180840",
+    "compressed_bytes": 3029
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_panelled_bakery_corner_inner.gltf",
+    "bytes": 3610,
+    "sha256": "8ca767440867955013789e9df4df68ab35f2bc446e703c1c945ea9183627b592",
+    "compressed_bytes": 797
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_panelled_bakery_corner_outer.bin",
+    "bytes": 12256,
+    "sha256": "2fb152b702a906d53aea2971be8f5654080f2260db76f0d105daeaf5ae4334dd",
+    "compressed_bytes": 3495
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_panelled_bakery_corner_outer.gltf",
+    "bytes": 3609,
+    "sha256": "1e8f7b89c2bbf76e9bbcfcab20bc532d3ff1de9a5d465285763d32c7f6818c87",
+    "compressed_bytes": 797
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_panelled_bakery_doorway.bin",
+    "bytes": 16676,
+    "sha256": "655aa95465199f1e3b866b13c463b17dc350a734131c640af0889e0ecbd9ba7e",
+    "compressed_bytes": 5451
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_panelled_bakery_doorway.gltf",
+    "bytes": 8339,
+    "sha256": "e75d671b2c1a3a0ebd9909865484678ed5a2b3a4eee1364c868f8c07851f4ddf",
+    "compressed_bytes": 1240
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_panelled_bakery_straight.bin",
+    "bytes": 6372,
+    "sha256": "8ca2260ea76b87e0cfd42885e6af50fb90337fbd11f48ba8fff14076610e011d",
+    "compressed_bytes": 1764
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_panelled_bakery_straight.gltf",
+    "bytes": 3578,
+    "sha256": "464ebe8e532e703ea9d4e9994e21def7d5550e466acae0349a6e66fe0bd3f321",
+    "compressed_bytes": 789
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_panelled_bakery_window_full_center.bin",
+    "bytes": 13872,
+    "sha256": "9097dead231e5b2b8d08aa7ba8c1a6af7e0759088358c4c359811978f489cbfd",
+    "compressed_bytes": 3527
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_panelled_bakery_window_full_center.gltf",
+    "bytes": 6267,
+    "sha256": "4e2077104c0092c0b29298a1dd69dd0316412963b616dd44efb9e37ed96406b8",
+    "compressed_bytes": 1042
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_panelled_bakery_window_full_left.bin",
+    "bytes": 15868,
+    "sha256": "03fb2b183e469cbb3187939e41cf70c9e9b733f9fb4924ae89a92b2de56d574e",
+    "compressed_bytes": 4405
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_panelled_bakery_window_full_left.gltf",
+    "bytes": 6279,
+    "sha256": "a6d2aafad4cb91a4d58119c8c1cd09433e9666e6b1d052e278c4116c0b063497",
+    "compressed_bytes": 1049
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_panelled_bakery_window_full_right.bin",
+    "bytes": 15868,
+    "sha256": "3c0763c077a2f0e7c79b66c1ea114838d294a53e76cbe01a2d556a029af7452b",
+    "compressed_bytes": 4355
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_panelled_bakery_window_full_right.gltf",
+    "bytes": 6281,
+    "sha256": "1393d8f729227c7503f12463dcc5c27c8b6e25745b0bd8e3ab11bee1a652acbe",
+    "compressed_bytes": 1047
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_panelled_bakery_window_large.bin",
+    "bytes": 17312,
+    "sha256": "80e90d960d6b943c1fd578d96165df72003b6139a871b0e103e789cab6f2f48a",
+    "compressed_bytes": 4900
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_panelled_bakery_window_large.gltf",
+    "bytes": 6285,
+    "sha256": "0e610eab7708bc206e395cdbce4b88797907f5b7606006eade198c1c8bf507a8",
+    "compressed_bytes": 1050
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_panelled_bakery_window_small.bin",
+    "bytes": 17312,
+    "sha256": "59a1a6639dc4ff9a0472ee1e4dd9b875af211ce8a95a08b7eb4cf16bb77c0ec9",
+    "compressed_bytes": 4858
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_panelled_bakery_window_small.gltf",
+    "bytes": 6284,
+    "sha256": "550ecae005b368407ac4a38363a3fa099039bdac15ebc63b1f9bdf3a4253fbbd",
+    "compressed_bytes": 1049
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_shelf_bakery_A.bin",
+    "bytes": 7648,
+    "sha256": "1bd18d4cf0a4803ae1594e5095eece814adf3c418d522c8dc991d7cbcce099c6",
+    "compressed_bytes": 2547
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_shelf_bakery_A.gltf",
+    "bytes": 3564,
+    "sha256": "e74f81d6f03129a227076bea33870af6ee2dbe84d80f6d1b15774f7e036c5c70",
+    "compressed_bytes": 795
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_shelf_bakery_B.bin",
+    "bytes": 10632,
+    "sha256": "c2b04dbf0c8d1b5d474f307a8220fc3090d3e7da512f8a9045bcd2bfc4231988",
+    "compressed_bytes": 3698
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_shelf_bakery_B.gltf",
+    "bytes": 3548,
+    "sha256": "b5e956807aea20da9c4d339c38a5121fa6cbd594d3ef1de629d03c90b6883f30",
+    "compressed_bytes": 787
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_shelf_bakery_C.bin",
+    "bytes": 5576,
+    "sha256": "1994aef5858c09f8db48de0cbdc37b08cdaafeea768701300660f7438cc6a4f3",
+    "compressed_bytes": 1842
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_shelf_bakery_C.gltf",
+    "bytes": 3582,
+    "sha256": "338426bace38fa2b14af23c83919c510a150cc082fe49b3317a31e65472d065b",
+    "compressed_bytes": 801
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_shelf_bakery_end.bin",
+    "bytes": 1816,
+    "sha256": "b02202975264f57cfc90af5f883753808efcfb6525c970e971867ab450c0d364",
+    "compressed_bytes": 668
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_shelf_bakery_end.gltf",
+    "bytes": 3583,
+    "sha256": "39cf28b0bd2df7f5acdc24e75472a8754d6fb7070163d0cdf108ec5e45a7a957",
+    "compressed_bytes": 788
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_sign_large.bin",
+    "bytes": 4824,
+    "sha256": "f1bb0337751feecd56449bffffd204b19d673e79014440c419432ef888c1bf43",
+    "compressed_bytes": 1718
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_sign_large.gltf",
+    "bytes": 6149,
+    "sha256": "ef9d937664950f4eb5b902c73ac8f6ada85dbc3d79fb1d45ba54652293166b47",
+    "compressed_bytes": 955
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_sign_small.bin",
+    "bytes": 4760,
+    "sha256": "5c4ca73a5a881b515581c4995684147e8db41868d867852b6d46b031de279d0b",
+    "compressed_bytes": 1989
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/wall_sign_small.gltf",
+    "bytes": 6190,
+    "sha256": "7b3a965e8eaea992825a254dee69c6b30097e4196280a49622c5aab7d6339ccc",
+    "compressed_bytes": 1017
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/whisk.bin",
+    "bytes": 18640,
+    "sha256": "da5e263c8d18f8805ccf3e2c2141d4d4d29313b112610ac55f1ebbbc196017fa",
+    "compressed_bytes": 10170
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/whisk.gltf",
+    "bytes": 3544,
+    "sha256": "8221fff7a8b9f725ee9577ef365d322df14e432e23e46d8a2449f78f1ccfa466",
+    "compressed_bytes": 792
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/window_full_center_modular.bin",
+    "bytes": 6380,
+    "sha256": "81f810d70241e1eec7a60a52c17b86685b6c5b26fbe920bb02be727cbadd91b1",
+    "compressed_bytes": 1472
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/window_full_center_modular.gltf",
+    "bytes": 6199,
+    "sha256": "d60a2a974da46623a8bbbc11a04f9fc9720cec607e08d84ffc7e222680dfd98c",
+    "compressed_bytes": 1013
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/window_full_left_modular.bin",
+    "bytes": 6688,
+    "sha256": "0e7add5a2ef3856de8239f21ca32083b8bae0b5b6603752bd1201fcd46733d1a",
+    "compressed_bytes": 1769
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/window_full_left_modular.gltf",
+    "bytes": 6228,
+    "sha256": "51ede18f2e30436bbc017874311b965310dff682a131f74d302d998deb4b2766",
+    "compressed_bytes": 1021
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/window_full_right_modular.bin",
+    "bytes": 6688,
+    "sha256": "84c3cd8febaf9d41eacbbf84f4ec49b01112e0a34d83c7a265d06fa635c2930e",
+    "compressed_bytes": 1763
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/window_full_right_modular.gltf",
+    "bytes": 6230,
+    "sha256": "ab3abcd4964412b913c038183819b8f0fc7ae197415a678f551a16e9d94636a5",
+    "compressed_bytes": 1024
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/window_large_modular.bin",
+    "bytes": 7028,
+    "sha256": "e58b8c915ea3a230f7941184372e74e4dfb83788a810a574c59283c625810060",
+    "compressed_bytes": 1952
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/window_large_modular.gltf",
+    "bytes": 6251,
+    "sha256": "69d7fb1caf80e3a2aa674cebdb7e57345d47f4f941ba5e3f73f8e043a363546f",
+    "compressed_bytes": 1040
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/window_small_modular.bin",
+    "bytes": 7028,
+    "sha256": "02688d7af76941ecf7ced7bf6e33347683dc9ce34323decd82dd40fd883cab92",
+    "compressed_bytes": 1986
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/gltf/window_small_modular.gltf",
+    "bytes": 6251,
+    "sha256": "bc3f1bf0f1bc29db0e87f11e6a00babb68b5aa0d36b14c47fa70ac08b61b2103",
+    "compressed_bytes": 1045
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/bakery_sign_long_texture.png",
+    "bytes": 19297,
+    "sha256": "281dcc2cfd56d867966546c634a59dd7f08a9f719d12f75cb224b99baed504b7",
+    "compressed_bytes": 14180
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/bakery_sign_texture.png",
+    "bytes": 12099,
+    "sha256": "54eda70f9e116b2f20611fb781105af3e9ffc4eecd91442c6b2792b1d017aace",
+    "compressed_bytes": 10708
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/basket_A.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/basket_A.obj",
+    "bytes": 31738,
+    "sha256": "8732eb38439a223a522a4e14dc2d37fcfa49ab6c2e9f5e361aaefea2c59ef462",
+    "compressed_bytes": 7422
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/basket_B.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/basket_B.obj",
+    "bytes": 20480,
+    "sha256": "bf2ccad246bb5311a48be84ee1faf36f791aa2dedf686f514e050a02c0278095",
+    "compressed_bytes": 4471
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/bread.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/bread.obj",
+    "bytes": 21721,
+    "sha256": "b0e94d6ed7f0392e6a1e4d579a00d7f055d848ad116784da7069de3cd3d5075b",
+    "compressed_bytes": 6665
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/bread_oven.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/bread_oven.obj",
+    "bytes": 62660,
+    "sha256": "ffae0f4f452884bc2c90ef126b48cdd17ceda28d2c92ed11d08e52f0f9e83488",
+    "compressed_bytes": 12126
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/bread_oven_door_A.mtl",
+    "bytes": 572,
+    "sha256": "141240cf7e9789226cbac2bf35f1ef614364cbd426dac84dd4b73b319310069f",
+    "compressed_bytes": 203
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/bread_oven_door_A.obj",
+    "bytes": 11286,
+    "sha256": "72464e342be5f83cc40f71da42190079e3f8a7c6085bf463171cccdb50844561",
+    "compressed_bytes": 2897
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/bread_oven_door_B.mtl",
+    "bytes": 572,
+    "sha256": "141240cf7e9789226cbac2bf35f1ef614364cbd426dac84dd4b73b319310069f",
+    "compressed_bytes": 203
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/bread_oven_door_B.obj",
+    "bytes": 11286,
+    "sha256": "b8f1b189a9d72f8ed8a3a5e2995606d59fe0a90b5f3e181afa83a88804380699",
+    "compressed_bytes": 2880
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/cash_register.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/cash_register.obj",
+    "bytes": 110699,
+    "sha256": "5609b8646317c585c66f2d54ca872221d90862e3b0235e1de846cbeb8d1a1097",
+    "compressed_bytes": 25096
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/cash_register_handle_001.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/cash_register_handle_001.obj",
+    "bytes": 5743,
+    "sha256": "e662ea1d76fccdc61f39e84bec90094ca3177e96cd996e5cdc72d2e0ee9c8b3f",
+    "compressed_bytes": 1571
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/chair.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/chair.obj",
+    "bytes": 37753,
+    "sha256": "0f8428fb06085bc20e0e6c39ae2149e63b55ce40fd3be053c1e996391224ecb8",
+    "compressed_bytes": 8152
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/coffee_cup_takeaway.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/coffee_cup_takeaway.obj",
+    "bytes": 16290,
+    "sha256": "45913c2e59b5cfdf01503d5e2ebeb4be879a5e744a7cd1f914ddd4c1f9de408b",
+    "compressed_bytes": 3590
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/coffee_cup_takeaway_stacked.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/coffee_cup_takeaway_stacked.obj",
+    "bytes": 43408,
+    "sha256": "a8e68741b511a52b84d357365ee583ba69442ac819c81126ff4a347828bfdbd1",
+    "compressed_bytes": 9287
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/coffee_machine.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/coffee_machine.obj",
+    "bytes": 83923,
+    "sha256": "e6c0577e40b7b4d379b9966144bd6b8daa67785e9ea3614f1cdd65ae5d87f2fa",
+    "compressed_bytes": 19053
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/coffee_machine_handle.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/coffee_machine_handle.obj",
+    "bytes": 7694,
+    "sha256": "5c5b44de3174b85737fca53c9500158dccd265dccd47a97e27d3a316b741d6cb",
+    "compressed_bytes": 2061
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/cookie.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/cookie.obj",
+    "bytes": 33748,
+    "sha256": "260016e36c14d5c9c6fa9ba09ff4008326dd898a12a7ccdd1e112a478f37710c",
+    "compressed_bytes": 7447
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/cookie_jar.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/cookie_jar.obj",
+    "bytes": 25638,
+    "sha256": "34c62befab1c8aa59d8f1cf4ac83b0842dc6f2421b74d48341ce46935b501128",
+    "compressed_bytes": 5963
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/countertop_closet_A_large.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/countertop_closet_A_large.obj",
+    "bytes": 6911,
+    "sha256": "dd3f8945e8fda78669bd3ef8837a5c1c689cd9564f63683136a6a1b3c3009109",
+    "compressed_bytes": 1546
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/countertop_closet_A_small.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/countertop_closet_A_small.obj",
+    "bytes": 6883,
+    "sha256": "190c35afea4b1c1278242de90ae98498bf601119534eb610ec2ef697a2c7cc64",
+    "compressed_bytes": 1532
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/countertop_closet_B_large.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/countertop_closet_B_large.obj",
+    "bytes": 5808,
+    "sha256": "4213caae35df4417d9d5a76246bddab0da4f53090303b949d5deadae21539eca",
+    "compressed_bytes": 1335
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/countertop_closet_B_small.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/countertop_closet_B_small.obj",
+    "bytes": 5808,
+    "sha256": "5c277c00bae83382c61a057cf281448d6945967d507313a7c0c982bf120f810e",
+    "compressed_bytes": 1333
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/countertop_corner_inner.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/countertop_corner_inner.obj",
+    "bytes": 5776,
+    "sha256": "4b70b83e589f401ca73eb4f08fc3147b4f5bc37e22c4d5b2ff338ee966f85fdf",
+    "compressed_bytes": 1367
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/countertop_counter_outer.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/countertop_counter_outer.obj",
+    "bytes": 5445,
+    "sha256": "3c4364eab8eee88b38733a544f5840e845e8e89562e2a33b33427c974d252c29",
+    "compressed_bytes": 1312
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/countertop_straight_A_large.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/countertop_straight_A_large.obj",
+    "bytes": 8394,
+    "sha256": "4bf8df982e8fbaff97f0b2574a05ecb22af3f45c1a8c78159113cc63d2f3168f",
+    "compressed_bytes": 1879
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/countertop_straight_A_short.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/countertop_straight_A_short.obj",
+    "bytes": 6866,
+    "sha256": "79de0e23d7ca7c9ec1c84881018828347371ba73db67993167a66f96af10e739",
+    "compressed_bytes": 1598
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/countertop_straight_B_long.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/countertop_straight_B_long.obj",
+    "bytes": 7249,
+    "sha256": "8a99bfbc30fa6ef7da19251a823468857c4e4d45e03b3a8492466175aa44b208",
+    "compressed_bytes": 1664
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/countertop_straight_B_short.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/countertop_straight_B_short.obj",
+    "bytes": 5746,
+    "sha256": "7fe7575c1424a57f1db99fb0fb85d0131a86fd42ddb0373a7556113317d5438a",
+    "compressed_bytes": 1387
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/counter_table.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/counter_table.obj",
+    "bytes": 20923,
+    "sha256": "c191c2907d7968784a5fa1799e86fef2774145363a804c20122d30313d42064f",
+    "compressed_bytes": 3875
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/cream_puff.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/cream_puff.obj",
+    "bytes": 19147,
+    "sha256": "7b9613fc54a6a5624ffc976e763538ae7e69a391d200bdfd704bc8fddc468c8b",
+    "compressed_bytes": 5060
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/curtains.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/curtains.obj",
+    "bytes": 33036,
+    "sha256": "2c0da1862f55733920e5937e79b4bf4dfe399400a003f0fbd97d04d5ab39952b",
+    "compressed_bytes": 6498
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/display_case_long.mtl",
+    "bytes": 572,
+    "sha256": "141240cf7e9789226cbac2bf35f1ef614364cbd426dac84dd4b73b319310069f",
+    "compressed_bytes": 203
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/display_case_long.obj",
+    "bytes": 30516,
+    "sha256": "f05d40fe7e38de2e930ce9a81a92edcbface9bc7623d88b1b1d9dc86206e30b8",
+    "compressed_bytes": 6659
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/display_case_short.mtl",
+    "bytes": 572,
+    "sha256": "141240cf7e9789226cbac2bf35f1ef614364cbd426dac84dd4b73b319310069f",
+    "compressed_bytes": 203
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/display_case_short.obj",
+    "bytes": 27041,
+    "sha256": "2df61f34a750d0369f5cd07b34d5cb3c443e24e8012a884c57a68d6da9ef1c4b",
+    "compressed_bytes": 5960
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/door_modular.mtl",
+    "bytes": 572,
+    "sha256": "141240cf7e9789226cbac2bf35f1ef614364cbd426dac84dd4b73b319310069f",
+    "compressed_bytes": 203
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/door_modular.obj",
+    "bytes": 22288,
+    "sha256": "4cecc76d188bfbe30d5a2fdf8ddb723a03d50aa88417eb83d6a435beb1d3c75c",
+    "compressed_bytes": 4819
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/dough_ball.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/dough_ball.obj",
+    "bytes": 4794,
+    "sha256": "9be20ecadecadb97bfcb5304ed0076a3f3702eb71457bf4bfe6f4488bcec1d14",
+    "compressed_bytes": 1235
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/dough_rolled_A.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/dough_rolled_A.obj",
+    "bytes": 6964,
+    "sha256": "dbfff8af83438c2f1b456da8a70db766e19c424d76e925f6450e94c143bfe658",
+    "compressed_bytes": 2165
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/dough_rolled_B.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/dough_rolled_B.obj",
+    "bytes": 6995,
+    "sha256": "cbd36413341d7837a4127b9f8277324610edd2598eba7ed88ea0321e369242bd",
+    "compressed_bytes": 2281
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/dough_roller.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/dough_roller.obj",
+    "bytes": 21546,
+    "sha256": "ac331171b4fd4edd3d20e1eabf2efa897c169e14141910030c67ef58f222ceee",
+    "compressed_bytes": 4892
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/egg_A.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/egg_A.obj",
+    "bytes": 10038,
+    "sha256": "05b8b48889090e947a56b2df8ea990589b4d64a82e96063249658d0b6c6444bf",
+    "compressed_bytes": 2226
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/egg_B.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/egg_B.obj",
+    "bytes": 10038,
+    "sha256": "8c90c8fae2a94261f1f4d47faa0a68612dc69eeb2850eb8a0e1fb10368d5edaa",
+    "compressed_bytes": 2229
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/floor_connection.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/floor_connection.obj",
+    "bytes": 11265,
+    "sha256": "00fb87f4460eb2695605a1de630ab47869bcb8946e2b8b0dbb657b624ee2e6f9",
+    "compressed_bytes": 2320
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/floor_tiled.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/floor_tiled.obj",
+    "bytes": 8995,
+    "sha256": "2aed60b35d4e0580b1725175ee70b7399609a08114ffd9c23a2df5f6a861e7ab",
+    "compressed_bytes": 1720
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/floor_wood.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/floor_wood.obj",
+    "bytes": 9892,
+    "sha256": "af6df4737a9614fbd8b1e64b91a757191f9b46385297b66c613540966a000f48",
+    "compressed_bytes": 1884
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/flour_sack_closed.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/flour_sack_closed.obj",
+    "bytes": 28370,
+    "sha256": "ee06fc5f9b1ec0b2ce4d99804b699b0aaf6007c19d87416451d8e126ebf7b036",
+    "compressed_bytes": 6868
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/flour_sack_open.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/flour_sack_open.obj",
+    "bytes": 36000,
+    "sha256": "219068f1cdec1088517c694106fb560181a3fb73e0b77d4e51be5beb78c0631e",
+    "compressed_bytes": 9161
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/macaron_blue.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/macaron_blue.obj",
+    "bytes": 24313,
+    "sha256": "db282f5a64f3e88804d1f48e1a7b322fa1da01a06f4a63e9e67ccf164ff6f4d6",
+    "compressed_bytes": 5069
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/macaron_pink.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/macaron_pink.obj",
+    "bytes": 24313,
+    "sha256": "526659c43f4f9dde59c07062ef99c5abec69b14436a60d2f4ec1cc52dba2c92b",
+    "compressed_bytes": 5059
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/macaron_yellow.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/macaron_yellow.obj",
+    "bytes": 24317,
+    "sha256": "5fab226531d87bab866c1ff4268a14db6175abd99bccb8d5c4776dad70ea0140",
+    "compressed_bytes": 5074
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/milk.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/milk.obj",
+    "bytes": 25572,
+    "sha256": "71d1749a37ec84b81a2f824c6d85ab0f42b1f6cc871e49e423d7ea50559071bb",
+    "compressed_bytes": 5293
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/mixing_bowl.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/mixing_bowl.obj",
+    "bytes": 18861,
+    "sha256": "ec339172792d0a1f9b089adfd261132afc9c0f1de8f8798dfde6be1b141b8a2a",
+    "compressed_bytes": 4224
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/mug_A_blue.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/mug_A_blue.obj",
+    "bytes": 24865,
+    "sha256": "ebbebdbdb98a5ea5bc0f0f169597434699509ea154ee62406229a282eb8b04d4",
+    "compressed_bytes": 5867
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/mug_A_pink.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/mug_A_pink.obj",
+    "bytes": 24865,
+    "sha256": "8579244f56c8a13fb83ce8bbaaaa9e6747690bb77fb75d0aaf4f8860e0eb7d08",
+    "compressed_bytes": 5879
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/mug_A_yellow.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/mug_A_yellow.obj",
+    "bytes": 24869,
+    "sha256": "148b55608fea5346ef25035b85b7154dbd5e93e6c20972d82fd102598e6798bf",
+    "compressed_bytes": 5875
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/mug_B.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/mug_B.obj",
+    "bytes": 27676,
+    "sha256": "08eb7284f42e24c39c190f4e9e801b696a5e31df52ffd7cce26bbecbd1a69340",
+    "compressed_bytes": 6561
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/mug_B_stacked.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/mug_B_stacked.obj",
+    "bytes": 56107,
+    "sha256": "9c96f877c75fc34fbf941206d7f08f0ebf9fe58d37ed07a74cb3d8ce5995d9f5",
+    "compressed_bytes": 12474
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/pastry_stand_A.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/pastry_stand_A.obj",
+    "bytes": 29009,
+    "sha256": "39d18b1dcc8ad954afdfd5f63f8a3b71ca685473fabc7096ad9f8be907f10dcc",
+    "compressed_bytes": 6546
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/pastry_stand_A_covered.mtl",
+    "bytes": 572,
+    "sha256": "141240cf7e9789226cbac2bf35f1ef614364cbd426dac84dd4b73b319310069f",
+    "compressed_bytes": 203
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/pastry_stand_A_covered.obj",
+    "bytes": 45730,
+    "sha256": "b7b10c4bceea9d24cc9d5ccacb8be76c316459194b04d37568f40eb7de20669e",
+    "compressed_bytes": 9788
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/pastry_stand_A_decorated.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/pastry_stand_A_decorated.obj",
+    "bytes": 96829,
+    "sha256": "80044ca2824fa73cc5c17fe35a0d9b8ae4a83fceae80f1a0d19f4446c86fff6f",
+    "compressed_bytes": 21455
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/pastry_stand_B.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/pastry_stand_B.obj",
+    "bytes": 52914,
+    "sha256": "00afc82baa81d5e2326812b6a9c7a453436aad3920c4698b312088209b6badec",
+    "compressed_bytes": 11054
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/pastry_stand_B_decorated.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/pastry_stand_B_decorated.obj",
+    "bytes": 130066,
+    "sha256": "2bccc74e6f75fae79e5aecdde2a7b46f7426dc12300df82a2acb93ffbb9e1cb6",
+    "compressed_bytes": 28443
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/plate.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/plate.obj",
+    "bytes": 28118,
+    "sha256": "23733813d17bd9aa0bec9eb380b33cf78f5086a99dcc3f48897a41ab1d3e81ac",
+    "compressed_bytes": 6605
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/plate_stacked.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/plate_stacked.obj",
+    "bytes": 44281,
+    "sha256": "aebf2f2d647cb2e957e6822b95e7ca5b5ed3ba9cc4d86cf084da108fd766578e",
+    "compressed_bytes": 9601
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/pretzel.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/pretzel.obj",
+    "bytes": 39025,
+    "sha256": "f1a58e2ceaf1e2acc30678dbb517192cbd0d7ffe72989c92df6b0a5f8c646770",
+    "compressed_bytes": 13234
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/pricing_card.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/pricing_card.obj",
+    "bytes": 13204,
+    "sha256": "755dfd4a68eb778eb82ebf1438f5c151af1b61188573801fbab5d50079061eed",
+    "compressed_bytes": 4124
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/rug.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/rug.obj",
+    "bytes": 13280,
+    "sha256": "0218f52f2d6950110c59abd9a306bbbca696ce7ab1d1ae12b8f79f279fcae22b",
+    "compressed_bytes": 2929
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/scale.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/scale.obj",
+    "bytes": 53125,
+    "sha256": "8af1ef9d5315f5d554a38a84bbb3b2ca992e70c90ebd62c3c5b6ba76eb8b7e36",
+    "compressed_bytes": 12568
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/serving_tray.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/serving_tray.obj",
+    "bytes": 20606,
+    "sha256": "b48d0899c1912b58d7d6db24f3adf1ce0da6aceaf2f3f597d6013c8f85ba5835",
+    "compressed_bytes": 4690
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/stand_mixer.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/stand_mixer.obj",
+    "bytes": 43009,
+    "sha256": "057579e549c75b1ca2d3bad1cc2815523d6df0d69bf6604ff7d61760d0c83577",
+    "compressed_bytes": 10297
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/stand_mixer_arm.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/stand_mixer_arm.obj",
+    "bytes": 38156,
+    "sha256": "2167e0e2ed6c8a8b7e9fb84b45c23dc21bb7f8c2ec163387d95234a304816f40",
+    "compressed_bytes": 9945
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/stand_mixer_arm_stand_mixer_whisk.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/stand_mixer_arm_stand_mixer_whisk.obj",
+    "bytes": 29498,
+    "sha256": "b051c938014416617ecd92528c238718256440d04c13c03f95485ee68a436426",
+    "compressed_bytes": 7086
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/table_round_A.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/table_round_A.obj",
+    "bytes": 24018,
+    "sha256": "d9acdf2f8d3fcdb38843c5a1dc3ccb3b891e4c6c31a0020b8cf00c9b3eae1f28",
+    "compressed_bytes": 5053
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/table_round_B.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/table_round_B.obj",
+    "bytes": 43520,
+    "sha256": "ea8ff1acf4288ec79599f19bffbd9aded9884bb0624e5eed050e5e52ea1846ae",
+    "compressed_bytes": 9897
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/table_round_C.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/table_round_C.obj",
+    "bytes": 36633,
+    "sha256": "e2c65506c66883c92b5d36af3f0d1f60c1fde74b2469eeeb5dbc32161fd7475d",
+    "compressed_bytes": 7736
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/tiny_treats_texture_1.png",
+    "bytes": 20974,
+    "sha256": "31e5c7c81bfba644a59797b1907519592c7728d4af98a705449975dd929482e5",
+    "compressed_bytes": 16533
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/tin_A_beige.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/tin_A_beige.obj",
+    "bytes": 17052,
+    "sha256": "0ba2c82746acd7427b3eaa8d0b623721069e33bb78c1e4ebeab782226007322e",
+    "compressed_bytes": 3939
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/tin_A_brown.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/tin_A_brown.obj",
+    "bytes": 17052,
+    "sha256": "a83eafa61287c65a5010b0c8c63fe8df4023fab95a7eec4183f0c4c2da8e05dc",
+    "compressed_bytes": 3933
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/tin_A_grey.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/tin_A_grey.obj",
+    "bytes": 17050,
+    "sha256": "975f5c52961d3b91957ac98aa238c718b254a05aa6fa50bb27b0ee34e2766ec1",
+    "compressed_bytes": 3937
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/tin_B_beige.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/tin_B_beige.obj",
+    "bytes": 17020,
+    "sha256": "4ce7d2daa67c97dda678460494f2e671cbb3694d8ef8a099c247e028ba597185",
+    "compressed_bytes": 3963
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/tin_B_brown.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/tin_B_brown.obj",
+    "bytes": 17020,
+    "sha256": "605e4e060d8a232fd66edd654d622aeffc1f620f46e02dcb29047c463facadcc",
+    "compressed_bytes": 3962
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/tin_B_grey.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/tin_B_grey.obj",
+    "bytes": 17018,
+    "sha256": "9470d1ff9a661181f33155df9172abff22a9efa40bcbff8ee0cf3a8ab438519f",
+    "compressed_bytes": 3965
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_corner_inner_A.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_corner_inner_A.obj",
+    "bytes": 1812,
+    "sha256": "80b776b8caadeeb75460a5790afe360fe6cc4f9a1504860cc4c0eb206831a5aa",
+    "compressed_bytes": 531
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_corner_inner_B.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_corner_inner_B.obj",
+    "bytes": 13927,
+    "sha256": "287ef70cdf8bb85bd65b893ad811393b339706bb43b73ad383b2bd156b4c3a62",
+    "compressed_bytes": 2499
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_corner_outer_A.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_corner_outer_A.obj",
+    "bytes": 15821,
+    "sha256": "f05a4f4497b3c8ce02f76401c52d1e755fae1341bec5aae2293f4feaa7a185cb",
+    "compressed_bytes": 2780
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_corner_outer_B.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_corner_outer_B.obj",
+    "bytes": 1752,
+    "sha256": "8c75e8e599c6a4cf057596fc97cdced9bbdd5655933e8de0deb7d1f6e55a11fb",
+    "compressed_bytes": 531
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_doorway.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_doorway.obj",
+    "bytes": 2317,
+    "sha256": "ed525b268101d8a9233706c919eb56dc5b79455715bda49542f27a1a371f90ea",
+    "compressed_bytes": 617
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_half_corner_inner_A.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_half_corner_inner_A.obj",
+    "bytes": 1823,
+    "sha256": "7c86f394a3b061e442597fc29e43f2554ec7e69081fd05e8a69ffb63f6fde2fb",
+    "compressed_bytes": 536
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_half_corner_inner_B.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_half_corner_inner_B.obj",
+    "bytes": 9810,
+    "sha256": "7bf9e76d8b1b1aa5c2a616b15dcd2ffa22a732dcfc80723129a04c99af5fb808",
+    "compressed_bytes": 1927
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_half_corner_outer_A.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_half_corner_outer_A.obj",
+    "bytes": 11506,
+    "sha256": "2b9d6a6511c6536174ef3337acba503d8c26bbb6547167a6ee7c8b2d89719fc9",
+    "compressed_bytes": 2178
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_half_corner_outer_B.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_half_corner_outer_B.obj",
+    "bytes": 1761,
+    "sha256": "e5230b14f195a6a471ae4f49a708e0a5c2dcb5b394e0781e01c581120a6c5ec3",
+    "compressed_bytes": 531
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_half_straight_A.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_half_straight_A.obj",
+    "bytes": 5996,
+    "sha256": "58e364567d3408f64d96f11d13f58bbb473c4f3c5c6c59898875d427906b35f5",
+    "compressed_bytes": 1266
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_half_straight_B.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_half_straight_B.obj",
+    "bytes": 1071,
+    "sha256": "2b79e24c10c5be21a2c1f88cc86462effd3bfbfb7b4341fcf2a0879f46be048c",
+    "compressed_bytes": 366
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_straight_A.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_straight_A.obj",
+    "bytes": 8222,
+    "sha256": "68e71475f44a0a34206bfec127878234bec61fed1f6b5566151ab7abee2e75b4",
+    "compressed_bytes": 1577
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_straight_B.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_straight_B.obj",
+    "bytes": 1061,
+    "sha256": "955462bbab8e9d13a175d813e7e147ea159b82e491f03547efb965658ee65823",
+    "compressed_bytes": 363
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_window_full_center_A.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_window_full_center_A.obj",
+    "bytes": 7597,
+    "sha256": "449f2c7aee2225dc2168d1ef5ddc89d03a0f5b098c6142238725ab81a187fa3c",
+    "compressed_bytes": 1597
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_window_full_center_B.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_window_full_center_B.obj",
+    "bytes": 1603,
+    "sha256": "ace7b2d9a8f3b897c79cedb12601dc8b56c804891c774dd1a2d9d69d2db1d72e",
+    "compressed_bytes": 490
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_window_full_left_A.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_window_full_left_A.obj",
+    "bytes": 9435,
+    "sha256": "bc78c9da30bffda1a800e5b8d6997879f26d37373b9a6a480feee10e595255b1",
+    "compressed_bytes": 1893
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_window_full_left_B.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_window_full_left_B.obj",
+    "bytes": 1948,
+    "sha256": "4ac23157c119ce584a9beb831c40fd123966944e65991e76d6eb99235e672057",
+    "compressed_bytes": 567
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_window_full_right_A.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_window_full_right_A.obj",
+    "bytes": 9424,
+    "sha256": "a3ee6bbdff2259951195732c44902f80bd1e77aea40f8fabf30685be76f4a541",
+    "compressed_bytes": 1915
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_window_full_right_B.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_window_full_right_B.obj",
+    "bytes": 1947,
+    "sha256": "1050bb2423f703f7a49da9c18c728b781b38c16a959a2f53f2501897bdc7f0d2",
+    "compressed_bytes": 570
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_window_large_A.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_window_large_A.obj",
+    "bytes": 11218,
+    "sha256": "643e88594dc74dd7313c81098fcb80fe7d1f804319b506a62593ad12087841f8",
+    "compressed_bytes": 2185
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_window_large_B.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_window_large_B.obj",
+    "bytes": 2407,
+    "sha256": "f07c7acb15bdf22f950be2f95973e6419891dd7143a85b1a76177694ecb7f81e",
+    "compressed_bytes": 638
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_window_small_A.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_window_small_A.obj",
+    "bytes": 11219,
+    "sha256": "06ffc50f659da3a44fcc287e06c68252e9ac5e0044627cebd593211962ffb31f",
+    "compressed_bytes": 2174
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_window_small_B.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_modular_panelled_bakery_window_small_B.obj",
+    "bytes": 2405,
+    "sha256": "6959fca8372b3646bfb50fed41579657a80d4f704eb558ec8f1af63224dd9674",
+    "compressed_bytes": 628
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_panelled_bakery_corner_inner.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_panelled_bakery_corner_inner.obj",
+    "bytes": 14230,
+    "sha256": "48bf02f0094d3104d6b52685c55e77d652e4a84d1835b4cf4e952c105fce2e6b",
+    "compressed_bytes": 2601
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_panelled_bakery_corner_outer.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_panelled_bakery_corner_outer.obj",
+    "bytes": 15999,
+    "sha256": "ee0ba87504275e83deb1f95c8ac6bd853f0ba9845c3f808072273ac9f40d08dc",
+    "compressed_bytes": 2860
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_panelled_bakery_doorway.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_panelled_bakery_doorway.obj",
+    "bytes": 2889,
+    "sha256": "df0f07b1291a2b280f83556fd07cf569a483b909d8189415cb3f53e8faf9625e",
+    "compressed_bytes": 721
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_panelled_bakery_doorway_wall_panelled_bakery_door.mtl",
+    "bytes": 572,
+    "sha256": "141240cf7e9789226cbac2bf35f1ef614364cbd426dac84dd4b73b319310069f",
+    "compressed_bytes": 203
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_panelled_bakery_doorway_wall_panelled_bakery_door.obj",
+    "bytes": 22369,
+    "sha256": "b615146a24f616f8580898b425b0ab7d4e171b6bf9c519c6d21bbc4142e79c57",
+    "compressed_bytes": 4833
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_panelled_bakery_straight.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_panelled_bakery_straight.obj",
+    "bytes": 8263,
+    "sha256": "c8492e859fcb54ded569325b7f89d7eb731bee0d6595d77b7d9402a9901b5261",
+    "compressed_bytes": 1590
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_panelled_bakery_window_full_center.mtl",
+    "bytes": 572,
+    "sha256": "141240cf7e9789226cbac2bf35f1ef614364cbd426dac84dd4b73b319310069f",
+    "compressed_bytes": 203
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_panelled_bakery_window_full_center.obj",
+    "bytes": 15210,
+    "sha256": "7ed7696d80cfe794c22e7060da51f7c066be251267a06292c85c460f16c40553",
+    "compressed_bytes": 3111
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_panelled_bakery_window_full_left.mtl",
+    "bytes": 572,
+    "sha256": "141240cf7e9789226cbac2bf35f1ef614364cbd426dac84dd4b73b319310069f",
+    "compressed_bytes": 203
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_panelled_bakery_window_full_left.obj",
+    "bytes": 19427,
+    "sha256": "3b46d01340095b1dc97e1012cca5accd6d89956ffdb3c7012d2015a3b2bb148c",
+    "compressed_bytes": 3882
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_panelled_bakery_window_full_right.mtl",
+    "bytes": 572,
+    "sha256": "141240cf7e9789226cbac2bf35f1ef614364cbd426dac84dd4b73b319310069f",
+    "compressed_bytes": 203
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_panelled_bakery_window_full_right.obj",
+    "bytes": 19387,
+    "sha256": "4cfa568ba4283463b94b2a130b09fc6eb21c4a44c46931d66dcebac1ddbc61f9",
+    "compressed_bytes": 3905
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_panelled_bakery_window_large.mtl",
+    "bytes": 572,
+    "sha256": "141240cf7e9789226cbac2bf35f1ef614364cbd426dac84dd4b73b319310069f",
+    "compressed_bytes": 203
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_panelled_bakery_window_large.obj",
+    "bytes": 22834,
+    "sha256": "1a80fda73fb15df56755f2ef49cf3ea2fe7db7f81ad19578f9c90c612cadeff2",
+    "compressed_bytes": 4385
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_panelled_bakery_window_small.mtl",
+    "bytes": 572,
+    "sha256": "141240cf7e9789226cbac2bf35f1ef614364cbd426dac84dd4b73b319310069f",
+    "compressed_bytes": 203
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_panelled_bakery_window_small.obj",
+    "bytes": 22793,
+    "sha256": "024c8aa7e05ecce10ef895b3fa2d9bd4c449205c34ebd6a465abbb110ee0a31e",
+    "compressed_bytes": 4379
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_shelf_bakery_A.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_shelf_bakery_A.obj",
+    "bytes": 10183,
+    "sha256": "30c2a18aefbf366d28522891c1a04dd95435f2ed73116bc0637078e710589ca1",
+    "compressed_bytes": 2216
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_shelf_bakery_B.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_shelf_bakery_B.obj",
+    "bytes": 17812,
+    "sha256": "a8e5d7c3db3f7390ab4796929ddd92d099ad9dce8df92f73a23b500044c2aaaa",
+    "compressed_bytes": 3595
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_shelf_bakery_C.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_shelf_bakery_C.obj",
+    "bytes": 7253,
+    "sha256": "e25ed04c60d0d107b4567209f1843d072a94a0ff87723d0a3de2f44ee8b078c0",
+    "compressed_bytes": 1550
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_shelf_bakery_end.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_shelf_bakery_end.obj",
+    "bytes": 2675,
+    "sha256": "5edb96b4f8706298066ffc83fe658ef379add731371d808808abc97321bcf0a9",
+    "compressed_bytes": 695
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_sign_large.mtl",
+    "bytes": 620,
+    "sha256": "6714892c740516141408a1a390a442347a050c671960d22161fc35588e793d15",
+    "compressed_bytes": 210
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_sign_large.obj",
+    "bytes": 6980,
+    "sha256": "9444125155f09d24de5e61a15dbf78c6ab2eb40b57c49a450a4834ae0e0f7b57",
+    "compressed_bytes": 1646
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_sign_small.mtl",
+    "bytes": 610,
+    "sha256": "5d767b9e6dc6ad197c400a94c5bf822db42df409fe1d8d0952972ee61a7e73c3",
+    "compressed_bytes": 209
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/wall_sign_small.obj",
+    "bytes": 6981,
+    "sha256": "27468d8f77a528180a44e5fc36be29900fdf93a2f848aa589f93a432cdbfe13c",
+    "compressed_bytes": 1717
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/whisk.mtl",
+    "bytes": 346,
+    "sha256": "404349cefdbb1dea3365d6ab2bccffa877f5c27ebe6060aa66494a7e172e1d68",
+    "compressed_bytes": 182
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/whisk.obj",
+    "bytes": 31533,
+    "sha256": "ed20d24c234c083d38d81644338b48ef884e90744d8db628abdd5387f8229605",
+    "compressed_bytes": 8863
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/window_full_center_modular.mtl",
+    "bytes": 572,
+    "sha256": "141240cf7e9789226cbac2bf35f1ef614364cbd426dac84dd4b73b319310069f",
+    "compressed_bytes": 203
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/window_full_center_modular.obj",
+    "bytes": 6789,
+    "sha256": "2f5ffec3604d47e630dfecb52a8354e617a569db386b5cd4b1909183c54e1e95",
+    "compressed_bytes": 1521
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/window_full_left_modular.mtl",
+    "bytes": 572,
+    "sha256": "141240cf7e9789226cbac2bf35f1ef614364cbd426dac84dd4b73b319310069f",
+    "compressed_bytes": 203
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/window_full_left_modular.obj",
+    "bytes": 8722,
+    "sha256": "e5cbcae792e3003d32ef45bf50cd5c537ac9dff4226b37473e468c3fcf69c06d",
+    "compressed_bytes": 1907
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/window_full_right_modular.mtl",
+    "bytes": 572,
+    "sha256": "141240cf7e9789226cbac2bf35f1ef614364cbd426dac84dd4b73b319310069f",
+    "compressed_bytes": 203
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/window_full_right_modular.obj",
+    "bytes": 8697,
+    "sha256": "7120441c2a35cf3fef84a00f20b5bf7221fe68f14edbbe22a59381268b951908",
+    "compressed_bytes": 1911
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/window_large_modular.mtl",
+    "bytes": 572,
+    "sha256": "141240cf7e9789226cbac2bf35f1ef614364cbd426dac84dd4b73b319310069f",
+    "compressed_bytes": 203
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/window_large_modular.obj",
+    "bytes": 10559,
+    "sha256": "0d9c293941498b58f9335cd4b8c77f6a77b747c19e45d79d7d592c7da11fca22",
+    "compressed_bytes": 2176
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/window_small_modular.mtl",
+    "bytes": 572,
+    "sha256": "141240cf7e9789226cbac2bf35f1ef614364cbd426dac84dd4b73b319310069f",
+    "compressed_bytes": 203
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/obj/window_small_modular.obj",
+    "bytes": 10584,
+    "sha256": "7ba3dbe4eee06c3fadf5dc2f4d5686c4f1325af80780e83ece939f8998e63f13",
+    "compressed_bytes": 2177
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/Textures/bakery_sign_long_texture.png",
+    "bytes": 19297,
+    "sha256": "281dcc2cfd56d867966546c634a59dd7f08a9f719d12f75cb224b99baed504b7",
+    "compressed_bytes": 14180
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/Textures/bakery_sign_texture.png",
+    "bytes": 12099,
+    "sha256": "54eda70f9e116b2f20611fb781105af3e9ffc4eecd91442c6b2792b1d017aace",
+    "compressed_bytes": 10708
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Assets/Textures/tiny_treats_texture_1.png",
+    "bytes": 20974,
+    "sha256": "31e5c7c81bfba644a59797b1907519592c7728d4af98a705449975dd929482e5",
+    "compressed_bytes": 16533
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/License.txt",
+    "bytes": 907,
+    "sha256": "af97867b174afc18500d5c79c3d49b9e8d97e3aefe10ca748cdfa0cadaa0121a",
+    "compressed_bytes": 481
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/More Tiny Treat Sets.url",
+    "bytes": 127,
+    "sha256": "0fb6e2b41375d5dbcc3b80d1780695ceb142d092d271657a3c306ad57d9828bd",
+    "compressed_bytes": 110
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/overview.png",
+    "bytes": 829765,
+    "sha256": "347f10426c787e2d2ada39ec7eb12a60756d072126096c43a17efe598506272f",
+    "compressed_bytes": 824741
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/overview_1.1.png",
+    "bytes": 919409,
+    "sha256": "32c4f2d00d2ce29537692c56992f1b7868f5cdd9f5e3339fef7be6bd7e510687",
+    "compressed_bytes": 914560
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/Patreon.url",
+    "bytes": 134,
+    "sha256": "a93dcb2aabb5a4c50229b9389fde23068471f2f185838c8f3cb52a83b5247d31",
+    "compressed_bytes": 116
+  },
+  {
+    "path": "Tiny_Treats_Bakery_Interior_1.1_FREE/sample.png",
+    "bytes": 1268549,
+    "sha256": "2a2e2e18888658cde9c594ceb362d507157317455c658325ba0e1679584ee85c",
+    "compressed_bytes": 1262976
+  }
+]

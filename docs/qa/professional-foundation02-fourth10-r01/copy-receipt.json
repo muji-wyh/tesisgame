@@ -1,0 +1,97 @@
+{
+  "schema": 1,
+  "files": [
+    {
+      "source": "build/professional-english/foundation02-fourth10-root-commit-r01/invoke.cjs",
+      "path": "docs/qa/professional-foundation02-fourth10-r01/root-commit/invoke.cjs",
+      "bytes": 4367,
+      "sha256": "7dbfa67e642b3d14135ab9cc5e4940efb99e282f517ff2ea9cf26620dbc5becd"
+    },
+    {
+      "source": "build/professional-english/foundation02-fourth10-root-commit-r01/source-review.json",
+      "path": "docs/qa/professional-foundation02-fourth10-r01/root-commit/source-review.json",
+      "bytes": 693,
+      "sha256": "403848e7c27672d4166c6acdee200d0021c5947913df0bf2f8fd1eeba809d1d5"
+    },
+    {
+      "source": "build/professional-english/foundation02-fourth10-root-commit-r01/input.json",
+      "path": "docs/qa/professional-foundation02-fourth10-r01/root-commit/input.json",
+      "bytes": 1716,
+      "sha256": "550c629c92c5da133348b6eca82b016dfa8426c3ac501fef2de265782c5faee0"
+    },
+    {
+      "source": "build/professional-english/foundation02-fourth10-root-commit-r01/committed-inspection.json",
+      "path": "docs/qa/professional-foundation02-fourth10-r01/root-commit/committed-inspection.json",
+      "bytes": 1438,
+      "sha256": "a8de0f793a6837c6c9f75bd474bf79e47893be55583104d10bdc35dbd39721e3"
+    },
+    {
+      "source": "build/professional-english/foundation02-fourth10-root-commit-r01/execution/start.json",
+      "path": "docs/qa/professional-foundation02-fourth10-r01/root-commit/execution/start.json",
+      "bytes": 2010,
+      "sha256": "b3f381296fe4c8804241406004a4099c699fd4b6ef17441865708740827fdd4f"
+    },
+    {
+      "source": "build/professional-english/foundation02-fourth10-root-commit-r01/execution/receipt.json",
+      "path": "docs/qa/professional-foundation02-fourth10-r01/root-commit/execution/receipt.json",
+      "bytes": 2245,
+      "sha256": "ba0dd86cae6c29144e71cfddcd8bb9c01aaa04ba83fd2168bb9d59ef2564dc50"
+    },
+    {
+      "source": "build/professional-english/foundation02-fourth10-root-commit-r01/execution/command.log",
+      "path": "docs/qa/professional-foundation02-fourth10-r01/root-commit/execution/command.log",
+      "bytes": 401,
+      "sha256": "2d0e96cd44211a8acde3f3c5bd6087e042f6311dee382a34284ea3391ae462ac"
+    },
+    {
+      "source": "build/professional-english/foundation02-fourth10-persisted-validation-r01/invoke.cjs",
+      "path": "docs/qa/professional-foundation02-fourth10-r01/persisted/invoke.cjs",
+      "bytes": 4817,
+      "sha256": "ec257f224e091177f1f8b7193bd3f96ec5773cc96e975377c8d6c276cfb7b491"
+    },
+    {
+      "source": "build/professional-english/foundation02-fourth10-persisted-validation-r01/source-review.json",
+      "path": "docs/qa/professional-foundation02-fourth10-r01/persisted/source-review.json",
+      "bytes": 783,
+      "sha256": "4e9a3c55c7cb4287ec773acf727f371497d8a59cb8fa95c3552e2c3c4b5fc2e0"
+    },
+    {
+      "source": "build/professional-english/foundation02-fourth10-persisted-validation-r01/attempt-001/start.json",
+      "path": "docs/qa/professional-foundation02-fourth10-r01/persisted/attempt-001/start.json",
+      "bytes": 121586,
+      "sha256": "c843fe0b209c8201ccd832db9db05852a10a415900b0e3ba605a7e2b1957121c"
+    },
+    {
+      "source": "build/professional-english/foundation02-fourth10-persisted-validation-r01/attempt-001/receipt.json",
+      "path": "docs/qa/professional-foundation02-fourth10-r01/persisted/attempt-001/receipt.json",
+      "bytes": 2818,
+      "sha256": "f25fbeb4fa8fafe08b0431653a5a9171d8369581aed104faad3e0161bbaf40f7"
+    },
+    {
+      "source": "build/professional-english/foundation02-fourth10-persisted-validation-r01/attempt-001/command-1.log",
+      "path": "docs/qa/professional-foundation02-fourth10-r01/persisted/attempt-001/command-1.log",
+      "bytes": 591,
+      "sha256": "ae490723b3003afdf5acb56d9d1d2523220eaff867fbd91a26fab1b06dd02757"
+    },
+    {
+      "source": "build/professional-english/foundation02-fourth10-persisted-validation-r01/attempt-001/command-2.log",
+      "path": "docs/qa/professional-foundation02-fourth10-r01/persisted/attempt-001/command-2.log",
+      "bytes": 24787,
+      "sha256": "b3f3a6a6f56ce381a742951e4cff7d2266eb7de55e8fc52054d2d5cc7dbeed07"
+    },
+    {
+      "source": "build/professional-english/foundation02-fourth10-persisted-validation-r01/attempt-001/command-3.log",
+      "path": "docs/qa/professional-foundation02-fourth10-r01/persisted/attempt-001/command-3.log",
+      "bytes": 130,
+      "sha256": "c04bf5168c4951be761afab31633b5a6d5e4fdb537a8a4f81c74f259bdfb09a2"
+    },
+    {
+      "source": "build/professional-english/foundation02-fourth10-persisted-validation-r01/attempt-001/command-4.log",
+      "path": "docs/qa/professional-foundation02-fourth10-r01/persisted/attempt-001/command-4.log",
+      "bytes": 241,
+      "sha256": "4a8a7d0fc0ef12f47710cf805557f896c6ad96529ce1cdd2f30cc40a0ac97023"
+    }
+  ],
+  "validated_current_inputs": 865,
+  "scope": "Exact copies of completed root dispatch and fresh persisted evidence; no test replay."
+}

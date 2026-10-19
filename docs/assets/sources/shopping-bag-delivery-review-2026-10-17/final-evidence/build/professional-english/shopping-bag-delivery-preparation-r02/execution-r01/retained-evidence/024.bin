@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "status": "pending_actual_successful_fourth10_delivery_and_independent_proposal_review",
+  "sense_id": "shopping-bag.goods-carrier.n",
+  "before_entry_json_sha256": "ba96e5d4ba9911b68ddb630d3413cac52d155a3d27c7452aaee97ba5284f7e07",
+  "after_entry_json_sha256": "25300b5f9d78a6327c16c27143f1aeddd9dba1c41bdd4e42c20f30d36148cc85",
+  "protected_fields_json_sha256": "091cb33bb94c158215dc8db8c4198482b0c2f991ce4b964786321d5114c51d69",
+  "required_actual_lineage": [
+    "Successful fourth10 guarded commit receipt and committed journal",
+    "Successful fourth10 fresh persisted-validation receipt and its measured inputs/afterimages",
+    "Independent exact integration-proposal review",
+    "New post-fourth10 frozen baseline and scratch test afterimages",
+    "Independent exact final rebase/delta review"
+  ],
+  "deferred_bindings": [
+    "Complete loaded registry before/after hashes",
+    "Raw sources.json hash and exact protected content",
+    "Raw retail-pilot.json before/after hashes",
+    "Three shared test source and afterimage hashes",
+    "Actual current validator/runtime/protected-input inventory",
+    "Final transaction, commit and persisted-verification lineage"
+  ],
+  "source_registry_delta": [],
+  "module_manifest_delta": [],
+  "curriculum_revision_delta": [],
+  "practice_modes_delta": [],
+  "approved_audio_delta": [],
+  "morphology_delta": [],
+  "expected_image_count_delta": 1,
+  "expected_audio_count_delta": 0,
+  "stop_conditions": [
+    "Active production/shared-test writer has not yielded",
+    "Fourth10 has only prepared/projected/failed evidence and no successful persisted delivery",
+    "Any pinned immutable source/candidate/acceptance file differs",
+    "Live bag differs from the exact accepted candidate preimage",
+    "Any protected existing image/audio descriptor or file differs without a separately reviewed explanation",
+    "Any intended new production target unexpectedly exists",
+    "Final delta would touch an unlisted field or replay a consumed candidate/proposal"
+  ],
+  "output_rule": "Create a fresh rebase revision; do not modify this sealed proposal or historical evidence.",
+  "dispatch_rule": "Root owns actual integration and fresh persisted schema/descriptor/hash/budget checks. This contract dispatches nothing and proposes no native/browser/visual/audio replay."
+}

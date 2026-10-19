@@ -1,0 +1,1791 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "care-coordinator.person-organizing-individual-support.n",
+      "text": "care coordinator",
+      "display_text": "care coordinator",
+      "pos": "noun",
+      "definition": "A person who helps organize and connect the care or support arranged for an individual.",
+      "example": "The care coordinator checked that everyone understood the next review.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "care coordinator"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An adult and coordinator discussing connected support arrangements.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "care-coordinator.person-organizing-individual-support.n.analysis.v1",
+        "lexeme_id": "care-coordinator.person-organizing-individual-support.n",
+        "text": "care coordinator",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.care",
+            "type": "stem",
+            "canonical": "care",
+            "surface": "care"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.coordinate",
+            "type": "stem",
+            "canonical": "coordinate",
+            "surface": "coordinat"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.or.suffix",
+            "type": "suffix",
+            "canonical": "or",
+            "surface": "or"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "coordinator",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "care coordinator",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-plans",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "care-agency.organization-providing-care-workers.n",
+      "text": "care agency",
+      "display_text": "care agency",
+      "pos": "noun",
+      "definition": "An organization that arranges or supplies care workers and related services.",
+      "example": "She asked the care agency who would contact her.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "care agency"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An adult speaking with a fictional care-service representative.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "care-agency.organization-providing-care-workers.n.analysis.v1",
+        "lexeme_id": "care-agency.organization-providing-care-workers.n",
+        "text": "care agency",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.care",
+            "type": "stem",
+            "canonical": "care",
+            "surface": "care"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.agency",
+            "type": "stem",
+            "canonical": "agency",
+            "surface": "agency"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "care agency",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-plans",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "care-home.residential-care-setting.n",
+      "text": "care home",
+      "display_text": "care home",
+      "pos": "noun",
+      "definition": "A place where people live and receive organized personal care or support, with services varying by setting.",
+      "example": "He asked which services the care home provides.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "care home"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A welcoming residential care setting with independent adult residents.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "care-home.residential-care-setting.n.analysis.v1",
+        "lexeme_id": "care-home.residential-care-setting.n",
+        "text": "care home",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.care",
+            "type": "stem",
+            "canonical": "care",
+            "surface": "care"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.home",
+            "type": "stem",
+            "canonical": "home",
+            "surface": "home"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "care home",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-plans",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "assisted-living.housing-with-personal-support-services.n",
+      "text": "assisted living",
+      "display_text": "assisted living",
+      "pos": "noun",
+      "definition": "Housing with organized support for daily living, with the meaning and services varying by region.",
+      "example": "She asked what assisted living includes in her area.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "assisted living"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Adults discussing a housing option without promising specific services.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "assisted-living.housing-with-personal-support-services.n.analysis.v1",
+        "lexeme_id": "assisted-living.housing-with-personal-support-services.n",
+        "text": "assisted living",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.assist",
+            "type": "stem",
+            "canonical": "assist",
+            "surface": "assist"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ed.suffix",
+            "type": "suffix",
+            "canonical": "ed",
+            "surface": "ed"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.live",
+            "type": "stem",
+            "canonical": "live",
+            "surface": "liv"
+          },
+          {
+            "id": "p4",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "assisted",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p3",
+            "right": "p4",
+            "surface": "living",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n3",
+            "left": "n1",
+            "right": "n2",
+            "surface": "assisted living",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n3"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-plans",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "day-center.daytime-community-support-setting.n",
+      "text": "day center",
+      "display_text": "day center",
+      "pos": "noun",
+      "definition": "A place providing organized daytime activities or support without an overnight stay.",
+      "example": "He asked about the day center's activities.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "day center",
+        "day centre"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An inclusive daytime community setting with adult participants.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "day-center.daytime-community-support-setting.n.analysis.v1",
+        "lexeme_id": "day-center.daytime-community-support-setting.n",
+        "text": "day center",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.day",
+            "type": "stem",
+            "canonical": "day",
+            "surface": "day"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.center",
+            "type": "stem",
+            "canonical": "center",
+            "surface": "center"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "day center",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-plans",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "home-adaptation.change-improving-home-access-or-use.n",
+      "text": "home adaptation",
+      "display_text": "home adaptation",
+      "pos": "noun",
+      "definition": "A change to a home intended to improve access or everyday use for an individual.",
+      "example": "The assessor discussed a proposed home adaptation.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "home adaptation"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An adult and assessor discussing a doorway change, no construction instructions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "home-adaptation.change-improving-home-access-or-use.n.analysis.v1",
+        "lexeme_id": "home-adaptation.change-improving-home-access-or-use.n",
+        "text": "home adaptation",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.home",
+            "type": "stem",
+            "canonical": "home",
+            "surface": "home"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.adapt",
+            "type": "stem",
+            "canonical": "adapt",
+            "surface": "adapt"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.ation.suffix",
+            "type": "suffix",
+            "canonical": "ation",
+            "surface": "ation"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "adaptation",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "home adaptation",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-plans",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "needs-assessment.evaluation-of-support-needs.n",
+      "text": "needs assessment",
+      "display_text": "needs assessment",
+      "pos": "noun",
+      "definition": "A structured consideration of a person's needs and what support may address them.",
+      "example": "She asked how to prepare for the needs assessment.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "needs assessment"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An adult explaining priorities during a support assessment.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "needs-assessment.evaluation-of-support-needs.n.analysis.v1",
+        "lexeme_id": "needs-assessment.evaluation-of-support-needs.n",
+        "text": "needs assessment",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.need",
+            "type": "stem",
+            "canonical": "need",
+            "surface": "need"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.s.suffix",
+            "type": "suffix",
+            "canonical": "s",
+            "surface": "s"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.assess",
+            "type": "stem",
+            "canonical": "assess",
+            "surface": "assess"
+          },
+          {
+            "id": "p4",
+            "canonical_id": "affix.ment.suffix",
+            "type": "suffix",
+            "canonical": "ment",
+            "surface": "ment"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "needs",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p3",
+            "right": "p4",
+            "surface": "assessment",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n3",
+            "left": "n1",
+            "right": "n2",
+            "surface": "needs assessment",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n3"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-plans",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "caregiver-assessment.review-of-caregiver-own-support-needs.n",
+      "text": "caregiver assessment",
+      "display_text": "caregiver assessment",
+      "pos": "noun",
+      "definition": "A consideration of a caregiver's own needs and support, with formal arrangements varying by region.",
+      "example": "He asked whether a caregiver assessment was available locally.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "caregiver assessment",
+        "carer's assessment"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A caregiver discussing their own needs with a professional.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "caregiver-assessment.review-of-caregiver-own-support-needs.n.analysis.v1",
+        "lexeme_id": "caregiver-assessment.review-of-caregiver-own-support-needs.n",
+        "text": "caregiver assessment",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.care",
+            "type": "stem",
+            "canonical": "care",
+            "surface": "care"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.give",
+            "type": "stem",
+            "canonical": "give",
+            "surface": "giv"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.er.suffix",
+            "type": "suffix",
+            "canonical": "er",
+            "surface": "er"
+          },
+          {
+            "id": "p4",
+            "canonical_id": "morph.assess",
+            "type": "stem",
+            "canonical": "assess",
+            "surface": "assess"
+          },
+          {
+            "id": "p5",
+            "canonical_id": "affix.ment.suffix",
+            "type": "suffix",
+            "canonical": "ment",
+            "surface": "ment"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "giver",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "caregiver",
+            "rule": "closed_compound"
+          },
+          {
+            "id": "n3",
+            "left": "p4",
+            "right": "p5",
+            "surface": "assessment",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n4",
+            "left": "n2",
+            "right": "n3",
+            "surface": "caregiver assessment",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n4"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-plans",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "support-network.people-and-services-offering-support.n",
+      "text": "support network",
+      "display_text": "support network",
+      "pos": "noun",
+      "definition": "People and services a person can turn to for practical, emotional, or other support.",
+      "example": "She chose which people belonged in her support network.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "support network"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An adult identifying trusted people and services.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "support-network.people-and-services-offering-support.n.analysis.v1",
+        "lexeme_id": "support-network.people-and-services-offering-support.n",
+        "text": "support network",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.support",
+            "type": "stem",
+            "canonical": "support",
+            "surface": "support"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.net",
+            "type": "stem",
+            "canonical": "net",
+            "surface": "net"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.work",
+            "type": "stem",
+            "canonical": "work",
+            "surface": "work"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "network",
+            "rule": "closed_compound"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "support network",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-plans",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "replacement-care.care-cover-during-usual-caregiver-absence.n",
+      "text": "replacement care",
+      "display_text": "replacement care",
+      "pos": "noun",
+      "definition": "Care arranged when the usual caregiver is unavailable.",
+      "example": "They discussed replacement care for the planned absence.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "replacement care"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An adult reviewing agreed temporary cover with a coordinator.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "replacement-care.care-cover-during-usual-caregiver-absence.n.analysis.v1",
+        "lexeme_id": "replacement-care.care-cover-during-usual-caregiver-absence.n",
+        "text": "replacement care",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "affix.re.prefix",
+            "type": "prefix",
+            "canonical": "re",
+            "surface": "re"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.place",
+            "type": "stem",
+            "canonical": "place",
+            "surface": "place"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.ment.suffix",
+            "type": "suffix",
+            "canonical": "ment",
+            "surface": "ment"
+          },
+          {
+            "id": "p4",
+            "canonical_id": "morph.care",
+            "type": "stem",
+            "canonical": "care",
+            "surface": "care"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "replace",
+            "rule": "prefix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "replacement",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n3",
+            "left": "n2",
+            "right": "p4",
+            "surface": "replacement care",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n3"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-plans",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "nhs-respite-care",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "service-agreement.documented-service-arrangement.n",
+      "text": "service agreement",
+      "display_text": "service agreement",
+      "pos": "noun",
+      "definition": "An agreement describing services, responsibilities, and relevant terms.",
+      "example": "He asked for the service agreement in an accessible format.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "service agreement"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An adult reviewing a fictional agreement with support.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "service-agreement.documented-service-arrangement.n.analysis.v1",
+        "lexeme_id": "service-agreement.documented-service-arrangement.n",
+        "text": "service agreement",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.service",
+            "type": "stem",
+            "canonical": "service",
+            "surface": "service"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.agree",
+            "type": "stem",
+            "canonical": "agree",
+            "surface": "agree"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.ment.suffix",
+            "type": "suffix",
+            "canonical": "ment",
+            "surface": "ment"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "agreement",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "service agreement",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-plans",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "zendesk-ticket-lifecycle",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-lodging-managers",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "transport-bls-delivery-drivers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-onet-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-sales-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "review-meeting.meeting-to-reconsider-arrangements.n",
+      "text": "review meeting",
+      "display_text": "review meeting",
+      "pos": "noun",
+      "definition": "A meeting to consider how arrangements are working and whether changes are needed.",
+      "example": "She asked to include her own goals in the review meeting.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "review meeting"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An adult leading discussion of their support arrangements.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "review-meeting.meeting-to-reconsider-arrangements.n.analysis.v1",
+        "lexeme_id": "review-meeting.meeting-to-reconsider-arrangements.n",
+        "text": "review meeting",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "affix.re.prefix",
+            "type": "prefix",
+            "canonical": "re",
+            "surface": "re"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.view",
+            "type": "stem",
+            "canonical": "view",
+            "surface": "view"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.meet",
+            "type": "stem",
+            "canonical": "meet",
+            "surface": "meet"
+          },
+          {
+            "id": "p4",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "review",
+            "rule": "prefix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p3",
+            "right": "p4",
+            "surface": "meeting",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n3",
+            "left": "n1",
+            "right": "n2",
+            "surface": "review meeting",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n3"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-plans",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "zendesk-support-duration-metrics",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-lodging-managers",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "transport-bls-delivery-drivers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-training-development",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-sales-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "missed-visit.planned-visit-not-occurring.n",
+      "text": "missed visit",
+      "display_text": "missed visit",
+      "pos": "noun",
+      "definition": "A scheduled visit that did not take place as arranged.",
+      "example": "The coordinator recorded and followed up the missed visit.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "missed visit"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional schedule showing an uncompleted visit and a contact action.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "missed-visit.planned-visit-not-occurring.n.analysis.v1",
+        "lexeme_id": "missed-visit.planned-visit-not-occurring.n",
+        "text": "missed visit",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents and spelling alternations. A qualified language reviewer must verify allomorphs, the depth of analysis for intact stems, and suitability for learning. Classical or uncertain analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.miss",
+            "type": "stem",
+            "canonical": "miss",
+            "surface": "miss"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ed.suffix",
+            "type": "suffix",
+            "canonical": "ed",
+            "surface": "ed"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.visit",
+            "type": "stem",
+            "canonical": "visit",
+            "surface": "visit"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "missed",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "missed visit",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nhs-care-plans",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft requires term-level language, care-domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Individual choices, accessibility, role boundaries, regional terminology, care-domain meaning, and morphology require review. No clinical procedure, medicine dose, equipment-use technique, or legal entitlement is taught. Image brief only; no artwork has been acquired."
+    }
+  ]
+}

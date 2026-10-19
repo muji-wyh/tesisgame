@@ -1,0 +1,333 @@
+{
+  "schema": 1,
+  "ok": true,
+  "time": "2026-10-16T21:01:49.488Z",
+  "copies": [
+    {
+      "source": {
+        "path": "build/professional-english/domain-runtime-web-browser-r05/inventory.json",
+        "bytes": 2060,
+        "sha256": "86978ca1b5921ef3a945c806d0c6c92d25bf2b467c636d820bf8b9c1168e4a24"
+      },
+      "destination": {
+        "path": "docs\\qa\\professional-domain-web-runtime-r01\\r05-browser\\proposal\\inventory.json",
+        "bytes": 2060,
+        "sha256": "86978ca1b5921ef3a945c806d0c6c92d25bf2b467c636d820bf8b9c1168e4a24"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/domain-runtime-web-browser-r05/README.md",
+        "bytes": 2563,
+        "sha256": "bc6ceffaeec8989f6567d7ea0e628bf3491a9e581e5df743515d433cb3f1db1a"
+      },
+      "destination": {
+        "path": "docs\\qa\\professional-domain-web-runtime-r01\\r05-browser\\proposal\\README.md",
+        "bytes": 2563,
+        "sha256": "bc6ceffaeec8989f6567d7ea0e628bf3491a9e581e5df743515d433cb3f1db1a"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/domain-runtime-web-browser-r05/assemble-proposal.cjs",
+        "bytes": 14634,
+        "sha256": "be5cf56b10564bff06a4c731e19094776fc2e6e8400ef59c9784e0a2b1c1710c"
+      },
+      "destination": {
+        "path": "docs\\qa\\professional-domain-web-runtime-r01\\r05-browser\\proposal\\assemble-proposal.cjs",
+        "bytes": 14634,
+        "sha256": "be5cf56b10564bff06a4c731e19094776fc2e6e8400ef59c9784e0a2b1c1710c"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/domain-runtime-web-browser-r05/assembly-result.json",
+        "bytes": 464,
+        "sha256": "cd7f97926bafe1c95089c2818e783fdb64e62be5e004b3bc834ac636d1b56a51"
+      },
+      "destination": {
+        "path": "docs\\qa\\professional-domain-web-runtime-r01\\r05-browser\\proposal\\assembly-result.json",
+        "bytes": 464,
+        "sha256": "cd7f97926bafe1c95089c2818e783fdb64e62be5e004b3bc834ac636d1b56a51"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/domain-runtime-web-browser-r05/assembly-start.json",
+        "bytes": 294,
+        "sha256": "343bb7503dea59ff11ccacb1558ef88ff17908d6e311117594cfbdb8b2a7350c"
+      },
+      "destination": {
+        "path": "docs\\qa\\professional-domain-web-runtime-r01\\r05-browser\\proposal\\assembly-start.json",
+        "bytes": 294,
+        "sha256": "343bb7503dea59ff11ccacb1558ef88ff17908d6e311117594cfbdb8b2a7350c"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/domain-runtime-web-browser-r05/browser.cjs",
+        "bytes": 11244,
+        "sha256": "74f38e7351444c3b441f5263e9931f06a624d6ab15736096c6892ede5d0d363b"
+      },
+      "destination": {
+        "path": "docs\\qa\\professional-domain-web-runtime-r01\\r05-browser\\proposal\\browser.cjs",
+        "bytes": 11244,
+        "sha256": "74f38e7351444c3b441f5263e9931f06a624d6ab15736096c6892ede5d0d363b"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/domain-runtime-web-browser-r05/common.cjs",
+        "bytes": 2232,
+        "sha256": "8417a3ea866a452c48a7f72ec28a6608a4a2318cbd97a67ce61a8172c8fbb4fa"
+      },
+      "destination": {
+        "path": "docs\\qa\\professional-domain-web-runtime-r01\\r05-browser\\proposal\\common.cjs",
+        "bytes": 2232,
+        "sha256": "8417a3ea866a452c48a7f72ec28a6608a4a2318cbd97a67ce61a8172c8fbb4fa"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/domain-runtime-web-browser-r05/inherited-inputs.json",
+        "bytes": 11062,
+        "sha256": "e38f78572410065afc3c5bfc4f8053b332e9c911c6e9af83c1824a72a85af432"
+      },
+      "destination": {
+        "path": "docs\\qa\\professional-domain-web-runtime-r01\\r05-browser\\proposal\\inherited-inputs.json",
+        "bytes": 11062,
+        "sha256": "e38f78572410065afc3c5bfc4f8053b332e9c911c6e9af83c1824a72a85af432"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/domain-runtime-web-browser-r05/materialize.cjs",
+        "bytes": 2810,
+        "sha256": "3454f6742bb6a028860a2b7458edb1be2b204816f2c031ec8b64a99f4990bb66"
+      },
+      "destination": {
+        "path": "docs\\qa\\professional-domain-web-runtime-r01\\r05-browser\\proposal\\materialize.cjs",
+        "bytes": 2810,
+        "sha256": "3454f6742bb6a028860a2b7458edb1be2b204816f2c031ec8b64a99f4990bb66"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/domain-runtime-web-browser-r05/proposal.json",
+        "bytes": 5898,
+        "sha256": "3b52a39be761dc8f8566e605877965a87129a9fae44b4df232ed0fbf14b60ce3"
+      },
+      "destination": {
+        "path": "docs\\qa\\professional-domain-web-runtime-r01\\r05-browser\\proposal\\proposal.json",
+        "bytes": 5898,
+        "sha256": "3b52a39be761dc8f8566e605877965a87129a9fae44b4df232ed0fbf14b60ce3"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/domain-runtime-web-browser-r05/shell-after.html",
+        "bytes": 4869,
+        "sha256": "5cd253ab1dc2a2b3deb96fa4cbd383edcfe501aabb5d683c919883a6845847ce"
+      },
+      "destination": {
+        "path": "docs\\qa\\professional-domain-web-runtime-r01\\r05-browser\\proposal\\shell-after.html",
+        "bytes": 4869,
+        "sha256": "5cd253ab1dc2a2b3deb96fa4cbd383edcfe501aabb5d683c919883a6845847ce"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/domain-runtime-web-browser-r05/source-references.json",
+        "bytes": 11730,
+        "sha256": "549140e0cb645496c3ba1c5b9b1e5e5474dfff65d0c22eec9cbb041297927b46"
+      },
+      "destination": {
+        "path": "docs\\qa\\professional-domain-web-runtime-r01\\r05-browser\\proposal\\source-references.json",
+        "bytes": 11730,
+        "sha256": "549140e0cb645496c3ba1c5b9b1e5e5474dfff65d0c22eec9cbb041297927b46"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/domain-runtime-web-browser-r05/supplement.cjs",
+        "bytes": 3290,
+        "sha256": "94ff6adf2fcba1890bbf30a071ff0f55499a96139846fb4b19858bb4255065fc"
+      },
+      "destination": {
+        "path": "docs\\qa\\professional-domain-web-runtime-r01\\r05-browser\\proposal\\supplement.cjs",
+        "bytes": 3290,
+        "sha256": "94ff6adf2fcba1890bbf30a071ff0f55499a96139846fb4b19858bb4255065fc"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/domain-runtime-web-root-r05/invoke.cjs",
+        "bytes": 3384,
+        "sha256": "912538c5e22ae84ca4adf983b7446d75655b65f023da5ca55527f6572a5026bd"
+      },
+      "destination": {
+        "path": "docs\\qa\\professional-domain-web-runtime-r01\\r05-browser\\root\\invoke.cjs",
+        "bytes": 3384,
+        "sha256": "912538c5e22ae84ca4adf983b7446d75655b65f023da5ca55527f6572a5026bd"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/domain-runtime-web-root-r05/dispatch-source.json",
+        "bytes": 761,
+        "sha256": "7ef10e8868c6dce98136cf77f327d23b9afe71d6585af8aa2ed4da0992ea1e04"
+      },
+      "destination": {
+        "path": "docs\\qa\\professional-domain-web-runtime-r01\\r05-browser\\root\\dispatch-source.json",
+        "bytes": 761,
+        "sha256": "7ef10e8868c6dce98136cf77f327d23b9afe71d6585af8aa2ed4da0992ea1e04"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/domain-runtime-web-root-r05/materialized-inspection.json",
+        "bytes": 3295,
+        "sha256": "d942fcf1203927cd3bbcb44558267c0ab9db66314e8c13d446793bf7a9706e06"
+      },
+      "destination": {
+        "path": "docs\\qa\\professional-domain-web-runtime-r01\\r05-browser\\root\\materialized-inspection.json",
+        "bytes": 3295,
+        "sha256": "d942fcf1203927cd3bbcb44558267c0ab9db66314e8c13d446793bf7a9706e06"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/domain-runtime-web-root-r05/materialize/start.json",
+        "bytes": 1272,
+        "sha256": "0fbc61ca7008bdeeaceabfdd843fd4df9ccf73b83f6827b3c6805607f7c1f343"
+      },
+      "destination": {
+        "path": "docs\\qa\\professional-domain-web-runtime-r01\\r05-browser\\root\\materialize\\start.json",
+        "bytes": 1272,
+        "sha256": "0fbc61ca7008bdeeaceabfdd843fd4df9ccf73b83f6827b3c6805607f7c1f343"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/domain-runtime-web-root-r05/materialize/execution.log",
+        "bytes": 186,
+        "sha256": "22950fc59b71182b80cff0e7e5dffcc02c1f012106e38d95a89d1dfc9142d7fa"
+      },
+      "destination": {
+        "path": "docs\\qa\\professional-domain-web-runtime-r01\\r05-browser\\root\\materialize\\execution.log",
+        "bytes": 186,
+        "sha256": "22950fc59b71182b80cff0e7e5dffcc02c1f012106e38d95a89d1dfc9142d7fa"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/domain-runtime-web-root-r05/materialize/receipt.json",
+        "bytes": 1436,
+        "sha256": "a0358772a14fd59c27641570cc4ea324865d1dc65887f3451d846ba298b75160"
+      },
+      "destination": {
+        "path": "docs\\qa\\professional-domain-web-runtime-r01\\r05-browser\\root\\materialize\\receipt.json",
+        "bytes": 1436,
+        "sha256": "a0358772a14fd59c27641570cc4ea324865d1dc65887f3451d846ba298b75160"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/domain-runtime-web-root-r05/browser/start.json",
+        "bytes": 1265,
+        "sha256": "2d6e5623c6d49123936b3f507277f5edb479749ee754cd469be6b6af7dbb8999"
+      },
+      "destination": {
+        "path": "docs\\qa\\professional-domain-web-runtime-r01\\r05-browser\\root\\browser\\start.json",
+        "bytes": 1265,
+        "sha256": "2d6e5623c6d49123936b3f507277f5edb479749ee754cd469be6b6af7dbb8999"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/domain-runtime-web-root-r05/browser/execution.log",
+        "bytes": 204,
+        "sha256": "b542c3b83ef806366f2de0bb6609914e08cf8c13fa28115a96fa3e8ec7142f99"
+      },
+      "destination": {
+        "path": "docs\\qa\\professional-domain-web-runtime-r01\\r05-browser\\root\\browser\\execution.log",
+        "bytes": 204,
+        "sha256": "b542c3b83ef806366f2de0bb6609914e08cf8c13fa28115a96fa3e8ec7142f99"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/domain-runtime-web-root-r05/browser/receipt.json",
+        "bytes": 1425,
+        "sha256": "f83d44e546641347d1141bc08d5b0781c61e360cc590b5cc4f897b42f7a8d140"
+      },
+      "destination": {
+        "path": "docs\\qa\\professional-domain-web-runtime-r01\\r05-browser\\root\\browser\\receipt.json",
+        "bytes": 1425,
+        "sha256": "f83d44e546641347d1141bc08d5b0781c61e360cc590b5cc4f897b42f7a8d140"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/domain-runtime-web-browser-r05/attempt-001/materialize-start.json",
+        "bytes": 699,
+        "sha256": "bc076a464a7d2f96fe42da09989510bc196b6ff490ebc9e75f851d71b7a6fe5a"
+      },
+      "destination": {
+        "path": "docs\\qa\\professional-domain-web-runtime-r01\\r05-browser\\actual\\materialize-start.json",
+        "bytes": 699,
+        "sha256": "bc076a464a7d2f96fe42da09989510bc196b6ff490ebc9e75f851d71b7a6fe5a"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/domain-runtime-web-browser-r05/attempt-001/shell-supplement.json",
+        "bytes": 4302,
+        "sha256": "be4fd060e55388d2590d7c077ac6800c221e8d6eb308ab550972fd9eae55b06a"
+      },
+      "destination": {
+        "path": "docs\\qa\\professional-domain-web-runtime-r01\\r05-browser\\actual\\shell-supplement.json",
+        "bytes": 4302,
+        "sha256": "be4fd060e55388d2590d7c077ac6800c221e8d6eb308ab550972fd9eae55b06a"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/domain-runtime-web-browser-r05/attempt-001/browser/receipt.json",
+        "bytes": 82314,
+        "sha256": "3734fd8a9db5baa583821aefcbc109397b153fdfc4492d2d4d952a044f89ffbc"
+      },
+      "destination": {
+        "path": "docs\\qa\\professional-domain-web-runtime-r01\\r05-browser\\actual\\browser\\receipt.json",
+        "bytes": 82314,
+        "sha256": "3734fd8a9db5baa583821aefcbc109397b153fdfc4492d2d4d952a044f89ffbc"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/domain-runtime-web-browser-r05/attempt-001/browser/console.json",
+        "bytes": 1081,
+        "sha256": "b56950e0395624f3031cf864c9e3d1f698ec30a4344cfc03f5fd2b8ab4c46cfc"
+      },
+      "destination": {
+        "path": "docs\\qa\\professional-domain-web-runtime-r01\\r05-browser\\actual\\browser\\console.json",
+        "bytes": 1081,
+        "sha256": "b56950e0395624f3031cf864c9e3d1f698ec30a4344cfc03f5fd2b8ab4c46cfc"
+      }
+    },
+    {
+      "source": {
+        "path": "build/professional-english/domain-runtime-web-browser-r05/attempt-001/browser/phrase-runtime.png",
+        "bytes": 98211,
+        "sha256": "e4ddb21af911d064bbe4c9a9f3a20c6ece3514e9b925565e93b1a3cc6cc1ca9c"
+      },
+      "destination": {
+        "path": "docs\\qa\\professional-domain-web-runtime-r01\\r05-browser\\actual\\browser\\phrase-runtime.png",
+        "bytes": 98211,
+        "sha256": "e4ddb21af911d064bbe4c9a9f3a20c6ece3514e9b925565e93b1a3cc6cc1ca9c"
+      }
+    }
+  ],
+  "originals_preserved": true,
+  "large_output_files_not_duplicated": "The exact successful r04 export and r05 copied outputs remain in build; inventories bind them. No binary export or proof replay."
+}

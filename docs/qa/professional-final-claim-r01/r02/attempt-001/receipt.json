@@ -1,0 +1,126 @@
+{
+  "schema": 1,
+  "probe": "final-claim-after-preflight-r02",
+  "started_at": "2026-10-16T20:29:10.944Z",
+  "status": "passed",
+  "root": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+  "attempt": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\final-claim-after-preflight-r02\\attempt-001",
+  "inventory_sha256": "e7a9d9e9a51a9c828777f1f0d61f989b15af6de3bd361070f4e8759e68f5c02c",
+  "executable": {
+    "path": "C:\\Users\\yaohuiwang\\AppData\\Local\\Microsoft\\WinGet\\Links\\godot.exe",
+    "sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8"
+  },
+  "steps": [
+    {
+      "name": "check-ui",
+      "command": "C:\\Users\\yaohuiwang\\AppData\\Local\\Microsoft\\WinGet\\Links\\godot.exe",
+      "args": [
+        "--headless",
+        "--path",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+        "--check-only",
+        "--script",
+        "res://build/professional-english/final-claim-after-preflight-r02/probe_ui.gd"
+      ],
+      "cwd": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+      "started_at": "2026-10-16T20:29:13.224Z",
+      "duration_ms": 8751,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": "check-ui.stdout.log",
+      "stderr": "check-ui.stderr.log",
+      "stdout_sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "check-probe",
+      "command": "C:\\Users\\yaohuiwang\\AppData\\Local\\Microsoft\\WinGet\\Links\\godot.exe",
+      "args": [
+        "--headless",
+        "--path",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+        "--check-only",
+        "--script",
+        "res://build/professional-english/final-claim-after-preflight-r02/probe.gd"
+      ],
+      "cwd": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+      "started_at": "2026-10-16T20:29:23.547Z",
+      "duration_ms": 1534,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": "check-probe.stdout.log",
+      "stderr": "check-probe.stderr.log",
+      "stdout_sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "native-probe",
+      "command": "C:\\Users\\yaohuiwang\\AppData\\Local\\Microsoft\\WinGet\\Links\\godot.exe",
+      "args": [
+        "--headless",
+        "--path",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+        "--script",
+        "res://build/professional-english/final-claim-after-preflight-r02/probe.gd",
+        "--",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\final-claim-after-preflight-r02\\attempt-001"
+      ],
+      "cwd": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+      "started_at": "2026-10-16T20:29:26.630Z",
+      "duration_ms": 15365,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": "native-probe.stdout.log",
+      "stderr": "native-probe.stderr.log",
+      "stdout_sha256": "0f1345e81f49091e407a84e463464aadd75cd09c9a5fe372b0d0490ef64d9469",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "verification": [
+    {
+      "label": "initial",
+      "at": "2026-10-16T20:29:12.282Z",
+      "count": 570
+    },
+    {
+      "label": "before-check-ui",
+      "at": "2026-10-16T20:29:13.224Z",
+      "count": 570
+    },
+    {
+      "label": "after-check-ui",
+      "at": "2026-10-16T20:29:22.756Z",
+      "count": 570
+    },
+    {
+      "label": "before-check-probe",
+      "at": "2026-10-16T20:29:23.547Z",
+      "count": 570
+    },
+    {
+      "label": "after-check-probe",
+      "at": "2026-10-16T20:29:25.786Z",
+      "count": 570
+    },
+    {
+      "label": "before-native-probe",
+      "at": "2026-10-16T20:29:26.630Z",
+      "count": 570
+    },
+    {
+      "label": "after-native-probe",
+      "at": "2026-10-16T20:29:42.924Z",
+      "count": 570
+    }
+  ],
+  "result": {
+    "path": "result.json",
+    "sha256": "3ac251b01c3984e8a08552abe27f4cf996e0be440f2b1d08ec71ce7aa2162e1c",
+    "checks": 104,
+    "failures": 0
+  },
+  "finished_at": "2026-10-16T20:29:42.966Z"
+}

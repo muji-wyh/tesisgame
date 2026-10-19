@@ -1,0 +1,47 @@
+{
+  "status": "scratch_authored_motion_pending_independent_review",
+  "props_mask_unchanged_background_margin_pixels": 3,
+  "layer_composite_exact": true,
+  "all_motion_composites_exact": true,
+  "loop_endpoint_matches_rest_exactly": true,
+  "half_cycle_matches_rest_exactly": true,
+  "source_motion_bounds": [
+    497,
+    362,
+    743,
+    558
+  ],
+  "patch_bounds": [
+    489,
+    354,
+    262,
+    212
+  ],
+  "sheet_size": [
+    1048,
+    848
+  ],
+  "frame_count": 16,
+  "duration_seconds": 8,
+  "clip": {
+    "id": "nursing-curtain-hem-sway",
+    "columns": 4,
+    "rows": 4,
+    "frame_count": 16,
+    "rest_frame": 0,
+    "frames_per_second": 2,
+    "rect": [
+      0.4775390625,
+      0.345703125,
+      0.255859375,
+      0.20703125
+    ]
+  },
+  "accepted_static_rest_comparison": {
+    "changed_pixels": 9212,
+    "maximum_channel_difference": 28,
+    "reason": "Source triangle subdivision introduces rasterization/interpolation differences at rest; the accepted camera, silhouette, composition, source materials and corrected normals are retained."
+  },
+  "motion_changed_pixels": 15375,
+  "scope": "Source scene renders, source poses and evidence GIF/APNG only. No live runtime or production approval."
+}

@@ -1,0 +1,88 @@
+{
+  "schema": 1,
+  "status": "failed_attempt_retained_diagnosis_pending",
+  "checks": 104,
+  "failures": 1,
+  "failed_assertions": [
+    {
+      "message": "Restoration retains the exact accepted progress",
+      "ok": false
+    }
+  ],
+  "receipt_has_result_binding": false,
+  "structured_result_exists": true,
+  "serialized_before_after_progress_equal": true,
+  "limitation": "JSON serialization loses Godot Variant/key types; serialized equality alone does not identify the original in-memory inequality. No corrected native result yet.",
+  "files": [
+    {
+      "path": "inventory.json",
+      "bytes": 1402,
+      "sha256": "96d02fb46ab915a5c519b9ba3591f7a208b054df5b20d7bd5aa5a62ecf483280"
+    },
+    {
+      "path": "inputs.json",
+      "bytes": 105874,
+      "sha256": "9c4c671b5761b93ea87ba749836f0b5e95319e4ef490f34c4c58220fb1bdc996"
+    },
+    {
+      "path": "probe.gd",
+      "bytes": 20625,
+      "sha256": "a10bf54317792565fad77da8f3fccfa0e712a144512944e1c55cacdaedab09e5"
+    },
+    {
+      "path": "probe_ui.gd",
+      "bytes": 1532,
+      "sha256": "448c0e7685e37ca7671fdfb13a5c053d53edaed182f16b7888ad65ab5488bf7d"
+    },
+    {
+      "path": "probe_ui.tscn",
+      "bytes": 335,
+      "sha256": "fb8f996f5314669d621446588bddc346c827e3297e3eb1c336ca5b6d2a424723"
+    },
+    {
+      "path": "run-once.cjs",
+      "bytes": 5297,
+      "sha256": "5cc2a53743c0a2425374268215fc4335ae52a0f4c7d0a455e46514fd6312ba3e"
+    },
+    {
+      "path": "attempt-001/receipt.json",
+      "bytes": 5327,
+      "sha256": "4d874bfb9ca40419b97cc06a10289bf13cf4f3d99c0b96df7218dfe5bc797eba"
+    },
+    {
+      "path": "attempt-001/result.json",
+      "bytes": 1255175,
+      "sha256": "e73e1432faa400033fa615028ace448d0f41bdb56d7c85580b2a6155d8d7b612"
+    },
+    {
+      "path": "attempt-001/check-ui.stdout.log",
+      "bytes": 73,
+      "sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d"
+    },
+    {
+      "path": "attempt-001/check-ui.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "attempt-001/check-probe.stdout.log",
+      "bytes": 73,
+      "sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d"
+    },
+    {
+      "path": "attempt-001/check-probe.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "attempt-001/native-probe.stdout.log",
+      "bytes": 137,
+      "sha256": "87f12009d2eb4ffa4febe52b747a7618dad69f42ce717257c1c08f5de4f3f153"
+    },
+    {
+      "path": "attempt-001/native-probe.stderr.log",
+      "bytes": 55,
+      "sha256": "cf455c196a0b2fa6ba1a72662bac7e353ab5b51050e04aaecf9579d965fe1cc4"
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "folder": "innerscene-carpentry-workbench",
+  "source_url": "https://www.innerscene.com/tools/library/3d-parts/carpenter-workbench-carpentry-workbench-9855fae6",
+  "download_url": "https://www.innerscene.com/api/library/carpenter-workbench-carpentry-workbench-9855fae6/download",
+  "filename": "carpenters-workbench-with-vise.glb",
+  "bytes": 1010268,
+  "sha256": "1674b0434d27fe150aeacad353df395702be2a2a1dde53c87094bd121d042d99",
+  "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+  "creator": "Innerscene",
+  "acquired_on": "2026-10-16",
+  "license": "CC0-1.0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "terms_url": "https://www.innerscene.com/tools/library/terms",
+  "acquisition_status": "downloaded_from_original_source_for_review",
+  "conversion_status": "original_GLB_loaded_without_geometry_or_material_substitution",
+  "integration_status": "source_used_in_integrated_static_home_preview",
+  "review_status": "actual_source_and_composition_renders_inspected_at_phone_size",
+  "mesh_count": 25,
+  "node_count": 26,
+  "triangle_count": 9706,
+  "vertex_count": 7556,
+  "material_count": 5,
+  "image_count": 10,
+  "external_dependencies": [],
+  "available_animations": [],
+  "skin_count": 0,
+  "asset_metadata": {
+    "generator": "Khronos glTF Blender I/O v5.2.40",
+    "version": "2.0"
+  },
+  "extras": {},
+  "node_names": [
+    "Deep long stretcher",
+    "Deep long stretcher.001",
+    "End cap joint",
+    "End cap joint.001",
+    "Front vise moving jaw",
+    "Handle end stop",
+    "Handle end stop.001",
+    "Sliding vise handle",
+    "Thick oak bench slab",
+    "Tool shelf plank",
+    "Tool shelf plank.001",
+    "Tool shelf plank.002",
+    "Tool shelf plank.003",
+    "Tool shelf plank.004",
+    "Tool shelf plank.005",
+    "Trestle lower tie",
+    "Trestle lower tie.001",
+    "Trestle post",
+    "Trestle post.001",
+    "Trestle post.002",
+    "Trestle post.003",
+    "Vise screw",
+    "Vise screw flange",
+    "Vise steel guide",
+    "Vise steel guide.001",
+    "Carpenter workbench"
+  ],
+  "material_names": [
+    "Satin oak | longitudinal grain",
+    "Satin oak | end grain",
+    "Satin galvanized steel",
+    "Charcoal fine-textured powdercoat",
+    "Blackened steel mounting hardware"
+  ],
+  "source_sha256_verified": true,
+  "review": {
+    "original_model_views": [
+      "carpentry-source-front-phone.png",
+      "carpentry-source-rear-phone.png"
+    ],
+    "derived_composition": [
+      "construction-trades-full.png",
+      "construction-trades-preview.png",
+      "construction-trades-phone.png"
+    ],
+    "source_resolution": [
+      1280,
+      800
+    ],
+    "preview_resolution": [
+      512,
+      320
+    ],
+    "phone_resolution": [
+      296,
+      185
+    ],
+    "visual_observation": "The oak slab, front screw vise, dog holes and trestle shelf remain readable at phone size.",
+    "limitations": "Static illustration source; no rig or animation clips. Full course and theme readiness is not implied."
+  },
+  "integration_scope": "Original GLB retained outside Web export; the reviewed static Home PNG derivative is integrated. Full theme and course readiness remain separate."
+}

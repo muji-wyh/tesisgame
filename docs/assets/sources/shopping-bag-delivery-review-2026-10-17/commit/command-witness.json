@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "dispatcher": "Codex root",
+  "session_id": 40710,
+  "source_sha256": "b522c987354d2e526cc9194b0dd5239b2592b07aa30f4ddd7bd16261e2c3c087",
+  "input": {
+    "path": "build/professional-english/shopping-bag-root-commit-r01/input.json",
+    "sha256": "4db261a88a139983a7a783da551ecb389788e59a6e8fb333ec8862145a81a0e5"
+  },
+  "exit_code": 0,
+  "signal": null,
+  "error": null,
+  "status": "committed",
+  "targets": 153,
+  "receipt_sha256": "b5b263fda99813d9c45564d5fdc35a8b437f5a3a91ec60b06eb1b00e45ddb681"
+}

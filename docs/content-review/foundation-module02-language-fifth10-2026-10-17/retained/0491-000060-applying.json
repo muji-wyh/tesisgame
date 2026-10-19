@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 60,
+  "status": "applying",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "6e050f166c634c2a74918ea7d58ff24042d14b0805e0ce6ff6387a08ce2764cb",
+  "recorded_at": "2026-10-16T22:48:05.230Z",
+  "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/protected-media-observation.json",
+  "work": "work/c7715702-829c-4953-b823-6558019b2962.bin"
+}

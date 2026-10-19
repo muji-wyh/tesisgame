@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "status": "frozen_independent_static_review",
+  "root": "build/professional-english/domain-runtime-staging-r01-independent-review/r01",
+  "files": [
+    {
+      "path": "inputs.json",
+      "bytes": 5828,
+      "sha256": "9f438c964fc5ae27da2ebbcabdbdcb316ad0b2fbec646ee1793fe12d72246b47"
+    },
+    {
+      "path": "REVIEW.md",
+      "bytes": 9768,
+      "sha256": "49e51bef480155179752ef434e7dc991b921390d1a8f2e8cc3787d1c8c5d9ef6"
+    },
+    {
+      "path": "review.json",
+      "bytes": 4989,
+      "sha256": "292aeebb92b1ae14c87abe0af4a0c3fb1216e1f9b409dba1879186f424ae3774"
+    },
+    {
+      "path": "completion.json",
+      "bytes": 11409,
+      "sha256": "02b73efdf3b9c077aa42ee028a99a5f511fcf13c11aa49aba048e416f3193811"
+    }
+  ]
+}

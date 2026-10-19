@@ -1,0 +1,487 @@
+{
+  "schema": 1,
+  "status": "consultation_index_no_acceptance",
+  "note": "Lossless source details remain in the unchanged two author ledgers. Index labels retain source scope. Source-body hashes identify unsaved retrievals, not persistent page snapshots or this artifact.",
+  "sources": [
+    {
+      "id": "foundation02-language-second10-oxford-complete",
+      "term": "complete",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/complete_2",
+      "artifact": "sources-a.json",
+      "artifact_pointer": "/consultations/0",
+      "selected_sections": "Verb sense 1, finish making/doing; rendered lines 112-140",
+      "rendered_selected_label": null,
+      "rendered_label_scope": null,
+      "html_selected_levels": [
+        {
+          "element_id": "complete_sng_6",
+          "attribute": "cefr",
+          "literal": "a1",
+          "normalized": "A1"
+        }
+      ],
+      "raw_body_sha256": "33259cd94e971b5b0841a53437fcaa86373502d5ef2d40c618caef42ad787601",
+      "status": "consulted_only_no_acceptance"
+    },
+    {
+      "id": "foundation02-language-second10-collins-complete",
+      "term": "complete",
+      "publisher": "HarperCollins",
+      "url": "https://www.collinsdictionary.com/dictionary/english/complete",
+      "artifact": "sources-a.json",
+      "artifact_pointer": "/consultations/1",
+      "selected_sections": "COBUILD verb sense 8, rendered lines 299-306; adjacent sense 9 at 315-321",
+      "rendered_selected_label": "A2",
+      "rendered_label_scope": null,
+      "html_selected_levels": [],
+      "raw_body_sha256": null,
+      "status": "consulted_only_no_acceptance"
+    },
+    {
+      "id": "foundation02-language-second10-oxford-prepare",
+      "term": "prepare",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/prepare",
+      "artifact": "sources-a.json",
+      "artifact_pointer": "/consultations/2",
+      "selected_sections": "Verb sense 1, making something/somebody ready, rendered lines 114-142",
+      "rendered_selected_label": null,
+      "rendered_label_scope": null,
+      "html_selected_levels": [
+        {
+          "element_id": "prepare_sng_1",
+          "attribute": "cefr",
+          "literal": "a1",
+          "normalized": "A1"
+        }
+      ],
+      "raw_body_sha256": "634f66c1f75c4aace313170567ca428ffd90aea70632f439c518138c1fbb4b65",
+      "status": "consulted_only_no_acceptance"
+    },
+    {
+      "id": "foundation02-language-second10-collins-prepare",
+      "term": "prepare",
+      "publisher": "HarperCollins",
+      "url": "https://www.collinsdictionary.com/dictionary/english/prepare",
+      "artifact": "sources-a.json",
+      "artifact_pointer": "/consultations/3",
+      "selected_sections": "COBUILD verb sense 1, rendered lines 224-233",
+      "rendered_selected_label": "A2",
+      "rendered_label_scope": null,
+      "html_selected_levels": [],
+      "raw_body_sha256": null,
+      "status": "consulted_only_no_acceptance"
+    },
+    {
+      "id": "foundation02-language-second10-oxford-arrange",
+      "term": "arrange",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/arrange",
+      "artifact": "sources-a.json",
+      "artifact_pointer": "/consultations/4",
+      "selected_sections": "Verb sense 1, planning/organizing in advance, rendered lines 112-175",
+      "rendered_selected_label": null,
+      "rendered_label_scope": null,
+      "html_selected_levels": [
+        {
+          "element_id": "arrange_sng_1",
+          "attribute": "cefr",
+          "literal": "a2",
+          "normalized": "A2"
+        }
+      ],
+      "raw_body_sha256": "6a99975a4acbd540fa9d6a4b9868e08e4cc7eb72114610b93ea07f227db882a1",
+      "status": "consulted_only_no_acceptance"
+    },
+    {
+      "id": "foundation02-language-second10-collins-arrange",
+      "term": "arrange",
+      "publisher": "HarperCollins",
+      "url": "https://www.collinsdictionary.com/dictionary/english/arrange",
+      "artifact": "sources-a.json",
+      "artifact_pointer": "/consultations/5",
+      "selected_sections": "COBUILD verb sense 1 event/meeting planning, rendered lines 224-233",
+      "rendered_selected_label": "B1",
+      "rendered_label_scope": null,
+      "html_selected_levels": [],
+      "raw_body_sha256": null,
+      "status": "consulted_only_no_acceptance"
+    },
+    {
+      "id": "foundation02-language-second10-oxford-collect",
+      "term": "collect",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/collect_1",
+      "artifact": "sources-a.json",
+      "artifact_pointer": "/consultations/6",
+      "selected_sections": "Pickup/take-away sense 4, rendered lines 160-175; contrast gathering sense 1 at 113-122",
+      "rendered_selected_label": null,
+      "rendered_label_scope": null,
+      "html_selected_levels": [
+        {
+          "element_id": "collect_sng_6",
+          "attribute": "cefr",
+          "literal": "b1",
+          "normalized": "B1"
+        }
+      ],
+      "raw_body_sha256": "099369c5fe7b09f0a4b3edc5a761bfed5f8b46d2a9ff2f2b9bec14b67cfe22b2",
+      "status": "consulted_only_no_acceptance"
+    },
+    {
+      "id": "foundation02-language-second10-collins-collect",
+      "term": "collect",
+      "publisher": "HarperCollins",
+      "url": "https://www.collinsdictionary.com/dictionary/english/collect",
+      "artifact": "sources-a.json",
+      "artifact_pointer": "/consultations/7",
+      "selected_sections": "COBUILD verb sense 3 pickup, rendered lines 244-250",
+      "rendered_selected_label": "A2",
+      "rendered_label_scope": null,
+      "html_selected_levels": [],
+      "raw_body_sha256": null,
+      "status": "consulted_only_no_acceptance"
+    },
+    {
+      "id": "foundation02-language-second10-oxford-deliver",
+      "term": "deliver",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/deliver",
+      "artifact": "sources-a.json",
+      "artifact_pointer": "/consultations/8",
+      "selected_sections": "Physical goods/letters sense 1, rendered lines 113-142",
+      "rendered_selected_label": "B1",
+      "rendered_label_scope": "Shopping topic attached to selected sense 1.",
+      "html_selected_levels": [
+        {
+          "element_id": "deliver_sng_1",
+          "attribute": "cefr",
+          "literal": "b1",
+          "normalized": "B1"
+        }
+      ],
+      "raw_body_sha256": "d29ec5b273857dc6d41fa39e60de226c52dcece7bfa03c248291439333d3b575",
+      "status": "consulted_only_no_acceptance"
+    },
+    {
+      "id": "foundation02-language-second10-collins-deliver",
+      "term": "deliver",
+      "publisher": "HarperCollins",
+      "url": "https://www.collinsdictionary.com/dictionary/english/deliver",
+      "artifact": "sources-a.json",
+      "artifact_pointer": "/consultations/9",
+      "selected_sections": "COBUILD verb sense 1 physical taking, rendered lines 224-235",
+      "rendered_selected_label": "B1",
+      "rendered_label_scope": null,
+      "html_selected_levels": [],
+      "raw_body_sha256": null,
+      "status": "consulted_only_no_acceptance"
+    },
+    {
+      "id": "foundation02-language-second10-oxford-replace",
+      "term": "replace",
+      "publisher": "Oxford",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/replace",
+      "artifact": "sources-b.json",
+      "artifact_pointer": "/entries/0/sources/0",
+      "selected_sections": [
+        {
+          "sense": 2,
+          "id": "replace_sng_2",
+          "rendered_lines": "145-150",
+          "role": "primary general substitution"
+        },
+        {
+          "sense": 3,
+          "id": "replace_sng_3",
+          "rendered_lines": "168-180",
+          "role": "damaged-item example"
+        }
+      ],
+      "rendered_selected_label": null,
+      "rendered_selected_topic": null,
+      "html_selected_levels": [
+        {
+          "id": "replace_sng_2",
+          "attribute": "cefr",
+          "literal_value": "a2"
+        },
+        {
+          "id": "replace_sng_3",
+          "attribute": "cefr",
+          "literal_value": "a2"
+        }
+      ],
+      "raw_body_sha256": "db86ebf5280294959aa4763aeb394f96f8f17857e54159a302ee3d3b0c25ed92",
+      "status": "consulted_only_no_acceptance"
+    },
+    {
+      "id": "foundation02-language-second10-collins-replace",
+      "term": "replace",
+      "publisher": "Collins COBUILD",
+      "url": "https://www.collinsdictionary.com/dictionary/english/replace",
+      "artifact": "sources-b.json",
+      "artifact_pointer": "/entries/0/sources/1",
+      "selected_sections": [
+        {
+          "sense": 2,
+          "rendered_lines": "233-238",
+          "literal_cefr": "B1+",
+          "role": "general substitution"
+        },
+        {
+          "sense": 3,
+          "rendered_lines": "240-244",
+          "literal_cefr": "B1",
+          "role": "damaged-item example"
+        }
+      ],
+      "rendered_selected_topic": null,
+      "html_selected_levels": [],
+      "raw_body_sha256": null,
+      "status": "consulted_only_no_acceptance",
+      "rendered_selected_labels": [
+        {
+          "sense": 2,
+          "role": "general substitution",
+          "literal": "B1+"
+        },
+        {
+          "sense": 3,
+          "role": "damaged-item example",
+          "literal": "B1"
+        }
+      ]
+    },
+    {
+      "id": "foundation02-language-second10-oxford-return",
+      "term": "return",
+      "publisher": "Oxford",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/return_1",
+      "artifact": "sources-b.json",
+      "artifact_pointer": "/entries/1/sources/0",
+      "selected_sections": [
+        {
+          "sense": 2,
+          "id": "return_sng_2",
+          "heading": "bring/give back",
+          "rendered_lines": "169-186"
+        }
+      ],
+      "rendered_selected_label": null,
+      "rendered_selected_topic": {
+        "literal_text": "Shoppingb1",
+        "topic": "Shopping",
+        "literal_level": "b1",
+        "rendered_line": 186
+      },
+      "html_selected_levels": [
+        {
+          "id": "return_sng_2",
+          "attribute": "cefr",
+          "literal_value": "b1"
+        }
+      ],
+      "raw_body_sha256": "b8fdaff774bb3709dcc6841f35c05f5856bcab14fe12523a23383cf0de6d7d95",
+      "status": "consulted_only_no_acceptance"
+    },
+    {
+      "id": "foundation02-language-second10-collins-return",
+      "term": "return",
+      "publisher": "Collins COBUILD",
+      "url": "https://www.collinsdictionary.com/dictionary/english/return",
+      "artifact": "sources-b.json",
+      "artifact_pointer": "/entries/1/sources/1",
+      "selected_sections": [
+        {
+          "sense": 3,
+          "rendered_lines": "243-250",
+          "literal_cefr": "A2",
+          "scope": "borrowed or taken object given or put back"
+        }
+      ],
+      "rendered_selected_topic": null,
+      "html_selected_levels": [],
+      "raw_body_sha256": null,
+      "status": "consulted_only_no_acceptance",
+      "rendered_selected_labels": [
+        {
+          "sense": 3,
+          "role": "borrowed or taken object given or put back",
+          "literal": "A2"
+        }
+      ]
+    },
+    {
+      "id": "foundation02-language-second10-oxford-report",
+      "term": "report",
+      "publisher": "Oxford",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/report_2",
+      "artifact": "sources-b.json",
+      "artifact_pointer": "/entries/2/sources/0",
+      "selected_sections": [
+        {
+          "sense": 1,
+          "id": "report_sng_1",
+          "heading": "give information",
+          "rendered_lines": "113-131"
+        }
+      ],
+      "rendered_selected_label": null,
+      "rendered_selected_topic": null,
+      "html_selected_levels": [
+        {
+          "id": "report_sng_1",
+          "attribute": "cefr",
+          "literal_value": "a2"
+        }
+      ],
+      "raw_body_sha256": "30bedeaf5680fe197a414b7e98a68cf045a142237381ed6351f5235827014590",
+      "status": "consulted_only_no_acceptance"
+    },
+    {
+      "id": "foundation02-language-second10-collins-report",
+      "term": "report",
+      "publisher": "Collins COBUILD",
+      "url": "https://www.collinsdictionary.com/dictionary/english/report",
+      "artifact": "sources-b.json",
+      "artifact_pointer": "/entries/2/sources/1",
+      "selected_sections": [
+        {
+          "sense": 1,
+          "rendered_lines": "224-242",
+          "literal_cefr": "B1",
+          "scope": "tell people about an occurrence, including reporting an incident to police"
+        }
+      ],
+      "rendered_selected_topic": null,
+      "html_selected_levels": [],
+      "raw_body_sha256": null,
+      "status": "consulted_only_no_acceptance",
+      "rendered_selected_labels": [
+        {
+          "sense": 1,
+          "role": "tell people about an occurrence, including reporting an incident to police",
+          "literal": "B1"
+        }
+      ]
+    },
+    {
+      "id": "foundation02-language-second10-oxford-notify",
+      "term": "notify",
+      "publisher": "Oxford",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/notify",
+      "artifact": "sources-b.json",
+      "artifact_pointer": "/entries/3/sources/0",
+      "selected_sections": [
+        {
+          "sense": 1,
+          "id": "notify_sng_1",
+          "rendered_lines": "103-122",
+          "register": "formal",
+          "grammar_note": "often passive"
+        }
+      ],
+      "rendered_selected_label": null,
+      "rendered_selected_topic": null,
+      "html_selected_levels": [
+        {
+          "id": "notify_sng_1",
+          "attribute": "fkcefr",
+          "literal_value": "c1",
+          "additional_attribute": "fkox5000=\"y\""
+        }
+      ],
+      "raw_body_sha256": "ef63a9c8127914ddf7343ef13927695795a71d0f50aba2dbdbd99609cc7cf2ae",
+      "status": "consulted_only_no_acceptance"
+    },
+    {
+      "id": "foundation02-language-second10-collins-notify",
+      "term": "notify",
+      "publisher": "Collins COBUILD",
+      "url": "https://www.collinsdictionary.com/dictionary/english/notify",
+      "artifact": "sources-b.json",
+      "artifact_pointer": "/entries/3/sources/1",
+      "selected_sections": [
+        {
+          "sense": "single verb",
+          "rendered_lines": "224-239",
+          "literal_cefr": null,
+          "literal_register": "[formal]",
+          "patterns": "notify someone of/about something; notify someone that; notify someone"
+        }
+      ],
+      "rendered_selected_topic": null,
+      "html_selected_levels": [],
+      "raw_body_sha256": null,
+      "status": "consulted_only_no_acceptance",
+      "rendered_selected_labels": [
+        {
+          "sense": "single verb",
+          "role": null,
+          "literal": null
+        }
+      ]
+    },
+    {
+      "id": "foundation02-language-second10-oxford-contact",
+      "term": "contact",
+      "publisher": "Oxford",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/contact_2",
+      "artifact": "sources-b.json",
+      "artifact_pointer": "/entries/4/sources/0",
+      "selected_sections": [
+        {
+          "sense": "single displayed verb sense",
+          "id": "contact_sng_9",
+          "rendered_lines": "111-123"
+        }
+      ],
+      "rendered_selected_label": null,
+      "rendered_selected_topic": {
+        "literal_text": "Phones, email and the internetb1",
+        "topic": "Phones, email and the internet",
+        "literal_level": "b1",
+        "rendered_line": 123
+      },
+      "html_selected_levels": [
+        {
+          "id": "contact_sng_9",
+          "attribute": "fkcefr",
+          "literal_value": "b1",
+          "additional_attribute": "fkox3000=\"y\""
+        }
+      ],
+      "raw_body_sha256": "2e6fa6884dceb057a6f1490f66f99d1ab4bcc40c668e430956816fef7c2fe03b",
+      "status": "consulted_only_no_acceptance"
+    },
+    {
+      "id": "foundation02-language-second10-collins-contact",
+      "term": "contact",
+      "publisher": "Collins COBUILD",
+      "url": "https://www.collinsdictionary.com/dictionary/english/contact",
+      "artifact": "sources-b.json",
+      "artifact_pointer": "/entries/4/sources/1",
+      "selected_sections": [
+        {
+          "sense": 3,
+          "rendered_lines": "237-244",
+          "literal_cefr": "A2",
+          "scope": "phone, write, or visit to tell or ask something"
+        }
+      ],
+      "rendered_selected_topic": null,
+      "html_selected_levels": [],
+      "raw_body_sha256": null,
+      "status": "consulted_only_no_acceptance",
+      "rendered_selected_labels": [
+        {
+          "sense": 3,
+          "role": "phone, write, or visit to tell or ask something",
+          "literal": "A2"
+        }
+      ]
+    }
+  ]
+}

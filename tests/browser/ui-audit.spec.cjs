@@ -1,8 +1,9 @@
 const { test, expect } = require('@playwright/test');
-const { openGame, openRewards, metrics, tap, boardPoint, worldControl, growthView,
-  activateGrowthControl, openModeMenu, chooseMode, THEME_NAMES } = require('./game-ui.cjs');
+const { openGame, openRewards, metrics, tap, boardPoint, growthView,
+  activateGrowthControl, activateLibraryControl, openModeMenu, THEME_NAMES } = require('./game-ui.cjs');
+const learningThemes = require('../../data/professional/themes.json').profiles;
 
-test('the growth notebook preserves the game while theme choices belong to Home', async ({ page }, info) => {
+test('the growth notebook and automatic career previews preserve the current game', async ({ page }, info) => {
   const errors = await openGame(page);
   const first = boardPoint(await metrics(page), 0);
   await tap(page, first.x, first.y);
@@ -18,11 +19,20 @@ test('the growth notebook preserves the game while theme choices belong to Home'
   await expect(page.locator('#game-status')).toHaveText(status);
   expect(await page.locator('#selection-status').textContent()).toBe(selection);
   await openModeMenu(page);
-  const world = await worldControl(page, 5);
-  await tap(page, world.x + world.width / 2, world.y + world.height / 2);
-  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#f1edfb');
+  expect((await metrics(page)).library.controls.filter(control => control.visible && THEME_NAMES.includes(control.name))).toEqual([]);
+  await activateLibraryControl(page, 'ChangeLearningPath');
+  await activateLibraryControl(page, 'ProfessionalPath');
+  await activateLibraryControl(page, 'Career_retail');
+  expect((await metrics(page)).library.learning).toMatchObject({ screen: 'modules', course_id: 'retail' });
+  await expect.poll(() => page.locator('#game').evaluate(element => element.style.getPropertyValue('--voice-accent').toLowerCase()))
+    .toBe(learningThemes.find(profile => profile.id === 'professional_retail').palette.accent.toLowerCase());
   expect((await metrics(page)).library.visible).toBe(true);
-  await chooseMode(page, 'match');
+  expect(await page.locator('#selection-status').textContent()).toBe(selection);
+  await activateLibraryControl(page, 'ContinueCurrentRound');
+  await expect.poll(async () => (await metrics(page)).library.visible).toBe(false);
+  expect((await metrics(page)).library.current).toBe('match');
+  await expect.poll(() => page.locator('#game').evaluate(element => element.style.getPropertyValue('--voice-accent').toLowerCase()))
+    .toBe(learningThemes.find(profile => profile.id === 'growth_garden').palette.accent.toLowerCase());
   expect(await page.evaluate(keys => keys.map(key => localStorage.getItem(key)), keys)).toEqual(saved);
   expect(await page.locator('#selection-status').textContent()).toBe(selection);
   expect(errors).toEqual([]);

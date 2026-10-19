@@ -1,0 +1,1361 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.hr_recruitment.module09.01",
+      "text": "The pay statement separates gross pay, each deduction, and net pay.",
+      "meaning": "Explain the main parts of a pay record.",
+      "context": "Reading fictional payroll information.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "pay",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "statement",
+          "start": 8,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "separates",
+          "start": 18,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "gross",
+          "start": 28,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "pay",
+          "start": 34,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 37,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "each",
+          "start": 39,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "deduction",
+          "start": 44,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 53,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 55,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": "net",
+          "start": 59,
+          "end": 62
+        },
+        {
+          "index": 12,
+          "text": "pay",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 66,
+          "end": 67
+        }
+      ],
+      "focus_lexeme_ids": [
+        "pay-statement.document-showing-pay-and-related-amounts-for-period.n",
+        "gross-pay.pay-before-deductions.n",
+        "deduction.amount-subtracted-from-pay-or-total.n",
+        "net-pay.pay-remaining-after-applicable-deductions.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-pay-benefits",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-ico-employment-index",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module09.02",
+      "text": "Please archive the completed record under the applicable record retention arrangements.",
+      "meaning": "Refer a record-storage action to the applicable arrangements.",
+      "context": "Discussing managed storage without inventing a retention period.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "archive",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "completed",
+          "start": 19,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "record",
+          "start": 29,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": "under",
+          "start": 36,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "applicable",
+          "start": 46,
+          "end": 56
+        },
+        {
+          "index": 8,
+          "text": "record",
+          "start": 57,
+          "end": 63
+        },
+        {
+          "index": 9,
+          "text": "retention",
+          "start": 64,
+          "end": 73
+        },
+        {
+          "index": 10,
+          "text": "arrangements",
+          "start": 74,
+          "end": 86
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 86,
+          "end": 87
+        }
+      ],
+      "focus_lexeme_ids": [
+        "archive.move-material-into-managed-long-term-storage.v",
+        "record-retention.keeping-records-for-applicable-purpose-and-period.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-pay-benefits",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-ico-employment-index",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module09.03",
+      "text": "The personnel file contains the employee record and employee number.",
+      "meaning": "Describe the relationship between an employee's file and records.",
+      "context": "Explaining the structure of an HR record system.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "personnel",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "file",
+          "start": 14,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "contains",
+          "start": 19,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "employee",
+          "start": 32,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "record",
+          "start": 41,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "employee",
+          "start": 52,
+          "end": 60
+        },
+        {
+          "index": 9,
+          "text": "number",
+          "start": 61,
+          "end": 67
+        },
+        {
+          "index": 10,
+          "text": ".",
+          "start": 67,
+          "end": 68
+        }
+      ],
+      "focus_lexeme_ids": [
+        "personnel-file.collection-of-records-about-persons-employment.n",
+        "employee-record.stored-information-item-about-employee.n",
+        "employee-number.identifier-assigned-to-employee.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-pay-benefits",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-ico-employment-index",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module09.04",
+      "text": "Which field in this template supplies the dashboard with recruitment data?",
+      "meaning": "Ask how recorded information connects to a display.",
+      "context": "Clarifying the role of a data-entry field in the given system.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Which",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "field",
+          "start": 6,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "in",
+          "start": 12,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "this",
+          "start": 15,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "template",
+          "start": 20,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "supplies",
+          "start": 29,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 38,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "dashboard",
+          "start": 42,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "with",
+          "start": 52,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "recruitment",
+          "start": 57,
+          "end": 68
+        },
+        {
+          "index": 10,
+          "text": "data",
+          "start": 69,
+          "end": 73
+        },
+        {
+          "index": 11,
+          "text": "?",
+          "start": 73,
+          "end": 74
+        }
+      ],
+      "focus_lexeme_ids": [
+        "field.data-entry-space.n",
+        "template.reusable-document-pattern.n",
+        "dashboard.information-display.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-pay-benefits",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-ico-employment-index",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module09.05",
+      "text": "The employee self-service page shows the leave request and absence record.",
+      "meaning": "Locate information available through an employee portal.",
+      "context": "Explaining permitted self-service functions.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "employee",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "self-service",
+          "start": 13,
+          "end": 25
+        },
+        {
+          "index": 3,
+          "text": "page",
+          "start": 26,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": "shows",
+          "start": 31,
+          "end": 36
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 37,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "leave",
+          "start": 41,
+          "end": 46
+        },
+        {
+          "index": 7,
+          "text": "request",
+          "start": 47,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 55,
+          "end": 58
+        },
+        {
+          "index": 9,
+          "text": "absence",
+          "start": 59,
+          "end": 66
+        },
+        {
+          "index": 10,
+          "text": "record",
+          "start": 67,
+          "end": 73
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 73,
+          "end": 74
+        }
+      ],
+      "focus_lexeme_ids": [
+        "employee-self-service.system-functions-letting-employees-manage-permitted-information.n",
+        "leave-request.request-for-authorized-time-away.n",
+        "absence-record.record-of-time-away-from-expected-work.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-pay-benefits",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-ico-employment-index",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module09.06",
+      "text": "The pay period, payroll cutoff, and pay date refer to different parts of the schedule.",
+      "meaning": "Distinguish a pay span from two payroll dates or deadlines.",
+      "context": "Clarifying a fictional pay schedule.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "pay",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "period",
+          "start": 8,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 14,
+          "end": 15
+        },
+        {
+          "index": 4,
+          "text": "payroll",
+          "start": 16,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "cutoff",
+          "start": 24,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 30,
+          "end": 31
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 8,
+          "text": "pay",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 9,
+          "text": "date",
+          "start": 40,
+          "end": 44
+        },
+        {
+          "index": 10,
+          "text": "refer",
+          "start": 45,
+          "end": 50
+        },
+        {
+          "index": 11,
+          "text": "to",
+          "start": 51,
+          "end": 53
+        },
+        {
+          "index": 12,
+          "text": "different",
+          "start": 54,
+          "end": 63
+        },
+        {
+          "index": 13,
+          "text": "parts",
+          "start": 64,
+          "end": 69
+        },
+        {
+          "index": 14,
+          "text": "of",
+          "start": 70,
+          "end": 72
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 73,
+          "end": 76
+        },
+        {
+          "index": 16,
+          "text": "schedule",
+          "start": 77,
+          "end": 85
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 85,
+          "end": 86
+        }
+      ],
+      "focus_lexeme_ids": [
+        "pay-period.span-of-time-covered-by-pay-calculation.n",
+        "payroll-cutoff.deadline-for-including-information-in-payroll-run.n",
+        "pay-date.date-on-which-payment-is-scheduled.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-pay-benefits",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-ico-employment-index",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module09.07",
+      "text": "The skills matrix and training register support the recruitment report.",
+      "meaning": "Explain records used to inform a workforce discussion.",
+      "context": "Reviewing capability and training information.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "skills",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "matrix",
+          "start": 11,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 18,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "training",
+          "start": 22,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "register",
+          "start": 31,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "support",
+          "start": 40,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "recruitment",
+          "start": 52,
+          "end": 63
+        },
+        {
+          "index": 9,
+          "text": "report",
+          "start": 64,
+          "end": 70
+        },
+        {
+          "index": 10,
+          "text": ".",
+          "start": 70,
+          "end": 71
+        }
+      ],
+      "focus_lexeme_ids": [
+        "skills-matrix.table-showing-skills-against-people-or-roles.n",
+        "training-register.list-recording-participation-in-training.n",
+        "recruitment-report.account-of-recruitment-activity-and-results.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-pay-benefits",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-ico-employment-index",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module09.08",
+      "text": "The turnover rate, retention rate, and vacancy rate need clearly stated definitions.",
+      "meaning": "Ask for the scope of workforce measures.",
+      "context": "Reviewing a management report without assuming a universal formula.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "turnover",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "rate",
+          "start": 13,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 17,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "retention",
+          "start": 19,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "rate",
+          "start": 29,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 33,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 35,
+          "end": 38
+        },
+        {
+          "index": 8,
+          "text": "vacancy",
+          "start": 39,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "rate",
+          "start": 47,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "need",
+          "start": 52,
+          "end": 56
+        },
+        {
+          "index": 11,
+          "text": "clearly",
+          "start": 57,
+          "end": 64
+        },
+        {
+          "index": 12,
+          "text": "stated",
+          "start": 65,
+          "end": 71
+        },
+        {
+          "index": 13,
+          "text": "definitions",
+          "start": 72,
+          "end": 83
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 83,
+          "end": 84
+        }
+      ],
+      "focus_lexeme_ids": [
+        "turnover-rate.measure-of-employee-leaving-relative-to-defined-workforce.n",
+        "retention-rate.measure-of-employees-remaining-over-stated-period.n",
+        "vacancy-rate.measure-of-unfilled-positions-relative-to-defined-positions.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-pay-benefits",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-ico-employment-index",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module09.09",
+      "text": "Please explain the privacy notice before discussing the secure transfer of bank details.",
+      "meaning": "Request the relevant privacy and handling information.",
+      "context": "Asking about an authorized information transfer.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "explain",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "privacy",
+          "start": 19,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "notice",
+          "start": 27,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "before",
+          "start": 34,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "discussing",
+          "start": 41,
+          "end": 51
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 8,
+          "text": "secure",
+          "start": 56,
+          "end": 62
+        },
+        {
+          "index": 9,
+          "text": "transfer",
+          "start": 63,
+          "end": 71
+        },
+        {
+          "index": 10,
+          "text": "of",
+          "start": 72,
+          "end": 74
+        },
+        {
+          "index": 11,
+          "text": "bank",
+          "start": 75,
+          "end": 79
+        },
+        {
+          "index": 12,
+          "text": "details",
+          "start": 80,
+          "end": 87
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 87,
+          "end": 88
+        }
+      ],
+      "focus_lexeme_ids": [
+        "privacy-notice.information-explaining-how-personal-data-is-used.n",
+        "secure-transfer.transfer-using-protections-appropriate-to-information.n",
+        "bank-details.information-identifying-bank-account-for-payment.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-pay-benefits",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-ico-employment-index",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.hr_recruitment.module09.10",
+      "text": "The record correction appears in the audit trail and version history.",
+      "meaning": "Describe where a documented change is visible.",
+      "context": "Checking the history of a corrected record.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "record",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "correction",
+          "start": 11,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "appears",
+          "start": 22,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": "in",
+          "start": 30,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 33,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "audit",
+          "start": 37,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "trail",
+          "start": 43,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "version",
+          "start": 53,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": "history",
+          "start": 61,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 68,
+          "end": 69
+        }
+      ],
+      "focus_lexeme_ids": [
+        "record-correction.change-intended-to-fix-inaccurate-record.n",
+        "audit-trail.recorded-change-history.n",
+        "version-history.record-of-document-changes.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "hr-bls-pay-benefits",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-ico-employment-index",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

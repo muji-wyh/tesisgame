@@ -1,0 +1,19 @@
+{
+	"course_id": "retail",
+	"curriculum_revision": "candidate-r02",
+	"module_id": "cash-register-scratch-image-review",
+	"resources": [
+		{
+			"compressed_bytes": 172442,
+			"decoded_bytes": 2519040,
+			"format": "png",
+			"height": 615,
+			"id": "sha256:f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262",
+			"kind": "image",
+			"path": "professional-media/f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png",
+			"sha256": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262",
+			"width": 512
+		}
+	],
+	"schema_version": 1
+}

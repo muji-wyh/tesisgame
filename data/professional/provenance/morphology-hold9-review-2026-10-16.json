@@ -1,0 +1,3248 @@
+{
+  "schema": 1,
+  "status": "nine_exact_independent_ai_morphology_reviews_completed",
+  "accepted_proposal_sha256": "50d31c8cdfc16c650cbed26a429f7eec8033b0d4890a7bf0402604775e2a8b72",
+  "accepted_proposal_raw_sha256": "7693b25a79e28a2d379b75b4aab9d8efa36fd83cff69d2096b5e2cc3e50fb41c",
+  "scope": "Only the nine exact morphology.review records and their narrow current editorial-note clarification may change. All morphology structure, source identities and references, entry language/domain review fields, definitions, examples, media, memberships, course/module statuses, themes, and Growth content remain unchanged.",
+  "independent_approval": {
+    "accepted": true,
+    "date": "2026-10-16",
+    "proposal_json_sha256": "50d31c8cdfc16c650cbed26a429f7eec8033b0d4890a7bf0402604775e2a8b72",
+    "proposal_raw_sha256": "7693b25a79e28a2d379b75b4aab9d8efa36fd83cff69d2096b5e2cc3e50fb41c",
+    "exact_patches": 9,
+    "scope": "Root verified every current preimage and exact metadata/note delta independently. All nine graphs retain the previously accepted morphology, source references and sense identity. Only completed independent AI morphology review is recorded; all other review and media/module gates remain unchanged.",
+    "substantive_review_record": "independent-hold9.json",
+    "production_mutated": false
+  },
+  "proposal": {
+    "schema": 1,
+    "status": "exact_morphology_review_status_and_current_note_proposal_awaiting_independent_acceptance",
+    "date": "2026-10-16",
+    "accepted_graph_proposal_sha256": "0982c8562cb2d6bc70a314516dac4db5babb73f22306f487244a0cf2cbf91d56",
+    "substantive_graph_approval": {
+      "proposal_json_sha256": "0982c8562cb2d6bc70a314516dac4db5babb73f22306f487244a0cf2cbf91d56",
+      "accepted": true,
+      "growth_candidate_sha256": "0fd492358e6a812c6923ca75ec8993272fbe0917fc4af13c9edde5b6792cb6f7",
+      "growth_reviews": 9,
+      "unrelated_growth_entries_unchanged": 1541,
+      "growth_total_reviewed": 1550,
+      "growth_pending": 0,
+      "professional_exact_graphs_checked": 9,
+      "source_records_checked": 22,
+      "root_source_crosschecks": [
+        "Michigan ELI Rule6-3 and its separate/estimate examples",
+        "Thoughtful Learning vestig entry",
+        "Etymonline explore competing historical accounts",
+        "Pearson publisher chapter, extracted Origin of Multiply text"
+      ],
+      "review_scope": "Independent AI morphology review of the nine exact selected verb senses, authored allomorphs and permitted composition graphs. Explore is a deliberately reviewed current whole stem, not a denial of its disputed history. Whole meanings, media, rewards and non-morphology gates remain unchanged. No qualified human or domain-review claim.",
+      "growth_release_errors": 0,
+      "professional_draft_errors": 0,
+      "production_mutated": false
+    },
+    "baseline_registry_sha256": "db18f9abd0bd93d9c442e0b808aac39a2755a54f800e3b858eb3dd4c5d80d4c8",
+    "scope": "Only the nine exact morphology.review records and their narrow current editorial-note clarification may change. All morphology structure, source identities and references, entry language/domain review fields, definitions, examples, media, memberships, course/module statuses, themes, and Growth content remain unchanged.",
+    "note_reason": "The current authoring notes explicitly deny morphological approval or include morphology among still-required review. The proposed narrow correction avoids leaving those current claims in conflict with a completed AI morphology review, while retaining every other pending gate and every historical proposal unchanged.",
+    "excluded_claims": [
+      "human or subject-matter qualification",
+      "language approval",
+      "domain approval",
+      "pronunciation listening",
+      "image suitability",
+      "course or module readiness",
+      "automatic inheritance of Growth approval"
+    ],
+    "patches": [
+      {
+        "target_id": "compare.examine-differences.v",
+        "origin": "res://data/professional/lexemes/retail-module05.json",
+        "before_sha256": "5f733e28417ee30cc32bce2a215b079c3f33f0cb483dc715b5af2d7e4b69d1b0",
+        "before_morphology_sha256": "dca4cea0e2ea3b1a63fbd8c1dcd248886513c03d5c6a88bc29168ceb5b7d4d9b",
+        "before": {
+          "id": "compare.examine-differences.v",
+          "text": "compare",
+          "display_text": "compare",
+          "pos": "verb",
+          "definition": "To examine things together to notice similarities and differences.",
+          "example": "You can compare the two sizes here.",
+          "difficulty": "A2",
+          "accepted_forms": [
+            "compare"
+          ],
+          "regions": [
+            "general"
+          ],
+          "practice_modes": [
+            "word_jelly",
+            "phrase"
+          ],
+          "media": {
+            "image": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "brief": "Two similar boxes placed side by side for comparison.",
+              "picture_suitable": false,
+              "available_animations": [],
+              "adaptations": []
+            },
+            "audio": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "voice": "ava-sweet",
+              "voice_settings": {
+                "voice": "en-US-AvaNeural",
+                "rate": "-15%",
+                "pitch": "+8Hz",
+                "volume": "+0%",
+                "postprocessing": false
+              }
+            }
+          },
+          "morphology": {
+            "schema": 1,
+            "id": "professional.compare.examine-differences.v.morphology.v3",
+            "lexeme_id": "compare.examine-differences.v",
+            "text": "compare",
+            "kind": "morphological",
+            "parts": [
+              {
+                "id": "part1",
+                "canonical_id": "english.affix.com.together",
+                "type": "prefix",
+                "canonical": "com-",
+                "surface": "com",
+                "break_offsets": []
+              },
+              {
+                "id": "part2",
+                "canonical_id": "english.root.par.equal",
+                "type": "root",
+                "canonical": "par",
+                "surface": "pare",
+                "break_offsets": []
+              }
+            ],
+            "nodes": [
+              {
+                "id": "whole",
+                "left": "part1",
+                "right": "part2",
+                "rule": "authored-com-plus-par-equal-pare-realization",
+                "surface": "compare",
+                "break_offsets": []
+              }
+            ],
+            "roots": [
+              "whole"
+            ],
+            "review": {
+              "status": "pending",
+              "reviewer": null,
+              "reviewed_at": null,
+              "draft_author": "Codex (AI source consultation and editorial proposal; not human approval)",
+              "notes": "The selected comparison action uses the inherited com- and par equal family. Its exact English root surface is pare; final e belongs to this authored realization and is not a third morpheme. The par.equal identity is corroborated by par and kept distinct from pare trim and separate par.prepare. Comparing can establish differences as well as similarities; it does not assert equality. The completed current meaning is preserved, and this graph does not claim a productive English com- plus free pare construction.",
+              "references": [
+                "https://www.merriam-webster.com/dictionary/compare",
+                "https://www.etymonline.com/word/compare",
+                "https://www.merriam-webster.com/dictionary/par",
+                "https://www.merriam-webster.com/dictionary/com-"
+              ],
+              "source_record_ids": [
+                "mw-compare-new",
+                "etym-compare-hold9",
+                "mw-par-hold9",
+                "mw-com-prefix-new"
+              ],
+              "source_consultation": "Term-specific new consultation plus explicitly inherited prior-pass evidence; see proposal source registries.",
+              "independent_review": "pending"
+            }
+          },
+          "review": {
+            "status": "pending",
+            "language": "pending",
+            "domain": "pending",
+            "reviewer": null,
+            "reviewed_at": null
+          },
+          "references": [
+            {
+              "source_id": "bls-retail-sales",
+              "status": "pending_term_check",
+              "scope": "Context source only. Original definition, usage, image suitability, and morphology require term-level review."
+            },
+            {
+              "source_id": "bls-customer-service",
+              "status": "pending_term_check",
+              "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+            },
+            {
+              "source_id": "onet-general-office-clerks",
+              "status": "pending_term_check",
+              "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+            },
+            {
+              "source_id": "onet-stockers-order-fillers",
+              "status": "pending_term_check",
+              "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+            },
+            {
+              "source_id": "onet-concierges",
+              "status": "pending_term_check",
+              "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+            },
+            {
+              "source_id": "transport-bls-delivery-drivers",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "transport-onet-couriers",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "transport-hse-loading",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "it-support-bls-role",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "it-support-onet-tasks",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "it-support-microsoft-troubleshooting",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "education-bls-elementary",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "education-naeyc-assessment",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "education-ufli-glossary",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "hr-onet-specialists",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "hr-acas-interview-selection",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "construction-bls-laborers",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "construction-bls-carpenters",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "construction-bls-electricians",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "construction-bls-plumbers",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "manufacturing-bls-maintenance",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "manufacturing-bls-machinists",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "manufacturing-bls-quality",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "manufacturing-hse-maintenance",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "sales-bls-representatives",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "sales-bls-marketing-managers",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "sales-bls-market-research",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "accounting-bls-accountants",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "accounting-bls-clerks",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "accounting-irs-recordkeeping",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "accounting-ifrs10-overview",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            }
+          ],
+          "editorial_notes": "Original draft definition, example, and sense-specific picture brief. No language, subject, morphological, or visual approval is claimed."
+        },
+        "after": {
+          "id": "compare.examine-differences.v",
+          "text": "compare",
+          "display_text": "compare",
+          "pos": "verb",
+          "definition": "To examine things together to notice similarities and differences.",
+          "example": "You can compare the two sizes here.",
+          "difficulty": "A2",
+          "accepted_forms": [
+            "compare"
+          ],
+          "regions": [
+            "general"
+          ],
+          "practice_modes": [
+            "word_jelly",
+            "phrase"
+          ],
+          "media": {
+            "image": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "brief": "Two similar boxes placed side by side for comparison.",
+              "picture_suitable": false,
+              "available_animations": [],
+              "adaptations": []
+            },
+            "audio": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "voice": "ava-sweet",
+              "voice_settings": {
+                "voice": "en-US-AvaNeural",
+                "rate": "-15%",
+                "pitch": "+8Hz",
+                "volume": "+0%",
+                "postprocessing": false
+              }
+            }
+          },
+          "morphology": {
+            "schema": 1,
+            "id": "professional.compare.examine-differences.v.morphology.v3",
+            "lexeme_id": "compare.examine-differences.v",
+            "text": "compare",
+            "kind": "morphological",
+            "parts": [
+              {
+                "id": "part1",
+                "canonical_id": "english.affix.com.together",
+                "type": "prefix",
+                "canonical": "com-",
+                "surface": "com",
+                "break_offsets": []
+              },
+              {
+                "id": "part2",
+                "canonical_id": "english.root.par.equal",
+                "type": "root",
+                "canonical": "par",
+                "surface": "pare",
+                "break_offsets": []
+              }
+            ],
+            "nodes": [
+              {
+                "id": "whole",
+                "left": "part1",
+                "right": "part2",
+                "rule": "authored-com-plus-par-equal-pare-realization",
+                "surface": "compare",
+                "break_offsets": []
+              }
+            ],
+            "roots": [
+              "whole"
+            ],
+            "review": {
+              "status": "reviewed",
+              "reviewer": "Codex root (independent AI morphology review; not human or subject-matter approval)",
+              "reviewed_at": "2026-10-16",
+              "draft_author": "Codex (AI source consultation and editorial proposal; not human approval)",
+              "notes": "The selected comparison action uses the inherited com- and par equal family. Its exact English root surface is pare; final e belongs to this authored realization and is not a third morpheme. The par.equal identity is corroborated by par and kept distinct from pare trim and separate par.prepare. Comparing can establish differences as well as similarities; it does not assert equality. The completed current meaning is preserved, and this graph does not claim a productive English com- plus free pare construction.",
+              "references": [
+                "https://www.merriam-webster.com/dictionary/compare",
+                "https://www.etymonline.com/word/compare",
+                "https://www.merriam-webster.com/dictionary/par",
+                "https://www.merriam-webster.com/dictionary/com-"
+              ],
+              "source_record_ids": [
+                "mw-compare-new",
+                "etym-compare-hold9",
+                "mw-par-hold9",
+                "mw-com-prefix-new"
+              ],
+              "source_consultation": "Term-specific new consultation plus explicitly inherited prior-pass evidence; see proposal source registries.",
+              "independent_review": "completed_scoped_ai_morphology_review",
+              "review_scope": "Independent AI morphology review of the nine exact selected verb senses, authored allomorphs and permitted composition graphs. Explore is a deliberately reviewed current whole stem, not a denial of its disputed history. Whole meanings, media, rewards and non-morphology gates remain unchanged. No qualified human or domain-review claim.",
+              "approval_record": "res://data/professional/provenance/morphology-hold9-review-2026-10-16.json"
+            }
+          },
+          "review": {
+            "status": "pending",
+            "language": "pending",
+            "domain": "pending",
+            "reviewer": null,
+            "reviewed_at": null
+          },
+          "references": [
+            {
+              "source_id": "bls-retail-sales",
+              "status": "pending_term_check",
+              "scope": "Context source only. Original definition, usage, image suitability, and morphology require term-level review."
+            },
+            {
+              "source_id": "bls-customer-service",
+              "status": "pending_term_check",
+              "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+            },
+            {
+              "source_id": "onet-general-office-clerks",
+              "status": "pending_term_check",
+              "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+            },
+            {
+              "source_id": "onet-stockers-order-fillers",
+              "status": "pending_term_check",
+              "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+            },
+            {
+              "source_id": "onet-concierges",
+              "status": "pending_term_check",
+              "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+            },
+            {
+              "source_id": "transport-bls-delivery-drivers",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "transport-onet-couriers",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "transport-hse-loading",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "it-support-bls-role",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "it-support-onet-tasks",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "it-support-microsoft-troubleshooting",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "education-bls-elementary",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "education-naeyc-assessment",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "education-ufli-glossary",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "hr-onet-specialists",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "hr-acas-interview-selection",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "construction-bls-laborers",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "construction-bls-carpenters",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "construction-bls-electricians",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "construction-bls-plumbers",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "manufacturing-bls-maintenance",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "manufacturing-bls-machinists",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "manufacturing-bls-quality",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "manufacturing-hse-maintenance",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "sales-bls-representatives",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "sales-bls-marketing-managers",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "sales-bls-market-research",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "accounting-bls-accountants",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "accounting-bls-clerks",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "accounting-irs-recordkeeping",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "accounting-ifrs10-overview",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            }
+          ],
+          "editorial_notes": "Original draft definition, example, and sense-specific picture brief. No language, subject, or visual approval is claimed. A separate independent AI morphology review by the root reviewer was completed on 2026-10-16 for this exact verb sense, its source-supported morpheme identities, authored allomorphs, spelling reconstruction, and permitted composition graph. This is not human or subject-matter approval. Language, required domain review, media, and course/module readiness remain pending."
+        },
+        "exact_note_edit": {
+          "remove_or_replace": "No language, subject, morphological, or visual approval is claimed.",
+          "replacement": "No language, subject, or visual approval is claimed.",
+          "append": "A separate independent AI morphology review by the root reviewer was completed on 2026-10-16 for this exact verb sense, its source-supported morpheme identities, authored allomorphs, spelling reconstruction, and permitted composition graph. This is not human or subject-matter approval. Language, required domain review, media, and course/module readiness remain pending."
+        },
+        "source_basis": {
+          "existing_source_record_ids": [
+            "mw-compare-new",
+            "etym-compare-hold9",
+            "mw-par-hold9",
+            "mw-com-prefix-new"
+          ],
+          "references": [
+            "https://www.merriam-webster.com/dictionary/compare",
+            "https://www.etymonline.com/word/compare",
+            "https://www.merriam-webster.com/dictionary/par",
+            "https://www.merriam-webster.com/dictionary/com-"
+          ],
+          "substantive_decision": "The selected comparison action uses the inherited com- and par equal family. Its exact English root surface is pare; final e belongs to this authored realization and is not a third morpheme. The par.equal identity is corroborated by par and kept distinct from pare trim and separate par.prepare. Comparing can establish differences as well as similarities; it does not assert equality. The completed current meaning is preserved, and this graph does not claim a productive English com- plus free pare construction."
+        }
+      },
+      {
+        "target_id": "investigate.examine-information-to-understand-issue.v",
+        "origin": "res://data/professional/lexemes/customer-support-module05.json",
+        "before_sha256": "9d4667dccf403547749e707614ec2609829f72326562df456f51317c63b5fa9e",
+        "before_morphology_sha256": "cb4a59d7e75f51ca021eeb04e93cdffd703b59ad1c25e1cad609c3627f67b73a",
+        "before": {
+          "id": "investigate.examine-information-to-understand-issue.v",
+          "text": "investigate",
+          "display_text": "investigate",
+          "pos": "verb",
+          "definition": "To examine relevant information in order to understand what happened or why.",
+          "example": "The team investigated the reported billing discrepancy.",
+          "difficulty": "B1",
+          "accepted_forms": [
+            "investigate"
+          ],
+          "regions": [
+            "general"
+          ],
+          "practice_modes": [
+            "word_jelly",
+            "phrase"
+          ],
+          "media": {
+            "image": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "brief": "A worker comparing fictional records without making an unsupported conclusion.",
+              "picture_suitable": false,
+              "available_animations": [],
+              "adaptations": []
+            },
+            "audio": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "voice": "ava-sweet",
+              "voice_settings": {
+                "voice": "en-US-AvaNeural",
+                "rate": "-15%",
+                "pitch": "+8Hz",
+                "volume": "+0%",
+                "postprocessing": false
+              }
+            }
+          },
+          "morphology": {
+            "schema": 1,
+            "id": "professional.investigate.examine-information-to-understand-issue.v.morphology.v3",
+            "lexeme_id": "investigate.examine-information-to-understand-issue.v",
+            "text": "investigate",
+            "kind": "morphological",
+            "parts": [
+              {
+                "id": "part1",
+                "canonical_id": "english.affix.in.inside",
+                "type": "prefix",
+                "canonical": "in-",
+                "surface": "in",
+                "break_offsets": []
+              },
+              {
+                "id": "part2",
+                "canonical_id": "english.root.vestig.track",
+                "type": "root",
+                "canonical": "vestig",
+                "surface": "vestig",
+                "break_offsets": []
+              },
+              {
+                "id": "part3",
+                "canonical_id": "english.affix.ate.verb",
+                "type": "suffix",
+                "canonical": "-ate",
+                "surface": "ate",
+                "break_offsets": []
+              }
+            ],
+            "nodes": [
+              {
+                "id": "bound_stem",
+                "left": "part1",
+                "right": "part2",
+                "surface": "investig",
+                "rule": "authored-bound-stem-investig",
+                "break_offsets": []
+              },
+              {
+                "id": "whole",
+                "left": "bound_stem",
+                "right": "part3",
+                "rule": "authored-investig-bound-stem-plus-verbal-ate",
+                "surface": "investigate",
+                "break_offsets": []
+              }
+            ],
+            "roots": [
+              "whole"
+            ],
+            "review": {
+              "status": "pending",
+              "reviewer": null,
+              "reviewed_at": null,
+              "draft_author": "Codex (AI source consultation and editorial proposal; not human approval)",
+              "notes": "The individually attested family combines in- into with vestig track/trace and inherited verbal -ate. The teaching source explicitly lists vestig in investigate and vestige. The graph first builds the bound stem investig, then the complete verb; investig is not presented as an independent English word. Both proposed routes into English, borrowing and back-formation from investigation, share this family, so the graph does not assert a unique chronology. The selected careful inquiry sense remains authoritative; there is no clothing vest root or invented free vestigate requirement.",
+              "references": [
+                "https://www.merriam-webster.com/dictionary/investigate",
+                "https://www.merriam-webster.com/dictionary/vestige",
+                "https://www.merriam-webster.com/dictionary/-ate",
+                "https://www.etymonline.com/word/investigate",
+                "https://thoughtfullearning.com/inquirehsbook/pg166",
+                "https://www.etymonline.com/word/-ate"
+              ],
+              "source_record_ids": [
+                "mw-investigate-new",
+                "mw-vestige-new",
+                "mw-ate-suffix-new",
+                "etym-investigate-hold9",
+                "thoughtful-vestig-hold9",
+                "etym-ate-hold9"
+              ],
+              "source_consultation": "Term-specific new consultation plus explicitly inherited prior-pass evidence; see proposal source registries.",
+              "independent_review": "pending"
+            }
+          },
+          "review": {
+            "status": "pending",
+            "language": "pending",
+            "domain": "pending",
+            "reviewer": null,
+            "reviewed_at": null
+          },
+          "references": [
+            {
+              "source_id": "bls-customer-service",
+              "status": "pending_term_check",
+              "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+            },
+            {
+              "source_id": "clinical-bls-physicians",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "clinical-ahrq-diagnosis-education",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "clinical-medline-word-parts",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            }
+          ],
+          "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+        },
+        "after": {
+          "id": "investigate.examine-information-to-understand-issue.v",
+          "text": "investigate",
+          "display_text": "investigate",
+          "pos": "verb",
+          "definition": "To examine relevant information in order to understand what happened or why.",
+          "example": "The team investigated the reported billing discrepancy.",
+          "difficulty": "B1",
+          "accepted_forms": [
+            "investigate"
+          ],
+          "regions": [
+            "general"
+          ],
+          "practice_modes": [
+            "word_jelly",
+            "phrase"
+          ],
+          "media": {
+            "image": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "brief": "A worker comparing fictional records without making an unsupported conclusion.",
+              "picture_suitable": false,
+              "available_animations": [],
+              "adaptations": []
+            },
+            "audio": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "voice": "ava-sweet",
+              "voice_settings": {
+                "voice": "en-US-AvaNeural",
+                "rate": "-15%",
+                "pitch": "+8Hz",
+                "volume": "+0%",
+                "postprocessing": false
+              }
+            }
+          },
+          "morphology": {
+            "schema": 1,
+            "id": "professional.investigate.examine-information-to-understand-issue.v.morphology.v3",
+            "lexeme_id": "investigate.examine-information-to-understand-issue.v",
+            "text": "investigate",
+            "kind": "morphological",
+            "parts": [
+              {
+                "id": "part1",
+                "canonical_id": "english.affix.in.inside",
+                "type": "prefix",
+                "canonical": "in-",
+                "surface": "in",
+                "break_offsets": []
+              },
+              {
+                "id": "part2",
+                "canonical_id": "english.root.vestig.track",
+                "type": "root",
+                "canonical": "vestig",
+                "surface": "vestig",
+                "break_offsets": []
+              },
+              {
+                "id": "part3",
+                "canonical_id": "english.affix.ate.verb",
+                "type": "suffix",
+                "canonical": "-ate",
+                "surface": "ate",
+                "break_offsets": []
+              }
+            ],
+            "nodes": [
+              {
+                "id": "bound_stem",
+                "left": "part1",
+                "right": "part2",
+                "surface": "investig",
+                "rule": "authored-bound-stem-investig",
+                "break_offsets": []
+              },
+              {
+                "id": "whole",
+                "left": "bound_stem",
+                "right": "part3",
+                "rule": "authored-investig-bound-stem-plus-verbal-ate",
+                "surface": "investigate",
+                "break_offsets": []
+              }
+            ],
+            "roots": [
+              "whole"
+            ],
+            "review": {
+              "status": "reviewed",
+              "reviewer": "Codex root (independent AI morphology review; not human or subject-matter approval)",
+              "reviewed_at": "2026-10-16",
+              "draft_author": "Codex (AI source consultation and editorial proposal; not human approval)",
+              "notes": "The individually attested family combines in- into with vestig track/trace and inherited verbal -ate. The teaching source explicitly lists vestig in investigate and vestige. The graph first builds the bound stem investig, then the complete verb; investig is not presented as an independent English word. Both proposed routes into English, borrowing and back-formation from investigation, share this family, so the graph does not assert a unique chronology. The selected careful inquiry sense remains authoritative; there is no clothing vest root or invented free vestigate requirement.",
+              "references": [
+                "https://www.merriam-webster.com/dictionary/investigate",
+                "https://www.merriam-webster.com/dictionary/vestige",
+                "https://www.merriam-webster.com/dictionary/-ate",
+                "https://www.etymonline.com/word/investigate",
+                "https://thoughtfullearning.com/inquirehsbook/pg166",
+                "https://www.etymonline.com/word/-ate"
+              ],
+              "source_record_ids": [
+                "mw-investigate-new",
+                "mw-vestige-new",
+                "mw-ate-suffix-new",
+                "etym-investigate-hold9",
+                "thoughtful-vestig-hold9",
+                "etym-ate-hold9"
+              ],
+              "source_consultation": "Term-specific new consultation plus explicitly inherited prior-pass evidence; see proposal source registries.",
+              "independent_review": "completed_scoped_ai_morphology_review",
+              "review_scope": "Independent AI morphology review of the nine exact selected verb senses, authored allomorphs and permitted composition graphs. Explore is a deliberately reviewed current whole stem, not a denial of its disputed history. Whole meanings, media, rewards and non-morphology gates remain unchanged. No qualified human or domain-review claim.",
+              "approval_record": "res://data/professional/provenance/morphology-hold9-review-2026-10-16.json"
+            }
+          },
+          "review": {
+            "status": "pending",
+            "language": "pending",
+            "domain": "pending",
+            "reviewer": null,
+            "reviewed_at": null
+          },
+          "references": [
+            {
+              "source_id": "bls-customer-service",
+              "status": "pending_term_check",
+              "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+            },
+            {
+              "source_id": "clinical-bls-physicians",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "clinical-ahrq-diagnosis-education",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "clinical-medline-word-parts",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            }
+          ],
+          "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, and regional language require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired. A separate independent AI morphology review by the root reviewer was completed on 2026-10-16 for this exact verb sense, its source-supported morpheme identities, authored allomorphs, spelling reconstruction, and permitted composition graph. This is not human or subject-matter approval. Language, required domain review, media, and course/module readiness remain pending."
+        },
+        "exact_note_edit": {
+          "remove_or_replace": "regional language, and morphology require qualified review.",
+          "replacement": "and regional language require qualified review.",
+          "append": "A separate independent AI morphology review by the root reviewer was completed on 2026-10-16 for this exact verb sense, its source-supported morpheme identities, authored allomorphs, spelling reconstruction, and permitted composition graph. This is not human or subject-matter approval. Language, required domain review, media, and course/module readiness remain pending."
+        },
+        "source_basis": {
+          "existing_source_record_ids": [
+            "mw-investigate-new",
+            "mw-vestige-new",
+            "mw-ate-suffix-new",
+            "etym-investigate-hold9",
+            "thoughtful-vestig-hold9",
+            "etym-ate-hold9"
+          ],
+          "references": [
+            "https://www.merriam-webster.com/dictionary/investigate",
+            "https://www.merriam-webster.com/dictionary/vestige",
+            "https://www.merriam-webster.com/dictionary/-ate",
+            "https://www.etymonline.com/word/investigate",
+            "https://thoughtfullearning.com/inquirehsbook/pg166",
+            "https://www.etymonline.com/word/-ate"
+          ],
+          "substantive_decision": "The individually attested family combines in- into with vestig track/trace and inherited verbal -ate. The teaching source explicitly lists vestig in investigate and vestige. The graph first builds the bound stem investig, then the complete verb; investig is not presented as an independent English word. Both proposed routes into English, borrowing and back-formation from investigation, share this family, so the graph does not assert a unique chronology. The selected careful inquiry sense remains authoritative; there is no clothing vest root or invented free vestigate requirement."
+        }
+      },
+      {
+        "target_id": "suggest.put-forward-idea-for-consideration.v",
+        "origin": "res://data/professional/lexemes/hospitality-module05.json",
+        "before_sha256": "0e7795366ab0b6e7cf13104cb0c6ee61a09bd10ce65b6e6beedda6a6805cc831",
+        "before_morphology_sha256": "1ba1d4b616680e4c2d992b5c71da4dce24e4f689662dbd199689e8c8ccf9fd69",
+        "before": {
+          "id": "suggest.put-forward-idea-for-consideration.v",
+          "text": "suggest",
+          "display_text": "suggest",
+          "pos": "verb",
+          "definition": "To put forward an idea or option for someone to consider.",
+          "example": "May I suggest checking the updated opening times?",
+          "difficulty": "B1",
+          "accepted_forms": [
+            "suggest"
+          ],
+          "regions": [
+            "general"
+          ],
+          "practice_modes": [
+            "word_jelly",
+            "phrase"
+          ],
+          "media": {
+            "image": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "brief": "A friendly staff member sharing a fictional information card as an optional idea.",
+              "picture_suitable": false,
+              "available_animations": [],
+              "adaptations": []
+            },
+            "audio": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "voice": "ava-sweet",
+              "voice_settings": {
+                "voice": "en-US-AvaNeural",
+                "rate": "-15%",
+                "pitch": "+8Hz",
+                "volume": "+0%",
+                "postprocessing": false
+              }
+            }
+          },
+          "morphology": {
+            "schema": 1,
+            "id": "professional.suggest.put-forward-idea-for-consideration.v.morphology.v3",
+            "lexeme_id": "suggest.put-forward-idea-for-consideration.v",
+            "text": "suggest",
+            "kind": "morphological",
+            "parts": [
+              {
+                "id": "part1",
+                "canonical_id": "english.affix.sub.under",
+                "type": "prefix",
+                "canonical": "sub-",
+                "surface": "sug",
+                "break_offsets": []
+              },
+              {
+                "id": "part2",
+                "canonical_id": "english.root.gest.carry",
+                "type": "root",
+                "canonical": "gest",
+                "surface": "gest",
+                "break_offsets": []
+              }
+            ],
+            "nodes": [
+              {
+                "id": "whole",
+                "left": "part1",
+                "right": "part2",
+                "rule": "authored-sub-sug-allomorph-plus-gest-carry",
+                "surface": "suggest",
+                "break_offsets": []
+              }
+            ],
+            "roots": [
+              "whole"
+            ],
+            "review": {
+              "status": "pending",
+              "reviewer": null,
+              "reviewed_at": null,
+              "draft_author": "Codex (AI source consultation and editorial proposal; not human approval)",
+              "notes": "Collins explicitly records sug- as the before-g allomorph of sub- in suggest. The suggest/ingest histories corroborate gest as the participial realization of the carry/bear family. Sub.under is a historical identity here, not a claim that proposing an idea literally means carrying something underneath. The dictionary traces the furnishing/bringing-forward development into the selected proposal sense. The graph neither selects the modern sales acronym sug nor treats the unrelated noun gest as its base.",
+              "references": [
+                "https://www.merriam-webster.com/dictionary/suggest",
+                "https://www.etymonline.com/word/suggest",
+                "https://www.etymonline.com/word/sub-",
+                "https://www.collinsdictionary.com/us/dictionary/english/sug",
+                "https://www.merriam-webster.com/dictionary/ingest"
+              ],
+              "source_record_ids": [
+                "mw-suggest-new",
+                "etym-suggest-hold9",
+                "etym-sub-hold9",
+                "collins-sug-hold9",
+                "mw-ingest-hold9"
+              ],
+              "source_consultation": "Term-specific new consultation plus explicitly inherited prior-pass evidence; see proposal source registries.",
+              "independent_review": "pending"
+            }
+          },
+          "review": {
+            "status": "pending",
+            "language": "pending",
+            "domain": "pending",
+            "reviewer": null,
+            "reviewed_at": null
+          },
+          "references": [
+            {
+              "source_id": "onet-concierges",
+              "status": "pending_term_check",
+              "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+            }
+          ],
+          "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+        },
+        "after": {
+          "id": "suggest.put-forward-idea-for-consideration.v",
+          "text": "suggest",
+          "display_text": "suggest",
+          "pos": "verb",
+          "definition": "To put forward an idea or option for someone to consider.",
+          "example": "May I suggest checking the updated opening times?",
+          "difficulty": "B1",
+          "accepted_forms": [
+            "suggest"
+          ],
+          "regions": [
+            "general"
+          ],
+          "practice_modes": [
+            "word_jelly",
+            "phrase"
+          ],
+          "media": {
+            "image": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "brief": "A friendly staff member sharing a fictional information card as an optional idea.",
+              "picture_suitable": false,
+              "available_animations": [],
+              "adaptations": []
+            },
+            "audio": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "voice": "ava-sweet",
+              "voice_settings": {
+                "voice": "en-US-AvaNeural",
+                "rate": "-15%",
+                "pitch": "+8Hz",
+                "volume": "+0%",
+                "postprocessing": false
+              }
+            }
+          },
+          "morphology": {
+            "schema": 1,
+            "id": "professional.suggest.put-forward-idea-for-consideration.v.morphology.v3",
+            "lexeme_id": "suggest.put-forward-idea-for-consideration.v",
+            "text": "suggest",
+            "kind": "morphological",
+            "parts": [
+              {
+                "id": "part1",
+                "canonical_id": "english.affix.sub.under",
+                "type": "prefix",
+                "canonical": "sub-",
+                "surface": "sug",
+                "break_offsets": []
+              },
+              {
+                "id": "part2",
+                "canonical_id": "english.root.gest.carry",
+                "type": "root",
+                "canonical": "gest",
+                "surface": "gest",
+                "break_offsets": []
+              }
+            ],
+            "nodes": [
+              {
+                "id": "whole",
+                "left": "part1",
+                "right": "part2",
+                "rule": "authored-sub-sug-allomorph-plus-gest-carry",
+                "surface": "suggest",
+                "break_offsets": []
+              }
+            ],
+            "roots": [
+              "whole"
+            ],
+            "review": {
+              "status": "reviewed",
+              "reviewer": "Codex root (independent AI morphology review; not human or subject-matter approval)",
+              "reviewed_at": "2026-10-16",
+              "draft_author": "Codex (AI source consultation and editorial proposal; not human approval)",
+              "notes": "Collins explicitly records sug- as the before-g allomorph of sub- in suggest. The suggest/ingest histories corroborate gest as the participial realization of the carry/bear family. Sub.under is a historical identity here, not a claim that proposing an idea literally means carrying something underneath. The dictionary traces the furnishing/bringing-forward development into the selected proposal sense. The graph neither selects the modern sales acronym sug nor treats the unrelated noun gest as its base.",
+              "references": [
+                "https://www.merriam-webster.com/dictionary/suggest",
+                "https://www.etymonline.com/word/suggest",
+                "https://www.etymonline.com/word/sub-",
+                "https://www.collinsdictionary.com/us/dictionary/english/sug",
+                "https://www.merriam-webster.com/dictionary/ingest"
+              ],
+              "source_record_ids": [
+                "mw-suggest-new",
+                "etym-suggest-hold9",
+                "etym-sub-hold9",
+                "collins-sug-hold9",
+                "mw-ingest-hold9"
+              ],
+              "source_consultation": "Term-specific new consultation plus explicitly inherited prior-pass evidence; see proposal source registries.",
+              "independent_review": "completed_scoped_ai_morphology_review",
+              "review_scope": "Independent AI morphology review of the nine exact selected verb senses, authored allomorphs and permitted composition graphs. Explore is a deliberately reviewed current whole stem, not a denial of its disputed history. Whole meanings, media, rewards and non-morphology gates remain unchanged. No qualified human or domain-review claim.",
+              "approval_record": "res://data/professional/provenance/morphology-hold9-review-2026-10-16.json"
+            }
+          },
+          "review": {
+            "status": "pending",
+            "language": "pending",
+            "domain": "pending",
+            "reviewer": null,
+            "reviewed_at": null
+          },
+          "references": [
+            {
+              "source_id": "onet-concierges",
+              "status": "pending_term_check",
+              "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+            }
+          ],
+          "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, and regional usage require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired. A separate independent AI morphology review by the root reviewer was completed on 2026-10-16 for this exact verb sense, its source-supported morpheme identities, authored allomorphs, spelling reconstruction, and permitted composition graph. This is not human or subject-matter approval. Language, required domain review, media, and course/module readiness remain pending."
+        },
+        "exact_note_edit": {
+          "remove_or_replace": "regional usage, and morphology require qualified review.",
+          "replacement": "and regional usage require qualified review.",
+          "append": "A separate independent AI morphology review by the root reviewer was completed on 2026-10-16 for this exact verb sense, its source-supported morpheme identities, authored allomorphs, spelling reconstruction, and permitted composition graph. This is not human or subject-matter approval. Language, required domain review, media, and course/module readiness remain pending."
+        },
+        "source_basis": {
+          "existing_source_record_ids": [
+            "mw-suggest-new",
+            "etym-suggest-hold9",
+            "etym-sub-hold9",
+            "collins-sug-hold9",
+            "mw-ingest-hold9"
+          ],
+          "references": [
+            "https://www.merriam-webster.com/dictionary/suggest",
+            "https://www.etymonline.com/word/suggest",
+            "https://www.etymonline.com/word/sub-",
+            "https://www.collinsdictionary.com/us/dictionary/english/sug",
+            "https://www.merriam-webster.com/dictionary/ingest"
+          ],
+          "substantive_decision": "Collins explicitly records sug- as the before-g allomorph of sub- in suggest. The suggest/ingest histories corroborate gest as the participial realization of the carry/bear family. Sub.under is a historical identity here, not a claim that proposing an idea literally means carrying something underneath. The dictionary traces the furnishing/bringing-forward development into the selected proposal sense. The graph neither selects the modern sales acronym sug nor treats the unrelated noun gest as its base."
+        }
+      },
+      {
+        "target_id": "explore.examine-or-try-to-discover-more.v",
+        "origin": "res://data/professional/lexemes/education-module05.json",
+        "before_sha256": "59d5249c8a1628f716fb37c5823f364042c821bbfb53abc1dfa3295d9c78e9ca",
+        "before_morphology_sha256": "3955b8c4af811b3fd2a115cd8a7afd72210d9417d1dd0be8677396681eeb4ec9",
+        "before": {
+          "id": "explore.examine-or-try-to-discover-more.v",
+          "text": "explore",
+          "display_text": "explore",
+          "pos": "verb",
+          "definition": "To examine or try something in order to discover more about it.",
+          "example": "The group will explore the materials before making a plan.",
+          "difficulty": "B1",
+          "accepted_forms": [
+            "explore"
+          ],
+          "regions": [
+            "general"
+          ],
+          "practice_modes": [
+            "word_jelly",
+            "phrase"
+          ],
+          "media": {
+            "image": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "brief": "Learners examining varied safe classroom materials under the activity arrangements.",
+              "picture_suitable": false,
+              "available_animations": [],
+              "adaptations": []
+            },
+            "audio": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "voice": "ava-sweet",
+              "voice_settings": {
+                "voice": "en-US-AvaNeural",
+                "rate": "-15%",
+                "pitch": "+8Hz",
+                "volume": "+0%",
+                "postprocessing": false
+              }
+            }
+          },
+          "morphology": {
+            "schema": 1,
+            "id": "professional.explore.examine-or-try-to-discover-more.v.morphology.v3",
+            "lexeme_id": "explore.examine-or-try-to-discover-more.v",
+            "text": "explore",
+            "kind": "atomic",
+            "parts": [
+              {
+                "id": "whole",
+                "canonical_id": "growth.explore",
+                "canonical": "explore",
+                "surface": "explore",
+                "type": "atomic",
+                "break_offsets": []
+              }
+            ],
+            "nodes": [],
+            "roots": [
+              "whole"
+            ],
+            "review": {
+              "status": "pending",
+              "reviewer": null,
+              "reviewed_at": null,
+              "draft_author": "Codex (AI source consultation and editorial proposal; not human approval)",
+              "notes": "Keep the current explore stem whole at this teaching depth after examining, rather than denying, its historical complexity. The new history offers back-formation from exploration or borrowing and records competing cry-out and flow explanations of the deeper element. The stable contemporary family is explore/explorer/exploration; neither disputed historical account supplies a uniquely settled ex-plus-root lesson for the selected examining/discovery sense. This deliberate whole-stem exposure does not claim that bound roots must be free words or that explore has no etymological structure. A future explicit historical-family lesson may revisit it with the competing account retained.",
+              "references": [
+                "https://www.merriam-webster.com/dictionary/explore",
+                "https://www.etymonline.com/word/explore",
+                "https://socialsci.libretexts.org/Bookshelves/Linguistics/Essentials_of_Linguistics_2e_(Anderson_et_al.)/05:_Morphology/5.02:_Roots_bases_and_affixes"
+              ],
+              "source_record_ids": [
+                "mw-explore-new",
+                "etym-explore-hold9",
+                "anderson-2e-roots-new"
+              ],
+              "source_consultation": "Term-specific new consultation plus explicitly inherited prior-pass evidence; see proposal source registries.",
+              "independent_review": "pending"
+            }
+          },
+          "review": {
+            "status": "pending",
+            "language": "pending",
+            "domain": "pending",
+            "reviewer": null,
+            "reviewed_at": null
+          },
+          "references": [
+            {
+              "source_id": "education-bls-elementary",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "education-naeyc-assessment",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "education-ufli-glossary",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            }
+          ],
+          "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+        },
+        "after": {
+          "id": "explore.examine-or-try-to-discover-more.v",
+          "text": "explore",
+          "display_text": "explore",
+          "pos": "verb",
+          "definition": "To examine or try something in order to discover more about it.",
+          "example": "The group will explore the materials before making a plan.",
+          "difficulty": "B1",
+          "accepted_forms": [
+            "explore"
+          ],
+          "regions": [
+            "general"
+          ],
+          "practice_modes": [
+            "word_jelly",
+            "phrase"
+          ],
+          "media": {
+            "image": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "brief": "Learners examining varied safe classroom materials under the activity arrangements.",
+              "picture_suitable": false,
+              "available_animations": [],
+              "adaptations": []
+            },
+            "audio": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "voice": "ava-sweet",
+              "voice_settings": {
+                "voice": "en-US-AvaNeural",
+                "rate": "-15%",
+                "pitch": "+8Hz",
+                "volume": "+0%",
+                "postprocessing": false
+              }
+            }
+          },
+          "morphology": {
+            "schema": 1,
+            "id": "professional.explore.examine-or-try-to-discover-more.v.morphology.v3",
+            "lexeme_id": "explore.examine-or-try-to-discover-more.v",
+            "text": "explore",
+            "kind": "atomic",
+            "parts": [
+              {
+                "id": "whole",
+                "canonical_id": "growth.explore",
+                "canonical": "explore",
+                "surface": "explore",
+                "type": "atomic",
+                "break_offsets": []
+              }
+            ],
+            "nodes": [],
+            "roots": [
+              "whole"
+            ],
+            "review": {
+              "status": "reviewed",
+              "reviewer": "Codex root (independent AI morphology review; not human or subject-matter approval)",
+              "reviewed_at": "2026-10-16",
+              "draft_author": "Codex (AI source consultation and editorial proposal; not human approval)",
+              "notes": "Keep the current explore stem whole at this teaching depth after examining, rather than denying, its historical complexity. The new history offers back-formation from exploration or borrowing and records competing cry-out and flow explanations of the deeper element. The stable contemporary family is explore/explorer/exploration; neither disputed historical account supplies a uniquely settled ex-plus-root lesson for the selected examining/discovery sense. This deliberate whole-stem exposure does not claim that bound roots must be free words or that explore has no etymological structure. A future explicit historical-family lesson may revisit it with the competing account retained.",
+              "references": [
+                "https://www.merriam-webster.com/dictionary/explore",
+                "https://www.etymonline.com/word/explore",
+                "https://socialsci.libretexts.org/Bookshelves/Linguistics/Essentials_of_Linguistics_2e_(Anderson_et_al.)/05:_Morphology/5.02:_Roots_bases_and_affixes"
+              ],
+              "source_record_ids": [
+                "mw-explore-new",
+                "etym-explore-hold9",
+                "anderson-2e-roots-new"
+              ],
+              "source_consultation": "Term-specific new consultation plus explicitly inherited prior-pass evidence; see proposal source registries.",
+              "independent_review": "completed_scoped_ai_morphology_review",
+              "review_scope": "Independent AI morphology review of the nine exact selected verb senses, authored allomorphs and permitted composition graphs. Explore is a deliberately reviewed current whole stem, not a denial of its disputed history. Whole meanings, media, rewards and non-morphology gates remain unchanged. No qualified human or domain-review claim.",
+              "approval_record": "res://data/professional/provenance/morphology-hold9-review-2026-10-16.json"
+            }
+          },
+          "review": {
+            "status": "pending",
+            "language": "pending",
+            "domain": "pending",
+            "reviewer": null,
+            "reviewed_at": null
+          },
+          "references": [
+            {
+              "source_id": "education-bls-elementary",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "education-naeyc-assessment",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "education-ufli-glossary",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            }
+          ],
+          "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed. A separate independent AI morphology review by the root reviewer was completed on 2026-10-16 for this exact verb sense, its source-supported morpheme identities, authored allomorphs, spelling reconstruction, and permitted composition graph. This is not human or subject-matter approval. Language, required domain review, media, and course/module readiness remain pending."
+        },
+        "exact_note_edit": {
+          "remove_or_replace": "authorization, morphology, and image suitability require qualified review.",
+          "replacement": "authorization, and image suitability require qualified review.",
+          "append": "A separate independent AI morphology review by the root reviewer was completed on 2026-10-16 for this exact verb sense, its source-supported morpheme identities, authored allomorphs, spelling reconstruction, and permitted composition graph. This is not human or subject-matter approval. Language, required domain review, media, and course/module readiness remain pending."
+        },
+        "source_basis": {
+          "existing_source_record_ids": [
+            "mw-explore-new",
+            "etym-explore-hold9",
+            "anderson-2e-roots-new"
+          ],
+          "references": [
+            "https://www.merriam-webster.com/dictionary/explore",
+            "https://www.etymonline.com/word/explore",
+            "https://socialsci.libretexts.org/Bookshelves/Linguistics/Essentials_of_Linguistics_2e_(Anderson_et_al.)/05:_Morphology/5.02:_Roots_bases_and_affixes"
+          ],
+          "substantive_decision": "Keep the current explore stem whole at this teaching depth after examining, rather than denying, its historical complexity. The new history offers back-formation from exploration or borrowing and records competing cry-out and flow explanations of the deeper element. The stable contemporary family is explore/explorer/exploration; neither disputed historical account supplies a uniquely settled ex-plus-root lesson for the selected examining/discovery sense. This deliberate whole-stem exposure does not claim that bound roots must be free words or that explore has no etymological structure. A future explicit historical-family lesson may revisit it with the competing account retained."
+        }
+      },
+      {
+        "target_id": "separate.keep-or-place-things-apart.v",
+        "origin": "res://data/professional/lexemes/cleaning-module05.json",
+        "before_sha256": "a0d99d5c05f3acba41e4c4a4b2d7fae90194ac1386141f52cc30250adbd52137",
+        "before_morphology_sha256": "be13c80a9d5911cdcd31609c44e824d42072042b9d49993b4fa1686010a5a65f",
+        "before": {
+          "id": "separate.keep-or-place-things-apart.v",
+          "text": "separate",
+          "display_text": "separate",
+          "pos": "verb",
+          "definition": "To keep or place things apart from one another.",
+          "example": "The record explains why staff separate these materials.",
+          "difficulty": "B1",
+          "accepted_forms": [
+            "separate"
+          ],
+          "regions": [
+            "general"
+          ],
+          "practice_modes": [
+            "word_jelly",
+            "phrase"
+          ],
+          "media": {
+            "image": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "brief": "Two distinct groups of ordinary recyclable sample items kept apart on a table, without assigning legal waste classes.",
+              "picture_suitable": false,
+              "available_animations": [],
+              "adaptations": []
+            },
+            "audio": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "voice": "ava-sweet",
+              "voice_settings": {
+                "voice": "en-US-AvaNeural",
+                "rate": "-15%",
+                "pitch": "+8Hz",
+                "volume": "+0%",
+                "postprocessing": false
+              }
+            }
+          },
+          "morphology": {
+            "schema": 1,
+            "id": "professional.separate.keep-or-place-things-apart.v.morphology.v3",
+            "lexeme_id": "separate.keep-or-place-things-apart.v",
+            "text": "separate",
+            "kind": "morphological",
+            "parts": [
+              {
+                "id": "part1",
+                "canonical_id": "english.affix.se.apart",
+                "type": "prefix",
+                "canonical": "se-",
+                "surface": "se",
+                "break_offsets": []
+              },
+              {
+                "id": "part2",
+                "canonical_id": "english.root.par.prepare",
+                "type": "root",
+                "canonical": "par",
+                "surface": "par",
+                "break_offsets": []
+              },
+              {
+                "id": "part3",
+                "canonical_id": "english.affix.ate.verb",
+                "type": "suffix",
+                "canonical": "-ate",
+                "surface": "ate",
+                "break_offsets": []
+              }
+            ],
+            "nodes": [
+              {
+                "id": "bound_stem",
+                "left": "part1",
+                "right": "part2",
+                "surface": "separ",
+                "rule": "authored-bound-stem-separ",
+                "break_offsets": []
+              },
+              {
+                "id": "whole",
+                "left": "bound_stem",
+                "right": "part3",
+                "rule": "authored-separ-bound-stem-plus-verbal-ate",
+                "surface": "separate",
+                "break_offsets": []
+              }
+            ],
+            "roots": [
+              "whole"
+            ],
+            "review": {
+              "status": "pending",
+              "reviewer": null,
+              "reviewed_at": null,
+              "draft_author": "Codex (AI source consultation and editorial proposal; not human approval)",
+              "notes": "The selected verb has the inherited se- apart, par prepare/procure, and verbal -ate structure. Prepare supplies the companion parare family, and the University of Michigan teaching exercise independently includes separate in the -ate family. The exact first join is the bound stem separ, not an invented standalone verb; the second yields separate. Par.prepare is kept distinct from compare par.equal. The whole separating action remains the definition; the historical preparation gloss is not a claim that separation means preparation or equalization. This review concerns the verb rather than automatically reusing its analysis for a noun or adjective sense.",
+              "references": [
+                "https://www.merriam-webster.com/dictionary/separate",
+                "https://www.merriam-webster.com/dictionary/-ate",
+                "https://www.etymonline.com/word/separate",
+                "https://www.etymonline.com/word/se-",
+                "https://www.merriam-webster.com/dictionary/prepare",
+                "https://www.lrc.lsa.umich.edu/eli-538/pg-014.html"
+              ],
+              "source_record_ids": [
+                "mw-separate-new",
+                "mw-ate-suffix-new",
+                "etym-separate-hold9",
+                "etym-se-hold9",
+                "mw-prepare-hold9",
+                "michigan-ate-hold9"
+              ],
+              "source_consultation": "Term-specific new consultation plus explicitly inherited prior-pass evidence; see proposal source registries.",
+              "independent_review": "pending"
+            }
+          },
+          "review": {
+            "status": "pending",
+            "language": "pending",
+            "domain": "pending",
+            "reviewer": null,
+            "reviewed_at": null
+          },
+          "references": [
+            {
+              "source_id": "cleaning-onet-janitors",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "cleaning-hse-risk-topics",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            }
+          ],
+          "editorial_notes": "Original Cleaning & Facilities communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is communication practice, not chemical mixing, equipment operation, repair, lifting, electrical, pest-treatment, waste-classification, medical, or emergency instruction. Local requirements and qualified responsibilities remain context-specific. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+        },
+        "after": {
+          "id": "separate.keep-or-place-things-apart.v",
+          "text": "separate",
+          "display_text": "separate",
+          "pos": "verb",
+          "definition": "To keep or place things apart from one another.",
+          "example": "The record explains why staff separate these materials.",
+          "difficulty": "B1",
+          "accepted_forms": [
+            "separate"
+          ],
+          "regions": [
+            "general"
+          ],
+          "practice_modes": [
+            "word_jelly",
+            "phrase"
+          ],
+          "media": {
+            "image": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "brief": "Two distinct groups of ordinary recyclable sample items kept apart on a table, without assigning legal waste classes.",
+              "picture_suitable": false,
+              "available_animations": [],
+              "adaptations": []
+            },
+            "audio": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "voice": "ava-sweet",
+              "voice_settings": {
+                "voice": "en-US-AvaNeural",
+                "rate": "-15%",
+                "pitch": "+8Hz",
+                "volume": "+0%",
+                "postprocessing": false
+              }
+            }
+          },
+          "morphology": {
+            "schema": 1,
+            "id": "professional.separate.keep-or-place-things-apart.v.morphology.v3",
+            "lexeme_id": "separate.keep-or-place-things-apart.v",
+            "text": "separate",
+            "kind": "morphological",
+            "parts": [
+              {
+                "id": "part1",
+                "canonical_id": "english.affix.se.apart",
+                "type": "prefix",
+                "canonical": "se-",
+                "surface": "se",
+                "break_offsets": []
+              },
+              {
+                "id": "part2",
+                "canonical_id": "english.root.par.prepare",
+                "type": "root",
+                "canonical": "par",
+                "surface": "par",
+                "break_offsets": []
+              },
+              {
+                "id": "part3",
+                "canonical_id": "english.affix.ate.verb",
+                "type": "suffix",
+                "canonical": "-ate",
+                "surface": "ate",
+                "break_offsets": []
+              }
+            ],
+            "nodes": [
+              {
+                "id": "bound_stem",
+                "left": "part1",
+                "right": "part2",
+                "surface": "separ",
+                "rule": "authored-bound-stem-separ",
+                "break_offsets": []
+              },
+              {
+                "id": "whole",
+                "left": "bound_stem",
+                "right": "part3",
+                "rule": "authored-separ-bound-stem-plus-verbal-ate",
+                "surface": "separate",
+                "break_offsets": []
+              }
+            ],
+            "roots": [
+              "whole"
+            ],
+            "review": {
+              "status": "reviewed",
+              "reviewer": "Codex root (independent AI morphology review; not human or subject-matter approval)",
+              "reviewed_at": "2026-10-16",
+              "draft_author": "Codex (AI source consultation and editorial proposal; not human approval)",
+              "notes": "The selected verb has the inherited se- apart, par prepare/procure, and verbal -ate structure. Prepare supplies the companion parare family, and the University of Michigan teaching exercise independently includes separate in the -ate family. The exact first join is the bound stem separ, not an invented standalone verb; the second yields separate. Par.prepare is kept distinct from compare par.equal. The whole separating action remains the definition; the historical preparation gloss is not a claim that separation means preparation or equalization. This review concerns the verb rather than automatically reusing its analysis for a noun or adjective sense.",
+              "references": [
+                "https://www.merriam-webster.com/dictionary/separate",
+                "https://www.merriam-webster.com/dictionary/-ate",
+                "https://www.etymonline.com/word/separate",
+                "https://www.etymonline.com/word/se-",
+                "https://www.merriam-webster.com/dictionary/prepare",
+                "https://www.lrc.lsa.umich.edu/eli-538/pg-014.html"
+              ],
+              "source_record_ids": [
+                "mw-separate-new",
+                "mw-ate-suffix-new",
+                "etym-separate-hold9",
+                "etym-se-hold9",
+                "mw-prepare-hold9",
+                "michigan-ate-hold9"
+              ],
+              "source_consultation": "Term-specific new consultation plus explicitly inherited prior-pass evidence; see proposal source registries.",
+              "independent_review": "completed_scoped_ai_morphology_review",
+              "review_scope": "Independent AI morphology review of the nine exact selected verb senses, authored allomorphs and permitted composition graphs. Explore is a deliberately reviewed current whole stem, not a denial of its disputed history. Whole meanings, media, rewards and non-morphology gates remain unchanged. No qualified human or domain-review claim.",
+              "approval_record": "res://data/professional/provenance/morphology-hold9-review-2026-10-16.json"
+            }
+          },
+          "review": {
+            "status": "pending",
+            "language": "pending",
+            "domain": "pending",
+            "reviewer": null,
+            "reviewed_at": null
+          },
+          "references": [
+            {
+              "source_id": "cleaning-onet-janitors",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "cleaning-hse-risk-topics",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            }
+          ],
+          "editorial_notes": "Original Cleaning & Facilities communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, and image suitability require qualified review. This is communication practice, not chemical mixing, equipment operation, repair, lifting, electrical, pest-treatment, waste-classification, medical, or emergency instruction. Local requirements and qualified responsibilities remain context-specific. No image or recording has been acquired; picture games remain disabled until suitability is reviewed. A separate independent AI morphology review by the root reviewer was completed on 2026-10-16 for this exact verb sense, its source-supported morpheme identities, authored allomorphs, spelling reconstruction, and permitted composition graph. This is not human or subject-matter approval. Language, required domain review, media, and course/module readiness remain pending."
+        },
+        "exact_note_edit": {
+          "remove_or_replace": "authorization, morphology, and image suitability require qualified review.",
+          "replacement": "authorization, and image suitability require qualified review.",
+          "append": "A separate independent AI morphology review by the root reviewer was completed on 2026-10-16 for this exact verb sense, its source-supported morpheme identities, authored allomorphs, spelling reconstruction, and permitted composition graph. This is not human or subject-matter approval. Language, required domain review, media, and course/module readiness remain pending."
+        },
+        "source_basis": {
+          "existing_source_record_ids": [
+            "mw-separate-new",
+            "mw-ate-suffix-new",
+            "etym-separate-hold9",
+            "etym-se-hold9",
+            "mw-prepare-hold9",
+            "michigan-ate-hold9"
+          ],
+          "references": [
+            "https://www.merriam-webster.com/dictionary/separate",
+            "https://www.merriam-webster.com/dictionary/-ate",
+            "https://www.etymonline.com/word/separate",
+            "https://www.etymonline.com/word/se-",
+            "https://www.merriam-webster.com/dictionary/prepare",
+            "https://www.lrc.lsa.umich.edu/eli-538/pg-014.html"
+          ],
+          "substantive_decision": "The selected verb has the inherited se- apart, par prepare/procure, and verbal -ate structure. Prepare supplies the companion parare family, and the University of Michigan teaching exercise independently includes separate in the -ate family. The exact first join is the bound stem separ, not an invented standalone verb; the second yields separate. Par.prepare is kept distinct from compare par.equal. The whole separating action remains the definition; the historical preparation gloss is not a claim that separation means preparation or equalization. This review concerns the verb rather than automatically reusing its analysis for a noun or adjective sense."
+        }
+      },
+      {
+        "target_id": "multiply.find-product-of-numbers.v",
+        "origin": "res://data/professional/lexemes/accounting-module05.json",
+        "before_sha256": "b1e1afa17937b9ef1f674a63532222ffed265fad6442867b7f13a5ce40a3a6ba",
+        "before_morphology_sha256": "6fd20ac7b99ff6010d667acdcdc7a255f6cdd3253d383bba8c29c57c742ec4aa",
+        "before": {
+          "id": "multiply.find-product-of-numbers.v",
+          "text": "multiply",
+          "display_text": "multiply",
+          "pos": "verb",
+          "definition": "To find the product of two or more numbers.",
+          "example": "Multiply the unit price by the stated quantity in this example.",
+          "difficulty": "B1",
+          "accepted_forms": [
+            "multiply"
+          ],
+          "regions": [
+            "general"
+          ],
+          "practice_modes": [
+            "word_jelly",
+            "phrase"
+          ],
+          "media": {
+            "image": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "brief": "A fictional unit price and quantity connected to their multiplication result, with consistent values.",
+              "picture_suitable": false,
+              "available_animations": [],
+              "adaptations": []
+            },
+            "audio": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "voice": "ava-sweet",
+              "voice_settings": {
+                "voice": "en-US-AvaNeural",
+                "rate": "-15%",
+                "pitch": "+8Hz",
+                "volume": "+0%",
+                "postprocessing": false
+              }
+            }
+          },
+          "morphology": {
+            "schema": 1,
+            "id": "professional.multiply.find-product-of-numbers.v.morphology.v3",
+            "lexeme_id": "multiply.find-product-of-numbers.v",
+            "text": "multiply",
+            "kind": "morphological",
+            "parts": [
+              {
+                "id": "part1",
+                "canonical_id": "english.combining.multi.many",
+                "type": "combining_form",
+                "canonical": "multi-",
+                "surface": "multi",
+                "break_offsets": []
+              },
+              {
+                "id": "part2",
+                "canonical_id": "english.root.ply.fold",
+                "type": "root",
+                "canonical": "ply",
+                "surface": "ply",
+                "break_offsets": []
+              }
+            ],
+            "nodes": [
+              {
+                "id": "whole",
+                "left": "part1",
+                "right": "part2",
+                "rule": "authored-multi-plus-ply-fold-family",
+                "surface": "multiply",
+                "break_offsets": []
+              }
+            ],
+            "roots": [
+              "whole"
+            ],
+            "review": {
+              "status": "pending",
+              "reviewer": null,
+              "reviewed_at": null,
+              "draft_author": "Codex (AI source consultation and editorial proposal; not human approval)",
+              "notes": "The publisher-hosted Vocabulary Their Way chapter explicitly teaches the plic/ply fold family in multiply and multiplication. Together with the word history and multi- entry this supports the exact multi plus ply graph. Ply is the inherited fold-family root, not a substituted modern layer noun or a verb about plying a trade. The full ply surface includes the inherited English realization; no detachable y or adverbial -ly is invented. Multiplication retains its arithmetic definition, including cases that do not increase a number, and the historical folding analogy does not replace that definition.",
+              "references": [
+                "https://www.merriam-webster.com/dictionary/multiply",
+                "https://www.merriam-webster.com/dictionary/multiple",
+                "https://www.etymonline.com/word/multiply",
+                "https://www.merriam-webster.com/dictionary/multi-",
+                "https://ptgmedia.pearsoncmg.com/images/9780131555358/samplechapter/ch06.pdf"
+              ],
+              "source_record_ids": [
+                "mw-multiply-new",
+                "mw-multiple-new",
+                "etym-multiply-hold9",
+                "mw-multi-hold9",
+                "pearson-ply-hold9"
+              ],
+              "source_consultation": "Term-specific new consultation plus explicitly inherited prior-pass evidence; see proposal source registries.",
+              "independent_review": "pending"
+            }
+          },
+          "review": {
+            "status": "pending",
+            "language": "pending",
+            "domain": "pending",
+            "reviewer": null,
+            "reviewed_at": null
+          },
+          "references": [
+            {
+              "source_id": "accounting-bls-accountants",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "accounting-bls-clerks",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "accounting-irs-recordkeeping",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "accounting-ifrs10-overview",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            }
+          ],
+          "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+        },
+        "after": {
+          "id": "multiply.find-product-of-numbers.v",
+          "text": "multiply",
+          "display_text": "multiply",
+          "pos": "verb",
+          "definition": "To find the product of two or more numbers.",
+          "example": "Multiply the unit price by the stated quantity in this example.",
+          "difficulty": "B1",
+          "accepted_forms": [
+            "multiply"
+          ],
+          "regions": [
+            "general"
+          ],
+          "practice_modes": [
+            "word_jelly",
+            "phrase"
+          ],
+          "media": {
+            "image": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "brief": "A fictional unit price and quantity connected to their multiplication result, with consistent values.",
+              "picture_suitable": false,
+              "available_animations": [],
+              "adaptations": []
+            },
+            "audio": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "voice": "ava-sweet",
+              "voice_settings": {
+                "voice": "en-US-AvaNeural",
+                "rate": "-15%",
+                "pitch": "+8Hz",
+                "volume": "+0%",
+                "postprocessing": false
+              }
+            }
+          },
+          "morphology": {
+            "schema": 1,
+            "id": "professional.multiply.find-product-of-numbers.v.morphology.v3",
+            "lexeme_id": "multiply.find-product-of-numbers.v",
+            "text": "multiply",
+            "kind": "morphological",
+            "parts": [
+              {
+                "id": "part1",
+                "canonical_id": "english.combining.multi.many",
+                "type": "combining_form",
+                "canonical": "multi-",
+                "surface": "multi",
+                "break_offsets": []
+              },
+              {
+                "id": "part2",
+                "canonical_id": "english.root.ply.fold",
+                "type": "root",
+                "canonical": "ply",
+                "surface": "ply",
+                "break_offsets": []
+              }
+            ],
+            "nodes": [
+              {
+                "id": "whole",
+                "left": "part1",
+                "right": "part2",
+                "rule": "authored-multi-plus-ply-fold-family",
+                "surface": "multiply",
+                "break_offsets": []
+              }
+            ],
+            "roots": [
+              "whole"
+            ],
+            "review": {
+              "status": "reviewed",
+              "reviewer": "Codex root (independent AI morphology review; not human or subject-matter approval)",
+              "reviewed_at": "2026-10-16",
+              "draft_author": "Codex (AI source consultation and editorial proposal; not human approval)",
+              "notes": "The publisher-hosted Vocabulary Their Way chapter explicitly teaches the plic/ply fold family in multiply and multiplication. Together with the word history and multi- entry this supports the exact multi plus ply graph. Ply is the inherited fold-family root, not a substituted modern layer noun or a verb about plying a trade. The full ply surface includes the inherited English realization; no detachable y or adverbial -ly is invented. Multiplication retains its arithmetic definition, including cases that do not increase a number, and the historical folding analogy does not replace that definition.",
+              "references": [
+                "https://www.merriam-webster.com/dictionary/multiply",
+                "https://www.merriam-webster.com/dictionary/multiple",
+                "https://www.etymonline.com/word/multiply",
+                "https://www.merriam-webster.com/dictionary/multi-",
+                "https://ptgmedia.pearsoncmg.com/images/9780131555358/samplechapter/ch06.pdf"
+              ],
+              "source_record_ids": [
+                "mw-multiply-new",
+                "mw-multiple-new",
+                "etym-multiply-hold9",
+                "mw-multi-hold9",
+                "pearson-ply-hold9"
+              ],
+              "source_consultation": "Term-specific new consultation plus explicitly inherited prior-pass evidence; see proposal source registries.",
+              "independent_review": "completed_scoped_ai_morphology_review",
+              "review_scope": "Independent AI morphology review of the nine exact selected verb senses, authored allomorphs and permitted composition graphs. Explore is a deliberately reviewed current whole stem, not a denial of its disputed history. Whole meanings, media, rewards and non-morphology gates remain unchanged. No qualified human or domain-review claim.",
+              "approval_record": "res://data/professional/provenance/morphology-hold9-review-2026-10-16.json"
+            }
+          },
+          "review": {
+            "status": "pending",
+            "language": "pending",
+            "domain": "pending",
+            "reviewer": null,
+            "reviewed_at": null
+          },
+          "references": [
+            {
+              "source_id": "accounting-bls-accountants",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "accounting-bls-clerks",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "accounting-irs-recordkeeping",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "accounting-ifrs10-overview",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            }
+          ],
+          "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed. A separate independent AI morphology review by the root reviewer was completed on 2026-10-16 for this exact verb sense, its source-supported morpheme identities, authored allomorphs, spelling reconstruction, and permitted composition graph. This is not human or subject-matter approval. Language, required domain review, media, and course/module readiness remain pending."
+        },
+        "exact_note_edit": {
+          "remove_or_replace": "authorization, morphology, and image suitability require qualified review.",
+          "replacement": "authorization, and image suitability require qualified review.",
+          "append": "A separate independent AI morphology review by the root reviewer was completed on 2026-10-16 for this exact verb sense, its source-supported morpheme identities, authored allomorphs, spelling reconstruction, and permitted composition graph. This is not human or subject-matter approval. Language, required domain review, media, and course/module readiness remain pending."
+        },
+        "source_basis": {
+          "existing_source_record_ids": [
+            "mw-multiply-new",
+            "mw-multiple-new",
+            "etym-multiply-hold9",
+            "mw-multi-hold9",
+            "pearson-ply-hold9"
+          ],
+          "references": [
+            "https://www.merriam-webster.com/dictionary/multiply",
+            "https://www.merriam-webster.com/dictionary/multiple",
+            "https://www.etymonline.com/word/multiply",
+            "https://www.merriam-webster.com/dictionary/multi-",
+            "https://ptgmedia.pearsoncmg.com/images/9780131555358/samplechapter/ch06.pdf"
+          ],
+          "substantive_decision": "The publisher-hosted Vocabulary Their Way chapter explicitly teaches the plic/ply fold family in multiply and multiplication. Together with the word history and multi- entry this supports the exact multi plus ply graph. Ply is the inherited fold-family root, not a substituted modern layer noun or a verb about plying a trade. The full ply surface includes the inherited English realization; no detachable y or adverbial -ly is invented. Multiplication retains its arithmetic definition, including cases that do not increase a number, and the historical folding analogy does not replace that definition."
+        }
+      },
+      {
+        "target_id": "divide.find-how-many-times-one-number-fits-into-another.v",
+        "origin": "res://data/professional/lexemes/accounting-module05.json",
+        "before_sha256": "acb2e38577b5d26365720f38768b512af27c4a91bce2063dc3139e92ae55c780",
+        "before_morphology_sha256": "f46661b44601dbb4e5f8d939c1d6c7a549974ca0c3ffe0f08197056c4ffc8178",
+        "before": {
+          "id": "divide.find-how-many-times-one-number-fits-into-another.v",
+          "text": "divide",
+          "display_text": "divide",
+          "pos": "verb",
+          "definition": "To calculate how many times one number fits into another, or split an amount into equal parts.",
+          "example": "Please divide the total equally among the four categories in this example.",
+          "difficulty": "B1",
+          "accepted_forms": [
+            "divide"
+          ],
+          "regions": [
+            "general"
+          ],
+          "practice_modes": [
+            "word_jelly",
+            "phrase"
+          ],
+          "media": {
+            "image": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "brief": "One fictional amount separated into four equal numerical shares with their common value visible.",
+              "picture_suitable": false,
+              "available_animations": [],
+              "adaptations": []
+            },
+            "audio": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "voice": "ava-sweet",
+              "voice_settings": {
+                "voice": "en-US-AvaNeural",
+                "rate": "-15%",
+                "pitch": "+8Hz",
+                "volume": "+0%",
+                "postprocessing": false
+              }
+            }
+          },
+          "morphology": {
+            "schema": 1,
+            "id": "professional.divide.find-how-many-times-one-number-fits-into-another.v.morphology.v3",
+            "lexeme_id": "divide.find-how-many-times-one-number-fits-into-another.v",
+            "text": "divide",
+            "kind": "morphological",
+            "parts": [
+              {
+                "id": "part1",
+                "canonical_id": "english.affix.dis.apart",
+                "type": "prefix",
+                "canonical": "dis-",
+                "surface": "di",
+                "break_offsets": []
+              },
+              {
+                "id": "part2",
+                "canonical_id": "english.root.vide.separate",
+                "type": "root",
+                "canonical": "vide",
+                "surface": "vide",
+                "break_offsets": []
+              }
+            ],
+            "nodes": [
+              {
+                "id": "whole",
+                "left": "part1",
+                "right": "part2",
+                "rule": "authored-dis-di-allomorph-plus-vide-separate",
+                "surface": "divide",
+                "break_offsets": []
+              }
+            ],
+            "roots": [
+              "whole"
+            ],
+            "review": {
+              "status": "pending",
+              "reviewer": null,
+              "reviewed_at": null,
+              "draft_author": "Codex (AI source consultation and editorial proposal; not human approval)",
+              "notes": "The word history identifies dis- apart and the separate-root -videre. The prefix history explicitly records the di- realization before v, supporting di plus vide with the final e retained in the authored English root surface. The vide.separate identity is distinct from the vid/vis sight family and di is not the numeral combining form meaning two. The arithmetic sense is a conventional application of division into parts; the graph preserves its current definition without requiring a free English vide word.",
+              "references": [
+                "https://www.merriam-webster.com/dictionary/divide",
+                "https://www.etymonline.com/word/divide",
+                "https://www.merriam-webster.com/dictionary/dis-"
+              ],
+              "source_record_ids": [
+                "mw-divide-new",
+                "etym-divide-hold9",
+                "mw-dis-hold9"
+              ],
+              "source_consultation": "Term-specific new consultation plus explicitly inherited prior-pass evidence; see proposal source registries.",
+              "independent_review": "pending"
+            }
+          },
+          "review": {
+            "status": "pending",
+            "language": "pending",
+            "domain": "pending",
+            "reviewer": null,
+            "reviewed_at": null
+          },
+          "references": [
+            {
+              "source_id": "accounting-bls-accountants",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "accounting-bls-clerks",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "accounting-irs-recordkeeping",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "accounting-ifrs10-overview",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            }
+          ],
+          "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+        },
+        "after": {
+          "id": "divide.find-how-many-times-one-number-fits-into-another.v",
+          "text": "divide",
+          "display_text": "divide",
+          "pos": "verb",
+          "definition": "To calculate how many times one number fits into another, or split an amount into equal parts.",
+          "example": "Please divide the total equally among the four categories in this example.",
+          "difficulty": "B1",
+          "accepted_forms": [
+            "divide"
+          ],
+          "regions": [
+            "general"
+          ],
+          "practice_modes": [
+            "word_jelly",
+            "phrase"
+          ],
+          "media": {
+            "image": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "brief": "One fictional amount separated into four equal numerical shares with their common value visible.",
+              "picture_suitable": false,
+              "available_animations": [],
+              "adaptations": []
+            },
+            "audio": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "voice": "ava-sweet",
+              "voice_settings": {
+                "voice": "en-US-AvaNeural",
+                "rate": "-15%",
+                "pitch": "+8Hz",
+                "volume": "+0%",
+                "postprocessing": false
+              }
+            }
+          },
+          "morphology": {
+            "schema": 1,
+            "id": "professional.divide.find-how-many-times-one-number-fits-into-another.v.morphology.v3",
+            "lexeme_id": "divide.find-how-many-times-one-number-fits-into-another.v",
+            "text": "divide",
+            "kind": "morphological",
+            "parts": [
+              {
+                "id": "part1",
+                "canonical_id": "english.affix.dis.apart",
+                "type": "prefix",
+                "canonical": "dis-",
+                "surface": "di",
+                "break_offsets": []
+              },
+              {
+                "id": "part2",
+                "canonical_id": "english.root.vide.separate",
+                "type": "root",
+                "canonical": "vide",
+                "surface": "vide",
+                "break_offsets": []
+              }
+            ],
+            "nodes": [
+              {
+                "id": "whole",
+                "left": "part1",
+                "right": "part2",
+                "rule": "authored-dis-di-allomorph-plus-vide-separate",
+                "surface": "divide",
+                "break_offsets": []
+              }
+            ],
+            "roots": [
+              "whole"
+            ],
+            "review": {
+              "status": "reviewed",
+              "reviewer": "Codex root (independent AI morphology review; not human or subject-matter approval)",
+              "reviewed_at": "2026-10-16",
+              "draft_author": "Codex (AI source consultation and editorial proposal; not human approval)",
+              "notes": "The word history identifies dis- apart and the separate-root -videre. The prefix history explicitly records the di- realization before v, supporting di plus vide with the final e retained in the authored English root surface. The vide.separate identity is distinct from the vid/vis sight family and di is not the numeral combining form meaning two. The arithmetic sense is a conventional application of division into parts; the graph preserves its current definition without requiring a free English vide word.",
+              "references": [
+                "https://www.merriam-webster.com/dictionary/divide",
+                "https://www.etymonline.com/word/divide",
+                "https://www.merriam-webster.com/dictionary/dis-"
+              ],
+              "source_record_ids": [
+                "mw-divide-new",
+                "etym-divide-hold9",
+                "mw-dis-hold9"
+              ],
+              "source_consultation": "Term-specific new consultation plus explicitly inherited prior-pass evidence; see proposal source registries.",
+              "independent_review": "completed_scoped_ai_morphology_review",
+              "review_scope": "Independent AI morphology review of the nine exact selected verb senses, authored allomorphs and permitted composition graphs. Explore is a deliberately reviewed current whole stem, not a denial of its disputed history. Whole meanings, media, rewards and non-morphology gates remain unchanged. No qualified human or domain-review claim.",
+              "approval_record": "res://data/professional/provenance/morphology-hold9-review-2026-10-16.json"
+            }
+          },
+          "review": {
+            "status": "pending",
+            "language": "pending",
+            "domain": "pending",
+            "reviewer": null,
+            "reviewed_at": null
+          },
+          "references": [
+            {
+              "source_id": "accounting-bls-accountants",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "accounting-bls-clerks",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "accounting-irs-recordkeeping",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "accounting-ifrs10-overview",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            }
+          ],
+          "editorial_notes": "Original Accounting & Finance communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, and image suitability require qualified review. This is language practice, not accounting, audit, tax, legal, investment or compliance advice. No accounting treatment, audit opinion, recognition decision, tax entitlement, investment recommendation, authorization or compliance process is approved. No image or recording has been acquired; picture games remain disabled until suitability is reviewed. A separate independent AI morphology review by the root reviewer was completed on 2026-10-16 for this exact verb sense, its source-supported morpheme identities, authored allomorphs, spelling reconstruction, and permitted composition graph. This is not human or subject-matter approval. Language, required domain review, media, and course/module readiness remain pending."
+        },
+        "exact_note_edit": {
+          "remove_or_replace": "authorization, morphology, and image suitability require qualified review.",
+          "replacement": "authorization, and image suitability require qualified review.",
+          "append": "A separate independent AI morphology review by the root reviewer was completed on 2026-10-16 for this exact verb sense, its source-supported morpheme identities, authored allomorphs, spelling reconstruction, and permitted composition graph. This is not human or subject-matter approval. Language, required domain review, media, and course/module readiness remain pending."
+        },
+        "source_basis": {
+          "existing_source_record_ids": [
+            "mw-divide-new",
+            "etym-divide-hold9",
+            "mw-dis-hold9"
+          ],
+          "references": [
+            "https://www.merriam-webster.com/dictionary/divide",
+            "https://www.etymonline.com/word/divide",
+            "https://www.merriam-webster.com/dictionary/dis-"
+          ],
+          "substantive_decision": "The word history identifies dis- apart and the separate-root -videre. The prefix history explicitly records the di- realization before v, supporting di plus vide with the final e retained in the authored English root surface. The vide.separate identity is distinct from the vid/vis sight family and di is not the numeral combining form meaning two. The arithmetic sense is a conventional application of division into parts; the graph preserves its current definition without requiring a free English vide word."
+        }
+      },
+      {
+        "target_id": "estimate.make-informed-approximation.v",
+        "origin": "res://data/professional/lexemes/education-module05.json",
+        "before_sha256": "a78d71124a2ba4682ed53eaa3b72a2dbd751ef84444056f85492dd9c3c70256d",
+        "before_morphology_sha256": "8a70683f24e4727efcb6632e968acf6cad8c97060b8aab879ef59b2b4bba9e69",
+        "before": {
+          "id": "estimate.make-informed-approximation.v",
+          "text": "estimate",
+          "display_text": "estimate",
+          "pos": "verb",
+          "definition": "To make an informed approximation of an amount, size, or other quantity.",
+          "example": "The learners will estimate the number before counting.",
+          "difficulty": "B1",
+          "accepted_forms": [
+            "estimate"
+          ],
+          "regions": [
+            "general"
+          ],
+          "practice_modes": [
+            "word_jelly",
+            "phrase"
+          ],
+          "media": {
+            "image": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "brief": "A covered collection and a learner's tentative numerical estimate, clearly distinguished from an exact count.",
+              "picture_suitable": false,
+              "available_animations": [],
+              "adaptations": []
+            },
+            "audio": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "voice": "ava-sweet",
+              "voice_settings": {
+                "voice": "en-US-AvaNeural",
+                "rate": "-15%",
+                "pitch": "+8Hz",
+                "volume": "+0%",
+                "postprocessing": false
+              }
+            }
+          },
+          "morphology": {
+            "schema": 1,
+            "id": "professional.estimate.make-informed-approximation.v.morphology.v3",
+            "lexeme_id": "estimate.make-informed-approximation.v",
+            "text": "estimate",
+            "kind": "morphological",
+            "parts": [
+              {
+                "id": "part1",
+                "canonical_id": "english.root.estim.value",
+                "type": "root",
+                "canonical": "estim",
+                "surface": "estim",
+                "break_offsets": []
+              },
+              {
+                "id": "part2",
+                "canonical_id": "english.affix.ate.verb",
+                "type": "suffix",
+                "canonical": "-ate",
+                "surface": "ate",
+                "break_offsets": []
+              }
+            ],
+            "nodes": [
+              {
+                "id": "whole",
+                "left": "part1",
+                "right": "part2",
+                "rule": "authored-estim-value-plus-verbal-ate",
+                "surface": "estimate",
+                "break_offsets": []
+              }
+            ],
+            "roots": [
+              "whole"
+            ],
+            "review": {
+              "status": "pending",
+              "reviewer": null,
+              "reviewed_at": null,
+              "draft_author": "Codex (AI source consultation and editorial proposal; not human approval)",
+              "notes": "The history gives the aestimare/aestimatus valuing and appraising family, realized as estim in this inherited English form. The University of Michigan resource specifically identifies estimate as a verbal -ate example and contrasts it with the noun pronunciation. This term-level evidence supports estim plus -ate rather than a spelling-only suffix guess. Estim is bound, and no independent estim word is required. The selected informed approximation sense remains the whole meaning; the graph does not substitute the respectful-admiration sense of esteem or invent an es- prefix.",
+              "references": [
+                "https://www.merriam-webster.com/dictionary/estimate",
+                "https://www.merriam-webster.com/dictionary/-ate",
+                "https://www.etymonline.com/word/estimate",
+                "https://www.etymonline.com/word/-ate",
+                "https://www.lrc.lsa.umich.edu/eli-538/pg-014.html"
+              ],
+              "source_record_ids": [
+                "mw-estimate-new",
+                "mw-ate-suffix-new",
+                "etym-estimate-hold9",
+                "etym-ate-hold9",
+                "michigan-ate-hold9"
+              ],
+              "source_consultation": "Term-specific new consultation plus explicitly inherited prior-pass evidence; see proposal source registries.",
+              "independent_review": "pending"
+            }
+          },
+          "review": {
+            "status": "pending",
+            "language": "pending",
+            "domain": "pending",
+            "reviewer": null,
+            "reviewed_at": null
+          },
+          "references": [
+            {
+              "source_id": "education-bls-elementary",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "education-naeyc-assessment",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "education-ufli-glossary",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "sales-bls-representatives",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "sales-bls-marketing-managers",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "sales-bls-market-research",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "accounting-bls-accountants",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "accounting-bls-clerks",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "accounting-irs-recordkeeping",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "accounting-ifrs10-overview",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            }
+          ],
+          "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+        },
+        "after": {
+          "id": "estimate.make-informed-approximation.v",
+          "text": "estimate",
+          "display_text": "estimate",
+          "pos": "verb",
+          "definition": "To make an informed approximation of an amount, size, or other quantity.",
+          "example": "The learners will estimate the number before counting.",
+          "difficulty": "B1",
+          "accepted_forms": [
+            "estimate"
+          ],
+          "regions": [
+            "general"
+          ],
+          "practice_modes": [
+            "word_jelly",
+            "phrase"
+          ],
+          "media": {
+            "image": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "brief": "A covered collection and a learner's tentative numerical estimate, clearly distinguished from an exact count.",
+              "picture_suitable": false,
+              "available_animations": [],
+              "adaptations": []
+            },
+            "audio": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "voice": "ava-sweet",
+              "voice_settings": {
+                "voice": "en-US-AvaNeural",
+                "rate": "-15%",
+                "pitch": "+8Hz",
+                "volume": "+0%",
+                "postprocessing": false
+              }
+            }
+          },
+          "morphology": {
+            "schema": 1,
+            "id": "professional.estimate.make-informed-approximation.v.morphology.v3",
+            "lexeme_id": "estimate.make-informed-approximation.v",
+            "text": "estimate",
+            "kind": "morphological",
+            "parts": [
+              {
+                "id": "part1",
+                "canonical_id": "english.root.estim.value",
+                "type": "root",
+                "canonical": "estim",
+                "surface": "estim",
+                "break_offsets": []
+              },
+              {
+                "id": "part2",
+                "canonical_id": "english.affix.ate.verb",
+                "type": "suffix",
+                "canonical": "-ate",
+                "surface": "ate",
+                "break_offsets": []
+              }
+            ],
+            "nodes": [
+              {
+                "id": "whole",
+                "left": "part1",
+                "right": "part2",
+                "rule": "authored-estim-value-plus-verbal-ate",
+                "surface": "estimate",
+                "break_offsets": []
+              }
+            ],
+            "roots": [
+              "whole"
+            ],
+            "review": {
+              "status": "reviewed",
+              "reviewer": "Codex root (independent AI morphology review; not human or subject-matter approval)",
+              "reviewed_at": "2026-10-16",
+              "draft_author": "Codex (AI source consultation and editorial proposal; not human approval)",
+              "notes": "The history gives the aestimare/aestimatus valuing and appraising family, realized as estim in this inherited English form. The University of Michigan resource specifically identifies estimate as a verbal -ate example and contrasts it with the noun pronunciation. This term-level evidence supports estim plus -ate rather than a spelling-only suffix guess. Estim is bound, and no independent estim word is required. The selected informed approximation sense remains the whole meaning; the graph does not substitute the respectful-admiration sense of esteem or invent an es- prefix.",
+              "references": [
+                "https://www.merriam-webster.com/dictionary/estimate",
+                "https://www.merriam-webster.com/dictionary/-ate",
+                "https://www.etymonline.com/word/estimate",
+                "https://www.etymonline.com/word/-ate",
+                "https://www.lrc.lsa.umich.edu/eli-538/pg-014.html"
+              ],
+              "source_record_ids": [
+                "mw-estimate-new",
+                "mw-ate-suffix-new",
+                "etym-estimate-hold9",
+                "etym-ate-hold9",
+                "michigan-ate-hold9"
+              ],
+              "source_consultation": "Term-specific new consultation plus explicitly inherited prior-pass evidence; see proposal source registries.",
+              "independent_review": "completed_scoped_ai_morphology_review",
+              "review_scope": "Independent AI morphology review of the nine exact selected verb senses, authored allomorphs and permitted composition graphs. Explore is a deliberately reviewed current whole stem, not a denial of its disputed history. Whole meanings, media, rewards and non-morphology gates remain unchanged. No qualified human or domain-review claim.",
+              "approval_record": "res://data/professional/provenance/morphology-hold9-review-2026-10-16.json"
+            }
+          },
+          "review": {
+            "status": "pending",
+            "language": "pending",
+            "domain": "pending",
+            "reviewer": null,
+            "reviewed_at": null
+          },
+          "references": [
+            {
+              "source_id": "education-bls-elementary",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "education-naeyc-assessment",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "education-ufli-glossary",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "sales-bls-representatives",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "sales-bls-marketing-managers",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "sales-bls-market-research",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "accounting-bls-accountants",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "accounting-bls-clerks",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "accounting-irs-recordkeeping",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "accounting-ifrs10-overview",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            }
+          ],
+          "editorial_notes": "Original Teaching & Childcare communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, and image suitability require qualified review. This is not a developmental diagnosis, care technique, behavior-management procedure, safeguarding protocol, legal eligibility decision, or universal qualification rule. No image or recording has been acquired; picture games remain disabled until suitability is reviewed. A separate independent AI morphology review by the root reviewer was completed on 2026-10-16 for this exact verb sense, its source-supported morpheme identities, authored allomorphs, spelling reconstruction, and permitted composition graph. This is not human or subject-matter approval. Language, required domain review, media, and course/module readiness remain pending."
+        },
+        "exact_note_edit": {
+          "remove_or_replace": "authorization, morphology, and image suitability require qualified review.",
+          "replacement": "authorization, and image suitability require qualified review.",
+          "append": "A separate independent AI morphology review by the root reviewer was completed on 2026-10-16 for this exact verb sense, its source-supported morpheme identities, authored allomorphs, spelling reconstruction, and permitted composition graph. This is not human or subject-matter approval. Language, required domain review, media, and course/module readiness remain pending."
+        },
+        "source_basis": {
+          "existing_source_record_ids": [
+            "mw-estimate-new",
+            "mw-ate-suffix-new",
+            "etym-estimate-hold9",
+            "etym-ate-hold9",
+            "michigan-ate-hold9"
+          ],
+          "references": [
+            "https://www.merriam-webster.com/dictionary/estimate",
+            "https://www.merriam-webster.com/dictionary/-ate",
+            "https://www.etymonline.com/word/estimate",
+            "https://www.etymonline.com/word/-ate",
+            "https://www.lrc.lsa.umich.edu/eli-538/pg-014.html"
+          ],
+          "substantive_decision": "The history gives the aestimare/aestimatus valuing and appraising family, realized as estim in this inherited English form. The University of Michigan resource specifically identifies estimate as a verbal -ate example and contrasts it with the noun pronunciation. This term-level evidence supports estim plus -ate rather than a spelling-only suffix guess. Estim is bound, and no independent estim word is required. The selected informed approximation sense remains the whole meaning; the graph does not substitute the respectful-admiration sense of esteem or invent an es- prefix."
+        }
+      },
+      {
+        "target_id": "retire.leave-working-life-or-long-term-occupation.v",
+        "origin": "res://data/professional/lexemes/hr-module05.json",
+        "before_sha256": "f90837f8549a522fa69de807c35a29b81d3ff6012e07820b5f3278ecd55d0257",
+        "before_morphology_sha256": "7ecbcc152eac2471cb83f70ef3476977150caa369e1485b8e529c765395fb059",
+        "before": {
+          "id": "retire.leave-working-life-or-long-term-occupation.v",
+          "text": "retire",
+          "display_text": "retire",
+          "pos": "verb",
+          "definition": "To leave working life or a long-term occupation, often later in life.",
+          "example": "The colleague plans to retire next year.",
+          "difficulty": "B1",
+          "accepted_forms": [
+            "retire"
+          ],
+          "regions": [
+            "general"
+          ],
+          "practice_modes": [
+            "word_jelly",
+            "phrase"
+          ],
+          "media": {
+            "image": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "brief": "A worker discussing retirement plans without a required age or pension guarantee.",
+              "picture_suitable": false,
+              "available_animations": [],
+              "adaptations": []
+            },
+            "audio": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "voice": "ava-sweet",
+              "voice_settings": {
+                "voice": "en-US-AvaNeural",
+                "rate": "-15%",
+                "pitch": "+8Hz",
+                "volume": "+0%",
+                "postprocessing": false
+              }
+            }
+          },
+          "morphology": {
+            "schema": 1,
+            "id": "professional.retire.leave-working-life-or-long-term-occupation.v.morphology.v3",
+            "lexeme_id": "retire.leave-working-life-or-long-term-occupation.v",
+            "text": "retire",
+            "kind": "morphological",
+            "parts": [
+              {
+                "id": "part1",
+                "canonical_id": "english.affix.re.back",
+                "type": "prefix",
+                "canonical": "re-",
+                "surface": "re",
+                "break_offsets": []
+              },
+              {
+                "id": "part2",
+                "canonical_id": "english.root.tir.draw",
+                "type": "root",
+                "canonical": "tir",
+                "surface": "tire",
+                "break_offsets": []
+              }
+            ],
+            "nodes": [
+              {
+                "id": "whole",
+                "left": "part1",
+                "right": "part2",
+                "rule": "authored-re-back-plus-tir-draw-tire-realization",
+                "surface": "retire",
+                "break_offsets": []
+              }
+            ],
+            "roots": [
+              "whole"
+            ],
+            "review": {
+              "status": "pending",
+              "reviewer": null,
+              "reviewed_at": null,
+              "draft_author": "Codex (AI source consultation and editorial proposal; not human approval)",
+              "notes": "The dictionary history explicitly traces retire through French re- back and tirer draw into withdrawal from employment. The graph uses canonical tir.draw with the inherited English tire surface; final e belongs to that realization. This is not the Old English fatigue verb tire, the wheel noun, or a productive instruction to become tired again. The selected retirement sense remains the complete definition. Bound historical tir is legitimate even without a current free drawing verb of that spelling, and its canonical identity remains separate from all fatigue and equipment senses.",
+              "references": [
+                "https://www.merriam-webster.com/dictionary/retire",
+                "https://www.merriam-webster.com/dictionary/re-",
+                "https://www.etymonline.com/word/retire",
+                "https://www.etymonline.com/word/tire"
+              ],
+              "source_record_ids": [
+                "mw-retire-new",
+                "mw-re-prefix-new",
+                "etym-retire-hold9",
+                "etym-tire-hold9"
+              ],
+              "source_consultation": "Term-specific new consultation plus explicitly inherited prior-pass evidence; see proposal source registries.",
+              "independent_review": "pending"
+            }
+          },
+          "review": {
+            "status": "pending",
+            "language": "pending",
+            "domain": "pending",
+            "reviewer": null,
+            "reviewed_at": null
+          },
+          "references": [
+            {
+              "source_id": "hr-onet-specialists",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "hr-acas-interview-selection",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            }
+          ],
+          "editorial_notes": "Original HR & Recruitment communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, morphology, and image suitability require qualified review. This is language practice, not employment, legal, tax, benefits, medical, or security advice. No universal entitlement, hiring decision, screening permission, disciplinary procedure, or outcome is asserted. No image or recording has been acquired; picture games remain disabled until suitability is reviewed."
+        },
+        "after": {
+          "id": "retire.leave-working-life-or-long-term-occupation.v",
+          "text": "retire",
+          "display_text": "retire",
+          "pos": "verb",
+          "definition": "To leave working life or a long-term occupation, often later in life.",
+          "example": "The colleague plans to retire next year.",
+          "difficulty": "B1",
+          "accepted_forms": [
+            "retire"
+          ],
+          "regions": [
+            "general"
+          ],
+          "practice_modes": [
+            "word_jelly",
+            "phrase"
+          ],
+          "media": {
+            "image": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "brief": "A worker discussing retirement plans without a required age or pension guarantee.",
+              "picture_suitable": false,
+              "available_animations": [],
+              "adaptations": []
+            },
+            "audio": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "voice": "ava-sweet",
+              "voice_settings": {
+                "voice": "en-US-AvaNeural",
+                "rate": "-15%",
+                "pitch": "+8Hz",
+                "volume": "+0%",
+                "postprocessing": false
+              }
+            }
+          },
+          "morphology": {
+            "schema": 1,
+            "id": "professional.retire.leave-working-life-or-long-term-occupation.v.morphology.v3",
+            "lexeme_id": "retire.leave-working-life-or-long-term-occupation.v",
+            "text": "retire",
+            "kind": "morphological",
+            "parts": [
+              {
+                "id": "part1",
+                "canonical_id": "english.affix.re.back",
+                "type": "prefix",
+                "canonical": "re-",
+                "surface": "re",
+                "break_offsets": []
+              },
+              {
+                "id": "part2",
+                "canonical_id": "english.root.tir.draw",
+                "type": "root",
+                "canonical": "tir",
+                "surface": "tire",
+                "break_offsets": []
+              }
+            ],
+            "nodes": [
+              {
+                "id": "whole",
+                "left": "part1",
+                "right": "part2",
+                "rule": "authored-re-back-plus-tir-draw-tire-realization",
+                "surface": "retire",
+                "break_offsets": []
+              }
+            ],
+            "roots": [
+              "whole"
+            ],
+            "review": {
+              "status": "reviewed",
+              "reviewer": "Codex root (independent AI morphology review; not human or subject-matter approval)",
+              "reviewed_at": "2026-10-16",
+              "draft_author": "Codex (AI source consultation and editorial proposal; not human approval)",
+              "notes": "The dictionary history explicitly traces retire through French re- back and tirer draw into withdrawal from employment. The graph uses canonical tir.draw with the inherited English tire surface; final e belongs to that realization. This is not the Old English fatigue verb tire, the wheel noun, or a productive instruction to become tired again. The selected retirement sense remains the complete definition. Bound historical tir is legitimate even without a current free drawing verb of that spelling, and its canonical identity remains separate from all fatigue and equipment senses.",
+              "references": [
+                "https://www.merriam-webster.com/dictionary/retire",
+                "https://www.merriam-webster.com/dictionary/re-",
+                "https://www.etymonline.com/word/retire",
+                "https://www.etymonline.com/word/tire"
+              ],
+              "source_record_ids": [
+                "mw-retire-new",
+                "mw-re-prefix-new",
+                "etym-retire-hold9",
+                "etym-tire-hold9"
+              ],
+              "source_consultation": "Term-specific new consultation plus explicitly inherited prior-pass evidence; see proposal source registries.",
+              "independent_review": "completed_scoped_ai_morphology_review",
+              "review_scope": "Independent AI morphology review of the nine exact selected verb senses, authored allomorphs and permitted composition graphs. Explore is a deliberately reviewed current whole stem, not a denial of its disputed history. Whole meanings, media, rewards and non-morphology gates remain unchanged. No qualified human or domain-review claim.",
+              "approval_record": "res://data/professional/provenance/morphology-hold9-review-2026-10-16.json"
+            }
+          },
+          "review": {
+            "status": "pending",
+            "language": "pending",
+            "domain": "pending",
+            "reviewer": null,
+            "reviewed_at": null
+          },
+          "references": [
+            {
+              "source_id": "hr-onet-specialists",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            },
+            {
+              "source_id": "hr-acas-interview-selection",
+              "status": "pending_term_check",
+              "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+            }
+          ],
+          "editorial_notes": "Original HR & Recruitment communication draft for teenagers and adults. Difficulty and variants are editorial candidates. Language, domain, safety, regional usage, authorization, and image suitability require qualified review. This is language practice, not employment, legal, tax, benefits, medical, or security advice. No universal entitlement, hiring decision, screening permission, disciplinary procedure, or outcome is asserted. No image or recording has been acquired; picture games remain disabled until suitability is reviewed. A separate independent AI morphology review by the root reviewer was completed on 2026-10-16 for this exact verb sense, its source-supported morpheme identities, authored allomorphs, spelling reconstruction, and permitted composition graph. This is not human or subject-matter approval. Language, required domain review, media, and course/module readiness remain pending."
+        },
+        "exact_note_edit": {
+          "remove_or_replace": "authorization, morphology, and image suitability require qualified review.",
+          "replacement": "authorization, and image suitability require qualified review.",
+          "append": "A separate independent AI morphology review by the root reviewer was completed on 2026-10-16 for this exact verb sense, its source-supported morpheme identities, authored allomorphs, spelling reconstruction, and permitted composition graph. This is not human or subject-matter approval. Language, required domain review, media, and course/module readiness remain pending."
+        },
+        "source_basis": {
+          "existing_source_record_ids": [
+            "mw-retire-new",
+            "mw-re-prefix-new",
+            "etym-retire-hold9",
+            "etym-tire-hold9"
+          ],
+          "references": [
+            "https://www.merriam-webster.com/dictionary/retire",
+            "https://www.merriam-webster.com/dictionary/re-",
+            "https://www.etymonline.com/word/retire",
+            "https://www.etymonline.com/word/tire"
+          ],
+          "substantive_decision": "The dictionary history explicitly traces retire through French re- back and tirer draw into withdrawal from employment. The graph uses canonical tir.draw with the inherited English tire surface; final e belongs to that realization. This is not the Old English fatigue verb tire, the wheel noun, or a productive instruction to become tired again. The selected retirement sense remains the complete definition. Bound historical tir is legitimate even without a current free drawing verb of that spelling, and its canonical identity remains separate from all fatigue and equipment senses."
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,259 @@
+{
+  "date": "2026-10-16",
+  "status": "scratch_source_selection_only",
+  "sources": [
+    {
+      "id": "Furniture Kit/floorFull",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/floorFull.glb",
+      "sha256": "99fc5df646d8dc605d6fe35001fe5b15bb7b269cc5c65f4f7793fbc76ff3d822",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -1,
+        1,
+        0.0500000007450581,
+        1
+      ],
+      "dependencies": [],
+      "retained_copy": {
+        "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/kenney-extra-theme-assets/Furniture Kit/Models/GLTF format/floorFull.glb",
+        "sha256": "99fc5df646d8dc605d6fe35001fe5b15bb7b269cc5c65f4f7793fbc76ff3d822",
+        "dependencies": []
+      },
+      "creator": "Kenney",
+      "source": "https://kenney.nl/assets/furniture-kit",
+      "license": "CC0 1.0",
+      "acquisition_status": "previously_acquired_user_supplied_library_copied_to_scratch",
+      "scratch_path": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/floorFull.glb",
+      "prior_review_scope": "Existing static Home composition; full Care Ward composition and motion remain unreviewed."
+    },
+    {
+      "id": "Furniture Kit/wall",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/wall.glb",
+      "sha256": "69273d5d623bddfce41d12d4e5eeb5621ea04f1edcbd8f35c00a60c2fd3258b7",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.0500000007450581,
+        1,
+        1.28953170776367,
+        0.0500000007450581
+      ],
+      "dependencies": [],
+      "retained_copy": {
+        "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/kenney-extra-theme-assets/Furniture Kit/Models/GLTF format/wall.glb",
+        "sha256": "69273d5d623bddfce41d12d4e5eeb5621ea04f1edcbd8f35c00a60c2fd3258b7",
+        "dependencies": []
+      },
+      "creator": "Kenney",
+      "source": "https://kenney.nl/assets/furniture-kit",
+      "license": "CC0 1.0",
+      "acquisition_status": "previously_acquired_user_supplied_library_copied_to_scratch",
+      "scratch_path": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/wall.glb",
+      "prior_review_scope": "Existing static Home composition; full Care Ward composition and motion remain unreviewed."
+    },
+    {
+      "id": "Furniture Kit/wallWindow",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/wallWindow.glb",
+      "sha256": "166a10fddb8a78d942bc2791186913f7015dfee8501d20efd7a7b8f196fc5c3e",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.0695500001311302,
+        1,
+        1.28953170776367,
+        0.0891000032424927
+      ],
+      "dependencies": [],
+      "retained_copy": {
+        "path": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame/docs/assets/sources/kenney-extra-theme-assets/Furniture Kit/Models/GLTF format/wallWindow.glb",
+        "sha256": "166a10fddb8a78d942bc2791186913f7015dfee8501d20efd7a7b8f196fc5c3e",
+        "dependencies": []
+      },
+      "creator": "Kenney",
+      "source": "https://kenney.nl/assets/furniture-kit",
+      "license": "CC0 1.0",
+      "acquisition_status": "previously_acquired_user_supplied_library_copied_to_scratch",
+      "scratch_path": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/wallWindow.glb",
+      "prior_review_scope": "Existing static Home composition; full Care Ward composition and motion remain unreviewed."
+    },
+    {
+      "id": "Furniture Kit/cabinetBedDrawerTable",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/cabinetBedDrawerTable.glb",
+      "sha256": "fec6271639df5aff9f8ac75d6679385eab2abb7c8d2f51abeba3ed689ddb6f0d",
+      "animations": [],
+      "bounds": [
+        -0.00999999977648258,
+        0,
+        -0.205000013113022,
+        0.265999972820282,
+        0.263199985027313,
+        0.21730001270771
+      ],
+      "dependencies": [],
+      "creator": "Kenney",
+      "source": "https://kenney.nl/assets/furniture-kit",
+      "license": "CC0 1.0",
+      "acquisition_status": "previously_acquired_user_supplied_library_copied_to_scratch",
+      "scratch_path": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/cabinetBedDrawerTable.glb",
+      "prior_review_scope": "Existing static Home composition; full Care Ward composition and motion remain unreviewed."
+    },
+    {
+      "id": "Furniture Kit/chairCushion",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/chairCushion.glb",
+      "sha256": "33544228984857f2cb502b58452fed72157335f9b1caf29e96da5c9094c53fdc",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.200000002980232,
+        0.200000002980232,
+        0.46000000834465,
+        0.200000002980232
+      ],
+      "dependencies": [],
+      "creator": "Kenney",
+      "source": "https://kenney.nl/assets/furniture-kit",
+      "license": "CC0 1.0",
+      "acquisition_status": "previously_acquired_user_supplied_library_copied_to_scratch",
+      "scratch_path": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/chairCushion.glb",
+      "prior_review_scope": "Existing static Home composition; full Care Ward composition and motion remain unreviewed."
+    },
+    {
+      "id": "Furniture Kit/bookcaseClosedDoors",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/bookcaseClosedDoors.glb",
+      "sha256": "ff33f535acdb1825c0e958a293642b39665adcae0b1317b650e83d2bb687f4e2",
+      "animations": [],
+      "bounds": [
+        0,
+        0,
+        -0.25,
+        0.400000005960464,
+        0.849999964237213,
+        0.25
+      ],
+      "dependencies": [],
+      "creator": "Kenney",
+      "source": "https://kenney.nl/assets/furniture-kit",
+      "license": "CC0 1.0",
+      "acquisition_status": "previously_acquired_user_supplied_library_copied_to_scratch",
+      "scratch_path": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/bookcaseClosedDoors.glb",
+      "prior_review_scope": "Existing static Home composition; full Care Ward composition and motion remain unreviewed."
+    },
+    {
+      "id": "Mini Characters/wheelchair",
+      "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Characters/Models/GLB format/wheelchair.glb",
+      "sha256": "cb7b6cbebc7bbe238ae926b26305661eb66e17659fafa8fa0c098f5e7955fabe",
+      "animations": [],
+      "bounds": [
+        -0.250000029802322,
+        1.24176346982807e-9,
+        -0.364638775587082,
+        0.500000059604645,
+        0.495000034570694,
+        0.582415103912354
+      ],
+      "dependencies": [
+        {
+          "path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Characters/Models/GLB format/Textures/colormap.png",
+          "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e"
+        }
+      ],
+      "creator": "Kenney",
+      "source": "https://kenney.nl/assets/mini-characters",
+      "license": "CC0 1.0",
+      "acquisition_status": "previously_acquired_user_supplied_library_copied_to_scratch",
+      "scratch_path": "build/professional-english/nursing-theme-review/acquired/kenney/Mini Characters/Models/GLB format/wheelchair.glb",
+      "prior_review_scope": "Existing static Home composition; full Care Ward composition and motion remain unreviewed."
+    },
+    {
+      "id": "hospital-bed",
+      "path": "docs/assets/sources/innerscene-hospital-bed/hospital-bed-raised-backrest.glb",
+      "sha256": "2d66623eaa1162b358d404df5288ce6a29416fc506b50ffd0718d832435c1ab5",
+      "creator": "Innerscene",
+      "license": "CC0-1.0",
+      "available_animations": [],
+      "acquisition_status": "previously_acquired_and_retained",
+      "source_record": "docs/assets/sources/innerscene-hospital-bed/source-inventory.json",
+      "prior_review_scope": "Actual source phone views and static Home use; full Care Ward composition and motion remain unreviewed."
+    },
+    {
+      "id": "medical-supply-cart",
+      "path": "docs/assets/sources/innerscene-medical-supply-cart/medical-supply-cart.glb",
+      "sha256": "ecab70adf0e563f62cd27a1baf21380868c0c0e52a5c1b2e93f5873b1a8c02f6",
+      "creator": "Innerscene",
+      "license": "CC0-1.0",
+      "available_animations": [],
+      "acquisition_status": "previously_acquired_and_retained",
+      "source_record": "docs/assets/sources/innerscene-medical-supply-cart/source-inventory.json",
+      "prior_review_scope": "Actual source phone views and static Home use; full Care Ward composition and motion remain unreviewed."
+    }
+  ],
+  "copies": [
+    {
+      "source": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/floorFull.glb",
+      "path": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/floorFull.glb",
+      "sha256": "99fc5df646d8dc605d6fe35001fe5b15bb7b269cc5c65f4f7793fbc76ff3d822",
+      "bytes": 2260
+    },
+    {
+      "source": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/License.txt",
+      "path": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/License.txt",
+      "sha256": "0ef3667d547d93dea1e3e47aa1c323eaef4913f25c0f2c2cfe31899f2ee134b7",
+      "bytes": 614
+    },
+    {
+      "source": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/wall.glb",
+      "path": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/wall.glb",
+      "sha256": "69273d5d623bddfce41d12d4e5eeb5621ea04f1edcbd8f35c00a60c2fd3258b7",
+      "bytes": 3340
+    },
+    {
+      "source": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/wallWindow.glb",
+      "path": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/wallWindow.glb",
+      "sha256": "166a10fddb8a78d942bc2791186913f7015dfee8501d20efd7a7b8f196fc5c3e",
+      "bytes": 10744
+    },
+    {
+      "source": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/cabinetBedDrawerTable.glb",
+      "path": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/cabinetBedDrawerTable.glb",
+      "sha256": "fec6271639df5aff9f8ac75d6679385eab2abb7c8d2f51abeba3ed689ddb6f0d",
+      "bytes": 12200
+    },
+    {
+      "source": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/chairCushion.glb",
+      "path": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/chairCushion.glb",
+      "sha256": "33544228984857f2cb502b58452fed72157335f9b1caf29e96da5c9094c53fdc",
+      "bytes": 12588
+    },
+    {
+      "source": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Furniture Kit/Models/GLTF format/bookcaseClosedDoors.glb",
+      "path": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/bookcaseClosedDoors.glb",
+      "sha256": "ff33f535acdb1825c0e958a293642b39665adcae0b1317b650e83d2bb687f4e2",
+      "bytes": 22644
+    },
+    {
+      "source": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Characters/Models/GLB format/wheelchair.glb",
+      "path": "build/professional-english/nursing-theme-review/acquired/kenney/Mini Characters/Models/GLB format/wheelchair.glb",
+      "sha256": "cb7b6cbebc7bbe238ae926b26305661eb66e17659fafa8fa0c098f5e7955fabe",
+      "bytes": 56680
+    },
+    {
+      "source": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Characters/Models/GLB format/Textures/colormap.png",
+      "path": "build/professional-english/nursing-theme-review/acquired/kenney/Mini Characters/Models/GLB format/Textures/colormap.png",
+      "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e",
+      "bytes": 8706
+    },
+    {
+      "source": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Mini Characters/License.txt",
+      "path": "build/professional-english/nursing-theme-review/acquired/kenney/Mini Characters/License.txt",
+      "sha256": "28358ae5accc85b572eb42507956afc8beae05acb4648bb9026a5714d421b785",
+      "bytes": 718
+    }
+  ],
+  "preserved_home_previews": 20,
+  "production_mutated": false
+}

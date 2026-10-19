@@ -1,0 +1,101 @@
+{
+  "id": "collect.gather.v",
+  "text": "collect",
+  "display_text": "collect",
+  "pos": "verb",
+  "definition": "To gather items together or pick them up from a place.",
+  "example": "Please collect the documents from reception.",
+  "difficulty": "A2",
+  "accepted_forms": [
+    "collect"
+  ],
+  "regions": [
+    "general"
+  ],
+  "practice_modes": [
+    "match",
+    "memory",
+    "pop",
+    "jelly",
+    "word_jelly",
+    "phrase"
+  ],
+  "media": {
+    "image": {
+      "status": "pending",
+      "path": null,
+      "sha256": null,
+      "source": null,
+      "creator": null,
+      "license": null,
+      "acquisition_status": "not_started",
+      "review": {
+        "status": "pending"
+      },
+      "brief": "A friendly worker picking up an agreed set of fictional documents from reception; show the pickup context clearly, with no money collection or private information.",
+      "picture_suitable": true,
+      "available_animations": [],
+      "adaptations": []
+    },
+    "audio": {
+      "status": "pending",
+      "path": null,
+      "sha256": null,
+      "source": null,
+      "creator": null,
+      "license": null,
+      "acquisition_status": "not_started",
+      "review": {
+        "status": "pending"
+      },
+      "voice": "ava-sweet",
+      "voice_settings": {
+        "voice": "en-US-AvaNeural",
+        "rate": "-15%",
+        "pitch": "+8Hz",
+        "volume": "+0%",
+        "postprocessing": false
+      }
+    }
+  },
+  "morphology": {
+    "schema": 1,
+    "id": "collect.gather.v.analysis.v1",
+    "lexeme_id": "collect.gather.v",
+    "text": "collect",
+    "kind": "atomic",
+    "review": {
+      "status": "pending",
+      "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+      "references": []
+    },
+    "parts": [
+      {
+        "id": "p1",
+        "type": "atomic",
+        "canonical": "collect",
+        "surface": "collect",
+        "canonical_id": "morph.collect"
+      }
+    ],
+    "nodes": [],
+    "roots": [
+      "p1"
+    ]
+  },
+  "review": {
+    "status": "pending",
+    "language": "pending",
+    "domain": "not_required",
+    "reviewer": null,
+    "reviewed_at": null
+  },
+  "references": [
+    {
+      "source_id": "british-council-requests",
+      "status": "pending_term_check",
+      "scope": "Workplace communication context only; this original definition and example await term-level review."
+    }
+  ],
+  "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. The assessment explicitly uses picking up items from a place. The general gathering identity is retained; collection of money is outside this example."
+}

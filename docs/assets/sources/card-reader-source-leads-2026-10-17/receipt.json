@@ -1,0 +1,163 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-10-16T18:18:50.669Z",
+  "scope": "Fresh source leads only. Original publisher pages returned 403 via web access; public metadata observations are separate. No model acquired, no visual inspection, no license acceptance or production integration.",
+  "results": [
+    {
+      "id": "12376a29b015453da5f7a0deede21dd8",
+      "title": "Payment terminal",
+      "creator_from_search": "nofurion",
+      "source": "https://sketchfab.com/3d-models/payment-terminal-12376a29b015453da5f7a0deede21dd8",
+      "page_web_result": "403 Forbidden",
+      "metadata_url": "https://api.sketchfab.com/v3/models/12376a29b015453da5f7a0deede21dd8",
+      "status": 200,
+      "response_file": "12376a29b015453da5f7a0deede21dd8.metadata-response",
+      "sha256": "1351f0cb263a56b74993d4964e804aac35041427954ca58543aaa00a75912fed",
+      "metadata": {
+        "name": "Payment terminal",
+        "user": "nofurion",
+        "license": {
+          "uri": "https://api.sketchfab.com/v3/licenses/322a749bcfa841b29dff1e8a1bb74b0b",
+          "label": "CC Attribution",
+          "fullName": "Creative Commons Attribution",
+          "requirements": "Author must be credited. Commercial use is allowed.",
+          "url": "http://creativecommons.org/licenses/by/4.0/",
+          "slug": "by"
+        },
+        "isDownloadable": true,
+        "animationCount": 0,
+        "thumbnails": [
+          {
+            "url": "https://media.sketchfab.com/models/12376a29b015453da5f7a0deede21dd8/thumbnails/0eaf992e74b5432591a3f1d2fa02fa6c/accf6b2ac81043179cce3a2a91a276b5.jpeg",
+            "width": 1920,
+            "height": 1080
+          },
+          {
+            "url": "https://media.sketchfab.com/models/12376a29b015453da5f7a0deede21dd8/thumbnails/0eaf992e74b5432591a3f1d2fa02fa6c/6624a0c9ddfd4ead8a1f88761fc973e0.jpeg",
+            "width": 1024,
+            "height": 576
+          },
+          {
+            "url": "https://media.sketchfab.com/models/12376a29b015453da5f7a0deede21dd8/thumbnails/0eaf992e74b5432591a3f1d2fa02fa6c/e553d606c7884f00bbfbcba8edaa2dfe.jpeg",
+            "width": 720,
+            "height": 405
+          },
+          {
+            "url": "https://media.sketchfab.com/models/12376a29b015453da5f7a0deede21dd8/thumbnails/0eaf992e74b5432591a3f1d2fa02fa6c/c2f852f092da49829b37ab9e34800f6a.jpeg",
+            "width": 256,
+            "height": 144
+          },
+          {
+            "url": "https://media.sketchfab.com/models/12376a29b015453da5f7a0deede21dd8/thumbnails/0eaf992e74b5432591a3f1d2fa02fa6c/65ae9bf94c6d4b2e8cc5744af685fb85.jpeg",
+            "width": 64,
+            "height": 36
+          }
+        ]
+      }
+    },
+    {
+      "id": "ccc9d1a3f47b4537ac5b8cf75196c40c",
+      "title": "Chip and PIN card reader",
+      "creator_from_search": "Mixmamo.studio",
+      "source": "https://sketchfab.com/3d-models/chip-and-pin-card-reader-ccc9d1a3f47b4537ac5b8cf75196c40c",
+      "page_web_result": "403 Forbidden",
+      "metadata_url": "https://api.sketchfab.com/v3/models/ccc9d1a3f47b4537ac5b8cf75196c40c",
+      "status": 200,
+      "response_file": "ccc9d1a3f47b4537ac5b8cf75196c40c.metadata-response",
+      "sha256": "28c4a032c68c2491bcd8bd2b2ba2880b38ce464c25e393ff6df6e3d1346a7189",
+      "metadata": {
+        "name": "Chip and PIN card reader",
+        "user": "Mixmamo.studio:   An effortless 3D collections.",
+        "license": {
+          "uri": "https://api.sketchfab.com/v3/licenses/322a749bcfa841b29dff1e8a1bb74b0b",
+          "label": "CC Attribution",
+          "fullName": "Creative Commons Attribution",
+          "requirements": "Author must be credited. Commercial use is allowed.",
+          "url": "http://creativecommons.org/licenses/by/4.0/",
+          "slug": "by"
+        },
+        "isDownloadable": true,
+        "animationCount": 0,
+        "thumbnails": [
+          {
+            "url": "https://media.sketchfab.com/models/ccc9d1a3f47b4537ac5b8cf75196c40c/thumbnails/25e84f66e1f14a3193d673163fcf30e6/ec46175c6aaa4dc884749e5ca8b96e8c.jpeg",
+            "width": 1920,
+            "height": 1080
+          },
+          {
+            "url": "https://media.sketchfab.com/models/ccc9d1a3f47b4537ac5b8cf75196c40c/thumbnails/25e84f66e1f14a3193d673163fcf30e6/7424ec73d0674ca1bb2af90ca94f18e8.jpeg",
+            "width": 1024,
+            "height": 576
+          },
+          {
+            "url": "https://media.sketchfab.com/models/ccc9d1a3f47b4537ac5b8cf75196c40c/thumbnails/25e84f66e1f14a3193d673163fcf30e6/6605c87e85b7473ab63dc74bdf6ea70a.jpeg",
+            "width": 720,
+            "height": 405
+          },
+          {
+            "url": "https://media.sketchfab.com/models/ccc9d1a3f47b4537ac5b8cf75196c40c/thumbnails/25e84f66e1f14a3193d673163fcf30e6/9ea14823685347c8860ef9cad7789868.jpeg",
+            "width": 256,
+            "height": 144
+          },
+          {
+            "url": "https://media.sketchfab.com/models/ccc9d1a3f47b4537ac5b8cf75196c40c/thumbnails/25e84f66e1f14a3193d673163fcf30e6/db62cc0352574909a0b5465efb73e3fd.jpeg",
+            "width": 64,
+            "height": 36
+          }
+        ]
+      }
+    },
+    {
+      "id": "71b6c4de982e4681a711da9ea6475d32",
+      "title": "Card Reader",
+      "creator_from_search": "oguz1sapmaz",
+      "source": "https://sketchfab.com/3d-models/card-reader-71b6c4de982e4681a711da9ea6475d32",
+      "page_web_result": "403 Forbidden",
+      "metadata_url": "https://api.sketchfab.com/v3/models/71b6c4de982e4681a711da9ea6475d32",
+      "status": 200,
+      "response_file": "71b6c4de982e4681a711da9ea6475d32.metadata-response",
+      "sha256": "a038a20e949b8dec5c1f9841fd9383fb1ba342d2007abc4c0bfa5933a750c9c7",
+      "metadata": {
+        "name": "Card Reader",
+        "user": "oguz1sapmaz",
+        "license": {
+          "uri": "https://api.sketchfab.com/v3/licenses/322a749bcfa841b29dff1e8a1bb74b0b",
+          "label": "CC Attribution",
+          "fullName": "Creative Commons Attribution",
+          "requirements": "Author must be credited. Commercial use is allowed.",
+          "url": "http://creativecommons.org/licenses/by/4.0/",
+          "slug": "by"
+        },
+        "isDownloadable": true,
+        "animationCount": 0,
+        "thumbnails": [
+          {
+            "url": "https://media.sketchfab.com/models/71b6c4de982e4681a711da9ea6475d32/thumbnails/f9dccc48740845f89b30e04fed8ba89b/54cb20cbea5e413a8e7e80be7b23494d.jpeg",
+            "width": 1920,
+            "height": 1080
+          },
+          {
+            "url": "https://media.sketchfab.com/models/71b6c4de982e4681a711da9ea6475d32/thumbnails/f9dccc48740845f89b30e04fed8ba89b/7639b0d7ebd94dada968402cf77abdb6.jpeg",
+            "width": 1024,
+            "height": 576
+          },
+          {
+            "url": "https://media.sketchfab.com/models/71b6c4de982e4681a711da9ea6475d32/thumbnails/f9dccc48740845f89b30e04fed8ba89b/b9d7a745ae8a4466910afe7c723eb054.jpeg",
+            "width": 720,
+            "height": 405
+          },
+          {
+            "url": "https://media.sketchfab.com/models/71b6c4de982e4681a711da9ea6475d32/thumbnails/f9dccc48740845f89b30e04fed8ba89b/7196d410ca1a4af1ae8b31312a1fdee0.jpeg",
+            "width": 256,
+            "height": 144
+          },
+          {
+            "url": "https://media.sketchfab.com/models/71b6c4de982e4681a711da9ea6475d32/thumbnails/f9dccc48740845f89b30e04fed8ba89b/d220d36965cf413584c6df18a4d618ef.jpeg",
+            "width": 64,
+            "height": 36
+          }
+        ]
+      }
+    }
+  ]
+}

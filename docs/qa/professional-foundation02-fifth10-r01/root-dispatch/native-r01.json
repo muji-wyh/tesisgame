@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "kind": "native",
+  "dispatcher": "/root",
+  "observed_at": "2026-10-16T23:52:50.836Z",
+  "session_id": 6549,
+  "command": [
+    "node",
+    "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/run.cjs",
+    "--root-input",
+    "build/professional-english/foundation02-fifth10-root-native-r01/input.json",
+    "--root-input-sha256",
+    "58a00ee875f524d7a1561aebe46d2e6d3d6bb0a46a9a4cbe6b9c31dc51e44117"
+  ],
+  "cwd": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame",
+  "source": {
+    "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/run.cjs",
+    "bytes": 23431,
+    "raw_sha256": "0359ced35e82254e9e09f95bd5ca8b10748e8d4a6c482ed9d992c5e3fb6ed33d"
+  },
+  "input": {
+    "path": "build/professional-english/foundation02-fifth10-root-native-r01/input.json",
+    "bytes": 3218,
+    "raw_sha256": "58a00ee875f524d7a1561aebe46d2e6d3d6bb0a46a9a4cbe6b9c31dc51e44117"
+  },
+  "start": {
+    "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/start.json",
+    "bytes": 3056,
+    "raw_sha256": "c3f2940fe679c62d563526fd24aab08e0f0c0bed10bf8c86dc1a64648289336a"
+  },
+  "exit_code": 1,
+  "signal": null,
+  "error": null,
+  "receipt": {
+    "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/receipt.json",
+    "bytes": 10577,
+    "raw_sha256": "878a6ec5298b553831454c250900c6c552e2d0005a1c97cd5df6a1e9ac9584fb"
+  },
+  "observation_basis": "Root observed tools.write_stdin terminal completion with exit_code 1 for session 6549, chunk bd536d. No signal or tool process error was reported. The failed native assertion and wrapper failure are separately recorded by the pinned receipt and command logs.",
+  "final_tool_metadata": {
+    "chunk_id": "bd536d",
+    "wall_time_seconds": 0.000019,
+    "exit_code": 1,
+    "original_token_count": 594
+  },
+  "observed_output_summary": {
+    "ok": false,
+    "status": "isolated_native_candidate_failed",
+    "native_checks": 3922,
+    "native_failures": 1,
+    "failure": "Related broad Professional graph remains its exact pending preimage: safe.free-from-unacceptable-danger.adj",
+    "postcheck_error": null
+  },
+  "actual_installation": false,
+  "persisted_validation": false,
+  "replay_allowed": false
+}

@@ -1,0 +1,782 @@
+{
+  "schema": 1,
+  "status": "integrated_language_outputs_require_committed_journal",
+  "reviewer": "Codex approved_audio independent AI language reviewer; not human or subject-matter approval",
+  "prepared_by": "Codex attendance_review continuation delivery author",
+  "new_language_approval": false,
+  "author_research": {
+    "path": "docs/content-review/foundation-module01-attendance-language-2026-10-17/research.json",
+    "raw_sha256": "ce942440d12226494de805eedfefb9e09b4c23e517b5f643c2e2ad0421049a4b",
+    "accepted": false
+  },
+  "independent_review": {
+    "path": "docs/content-review/foundation-module01-attendance-language-2026-10-17/independent-language-review.json",
+    "raw_sha256": "979297a9ea44542fff7ec7082346edae11fa66587787190f2a81730bc77a35b4",
+    "accepted": true,
+    "reviewer": "Codex approved_audio independent AI language reviewer; not human or subject-matter approval",
+    "recorded_at": "2026-10-16T14:28:29.119Z",
+    "human_or_specialist_approval": false,
+    "decision": {
+      "meaning": "Accept the existing original definition as ordinary presence at a work, meeting, or scheduled activity. It does not define a register, a sheet, or a crowd count. Oxford and Collins separate this presence meaning from their headcount sense.",
+      "example": "Accept the retained trainer/session sentence as natural ordinary usage: recording attendance means recording whether participants are present. The recording verb does not change attendance into the name of a paper document. This sentence does not approve every attendance expression elsewhere.",
+      "difficulty": "Accept B2 as a bounded course editorial placement. The exact noun/POS has B2 evidence in CEFR-J v1.5, and a directly inspected intermediate workplace lesson explicitly teaches attendance policy and absence communication. Their different scopes are retained: neither certifies this exact sense or active mastery. Oxford selected-presence C1 remains a real conflict. B2 is not an automatic clamp of C1, a transfer from attend, or an assumption based on a footer.",
+      "historical_boundary": "The earlier A2 entry and prior hold remain immutable historical evidence. The new candidate resolves only this content-level review; separate guarded integration and metadata review are still required."
+    },
+    "source_checks": [
+      {
+        "id": "cefrj-wordlist-1.5-attendance",
+        "url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/cefrj-vocabulary-profile-1.5.csv",
+        "access": "Direct web open and independent HTTP 200 byte fetch",
+        "selected_row": "attendance,noun,B2,,,",
+        "line": 445,
+        "raw_bytes": 233214,
+        "raw_sha256": "b0dd3c635f1c9a4fdf1490c7e5b7c48e8bbe55b652ad0c9860a95f98e10ae498",
+        "observation": "The exact noun/POS row is B2. The row contains no sense definition or productive-skill certification.",
+        "limits": "Version 1.5 was inspected. The list covers A1–B2 and has textbook/profile methodology; its highest listed level is not universal proof that every sense is B2."
+      },
+      {
+        "id": "cefrj-repository-attribution",
+        "url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/README.md",
+        "access": "Direct web open and independent HTTP 200 byte fetch",
+        "raw_bytes": 1956,
+        "raw_sha256": "8b69f7366fa3c7be328cb9ba02ceb7b3725697f36125bb75b85131d664b5e359",
+        "observation": "The repository identifies CEFR-J v1.5, attributes copyright to Tono Laboratory at TUFS, and permits research/commercial use with proper source acknowledgement. The separate Octanove C1/C2 dataset has different CC BY-SA terms; those are not assigned to CEFR-J.",
+        "citation": "The CEFR-J Wordlist Version 1.5. Compiled by Yukio Tono, Tokyo University of Foreign Studies. Consulted via Open Language Profiles on 2026-10-16."
+      },
+      {
+        "id": "cefrj-official-methodology",
+        "url": "https://www.cefr-j.org/download.html",
+        "access": "Direct web open",
+        "selected_lines": "56-100",
+        "observation": "The official page describes textbook corpora classified by approximate CEFR level, comparison with English Vocabulary Profile, POS-level entries, source acknowledgement, and version 1.6 availability.",
+        "limits": "The separately linked 1.6 workbook was not acquired or used to certify the inspected 1.5 row. English summary only retained."
+      },
+      {
+        "id": "oxford-attendance-presence",
+        "url": "https://www.oxfordlearnersdictionaries.com/definition/english/attendance",
+        "access": "Direct web open",
+        "selected_lines": "107-112;143-148",
+        "observed_selected_level": "C1",
+        "observation": "The first sense concerns presence; its workplace and education topic labels are C1. A separate second sense covers the number present. This C1 evidence is retained rather than overridden."
+      },
+      {
+        "id": "collins-attendance-presence",
+        "url": "https://www.collinsdictionary.com/dictionary/english/attendance",
+        "access": "Direct web open",
+        "selected_lines": "224-239",
+        "observed_selected_level": null,
+        "observation": "The first uncountable noun sense concerns presence at an event or regular institutional attendance. The separate next sense concerns headcount. No selected CEFR level observed."
+      },
+      {
+        "id": "englishflows-attendance-workplace-lesson",
+        "url": "https://theenglishflows.com/lesson-plans/attendance-time-off-and-absenteeism/",
+        "access": "Web tool open failed internally; independent direct HTTP 200 public-page fetch succeeded",
+        "raw_bytes": 310953,
+        "raw_sha256": "bd7bcd03b3c6831b53b88269ead8f07c2962a352d1db8b06d84b6ec28bbdae0e",
+        "observed_level": "B1 / B2",
+        "observation": "The actual lesson section identifies B1/B2 and an intermediate audience. Its public outline includes attendance-policy vocabulary, absence/leave communication, and employee-attendance activities; the label is not merely a sitewide filter.",
+        "limits": "Lesson-level teachability only. No subscriber worksheets, videos, or paid material were accessed or acquired."
+      }
+    ]
+  },
+  "patches": [
+    {
+      "id": "attendance.presence-record.n",
+      "before": {
+        "id": "attendance.presence-record.n",
+        "text": "attendance",
+        "display_text": "attendance",
+        "pos": "noun",
+        "definition": "Being present at work, a meeting, or another scheduled activity.",
+        "example": "The trainer recorded attendance at the session.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "attendance"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A small group present at a fictional workplace meeting beside its corresponding attendance record. The concept is being present, not the sheet by itself; use invented names and no biometric or private data.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "attendance.presence-record.n.analysis.v1",
+          "lexeme_id": "attendance.presence-record.n",
+          "text": "attendance",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "attend",
+              "surface": "attend",
+              "canonical_id": "morph.attend"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-ance",
+              "surface": "ance",
+              "canonical_id": "affix.ance.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "attendance",
+              "rule": "suffix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. The legacy canonical ID is retained for progress continuity. The definition concerns presence, while the image connects presence with its record; the ID wording does not create a second record-object sense."
+      },
+      "after": {
+        "id": "attendance.presence-record.n",
+        "text": "attendance",
+        "display_text": "attendance",
+        "pos": "noun",
+        "definition": "Being present at work, a meeting, or another scheduled activity.",
+        "example": "The trainer recorded attendance at the session.",
+        "difficulty": "B2",
+        "accepted_forms": [
+          "attendance"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A small group present at a fictional workplace meeting beside its corresponding attendance record. The concept is being present, not the sheet by itself; use invented names and no biometric or private data.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "attendance.presence-record.n.analysis.v1",
+          "lexeme_id": "attendance.presence-record.n",
+          "text": "attendance",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "attend",
+              "surface": "attend",
+              "canonical_id": "morph.attend"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-ance",
+              "surface": "ance",
+              "canonical_id": "affix.ance.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "attendance",
+              "rule": "suffix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "reviewed",
+          "language": "reviewed",
+          "domain": "not_required",
+          "reviewer": "Codex approved_audio independent AI language reviewer; not human or subject-matter approval",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation01-attendance-reconsideration-cefrj-v15",
+            "status": "verified",
+            "scope": "The exact noun/POS row is B2. The row contains no sense definition or productive-skill certification. Version 1.5 was inspected. The list covers A1–B2 and has textbook/profile methodology; its highest listed level is not universal proof that every sense is B2.  Consulted by the recorded independent AI language reviewer; source media, dictionary page copies and complete datasets were not acquired or imported. No human, subject-matter, morphology, media, domain, expression or release approval is claimed. B2 is an independently accepted course editorial placement for ordinary presence. CEFR-J v1.5 lists the exact headword/POS at B2 without a sense definition; its A1-B2 coverage is not universal proof for every sense or active mastery. Oxford labels the selected presence topics C1, retained as conflicting evidence. Collins supports the selected meaning without an observed selected CEFR level. English Flows labels the whole workplace lesson B1 / B2; this is contextual teachability, not word- or sense-level certification. B2 is not an automatic clamp of C1 or a level transferred from attend."
+          },
+          {
+            "source_id": "foundation01-attendance-reconsideration-cefrj-attribution",
+            "status": "verified",
+            "scope": "The repository identifies CEFR-J v1.5, attributes copyright to Tono Laboratory at TUFS, and permits research/commercial use with proper source acknowledgement. The separate Octanove C1/C2 dataset has different CC BY-SA terms; those are not assigned to CEFR-J.  The CEFR-J Wordlist Version 1.5. Compiled by Yukio Tono, Tokyo University of Foreign Studies. Consulted via Open Language Profiles on 2026-10-16. Consulted by the recorded independent AI language reviewer; source media, dictionary page copies and complete datasets were not acquired or imported. No human, subject-matter, morphology, media, domain, expression or release approval is claimed. B2 is an independently accepted course editorial placement for ordinary presence. CEFR-J v1.5 lists the exact headword/POS at B2 without a sense definition; its A1-B2 coverage is not universal proof for every sense or active mastery. Oxford labels the selected presence topics C1, retained as conflicting evidence. Collins supports the selected meaning without an observed selected CEFR level. English Flows labels the whole workplace lesson B1 / B2; this is contextual teachability, not word- or sense-level certification. B2 is not an automatic clamp of C1 or a level transferred from attend."
+          },
+          {
+            "source_id": "foundation01-attendance-reconsideration-cefrj-methodology",
+            "status": "verified",
+            "scope": "The official page describes textbook corpora classified by approximate CEFR level, comparison with English Vocabulary Profile, POS-level entries, source acknowledgement, and version 1.6 availability. The separately linked 1.6 workbook was not acquired or used to certify the inspected 1.5 row. English summary only retained.  Consulted by the recorded independent AI language reviewer; source media, dictionary page copies and complete datasets were not acquired or imported. No human, subject-matter, morphology, media, domain, expression or release approval is claimed. B2 is an independently accepted course editorial placement for ordinary presence. CEFR-J v1.5 lists the exact headword/POS at B2 without a sense definition; its A1-B2 coverage is not universal proof for every sense or active mastery. Oxford labels the selected presence topics C1, retained as conflicting evidence. Collins supports the selected meaning without an observed selected CEFR level. English Flows labels the whole workplace lesson B1 / B2; this is contextual teachability, not word- or sense-level certification. B2 is not an automatic clamp of C1 or a level transferred from attend."
+          },
+          {
+            "source_id": "foundation01-attendance-reconsideration-oxford-presence",
+            "status": "verified",
+            "scope": "The first sense concerns presence; its workplace and education topic labels are C1. A separate second sense covers the number present. This C1 evidence is retained rather than overridden.   Consulted by the recorded independent AI language reviewer; source media, dictionary page copies and complete datasets were not acquired or imported. No human, subject-matter, morphology, media, domain, expression or release approval is claimed. B2 is an independently accepted course editorial placement for ordinary presence. CEFR-J v1.5 lists the exact headword/POS at B2 without a sense definition; its A1-B2 coverage is not universal proof for every sense or active mastery. Oxford labels the selected presence topics C1, retained as conflicting evidence. Collins supports the selected meaning without an observed selected CEFR level. English Flows labels the whole workplace lesson B1 / B2; this is contextual teachability, not word- or sense-level certification. B2 is not an automatic clamp of C1 or a level transferred from attend."
+          },
+          {
+            "source_id": "foundation01-attendance-reconsideration-collins-presence",
+            "status": "verified",
+            "scope": "The first uncountable noun sense concerns presence at an event or regular institutional attendance. The separate next sense concerns headcount. No selected CEFR level observed.   Consulted by the recorded independent AI language reviewer; source media, dictionary page copies and complete datasets were not acquired or imported. No human, subject-matter, morphology, media, domain, expression or release approval is claimed. B2 is an independently accepted course editorial placement for ordinary presence. CEFR-J v1.5 lists the exact headword/POS at B2 without a sense definition; its A1-B2 coverage is not universal proof for every sense or active mastery. Oxford labels the selected presence topics C1, retained as conflicting evidence. Collins supports the selected meaning without an observed selected CEFR level. English Flows labels the whole workplace lesson B1 / B2; this is contextual teachability, not word- or sense-level certification. B2 is not an automatic clamp of C1 or a level transferred from attend."
+          },
+          {
+            "source_id": "foundation01-attendance-reconsideration-englishflows-lesson",
+            "status": "verified",
+            "scope": "The actual lesson section identifies B1/B2 and an intermediate audience. Its public outline includes attendance-policy vocabulary, absence/leave communication, and employee-attendance activities; the label is not merely a sitewide filter. Lesson-level teachability only. No subscriber worksheets, videos, or paid material were accessed or acquired.  Consulted by the recorded independent AI language reviewer; source media, dictionary page copies and complete datasets were not acquired or imported. No human, subject-matter, morphology, media, domain, expression or release approval is claimed. B2 is an independently accepted course editorial placement for ordinary presence. CEFR-J v1.5 lists the exact headword/POS at B2 without a sense definition; its A1-B2 coverage is not universal proof for every sense or active mastery. Oxford labels the selected presence topics C1, retained as conflicting evidence. Collins supports the selected meaning without an observed selected CEFR level. English Flows labels the whole workplace lesson B1 / B2; this is contextual teachability, not word- or sense-level certification. B2 is not an automatic clamp of C1 or a level transferred from attend."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. The original ordinary-presence definition, trainer/session example and editorial B2 placement have independent AI language acceptance. B2 is an independently accepted course editorial placement for ordinary presence. CEFR-J v1.5 lists the exact headword/POS at B2 without a sense definition; its A1-B2 coverage is not universal proof for every sense or active mastery. Oxford labels the selected presence topics C1, retained as conflicting evidence. Collins supports the selected meaning without an observed selected CEFR level. English Flows labels the whole workplace lesson B1 / B2; this is contextual teachability, not word- or sense-level certification. B2 is not an automatic clamp of C1 or a level transferred from attend. The stable legacy ID is retained for progress continuity; it does not introduce a record-object or headcount sense. Recording attendance means recording whether participants are present. No human, subject-matter, morphology, media, domain, expression or release approval is claimed. Accepted forms, regions, prior references, morphology, image/audio and domain states, practice modes, memberships and expressions remain unchanged; separate pending gates still prevent complete-module readiness."
+      },
+      "before_sha256": "a7699c3e58649791eaee79817f87879c2ce6b2418e729768c6f1a43c19b3594e",
+      "after_sha256": "66fedbf3ee3565e1e3bddf2df322ccd0bb3e18bf7228e392e10384445c544b81",
+      "accepted_content": {
+        "id": "attendance.presence-record.n",
+        "text": "attendance",
+        "display_text": "attendance",
+        "pos": "noun",
+        "definition": "Being present at work, a meeting, or another scheduled activity.",
+        "example": "The trainer recorded attendance at the session.",
+        "difficulty": "B2",
+        "accepted_forms": [
+          "attendance"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A small group present at a fictional workplace meeting beside its corresponding attendance record. The concept is being present, not the sheet by itself; use invented names and no biometric or private data.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "attendance.presence-record.n.analysis.v1",
+          "lexeme_id": "attendance.presence-record.n",
+          "text": "attendance",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "stem",
+              "canonical": "attend",
+              "surface": "attend",
+              "canonical_id": "morph.attend"
+            },
+            {
+              "id": "p2",
+              "type": "suffix",
+              "canonical": "-ance",
+              "surface": "ance",
+              "canonical_id": "affix.ance.suffix"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "attendance",
+              "rule": "suffix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-meetings",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. The legacy canonical ID is retained for progress continuity. The definition concerns presence, while the image connects presence with its record; the ID wording does not create a second record-object sense."
+      },
+      "accepted_content_json_sha256": "b7c42d9ce09b8ad3c2a322cd7f6272eb1432a6ef935fc1abf83c0fea333813d1",
+      "protected_fields_sha256": "0f6c4813b7604ac46e376462f3c17ca77c7285c32c105e9e02014e03bcf0b240",
+      "changed_fields": [
+        "difficulty",
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "difficulty": {
+        "before": "A2",
+        "accepted_editorial": "B2",
+        "source_observations": {
+          "cefrj_v1_5_headword_pos": "B2",
+          "oxford_selected_presence_topics": "C1",
+          "collins_selected_presence_level": null,
+          "english_flows_whole_lesson": "B1 / B2"
+        },
+        "dictionary_or_unanimous_level_certification": false,
+        "active_mastery_certification": false,
+        "independent_editorial_basis": "B2 is an independently accepted course editorial placement for ordinary presence. CEFR-J v1.5 lists the exact headword/POS at B2 without a sense definition; its A1-B2 coverage is not universal proof for every sense or active mastery. Oxford labels the selected presence topics C1, retained as conflicting evidence. Collins supports the selected meaning without an observed selected CEFR level. English Flows labels the whole workplace lesson B1 / B2; this is contextual teachability, not word- or sense-level certification. B2 is not an automatic clamp of C1 or a level transferred from attend."
+      },
+      "memberships": [
+        {
+          "course_id": "caregiving",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "retail",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "food_service",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "nursing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "customer_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "office_admin",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "warehouse_logistics",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hospitality_tourism",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "transport_delivery",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "construction_trades",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "cleaning_facilities",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "education_childcare",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "manufacturing_maintenance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "it_support",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "software_data",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "accounting_finance",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "sales_marketing",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "hr_recruitment",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "clinical_medicine",
+          "module_id": "module01"
+        },
+        {
+          "course_id": "legal_paralegal",
+          "module_id": "module01"
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "foundation01-attendance-reconsideration-cefrj-v15",
+      "title": "The CEFR-J Wordlist Version 1.5: attendance noun",
+      "publisher": "Yukio Tono / Tono Laboratory, Tokyo University of Foreign Studies; Open Language Profiles redistribution",
+      "url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/cefrj-vocabulary-profile-1.5.csv",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "The exact noun/POS row is B2. The row contains no sense definition or productive-skill certification. Version 1.5 was inspected. The list covers A1–B2 and has textbook/profile methodology; its highest listed level is not universal proof that every sense is B2.  Consulted by the recorded independent AI language reviewer; source media, dictionary page copies and complete datasets were not acquired or imported. No human, subject-matter, morphology, media, domain, expression or release approval is claimed.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-attendance-reconsideration-cefrj-attribution",
+      "title": "CEFR-J v1.5 repository attribution and use terms",
+      "publisher": "Open Language Profiles; Tono Laboratory, Tokyo University of Foreign Studies",
+      "url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/README.md",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "The repository identifies CEFR-J v1.5, attributes copyright to Tono Laboratory at TUFS, and permits research/commercial use with proper source acknowledgement. The separate Octanove C1/C2 dataset has different CC BY-SA terms; those are not assigned to CEFR-J.  The CEFR-J Wordlist Version 1.5. Compiled by Yukio Tono, Tokyo University of Foreign Studies. Consulted via Open Language Profiles on 2026-10-16. Consulted by the recorded independent AI language reviewer; source media, dictionary page copies and complete datasets were not acquired or imported. No human, subject-matter, morphology, media, domain, expression or release approval is claimed.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-attendance-reconsideration-cefrj-methodology",
+      "title": "CEFR-J official wordlist methodology",
+      "publisher": "Tono Laboratory, Tokyo University of Foreign Studies",
+      "url": "https://www.cefr-j.org/download.html",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "The official page describes textbook corpora classified by approximate CEFR level, comparison with English Vocabulary Profile, POS-level entries, source acknowledgement, and version 1.6 availability. The separately linked 1.6 workbook was not acquired or used to certify the inspected 1.5 row. English summary only retained.  Consulted by the recorded independent AI language reviewer; source media, dictionary page copies and complete datasets were not acquired or imported. No human, subject-matter, morphology, media, domain, expression or release approval is claimed.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-attendance-reconsideration-oxford-presence",
+      "title": "Oxford Advanced Learner's Dictionary: attendance presence sense",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/attendance",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "The first sense concerns presence; its workplace and education topic labels are C1. A separate second sense covers the number present. This C1 evidence is retained rather than overridden.   Consulted by the recorded independent AI language reviewer; source media, dictionary page copies and complete datasets were not acquired or imported. No human, subject-matter, morphology, media, domain, expression or release approval is claimed.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-attendance-reconsideration-collins-presence",
+      "title": "Collins English Dictionary: attendance presence sense",
+      "publisher": "HarperCollins",
+      "url": "https://www.collinsdictionary.com/dictionary/english/attendance",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "The first uncountable noun sense concerns presence at an event or regular institutional attendance. The separate next sense concerns headcount. No selected CEFR level observed.   Consulted by the recorded independent AI language reviewer; source media, dictionary page copies and complete datasets were not acquired or imported. No human, subject-matter, morphology, media, domain, expression or release approval is claimed.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-attendance-reconsideration-englishflows-lesson",
+      "title": "English Flows: Attendance, time off and absenteeism",
+      "publisher": "English Flows",
+      "url": "https://theenglishflows.com/lesson-plans/attendance-time-off-and-absenteeism/",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "The actual lesson section identifies B1/B2 and an intermediate audience. Its public outline includes attendance-policy vocabulary, absence/leave communication, and employee-attendance activities; the label is not merely a sitewide filter. Lesson-level teachability only. No subscriber worksheets, videos, or paid material were accessed or acquired.  Consulted by the recorded independent AI language reviewer; source media, dictionary page copies and complete datasets were not acquired or imported. No human, subject-matter, morphology, media, domain, expression or release approval is claimed.",
+      "asset_license": null,
+      "assets_acquired": false
+    }
+  ],
+  "historical_boundary": {
+    "previous_A2_candidate_accepted": false,
+    "prior_hold_artifacts_immutable": true,
+    "excluded_third10_source_ids": [
+      "foundation01-language-third10-oxford-attendance",
+      "foundation01-language-third10-collins-attendance"
+    ]
+  },
+  "protected_context": {
+    "expressions": [
+      {
+        "id": "expr.office_admin.module06.03",
+        "entry_json_sha256": "bd4231be7e702337352f157433c82f674167146f79b0d4efb81770e12f3abe1c",
+        "decision": "preserve_exact_no_expression_acceptance_or_new_binding"
+      },
+      {
+        "id": "expr.education_childcare.module09.01",
+        "entry_json_sha256": "2aecfe86272c61756847108cbb7e0d2aca1543c97bd46150c299bc2be7f6c2d3",
+        "decision": "preserve_exact_no_expression_acceptance_or_new_binding"
+      }
+    ],
+    "all_expressions_json_sha256": "6123997d5d536376c2b5de984e7014848de50f49e022a4ab996a69e7b134d15e",
+    "all_other_lexemes_json_sha256": "9bed8ad22a45826aa5228504cab683b68a49d884bc5f87f9b2a04c6d06cc8d70",
+    "all_courses_json_sha256": "780a3e385fc713b8f7db16594b2010e1b329d40c6bc1b3d783df49fcc6cc90d1",
+    "all_themes_json_sha256": "d61cc725d971313efbec74494879afcc19dc67723d0f5b72292326f5b21bfc8e",
+    "previous_sources_json_sha256": "e40fc4b49407a7ab2844577b5986e761b9c4fa95e5c13c9c97537fdb05df6864"
+  },
+  "delivery_scope": {
+    "lexeme_file": "data/professional/lexemes/foundation-module01.json",
+    "sources_file": "data/professional/sources.json",
+    "provenance_file": "data/professional/provenance/foundation-module01-attendance-language-2026-10-17.json",
+    "review_directory": "docs/content-review/foundation-module01-attendance-language-2026-10-17",
+    "production_runtime_changed": false,
+    "module_acceptance": false
+  },
+  "candidate_audit": {
+    "summary": {
+      "courses": 20,
+      "modules": 200,
+      "themes": 21,
+      "unique_lexemes": 4939,
+      "vocabulary_memberships": 10000,
+      "vocabulary_memberships_target": 10000,
+      "vocabulary_memberships_remaining": 0,
+      "expressions": 1620,
+      "expression_memberships": 2000,
+      "expression_memberships_target": 2000,
+      "expression_memberships_remaining": 0,
+      "ready_modules": 0,
+      "reviewed_lexemes": 122,
+      "morphology_authored": 4045,
+      "morphology_reviewed": 89,
+      "integrated_word_images": 8,
+      "integrated_word_audio": 12,
+      "release_ready": false
+    },
+    "errors": 0,
+    "warnings": 29448
+  },
+  "baseline_bound": true,
+  "production_mutated": true,
+  "integrated_on": "2026-10-17",
+  "lineage": {
+    "validation": {
+      "path": "build/professional-english/continuation-validation-r31.json",
+      "raw_sha256": "6423f1c2b456262aab81b4977b0a2e1cef7848f62226b9d56b747d514b21be8a",
+      "registry_sha256": "14e65b3155e22372c6756e2b994bc443348f9c7bb6a2a9b906344a09928273df"
+    },
+    "binding": {
+      "path": "docs/content-review/foundation-module01-attendance-language-2026-10-17/binding.json",
+      "raw_sha256": "92c1567cc080001f6f549342fdca6a49d43ec4bfd6657b6d101d2f2ace0511bd"
+    },
+    "registry_before_sha256": "14e65b3155e22372c6756e2b994bc443348f9c7bb6a2a9b906344a09928273df",
+    "registry_after_sha256": "8574160412f2cdbb0e3891421f995ded387f108fd2727d66eb13fd83d2959a67"
+  },
+  "retained_files": [
+    {
+      "path": "docs/content-review/foundation-module01-attendance-language-2026-10-17/delivery-lib.cjs",
+      "raw_sha256": "f1b0d51212725ee22f4ac8ceaa16c0488262773e3bf986b03695a585fe7ec576"
+    },
+    {
+      "path": "docs/content-review/foundation-module01-attendance-language-2026-10-17/test-transforms.cjs",
+      "raw_sha256": "b39074f78f83c69d433562f95fe7c41e5d1139a1bef66da3d69331faa9c9218b"
+    },
+    {
+      "path": "docs/content-review/foundation-module01-attendance-language-2026-10-17/prepare.cjs",
+      "raw_sha256": "bda7ff59f06a0e47ec0d22e3c5dabbbd95302d2ef80171438aea13d62a5b5422"
+    },
+    {
+      "path": "docs/content-review/foundation-module01-attendance-language-2026-10-17/deliver.cjs",
+      "raw_sha256": "9c2365efc8de342d6bbd1ac0d15be49d4f091827b219aec8deb37b2bfb93cc38"
+    },
+    {
+      "path": "docs/content-review/foundation-module01-attendance-language-2026-10-17/HANDOFF.md",
+      "raw_sha256": "352d4fea670ad06c087e848ac5087a3752f7131fe5a32f7c866036a77a55acc2"
+    },
+    {
+      "path": "docs/content-review/foundation-module01-attendance-language-2026-10-17/accepted-language.json",
+      "raw_sha256": "a9bf1381c51d01784bff7f6fdd62e7cc050be038d3143f43ada8ed38f163dace"
+    },
+    {
+      "path": "docs/content-review/foundation-module01-attendance-language-2026-10-17/professional-content.test.cjs.before",
+      "raw_sha256": "6cc20ad953645ecf4961dfff2fd22f9cdd2ed5c4d6e3c9d100e938902fd3e9f0"
+    },
+    {
+      "path": "docs/content-review/foundation-module01-attendance-language-2026-10-17/professional-content.test.cjs.after",
+      "raw_sha256": "471f1eee4c01ffd0a0f9a43db0692311774afd5996ba29f5865d4674ec38ab19"
+    },
+    {
+      "path": "docs/content-review/foundation-module01-attendance-language-2026-10-17/professional-retail-morphology.test.cjs.before",
+      "raw_sha256": "5344e7ab7c62e62640f3c9047f602f0434be6d584430c08e65ae50dbeb9c210c"
+    },
+    {
+      "path": "docs/content-review/foundation-module01-attendance-language-2026-10-17/professional-retail-morphology.test.cjs.after",
+      "raw_sha256": "47474805af1db61c9a2bc944395f5790a5853c73420b02f29563559b2b1a4459"
+    },
+    {
+      "path": "docs/content-review/foundation-module01-attendance-language-2026-10-17/test-patches.json",
+      "raw_sha256": "3a22bc5357b48c352c5e4fcb9ea8d678416cdc530d99e88d0f07c639fd8a1a31"
+    },
+    {
+      "path": "docs/content-review/foundation-module01-attendance-language-2026-10-17/scratch-validation.json",
+      "raw_sha256": "adb1bd4c1f21250f67eff8f61118d7df9c79abffd979730257b135ffc691ebb5"
+    },
+    {
+      "path": "docs/content-review/foundation-module01-attendance-language-2026-10-17/binding.json",
+      "raw_sha256": "92c1567cc080001f6f549342fdca6a49d43ec4bfd6657b6d101d2f2ace0511bd"
+    },
+    {
+      "path": "docs/content-review/foundation-module01-attendance-language-2026-10-17/preparation-receipt.json",
+      "raw_sha256": "f7bd62c1af44632798823362f87fe2c07d4f32d680fb88428a2dff7670a6ff15"
+    },
+    {
+      "path": "docs/content-review/foundation-module01-attendance-language-2026-10-17/technical-review.json",
+      "raw_sha256": "a501cce44f94858e1a4e51c0459e8d74ab8f429c6a88c2200af86c191ec87fc7"
+    },
+    {
+      "path": "docs/content-review/foundation-module01-attendance-language-2026-10-17/independent-language-review.json",
+      "raw_sha256": "979297a9ea44542fff7ec7082346edae11fa66587787190f2a81730bc77a35b4"
+    },
+    {
+      "path": "docs/content-review/foundation-module01-attendance-language-2026-10-17/research.json",
+      "raw_sha256": "ce942440d12226494de805eedfefb9e09b4c23e517b5f643c2e2ad0421049a4b"
+    }
+  ],
+  "integration_guards": {
+    "transaction_path": "build/professional-english/transactions/foundation01-attendance-language-r01",
+    "helper": {
+      "path": "build/professional-english/foundation-module01-language-review/fifth10/delivery-r01/guarded-transaction.cjs",
+      "raw_sha256": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6",
+      "validation_path": "build/professional-english/retail-module03-morphology-review/fifth10/serializer-review-r01/validation-attempt-XE9O6l/receipt.json",
+      "validation_raw_sha256": "abd19b9952fe3085ef8cab5b87e430ef442780ed05f3a9a2105f909f968a9bae"
+    },
+    "technical_review": {
+      "path": "docs/content-review/foundation-module01-attendance-language-2026-10-17/technical-review.json",
+      "raw_sha256": "a501cce44f94858e1a4e51c0459e8d74ab8f429c6a88c2200af86c191ec87fc7"
+    },
+    "completion_requires_committed_journal": true
+  }
+}

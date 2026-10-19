@@ -1,0 +1,64 @@
+{
+  "schema": 1,
+  "status": "independent_actual_export_review_no_blocker",
+  "reviewer": "Codex disposal_test_review",
+  "fixture_author": "Codex runtime_recovery",
+  "reviewed_at": "2026-10-16T20:51:23.7547145Z",
+  "inspection": {
+    "path": "docs/qa/professional-domain-web-runtime-r01/r04-export-review/inspection-r04.json",
+    "sha256": "90675e73a961fe7c7d3ac648d101f4b2f11bf2f053c1bd113e0094bfe014fb5c"
+  },
+  "hash_checks": 875,
+  "live_root_refs_matched": 43,
+  "third10_live_ref_overlap": [],
+  "project_bindings_matched": 31,
+  "actual_web_outputs_matched": 15,
+  "pck": {
+    "path": "build/professional-english/domain-runtime-web-fixture-r04/attempt-001/web/index.pck",
+    "bytes": 1526148,
+    "sha256": "2ddb1228eaf5126e5983a849edfa2a7be42a2a61f1bdeefe586c15995fc9c01f"
+  },
+  "pck_payloads_verified": 76,
+  "generated_payloads_exact": 5,
+  "required_compiled_scripts_present": 21,
+  "source_closure_scripts": 22,
+  "direct_load_edges_in_root_review": 33,
+  "broader_literal_edges": 36,
+  "additional_literal_edges": [
+    "res://fixture/professional_domain_pack_verifier.gd|res://scripts/professional_domain_release.gd",
+    "res://scripts/professional_domain_catalog.gd|res://scripts/professional_catalog.gd",
+    "res://scripts/professional_domain_owner.gd|res://scripts/professional_domain_release.gd"
+  ],
+  "loose_media": {
+    "resources": 6,
+    "bytes": 879171
+  },
+  "synthetic_ready_modules": 1,
+  "current_production_generated_ready_modules": 0,
+  "immutable_source_vs_current_production": [
+    {
+      "path": "data/professional/lexemes/foundation-module02.json",
+      "prepared_source_sha256": "03953236a30d636a7d6db0f0f921d076910886e1f2f1834730ba1302b5b0ac41",
+      "current_production_sha256": "bec08364a841f92351d04cd4c891bbd9d7de6dbf00f9949cc58f18e2551962ad"
+    },
+    {
+      "path": "data/professional/sources.json",
+      "prepared_source_sha256": "148f9191f91891a564bb79dbce428c60b3b4b1a07e1374135cc0d6a0619165b9",
+      "current_production_sha256": "268caddf5f9acb1d806729200b1edf6ffe4d4dec7a737d1f57d176238500ae58"
+    }
+  ],
+  "reviewer_replayed_fixture_stages": false,
+  "reviewer_changed_production": false,
+  "browser_accepted": false,
+  "limitations": [
+    "The retained native proof loaded the exported pin; this independent review hashes and inspects its bound artifacts without rerunning Godot.",
+    "Compiled bytecode is present for the complete static literal dependency closure; this is not execution coverage or decompilation of every compiled script.",
+    "The one-ready-module phrase fixture is synthetic and uses its immutable prepared source. Later third10 production data changes do not rewrite that snapshot and do not overlap the 43 live root refs.",
+    "No browser, full GameUI, six-mode, settlement, audibility, device performance, heap reclamation, human, specialist, curriculum or release approval is granted."
+  ],
+  "retained_inspector_failures": [
+    "inspection-failure-r01.json",
+    "inspection-failure-r02.json",
+    "inspection-failure-r03.json"
+  ]
+}

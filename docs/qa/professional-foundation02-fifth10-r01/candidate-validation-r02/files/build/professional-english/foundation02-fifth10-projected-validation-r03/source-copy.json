@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "status": "unexecuted_exact_reviewed_runner_copy",
+  "source": {
+    "path": "build/professional-english/foundation02-fifth10-projected-validation-r02/run.cjs",
+    "bytes": 11683,
+    "raw_sha256": "7961b9c2e01a867d64f68ea4dbed83b9e58ff5025b71e8b986b50bc0f7f29f80"
+  },
+  "destination": {
+    "path": "build/professional-english/foundation02-fifth10-projected-validation-r03/run.cjs",
+    "bytes": 11683,
+    "raw_sha256": "7961b9c2e01a867d64f68ea4dbed83b9e58ff5025b71e8b986b50bc0f7f29f80"
+  },
+  "original_source_review": "build/professional-english/foundation02-fifth10-projected-validator-independent-review-r02/review.json",
+  "concrete_input_bound": false,
+  "executed": false
+}

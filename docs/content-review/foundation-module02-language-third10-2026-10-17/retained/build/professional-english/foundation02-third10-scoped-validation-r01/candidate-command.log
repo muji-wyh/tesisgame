@@ -1,0 +1,46 @@
+{
+  "ok": true,
+  "mode": "candidate",
+  "commands": [
+    {
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.exe",
+        "tools/run-godot.cjs",
+        "--headless",
+        "--path",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-third10-scoped-validation-r01\\candidate\\project",
+        "--check-only",
+        "--script",
+        "res://tests/godot/professional_retail_morphology_tests.gd"
+      ],
+      "started_at": "2026-10-16T20:11:02.638Z",
+      "finished_at": "2026-10-16T20:11:03.631Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log": "command-1.log",
+      "log_sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d"
+    },
+    {
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.exe",
+        "tools/run-godot.cjs",
+        "--headless",
+        "--path",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-third10-scoped-validation-r01\\candidate\\project",
+        "--script",
+        "res://tests/godot/professional_retail_morphology_tests.gd"
+      ],
+      "started_at": "2026-10-16T20:11:03.632Z",
+      "finished_at": "2026-10-16T20:11:13.686Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log": "command-2.log",
+      "log_sha256": "e3d9702396ad1581242c30762bf38a29e2fdba813db35be19060646bb32bf028"
+    }
+  ],
+  "error": null,
+  "receipt_sha256": "fcba82f121c313f79e50f8a11c6c047ea27d878e6025d5c631a35643fdcb6abc"
+}
+

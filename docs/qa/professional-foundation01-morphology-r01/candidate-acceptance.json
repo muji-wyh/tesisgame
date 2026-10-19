@@ -1,0 +1,91 @@
+{
+  "schema": 1,
+  "created_at": "2026-10-17T03:07:02.458Z",
+  "scope": "Fifty Foundation01 morphology decisions and current composition, reward, speech-routing and progress behavior. Full curriculum and release remain incomplete.",
+  "candidate_validation": {
+    "path": "build/professional-english/foundation01-morphology-work-r01/validation-r02/receipt.json",
+    "bytes": 17028,
+    "sha256": "82330a32ffffb3b34723d68087179741f8d5dc546596ec6ad7ebcd78829ad419"
+  },
+  "test_correction": {
+    "path": "build/professional-english/foundation01-morphology-work-r01/test-correction-r01/receipt.json",
+    "bytes": 2474,
+    "sha256": "224985b6cf88dd72ee94725e4bec1d8bc900280a3857a1b84d77b59df8e1cb2a"
+  },
+  "failed_validation": {
+    "path": "build/professional-english/foundation01-morphology-work-r01/validation-r01/receipt.json",
+    "bytes": 10001,
+    "sha256": "8ddee9d574b26f9550d23c220717ee634429cfd5bfc09fc961f9e502e5bee0d3"
+  },
+  "compiler": {
+    "path": "build/professional-english/foundation01-morphology-work-r01/compile-report.json",
+    "bytes": 1695,
+    "sha256": "06f615669a6496b8ebf495b4926ac66847114aa008f0e93a37468b824f39544b"
+  },
+  "source_capture": {
+    "path": "build/professional-english/foundation01-morphology-work-r01/compile-source-capture.json",
+    "bytes": 157470,
+    "sha256": "f981f80d1fe847e57b6ace733de9a86c609e1c823f45447b2940ba280a0cffe5"
+  },
+  "baseline": {
+    "path": "build/professional-english/foundation01-morphology-work-r01/baseline-receipt.json",
+    "bytes": 1925,
+    "sha256": "b5655469e3b0d78e36712f627355a94fe27484f13c011c3536d1f48135c52f82"
+  },
+  "overlay": {
+    "path": "build/professional-english/foundation01-morphology-work-r01/candidate-overlay.json",
+    "bytes": 6509,
+    "sha256": "c656aeeb6ec1d93c19820ccc97217e9eae6d6bf0d9d8bf0dbff47ba1dbcb90bc"
+  },
+  "source_reviews": [
+    {
+      "path": "build/professional-english/foundation01-morphology-integration-proposal-r01/inventory.json",
+      "bytes": 2218,
+      "sha256": "4ffccf837bfa4c00e2fbb8b4a2a9cd6e4f8518f77e6da9455e689373b6246bcc"
+    },
+    {
+      "path": "build/professional-english/foundation01-morphology-integration-independent-review-r01/inventory.json",
+      "bytes": 1477,
+      "sha256": "696714a59dc8d4e529ca59953f87aea9b89d8713305f1ec7c1aa6b394a2ec7a5"
+    },
+    {
+      "path": "build/professional-english/foundation01-morphology-current-tests-proposal-r02/inventory.json",
+      "bytes": 2796,
+      "sha256": "f5a0ee897dc42ca182077838100e730ae174f7f63dccfd606c39a655d0ea7862"
+    },
+    {
+      "path": "build/professional-english/foundation01-morphology-current-tests-independent-review-r02/inventory.json",
+      "bytes": 1531,
+      "sha256": "3b35f48622d70db904ad717ff7bbfe6d69b631293130512ff3faba9f1d273622"
+    }
+  ],
+  "protected_paths": [
+    "scripts/professional_play.gd",
+    "scripts/game_ui.gd",
+    "scripts/jelly_match.gd",
+    "assets/audio/jelly-match/collect-do.wav",
+    "assets/audio/jelly-match/collect-re.wav",
+    "assets/audio/jelly-match/collect-mi.wav",
+    "assets/audio/jelly-match/collect-fa.wav",
+    "assets/audio/jelly-match/collect-sol.wav",
+    "assets/audio/jelly-match/collect-la.wav",
+    "assets/audio/jelly-match/collect-ti.wav",
+    "professional-media/3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3.wav",
+    "professional-media/39df6ba3406a891283f99379ca8526d93fc8f3279b571134c0213dd824282224.wav",
+    "professional-media/685b544dbb353f3a1f3fb999fbe3f541cb94874d0e4543ad0cba774c39fd4bc3.wav",
+    "professional-media/0f883c09be9a86be9f30e444953d001d3a385ba71034e60ceb4181fc0b9aa763.wav",
+    "professional-media/acd48c920c631906e6ff0775cf3f373c247687fcb128b41e3ce0f3bdf668ba45.wav",
+    "professional-media/01b2666324e5e373b75799535d8a78494a6afe8225c4b82147975d55405c96e5.wav",
+    "professional-media/aac69f3394f2acd4486e68e32213e328849c204f0ddced680f56011c65ce4e12.wav",
+    "professional-media/150246ccfdd916301a660583fc5e552a7fb585fb4ccb2317b9ed4a40ebd1da56.wav",
+    "professional-media/778fcf9304a06cd7ed04566cdc1f9bf28997bfbdbcd6e757f20ff9c3cb6282e3.wav",
+    "professional-media/8d4713a7e8576fa065ad1c9e1b18edcfc10b192254182fad626392a2de71893f.wav",
+    "professional-media/cad8619dad6e225ce73c835ce5e90f7252c42af3c546aaa393adcd8db3e0f3a2.wav",
+    "professional-media/6c7d2ac0e733214faf920a4a0781d0458b6b891a92aa07b7ab433b501d19de72.wav"
+  ],
+  "ready_modules": 0,
+  "production_data_delta": "Only Foundation01 morphology and supporting provenance/source consultations. Language, media, requirements and non-Foundation01 entries are unchanged.",
+  "runtime_evidence_uses_dummy_audio": true,
+  "listening_acceptance": false,
+  "physical_device_acceptance": false
+}

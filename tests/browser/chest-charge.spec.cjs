@@ -2,7 +2,8 @@ const { test, expect } = require('@playwright/test');
 const { watchAudioRequests, observeOutputAudio, expectOutputEnergy } = require('./bundled-audio.cjs');
 const {
   openGame, metrics, tap, rendered, discoverMatchCards, boardPoint, resultPoint,
-  openRewards, visibleColorCount, observeAudio, chooseTheme, acceptCelebration
+  openRewards, visibleColorCount, observeAudio, acceptCelebration,
+  openModeMenu, activateLibraryControl
 } = require('./game-ui.cjs');
 
 // Keep mobile CSS geometry while isolating cadence from software-renderer fill
@@ -210,8 +211,7 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
   await observeOutputAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 2, trackSourceLifecycle: true });
   await observeChest(page);
   const errors = await openGame(page, { reducedMotion: 'no-preference' });
-  // Summer has one of the widest world badges on the narrow phone stage.
-  await chooseTheme(page, 1);
+  expect((await metrics(page)).library.learning.selection.track).toBe('growth');
   const baseline = await pieces(page);
   await winMatch(page);
   const progress = page.locator('#chest-progress');
@@ -505,7 +505,7 @@ test('an earned chest cancels on release, recharges visibly and saves one piece'
 test('reduced motion keeps hold progress and releases without claiming early', async ({ page }, testInfo) => {
   await observeChest(page);
   const errors = await openGame(page, { reducedMotion: 'reduce' });
-  await chooseTheme(page, 4); // Ocean exercises the larger crystal chest.
+  expect((await metrics(page)).library.learning.selection.track).toBe('growth');
   await winMatch(page);
   const baseline = await pieces(page), progress = page.locator('#chest-progress');
   await pressChest(page, 250);
@@ -546,7 +546,7 @@ test('release before the lid opens cancels but release at the opening flash comp
   await observeAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 2, trackSourceLifecycle: true });
   await observeChest(page);
   const errors = await openGame(page, { reducedMotion: 'no-preference' });
-  await chooseTheme(page, 1);
+  expect((await metrics(page)).library.learning.selection.track).toBe('growth');
   await winMatch(page);
   const baseline = await pieces(page), unopenedSave = await rewardSave(page);
   const status = page.locator('#game-status'), progress = page.locator('#chest-progress');
@@ -636,7 +636,7 @@ for (const interruption of ['background', 'focus loss']) {
     await observeAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 2, trackSourceLifecycle: true });
     await observeChest(page);
     const errors = await openGame(page, { reducedMotion: 'no-preference' });
-    await chooseTheme(page, 1);
+    expect((await metrics(page)).library.learning.selection.track).toBe('growth');
     await winMatch(page);
     const baseline = await pieces(page), unopenedSave = await rewardSave(page);
     const status = page.locator('#game-status'), progress = page.locator('#chest-progress');
@@ -713,7 +713,7 @@ test('background after the opening flash silently saves once without replay on r
   await observeAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 2, trackSourceLifecycle: true });
   await observeChest(page);
   const errors = await openGame(page, { reducedMotion: 'no-preference' });
-  await chooseTheme(page, 1);
+  expect((await metrics(page)).library.learning.selection.track).toBe('growth');
   await winMatch(page);
   const baseline = await pieces(page), unopenedSave = await rewardSave(page);
   const status = page.locator('#game-status'), progress = page.locator('#chest-progress');
@@ -777,9 +777,16 @@ test('bundled Kenney chest samples stay audible offline without delaying rewards
   const errors = await openGame(page, { reducedMotion: 'no-preference' });
   await context.setOffline(true);
   try {
-    // Visit an unplayed world only after disconnecting. All shared Kenney
-    // recordings must already be in the pack, including the material bed.
-    await chooseTheme(page, 5);
+    // Browse an unvisited career after disconnecting, then resume the frozen
+    // Growth round. Shared chest recordings must already be in the pack.
+    await openModeMenu(page);
+    await activateLibraryControl(page, 'ChangeLearningPath');
+    await activateLibraryControl(page, 'ProfessionalPath');
+    await activateLibraryControl(page, 'Career_retail');
+    await expect.poll(async () => (await metrics(page)).library.learning.course_id).toBe('retail');
+    await activateLibraryControl(page, 'ContinueCurrentRound');
+    await expect.poll(async () => (await metrics(page)).library.visible).toBe(false);
+    expect((await metrics(page)).library.learning.selection.track).toBe('growth');
     await winMatch(page);
     const baseline = await pieces(page);
     const available = await page.evaluate(() => window.audioObservation.available);

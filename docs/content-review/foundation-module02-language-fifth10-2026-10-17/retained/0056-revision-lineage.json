@@ -1,0 +1,104 @@
+{
+  "schema": 1,
+  "status": "fresh_unexecuted_source_revision_actual_binding_unbound",
+  "preparation_author": "/root/recover_delivery",
+  "inherited_preparation_author": "/root/runtime_recovery",
+  "required_dispatcher": "/root",
+  "prior_inventory": {
+    "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r02/source-inventory.json",
+    "bytes": 2485,
+    "raw_sha256": "21df8c149742cb4fc63acecb033bfb7d499e10310b5467c8ff81bd715db73598"
+  },
+  "independent_prior_review": {
+    "path": "build/professional-english/foundation02-fifth10-preparation-independent-review-r02/review.json",
+    "bytes": 8929,
+    "raw_sha256": "b5f9389ea3344d8ce84dd39af20f7b6f0a92a04b00453fca1c8c1c5c25d444c0"
+  },
+  "independent_prior_review_inventory": {
+    "path": "build/professional-english/foundation02-fifth10-preparation-independent-review-r02/inventory.json",
+    "bytes": 1368,
+    "raw_sha256": "9ff8e10e22f6b91063bd8966b9381fc4002f84ccdf2c224a32c70638b9ef752c"
+  },
+  "prior_sources_rehashed_unchanged": true,
+  "unchanged_r02_members": [
+    {
+      "path": "accepted-contract.json",
+      "bytes": 414984,
+      "raw_sha256": "e930b6e65c44daa4ab27b44523241edc41e10942d92b25f2254f47073acd2235"
+    },
+    {
+      "path": "context-contract.json",
+      "bytes": 1751439,
+      "raw_sha256": "5cf815fb77ebdc45325063e40eb2b1940718e721ed18f46f347277689dd2993a"
+    },
+    {
+      "path": "donor-row-contract.json",
+      "bytes": 224067,
+      "raw_sha256": "119814498724b14dd5d272a005ecdcc19f646651d321dd78dcafef0fe1c3d638"
+    },
+    {
+      "path": "projection.cjs",
+      "bytes": 15663,
+      "raw_sha256": "27794f6f3cde0a2e1e5185813e496502c1385a00ddc760f135a2c339810d6302"
+    },
+    {
+      "path": "test-transforms.cjs",
+      "bytes": 27566,
+      "raw_sha256": "e2812802f2146bfe63fcb346db6ee49c2dc1523176d1d28ce03255d34deafd37"
+    },
+    {
+      "path": "prepare.cjs",
+      "bytes": 7472,
+      "raw_sha256": "0d736bb531a7ab9dbe767e78015881a5d994f057958bd1b53ad17a28bc97fcf1"
+    },
+    {
+      "path": "CALL-GRAPH.md",
+      "bytes": 3633,
+      "raw_sha256": "1bc79f6ba80f61799e73f1683f97e95e7a4f00dac31652f85f56b0485e40be0f"
+    },
+    {
+      "path": "author-observations.json",
+      "bytes": 43657,
+      "raw_sha256": "c6afb0acba234b42762447169f94547cd21aebba44467b9a5dbc0cb133586012"
+    }
+  ],
+  "modified_r02_members": [
+    "binding.cjs",
+    "BINDING-CONTRACT.md",
+    "README.md",
+    "actual-baseline-binding.template.json",
+    "root-input.template.json"
+  ],
+  "resolved_findings": [
+    {
+      "id": "F01",
+      "change": "Explicit actual fourth10 nested receipt and bag top-level receipt branches; bag persisted source/input hashes bind its actual receipt schema rather than invented source_before/after or committed_receipt fields."
+    },
+    {
+      "id": "F02",
+      "change": "Canonical nonempty independent reviewer identity and exact role/pin linkage, rejecting current author, inherited author and dispatcher; unexecuted root-owned negative specifications supplied."
+    },
+    {
+      "id": "F03",
+      "change": "Mandatory commit state/prepared/plan linkage, exact complete prepared/state/receipt manifest consistency, explicit exact-content journal-copy mapping, latest-state checks and complete installed bag afterimage equality."
+    }
+  ],
+  "static_source_observations": {
+    "fourth10_actual_prepared_plan_encoding_hash": "e43a7c5c40facfefc4874669d85aa404cc0a47ea8979645306768dfff491eab1",
+    "method": "Read-only JSON reserialization/hash comparison against genuine fourth10 prepared journal; no proposal import or execution.",
+    "accepted_projections_preserved": 8,
+    "consulted_sources_preserved": 16,
+    "complete_holds_preserved": 6,
+    "full_donor_rows_preserved": 50
+  },
+  "authoring_note": "One apply_patch request was rejected before changes because it attempted delete/add operations for the same documentation path. The document was subsequently written inside this fresh author directory. This was not syntax, proposal, preparation or project execution.",
+  "actual_baseline_binding": null,
+  "actual_bag_success_selected": false,
+  "source_modules_imported": false,
+  "syntax_checks_run": false,
+  "preparation_dispatched": false,
+  "guard_cases_executed": false,
+  "project_tests_run": false,
+  "native_browser_build_probe_run": false,
+  "production_or_shared_tests_written": false
+}

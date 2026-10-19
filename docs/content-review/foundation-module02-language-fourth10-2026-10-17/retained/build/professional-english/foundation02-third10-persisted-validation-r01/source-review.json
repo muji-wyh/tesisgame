@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "status": "root_authored_and_statically_reviewed_unexecuted",
+  "source": {
+    "path": "build/professional-english/foundation02-third10-persisted-validation-r01/invoke.cjs",
+    "sha256": "3582fb89265590dd9d0c323b477b6956ce82f4739fcbef4e526ac9db079d0314"
+  },
+  "checks": [
+    "Exact source hash and actual committed receipt hash required before attempt creation",
+    "Original680 bindings use five prepared replacement hashes; five candidate-only paths and new provenance separately bound",
+    "Four sequential scoped commands preserve logs and check inputs around each command",
+    "No automatic retry, broad suite replay, production mutation, deployment or acceptance promotion"
+  ],
+  "scope": "Root review of its own validation orchestration, not independent authored approval."
+}

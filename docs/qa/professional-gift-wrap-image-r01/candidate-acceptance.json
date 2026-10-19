@@ -1,0 +1,86 @@
+{
+  "schema": 1,
+  "created_at": "2026-10-17T04:05:36.382Z",
+  "scope": "Exact gift-wrap contextual image and current route verification. Full curriculum and release remain incomplete.",
+  "native_validation": {
+    "path": "build/professional-english/gift-wrap-install-work-r01/native-r02/receipt.json",
+    "bytes": 20624,
+    "sha256": "fb6472b44c5c652963427c59a4c2a37d4990ebfe38a8f1f0429287ef0e914537"
+  },
+  "node_validation": {
+    "path": "build/professional-english/gift-wrap-install-work-r01/validation-r04/receipt.json",
+    "bytes": 6398,
+    "sha256": "c085d03c37f91c615d421a77d2c24a20a21b3aea5373d3c5fc184a162b95441c"
+  },
+  "evidence_binding": {
+    "path": "build/professional-english/gift-wrap-install-work-r01/installation-evidence-binding.json",
+    "bytes": 39481,
+    "sha256": "e07559254b352bd0d1a8355adb41d4bf25b70c874f5fa58679342cf38a1e5fb0"
+  },
+  "compiler": {
+    "path": "build/professional-english/gift-wrap-install-work-r01/compile-report.json",
+    "bytes": 1696,
+    "sha256": "f4c91f75142b1f748e2e7d4e997138119255ab6ebf6b94bec7082c49fbe73fae"
+  },
+  "source_capture": {
+    "path": "build/professional-english/gift-wrap-install-work-r01/compile-source-capture.json",
+    "bytes": 157910,
+    "sha256": "6ee55e7a30d5e1f6ba02670f3e3ce1a0aa02d5f52a63db4bb0523629e486d9a5"
+  },
+  "baseline": {
+    "path": "build/professional-english/gift-wrap-install-work-r01/baseline-receipt.json",
+    "bytes": 691,
+    "sha256": "57760e26e1b67b8847f69ce64664aeee6c0d66c30967284232dc9ecb509feac2"
+  },
+  "image_overlay": {
+    "path": "build/professional-english/gift-wrap-install-work-r01/image-overlay.json",
+    "bytes": 5411,
+    "sha256": "0dcf5948f83169c2147c77a0e549312c857ca4867a5409b37e1a4ba847e719af"
+  },
+  "provenance_correction": {
+    "path": "build/professional-english/gift-wrap-install-work-r01/provenance-correction-r01/receipt.json",
+    "bytes": 866,
+    "sha256": "f762a5f1ebc3b525547b8a834880da297de02b1ba03eeb893d4b7bbfc2cc0f99"
+  },
+  "test_overlay": {
+    "path": "build/professional-english/gift-wrap-install-work-r01/test-overlay.json",
+    "bytes": 1826,
+    "sha256": "2cae9e67d6228906e07c222d79b7da05daa8cbed4642207cf78235df4bd458f5"
+  },
+  "selector_correction": {
+    "path": "build/professional-english/gift-wrap-install-work-r01/selector-correction-r01/receipt.json",
+    "bytes": 1104,
+    "sha256": "01e86c94d7ee5765b822fb9b6d32bf3837e3751cd3f3871f224225a1ff4b2475"
+  },
+  "protected_paths": [
+    "scripts/professional_play.gd",
+    "scripts/game_ui.gd",
+    "scripts/jelly_match.gd",
+    "assets/audio/jelly-match/collect-do.wav",
+    "assets/audio/jelly-match/collect-re.wav",
+    "assets/audio/jelly-match/collect-mi.wav",
+    "assets/audio/jelly-match/collect-fa.wav",
+    "assets/audio/jelly-match/collect-sol.wav",
+    "assets/audio/jelly-match/collect-la.wav",
+    "assets/audio/jelly-match/collect-ti.wav",
+    "professional-media/3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3.wav",
+    "professional-media/39df6ba3406a891283f99379ca8526d93fc8f3279b571134c0213dd824282224.wav",
+    "professional-media/685b544dbb353f3a1f3fb999fbe3f541cb94874d0e4543ad0cba774c39fd4bc3.wav",
+    "professional-media/0f883c09be9a86be9f30e444953d001d3a385ba71034e60ceb4181fc0b9aa763.wav",
+    "professional-media/acd48c920c631906e6ff0775cf3f373c247687fcb128b41e3ce0f3bdf668ba45.wav",
+    "professional-media/01b2666324e5e373b75799535d8a78494a6afe8225c4b82147975d55405c96e5.wav",
+    "professional-media/aac69f3394f2acd4486e68e32213e328849c204f0ddced680f56011c65ce4e12.wav",
+    "professional-media/150246ccfdd916301a660583fc5e552a7fb585fb4ccb2317b9ed4a40ebd1da56.wav",
+    "professional-media/778fcf9304a06cd7ed04566cdc1f9bf28997bfbdbcd6e757f20ff9c3cb6282e3.wav",
+    "professional-media/8d4713a7e8576fa065ad1c9e1b18edcfc10b192254182fad626392a2de71893f.wav",
+    "professional-media/cad8619dad6e225ce73c835ce5e90f7252c42af3c546aaa393adcd8db3e0f3a2.wav",
+    "professional-media/6c7d2ac0e733214faf920a4a0781d0458b6b891a92aa07b7ab433b501d19de72.wav"
+  ],
+  "ready_modules": 0,
+  "production_delta": "Gift media.image, exact review note and Word Jelly practice mode; PNG/provenance; four current test files and generated release bindings. All other entry fields and approved audio unchanged.",
+  "picture_scoring": false,
+  "runtime_evidence_uses_dummy_audio": true,
+  "human_picture_acceptance": false,
+  "listening_acceptance": false,
+  "physical_device_acceptance": false
+}

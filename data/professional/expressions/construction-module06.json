@@ -1,0 +1,1590 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.construction_trades.module06.01",
+      "text": "The elevation and section use the same symbol, but its meaning is missing from the legend.",
+      "meaning": "Report inconsistent or incomplete drawing information.",
+      "context": "Requesting clarification of two drawing views.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "elevation",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "section",
+          "start": 18,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "use",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "same",
+          "start": 34,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "symbol",
+          "start": 39,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 45,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "but",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 10,
+          "text": "its",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 11,
+          "text": "meaning",
+          "start": 55,
+          "end": 62
+        },
+        {
+          "index": 12,
+          "text": "is",
+          "start": 63,
+          "end": 65
+        },
+        {
+          "index": 13,
+          "text": "missing",
+          "start": 66,
+          "end": 73
+        },
+        {
+          "index": 14,
+          "text": "from",
+          "start": 74,
+          "end": 78
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 79,
+          "end": 82
+        },
+        {
+          "index": 16,
+          "text": "legend",
+          "start": 83,
+          "end": 89
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 89,
+          "end": 90
+        }
+      ],
+      "focus_lexeme_ids": [
+        "elevation.drawing-view.n",
+        "section.cut-through-drawing.n",
+        "symbol.graphic-mark-representing-feature-or-information.n",
+        "legend.key-explaining-drawing-symbols-or-conventions.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-planning",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module06.02",
+      "text": "The dimension record lists length, width, height, and depth with a separate reference for each.",
+      "meaning": "Distinguish measurements and their reference directions.",
+      "context": "Checking a fictional dimensional record.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "dimension",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "record",
+          "start": 14,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "lists",
+          "start": 21,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "length",
+          "start": 27,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 33,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "width",
+          "start": 35,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 40,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": "height",
+          "start": 42,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 48,
+          "end": 49
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 11,
+          "text": "depth",
+          "start": 54,
+          "end": 59
+        },
+        {
+          "index": 12,
+          "text": "with",
+          "start": 60,
+          "end": 64
+        },
+        {
+          "index": 13,
+          "text": "a",
+          "start": 65,
+          "end": 66
+        },
+        {
+          "index": 14,
+          "text": "separate",
+          "start": 67,
+          "end": 75
+        },
+        {
+          "index": 15,
+          "text": "reference",
+          "start": 76,
+          "end": 85
+        },
+        {
+          "index": 16,
+          "text": "for",
+          "start": 86,
+          "end": 89
+        },
+        {
+          "index": 17,
+          "text": "each",
+          "start": 90,
+          "end": 94
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 94,
+          "end": 95
+        }
+      ],
+      "focus_lexeme_ids": [
+        "dimension.physical-measurement.n",
+        "length.extent-from-one-end-to-another.n",
+        "width.extent-across-object-or-space.n",
+        "height.vertical-extent-or-distance-above-reference.n",
+        "depth.distance-below-or-inward-from-reference-surface.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-planning",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module06.03",
+      "text": "This note gives the diameter of the circular opening, while the other note gives its radius.",
+      "meaning": "Explain the difference between two circular measurements.",
+      "context": "Comparing drawing labels without calculating a design value.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "This",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "note",
+          "start": 5,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "gives",
+          "start": 10,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "diameter",
+          "start": 20,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "of",
+          "start": 29,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "circular",
+          "start": 36,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "opening",
+          "start": 45,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 52,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "while",
+          "start": 54,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 12,
+          "text": "other",
+          "start": 64,
+          "end": 69
+        },
+        {
+          "index": 13,
+          "text": "note",
+          "start": 70,
+          "end": 74
+        },
+        {
+          "index": 14,
+          "text": "gives",
+          "start": 75,
+          "end": 80
+        },
+        {
+          "index": 15,
+          "text": "its",
+          "start": 81,
+          "end": 84
+        },
+        {
+          "index": 16,
+          "text": "radius",
+          "start": 85,
+          "end": 91
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 91,
+          "end": 92
+        }
+      ],
+      "focus_lexeme_ids": [
+        "diameter.distance-across-circle-through-center.n",
+        "radius.distance-from-circle-center-to-edge.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-planning",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module06.04",
+      "text": "The drawing states the angle and slope, but the datum still needs confirmation.",
+      "meaning": "Identify provided geometry and an unresolved measurement reference.",
+      "context": "Reviewing technical information with the design team.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "drawing",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "states",
+          "start": 12,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "angle",
+          "start": 23,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "slope",
+          "start": 33,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 38,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "but",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 10,
+          "text": "datum",
+          "start": 48,
+          "end": 53
+        },
+        {
+          "index": 11,
+          "text": "still",
+          "start": 54,
+          "end": 59
+        },
+        {
+          "index": 12,
+          "text": "needs",
+          "start": 60,
+          "end": 65
+        },
+        {
+          "index": 13,
+          "text": "confirmation",
+          "start": 66,
+          "end": 78
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 78,
+          "end": 79
+        }
+      ],
+      "focus_lexeme_ids": [
+        "angle.amount-of-turn-between-lines-or-surfaces.n",
+        "slope.inclination-relative-to-horizontal.n",
+        "datum.reference-from-which-measurements-are-made.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-planning",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module06.05",
+      "text": "The horizontal reference in the plan must be read together with the vertical reference in the section.",
+      "meaning": "Explain how the stated reference directions relate to different views.",
+      "context": "Reading fictional drawing references without setting out work.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "horizontal",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "reference",
+          "start": 15,
+          "end": 24
+        },
+        {
+          "index": 3,
+          "text": "in",
+          "start": 25,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "plan",
+          "start": 32,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "must",
+          "start": 37,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "be",
+          "start": 42,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "read",
+          "start": 45,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": "together",
+          "start": 50,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "with",
+          "start": 59,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": "vertical",
+          "start": 68,
+          "end": 76
+        },
+        {
+          "index": 13,
+          "text": "reference",
+          "start": 77,
+          "end": 86
+        },
+        {
+          "index": 14,
+          "text": "in",
+          "start": 87,
+          "end": 89
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 90,
+          "end": 93
+        },
+        {
+          "index": 16,
+          "text": "section",
+          "start": 94,
+          "end": 101
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 101,
+          "end": 102
+        }
+      ],
+      "focus_lexeme_ids": [
+        "horizontal.parallel-to-level-reference-plane.a",
+        "vertical.in-upright-direction-relative-to-level-plane.a"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-planning",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module06.06",
+      "text": "The cover is shown flush with the surrounding surface, with parallel sides and a fixing perpendicular to that surface.",
+      "meaning": "Describe the spatial relationships shown in a detail.",
+      "context": "Discussing a drawing without judging the installed assembly.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "cover",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "is",
+          "start": 10,
+          "end": 12
+        },
+        {
+          "index": 3,
+          "text": "shown",
+          "start": 13,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "flush",
+          "start": 19,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "with",
+          "start": 25,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 7,
+          "text": "surrounding",
+          "start": 34,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "surface",
+          "start": 46,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 53,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "with",
+          "start": 55,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "parallel",
+          "start": 60,
+          "end": 68
+        },
+        {
+          "index": 12,
+          "text": "sides",
+          "start": 69,
+          "end": 74
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 14,
+          "text": "a",
+          "start": 79,
+          "end": 80
+        },
+        {
+          "index": 15,
+          "text": "fixing",
+          "start": 81,
+          "end": 87
+        },
+        {
+          "index": 16,
+          "text": "perpendicular",
+          "start": 88,
+          "end": 101
+        },
+        {
+          "index": 17,
+          "text": "to",
+          "start": 102,
+          "end": 104
+        },
+        {
+          "index": 18,
+          "text": "that",
+          "start": 105,
+          "end": 109
+        },
+        {
+          "index": 19,
+          "text": "surface",
+          "start": 110,
+          "end": 117
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 117,
+          "end": 118
+        }
+      ],
+      "focus_lexeme_ids": [
+        "flush.even-with-adjacent-surface.a",
+        "parallel.running-side-by-side-without-converging.a",
+        "perpendicular.meeting-at-right-angle.a"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-planning",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module06.07",
+      "text": "The alignment observation needs comparison with the stated tolerance.",
+      "meaning": "Refer an observed position to the actual acceptance requirement.",
+      "context": "Discussing a measurement record without inventing a permissible variation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "alignment",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "observation",
+          "start": 14,
+          "end": 25
+        },
+        {
+          "index": 3,
+          "text": "needs",
+          "start": 26,
+          "end": 31
+        },
+        {
+          "index": 4,
+          "text": "comparison",
+          "start": 32,
+          "end": 42
+        },
+        {
+          "index": 5,
+          "text": "with",
+          "start": 43,
+          "end": 47
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 7,
+          "text": "stated",
+          "start": 52,
+          "end": 58
+        },
+        {
+          "index": 8,
+          "text": "tolerance",
+          "start": 59,
+          "end": 68
+        },
+        {
+          "index": 9,
+          "text": ".",
+          "start": 68,
+          "end": 69
+        }
+      ],
+      "focus_lexeme_ids": [
+        "alignment.position-of-parts-relative-to-required-line-or-relationship.n",
+        "tolerance.permitted-variation-from-specified-value.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-planning",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module06.08",
+      "text": "The unit list distinguishes the meter, millimeter, and centimeter as measures of length.",
+      "meaning": "Distinguish named metric length units.",
+      "context": "Reading a clearly labeled measurement record.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "unit",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "list",
+          "start": 9,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "distinguishes",
+          "start": 14,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 28,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "meter",
+          "start": 32,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 37,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "millimeter",
+          "start": 39,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 49,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "centimeter",
+          "start": 55,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": "as",
+          "start": 66,
+          "end": 68
+        },
+        {
+          "index": 12,
+          "text": "measures",
+          "start": 69,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": "of",
+          "start": 78,
+          "end": 80
+        },
+        {
+          "index": 14,
+          "text": "length",
+          "start": 81,
+          "end": 87
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 87,
+          "end": 88
+        }
+      ],
+      "focus_lexeme_ids": [
+        "meter.si-base-unit-of-length.n",
+        "millimeter.one-thousandth-of-meter.n",
+        "centimeter.one-hundredth-of-meter.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-planning",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module06.09",
+      "text": "The specification distinguishes the product's nominal size from its actual size.",
+      "meaning": "Explain why a size label and a measured size may differ.",
+      "context": "Checking product information within the stated specification scope.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "specification",
+          "start": 4,
+          "end": 17
+        },
+        {
+          "index": 2,
+          "text": "distinguishes",
+          "start": 18,
+          "end": 31
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 4,
+          "text": "product's",
+          "start": 36,
+          "end": 45
+        },
+        {
+          "index": 5,
+          "text": "nominal",
+          "start": 46,
+          "end": 53
+        },
+        {
+          "index": 6,
+          "text": "size",
+          "start": 54,
+          "end": 58
+        },
+        {
+          "index": 7,
+          "text": "from",
+          "start": 59,
+          "end": 63
+        },
+        {
+          "index": 8,
+          "text": "its",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 9,
+          "text": "actual",
+          "start": 68,
+          "end": 74
+        },
+        {
+          "index": 10,
+          "text": "size",
+          "start": 75,
+          "end": 79
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 79,
+          "end": 80
+        }
+      ],
+      "focus_lexeme_ids": [
+        "specification.detailed-system-description.n",
+        "nominal-size.size-designation-not-necessarily-actual-measurement.n",
+        "actual-size.measured-dimensions-of-item.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-planning",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.construction_trades.module06.10",
+      "text": "The designer must confirm which wall is load-bearing and which partition is non-load-bearing.",
+      "meaning": "Request the design classification of different building elements.",
+      "context": "A drawing query that gives no permission to alter either element.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "designer",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "must",
+          "start": 13,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "confirm",
+          "start": 18,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "which",
+          "start": 26,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "wall",
+          "start": 32,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "is",
+          "start": 37,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "load-bearing",
+          "start": 40,
+          "end": 52
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "which",
+          "start": 57,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "partition",
+          "start": 63,
+          "end": 72
+        },
+        {
+          "index": 11,
+          "text": "is",
+          "start": 73,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": "non-load-bearing",
+          "start": 76,
+          "end": 92
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 92,
+          "end": 93
+        }
+      ],
+      "focus_lexeme_ids": [
+        "load-bearing.intended-to-carry-specified-structural-loads.a",
+        "non-load-bearing.not-assigned-primary-structural-support-role.a"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-planning",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

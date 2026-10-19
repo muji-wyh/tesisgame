@@ -1,0 +1,1700 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.legal_paralegal.module08.01",
+      "text": "The confidential record contains personal data; please explain how confidentiality and privacy apply in this context.",
+      "meaning": "Ask for the relevant information-handling duties without assuming they are identical.",
+      "context": "Discussing a fictional protected record.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "confidential",
+          "start": 4,
+          "end": 16
+        },
+        {
+          "index": 2,
+          "text": "record",
+          "start": 17,
+          "end": 23
+        },
+        {
+          "index": 3,
+          "text": "contains",
+          "start": 24,
+          "end": 32
+        },
+        {
+          "index": 4,
+          "text": "personal",
+          "start": 33,
+          "end": 41
+        },
+        {
+          "index": 5,
+          "text": "data",
+          "start": 42,
+          "end": 46
+        },
+        {
+          "index": 6,
+          "text": ";",
+          "start": 46,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "please",
+          "start": 48,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": "explain",
+          "start": 55,
+          "end": 62
+        },
+        {
+          "index": 9,
+          "text": "how",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 10,
+          "text": "confidentiality",
+          "start": 67,
+          "end": 82
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 83,
+          "end": 86
+        },
+        {
+          "index": 12,
+          "text": "privacy",
+          "start": 87,
+          "end": 94
+        },
+        {
+          "index": 13,
+          "text": "apply",
+          "start": 95,
+          "end": 100
+        },
+        {
+          "index": 14,
+          "text": "in",
+          "start": 101,
+          "end": 103
+        },
+        {
+          "index": 15,
+          "text": "this",
+          "start": 104,
+          "end": 108
+        },
+        {
+          "index": 16,
+          "text": "context",
+          "start": 109,
+          "end": 116
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 116,
+          "end": 117
+        }
+      ],
+      "focus_lexeme_ids": [
+        "confidential.intended-only-for-authorized-recipients.a",
+        "personal-data.identifiable-person-information.n",
+        "confidentiality.authorized-information-disclosure.n",
+        "privacy.personal-space-and-information-control.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-conflicts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module08.02",
+      "text": "The identity check supports authentication, but access permission must also be established.",
+      "meaning": "Distinguish checking identity from authority to use information.",
+      "context": "Reviewing a fictional access request without granting access.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "identity",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "check",
+          "start": 13,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "supports",
+          "start": 19,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "authentication",
+          "start": 28,
+          "end": 42
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 42,
+          "end": 43
+        },
+        {
+          "index": 6,
+          "text": "but",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "access",
+          "start": 48,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": "permission",
+          "start": 55,
+          "end": 65
+        },
+        {
+          "index": 9,
+          "text": "must",
+          "start": 66,
+          "end": 70
+        },
+        {
+          "index": 10,
+          "text": "also",
+          "start": 71,
+          "end": 75
+        },
+        {
+          "index": 11,
+          "text": "be",
+          "start": 76,
+          "end": 78
+        },
+        {
+          "index": 12,
+          "text": "established",
+          "start": 79,
+          "end": 90
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 90,
+          "end": 91
+        }
+      ],
+      "focus_lexeme_ids": [
+        "identity-check.identity-verification.n",
+        "authentication.identity-verification-process.n",
+        "access-permission.authorization-to-use-specified-resource-or-information.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-conflicts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module08.03",
+      "text": "The conflict check considers an own-interest conflict separately from a client conflict.",
+      "meaning": "Distinguish two potential sources of conflicting duties.",
+      "context": "Reading an SRA-context fictional review record without approving representation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "conflict",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "check",
+          "start": 13,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "considers",
+          "start": 19,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "an",
+          "start": 29,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "own-interest",
+          "start": 32,
+          "end": 44
+        },
+        {
+          "index": 6,
+          "text": "conflict",
+          "start": 45,
+          "end": 53
+        },
+        {
+          "index": 7,
+          "text": "separately",
+          "start": 54,
+          "end": 64
+        },
+        {
+          "index": 8,
+          "text": "from",
+          "start": 65,
+          "end": 69
+        },
+        {
+          "index": 9,
+          "text": "a",
+          "start": 70,
+          "end": 71
+        },
+        {
+          "index": 10,
+          "text": "client",
+          "start": 72,
+          "end": 78
+        },
+        {
+          "index": 11,
+          "text": "conflict",
+          "start": 79,
+          "end": 87
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 87,
+          "end": 88
+        }
+      ],
+      "focus_lexeme_ids": [
+        "conflict-check.review-for-potential-conflicting-interests-or-duties.n",
+        "own-interest-conflict.conflict-between-professional-duty-and-own-interest.n",
+        "client-conflict.conflict-between-duties-owed-to-different-clients.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-conflicts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module08.04",
+      "text": "The England and Wales note uses legal professional privilege; the U.S. note discusses attorney-client privilege under its own rules.",
+      "meaning": "Recognize jurisdiction-specific privilege concepts without treating them as automatic equivalents.",
+      "context": "Comparing fictional regional legal communication notes.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "England",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 12,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "Wales",
+          "start": 16,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "note",
+          "start": 22,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "uses",
+          "start": 27,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "legal",
+          "start": 32,
+          "end": 37
+        },
+        {
+          "index": 7,
+          "text": "professional",
+          "start": 38,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": "privilege",
+          "start": 51,
+          "end": 60
+        },
+        {
+          "index": 9,
+          "text": ";",
+          "start": 60,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": "U",
+          "start": 66,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 67,
+          "end": 68
+        },
+        {
+          "index": 13,
+          "text": "S",
+          "start": 68,
+          "end": 69
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 69,
+          "end": 70
+        },
+        {
+          "index": 15,
+          "text": "note",
+          "start": 71,
+          "end": 75
+        },
+        {
+          "index": 16,
+          "text": "discusses",
+          "start": 76,
+          "end": 85
+        },
+        {
+          "index": 17,
+          "text": "attorney-client",
+          "start": 86,
+          "end": 101
+        },
+        {
+          "index": 18,
+          "text": "privilege",
+          "start": 102,
+          "end": 111
+        },
+        {
+          "index": 19,
+          "text": "under",
+          "start": 112,
+          "end": 117
+        },
+        {
+          "index": 20,
+          "text": "its",
+          "start": 118,
+          "end": 121
+        },
+        {
+          "index": 21,
+          "text": "own",
+          "start": 122,
+          "end": 125
+        },
+        {
+          "index": 22,
+          "text": "rules",
+          "start": 126,
+          "end": 131
+        },
+        {
+          "index": 23,
+          "text": ".",
+          "start": 131,
+          "end": 132
+        }
+      ],
+      "focus_lexeme_ids": [
+        "legal-professional-privilege.protection-for-qualifying-legal-communications-or-material.n",
+        "attorney-client-privilege.us-protection-for-qualifying-lawyer-client-communications.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-conflicts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module08.05",
+      "text": "The lawyer will assess litigation privilege before describing the record as a privileged document.",
+      "meaning": "Leave privilege classification to a qualified review.",
+      "context": "Checking a fictional document label without creating privilege through wording.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "lawyer",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "will",
+          "start": 11,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "assess",
+          "start": 16,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "litigation",
+          "start": 23,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "privilege",
+          "start": 34,
+          "end": 43
+        },
+        {
+          "index": 6,
+          "text": "before",
+          "start": 44,
+          "end": 50
+        },
+        {
+          "index": 7,
+          "text": "describing",
+          "start": 51,
+          "end": 61
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 9,
+          "text": "record",
+          "start": 66,
+          "end": 72
+        },
+        {
+          "index": 10,
+          "text": "as",
+          "start": 73,
+          "end": 75
+        },
+        {
+          "index": 11,
+          "text": "a",
+          "start": 76,
+          "end": 77
+        },
+        {
+          "index": 12,
+          "text": "privileged",
+          "start": 78,
+          "end": 88
+        },
+        {
+          "index": 13,
+          "text": "document",
+          "start": 89,
+          "end": 97
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 97,
+          "end": 98
+        }
+      ],
+      "focus_lexeme_ids": [
+        "litigation-privilege.protection-for-qualifying-material-connected-with-litigation.n",
+        "privileged-document.document-to-which-applicable-legal-privilege-attaches.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-conflicts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module08.06",
+      "text": "The lawyer will review disclosure before any secure transfer; the disclosure log does not itself establish authority.",
+      "meaning": "Separate a record of sharing from authorization to share.",
+      "context": "Discussing a fictional legal disclosure request.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "lawyer",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "will",
+          "start": 11,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "review",
+          "start": 16,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "disclosure",
+          "start": 23,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "before",
+          "start": 34,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "any",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "secure",
+          "start": 45,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "transfer",
+          "start": 52,
+          "end": 60
+        },
+        {
+          "index": 9,
+          "text": ";",
+          "start": 60,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": "disclosure",
+          "start": 66,
+          "end": 76
+        },
+        {
+          "index": 12,
+          "text": "log",
+          "start": 77,
+          "end": 80
+        },
+        {
+          "index": 13,
+          "text": "does",
+          "start": 81,
+          "end": 85
+        },
+        {
+          "index": 14,
+          "text": "not",
+          "start": 86,
+          "end": 89
+        },
+        {
+          "index": 15,
+          "text": "itself",
+          "start": 90,
+          "end": 96
+        },
+        {
+          "index": 16,
+          "text": "establish",
+          "start": 97,
+          "end": 106
+        },
+        {
+          "index": 17,
+          "text": "authority",
+          "start": 107,
+          "end": 116
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 116,
+          "end": 117
+        }
+      ],
+      "focus_lexeme_ids": [
+        "disclosure.provision-or-identification-of-information-in-legal-process.n",
+        "secure-transfer.transfer-using-protections-appropriate-to-information.n",
+        "disclosure-log.record-of-information-disclosures-and-relevant-context.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-conflicts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module08.07",
+      "text": "The deletion request must be considered alongside the legal hold, record retention requirements, and applicable retention period.",
+      "meaning": "Flag potentially interacting information duties for review.",
+      "context": "Handling a fictional request without authorizing deletion or setting a retention period.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "deletion",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "request",
+          "start": 13,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "must",
+          "start": 21,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "be",
+          "start": 26,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "considered",
+          "start": 29,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "alongside",
+          "start": 40,
+          "end": 49
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 8,
+          "text": "legal",
+          "start": 54,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "hold",
+          "start": 60,
+          "end": 64
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 64,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": "record",
+          "start": 66,
+          "end": 72
+        },
+        {
+          "index": 12,
+          "text": "retention",
+          "start": 73,
+          "end": 82
+        },
+        {
+          "index": 13,
+          "text": "requirements",
+          "start": 83,
+          "end": 95
+        },
+        {
+          "index": 14,
+          "text": ",",
+          "start": 95,
+          "end": 96
+        },
+        {
+          "index": 15,
+          "text": "and",
+          "start": 97,
+          "end": 100
+        },
+        {
+          "index": 16,
+          "text": "applicable",
+          "start": 101,
+          "end": 111
+        },
+        {
+          "index": 17,
+          "text": "retention",
+          "start": 112,
+          "end": 121
+        },
+        {
+          "index": 18,
+          "text": "period",
+          "start": 122,
+          "end": 128
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 128,
+          "end": 129
+        }
+      ],
+      "focus_lexeme_ids": [
+        "deletion-request.request-to-remove-specified-information.n",
+        "legal-hold.direction-to-preserve-material-for-legal-purpose.n",
+        "record-retention.keeping-records-for-applicable-purpose-and-period.n",
+        "retention-period.information-keeping-duration.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-conflicts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module08.08",
+      "text": "Redaction, anonymization, and pseudonymization have different purposes and do not automatically remove every privacy risk.",
+      "meaning": "Distinguish information treatments without promising complete protection.",
+      "context": "Reviewing a fictional data-handling description.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Redaction",
+          "start": 0,
+          "end": 9
+        },
+        {
+          "index": 1,
+          "text": ",",
+          "start": 9,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "anonymization",
+          "start": 11,
+          "end": 24
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 24,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "pseudonymization",
+          "start": 30,
+          "end": 46
+        },
+        {
+          "index": 6,
+          "text": "have",
+          "start": 47,
+          "end": 51
+        },
+        {
+          "index": 7,
+          "text": "different",
+          "start": 52,
+          "end": 61
+        },
+        {
+          "index": 8,
+          "text": "purposes",
+          "start": 62,
+          "end": 70
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 10,
+          "text": "do",
+          "start": 75,
+          "end": 77
+        },
+        {
+          "index": 11,
+          "text": "not",
+          "start": 78,
+          "end": 81
+        },
+        {
+          "index": 12,
+          "text": "automatically",
+          "start": 82,
+          "end": 95
+        },
+        {
+          "index": 13,
+          "text": "remove",
+          "start": 96,
+          "end": 102
+        },
+        {
+          "index": 14,
+          "text": "every",
+          "start": 103,
+          "end": 108
+        },
+        {
+          "index": 15,
+          "text": "privacy",
+          "start": 109,
+          "end": 116
+        },
+        {
+          "index": 16,
+          "text": "risk",
+          "start": 117,
+          "end": 121
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 121,
+          "end": 122
+        }
+      ],
+      "focus_lexeme_ids": [
+        "redaction.removal-or-obscuring-of-sensitive-information.n",
+        "anonymization.identity-removal-process.n",
+        "pseudonymization.identity-substitution-process.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-conflicts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module08.09",
+      "text": "Please record the withdrawal of consent and refer its effect for review alongside the consent record and privacy notice.",
+      "meaning": "Record a changed agreement while leaving legal effect unresolved.",
+      "context": "Discussing a fictional consent-related communication without implying retrospective erasure of past use.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "record",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "withdrawal",
+          "start": 18,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "of",
+          "start": 29,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "consent",
+          "start": 32,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "refer",
+          "start": 44,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "its",
+          "start": 50,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "effect",
+          "start": 54,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": "for",
+          "start": 61,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "review",
+          "start": 65,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "alongside",
+          "start": 72,
+          "end": 81
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 82,
+          "end": 85
+        },
+        {
+          "index": 14,
+          "text": "consent",
+          "start": 86,
+          "end": 93
+        },
+        {
+          "index": 15,
+          "text": "record",
+          "start": 94,
+          "end": 100
+        },
+        {
+          "index": 16,
+          "text": "and",
+          "start": 101,
+          "end": 104
+        },
+        {
+          "index": 17,
+          "text": "privacy",
+          "start": 105,
+          "end": 112
+        },
+        {
+          "index": 18,
+          "text": "notice",
+          "start": 113,
+          "end": 119
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 119,
+          "end": 120
+        }
+      ],
+      "focus_lexeme_ids": [
+        "withdrawal-of-consent.ending-previously-given-agreement.n",
+        "consent-record.documentation-of-consent-arrangements.n",
+        "privacy-notice.information-explaining-how-personal-data-is-used.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-conflicts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.legal_paralegal.module08.10",
+      "text": "The reporting channel should support the person's accessibility requirement and contact preference when addressing a security concern.",
+      "meaning": "Describe communication needs within the relevant reporting arrangements.",
+      "context": "Planning an accessible fictional concern report without bypassing policy.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "reporting",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "channel",
+          "start": 14,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "should",
+          "start": 22,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "support",
+          "start": 29,
+          "end": 36
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 37,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "person's",
+          "start": 41,
+          "end": 49
+        },
+        {
+          "index": 7,
+          "text": "accessibility",
+          "start": 50,
+          "end": 63
+        },
+        {
+          "index": 8,
+          "text": "requirement",
+          "start": 64,
+          "end": 75
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 76,
+          "end": 79
+        },
+        {
+          "index": 10,
+          "text": "contact",
+          "start": 80,
+          "end": 87
+        },
+        {
+          "index": 11,
+          "text": "preference",
+          "start": 88,
+          "end": 98
+        },
+        {
+          "index": 12,
+          "text": "when",
+          "start": 99,
+          "end": 103
+        },
+        {
+          "index": 13,
+          "text": "addressing",
+          "start": 104,
+          "end": 114
+        },
+        {
+          "index": 14,
+          "text": "a",
+          "start": 115,
+          "end": 116
+        },
+        {
+          "index": 15,
+          "text": "security",
+          "start": 117,
+          "end": 125
+        },
+        {
+          "index": 16,
+          "text": "concern",
+          "start": 126,
+          "end": 133
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 133,
+          "end": 134
+        }
+      ],
+      "focus_lexeme_ids": [
+        "reporting-channel.designated-means-for-submitting-report-or-concern.n",
+        "accessibility-requirement.specified-condition-needed-to-support-access.n",
+        "contact-preference.persons-stated-choice-about-how-to-be-contacted.n",
+        "security-concern.reported-issue-that-may-affect-protection-or-authorized-access.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-conflicts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

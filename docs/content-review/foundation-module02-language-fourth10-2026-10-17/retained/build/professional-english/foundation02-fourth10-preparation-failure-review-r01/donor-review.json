@@ -1,0 +1,1093 @@
+{
+  "schema": 1,
+  "status": "independent_json_inspection_complete",
+  "root": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame",
+  "hash_basis": "Raw-byte SHA256 for files; UTF-8 JSON.stringify for parsed entry and row JSON hashes.",
+  "histories": [
+    {
+      "key": "first10",
+      "path": "data/professional/provenance/foundation-module01-language-first10-2026-10-16.json",
+      "bytes": 3197142,
+      "sha256": "c6c6083fe03324ac5ea5d1e7c5ec7cf2bad92559616d8437ce32d572fe1b3d92",
+      "groups": [
+        {
+          "id": "submit.send-for-consideration.v",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 70,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "038741f5b1ef9768262a06de00e2e984b6224a83e492b52b59f3d502bd86ccaa",
+              "computed_entry_json_sha256": "038741f5b1ef9768262a06de00e2e984b6224a83e492b52b59f3d502bd86ccaa",
+              "whole_row_json_sha256": "05662ea5632582d8cc32d216b3d4708fc1030cd9fb26bd226c49da91e8e45391",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "approve.authorize.v",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 71,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "ab2837be0d8b9679afb1fb01e5f4eab5016e3a6da46af9b9118379d515ad0919",
+              "computed_entry_json_sha256": "ab2837be0d8b9679afb1fb01e5f4eab5016e3a6da46af9b9118379d515ad0919",
+              "whole_row_json_sha256": "6ae7f0b1dcc27c81a02cc18da31f9829a4e8bdc802c42c144a86906e7e17ca17",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "reject.decline-acceptance.v",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 72,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "e5b950450545df6a6e40bc550486729bf27e5e90850a236d23a834f579918184",
+              "computed_entry_json_sha256": "e5b950450545df6a6e40bc550486729bf27e5e90850a236d23a834f579918184",
+              "whole_row_json_sha256": "868c97a1991957483fd6260f3f4562c48e7c5b17b514cb231eea6378dec4f3e4",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "sign.write-name.v",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 73,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "7b5c5821f734e07d7e5adb4c870e10275785f5217acc8130e29cde1c274360a7",
+              "computed_entry_json_sha256": "7b5c5821f734e07d7e5adb4c870e10275785f5217acc8130e29cde1c274360a7",
+              "whole_row_json_sha256": "80a3692257863ce44cc747eba40d272b1e8a208141080d134c2c7aa8520c583d",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "delay.late-occurrence.n",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 74,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "af2c19270729a0b41440613703e70f772bfcfc5777f5d1c22d60c78fa86b497f",
+              "computed_entry_json_sha256": "af2c19270729a0b41440613703e70f772bfcfc5777f5d1c22d60c78fa86b497f",
+              "whole_row_json_sha256": "9b151a9dff594d0f89f35a79ce141dba2b1e83bed7393e668907a29ad384c72d",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "error.mistake.n",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 75,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "7514df83cb0ac37ce167bbef07ae9e23d040adcee65a7d905ea01223da6ed63a",
+              "computed_entry_json_sha256": "7514df83cb0ac37ce167bbef07ae9e23d040adcee65a7d905ea01223da6ed63a",
+              "whole_row_json_sha256": "adab82987dff3d4fb387a335584c1485c07fe70bb579a5160f5f338ff5d83c98",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "fault.equipment-defect.n",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 76,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "dc00596d3b1ffa3d679fb48f2f0eda5eb7a75a1a56ed814ada7573bb7bb086e2",
+              "computed_entry_json_sha256": "dc00596d3b1ffa3d679fb48f2f0eda5eb7a75a1a56ed814ada7573bb7bb086e2",
+              "whole_row_json_sha256": "2a0b7381a71ba5de73186101e54e787bb21b75e9aa35a96bc54941bf0468706c",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "damage.physical-harm.n",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 77,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "d131750f070c36735e95b6f54594eeb6e0dbe4675f88ced94ae6e4051df42706",
+              "computed_entry_json_sha256": "d131750f070c36735e95b6f54594eeb6e0dbe4675f88ced94ae6e4051df42706",
+              "whole_row_json_sha256": "287e65e42effbdace6e51f32f505f2631430478d4df8cfd4b32f588abd6edb69",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "shortage.insufficient-supply.n",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 78,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "c0cf47c8ef306fd2ab271e3d87a5fa5eed850902d02f40614b01823629d09a05",
+              "computed_entry_json_sha256": "c0cf47c8ef306fd2ab271e3d87a5fa5eed850902d02f40614b01823629d09a05",
+              "whole_row_json_sha256": "4ecbe7721c22627159d21d63fcdf35ab4682750ef38379277850240fe38f4d73",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "missing.not-present.adj",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 79,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "7c1690f74ebe3d99a10e98ad6e575c95eae7675d6b2727a840d278227158c91c",
+              "computed_entry_json_sha256": "7c1690f74ebe3d99a10e98ad6e575c95eae7675d6b2727a840d278227158c91c",
+              "whole_row_json_sha256": "dfa5698db81715b39aab3165070c7c77ea75d050895d7f15726f6986b280d75d",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "second10",
+      "path": "data/professional/provenance/foundation-module01-language-second10-2026-10-16.json",
+      "bytes": 2755242,
+      "sha256": "528267cabf4ef12daa9977da23267131c3b69d223f76d1a4a83fcac9ba9973e7",
+      "groups": [
+        {
+          "id": "submit.send-for-consideration.v",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 70,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "038741f5b1ef9768262a06de00e2e984b6224a83e492b52b59f3d502bd86ccaa",
+              "computed_entry_json_sha256": "038741f5b1ef9768262a06de00e2e984b6224a83e492b52b59f3d502bd86ccaa",
+              "whole_row_json_sha256": "05662ea5632582d8cc32d216b3d4708fc1030cd9fb26bd226c49da91e8e45391",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "approve.authorize.v",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 71,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "ab2837be0d8b9679afb1fb01e5f4eab5016e3a6da46af9b9118379d515ad0919",
+              "computed_entry_json_sha256": "ab2837be0d8b9679afb1fb01e5f4eab5016e3a6da46af9b9118379d515ad0919",
+              "whole_row_json_sha256": "6ae7f0b1dcc27c81a02cc18da31f9829a4e8bdc802c42c144a86906e7e17ca17",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "reject.decline-acceptance.v",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 72,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "e5b950450545df6a6e40bc550486729bf27e5e90850a236d23a834f579918184",
+              "computed_entry_json_sha256": "e5b950450545df6a6e40bc550486729bf27e5e90850a236d23a834f579918184",
+              "whole_row_json_sha256": "868c97a1991957483fd6260f3f4562c48e7c5b17b514cb231eea6378dec4f3e4",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "sign.write-name.v",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 73,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "7b5c5821f734e07d7e5adb4c870e10275785f5217acc8130e29cde1c274360a7",
+              "computed_entry_json_sha256": "7b5c5821f734e07d7e5adb4c870e10275785f5217acc8130e29cde1c274360a7",
+              "whole_row_json_sha256": "80a3692257863ce44cc747eba40d272b1e8a208141080d134c2c7aa8520c583d",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "delay.late-occurrence.n",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 74,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "af2c19270729a0b41440613703e70f772bfcfc5777f5d1c22d60c78fa86b497f",
+              "computed_entry_json_sha256": "af2c19270729a0b41440613703e70f772bfcfc5777f5d1c22d60c78fa86b497f",
+              "whole_row_json_sha256": "9b151a9dff594d0f89f35a79ce141dba2b1e83bed7393e668907a29ad384c72d",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "error.mistake.n",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 75,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "7514df83cb0ac37ce167bbef07ae9e23d040adcee65a7d905ea01223da6ed63a",
+              "computed_entry_json_sha256": "7514df83cb0ac37ce167bbef07ae9e23d040adcee65a7d905ea01223da6ed63a",
+              "whole_row_json_sha256": "adab82987dff3d4fb387a335584c1485c07fe70bb579a5160f5f338ff5d83c98",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "fault.equipment-defect.n",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 76,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "dc00596d3b1ffa3d679fb48f2f0eda5eb7a75a1a56ed814ada7573bb7bb086e2",
+              "computed_entry_json_sha256": "dc00596d3b1ffa3d679fb48f2f0eda5eb7a75a1a56ed814ada7573bb7bb086e2",
+              "whole_row_json_sha256": "2a0b7381a71ba5de73186101e54e787bb21b75e9aa35a96bc54941bf0468706c",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "damage.physical-harm.n",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 77,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "d131750f070c36735e95b6f54594eeb6e0dbe4675f88ced94ae6e4051df42706",
+              "computed_entry_json_sha256": "d131750f070c36735e95b6f54594eeb6e0dbe4675f88ced94ae6e4051df42706",
+              "whole_row_json_sha256": "287e65e42effbdace6e51f32f505f2631430478d4df8cfd4b32f588abd6edb69",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "shortage.insufficient-supply.n",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 78,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "c0cf47c8ef306fd2ab271e3d87a5fa5eed850902d02f40614b01823629d09a05",
+              "computed_entry_json_sha256": "c0cf47c8ef306fd2ab271e3d87a5fa5eed850902d02f40614b01823629d09a05",
+              "whole_row_json_sha256": "4ecbe7721c22627159d21d63fcdf35ab4682750ef38379277850240fe38f4d73",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "missing.not-present.adj",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 79,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "7c1690f74ebe3d99a10e98ad6e575c95eae7675d6b2727a840d278227158c91c",
+              "computed_entry_json_sha256": "7c1690f74ebe3d99a10e98ad6e575c95eae7675d6b2727a840d278227158c91c",
+              "whole_row_json_sha256": "dfa5698db81715b39aab3165070c7c77ea75d050895d7f15726f6986b280d75d",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "third10",
+      "path": "data/professional/provenance/foundation-module01-language-third10-2026-10-16.json",
+      "bytes": 2367179,
+      "sha256": "d821f85146ef5e5e14ee5b4cee9ce129d0c6652f683090bc44fb7af14d6d14f1",
+      "groups": [
+        {
+          "id": "submit.send-for-consideration.v",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 70,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "038741f5b1ef9768262a06de00e2e984b6224a83e492b52b59f3d502bd86ccaa",
+              "computed_entry_json_sha256": "038741f5b1ef9768262a06de00e2e984b6224a83e492b52b59f3d502bd86ccaa",
+              "whole_row_json_sha256": "05662ea5632582d8cc32d216b3d4708fc1030cd9fb26bd226c49da91e8e45391",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "approve.authorize.v",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 71,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "ab2837be0d8b9679afb1fb01e5f4eab5016e3a6da46af9b9118379d515ad0919",
+              "computed_entry_json_sha256": "ab2837be0d8b9679afb1fb01e5f4eab5016e3a6da46af9b9118379d515ad0919",
+              "whole_row_json_sha256": "6ae7f0b1dcc27c81a02cc18da31f9829a4e8bdc802c42c144a86906e7e17ca17",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "reject.decline-acceptance.v",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 72,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "e5b950450545df6a6e40bc550486729bf27e5e90850a236d23a834f579918184",
+              "computed_entry_json_sha256": "e5b950450545df6a6e40bc550486729bf27e5e90850a236d23a834f579918184",
+              "whole_row_json_sha256": "868c97a1991957483fd6260f3f4562c48e7c5b17b514cb231eea6378dec4f3e4",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "sign.write-name.v",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 73,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "7b5c5821f734e07d7e5adb4c870e10275785f5217acc8130e29cde1c274360a7",
+              "computed_entry_json_sha256": "7b5c5821f734e07d7e5adb4c870e10275785f5217acc8130e29cde1c274360a7",
+              "whole_row_json_sha256": "80a3692257863ce44cc747eba40d272b1e8a208141080d134c2c7aa8520c583d",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "delay.late-occurrence.n",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 74,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "af2c19270729a0b41440613703e70f772bfcfc5777f5d1c22d60c78fa86b497f",
+              "computed_entry_json_sha256": "af2c19270729a0b41440613703e70f772bfcfc5777f5d1c22d60c78fa86b497f",
+              "whole_row_json_sha256": "9b151a9dff594d0f89f35a79ce141dba2b1e83bed7393e668907a29ad384c72d",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "error.mistake.n",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 75,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "7514df83cb0ac37ce167bbef07ae9e23d040adcee65a7d905ea01223da6ed63a",
+              "computed_entry_json_sha256": "7514df83cb0ac37ce167bbef07ae9e23d040adcee65a7d905ea01223da6ed63a",
+              "whole_row_json_sha256": "adab82987dff3d4fb387a335584c1485c07fe70bb579a5160f5f338ff5d83c98",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "fault.equipment-defect.n",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 76,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "dc00596d3b1ffa3d679fb48f2f0eda5eb7a75a1a56ed814ada7573bb7bb086e2",
+              "computed_entry_json_sha256": "dc00596d3b1ffa3d679fb48f2f0eda5eb7a75a1a56ed814ada7573bb7bb086e2",
+              "whole_row_json_sha256": "2a0b7381a71ba5de73186101e54e787bb21b75e9aa35a96bc54941bf0468706c",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "damage.physical-harm.n",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 77,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "d131750f070c36735e95b6f54594eeb6e0dbe4675f88ced94ae6e4051df42706",
+              "computed_entry_json_sha256": "d131750f070c36735e95b6f54594eeb6e0dbe4675f88ced94ae6e4051df42706",
+              "whole_row_json_sha256": "287e65e42effbdace6e51f32f505f2631430478d4df8cfd4b32f588abd6edb69",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "shortage.insufficient-supply.n",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 78,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "c0cf47c8ef306fd2ab271e3d87a5fa5eed850902d02f40614b01823629d09a05",
+              "computed_entry_json_sha256": "c0cf47c8ef306fd2ab271e3d87a5fa5eed850902d02f40614b01823629d09a05",
+              "whole_row_json_sha256": "4ecbe7721c22627159d21d63fcdf35ab4682750ef38379277850240fe38f4d73",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "missing.not-present.adj",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 79,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "7c1690f74ebe3d99a10e98ad6e575c95eae7675d6b2727a840d278227158c91c",
+              "computed_entry_json_sha256": "7c1690f74ebe3d99a10e98ad6e575c95eae7675d6b2727a840d278227158c91c",
+              "whole_row_json_sha256": "dfa5698db81715b39aab3165070c7c77ea75d050895d7f15726f6986b280d75d",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "fourth10",
+      "path": "data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json",
+      "bytes": 2216910,
+      "sha256": "8ab99dbd7a7ea692401c594259986328d43e04e676557c51d15aa675fc7bf83b",
+      "groups": [
+        {
+          "id": "submit.send-for-consideration.v",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 70,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "038741f5b1ef9768262a06de00e2e984b6224a83e492b52b59f3d502bd86ccaa",
+              "computed_entry_json_sha256": "038741f5b1ef9768262a06de00e2e984b6224a83e492b52b59f3d502bd86ccaa",
+              "whole_row_json_sha256": "05662ea5632582d8cc32d216b3d4708fc1030cd9fb26bd226c49da91e8e45391",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "approve.authorize.v",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 71,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "ab2837be0d8b9679afb1fb01e5f4eab5016e3a6da46af9b9118379d515ad0919",
+              "computed_entry_json_sha256": "ab2837be0d8b9679afb1fb01e5f4eab5016e3a6da46af9b9118379d515ad0919",
+              "whole_row_json_sha256": "6ae7f0b1dcc27c81a02cc18da31f9829a4e8bdc802c42c144a86906e7e17ca17",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "reject.decline-acceptance.v",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 72,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "e5b950450545df6a6e40bc550486729bf27e5e90850a236d23a834f579918184",
+              "computed_entry_json_sha256": "e5b950450545df6a6e40bc550486729bf27e5e90850a236d23a834f579918184",
+              "whole_row_json_sha256": "868c97a1991957483fd6260f3f4562c48e7c5b17b514cb231eea6378dec4f3e4",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "sign.write-name.v",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 73,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "7b5c5821f734e07d7e5adb4c870e10275785f5217acc8130e29cde1c274360a7",
+              "computed_entry_json_sha256": "7b5c5821f734e07d7e5adb4c870e10275785f5217acc8130e29cde1c274360a7",
+              "whole_row_json_sha256": "80a3692257863ce44cc747eba40d272b1e8a208141080d134c2c7aa8520c583d",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "delay.late-occurrence.n",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 74,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "af2c19270729a0b41440613703e70f772bfcfc5777f5d1c22d60c78fa86b497f",
+              "computed_entry_json_sha256": "af2c19270729a0b41440613703e70f772bfcfc5777f5d1c22d60c78fa86b497f",
+              "whole_row_json_sha256": "9b151a9dff594d0f89f35a79ce141dba2b1e83bed7393e668907a29ad384c72d",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "error.mistake.n",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 75,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "7514df83cb0ac37ce167bbef07ae9e23d040adcee65a7d905ea01223da6ed63a",
+              "computed_entry_json_sha256": "7514df83cb0ac37ce167bbef07ae9e23d040adcee65a7d905ea01223da6ed63a",
+              "whole_row_json_sha256": "adab82987dff3d4fb387a335584c1485c07fe70bb579a5160f5f338ff5d83c98",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "fault.equipment-defect.n",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 76,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "dc00596d3b1ffa3d679fb48f2f0eda5eb7a75a1a56ed814ada7573bb7bb086e2",
+              "computed_entry_json_sha256": "dc00596d3b1ffa3d679fb48f2f0eda5eb7a75a1a56ed814ada7573bb7bb086e2",
+              "whole_row_json_sha256": "2a0b7381a71ba5de73186101e54e787bb21b75e9aa35a96bc54941bf0468706c",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "damage.physical-harm.n",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 77,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "d131750f070c36735e95b6f54594eeb6e0dbe4675f88ced94ae6e4051df42706",
+              "computed_entry_json_sha256": "d131750f070c36735e95b6f54594eeb6e0dbe4675f88ced94ae6e4051df42706",
+              "whole_row_json_sha256": "287e65e42effbdace6e51f32f505f2631430478d4df8cfd4b32f588abd6edb69",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "shortage.insufficient-supply.n",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 78,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "c0cf47c8ef306fd2ab271e3d87a5fa5eed850902d02f40614b01823629d09a05",
+              "computed_entry_json_sha256": "c0cf47c8ef306fd2ab271e3d87a5fa5eed850902d02f40614b01823629d09a05",
+              "whole_row_json_sha256": "4ecbe7721c22627159d21d63fcdf35ab4682750ef38379277850240fe38f4d73",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "missing.not-present.adj",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 79,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "7c1690f74ebe3d99a10e98ad6e575c95eae7675d6b2727a840d278227158c91c",
+              "computed_entry_json_sha256": "7c1690f74ebe3d99a10e98ad6e575c95eae7675d6b2727a840d278227158c91c",
+              "whole_row_json_sha256": "dfa5698db81715b39aab3165070c7c77ea75d050895d7f15726f6986b280d75d",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "fifth10",
+      "path": "data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json",
+      "bytes": 3209077,
+      "sha256": "ccd4ab160b89efbc21289c51fd576933d7da19734567ee986656b4462ad06083",
+      "groups": [
+        {
+          "id": "submit.send-for-consideration.v",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 70,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "038741f5b1ef9768262a06de00e2e984b6224a83e492b52b59f3d502bd86ccaa",
+              "computed_entry_json_sha256": "038741f5b1ef9768262a06de00e2e984b6224a83e492b52b59f3d502bd86ccaa",
+              "whole_row_json_sha256": "05662ea5632582d8cc32d216b3d4708fc1030cd9fb26bd226c49da91e8e45391",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "approve.authorize.v",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 71,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "ab2837be0d8b9679afb1fb01e5f4eab5016e3a6da46af9b9118379d515ad0919",
+              "computed_entry_json_sha256": "ab2837be0d8b9679afb1fb01e5f4eab5016e3a6da46af9b9118379d515ad0919",
+              "whole_row_json_sha256": "6ae7f0b1dcc27c81a02cc18da31f9829a4e8bdc802c42c144a86906e7e17ca17",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "reject.decline-acceptance.v",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 72,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "e5b950450545df6a6e40bc550486729bf27e5e90850a236d23a834f579918184",
+              "computed_entry_json_sha256": "e5b950450545df6a6e40bc550486729bf27e5e90850a236d23a834f579918184",
+              "whole_row_json_sha256": "868c97a1991957483fd6260f3f4562c48e7c5b17b514cb231eea6378dec4f3e4",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "sign.write-name.v",
+          "expected_count": 2,
+          "actual_count": 2,
+          "rows": [
+            {
+              "index_zero_based": 73,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "7b5c5821f734e07d7e5adb4c870e10275785f5217acc8130e29cde1c274360a7",
+              "computed_entry_json_sha256": "7b5c5821f734e07d7e5adb4c870e10275785f5217acc8130e29cde1c274360a7",
+              "whole_row_json_sha256": "80a3692257863ce44cc747eba40d272b1e8a208141080d134c2c7aa8520c583d",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            },
+            {
+              "index_zero_based": 90,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "7b5c5821f734e07d7e5adb4c870e10275785f5217acc8130e29cde1c274360a7",
+              "computed_entry_json_sha256": "7b5c5821f734e07d7e5adb4c870e10275785f5217acc8130e29cde1c274360a7",
+              "whole_row_json_sha256": "80a3692257863ce44cc747eba40d272b1e8a208141080d134c2c7aa8520c583d",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "delay.late-occurrence.n",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 74,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "af2c19270729a0b41440613703e70f772bfcfc5777f5d1c22d60c78fa86b497f",
+              "computed_entry_json_sha256": "af2c19270729a0b41440613703e70f772bfcfc5777f5d1c22d60c78fa86b497f",
+              "whole_row_json_sha256": "9b151a9dff594d0f89f35a79ce141dba2b1e83bed7393e668907a29ad384c72d",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "error.mistake.n",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 75,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "7514df83cb0ac37ce167bbef07ae9e23d040adcee65a7d905ea01223da6ed63a",
+              "computed_entry_json_sha256": "7514df83cb0ac37ce167bbef07ae9e23d040adcee65a7d905ea01223da6ed63a",
+              "whole_row_json_sha256": "adab82987dff3d4fb387a335584c1485c07fe70bb579a5160f5f338ff5d83c98",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "fault.equipment-defect.n",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 76,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "dc00596d3b1ffa3d679fb48f2f0eda5eb7a75a1a56ed814ada7573bb7bb086e2",
+              "computed_entry_json_sha256": "dc00596d3b1ffa3d679fb48f2f0eda5eb7a75a1a56ed814ada7573bb7bb086e2",
+              "whole_row_json_sha256": "2a0b7381a71ba5de73186101e54e787bb21b75e9aa35a96bc54941bf0468706c",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "damage.physical-harm.n",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 77,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "d131750f070c36735e95b6f54594eeb6e0dbe4675f88ced94ae6e4051df42706",
+              "computed_entry_json_sha256": "d131750f070c36735e95b6f54594eeb6e0dbe4675f88ced94ae6e4051df42706",
+              "whole_row_json_sha256": "287e65e42effbdace6e51f32f505f2631430478d4df8cfd4b32f588abd6edb69",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "shortage.insufficient-supply.n",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 78,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "c0cf47c8ef306fd2ab271e3d87a5fa5eed850902d02f40614b01823629d09a05",
+              "computed_entry_json_sha256": "c0cf47c8ef306fd2ab271e3d87a5fa5eed850902d02f40614b01823629d09a05",
+              "whole_row_json_sha256": "4ecbe7721c22627159d21d63fcdf35ab4682750ef38379277850240fe38f4d73",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        },
+        {
+          "id": "missing.not-present.adj",
+          "expected_count": 1,
+          "actual_count": 1,
+          "rows": [
+            {
+              "index_zero_based": 79,
+              "resource": "res://data/professional/lexemes/foundation-module02.json",
+              "recorded_entry_json_sha256": "7c1690f74ebe3d99a10e98ad6e575c95eae7675d6b2727a840d278227158c91c",
+              "computed_entry_json_sha256": "7c1690f74ebe3d99a10e98ad6e575c95eae7675d6b2727a840d278227158c91c",
+              "whole_row_json_sha256": "dfa5698db81715b39aab3165070c7c77ea75d050895d7f15726f6986b280d75d",
+              "exact_whole_row_matches_expected": true,
+              "full_entry_matches_ledger_before": true
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "expected_counts_by_id_in_history_order": {
+    "submit.send-for-consideration.v": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "approve.authorize.v": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "reject.decline-acceptance.v": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "sign.write-name.v": [
+      1,
+      1,
+      1,
+      1,
+      2
+    ],
+    "delay.late-occurrence.n": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "error.mistake.n": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "fault.equipment-defect.n": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "damage.physical-harm.n": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "shortage.insufficient-supply.n": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "missing.not-present.adj": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  "history_order": [
+    "first10",
+    "second10",
+    "third10",
+    "fourth10",
+    "fifth10"
+  ],
+  "history_id_groups_checked": 50,
+  "whole_rows_checked": 51,
+  "ledger": {
+    "path": "docs/content-review/foundation-module02-language-fourth10-research-2026-10-17/candidate-ledger.json",
+    "bytes": 92687,
+    "sha256": "590e97f018a3fdf2f1190d1405153ba7a144e0230cb6f5195aea182bfcaa3b6f"
+  },
+  "current_foundation02": {
+    "path": "data/professional/lexemes/foundation-module02.json",
+    "bytes": 267505,
+    "sha256": "bec08364a841f92351d04cd4c891bbd9d7de6dbf00f9949cc58f18e2551962ad"
+  },
+  "duplicate_origin": {
+    "history": "data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json",
+    "id": "sign.write-name.v",
+    "indices_zero_based": [
+      73,
+      90
+    ],
+    "original_preimages": {
+      "path": "build/professional-english/foundation-module01-language-review/fifth10/preimages.json",
+      "bytes": 2110027,
+      "sha256": "a7400da1bd33130b62f0e49d6bff48d4f8ecb498712fef9d5464f0014749193d"
+    },
+    "durable_preimages": {
+      "path": "docs/content-review/foundation-module01-language-fifth10-2026-10-16/preimages.json",
+      "bytes": 2110027,
+      "sha256": "a7400da1bd33130b62f0e49d6bff48d4f8ecb498712fef9d5464f0014749193d"
+    },
+    "original_and_durable_preimages_raw_bytes_equal": true,
+    "categories": [
+      {
+        "name": "unselected_foundation_entries",
+        "index_zero_based": 73,
+        "category_count": 90
+      },
+      {
+        "name": "related_entries",
+        "index_zero_based": 0,
+        "category_count": 65
+      }
+    ],
+    "constructor": {
+      "path": "build/professional-english/foundation-module01-language-review/fifth10/delivery-r01/delivery-lib.cjs",
+      "bytes": 27794,
+      "sha256": "84338140a7e95d5f56dc881131270169bfce29a69ae2cdc0a584a2d58c97d106",
+      "line": 92,
+      "expression": "lexemes:[...evidence.pre.unselected_foundation_entries,...evidence.pre.related_entries]"
+    },
+    "entire_history_lexemes_array_matches_original_category_concatenation": true,
+    "whole_row": {
+      "resource": "res://data/professional/lexemes/foundation-module02.json",
+      "json_sha256": "7b5c5821f734e07d7e5adb4c870e10275785f5217acc8130e29cde1c274360a7",
+      "entry": {
+        "id": "sign.write-name.v",
+        "text": "sign",
+        "display_text": "sign",
+        "pos": "verb",
+        "definition": "To write one's name on a document as a form of identification or agreement.",
+        "example": "Please sign the attendance sheet.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "sign"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A person adding their name to an attendance sheet.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "sign.write-name.v.analysis.v1",
+          "lexeme_id": "sign.write-name.v",
+          "text": "sign",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "sign",
+              "surface": "sign",
+              "canonical_id": "morph.sign"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      }
+    },
+    "whole_row_json_sha256": "80a3692257863ce44cc747eba40d272b1e8a208141080d134c2c7aa8520c583d",
+    "both_whole_rows_equal": true
+  }
+}

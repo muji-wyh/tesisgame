@@ -1,0 +1,403 @@
+{
+  "status": "acquired_for_scratch_review_not_integrated",
+  "source": "https://kenney.nl/assets/mini-market",
+  "creator": "Kenney",
+  "additional_creators": [
+    "Fleur Keijsers",
+    "Guus Vermeulen"
+  ],
+  "license": "CC0 1.0",
+  "acquisition": "Previously user-acquired Kenney All-in-1 3.7.0 library; selected originals retained without alteration.",
+  "selected_motion": "Only idle/static are candidates; other named clips were inventoried but not selected or visually reviewed.",
+  "records": [
+    {
+      "id": "Mini Market/License",
+      "original": "Q:\\uwok\\Kenney Game Assets All-in-1 3.7.0\\3D assets\\Mini Market\\License.txt",
+      "retained": "sources/mini-market/License.txt",
+      "sha256": "5ee4df809330c05896f223c97f250cc1bdc13b46a370eb464533c85c94146070",
+      "bytes": 767
+    },
+    {
+      "id": "Mini Market/floor",
+      "original": "Q:\\uwok\\Kenney Game Assets All-in-1 3.7.0\\3D assets\\Mini Market\\Models\\GLB format\\floor.glb",
+      "retained": "sources/mini-market/Models/GLB format/floor.glb",
+      "sha256": "b18da447e10ae1afb327c90bc316590c780c68b04097a038f3fbb26fd28ca0f8",
+      "bytes": 3928,
+      "mesh_count": 1,
+      "skin_count": 0,
+      "external_images": [
+        "Textures/colormap.png"
+      ],
+      "animations": []
+    },
+    {
+      "id": "Mini Market/wall",
+      "original": "Q:\\uwok\\Kenney Game Assets All-in-1 3.7.0\\3D assets\\Mini Market\\Models\\GLB format\\wall.glb",
+      "retained": "sources/mini-market/Models/GLB format/wall.glb",
+      "sha256": "a926d264ec7d6a4344ee36e732f2f179469bfb727b89e5ada9d61226ff5eff2c",
+      "bytes": 4352,
+      "mesh_count": 1,
+      "skin_count": 0,
+      "external_images": [
+        "Textures/colormap.png"
+      ],
+      "animations": []
+    },
+    {
+      "id": "Mini Market/wall-window",
+      "original": "Q:\\uwok\\Kenney Game Assets All-in-1 3.7.0\\3D assets\\Mini Market\\Models\\GLB format\\wall-window.glb",
+      "retained": "sources/mini-market/Models/GLB format/wall-window.glb",
+      "sha256": "58b59e2c18459b2190298021506882bc5f521289c694519c1b2cd6439e409cb0",
+      "bytes": 15628,
+      "mesh_count": 2,
+      "skin_count": 0,
+      "external_images": [
+        "Textures/colormap.png"
+      ],
+      "animations": []
+    },
+    {
+      "id": "Mini Market/freezers-standing",
+      "original": "Q:\\uwok\\Kenney Game Assets All-in-1 3.7.0\\3D assets\\Mini Market\\Models\\GLB format\\freezers-standing.glb",
+      "retained": "sources/mini-market/Models/GLB format/freezers-standing.glb",
+      "sha256": "0fe103e694d7b9a733d2c1a8dde3fcb15fd355d63aba376aa8d7aa8e752ed9a1",
+      "bytes": 15340,
+      "mesh_count": 1,
+      "skin_count": 0,
+      "external_images": [
+        "Textures/colormap.png"
+      ],
+      "animations": []
+    },
+    {
+      "id": "Mini Market/shelf-boxes",
+      "original": "Q:\\uwok\\Kenney Game Assets All-in-1 3.7.0\\3D assets\\Mini Market\\Models\\GLB format\\shelf-boxes.glb",
+      "retained": "sources/mini-market/Models/GLB format/shelf-boxes.glb",
+      "sha256": "3f340fe9207a4b85739d8d11104cf5b4cad3a130afcbfc1fadb47c17d6a9e210",
+      "bytes": 56780,
+      "mesh_count": 11,
+      "skin_count": 0,
+      "external_images": [
+        "Textures/colormap.png"
+      ],
+      "animations": []
+    },
+    {
+      "id": "Mini Market/shelf-bags",
+      "original": "Q:\\uwok\\Kenney Game Assets All-in-1 3.7.0\\3D assets\\Mini Market\\Models\\GLB format\\shelf-bags.glb",
+      "retained": "sources/mini-market/Models/GLB format/shelf-bags.glb",
+      "sha256": "17725a5f680aff17dbc6ac3398ef0339d78b5b76bbfaa29292a5084479c4bd69",
+      "bytes": 78444,
+      "mesh_count": 9,
+      "skin_count": 0,
+      "external_images": [
+        "Textures/colormap.png"
+      ],
+      "animations": []
+    },
+    {
+      "id": "Mini Market/display-fruit",
+      "original": "Q:\\uwok\\Kenney Game Assets All-in-1 3.7.0\\3D assets\\Mini Market\\Models\\GLB format\\display-fruit.glb",
+      "retained": "sources/mini-market/Models/GLB format/display-fruit.glb",
+      "sha256": "4cc38dcbd0f703d5bc829ff4a627648872dd3f6578f3e7e01fdcee066367873b",
+      "bytes": 62976,
+      "mesh_count": 1,
+      "skin_count": 0,
+      "external_images": [
+        "Textures/colormap.png"
+      ],
+      "animations": []
+    },
+    {
+      "id": "Mini Market/display-bread",
+      "original": "Q:\\uwok\\Kenney Game Assets All-in-1 3.7.0\\3D assets\\Mini Market\\Models\\GLB format\\display-bread.glb",
+      "retained": "sources/mini-market/Models/GLB format/display-bread.glb",
+      "sha256": "33a57fee0e331e5e40df5f0dc7af302e93266fd978dda810ab9f0ea4a2c205d1",
+      "bytes": 36640,
+      "mesh_count": 3,
+      "skin_count": 0,
+      "external_images": [
+        "Textures/colormap.png"
+      ],
+      "animations": []
+    },
+    {
+      "id": "Mini Market/cash-register",
+      "original": "Q:\\uwok\\Kenney Game Assets All-in-1 3.7.0\\3D assets\\Mini Market\\Models\\GLB format\\cash-register.glb",
+      "retained": "sources/mini-market/Models/GLB format/cash-register.glb",
+      "sha256": "155f2eb666dea3a931d133a4953379898c8adb4b827ab60b86cae07235b9b598",
+      "bytes": 20332,
+      "mesh_count": 1,
+      "skin_count": 0,
+      "external_images": [
+        "Textures/colormap.png"
+      ],
+      "animations": []
+    },
+    {
+      "id": "Mini Market/shopping-cart",
+      "original": "Q:\\uwok\\Kenney Game Assets All-in-1 3.7.0\\3D assets\\Mini Market\\Models\\GLB format\\shopping-cart.glb",
+      "retained": "sources/mini-market/Models/GLB format/shopping-cart.glb",
+      "sha256": "8933fdece5c43b619ea6902fa03a5fea9f490486048ae7543cc8b03ee98c98dd",
+      "bytes": 34832,
+      "mesh_count": 1,
+      "skin_count": 0,
+      "external_images": [
+        "Textures/colormap.png"
+      ],
+      "animations": []
+    },
+    {
+      "id": "Mini Market/shopping-basket",
+      "original": "Q:\\uwok\\Kenney Game Assets All-in-1 3.7.0\\3D assets\\Mini Market\\Models\\GLB format\\shopping-basket.glb",
+      "retained": "sources/mini-market/Models/GLB format/shopping-basket.glb",
+      "sha256": "a7704926cb56c5a9ab74488230fc7c4d7b914387c59e9c1b6f62376965c0ea7d",
+      "bytes": 25864,
+      "mesh_count": 1,
+      "skin_count": 0,
+      "external_images": [
+        "Textures/colormap.png"
+      ],
+      "animations": []
+    },
+    {
+      "id": "Mini Market/character-employee",
+      "original": "Q:\\uwok\\Kenney Game Assets All-in-1 3.7.0\\3D assets\\Mini Market\\Models\\GLB format\\character-employee.glb",
+      "retained": "sources/mini-market/Models/GLB format/character-employee.glb",
+      "sha256": "8774b93a5ff11af146176505035cc351d37a8a69ad0b1fde612bba9c8ffa84cc",
+      "bytes": 215836,
+      "mesh_count": 2,
+      "skin_count": 2,
+      "external_images": [
+        "Textures/colormap.png"
+      ],
+      "animations": [
+        {
+          "name": "static",
+          "channels": 21,
+          "duration_seconds": 0.10000000149011612
+        },
+        {
+          "name": "idle",
+          "channels": 4,
+          "duration_seconds": 1.3333333730697632
+        },
+        {
+          "name": "walk",
+          "channels": 7,
+          "duration_seconds": 0.6666666865348816
+        },
+        {
+          "name": "sprint",
+          "channels": 7,
+          "duration_seconds": 0.5
+        },
+        {
+          "name": "jump",
+          "channels": 7,
+          "duration_seconds": 0.5
+        },
+        {
+          "name": "fall",
+          "channels": 5,
+          "duration_seconds": 0.3333333432674408
+        },
+        {
+          "name": "crouch",
+          "channels": 8,
+          "duration_seconds": 0.1666666716337204
+        },
+        {
+          "name": "sit",
+          "channels": 5,
+          "duration_seconds": 0.1666666716337204
+        },
+        {
+          "name": "drive",
+          "channels": 5,
+          "duration_seconds": 0.1666666716337204
+        },
+        {
+          "name": "die",
+          "channels": 8,
+          "duration_seconds": 0.3333333432674408
+        },
+        {
+          "name": "pick-up",
+          "channels": 4,
+          "duration_seconds": 0.3333333432674408
+        },
+        {
+          "name": "emote-yes",
+          "channels": 4,
+          "duration_seconds": 0.6666666865348816
+        },
+        {
+          "name": "emote-no",
+          "channels": 4,
+          "duration_seconds": 0.6666666865348816
+        },
+        {
+          "name": "holding-right",
+          "channels": 2,
+          "duration_seconds": 0.1666666716337204
+        },
+        {
+          "name": "holding-left",
+          "channels": 2,
+          "duration_seconds": 0.1666666716337204
+        },
+        {
+          "name": "holding-both",
+          "channels": 2,
+          "duration_seconds": 0.1666666716337204
+        },
+        {
+          "name": "holding-right-shoot",
+          "channels": 4,
+          "duration_seconds": 0.20000000298023224
+        },
+        {
+          "name": "holding-left-shoot",
+          "channels": 4,
+          "duration_seconds": 0.20000000298023224
+        },
+        {
+          "name": "holding-both-shoot",
+          "channels": 4,
+          "duration_seconds": 0.20000000298023224
+        },
+        {
+          "name": "attack-melee-right",
+          "channels": 7,
+          "duration_seconds": 0.4166666567325592
+        },
+        {
+          "name": "attack-melee-left",
+          "channels": 7,
+          "duration_seconds": 0.4166666567325592
+        },
+        {
+          "name": "attack-kick-right",
+          "channels": 7,
+          "duration_seconds": 0.5333333611488342
+        },
+        {
+          "name": "attack-kick-left",
+          "channels": 7,
+          "duration_seconds": 0.5333333611488342
+        },
+        {
+          "name": "interact-right",
+          "channels": 4,
+          "duration_seconds": 0.6666666865348816
+        },
+        {
+          "name": "interact-left",
+          "channels": 4,
+          "duration_seconds": 0.6666666865348816
+        },
+        {
+          "name": "wheelchair-sit",
+          "channels": 7,
+          "duration_seconds": 0.1666666716337204
+        },
+        {
+          "name": "wheelchair-look-left",
+          "channels": 9,
+          "duration_seconds": 0.3333333432674408
+        },
+        {
+          "name": "wheelchair-look-right",
+          "channels": 9,
+          "duration_seconds": 0.3333333432674408
+        },
+        {
+          "name": "wheelchair-move-forward",
+          "channels": 9,
+          "duration_seconds": 0.5
+        },
+        {
+          "name": "wheelchair-move-back",
+          "channels": 9,
+          "duration_seconds": 0.5
+        },
+        {
+          "name": "wheelchair-move-left",
+          "channels": 9,
+          "duration_seconds": 0.5
+        },
+        {
+          "name": "wheelchair-move-right",
+          "channels": 9,
+          "duration_seconds": 0.5
+        }
+      ]
+    },
+    {
+      "id": "Mini Market/wall-door-rotate",
+      "original": "Q:\\uwok\\Kenney Game Assets All-in-1 3.7.0\\3D assets\\Mini Market\\Models\\GLB format\\wall-door-rotate.glb",
+      "retained": "sources/mini-market/Models/GLB format/wall-door-rotate.glb",
+      "sha256": "de539cafdc80c9944258105cbf5d57303a3a020e588b4a611fa4f4ce90cf5b29",
+      "bytes": 38492,
+      "mesh_count": 4,
+      "skin_count": 0,
+      "external_images": [
+        "Textures/colormap.png"
+      ],
+      "animations": [
+        {
+          "name": "open",
+          "channels": 2,
+          "duration_seconds": 1
+        },
+        {
+          "name": "close",
+          "channels": 2,
+          "duration_seconds": 1
+        },
+        {
+          "name": "open-and-close",
+          "channels": 2,
+          "duration_seconds": 2
+        }
+      ]
+    },
+    {
+      "id": "Mini Market/fence-door-rotate",
+      "original": "Q:\\uwok\\Kenney Game Assets All-in-1 3.7.0\\3D assets\\Mini Market\\Models\\GLB format\\fence-door-rotate.glb",
+      "retained": "sources/mini-market/Models/GLB format/fence-door-rotate.glb",
+      "sha256": "ae8b3335ad034a104d314c95ecbfd0b3521ccfe76812a5b63ad41018f80cee87",
+      "bytes": 36148,
+      "mesh_count": 3,
+      "skin_count": 0,
+      "external_images": [
+        "Textures/colormap.png"
+      ],
+      "animations": [
+        {
+          "name": "open",
+          "channels": 2,
+          "duration_seconds": 1
+        },
+        {
+          "name": "close",
+          "channels": 2,
+          "duration_seconds": 1
+        },
+        {
+          "name": "open-and-close",
+          "channels": 2,
+          "duration_seconds": 2
+        }
+      ]
+    },
+    {
+      "id": "Mini Market/colormap",
+      "original": "Q:\\uwok\\Kenney Game Assets All-in-1 3.7.0\\3D assets\\Mini Market\\Models\\GLB format\\Textures\\colormap.png",
+      "retained": "sources/mini-market/Models/GLB format/Textures/colormap.png",
+      "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e",
+      "bytes": 8706
+    }
+  ]
+}

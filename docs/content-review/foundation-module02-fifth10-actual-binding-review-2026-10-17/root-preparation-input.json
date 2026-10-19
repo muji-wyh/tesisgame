@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "status": "root_authorized_one_shot_scratch_preparation",
+  "entrypoint": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/prepare.cjs",
+  "output": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/execution-r01",
+  "dispatcher": "/root",
+  "preparation_author": "/root/recover_delivery",
+  "root_selected_actual_baseline": true,
+  "execute_project_tests": false,
+  "binding": {
+    "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+    "bytes": 3187477,
+    "raw_sha256": "7323bcb1baac6ea85817169bcc90325f9b54d587b19d4895ca3106ee7af0e015"
+  },
+  "source_inventory": {
+    "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r03/source-inventory.json",
+    "bytes": 3279,
+    "raw_sha256": "2f4033d3edfeb6eacc78657e9c215ef8718bd3ceb275c94f4c6168e68d2c6ee3"
+  },
+  "independent_source_review": {
+    "path": "build/professional-english/foundation02-fifth10-actual-binding-independent-review-r01/review.json",
+    "bytes": 8270,
+    "raw_sha256": "0dccddda14c35f3c5d90b69aa53623a8f99a91addfcc706ea0400adb3b09cc7c"
+  }
+}

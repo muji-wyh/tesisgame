@@ -1,0 +1,156 @@
+{
+	"animation_players": 0,
+	"captures": [
+		{
+			"camera": [
+				4.76889085769653,
+				3.81511330604553,
+				6.35852146148682
+			],
+			"file": "positive-z-right-high.png",
+			"look_at": [
+				0,
+				0,
+				0
+			],
+			"orthographic_size": 1.89497184753418,
+			"pixels": [
+				768,
+				768
+			],
+			"sha256": "c04718b1019efcc51752e2e16e7f022273390c3e0b19dee0fdd968089d5d17cb"
+		},
+		{
+			"camera": [
+				-4.76889085769653,
+				3.81511330604553,
+				6.35852146148682
+			],
+			"file": "positive-z-left-high.png",
+			"look_at": [
+				0,
+				0,
+				0
+			],
+			"orthographic_size": 1.89497184753418,
+			"pixels": [
+				768,
+				768
+			],
+			"sha256": "335322fd4780c514e79e6fd5d0d2eed5b0070b46f36e0bca3a6cd0ad4e71696d"
+		},
+		{
+			"camera": [
+				4.76889085769653,
+				3.81511330604553,
+				-6.35852146148682
+			],
+			"file": "negative-z-right-high.png",
+			"look_at": [
+				0,
+				0,
+				0
+			],
+			"orthographic_size": 1.89497172832489,
+			"pixels": [
+				768,
+				768
+			],
+			"sha256": "0a1de9f2ffc2f00617562443532dc08f7ba4aef970240b6110088f2332f36e0d"
+		},
+		{
+			"camera": [
+				-4.76889085769653,
+				3.81511330604553,
+				-6.35852146148682
+			],
+			"file": "negative-z-left-high.png",
+			"look_at": [
+				0,
+				0,
+				0
+			],
+			"orthographic_size": 1.89497172832489,
+			"pixels": [
+				768,
+				768
+			],
+			"sha256": "9f8e1dc896672ab5c29c735423779097c57fa21329b602f6dff7909b06bb119d"
+		},
+		{
+			"camera": [
+				4.68190717697144,
+				2.77446365356445,
+				6.93615913391113
+			],
+			"file": "positive-z-right-low.png",
+			"look_at": [
+				0,
+				0,
+				0
+			],
+			"orthographic_size": 1.78342950344086,
+			"pixels": [
+				768,
+				768
+			],
+			"sha256": "7b90fe5375e245c81c4297e246febbff42a8f85f231d56d9f60315d263fd34f8"
+		},
+		{
+			"camera": [
+				0.0,
+				2.21849465370178,
+				8.53267288208008
+			],
+			"file": "positive-z-front.png",
+			"look_at": [
+				0,
+				0,
+				0
+			],
+			"orthographic_size": 1.60621047019959,
+			"pixels": [
+				768,
+				768
+			],
+			"sha256": "214288be98c51dfe980f21366216d8dc6394439fafeb1f4714017b5299c4de2a"
+		}
+	],
+	"geometry_materials_textures_child_transforms": "Original and unchanged",
+	"lighting": {
+		"ambient_energy": 0.45,
+		"directional_energy": 0.65,
+		"directional_rotation": [
+			-50,
+			-35,
+			0
+		]
+	},
+	"meshes": [
+		{
+			"aabb": "[P: (-0.444299, 0.0, -0.383784), S: (0.936698, 1.204649, 0.869428)]",
+			"name": "cash_register",
+			"surfaces": 1
+		},
+		{
+			"aabb": "[P: (-0.03489, -0.047284, 0.059583), S: (0.095525, 0.094566, 0.251587)]",
+			"name": "cash_register_handle_001",
+			"surfaces": 1
+		}
+	],
+	"model_sha256": "43aed74637cf10432d996a18f03ed580f6cbc346b5f91d9592473370ed8ea1cc",
+	"root_centering_translation": [
+		-0.0305804908275604,
+		-0.602324724197388,
+		-0.0509295761585236
+	],
+	"scope": "Original acquired source in six views; no term candidate, minimum-card validation, acceptance, or production integration.",
+	"source_bounds": [
+		-0.444299280643463,
+		0.0,
+		-0.383784353733063,
+		0.949759542942047,
+		1.20464944839478,
+		0.869427859783173
+	]
+}

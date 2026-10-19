@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "status": "frozen_author_morphology_research_not_independent_acceptance",
+  "frozen_at": "2026-10-16T22:06:42.9575320Z",
+  "files": [
+    {
+      "path": "accepted-language-basis.json",
+      "bytes": 1398,
+      "sha256": "4506b69b74320a11a9b1943b0251a41229c37434ba80b662b037de398f047e6f"
+    },
+    {
+      "path": "analyses.proposed.json",
+      "bytes": 4824,
+      "sha256": "b8723c310b12b8885604d40e148c81a696866c270b455b36aefbdf07912f50c2"
+    },
+    {
+      "path": "canonical-family-contexts.before.json",
+      "bytes": 116929,
+      "sha256": "211e0e42a1c3af2dc32ab96f32f1de225efe32c0b40360a24ca0bc7be42dc71e"
+    },
+    {
+      "path": "canonical-family-scan.json",
+      "bytes": 11698,
+      "sha256": "5fe1c127d4f26d9e89c9efc35992d0fdf945f6952136e0f3bdfb718fdb645b44"
+    },
+    {
+      "path": "ensure.atomic-alternative.proposed.json",
+      "bytes": 1346,
+      "sha256": "71a3e1abc849221c4d471953a0b686f8ecd8dd1d56d98d82be133115bad20999"
+    },
+    {
+      "path": "HANDOFF.md",
+      "bytes": 2548,
+      "sha256": "76fc826a5dd4f05148ddff083740468b4bfba239dcb077cd218929e57345c00f"
+    },
+    {
+      "path": "input-pins.json",
+      "bytes": 50032,
+      "sha256": "e668a6d0d70c9f6284288710b2ff07fdce4e348bd6ad864cb364e4f07080fac6"
+    },
+    {
+      "path": "proposal.json",
+      "bytes": 8046,
+      "sha256": "951b8f4f1397261dfd05786fcb1f847d8ab4acfd34cb8b53bf4fa3a4aed3222c"
+    },
+    {
+      "path": "protected-contexts.additional.json",
+      "bytes": 22015,
+      "sha256": "3566d3d797165ed000e9ac5fa28cdce42f218e7c7ec6fa746b5622d0f7ba89a0"
+    },
+    {
+      "path": "README.md",
+      "bytes": 4523,
+      "sha256": "13e4ae6ae5fd1f96aaa137f7cc72a8ac4a3b5a816c24b97fda9a126e912a3af4"
+    },
+    {
+      "path": "SOURCE-LEDGER.md",
+      "bytes": 5362,
+      "sha256": "d79e60a06be5a6846ce6db606e692ea96e7c156790976a15aad7d3cffd648289"
+    },
+    {
+      "path": "source-observations.json",
+      "bytes": 6199,
+      "sha256": "aaac9f93f8a8e185f3e619e8734b93b114d73e5f69700f3ce0e75974fdfd8ad6"
+    },
+    {
+      "path": "source-records.proposed.json",
+      "bytes": 7630,
+      "sha256": "ec5e2bb5b54f0eecf2394dc45d0da9cb9a4b53b00b8aa513bbb45b0d52e27418"
+    },
+    {
+      "path": "static-observations.json",
+      "bytes": 2256,
+      "sha256": "e35eede2153578a9b53340bb911a8de05efca5e6105889b7aa985d3ee49f052d"
+    }
+  ],
+  "inventory_excludes_itself": true,
+  "production_changed": false,
+  "project_execution": false,
+  "final_live_binding": "UNBOUND"
+}

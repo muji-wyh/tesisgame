@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "status": "actual_root_native_results_selected_for_raw_review",
+  "receipt": {
+    "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r03/execution-r01/receipt.json",
+    "bytes": 9661,
+    "raw_sha256": "8d361e700adf1808d1aa5543816ca983b36d984ed92bdb5921b6d3e475ab6d01"
+  },
+  "witness": {
+    "path": "docs/qa/professional-foundation02-fifth10-r01/root-dispatch/native-r03.json",
+    "bytes": 2397,
+    "raw_sha256": "d39bcad2b850e617bf1ba07de68e969761536ec5289deae83538b95abe55090f"
+  }
+}

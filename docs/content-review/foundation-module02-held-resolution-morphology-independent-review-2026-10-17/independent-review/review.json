@@ -1,0 +1,86 @@
+{
+  "schema": 1,
+  "status": "accepted_exact_morphology_structure_projection_pending_delivery",
+  "reviewer": "Codex morph_review, independent AI reviewer of Codex runtime_recovery research; not human or subject-matter approval",
+  "reviewed_on": "2026-10-17",
+  "author_inventory_sha256": "9ecff44931f5512774c98ef4781d1720d3fdb416855dd53e6e56b065cb0d6741",
+  "author_analyses_raw_sha256": "b8723c310b12b8885604d40e148c81a696866c270b455b36aefbdf07912f50c2",
+  "accepted_projection": {
+    "path": "accepted-analysis-structure.json",
+    "raw_sha256": "a14730c9239eff17513700bc126e960a68c2a8f0100e259a7b297a92acc4dd6c",
+    "fields": ["schema", "lexeme_id", "text", "kind", "parts", "nodes", "roots"],
+    "excluded": ["analysis id", "review status/reviewer/date/notes/references", "all lexical and expression fields", "production metadata", "live registry binding"]
+  },
+  "decisions": [
+    {
+      "lexeme_id": "ensure.make-certain.v",
+      "decision": "accept_exact_two_part_structure",
+      "analysis": "en- + sure",
+      "reason": "The selected outcome/condition sense is compositionally interpretable as causing a result or condition to be certain. Fresh current-prefix and current-base evidence supports this modern teaching boundary; Collins history corroborates it but is not the sole reason. Prefix and free adjective stem are correctly distinguished. The authored en and sure surfaces concatenate exactly, so no spelling transformation is inferred.",
+      "canonical_family": "Accept english.affix.en.causative with canonical en- and english.stem.sure.certain with canonical sure for this target. Preserve distinct identities from the pending generic encode/enable prefix, Greek-location empathy prefix, all -en suffixes and assure/assurance bases. This does not decide future justified reuse after independent review.",
+      "variant": "Keep the already accepted forms ensure and insure and the North American note. This graph covers canonical ensure only. It neither teaches a negative in- analysis nor authorizes rejection of an otherwise accepted insure answer. Alternate spelling presentation and scoring remain a separate integration check.",
+      "fallback": "The frozen atomic ensure alternative is a structurally coherent unselected fallback. It is not the accepted projection and must not become a second active analysis or an unreviewed substitution for the selected structure."
+    },
+    {
+      "lexeme_id": "inform.give-information.v",
+      "decision": "accept_exact_atomic_teaching_structure",
+      "analysis": "inform as one intact base",
+      "reason": "The current selected meaning is information transfer. Splitting negative in- from the document word form would not express it. Historical shaping structure does not require this course to teach a deeper inherited analysis. Atomic here states the chosen teaching boundary, not universal linguistic monomorphemicity or absence of derivative morphology.",
+      "canonical_family": "Accept english.atomic.inform.give-information with canonical inform for the new ordinary verb. Retain separation from pending clinical morph.inform. Ordinary informed forms support a plausible shared base, but there is no remap, clinical-consent graph approval, standalone informed-adjective analysis, information-family approval or specialist acceptance. A later explicit equivalence decision may unify only independently accepted occurrences."
+    },
+    {
+      "lexeme_id": "collect.gather.v",
+      "decision": "accept_exact_atomic_teaching_structure",
+      "analysis": "collect as one intact gathering base",
+      "reason": "The independently accepted gathering sense and its usual derivatives support retaining collect as the teaching base. The documented Latin history is real; it does not by itself establish the correct depth, allomorphs or semantics of a modern col + lect exercise. No syllable or letter-count cut is justified.",
+      "canonical_family": "Accept english.atomic.collect.gather with canonical collect for the gathering repair. Preserve all old morph.collect pickup occurrences and morph.collection pickup/payment compounds pending. This conservative boundary prevents automatic same-spelling tile equivalence while those decisions are unresolved; it does not assert that the polysemous families can never be related.",
+      "progress": "The lexical ID stays collect.gather.v. A new part ID cannot repair or certify old pickup-derived skill evidence. Preserve historical records and the existing separate semantic-provenance caveat; this morphology review approves no progress migration or mastery claim."
+    }
+  ],
+  "canonical_family_observations": [
+    "All 163 frozen lexical envelopes and 4,939 lexemes were read. The author's twenty-one exact family snapshots, summary rows and four additional complete contrasts match the frozen candidate objects.",
+    "A separate spelling-based supplement checked every frozen lexical envelope and found twelve relevant surface/canonical-form rows. Its five extra complete objects include broken already present among the author's contrasts, so it adds four new protected objects: tighten, loosen, quality assurance and reassure. Twenty-nine distinct contextual objects are retained across the combined records.",
+    "The five proposed canonical IDs, including the unselected ensure fallback, have no collision in the frozen corpus. This is not a current registry collision check.",
+    "The legacy affix.en.suffix ID appears in both participial broken and causative tighten/loosen. All are pending. This review grants no approval or equivalence to that inherited suffix family and makes no change to it.",
+    "The frozen morphology runtime signature includes canonical_id and canonical form and excludes contextual atomic/stem type. Merely changing type or notes would not isolate any of these families. The accepted exact identities are therefore part of this bounded structure decision."
+  ],
+  "technical_observations": {
+    "capture": "capture-r02-result.json",
+    "capture_raw_sha256": "faf3ceb2b1632f5d135633bcd07038fd137b2ae256257f60a32ee8bc9f7a9f65",
+    "static_checks_passed": 5373,
+    "measured_immutable_inputs": 194,
+    "author_payload_files_exact": 14,
+    "author_frozen_input_pins_exact": 176,
+    "author_live_input_pins_deliberately_not_read": 8,
+    "exact_immutable_runtime_substitutions": 3,
+    "graph_observation": "All three selected graphs and the unselected fallback have exact target surfaces, unique IDs, full reachable roots and no artificial breaks. The two-part ensure join is adjacent and requires no deletion. This is direct JSON/source inspection, not a schema/compiler/test pass.",
+    "atomic_observation": "The exact-hash immutable resolver source omits spelling from atomic Word Jelly requirements and rejects terms without any reachable scored skill. Atomic exposure does not certify mastery. Valid scored routes and the final accepted phrases still require integrated readiness checks.",
+    "failure_preserved": "capture.cjs and capture-failure.json remain immutable. The first reviewer capture compared the author's extra disposition annotation against a bare corpus wrapper and stopped at broken. Fresh capture-r02.cjs compares the complete resource and entry fields, leaving that annotation as commentary; it passed. No author file changed, project module ran or historical entrypoint was replayed."
+  },
+  "source_records": {
+    "decision": "accept_as_author_consultation_proposals_only",
+    "count": 9,
+    "reason": "Fresh independent rendered observations corroborate the claimed sections. The rows accurately deny acquired assets and independent acceptance. Exact final source-registration metadata and references remain a separate delivery review; this decision does not register them."
+  },
+  "remaining_delivery_conditions": [
+    "Finalize analysis IDs and review/status/reference/note metadata in a separately reviewed delivery proposal; preserve the frozen pending author analyses and this accepted structure projection.",
+    "Bind the actual settled registry, source rows, curriculum and requirements revisions, media and domain-policy dependencies. Recheck canonical collisions and exact relevant current contexts then.",
+    "Keep the accepted ensure/insure language projection exact; verify variant handling separately from canonical composition.",
+    "Preserve old notify/verify identities and saved evidence outside the active replacement catalog, grant no alias/skill transfer, and copy no old expression completion into the coordinated new requirements namespace.",
+    "Retain the same-ID collect pickup-provenance caveat and complete separate populated-profile verification before claiming gathering mastery.",
+    "Run actual integrated schema/compiler/runtime and persisted checks only under root ownership after final binding; no such execution is represented here.",
+    "Keep all word/phrase media, clinical/specialist, full-module and release gates separate and pending where not independently accepted."
+  ],
+  "scope": {
+    "production_changed": false,
+    "shared_tests_changed": false,
+    "author_packet_changed": false,
+    "project_modules_imported": false,
+    "project_tests_native_build_or_browser_executed": false,
+    "live_saves_inspected": false,
+    "clinical_or_specialist_approval": false,
+    "media_acquired_or_played": false,
+    "final_live_binding": "UNBOUND",
+    "module_or_release_accepted": false
+  }
+}

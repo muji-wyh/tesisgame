@@ -1,0 +1,80 @@
+{
+  "schema": 1,
+  "status": "actual_projected_candidate_result_corroborated",
+  "reviewer": "/root/morph_review",
+  "at": "2026-10-17T00:19:53.799Z",
+  "receipt": {
+    "path": "build/professional-english/foundation02-fifth10-projected-validation-r03/attempt-001/receipt.json",
+    "bytes": 472109,
+    "raw_sha256": "ea5d48950c11579f39f12c5c020fe64409db1641951084fe2f3d4a61fb4f5650"
+  },
+  "witness": {
+    "path": "docs/qa/professional-foundation02-fifth10-r01/root-dispatch/projected-r03.json",
+    "bytes": 2127,
+    "raw_sha256": "b4ccf719129a50f17cf41bd2dd509def2ad832248faac2b6694ce0b4b779bdb7"
+  },
+  "comparisons_passed": 52061,
+  "findings": [],
+  "inputs_rehashed_at_end": 14325,
+  "measurements": {
+    "callbacks": 263,
+    "callbacks_by_file": {
+      "tests/professional-content.test.cjs": 197,
+      "tests/professional-retail-morphology.test.cjs": 40,
+      "tests/professional-retail-media.test.cjs": 26
+    },
+    "audit": {
+      "summary": {
+        "courses": 20,
+        "modules": 200,
+        "themes": 21,
+        "unique_lexemes": 4939,
+        "vocabulary_memberships": 10000,
+        "vocabulary_memberships_target": 10000,
+        "vocabulary_memberships_remaining": 0,
+        "expressions": 1620,
+        "expression_memberships": 2000,
+        "expression_memberships_target": 2000,
+        "expression_memberships_remaining": 0,
+        "ready_modules": 0,
+        "reviewed_lexemes": 156,
+        "morphology_authored": 4045,
+        "morphology_reviewed": 89,
+        "integrated_word_images": 9,
+        "integrated_word_audio": 12,
+        "release_ready": false
+      },
+      "errors": 0,
+      "warnings": 29382
+    },
+    "protected_inputs": 14319,
+    "evidence_files": 1734,
+    "observed_current_inputs": 3223,
+    "absent_production_additions": 817,
+    "temporary_roots_removed": 2,
+    "root_dispatch": {
+      "kind": "projected",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "receipt": {
+        "path": "build/professional-english/foundation02-fifth10-projected-validation-r03/attempt-001/receipt.json",
+        "bytes": 472109,
+        "raw_sha256": "ea5d48950c11579f39f12c5c020fe64409db1641951084fe2f3d4a61fb4f5650"
+      }
+    },
+    "root_dispatch_witness": {
+      "path": "docs/qa/professional-foundation02-fifth10-r01/root-dispatch/projected-r03.json",
+      "bytes": 2127,
+      "raw_sha256": "b4ccf719129a50f17cf41bd2dd509def2ad832248faac2b6694ce0b4b779bdb7"
+    }
+  },
+  "actual_installation": false,
+  "persisted_validation": false,
+  "scope": {
+    "independent_raw_inspection_only": true,
+    "project_or_proposal_modules_executed": false,
+    "tests_rerun": false,
+    "native_result_not_reviewed_here": true
+  }
+}

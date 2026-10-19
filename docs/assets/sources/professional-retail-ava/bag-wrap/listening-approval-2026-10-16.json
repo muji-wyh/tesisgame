@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "status": "approved_by_user",
+  "approved_on": "2026-10-16",
+  "evidence": {
+    "source": "Direct human answer received in this continuation chat",
+    "question_item_id": [
+      "request_user_input_async",
+      "call_gl3ZkQHtOHUHev3ulmRyYH3a",
+      0
+    ],
+    "question_english": "After listening to shopping bag and gift wrap, are the pronunciation, speed and voice suitable for the game?",
+    "answer_english": "Both are acceptable.",
+    "translation_note": "English translation of the direct human response; no user-message UUID was supplied by the answer event."
+  },
+  "profile": {
+    "voice": "en-US-AvaNeural",
+    "rate": "-15%",
+    "pitch": "+8Hz",
+    "volume": "+0%",
+    "postprocessing": false
+  },
+  "technical_qa": {
+    "path": "build/professional-english/retail-audio-review/bag-wrap-acquired-r01/technical-qa-r01.json",
+    "json_sha256": "25179e9594b091d3f344aad3cb3a72b5ec95fb50701b568565207f5310fec484",
+    "raw_sha256": "05535fbc6acb6b893afa57c14c3156897a3f12010512f598af5d4abe41d4ca29"
+  },
+  "scope": "Approval applies only to these exact presented WAV bytes. No approval of future recordings, alternate synthesis, expressions or game mix is inferred.",
+  "outputs": [
+    {
+      "sense_id": "shopping-bag.goods-carrier.n",
+      "text": "shopping bag",
+      "synthesis_identity_key": "586be3f8c9c02ddf3c082a5c872ffe5565bbe27ddf2da3ac95b5155c214beea4",
+      "submitted_text": "shopping bag.",
+      "presented_path": "build/professional-english/retail-audio-review/bag-wrap-acquired-r01/586be3f8c9c02ddf3c082a5c872ffe5565bbe27ddf2da3ac95b5155c214beea4.wav",
+      "retained_wav": "docs/assets/sources/professional-retail-ava/bag-wrap/586be3f8c9c02ddf3c082a5c872ffe5565bbe27ddf2da3ac95b5155c214beea4.wav",
+      "wav_sha256": "6c7d2ac0e733214faf920a4a0781d0458b6b891a92aa07b7ab433b501d19de72",
+      "retained_mp3": "docs/assets/sources/professional-retail-ava/bag-wrap/586be3f8c9c02ddf3c082a5c872ffe5565bbe27ddf2da3ac95b5155c214beea4.mp3",
+      "source_mp3_sha256": "b3523482f20ec0e4809550527ced762fc15cbf8c21e7209819e10635d9553d7b",
+      "acquisition_receipt": "docs/assets/sources/professional-retail-ava/bag-wrap/586be3f8c9c02ddf3c082a5c872ffe5565bbe27ddf2da3ac95b5155c214beea4.json",
+      "acquisition_receipt_raw_sha256": "4b08fd20ca1be1e3b9f38e54d40af6df68275d9ebf22cad3119aff520c3f798e"
+    },
+    {
+      "sense_id": "gift-wrap.wrapping-paper.n",
+      "text": "gift wrap",
+      "synthesis_identity_key": "410f5cf3688abf20616723d6b01f156bf340893774bb37e3f002e1fe2727a4f6",
+      "submitted_text": "gift wrap.",
+      "presented_path": "build/professional-english/retail-audio-review/bag-wrap-acquired-r01/410f5cf3688abf20616723d6b01f156bf340893774bb37e3f002e1fe2727a4f6.wav",
+      "retained_wav": "docs/assets/sources/professional-retail-ava/bag-wrap/410f5cf3688abf20616723d6b01f156bf340893774bb37e3f002e1fe2727a4f6.wav",
+      "wav_sha256": "cad8619dad6e225ce73c835ce5e90f7252c42af3c546aaa393adcd8db3e0f3a2",
+      "retained_mp3": "docs/assets/sources/professional-retail-ava/bag-wrap/410f5cf3688abf20616723d6b01f156bf340893774bb37e3f002e1fe2727a4f6.mp3",
+      "source_mp3_sha256": "a6d20b0c7e15a29e8f8b1b81476e77a3290c0cc617fdb2bdff3bfffde8de410f",
+      "acquisition_receipt": "docs/assets/sources/professional-retail-ava/bag-wrap/410f5cf3688abf20616723d6b01f156bf340893774bb37e3f002e1fe2727a4f6.json",
+      "acquisition_receipt_raw_sha256": "90d3d53df91efde404c0592ad0d816a9678f31121be471a4dca29b8661ee5ea9"
+    }
+  ]
+}

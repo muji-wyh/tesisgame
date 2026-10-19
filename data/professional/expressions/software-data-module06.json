@@ -1,0 +1,1494 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.software_data.module06.01",
+      "text": "The user story and requirement need clear acceptance criteria in the specification.",
+      "meaning": "Ask for a precise description of success.",
+      "context": "A team prepares a feature for development.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "user",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "story",
+          "start": 9,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "requirement",
+          "start": 19,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "need",
+          "start": 31,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "clear",
+          "start": 36,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "acceptance",
+          "start": 42,
+          "end": 52
+        },
+        {
+          "index": 8,
+          "text": "criteria",
+          "start": 53,
+          "end": 61
+        },
+        {
+          "index": 9,
+          "text": "in",
+          "start": 62,
+          "end": 64
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": "specification",
+          "start": 69,
+          "end": 82
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 82,
+          "end": 83
+        }
+      ],
+      "focus_lexeme_ids": [
+        "user-story.user-centered-work-description.n",
+        "requirement.needed-system-capability.n",
+        "acceptance-criteria.agreed-success-conditions.n",
+        "specification.detailed-system-description.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module06.02",
+      "text": "The prototype is a proof of concept for the new feature.",
+      "meaning": "Explain the purpose of an early implementation.",
+      "context": "A developer presents a design experiment.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "prototype",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "is",
+          "start": 14,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 17,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "proof",
+          "start": 19,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "of",
+          "start": 25,
+          "end": 27
+        },
+        {
+          "index": 6,
+          "text": "concept",
+          "start": 28,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "for",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 9,
+          "text": "new",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 10,
+          "text": "feature",
+          "start": 48,
+          "end": 55
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 55,
+          "end": 56
+        }
+      ],
+      "focus_lexeme_ids": [
+        "prototype.early-design-model.n",
+        "proof-of-concept.feasibility-demonstration.n",
+        "feature.software-capability.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module06.03",
+      "text": "Link the bug and defect reports to the issue and support ticket.",
+      "meaning": "Connect related records of a software problem.",
+      "context": "A developer coordinates investigation with support.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Link",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 5,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "bug",
+          "start": 9,
+          "end": 12
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 4,
+          "text": "defect",
+          "start": 17,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "reports",
+          "start": 24,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "to",
+          "start": 32,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 35,
+          "end": 38
+        },
+        {
+          "index": 8,
+          "text": "issue",
+          "start": 39,
+          "end": 44
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 10,
+          "text": "support",
+          "start": 49,
+          "end": 56
+        },
+        {
+          "index": 11,
+          "text": "ticket",
+          "start": 57,
+          "end": 63
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 63,
+          "end": 64
+        }
+      ],
+      "focus_lexeme_ids": [
+        "bug.unintended-program-problem.n",
+        "defect.product-flaw.n",
+        "issue.tracked-work-item.n",
+        "ticket.tracked-request-record.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module06.04",
+      "text": "The backlog includes work for the next sprint, iteration, and milestone.",
+      "meaning": "Describe how planned work relates to upcoming delivery points.",
+      "context": "A team reviews its development plan.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "backlog",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "includes",
+          "start": 12,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "work",
+          "start": 21,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "for",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "next",
+          "start": 34,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "sprint",
+          "start": 39,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 45,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "iteration",
+          "start": 47,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 56,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 12,
+          "text": "milestone",
+          "start": 62,
+          "end": 71
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 71,
+          "end": 72
+        }
+      ],
+      "focus_lexeme_ids": [
+        "backlog.uncompleted-work-list.n",
+        "sprint.time-boxed-work-cycle.n",
+        "iteration.development-cycle.n",
+        "milestone.significant-project-point.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module06.05",
+      "text": "The release contains a new version, a patch, and an approved hotfix.",
+      "meaning": "Describe the contents of a software delivery.",
+      "context": "A developer explains a fictional release summary.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "release",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "contains",
+          "start": 12,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 21,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "new",
+          "start": 23,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "version",
+          "start": 27,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 34,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "a",
+          "start": 36,
+          "end": 37
+        },
+        {
+          "index": 8,
+          "text": "patch",
+          "start": 38,
+          "end": 43
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 43,
+          "end": 44
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 11,
+          "text": "an",
+          "start": 49,
+          "end": 51
+        },
+        {
+          "index": 12,
+          "text": "approved",
+          "start": 52,
+          "end": 60
+        },
+        {
+          "index": 13,
+          "text": "hotfix",
+          "start": 61,
+          "end": 67
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 67,
+          "end": 68
+        }
+      ],
+      "focus_lexeme_ids": [
+        "release.distributed-software-version.n",
+        "version.identified-software-state.n",
+        "patch.targeted-software-change.n",
+        "hotfix.urgent-targeted-fix.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module06.06",
+      "text": "Check the build artifact, dependency lockfile, and configuration file before staging validation.",
+      "meaning": "Identify outputs and inputs requiring review.",
+      "context": "A release engineer prepares a validation run.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Check",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "build",
+          "start": 10,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "artifact",
+          "start": 16,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 24,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "dependency",
+          "start": 26,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "lockfile",
+          "start": 37,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 45,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "configuration",
+          "start": 51,
+          "end": 64
+        },
+        {
+          "index": 10,
+          "text": "file",
+          "start": 65,
+          "end": 69
+        },
+        {
+          "index": 11,
+          "text": "before",
+          "start": 70,
+          "end": 76
+        },
+        {
+          "index": 12,
+          "text": "staging",
+          "start": 77,
+          "end": 84
+        },
+        {
+          "index": 13,
+          "text": "validation",
+          "start": 85,
+          "end": 95
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 95,
+          "end": 96
+        }
+      ],
+      "focus_lexeme_ids": [
+        "build-artifact.generated-build-output.n",
+        "dependency-lockfile.resolved-dependency-record.n",
+        "configuration-file.settings-file.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module06.07",
+      "text": "Each environment has a defined purpose: keep the development environment and staging environment distinct from the production environment.",
+      "meaning": "Distinguish environments by their intended use.",
+      "context": "A team checks boundaries between development, validation, and live systems.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Each",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "environment",
+          "start": 5,
+          "end": 16
+        },
+        {
+          "index": 2,
+          "text": "has",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 21,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "defined",
+          "start": 23,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "purpose",
+          "start": 31,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": ":",
+          "start": 38,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "keep",
+          "start": 40,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "development",
+          "start": 49,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": "environment",
+          "start": 61,
+          "end": 72
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 73,
+          "end": 76
+        },
+        {
+          "index": 12,
+          "text": "staging",
+          "start": 77,
+          "end": 84
+        },
+        {
+          "index": 13,
+          "text": "environment",
+          "start": 85,
+          "end": 96
+        },
+        {
+          "index": 14,
+          "text": "distinct",
+          "start": 97,
+          "end": 105
+        },
+        {
+          "index": 15,
+          "text": "from",
+          "start": 106,
+          "end": 110
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 111,
+          "end": 114
+        },
+        {
+          "index": 17,
+          "text": "production",
+          "start": 115,
+          "end": 125
+        },
+        {
+          "index": 18,
+          "text": "environment",
+          "start": 126,
+          "end": 137
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 137,
+          "end": 138
+        }
+      ],
+      "focus_lexeme_ids": [
+        "development-environment.software-building-context.n",
+        "staging-environment.pre-release-validation-context.n",
+        "production-environment.live-service-context.n",
+        "environment.software-running-context.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module06.08",
+      "text": "The pull request needs code review and a resolved merge conflict before integration.",
+      "meaning": "Describe outstanding review work.",
+      "context": "Developers coordinate a proposed change.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "pull",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "request",
+          "start": 9,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "needs",
+          "start": 17,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "code",
+          "start": 23,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "review",
+          "start": 28,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 35,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "a",
+          "start": 39,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": "resolved",
+          "start": 41,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": "merge",
+          "start": 50,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": "conflict",
+          "start": 56,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "before",
+          "start": 65,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "integration",
+          "start": 72,
+          "end": 83
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 83,
+          "end": 84
+        }
+      ],
+      "focus_lexeme_ids": [
+        "pull-request.proposed-branch-integration.n",
+        "code-review.change-examination.n",
+        "merge-conflict.incompatible-change-overlap.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module06.09",
+      "text": "This test case compares the expected result and actual result with an assertion, using a stub for predefined responses and a mock for interaction checks.",
+      "meaning": "Describe test outcomes and the roles of test substitutes.",
+      "context": "A reviewer explains a test's design.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "This",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "test",
+          "start": 5,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "case",
+          "start": 10,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "compares",
+          "start": 15,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "expected",
+          "start": 28,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "result",
+          "start": 37,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "actual",
+          "start": 48,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "result",
+          "start": 55,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": "with",
+          "start": 62,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": "an",
+          "start": 67,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": "assertion",
+          "start": 70,
+          "end": 79
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 79,
+          "end": 80
+        },
+        {
+          "index": 14,
+          "text": "using",
+          "start": 81,
+          "end": 86
+        },
+        {
+          "index": 15,
+          "text": "a",
+          "start": 87,
+          "end": 88
+        },
+        {
+          "index": 16,
+          "text": "stub",
+          "start": 89,
+          "end": 93
+        },
+        {
+          "index": 17,
+          "text": "for",
+          "start": 94,
+          "end": 97
+        },
+        {
+          "index": 18,
+          "text": "predefined",
+          "start": 98,
+          "end": 108
+        },
+        {
+          "index": 19,
+          "text": "responses",
+          "start": 109,
+          "end": 118
+        },
+        {
+          "index": 20,
+          "text": "and",
+          "start": 119,
+          "end": 122
+        },
+        {
+          "index": 21,
+          "text": "a",
+          "start": 123,
+          "end": 124
+        },
+        {
+          "index": 22,
+          "text": "mock",
+          "start": 125,
+          "end": 129
+        },
+        {
+          "index": 23,
+          "text": "for",
+          "start": 130,
+          "end": 133
+        },
+        {
+          "index": 24,
+          "text": "interaction",
+          "start": 134,
+          "end": 145
+        },
+        {
+          "index": 25,
+          "text": "checks",
+          "start": 146,
+          "end": 152
+        },
+        {
+          "index": 26,
+          "text": ".",
+          "start": 152,
+          "end": 153
+        }
+      ],
+      "focus_lexeme_ids": [
+        "test-case.specified-test-scenario.n",
+        "expected-result.intended-test-outcome.n",
+        "actual-result.observed-test-outcome.n",
+        "assertion.test-condition-check.n",
+        "stub.predefined-test-response.n",
+        "mock.controlled-test-substitute.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    },
+    {
+      "id": "expr.software_data.module06.10",
+      "text": "Add a regression test for the edge case and include the reproduction steps and stack trace.",
+      "meaning": "Request evidence and protection for a known failure.",
+      "context": "A developer records a reproducible problem.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Add",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "a",
+          "start": 4,
+          "end": 5
+        },
+        {
+          "index": 2,
+          "text": "regression",
+          "start": 6,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "test",
+          "start": 17,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "for",
+          "start": 22,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "edge",
+          "start": 30,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "case",
+          "start": 35,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 9,
+          "text": "include",
+          "start": 44,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 11,
+          "text": "reproduction",
+          "start": 56,
+          "end": 68
+        },
+        {
+          "index": 12,
+          "text": "steps",
+          "start": 69,
+          "end": 74
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 14,
+          "text": "stack",
+          "start": 79,
+          "end": 84
+        },
+        {
+          "index": 15,
+          "text": "trace",
+          "start": 85,
+          "end": 90
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 90,
+          "end": 91
+        }
+      ],
+      "focus_lexeme_ids": [
+        "regression-test.previous-behavior-protection-check.n",
+        "edge-case.boundary-or-unusual-case.n",
+        "reproduction-steps.failure-recreation-sequence.n",
+        "stack-trace.recorded-call-sequence.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "schema": 1,
+  "status": "scratch_test_previews_syntax_checked_not_executed",
+  "transforms": {
+    "tests/professional-content.test.cjs": {
+      "before_raw_sha256": "3d8637bc8a21c1a39135abeef0d4b1155b2796526da1bf3d3b98a720a75368de",
+      "after_raw_sha256": "37d469c627c45fb76414267c4b94a244589ea31fcf72d5275c4394002693fd5a",
+      "preview": "build/professional-english/retail-term-art-review/cash-register-r04/delivery-r01/preview/tests/professional-content.test.cjs"
+    },
+    "tests/professional-retail-morphology.test.cjs": {
+      "before_raw_sha256": "fcb09be651af0198a657becc9f0472c0b5d37ed10a382a86312c48f0c3610994",
+      "after_raw_sha256": "75e6db92598a676560ce4cc92fb931bc219178db28988b7f8985061f69f3521d",
+      "preview": "build/professional-english/retail-term-art-review/cash-register-r04/delivery-r01/preview/tests/professional-retail-morphology.test.cjs"
+    },
+    "tests/professional-retail-media.test.cjs": {
+      "before_raw_sha256": "ab5bbbcef1b920df0cef35d71c6e144a44c16117195f588b350565d94c777bd8",
+      "after_raw_sha256": "7cda7edce2ec79e8ab2ac645729b56db1f71841680119befc56d14c53f87c7c5",
+      "preview": "build/professional-english/retail-term-art-review/cash-register-r04/delivery-r01/preview/tests/professional-retail-media.test.cjs"
+    },
+    "tests/professional-approved-audio.test.cjs": {
+      "before_raw_sha256": "eb03eeae35a34409cc3a556c675554150fb4ed41dec3831d987d373e94c8662f",
+      "after_raw_sha256": "172e6fd20c931657fd804369efa45cabf209c9171dfcb1ca58df9a1a090076c4",
+      "preview": "build/professional-english/retail-term-art-review/cash-register-r04/delivery-r01/preview/tests/professional-approved-audio.test.cjs"
+    }
+  },
+  "syntax": [
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register-r04/delivery-r01/delivery-lib.cjs",
+      "raw_sha256": "96807a265245e6d00a3ef7488ef99a60a727f674c75551eba02cd46e0e9a0520",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register-r04/delivery-r01/bind-current-baseline.cjs",
+      "raw_sha256": "311b853b223613e55354217b721d6e5815f33cb345e2fd362a01c49c589f6d83",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register-r04/delivery-r01/integrate-reviewed.cjs",
+      "raw_sha256": "2334821d643869b8b67057518f85343e4b0a74fa30d6fecf03e53a35accc9381",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register-r04/delivery-r01/transaction-plan.cjs",
+      "raw_sha256": "dca101335d6c1f9bdc379f566c1d048e094638371e720f7afde2398ca1ab1ea2",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register-r04/delivery-r01/guarded-transaction.cjs",
+      "raw_sha256": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register-r04/delivery-r01/persisted-test-transforms.cjs",
+      "raw_sha256": "19bb156bc9ad954cdcaf8680b839989109a670b99ee1f872fbecf12a21d1b892",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register-r04/delivery-r01/update-persisted-tests.cjs",
+      "raw_sha256": "f16703cc9ba5def1c10615018f6547a30df1b760cbb9c38f23da533414956090",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register-r04/delivery-r01/prepare-delivery.cjs",
+      "raw_sha256": "b146801666f0f54fd815cd00fc260707cd37b31c1d7030acab2cd5b697c4774d",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register-r04/production-delivery-r01/prepare-delivery-check.cjs",
+      "raw_sha256": "b81fe23cf11b5622ff1b1073157108d0742159a90b823fb6dfe31e762cb9a3f1",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register-r04/production-delivery-r01/run-production-check.cjs",
+      "raw_sha256": "4beeae6977bf0e436da8b41103451c6b87d0a33c08e9f7d8f7be0b8b38bc6fd5",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register-r04/delivery-r01/preview/tests/professional-content.test.cjs",
+      "raw_sha256": "37d469c627c45fb76414267c4b94a244589ea31fcf72d5275c4394002693fd5a",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register-r04/delivery-r01/preview/tests/professional-retail-morphology.test.cjs",
+      "raw_sha256": "75e6db92598a676560ce4cc92fb931bc219178db28988b7f8985061f69f3521d",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register-r04/delivery-r01/preview/tests/professional-retail-media.test.cjs",
+      "raw_sha256": "7cda7edce2ec79e8ab2ac645729b56db1f71841680119befc56d14c53f87c7c5",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/cash-register-r04/delivery-r01/preview/tests/professional-approved-audio.test.cjs",
+      "raw_sha256": "172e6fd20c931657fd804369efa45cabf209c9171dfcb1ca58df9a1a090076c4",
+      "status": 0
+    }
+  ],
+  "production_files_written": false,
+  "tests_executed": false,
+  "native_executed": false
+}

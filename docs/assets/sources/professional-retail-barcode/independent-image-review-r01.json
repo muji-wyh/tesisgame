@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "status": "independent_visual_review_accepts_exact_barcode_candidate_pending_root_acceptance",
+  "reviewer": "Codex delivery_review (independent AI image review; not human participant recognition or specialist approval)",
+  "recorded_at": "2026-10-16T10:54:02.566Z",
+  "sense_id": "barcode.product-code.n",
+  "image_sha256": "a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c",
+  "review_receipt_raw_sha256": "26ec94893e29fce4aafc0d11807707ada5eeb384689b7de996a8150c67762c6b",
+  "inspected": [
+    "source-preview.png",
+    "candidate-r02/barcode.png",
+    "candidate-r02/actual-word-card-contact.png",
+    "barcode.svg",
+    "candidate-r02/label-crop.svg",
+    "candidate-r02/render.gd",
+    "source-page.html",
+    "cc0-deed.html",
+    "source/parcel/License.txt"
+  ],
+  "findings": [
+    "The white linear-code label is the dominant subject. Its bars and spaces are visibly separated in the full image and the native 1:1 minimum Match and Memory card captures.",
+    "The matched states retain recognizably separate dark bars at 0.68 alpha. The top-right matched badge sits outside the barcode label and does not conceal the identifying pattern.",
+    "The quiet taped parcel top and right edge provide packaging context without a competing price tag, scanner, readable identifier or brand. The intentional close-up is consistent with the exact term brief.",
+    "Source crop retains all original barcode strokes and whitespace; the original black backdrop is excluded. The parcel geometry and materials remain sourced and unchanged.",
+    "ClipSafari names netalloy and applies CC0 to the exact downloadable SVG. The original Openclipart endpoint was not acquired, and this distinction is retained."
+  ],
+  "accepted_adaptations": [
+    "Change only source SVG viewBox from 0 0 300 300 to 92 79 173 88, retaining every original bar and space. The narrow border is cropped at its edge; no barcode strokes are fabricated.",
+    "Rasterize this source crop at 692 by 352, then apply it as a planar artwork surface on the unchanged complete Kenney parcel.",
+    "Use recorded camera and lighting with an intentional package-edge close-up; preserve all original parcel nodes, geometry, materials, texture and child transforms.",
+    "Downscale the 768 by 440 rendered composition proportionally to 512 by 293."
+  ],
+  "boundaries": [
+    "Image-only acceptance for this exact candidate; lexical, domain, morphology, audio and curriculum states remain unchanged.",
+    "No claim of valid machine-readable encoding or real product identity.",
+    "No live physical-phone test or participant recognition study was performed.",
+    "Root-owned production Loader/pixel/card/cache validation remains required after integration."
+  ],
+  "production_changed": false
+}

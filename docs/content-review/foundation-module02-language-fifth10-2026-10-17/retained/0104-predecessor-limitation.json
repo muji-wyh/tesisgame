@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "status": "failed_actual_persisted_receipt_observed_no_success_claim",
+  "reviewer": "/root/morph_review",
+  "files": [
+    {
+      "path": "build/professional-english/shopping-bag-persisted-validation-r01/attempt-001/receipt.json",
+      "bytes": 2981,
+      "raw_sha256": "8680e417f593aa1e04225e258b9390e1cb944c7d91cf378288ff19011de2204d"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-persisted-validation-r01/attempt-001/command-1.log",
+      "bytes": 5791184,
+      "raw_sha256": "0020b63f47249956e1122188f101d26390511a6b02ec16e52377033dd6504ae6"
+    },
+    {
+      "path": "build/professional-english/shopping-bag-persisted-validation-r01/attempt-001/command-2.log",
+      "bytes": 27390,
+      "raw_sha256": "5c51c6b4a8a8b4016fab7fee1126473f50ebb799dfc70df7df953f54e291fc23"
+    }
+  ],
+  "all_raw_hashes_match_receipt_and_root_report": true,
+  "overall_receipt_ok": false,
+  "helper_execution_accepted": false,
+  "actual_binding_accepted": false
+}

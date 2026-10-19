@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "started_at": "2026-10-16T18:55:11.949Z",
+  "completed_at": "2026-10-16T18:55:15.108Z",
+  "entrypoint": "build/professional-english/foundation-module02-language-review/third10-research-r01/assemble.cjs",
+  "source_files": [
+    {
+      "path": "build/professional-english/foundation-module02-language-review/third10-research-r01/collect-html-metadata.cjs",
+      "raw_sha256": "9bbcc9b3534bfcf8febd2bb5de05d15c5ae9e23085987ebfe228ceccc62dfb03"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/third10-research-r01/oxford-html-metadata.json",
+      "raw_sha256": "33efde1aabcb5cef8c82fb455fd2d0a0ae3c77f78d3ff49d11dd9e9b06244b7f"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/third10-research-r01/research-notes.json",
+      "raw_sha256": "4e996e65b2bf54d9f466e7c91f8ea45036a2e05b1723bb29aa1f0d2bb240566e"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/third10-research-r01/assemble.cjs",
+      "raw_sha256": "59b301a8a8b0860bcfb289a5cc5f5df08a788b6e27471d4ece5c8b5277ccd4f9"
+    }
+  ],
+  "assembly_start_raw_sha256": "47bb204e6dc01c94f6dc562abbd1aef4268d45db44dcd0df599a7380b83fa4a7",
+  "inventory_raw_sha256": null,
+  "status": 1,
+  "signal": null,
+  "error": null,
+  "stdout": "",
+  "stderr": "node:fs:439\r\n    return binding.readFileUtf8(path, stringToFlags(options.flag));\r\n                   ^\r\n\r\nError: ENOENT: no such file or directory, open 'Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\data\\professional\\schemas\\lexeme.schema.json.schema.json'\r\n    at Object.readFileSync (node:fs:439:20)\r\n    at read (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\tools\\validate-professional-content.cjs:64:57)\r\n    at Object.schemaErrors (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\tools\\validate-professional-content.cjs:116:23)\r\n    at Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation-module02-language-review\\third10-research-r01\\assemble.cjs:45:24\r\n    at Array.map (<anonymous>)\r\n    at Object.<anonymous> (Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation-module02-language-review\\third10-research-r01\\assemble.cjs:39:29)\r\n    at Module._compile (node:internal/modules/cjs/loader:1804:14)\r\n    at Object..js (node:internal/modules/cjs/loader:1936:10)\r\n    at Module.load (node:internal/modules/cjs/loader:1525:32)\r\n    at Module._load (node:internal/modules/cjs/loader:1327:12) {\r\n  errno: -4058,\r\n  code: 'ENOENT',\r\n  syscall: 'open',\r\n  path: 'Q:\\\\.codex\\\\worktrees\\\\current-age-vocabulary\\\\tesisgame\\\\data\\\\professional\\\\schemas\\\\lexeme.schema.json.schema.json'\r\n}\r\n\r\nNode.js v24.13.1\r\n",
+  "executed_source_equality_verified": false,
+  "witness_verification_error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n1 !== 0\n\n    at [stdin]:13:9\n    at runScriptInThisContext (node:internal/vm:219:10)\n    at node:internal/process/execution:451:12\n    at [stdin]-wrapper:6:24\n    at runScriptInContext (node:internal/process/execution:449:60)\n    at evalFunction (node:internal/process/execution:283:30)\n    at evalTypeScript (node:internal/process/execution:295:3)\n    at node:internal/main/eval_stdin:51:5\n    at Socket.<anonymous> (node:internal/process/execution:205:5)\n    at Socket.emit (node:events:520:35)",
+  "production_mutated": false
+}

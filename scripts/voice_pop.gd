@@ -54,6 +54,7 @@ var _words: Array = []
 var _textures: Dictionary = {}
 var _word_fits: Dictionary = {}
 var _draw_style_scale: float = -1.0
+var _learning_backdrop_active: bool = false
 var _backdrop_style: StyleBoxFlat
 var _hud_panel_style: StyleBoxFlat
 var _card_shadow_style: StyleBoxFlat
@@ -141,6 +142,13 @@ func _ready() -> void:
 	_build()
 	_layout()
 
+
+func set_learning_backdrop(active: bool) -> void:
+	if _learning_backdrop_active == active:
+		return
+	_learning_backdrop_active = active
+	_draw_style_scale = -1.0
+	queue_redraw()
 
 func apply_theme(_theme: Dictionary, chests: Dictionary) -> void:
 	_build()
@@ -628,6 +636,7 @@ func pause() -> void:
 
 
 func stop() -> void:
+	set_learning_backdrop(false)
 	cancel_result_input()
 	_clear_transcript()
 	_listening = false
@@ -645,6 +654,12 @@ func stop() -> void:
 	_clear_slices()
 	_frozen_targets.clear()
 	_draw_targets.clear()
+	_textures.clear()
+	_words.clear()
+	_word_fits.clear()
+	game._words.clear()
+	game.hit_words.clear()
+	game.missed_words.clear()
 	_target_canvas.queue_redraw()
 	set_process(false)
 	_publish(true)
@@ -733,6 +748,7 @@ func snapshot(refresh_targets: bool = true) -> Dictionary:
 		"loot_flights": _loot_flights.size(),
 		"chest_fx": _chest_fx_snapshot(),
 		"controls": actions, "message": _message, "listening": _listening, "enabled": _enabled,
+		"learning_backdrop_active": _learning_backdrop_active,
 		"transcript": _transcript, "transcript_final": _transcript_final,
 		"board_frozen": _finished_sent and not _stopped}
 
@@ -1336,7 +1352,8 @@ func _draw() -> void:
 	var scale: float = Style.ui_scale(self)
 	_ensure_draw_styles(scale)
 	draw_style_box(_backdrop_style, Rect2(Vector2.ZERO, size))
-	_draw_atmosphere(scale)
+	if not _learning_backdrop_active:
+		_draw_atmosphere(scale)
 	if _hud != null and _hud.visible:
 		var side: float = time_label.size.x
 		for x in [16.0 / scale, size.x - 16.0 / scale - side]:
@@ -1347,7 +1364,7 @@ func _ensure_draw_styles(scale: float) -> void:
 	if _draw_style_scale == scale:
 		return
 	_draw_style_scale = scale
-	_backdrop_style = Style.box(NAVY, Color("#45645b"), ceili(20.0 / scale), maxi(1, roundi(1.0 / scale)))
+	_backdrop_style = Style.box(Color(NAVY, 0.72 if _learning_backdrop_active else 1.0), Color("#45645b"), ceili(20.0 / scale), maxi(1, roundi(1.0 / scale)))
 	_hud_panel_style = Style.box(SURFACE, Color("#45645b"), ceili(13.0 / scale), 1)
 	_card_shadow_style = Style.box(Color(0.0, 0.0, 0.0, 0.3), Color.TRANSPARENT, ceili(21.0 / scale), 0)
 	_card_glow_styles.clear()

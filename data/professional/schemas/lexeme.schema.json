@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "lexeme.schema.json",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_.-]*$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1
+    },
+    "display_text": {
+      "type": "string",
+      "minLength": 1
+    },
+    "pos": {
+      "enum": [
+        "noun",
+        "verb",
+        "adjective",
+        "adverb",
+        "preposition",
+        "pronoun",
+        "determiner",
+        "numeral",
+        "conjunction",
+        "interjection"
+      ]
+    },
+    "definition": {
+      "type": "string",
+      "minLength": 1
+    },
+    "example": {
+      "type": "string",
+      "minLength": 1
+    },
+    "difficulty": {
+      "enum": [
+        "A2",
+        "B1",
+        "B2"
+      ]
+    },
+    "accepted_forms": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true,
+      "minItems": 1
+    },
+    "regions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true,
+      "minItems": 1
+    },
+    "practice_modes": {
+      "$ref": "common.schema.json#/$defs/practice_modes"
+    },
+    "media": {
+      "type": "object",
+      "properties": {
+        "image": {
+          "$ref": "common.schema.json#/$defs/image"
+        },
+        "audio": {
+          "$ref": "common.schema.json#/$defs/audio"
+        }
+      },
+      "required": [
+        "image",
+        "audio"
+      ],
+      "additionalProperties": false
+    },
+    "morphology": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "morphology.schema.json"
+        }
+      ]
+    },
+    "review": {
+      "$ref": "common.schema.json#/$defs/review"
+    },
+    "references": {
+      "$ref": "common.schema.json#/$defs/references"
+    },
+    "editorial_notes": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "id",
+    "text",
+    "display_text",
+    "pos",
+    "definition",
+    "example",
+    "difficulty",
+    "accepted_forms",
+    "regions",
+    "practice_modes",
+    "media",
+    "morphology",
+    "review",
+    "references"
+  ],
+  "additionalProperties": false
+}

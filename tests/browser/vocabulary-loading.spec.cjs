@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test');
 const words = require('../../words.json');
 const phrases = require('../../phrases.json');
 const { enterGame, openGame, openRewards, growthView, growthState, seedGrowth,
-  activateGrowthControl, ageControl, tap, rendered, matchWords, chooseMode, metrics } = require('./game-ui.cjs');
+  activateGrowthControl, activateLibraryControl, ageControl, tap, rendered, matchWords, chooseMode, metrics } = require('./game-ui.cjs');
 
 const PACK = /\/vocabulary-(3|4|5|6|7|8|9|10|11|12)-[a-f0-9]{16,64}\.pck\.br(?:\?|$)/;
 const SHARED_PACK = /\/vocabulary-shared-((?:[3-9]|1[0-2])(?:-(?:[3-9]|1[0-2]))+)-[a-f0-9]{16,64}\.pck\.br(?:\?|$)/;
@@ -84,7 +84,7 @@ async function captureNotebookLoading(page, info, state) {
     await rendered(page);
   }
 }
-test('a fresh visit fetches only the current age and waits for its media before play', async ({ page }, info) => {
+test('a fresh visit opens paths before downloading the selected Growth age', async ({ page }, info) => {
   test.setTimeout(150000);
   const observed = observePacks(page), firstAge = hold();
   await page.route(/\/vocabulary-3-[a-f0-9]+\.pck\.br(?:\?|$)/, async route => {
@@ -94,15 +94,20 @@ test('a fresh visit fetches only the current age and waits for its media before 
   await page.emulateMedia({ reducedMotion: 'reduce' });
   try {
     await page.goto('/');
+    await enterGame(page, { home: true });
+    expect(observed.ages).toEqual([]);
+    expect(observed.shared).toEqual([]);
+    await activateLibraryControl(page, 'GrowthPath');
+    await activateLibraryControl(page, 'Mode_match');
     await expect.poll(() => observed.ages, { timeout: 60000 }).toEqual([3]);
     await expect.poll(async () => (await loading(page))?.states?.['3']?.state).toBe('loading');
     expect((await loading(page)).ready).toBe(false);
     expect((await loading(page)).pending_age).toBe(3);
     expect((await loading(page)).age).toBe(3);
-    expect(await page.locator('body').getAttribute('data-engine-ready')).not.toBe('true');
+    expect(await page.locator('body').getAttribute('data-engine-ready')).toBe('true');
     await page.screenshot({ path: info.outputPath('startup-vocabulary-loading.png'), scale: 'css' });
     firstAge.release();
-    await enterGame(page);
+    await expect.poll(async () => (await metrics(page)).library?.visible).toBe(false);
     await expect(page.locator('#game-status')).toContainText('Find 5 word–picture pairs.');
     expect((await loading(page)).ready).toBe(true);
     expect((await growthState(page)).learning_age).toBe(3);

@@ -1,0 +1,2017 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.hospitality_tourism.module05.01",
+      "text": "Greet and welcome the guest, listen to their concern, acknowledge what they said, clarify the details, and apologize for the inconvenience.",
+      "meaning": "Receive a guest politely and respond to the stated concern.",
+      "context": "A worker listens and checks meaning before responding.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Greet",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "and",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "welcome",
+          "start": 10,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 18,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "guest",
+          "start": 22,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 27,
+          "end": 28
+        },
+        {
+          "index": 6,
+          "text": "listen",
+          "start": 29,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "to",
+          "start": 36,
+          "end": 38
+        },
+        {
+          "index": 8,
+          "text": "their",
+          "start": 39,
+          "end": 44
+        },
+        {
+          "index": 9,
+          "text": "concern",
+          "start": 45,
+          "end": 52
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 52,
+          "end": 53
+        },
+        {
+          "index": 11,
+          "text": "acknowledge",
+          "start": 54,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "what",
+          "start": 66,
+          "end": 70
+        },
+        {
+          "index": 13,
+          "text": "they",
+          "start": 71,
+          "end": 75
+        },
+        {
+          "index": 14,
+          "text": "said",
+          "start": 76,
+          "end": 80
+        },
+        {
+          "index": 15,
+          "text": ",",
+          "start": 80,
+          "end": 81
+        },
+        {
+          "index": 16,
+          "text": "clarify",
+          "start": 82,
+          "end": 89
+        },
+        {
+          "index": 17,
+          "text": "the",
+          "start": 90,
+          "end": 93
+        },
+        {
+          "index": 18,
+          "text": "details",
+          "start": 94,
+          "end": 101
+        },
+        {
+          "index": 19,
+          "text": ",",
+          "start": 101,
+          "end": 102
+        },
+        {
+          "index": 20,
+          "text": "and",
+          "start": 103,
+          "end": 106
+        },
+        {
+          "index": 21,
+          "text": "apologize",
+          "start": 107,
+          "end": 116
+        },
+        {
+          "index": 22,
+          "text": "for",
+          "start": 117,
+          "end": 120
+        },
+        {
+          "index": 23,
+          "text": "the",
+          "start": 121,
+          "end": 124
+        },
+        {
+          "index": 24,
+          "text": "inconvenience",
+          "start": 125,
+          "end": 138
+        },
+        {
+          "index": 25,
+          "text": ".",
+          "start": 138,
+          "end": 139
+        }
+      ],
+      "focus_lexeme_ids": [
+        "greet.acknowledge-person-with-words-or-gesture.v",
+        "welcome.receive-arriving-person-in-friendly-way.v",
+        "listen.attend-to-spoken-information.v",
+        "acknowledge.recognize-receipt-or-stated-concern.v",
+        "clarify.make-meaning-or-detail-clearer.v",
+        "apologize.express-regret.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-concierges",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module05.02",
+      "text": "Offer the available options, compare their features, and suggest checking the current details before you recommend a choice.",
+      "meaning": "Compare available choices before suggesting a suitable option.",
+      "context": "A worker checks current service information.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Offer",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "available",
+          "start": 10,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "options",
+          "start": 20,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 27,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "compare",
+          "start": 29,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "their",
+          "start": 37,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "features",
+          "start": 43,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 51,
+          "end": 52
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "suggest",
+          "start": 57,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "checking",
+          "start": 65,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 74,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": "current",
+          "start": 78,
+          "end": 85
+        },
+        {
+          "index": 14,
+          "text": "details",
+          "start": 86,
+          "end": 93
+        },
+        {
+          "index": 15,
+          "text": "before",
+          "start": 94,
+          "end": 100
+        },
+        {
+          "index": 16,
+          "text": "you",
+          "start": 101,
+          "end": 104
+        },
+        {
+          "index": 17,
+          "text": "recommend",
+          "start": 105,
+          "end": 114
+        },
+        {
+          "index": 18,
+          "text": "a",
+          "start": 115,
+          "end": 116
+        },
+        {
+          "index": 19,
+          "text": "choice",
+          "start": 117,
+          "end": 123
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 123,
+          "end": 124
+        }
+      ],
+      "focus_lexeme_ids": [
+        "offer.present-something-for-person-to-accept-or-decline.v",
+        "suggest.put-forward-idea-for-consideration.v",
+        "compare.examine-differences.v",
+        "recommend.suggest-suitable-choice.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-concierges",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module05.03",
+      "text": "I will forward your message, follow up with the responsible team, escalate unresolved concerns, and respond with the update they confirm.",
+      "meaning": "Pass a message onward and seek authorized follow-up.",
+      "context": "A worker coordinates a concern through the agreed route.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "I",
+          "start": 0,
+          "end": 1
+        },
+        {
+          "index": 1,
+          "text": "will",
+          "start": 2,
+          "end": 6
+        },
+        {
+          "index": 2,
+          "text": "forward",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "your",
+          "start": 15,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "message",
+          "start": 20,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 27,
+          "end": 28
+        },
+        {
+          "index": 6,
+          "text": "follow",
+          "start": 29,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "up",
+          "start": 36,
+          "end": 38
+        },
+        {
+          "index": 8,
+          "text": "with",
+          "start": 39,
+          "end": 43
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 44,
+          "end": 47
+        },
+        {
+          "index": 10,
+          "text": "responsible",
+          "start": 48,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "team",
+          "start": 60,
+          "end": 64
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 64,
+          "end": 65
+        },
+        {
+          "index": 13,
+          "text": "escalate",
+          "start": 66,
+          "end": 74
+        },
+        {
+          "index": 14,
+          "text": "unresolved",
+          "start": 75,
+          "end": 85
+        },
+        {
+          "index": 15,
+          "text": "concerns",
+          "start": 86,
+          "end": 94
+        },
+        {
+          "index": 16,
+          "text": ",",
+          "start": 94,
+          "end": 95
+        },
+        {
+          "index": 17,
+          "text": "and",
+          "start": 96,
+          "end": 99
+        },
+        {
+          "index": 18,
+          "text": "respond",
+          "start": 100,
+          "end": 107
+        },
+        {
+          "index": 19,
+          "text": "with",
+          "start": 108,
+          "end": 112
+        },
+        {
+          "index": 20,
+          "text": "the",
+          "start": 113,
+          "end": 116
+        },
+        {
+          "index": 21,
+          "text": "update",
+          "start": 117,
+          "end": 123
+        },
+        {
+          "index": 22,
+          "text": "they",
+          "start": 124,
+          "end": 128
+        },
+        {
+          "index": 23,
+          "text": "confirm",
+          "start": 129,
+          "end": 136
+        },
+        {
+          "index": 24,
+          "text": ".",
+          "start": 136,
+          "end": 137
+        }
+      ],
+      "focus_lexeme_ids": [
+        "follow-up.take-further-action-on-earlier-matter.v",
+        "respond.give-reply-or-reaction.v",
+        "forward.send-received-message-onward.v",
+        "escalate.refer-for-higher-or-specialist-attention.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-concierges",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module05.04",
+      "text": "Ask the approved provider to translate the text or interpret the conversation; document only the information needed for the authorized purpose.",
+      "meaning": "Arrange language support and create a limited factual account.",
+      "context": "A worker uses the approved provider and records only authorized information.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Ask",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "approved",
+          "start": 8,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "provider",
+          "start": 17,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "to",
+          "start": 26,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "translate",
+          "start": 29,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 39,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "text",
+          "start": 43,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "or",
+          "start": 48,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "interpret",
+          "start": 51,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 61,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "conversation",
+          "start": 65,
+          "end": 77
+        },
+        {
+          "index": 12,
+          "text": ";",
+          "start": 77,
+          "end": 78
+        },
+        {
+          "index": 13,
+          "text": "document",
+          "start": 79,
+          "end": 87
+        },
+        {
+          "index": 14,
+          "text": "only",
+          "start": 88,
+          "end": 92
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 93,
+          "end": 96
+        },
+        {
+          "index": 16,
+          "text": "information",
+          "start": 97,
+          "end": 108
+        },
+        {
+          "index": 17,
+          "text": "needed",
+          "start": 109,
+          "end": 115
+        },
+        {
+          "index": 18,
+          "text": "for",
+          "start": 116,
+          "end": 119
+        },
+        {
+          "index": 19,
+          "text": "the",
+          "start": 120,
+          "end": 123
+        },
+        {
+          "index": 20,
+          "text": "authorized",
+          "start": 124,
+          "end": 134
+        },
+        {
+          "index": 21,
+          "text": "purpose",
+          "start": 135,
+          "end": 142
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 142,
+          "end": 143
+        }
+      ],
+      "focus_lexeme_ids": [
+        "translate.express-content-in-another-language.v",
+        "interpret.convey-spoken-or-signed-language-in-another-language.v",
+        "document.make-care-record.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-concierges",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module05.05",
+      "text": "Ask housekeeping how to inspect, clean, launder, sanitize, or disinfect assigned items under approved procedures; separately confirm when to tidy the room and replenish supplies.",
+      "meaning": "Clarify distinct inspection, cleaning, arrangement, and supply actions.",
+      "context": "A worker seeks task-specific procedures without selecting chemicals or defining sanitation parameters.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Ask",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "housekeeping",
+          "start": 4,
+          "end": 16
+        },
+        {
+          "index": 2,
+          "text": "how",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "to",
+          "start": 21,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "inspect",
+          "start": 24,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 31,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "clean",
+          "start": 33,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 38,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "launder",
+          "start": 40,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 47,
+          "end": 48
+        },
+        {
+          "index": 10,
+          "text": "sanitize",
+          "start": 49,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 57,
+          "end": 58
+        },
+        {
+          "index": 12,
+          "text": "or",
+          "start": 59,
+          "end": 61
+        },
+        {
+          "index": 13,
+          "text": "disinfect",
+          "start": 62,
+          "end": 71
+        },
+        {
+          "index": 14,
+          "text": "assigned",
+          "start": 72,
+          "end": 80
+        },
+        {
+          "index": 15,
+          "text": "items",
+          "start": 81,
+          "end": 86
+        },
+        {
+          "index": 16,
+          "text": "under",
+          "start": 87,
+          "end": 92
+        },
+        {
+          "index": 17,
+          "text": "approved",
+          "start": 93,
+          "end": 101
+        },
+        {
+          "index": 18,
+          "text": "procedures",
+          "start": 102,
+          "end": 112
+        },
+        {
+          "index": 19,
+          "text": ";",
+          "start": 112,
+          "end": 113
+        },
+        {
+          "index": 20,
+          "text": "separately",
+          "start": 114,
+          "end": 124
+        },
+        {
+          "index": 21,
+          "text": "confirm",
+          "start": 125,
+          "end": 132
+        },
+        {
+          "index": 22,
+          "text": "when",
+          "start": 133,
+          "end": 137
+        },
+        {
+          "index": 23,
+          "text": "to",
+          "start": 138,
+          "end": 140
+        },
+        {
+          "index": 24,
+          "text": "tidy",
+          "start": 141,
+          "end": 145
+        },
+        {
+          "index": 25,
+          "text": "the",
+          "start": 146,
+          "end": 149
+        },
+        {
+          "index": 26,
+          "text": "room",
+          "start": 150,
+          "end": 154
+        },
+        {
+          "index": 27,
+          "text": "and",
+          "start": 155,
+          "end": 158
+        },
+        {
+          "index": 28,
+          "text": "replenish",
+          "start": 159,
+          "end": 168
+        },
+        {
+          "index": 29,
+          "text": "supplies",
+          "start": 169,
+          "end": 177
+        },
+        {
+          "index": 30,
+          "text": ".",
+          "start": 177,
+          "end": 178
+        }
+      ],
+      "focus_lexeme_ids": [
+        "launder.wash-and-care-for-clothes-or-linen.v",
+        "inspect.examine-visually.v",
+        "clean.remove-dirt-or-unwanted-material.v",
+        "sanitize.reduce-microorganisms-to-required-level.v",
+        "disinfect.reduce-specified-microorganisms.v",
+        "tidy.put-things-in-order.v",
+        "replenish.restore-supply.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-concierges",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module05.06",
+      "text": "Please reconcile the account records and confirm what to charge before helping the guest check out; follow the agreed process when they check in.",
+      "meaning": "Compare account records and clarify the amount due.",
+      "context": "A worker follows the authorized arrival and departure processes.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "reconcile",
+          "start": 7,
+          "end": 16
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "account",
+          "start": 21,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "records",
+          "start": 29,
+          "end": 36
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 37,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "confirm",
+          "start": 41,
+          "end": 48
+        },
+        {
+          "index": 7,
+          "text": "what",
+          "start": 49,
+          "end": 53
+        },
+        {
+          "index": 8,
+          "text": "to",
+          "start": 54,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "charge",
+          "start": 57,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "before",
+          "start": 64,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": "helping",
+          "start": 71,
+          "end": 78
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 79,
+          "end": 82
+        },
+        {
+          "index": 13,
+          "text": "guest",
+          "start": 83,
+          "end": 88
+        },
+        {
+          "index": 14,
+          "text": "check",
+          "start": 89,
+          "end": 94
+        },
+        {
+          "index": 15,
+          "text": "out",
+          "start": 95,
+          "end": 98
+        },
+        {
+          "index": 16,
+          "text": ";",
+          "start": 98,
+          "end": 99
+        },
+        {
+          "index": 17,
+          "text": "follow",
+          "start": 100,
+          "end": 106
+        },
+        {
+          "index": 18,
+          "text": "the",
+          "start": 107,
+          "end": 110
+        },
+        {
+          "index": 19,
+          "text": "agreed",
+          "start": 111,
+          "end": 117
+        },
+        {
+          "index": 20,
+          "text": "process",
+          "start": 118,
+          "end": 125
+        },
+        {
+          "index": 21,
+          "text": "when",
+          "start": 126,
+          "end": 130
+        },
+        {
+          "index": 22,
+          "text": "they",
+          "start": 131,
+          "end": 135
+        },
+        {
+          "index": 23,
+          "text": "check",
+          "start": 136,
+          "end": 141
+        },
+        {
+          "index": 24,
+          "text": "in",
+          "start": 142,
+          "end": 144
+        },
+        {
+          "index": 25,
+          "text": ".",
+          "start": 144,
+          "end": 145
+        }
+      ],
+      "focus_lexeme_ids": [
+        "check-in.complete-arrival-registration-for-booked-service.v",
+        "check-out.complete-departure-process-for-accommodation.v",
+        "reconcile.match-financial-records.v",
+        "charge.ask-payment.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-concierges",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module05.07",
+      "text": "Please identify the authorized record and retrieve only the needed details; confirm the purpose before you register the guest or record new information.",
+      "meaning": "Locate the authorized information before registration or recording.",
+      "context": "A worker limits access and new entries to the stated purpose.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "identify",
+          "start": 7,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "authorized",
+          "start": 20,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": "record",
+          "start": 31,
+          "end": 37
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 38,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "retrieve",
+          "start": 42,
+          "end": 50
+        },
+        {
+          "index": 7,
+          "text": "only",
+          "start": 51,
+          "end": 55
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "needed",
+          "start": 60,
+          "end": 66
+        },
+        {
+          "index": 10,
+          "text": "details",
+          "start": 67,
+          "end": 74
+        },
+        {
+          "index": 11,
+          "text": ";",
+          "start": 74,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": "confirm",
+          "start": 76,
+          "end": 83
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 84,
+          "end": 87
+        },
+        {
+          "index": 14,
+          "text": "purpose",
+          "start": 88,
+          "end": 95
+        },
+        {
+          "index": 15,
+          "text": "before",
+          "start": 96,
+          "end": 102
+        },
+        {
+          "index": 16,
+          "text": "you",
+          "start": 103,
+          "end": 106
+        },
+        {
+          "index": 17,
+          "text": "register",
+          "start": 107,
+          "end": 115
+        },
+        {
+          "index": 18,
+          "text": "the",
+          "start": 116,
+          "end": 119
+        },
+        {
+          "index": 19,
+          "text": "guest",
+          "start": 120,
+          "end": 125
+        },
+        {
+          "index": 20,
+          "text": "or",
+          "start": 126,
+          "end": 128
+        },
+        {
+          "index": 21,
+          "text": "record",
+          "start": 129,
+          "end": 135
+        },
+        {
+          "index": 22,
+          "text": "new",
+          "start": 136,
+          "end": 139
+        },
+        {
+          "index": 23,
+          "text": "information",
+          "start": 140,
+          "end": 151
+        },
+        {
+          "index": 24,
+          "text": ".",
+          "start": 151,
+          "end": 152
+        }
+      ],
+      "focus_lexeme_ids": [
+        "register.enter-required-details-in-authorized-record.v",
+        "record.store-observed-information.v",
+        "identify.establish-identity-or-nature.v",
+        "retrieve.find-and-obtain-stored-item.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-concierges",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "ada-lodging-low-vision",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module05.08",
+      "text": "Ask whether the guest wants someone to escort them; review the recommendation before deciding how to accommodate their requirements.",
+      "meaning": "Consider a proposed next step and ask about assistance.",
+      "context": "A worker checks the guest preference and the relevant service recommendation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Ask",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "whether",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 12,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "guest",
+          "start": 16,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "wants",
+          "start": 22,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "someone",
+          "start": 28,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "to",
+          "start": 36,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "escort",
+          "start": 39,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "them",
+          "start": 46,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": ";",
+          "start": 50,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "review",
+          "start": 52,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 59,
+          "end": 62
+        },
+        {
+          "index": 12,
+          "text": "recommendation",
+          "start": 63,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": "before",
+          "start": 78,
+          "end": 84
+        },
+        {
+          "index": 14,
+          "text": "deciding",
+          "start": 85,
+          "end": 93
+        },
+        {
+          "index": 15,
+          "text": "how",
+          "start": 94,
+          "end": 97
+        },
+        {
+          "index": 16,
+          "text": "to",
+          "start": 98,
+          "end": 100
+        },
+        {
+          "index": 17,
+          "text": "accommodate",
+          "start": 101,
+          "end": 112
+        },
+        {
+          "index": 18,
+          "text": "their",
+          "start": 113,
+          "end": 118
+        },
+        {
+          "index": 19,
+          "text": "requirements",
+          "start": 119,
+          "end": 131
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 131,
+          "end": 132
+        }
+      ],
+      "focus_lexeme_ids": [
+        "escort.accompany-person-to-a-place.v",
+        "accommodate.make-suitable-arrangements-for-stated-need.v",
+        "review.reconsider-care-information.v",
+        "recommendation.proposed-care-related-next-step.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-concierges",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module05.09",
+      "text": "Check availability before you book a stay, reserve the requested item, upgrade the room, or extend the visit; confirm the applicable terms.",
+      "meaning": "Distinguish arranging a stay from holding an item and changing a booking.",
+      "context": "A worker checks availability and actual conditions before promising a service.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Check",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "availability",
+          "start": 6,
+          "end": 18
+        },
+        {
+          "index": 2,
+          "text": "before",
+          "start": 19,
+          "end": 25
+        },
+        {
+          "index": 3,
+          "text": "you",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 4,
+          "text": "book",
+          "start": 30,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "a",
+          "start": 35,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "stay",
+          "start": 37,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 41,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "reserve",
+          "start": 43,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "requested",
+          "start": 55,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "item",
+          "start": 65,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 69,
+          "end": 70
+        },
+        {
+          "index": 13,
+          "text": "upgrade",
+          "start": 71,
+          "end": 78
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 79,
+          "end": 82
+        },
+        {
+          "index": 15,
+          "text": "room",
+          "start": 83,
+          "end": 87
+        },
+        {
+          "index": 16,
+          "text": ",",
+          "start": 87,
+          "end": 88
+        },
+        {
+          "index": 17,
+          "text": "or",
+          "start": 89,
+          "end": 91
+        },
+        {
+          "index": 18,
+          "text": "extend",
+          "start": 92,
+          "end": 98
+        },
+        {
+          "index": 19,
+          "text": "the",
+          "start": 99,
+          "end": 102
+        },
+        {
+          "index": 20,
+          "text": "visit",
+          "start": 103,
+          "end": 108
+        },
+        {
+          "index": 21,
+          "text": ";",
+          "start": 108,
+          "end": 109
+        },
+        {
+          "index": 22,
+          "text": "confirm",
+          "start": 110,
+          "end": 117
+        },
+        {
+          "index": 23,
+          "text": "the",
+          "start": 118,
+          "end": 121
+        },
+        {
+          "index": 24,
+          "text": "applicable",
+          "start": 122,
+          "end": 132
+        },
+        {
+          "index": 25,
+          "text": "terms",
+          "start": 133,
+          "end": 138
+        },
+        {
+          "index": 26,
+          "text": ".",
+          "start": 138,
+          "end": 139
+        }
+      ],
+      "focus_lexeme_ids": [
+        "upgrade.change-booking-to-higher-service-category.v",
+        "extend.increase-agreed-duration-or-period.v",
+        "book.arrange-reservation-for-service-or-place.v",
+        "reserve.hold-for-customer.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-concierges",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.hospitality_tourism.module05.10",
+      "text": "The guest has requested a call to wake them at the agreed time; confirm the date and time zone.",
+      "meaning": "Check the actual details of a requested wake-up call.",
+      "context": "Recording an agreed guest service.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "guest",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "has",
+          "start": 10,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "requested",
+          "start": 14,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "a",
+          "start": 24,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "call",
+          "start": 26,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "to",
+          "start": 31,
+          "end": 33
+        },
+        {
+          "index": 7,
+          "text": "wake",
+          "start": 34,
+          "end": 38
+        },
+        {
+          "index": 8,
+          "text": "them",
+          "start": 39,
+          "end": 43
+        },
+        {
+          "index": 9,
+          "text": "at",
+          "start": 44,
+          "end": 46
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 11,
+          "text": "agreed",
+          "start": 51,
+          "end": 57
+        },
+        {
+          "index": 12,
+          "text": "time",
+          "start": 58,
+          "end": 62
+        },
+        {
+          "index": 13,
+          "text": ";",
+          "start": 62,
+          "end": 63
+        },
+        {
+          "index": 14,
+          "text": "confirm",
+          "start": 64,
+          "end": 71
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 72,
+          "end": 75
+        },
+        {
+          "index": 16,
+          "text": "date",
+          "start": 76,
+          "end": 80
+        },
+        {
+          "index": 17,
+          "text": "and",
+          "start": 81,
+          "end": 84
+        },
+        {
+          "index": 18,
+          "text": "time",
+          "start": 85,
+          "end": 89
+        },
+        {
+          "index": 19,
+          "text": "zone",
+          "start": 90,
+          "end": 94
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 94,
+          "end": 95
+        }
+      ],
+      "focus_lexeme_ids": [
+        "wake.cause-person-to-stop-sleeping.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-concierges",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    }
+  ]
+}

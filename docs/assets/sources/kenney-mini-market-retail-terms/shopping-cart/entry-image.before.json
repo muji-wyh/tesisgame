@@ -1,0 +1,16 @@
+{
+  "status": "pending",
+  "path": null,
+  "sha256": null,
+  "source": null,
+  "creator": null,
+  "license": null,
+  "acquisition_status": "not_started",
+  "review": {
+    "status": "pending"
+  },
+  "brief": "Show a full-size retail trolley in a three-quarter side view with basket, push handle, lower frame, and four wheels legible. Keep it mostly empty so its structure is visible. Exclude a hand-carried basket, flat warehouse trolley, wheelchair, or online cart icon. Inspect the Mini Market shopping-cart lead before rendering.",
+  "picture_suitable": true,
+  "available_animations": [],
+  "adaptations": []
+}

@@ -1,0 +1,1139 @@
+{
+	"checks": [
+		{
+			"check": "compact-three-quarter: transparent background",
+			"passed": true
+		},
+		{
+			"check": "compact-three-quarter: complete scene in viewport",
+			"passed": true
+		},
+		{
+			"check": "compact-three-quarter: match-unmatched card size",
+			"passed": true
+		},
+		{
+			"check": "compact-three-quarter: match-unmatched picture size",
+			"passed": true
+		},
+		{
+			"check": "compact-three-quarter: match-unmatched badge",
+			"passed": true
+		},
+		{
+			"check": "compact-three-quarter: match-unmatched picture alpha",
+			"passed": true
+		},
+		{
+			"check": "compact-three-quarter: match-matched card size",
+			"passed": true
+		},
+		{
+			"check": "compact-three-quarter: match-matched picture size",
+			"passed": true
+		},
+		{
+			"check": "compact-three-quarter: match-matched badge",
+			"passed": true
+		},
+		{
+			"check": "compact-three-quarter: match-matched picture alpha",
+			"passed": true
+		},
+		{
+			"check": "compact-three-quarter: memory-unmatched card size",
+			"passed": true
+		},
+		{
+			"check": "compact-three-quarter: memory-unmatched picture size",
+			"passed": true
+		},
+		{
+			"check": "compact-three-quarter: memory-unmatched badge",
+			"passed": true
+		},
+		{
+			"check": "compact-three-quarter: memory-unmatched picture alpha",
+			"passed": true
+		},
+		{
+			"check": "compact-three-quarter: memory-matched card size",
+			"passed": true
+		},
+		{
+			"check": "compact-three-quarter: memory-matched picture size",
+			"passed": true
+		},
+		{
+			"check": "compact-three-quarter: memory-matched badge",
+			"passed": true
+		},
+		{
+			"check": "compact-three-quarter: memory-matched picture alpha",
+			"passed": true
+		},
+		{
+			"check": "compact-high: transparent background",
+			"passed": true
+		},
+		{
+			"check": "compact-high: complete scene in viewport",
+			"passed": true
+		},
+		{
+			"check": "compact-high: match-unmatched card size",
+			"passed": true
+		},
+		{
+			"check": "compact-high: match-unmatched picture size",
+			"passed": true
+		},
+		{
+			"check": "compact-high: match-unmatched badge",
+			"passed": true
+		},
+		{
+			"check": "compact-high: match-unmatched picture alpha",
+			"passed": true
+		},
+		{
+			"check": "compact-high: match-matched card size",
+			"passed": true
+		},
+		{
+			"check": "compact-high: match-matched picture size",
+			"passed": true
+		},
+		{
+			"check": "compact-high: match-matched badge",
+			"passed": true
+		},
+		{
+			"check": "compact-high: match-matched picture alpha",
+			"passed": true
+		},
+		{
+			"check": "compact-high: memory-unmatched card size",
+			"passed": true
+		},
+		{
+			"check": "compact-high: memory-unmatched picture size",
+			"passed": true
+		},
+		{
+			"check": "compact-high: memory-unmatched badge",
+			"passed": true
+		},
+		{
+			"check": "compact-high: memory-unmatched picture alpha",
+			"passed": true
+		},
+		{
+			"check": "compact-high: memory-matched card size",
+			"passed": true
+		},
+		{
+			"check": "compact-high: memory-matched picture size",
+			"passed": true
+		},
+		{
+			"check": "compact-high: memory-matched badge",
+			"passed": true
+		},
+		{
+			"check": "compact-high: memory-matched picture alpha",
+			"passed": true
+		},
+		{
+			"check": "tiled-three-quarter: transparent background",
+			"passed": true
+		},
+		{
+			"check": "tiled-three-quarter: complete scene in viewport",
+			"passed": false
+		},
+		{
+			"check": "tiled-three-quarter: match-unmatched card size",
+			"passed": true
+		},
+		{
+			"check": "tiled-three-quarter: match-unmatched picture size",
+			"passed": true
+		},
+		{
+			"check": "tiled-three-quarter: match-unmatched badge",
+			"passed": true
+		},
+		{
+			"check": "tiled-three-quarter: match-unmatched picture alpha",
+			"passed": true
+		},
+		{
+			"check": "tiled-three-quarter: match-matched card size",
+			"passed": true
+		},
+		{
+			"check": "tiled-three-quarter: match-matched picture size",
+			"passed": true
+		},
+		{
+			"check": "tiled-three-quarter: match-matched badge",
+			"passed": true
+		},
+		{
+			"check": "tiled-three-quarter: match-matched picture alpha",
+			"passed": true
+		},
+		{
+			"check": "tiled-three-quarter: memory-unmatched card size",
+			"passed": true
+		},
+		{
+			"check": "tiled-three-quarter: memory-unmatched picture size",
+			"passed": true
+		},
+		{
+			"check": "tiled-three-quarter: memory-unmatched badge",
+			"passed": true
+		},
+		{
+			"check": "tiled-three-quarter: memory-unmatched picture alpha",
+			"passed": true
+		},
+		{
+			"check": "tiled-three-quarter: memory-matched card size",
+			"passed": true
+		},
+		{
+			"check": "tiled-three-quarter: memory-matched picture size",
+			"passed": true
+		},
+		{
+			"check": "tiled-three-quarter: memory-matched badge",
+			"passed": true
+		},
+		{
+			"check": "tiled-three-quarter: memory-matched picture alpha",
+			"passed": true
+		},
+		{
+			"check": "tiled-high: transparent background",
+			"passed": true
+		},
+		{
+			"check": "tiled-high: complete scene in viewport",
+			"passed": false
+		},
+		{
+			"check": "tiled-high: match-unmatched card size",
+			"passed": true
+		},
+		{
+			"check": "tiled-high: match-unmatched picture size",
+			"passed": true
+		},
+		{
+			"check": "tiled-high: match-unmatched badge",
+			"passed": true
+		},
+		{
+			"check": "tiled-high: match-unmatched picture alpha",
+			"passed": true
+		},
+		{
+			"check": "tiled-high: match-matched card size",
+			"passed": true
+		},
+		{
+			"check": "tiled-high: match-matched picture size",
+			"passed": true
+		},
+		{
+			"check": "tiled-high: match-matched badge",
+			"passed": true
+		},
+		{
+			"check": "tiled-high: match-matched picture alpha",
+			"passed": true
+		},
+		{
+			"check": "tiled-high: memory-unmatched card size",
+			"passed": true
+		},
+		{
+			"check": "tiled-high: memory-unmatched picture size",
+			"passed": true
+		},
+		{
+			"check": "tiled-high: memory-unmatched badge",
+			"passed": true
+		},
+		{
+			"check": "tiled-high: memory-unmatched picture alpha",
+			"passed": true
+		},
+		{
+			"check": "tiled-high: memory-matched card size",
+			"passed": true
+		},
+		{
+			"check": "tiled-high: memory-matched picture size",
+			"passed": true
+		},
+		{
+			"check": "tiled-high: memory-matched badge",
+			"passed": true
+		},
+		{
+			"check": "tiled-high: memory-matched picture alpha",
+			"passed": true
+		}
+	],
+	"failed": 2,
+	"palette": "Current Retail profile over Spring defaults as in Main",
+	"probes": [
+		{
+			"camera": {
+				"orthographic_size": 1.9,
+				"position": [
+					3.0,
+					2.70000004768372,
+					4.0
+				],
+				"target": [
+					-0.16,
+					0.25,
+					-0.1
+				]
+			},
+			"crop": [
+				55,
+				120,
+				641,
+				492
+			],
+			"dimensions": [
+				512,
+				393
+			],
+			"image_sha256": "eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe",
+			"measurements": [
+				{
+					"badge_visible": false,
+					"card_size": [
+						126.0,
+						72.0
+					],
+					"image_render_size": [
+						67.7455470737913,
+						52.0
+					],
+					"picture_alpha": 1.0,
+					"picture_size": [
+						102.0,
+						52.0
+					],
+					"state": "match-unmatched",
+					"texture_delivery": "Direct scratch ImageTexture assigned to the real WordCard; not the production Loader/cache delivery."
+				},
+				{
+					"badge_visible": true,
+					"card_size": [
+						126.0,
+						72.0
+					],
+					"image_render_size": [
+						67.7455470737913,
+						52.0
+					],
+					"picture_alpha": 0.680000007152557,
+					"picture_size": [
+						102.0,
+						52.0
+					],
+					"state": "match-matched",
+					"texture_delivery": "Direct scratch ImageTexture assigned to the real WordCard; not the production Loader/cache delivery."
+				},
+				{
+					"badge_visible": false,
+					"card_size": [
+						144.0,
+						74.0
+					],
+					"image_render_size": [
+						70.3511450381679,
+						54.0
+					],
+					"picture_alpha": 1.0,
+					"picture_size": [
+						120.0,
+						54.0
+					],
+					"state": "memory-unmatched",
+					"texture_delivery": "Direct scratch ImageTexture assigned to the real WordCard; not the production Loader/cache delivery."
+				},
+				{
+					"badge_visible": true,
+					"card_size": [
+						144.0,
+						74.0
+					],
+					"image_render_size": [
+						70.3511450381679,
+						54.0
+					],
+					"picture_alpha": 0.680000007152557,
+					"picture_size": [
+						120.0,
+						54.0
+					],
+					"state": "memory-matched",
+					"texture_delivery": "Direct scratch ImageTexture assigned to the real WordCard; not the production Loader/cache delivery."
+				}
+			],
+			"name": "compact-three-quarter",
+			"scope": "Composition probe only; not selected or accepted",
+			"source_instances": [
+				{
+					"geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+					"hidden_source_nodes": [],
+					"root_position": [
+						0.0,
+						0.0,
+						0.0
+					],
+					"root_uniform_scale": 1.0,
+					"root_yaw_degrees": 0.0,
+					"sha256": "155f2eb666dea3a931d133a4953379898c8adb4b827ab60b86cae07235b9b598",
+					"source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/original/cash-register.glb",
+					"source_pose": {}
+				},
+				{
+					"geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+					"hidden_source_nodes": [],
+					"root_position": [
+						0.230000004172325,
+						0.0,
+						-0.330000013113022
+					],
+					"root_uniform_scale": 1.0,
+					"root_yaw_degrees": 0.0,
+					"sha256": "8774b93a5ff11af146176505035cc351d37a8a69ad0b1fde612bba9c8ffa84cc",
+					"source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/original/character-employee.glb",
+					"source_pose": {
+						"clip": "idle",
+						"seconds": 0.0,
+						"source_animation_only": true
+					}
+				},
+				{
+					"geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+					"hidden_source_nodes": [],
+					"root_position": [
+						-0.75,
+						0.0,
+						0.0
+					],
+					"root_uniform_scale": 1.0,
+					"root_yaw_degrees": 90.0,
+					"sha256": "2288438e7baf9acc91a870c82dc00d66710bb486592cfc3474ef8ed93a03863a",
+					"source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/mini-characters/original/character-female-b.glb",
+					"source_pose": {
+						"clip": "interact-right",
+						"seconds": 0.333,
+						"source_animation_only": true
+					}
+				},
+				{
+					"geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+					"hidden_source_nodes": [],
+					"root_position": [
+						-0.25,
+						0.25,
+						-0.129999995231628
+					],
+					"root_uniform_scale": 0.32,
+					"root_yaw_degrees": -12.0,
+					"sha256": "b63a5081c6edbda7ba8172e6a776f222e781f886a011a887789b2fde42095d04",
+					"source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/food-kit/original/carton.glb",
+					"source_pose": {}
+				},
+				{
+					"geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+					"hidden_source_nodes": [],
+					"root_position": [
+						-0.239999994635582,
+						0.25,
+						0.129999995231628
+					],
+					"root_uniform_scale": 0.55,
+					"root_yaw_degrees": 20.0,
+					"sha256": "2a80ab65d5bc2cb4f2bca1e8176cbb591849a288596d4b2e76e411338761a526",
+					"source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/food-kit/original/apple.glb",
+					"source_pose": {}
+				}
+			]
+		},
+		{
+			"camera": {
+				"orthographic_size": 1.9,
+				"position": [
+					3.0,
+					4.0,
+					4.0
+				],
+				"target": [
+					-0.16,
+					0.25,
+					-0.1
+				]
+			},
+			"crop": [
+				55,
+				108,
+				641,
+				539
+			],
+			"dimensions": [
+				512,
+				431
+			],
+			"image_sha256": "5eee948ef6a77ecbce79e0b745c204f9c4952ea27b0895a27efd61ed29b1259e",
+			"measurements": [
+				{
+					"badge_visible": false,
+					"card_size": [
+						126.0,
+						72.0
+					],
+					"image_render_size": [
+						61.7726218097448,
+						52.0
+					],
+					"picture_alpha": 1.0,
+					"picture_size": [
+						102.0,
+						52.0
+					],
+					"state": "match-unmatched",
+					"texture_delivery": "Direct scratch ImageTexture assigned to the real WordCard; not the production Loader/cache delivery."
+				},
+				{
+					"badge_visible": true,
+					"card_size": [
+						126.0,
+						72.0
+					],
+					"image_render_size": [
+						61.7726218097448,
+						52.0
+					],
+					"picture_alpha": 0.680000007152557,
+					"picture_size": [
+						102.0,
+						52.0
+					],
+					"state": "match-matched",
+					"texture_delivery": "Direct scratch ImageTexture assigned to the real WordCard; not the production Loader/cache delivery."
+				},
+				{
+					"badge_visible": false,
+					"card_size": [
+						144.0,
+						74.0
+					],
+					"image_render_size": [
+						64.1484918793503,
+						54.0
+					],
+					"picture_alpha": 1.0,
+					"picture_size": [
+						120.0,
+						54.0
+					],
+					"state": "memory-unmatched",
+					"texture_delivery": "Direct scratch ImageTexture assigned to the real WordCard; not the production Loader/cache delivery."
+				},
+				{
+					"badge_visible": true,
+					"card_size": [
+						144.0,
+						74.0
+					],
+					"image_render_size": [
+						64.1484918793503,
+						54.0
+					],
+					"picture_alpha": 0.680000007152557,
+					"picture_size": [
+						120.0,
+						54.0
+					],
+					"state": "memory-matched",
+					"texture_delivery": "Direct scratch ImageTexture assigned to the real WordCard; not the production Loader/cache delivery."
+				}
+			],
+			"name": "compact-high",
+			"scope": "Composition probe only; not selected or accepted",
+			"source_instances": [
+				{
+					"geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+					"hidden_source_nodes": [],
+					"root_position": [
+						0.0,
+						0.0,
+						0.0
+					],
+					"root_uniform_scale": 1.0,
+					"root_yaw_degrees": 0.0,
+					"sha256": "155f2eb666dea3a931d133a4953379898c8adb4b827ab60b86cae07235b9b598",
+					"source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/original/cash-register.glb",
+					"source_pose": {}
+				},
+				{
+					"geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+					"hidden_source_nodes": [],
+					"root_position": [
+						0.230000004172325,
+						0.0,
+						-0.330000013113022
+					],
+					"root_uniform_scale": 1.0,
+					"root_yaw_degrees": 0.0,
+					"sha256": "8774b93a5ff11af146176505035cc351d37a8a69ad0b1fde612bba9c8ffa84cc",
+					"source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/original/character-employee.glb",
+					"source_pose": {
+						"clip": "idle",
+						"seconds": 0.0,
+						"source_animation_only": true
+					}
+				},
+				{
+					"geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+					"hidden_source_nodes": [],
+					"root_position": [
+						-0.75,
+						0.0,
+						0.0
+					],
+					"root_uniform_scale": 1.0,
+					"root_yaw_degrees": 90.0,
+					"sha256": "2288438e7baf9acc91a870c82dc00d66710bb486592cfc3474ef8ed93a03863a",
+					"source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/mini-characters/original/character-female-b.glb",
+					"source_pose": {
+						"clip": "interact-right",
+						"seconds": 0.333,
+						"source_animation_only": true
+					}
+				},
+				{
+					"geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+					"hidden_source_nodes": [],
+					"root_position": [
+						-0.25,
+						0.25,
+						-0.129999995231628
+					],
+					"root_uniform_scale": 0.32,
+					"root_yaw_degrees": -12.0,
+					"sha256": "b63a5081c6edbda7ba8172e6a776f222e781f886a011a887789b2fde42095d04",
+					"source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/food-kit/original/carton.glb",
+					"source_pose": {}
+				},
+				{
+					"geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+					"hidden_source_nodes": [],
+					"root_position": [
+						-0.239999994635582,
+						0.25,
+						0.129999995231628
+					],
+					"root_uniform_scale": 0.55,
+					"root_yaw_degrees": 20.0,
+					"sha256": "2a80ab65d5bc2cb4f2bca1e8176cbb591849a288596d4b2e76e411338761a526",
+					"source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/food-kit/original/apple.glb",
+					"source_pose": {}
+				}
+			]
+		},
+		{
+			"camera": {
+				"orthographic_size": 2.55,
+				"position": [
+					3.0,
+					2.70000004768372,
+					4.0
+				],
+				"target": [
+					-0.16,
+					0.25,
+					-0.1
+				]
+			},
+			"crop": [
+				0,
+				176,
+				768,
+				466
+			],
+			"dimensions": [
+				512,
+				311
+			],
+			"image_sha256": "800826e687ba79a70ae9414708980d7ae5d224689c8d7970142081cae8b1db4a",
+			"measurements": [
+				{
+					"badge_visible": false,
+					"card_size": [
+						126.0,
+						72.0
+					],
+					"image_render_size": [
+						85.6077170418006,
+						52.0
+					],
+					"picture_alpha": 1.0,
+					"picture_size": [
+						102.0,
+						52.0
+					],
+					"state": "match-unmatched",
+					"texture_delivery": "Direct scratch ImageTexture assigned to the real WordCard; not the production Loader/cache delivery."
+				},
+				{
+					"badge_visible": true,
+					"card_size": [
+						126.0,
+						72.0
+					],
+					"image_render_size": [
+						85.6077170418006,
+						52.0
+					],
+					"picture_alpha": 0.680000007152557,
+					"picture_size": [
+						102.0,
+						52.0
+					],
+					"state": "match-matched",
+					"texture_delivery": "Direct scratch ImageTexture assigned to the real WordCard; not the production Loader/cache delivery."
+				},
+				{
+					"badge_visible": false,
+					"card_size": [
+						144.0,
+						74.0
+					],
+					"image_render_size": [
+						88.9003215434084,
+						54.0
+					],
+					"picture_alpha": 1.0,
+					"picture_size": [
+						120.0,
+						54.0
+					],
+					"state": "memory-unmatched",
+					"texture_delivery": "Direct scratch ImageTexture assigned to the real WordCard; not the production Loader/cache delivery."
+				},
+				{
+					"badge_visible": true,
+					"card_size": [
+						144.0,
+						74.0
+					],
+					"image_render_size": [
+						88.9003215434084,
+						54.0
+					],
+					"picture_alpha": 0.680000007152557,
+					"picture_size": [
+						120.0,
+						54.0
+					],
+					"state": "memory-matched",
+					"texture_delivery": "Direct scratch ImageTexture assigned to the real WordCard; not the production Loader/cache delivery."
+				}
+			],
+			"name": "tiled-three-quarter",
+			"scope": "Composition probe only; not selected or accepted",
+			"source_instances": [
+				{
+					"geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+					"hidden_source_nodes": [],
+					"root_position": [
+						-0.75,
+						0.0,
+						-0.600000023841858
+					],
+					"root_uniform_scale": 1.0,
+					"root_yaw_degrees": 0.0,
+					"sha256": "b18da447e10ae1afb327c90bc316590c780c68b04097a038f3fbb26fd28ca0f8",
+					"source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/original/floor.glb",
+					"source_pose": {}
+				},
+				{
+					"geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+					"hidden_source_nodes": [],
+					"root_position": [
+						-0.75,
+						0.0,
+						0.400000005960464
+					],
+					"root_uniform_scale": 1.0,
+					"root_yaw_degrees": 0.0,
+					"sha256": "b18da447e10ae1afb327c90bc316590c780c68b04097a038f3fbb26fd28ca0f8",
+					"source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/original/floor.glb",
+					"source_pose": {}
+				},
+				{
+					"geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+					"hidden_source_nodes": [],
+					"root_position": [
+						0.25,
+						0.0,
+						-0.600000023841858
+					],
+					"root_uniform_scale": 1.0,
+					"root_yaw_degrees": 0.0,
+					"sha256": "b18da447e10ae1afb327c90bc316590c780c68b04097a038f3fbb26fd28ca0f8",
+					"source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/original/floor.glb",
+					"source_pose": {}
+				},
+				{
+					"geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+					"hidden_source_nodes": [],
+					"root_position": [
+						0.25,
+						0.0,
+						0.400000005960464
+					],
+					"root_uniform_scale": 1.0,
+					"root_yaw_degrees": 0.0,
+					"sha256": "b18da447e10ae1afb327c90bc316590c780c68b04097a038f3fbb26fd28ca0f8",
+					"source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/original/floor.glb",
+					"source_pose": {}
+				},
+				{
+					"geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+					"hidden_source_nodes": [],
+					"root_position": [
+						0.0,
+						0.025000000372529,
+						0.0
+					],
+					"root_uniform_scale": 1.0,
+					"root_yaw_degrees": 0.0,
+					"sha256": "155f2eb666dea3a931d133a4953379898c8adb4b827ab60b86cae07235b9b598",
+					"source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/original/cash-register.glb",
+					"source_pose": {}
+				},
+				{
+					"geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+					"hidden_source_nodes": [],
+					"root_position": [
+						0.230000004172325,
+						0.025000000372529,
+						-0.330000013113022
+					],
+					"root_uniform_scale": 1.0,
+					"root_yaw_degrees": 0.0,
+					"sha256": "8774b93a5ff11af146176505035cc351d37a8a69ad0b1fde612bba9c8ffa84cc",
+					"source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/original/character-employee.glb",
+					"source_pose": {
+						"clip": "idle",
+						"seconds": 0.0,
+						"source_animation_only": true
+					}
+				},
+				{
+					"geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+					"hidden_source_nodes": [],
+					"root_position": [
+						-0.75,
+						0.025000000372529,
+						0.0
+					],
+					"root_uniform_scale": 1.0,
+					"root_yaw_degrees": 90.0,
+					"sha256": "2288438e7baf9acc91a870c82dc00d66710bb486592cfc3474ef8ed93a03863a",
+					"source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/mini-characters/original/character-female-b.glb",
+					"source_pose": {
+						"clip": "interact-right",
+						"seconds": 0.333,
+						"source_animation_only": true
+					}
+				},
+				{
+					"geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+					"hidden_source_nodes": [],
+					"root_position": [
+						-0.25,
+						0.275000005960464,
+						-0.129999995231628
+					],
+					"root_uniform_scale": 0.32,
+					"root_yaw_degrees": -12.0,
+					"sha256": "b63a5081c6edbda7ba8172e6a776f222e781f886a011a887789b2fde42095d04",
+					"source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/food-kit/original/carton.glb",
+					"source_pose": {}
+				},
+				{
+					"geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+					"hidden_source_nodes": [],
+					"root_position": [
+						-0.239999994635582,
+						0.275000005960464,
+						0.129999995231628
+					],
+					"root_uniform_scale": 0.55,
+					"root_yaw_degrees": 20.0,
+					"sha256": "2a80ab65d5bc2cb4f2bca1e8176cbb591849a288596d4b2e76e411338761a526",
+					"source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/food-kit/original/apple.glb",
+					"source_pose": {}
+				}
+			]
+		},
+		{
+			"camera": {
+				"orthographic_size": 2.55,
+				"position": [
+					3.0,
+					4.0,
+					4.0
+				],
+				"target": [
+					-0.16,
+					0.25,
+					-0.1
+				]
+			},
+			"crop": [
+				0,
+				165,
+				768,
+				534
+			],
+			"dimensions": [
+				512,
+				356
+			],
+			"image_sha256": "7f5c9f4d14a4d96a5b8c4be2ea9598159fa0a423699d35a90bbeea5b8c4485f7",
+			"measurements": [
+				{
+					"badge_visible": false,
+					"card_size": [
+						126.0,
+						72.0
+					],
+					"image_render_size": [
+						74.7865168539326,
+						52.0
+					],
+					"picture_alpha": 1.0,
+					"picture_size": [
+						102.0,
+						52.0
+					],
+					"state": "match-unmatched",
+					"texture_delivery": "Direct scratch ImageTexture assigned to the real WordCard; not the production Loader/cache delivery."
+				},
+				{
+					"badge_visible": true,
+					"card_size": [
+						126.0,
+						72.0
+					],
+					"image_render_size": [
+						74.7865168539326,
+						52.0
+					],
+					"picture_alpha": 0.680000007152557,
+					"picture_size": [
+						102.0,
+						52.0
+					],
+					"state": "match-matched",
+					"texture_delivery": "Direct scratch ImageTexture assigned to the real WordCard; not the production Loader/cache delivery."
+				},
+				{
+					"badge_visible": false,
+					"card_size": [
+						144.0,
+						74.0
+					],
+					"image_render_size": [
+						77.6629213483146,
+						54.0
+					],
+					"picture_alpha": 1.0,
+					"picture_size": [
+						120.0,
+						54.0
+					],
+					"state": "memory-unmatched",
+					"texture_delivery": "Direct scratch ImageTexture assigned to the real WordCard; not the production Loader/cache delivery."
+				},
+				{
+					"badge_visible": true,
+					"card_size": [
+						144.0,
+						74.0
+					],
+					"image_render_size": [
+						77.6629213483146,
+						54.0
+					],
+					"picture_alpha": 0.680000007152557,
+					"picture_size": [
+						120.0,
+						54.0
+					],
+					"state": "memory-matched",
+					"texture_delivery": "Direct scratch ImageTexture assigned to the real WordCard; not the production Loader/cache delivery."
+				}
+			],
+			"name": "tiled-high",
+			"scope": "Composition probe only; not selected or accepted",
+			"source_instances": [
+				{
+					"geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+					"hidden_source_nodes": [],
+					"root_position": [
+						-0.75,
+						0.0,
+						-0.600000023841858
+					],
+					"root_uniform_scale": 1.0,
+					"root_yaw_degrees": 0.0,
+					"sha256": "b18da447e10ae1afb327c90bc316590c780c68b04097a038f3fbb26fd28ca0f8",
+					"source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/original/floor.glb",
+					"source_pose": {}
+				},
+				{
+					"geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+					"hidden_source_nodes": [],
+					"root_position": [
+						-0.75,
+						0.0,
+						0.400000005960464
+					],
+					"root_uniform_scale": 1.0,
+					"root_yaw_degrees": 0.0,
+					"sha256": "b18da447e10ae1afb327c90bc316590c780c68b04097a038f3fbb26fd28ca0f8",
+					"source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/original/floor.glb",
+					"source_pose": {}
+				},
+				{
+					"geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+					"hidden_source_nodes": [],
+					"root_position": [
+						0.25,
+						0.0,
+						-0.600000023841858
+					],
+					"root_uniform_scale": 1.0,
+					"root_yaw_degrees": 0.0,
+					"sha256": "b18da447e10ae1afb327c90bc316590c780c68b04097a038f3fbb26fd28ca0f8",
+					"source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/original/floor.glb",
+					"source_pose": {}
+				},
+				{
+					"geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+					"hidden_source_nodes": [],
+					"root_position": [
+						0.25,
+						0.0,
+						0.400000005960464
+					],
+					"root_uniform_scale": 1.0,
+					"root_yaw_degrees": 0.0,
+					"sha256": "b18da447e10ae1afb327c90bc316590c780c68b04097a038f3fbb26fd28ca0f8",
+					"source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/original/floor.glb",
+					"source_pose": {}
+				},
+				{
+					"geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+					"hidden_source_nodes": [],
+					"root_position": [
+						0.0,
+						0.025000000372529,
+						0.0
+					],
+					"root_uniform_scale": 1.0,
+					"root_yaw_degrees": 0.0,
+					"sha256": "155f2eb666dea3a931d133a4953379898c8adb4b827ab60b86cae07235b9b598",
+					"source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/original/cash-register.glb",
+					"source_pose": {}
+				},
+				{
+					"geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+					"hidden_source_nodes": [],
+					"root_position": [
+						0.230000004172325,
+						0.025000000372529,
+						-0.330000013113022
+					],
+					"root_uniform_scale": 1.0,
+					"root_yaw_degrees": 0.0,
+					"sha256": "8774b93a5ff11af146176505035cc351d37a8a69ad0b1fde612bba9c8ffa84cc",
+					"source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/mini-market/original/character-employee.glb",
+					"source_pose": {
+						"clip": "idle",
+						"seconds": 0.0,
+						"source_animation_only": true
+					}
+				},
+				{
+					"geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+					"hidden_source_nodes": [],
+					"root_position": [
+						-0.75,
+						0.025000000372529,
+						0.0
+					],
+					"root_uniform_scale": 1.0,
+					"root_yaw_degrees": 90.0,
+					"sha256": "2288438e7baf9acc91a870c82dc00d66710bb486592cfc3474ef8ed93a03863a",
+					"source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/mini-characters/original/character-female-b.glb",
+					"source_pose": {
+						"clip": "interact-right",
+						"seconds": 0.333,
+						"source_animation_only": true
+					}
+				},
+				{
+					"geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+					"hidden_source_nodes": [],
+					"root_position": [
+						-0.25,
+						0.275000005960464,
+						-0.129999995231628
+					],
+					"root_uniform_scale": 0.32,
+					"root_yaw_degrees": -12.0,
+					"sha256": "b63a5081c6edbda7ba8172e6a776f222e781f886a011a887789b2fde42095d04",
+					"source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/food-kit/original/carton.glb",
+					"source_pose": {}
+				},
+				{
+					"geometry_materials_textures_skins_and_child_bind_transforms": "preserved; any pose comes only from the included sampled source clip",
+					"hidden_source_nodes": [],
+					"root_position": [
+						-0.239999994635582,
+						0.275000005960464,
+						0.129999995231628
+					],
+					"root_uniform_scale": 0.55,
+					"root_yaw_degrees": 20.0,
+					"sha256": "2a80ab65d5bc2cb4f2bca1e8176cbb591849a288596d4b2e76e411338761a526",
+					"source": "res://build/professional-english/retail-term-art-review/checkout-r01/source/food-kit/original/apple.glb",
+					"source_pose": {}
+				}
+			]
+		}
+	],
+	"scope": "Four source-rendered checkout composition probes with real minimum WordCard states. Picture recognition remains a visual review decision. No production/media/language/morphology gates changed.",
+	"source_pose_review_sha256": "e42735517811a7bed07721cdd9d1143510e01b2d9bb7e90d0f0777cc2af95ec5",
+	"source_record_sha256": "ea4f1e66fb38f55ea908a6d52c69bbddea86ae62dceaf232d6b22bc62f59fe91"
+}

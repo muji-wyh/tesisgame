@@ -1,0 +1,199 @@
+{
+  "date": "2026-10-16",
+  "status": "scratch_static_composition_pending_independent_root_review",
+  "review": "build/professional-english/nursing-theme-review/static-r03/review.md",
+  "source_receipt_sha256": "480148a06b0904edd173ca733233bfce99ef7efde63cc3e6c5966323df0b75f6",
+  "frozen_source_evidence_verified": 49,
+  "protected_themes_sha256": "718bae2956226505281d5e8f62406d0b225b12834b00977f401cb517f068f9fd",
+  "preserved_home_previews": 20,
+  "production_mutated": false,
+  "animations_authored": 0,
+  "layer_recomposition_exact": true,
+  "native_renderer_exit_code": 0,
+  "presentation_scope": "Godot source scene plus derived centered cover crops; no live game UI claim",
+  "candidate_images": [
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r03/candidate/environment.png",
+      "sha256": "c7e973550aa6089a83f55454fc070501e8c4181fcbe1c66b416ce1dabd77729f",
+      "bytes": 132898
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r03/candidate/home.png",
+      "sha256": "c201947ee8906975af0a76b95cd81e1f00dae9f8667a83d5cbc5db6ecc6de9b7",
+      "bytes": 190044
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r03/candidate/props.png",
+      "sha256": "d8141d20f458af1e087cf05de018063f9c25233179a680afbcdc0cb13ff8a585",
+      "bytes": 190806
+    }
+  ],
+  "evidence": [
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r01/diagnostic-render.log",
+      "sha256": "0e2404e9a22fd7965e563cff00eee48451e5cf9a312400fcb755318406adcf44",
+      "bytes": 383
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r01/diagnostics/adapted-no-shadows.png",
+      "sha256": "5a1439dec0e566997d0a3ac0908b6ebec915bce28d4792ad54a0542291a585c2",
+      "bytes": 54516
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r01/diagnostics/adapted-same-light.png",
+      "sha256": "5d5964885c11897cf1b2c5634705549de8383b4fe2ce27d3297a999d5bf7bac2",
+      "bytes": 66745
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r01/diagnostics/adapted-soft-light.png",
+      "sha256": "422e7a4ecef299990e7491da2dbfd813dc76e0e43ca5e9307228d03c277df215",
+      "bytes": 69736
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r01/diagnostics/original-no-shadows.png",
+      "sha256": "17ad46a4cd492c1ac0dd94c6455a1fc2feddb0a54d551b3f86ea5f346b04742e",
+      "bytes": 80605
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r01/diagnostics/original-shadows.png",
+      "sha256": "3ffc994761c2c1e6d670db74246b6539a3056e3682524cbfecea0c8faa302d45",
+      "bytes": 99697
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r01/diagnostics/report.json",
+      "sha256": "4ce18b1cc1858100491979066f919fa91dc49cba8967501ca6caaa3746a1ad09",
+      "bytes": 1176
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r01/inspect-normals.cjs",
+      "sha256": "2d4b4d28e8b54af66fe727ba6c627617f6c3294060b4fb46fb45f8ac1722b08a",
+      "bytes": 3840
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r01/normal-inspection.json",
+      "sha256": "e87b858e61d74b862735d875b2ac576da364f56f372c4f298c6d264eddc37232",
+      "bytes": 17681
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r01/render-curtain-diagnostics.gd",
+      "sha256": "0167697355bba78a249d23027a22ddce35b6fe8f70599bc4ddc978cae11c3753",
+      "bytes": 3827
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r01/textile-normal-adapter.gd",
+      "sha256": "803b7efd19291687fc4ea423cd86ff950e6d851c78f4eabf3d7da3aae95488ad",
+      "bytes": 2730
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r03/build-review.py",
+      "sha256": "2919abbeae09ee6fda8df22b65d9ae16f55c477b4de3e53960bb1bf1c5d924d2",
+      "bytes": 4989
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r03/candidate/environment.png",
+      "sha256": "c7e973550aa6089a83f55454fc070501e8c4181fcbe1c66b416ce1dabd77729f",
+      "bytes": 132898
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r03/candidate/home.png",
+      "sha256": "c201947ee8906975af0a76b95cd81e1f00dae9f8667a83d5cbc5db6ecc6de9b7",
+      "bytes": 190044
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r03/candidate/props.png",
+      "sha256": "d8141d20f458af1e087cf05de018063f9c25233179a680afbcdc0cb13ff8a585",
+      "bytes": 190806
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r03/composition-render.log",
+      "sha256": "b0d6b9cdf18cbe237b6a81adb3e8951c4a585ac286e511eee9b8e80b1a5c5d2f",
+      "bytes": 370
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r03/layer-review-report.json",
+      "sha256": "a038255fe2a99d2ead4446de9168e2cbb39a4f85a47581c98dfd5eb020347f65",
+      "bytes": 1621
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r03/package-review.cjs",
+      "sha256": "42e3934ba99ac1640da9bece382013a967aa691802a988250fb016485f790fe6",
+      "bytes": 3421
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r03/prepare-renderer.cjs",
+      "sha256": "1cb6c819dc04b9ba0289e08002228d84ae7f0a345a5424eeaf01133974b16fed",
+      "bytes": 2398
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r03/render-composition.gd",
+      "sha256": "9da5463261e622dd34fe505e38f968b1e4fb77cecd66127d517be70c9c1b77c5",
+      "bytes": 7183
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r03/renders/composite.png",
+      "sha256": "8d199bab37c359877cd108ba9c242cd25728efe4cd140dba2c929ef3a8454f5a",
+      "bytes": 194898
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r03/renders/composition-report.json",
+      "sha256": "f40b6c1b3e068ba58b69b8cb7872c19c1e48433df1703b72048a63a458c54b70",
+      "bytes": 11567
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r03/renders/environment.png",
+      "sha256": "36510d9b95aa97e84bb8af4cbdf4f7c18cb9992bafc8df3bad44911730f69ccb",
+      "bytes": 134205
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r03/review.md",
+      "sha256": "aad809340063a83eb69d8dd5e6eacdaf522b0dc42ba927e2ccfc9f0f70d6ffbd",
+      "bytes": 4866
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r03/review/curtain-diagnostic-contact.png",
+      "sha256": "00c15e2f665a1f1922e693e74589f495589a3582d14da96621216dceaf3e8806",
+      "bytes": 130369
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r03/review/nursing-covered-1280x800.png",
+      "sha256": "b00e256798c7681c07ee18fbf13a23029405edef36fdc5ce0e2d3e82d92fa08d",
+      "bytes": 409254
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r03/review/nursing-covered-320x568.png",
+      "sha256": "3f864c51b14e695c0defc857f6e7a78c1d3b0d55baa6021fc4778adb6f4778e1",
+      "bytes": 92978
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r03/review/nursing-covered-390x844.png",
+      "sha256": "cc6c17155fd563e6b68fb6e21805a1b0114f33f79437be20f10a29021909c984",
+      "bytes": 148567
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r03/review/nursing-covered-844x390.png",
+      "sha256": "e3acad00664852400fb4fd712c58d21403f97e2cff70e82117685cc368ed04bd",
+      "bytes": 194302
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r03/review/nursing-full.png",
+      "sha256": "c201947ee8906975af0a76b95cd81e1f00dae9f8667a83d5cbc5db6ecc6de9b7",
+      "bytes": 190044
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r03/review/nursing-phone-square.png",
+      "sha256": "c003cc274bcb97292b783a34d490ba295f0cd82f8cc3ccbf347193829d904c64",
+      "bytes": 44607
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/static-r03/review/static-review-contact.png",
+      "sha256": "79d684f752b5818648feb9655b1d62cd4770664b4b71c8aacf427a09cf5dc1ad",
+      "bytes": 394828
+    }
+  ],
+  "limitations": [
+    "Source selection and corrected normals accepted for exploration only",
+    "The narrow portrait crops remove peripheral scene furniture and part of the station",
+    "The 844 x 390 cover crop removes the ceiling/rail above the viewport",
+    "No final art, motion, clinical, runtime presentation or module readiness approval"
+  ]
+}

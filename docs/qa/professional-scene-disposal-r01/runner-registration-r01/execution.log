@@ -1,0 +1,12 @@
+✔ the default plan runs every Godot and Node test file exactly once (13.8833ms)
+✔ overlapping selections do not repeat suites and vocabulary keeps its fixed frame rate (1.4394ms)
+✔ npm keeps import preparation and every focused suite alias in the explicit runner (13.6686ms)
+✔ the CLI lists the plan, rejects unknown groups and propagates engine startup failures (953.4987ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1311.4269

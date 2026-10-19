@@ -1,0 +1,80 @@
+{
+  "schema": 1,
+  "status": "evidence_invariants_passed_not_production_validation",
+  "finished_at": "2026-10-16T20:05:07.551Z",
+  "assembly_script_raw_sha256": "9c512a2a8dbceb32d5436f33b9e2181a5de81dec1d8b11a7f2ff0efa108c1730",
+  "baseline_raw_sha256": "59c33da6c2a31ac2ea3f67bed20966e32f174030c07b16600d13b6f46e3f73e5",
+  "selected_original_pins_verified": 10,
+  "bound_source_files_verified_before_and_after": 350,
+  "source_drift_count": 0,
+  "projection_invariant_errors": 0,
+  "proposals": 9,
+  "whole_entry_holds": 1,
+  "actual_content_changes": 7,
+  "changed_fields_by_entry": [
+    {
+      "id": "urgent.needing-prompt-attention.adj",
+      "fields": [
+        "definition",
+        "difficulty"
+      ]
+    },
+    {
+      "id": "unclear.not-understandable.adj",
+      "fields": [
+        "difficulty"
+      ]
+    },
+    {
+      "id": "safe.free-from-unacceptable-danger.adj",
+      "fields": [
+        "definition"
+      ]
+    },
+    {
+      "id": "unsafe.presenting-danger.adj",
+      "fields": [
+        "difficulty"
+      ]
+    },
+    {
+      "id": "incident.workplace-event.n",
+      "fields": [
+        "definition",
+        "difficulty"
+      ]
+    },
+    {
+      "id": "concern.worrying-matter.n",
+      "fields": [
+        "definition",
+        "difficulty"
+      ]
+    },
+    {
+      "id": "procedure.agreed-method.n",
+      "fields": [
+        "example",
+        "difficulty"
+      ]
+    }
+  ],
+  "source_consultations": 20,
+  "failed_accesses": 3,
+  "excluded_wrong_part_of_speech_consultations": 1,
+  "previous_whole_entry_holds_preserved": 4,
+  "inherited_expression_holds_preserved": 17,
+  "containing_expressions_preserved": 10,
+  "observed_status": {
+    "senses": 4939,
+    "language_reviewed": 317,
+    "whole_entry_reviewed": 130,
+    "foundation02_language_reviewed": 18,
+    "ready_modules": 0
+  },
+  "production_writes": false,
+  "independent_acceptance": false,
+  "production_validators_or_tests_run": false,
+  "native_or_browser_dispatch_run": false,
+  "executed_capture_collection_and_assembly_source_equality_verified": true
+}

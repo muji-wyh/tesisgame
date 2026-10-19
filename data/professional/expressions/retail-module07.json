@@ -1,0 +1,1880 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.retail.module07.01",
+      "text": "Please compare the delivery note, packing list, and purchase order before recording the incoming shipment.",
+      "meaning": "Ask a colleague to compare receiving documents.",
+      "context": "A receiving team checks what has arrived.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "compare",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "delivery",
+          "start": 19,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "note",
+          "start": 28,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 32,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "packing",
+          "start": 34,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "list",
+          "start": 42,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 46,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "purchase",
+          "start": 52,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": "order",
+          "start": 61,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "before",
+          "start": 67,
+          "end": 73
+        },
+        {
+          "index": 13,
+          "text": "recording",
+          "start": 74,
+          "end": 83
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 84,
+          "end": 87
+        },
+        {
+          "index": 15,
+          "text": "incoming",
+          "start": 88,
+          "end": 96
+        },
+        {
+          "index": 16,
+          "text": "shipment",
+          "start": 97,
+          "end": 105
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 105,
+          "end": 106
+        }
+      ],
+      "focus_lexeme_ids": [
+        "delivery-note.delivered-goods-document.n",
+        "packing-list.package-contents-list.n",
+        "purchase-order.buyer-order-document.n",
+        "incoming-shipment.arriving-goods-load.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex (AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "shopify-inventory",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        },
+        {
+          "source_id": "retail07-review-delivery-note",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): British English noun definition. A delivery note is a document accompanying delivered goods. The automated illustrative quotations are not relied on. Limits: Dictionary meaning only; no proof-of-receipt, payment or legal acceptance inference. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only the selected dictionary sense, attested wording or stated lexical distinction used in this record. No automated illustrative quotations, CEFR certification, morphology, pronunciation, artwork rights, professional procedure, legal effect or product eligibility is verified."
+        },
+        {
+          "source_id": "retail07-review-delivery-checklist",
+          "status": "pending_term_check",
+          "scope": "Selected evidence (selected_page_passage): Difference between a consignment note and a delivery note, checklist passage. The delivery-note passage describes a document between sender and receiver that can list details of the ordered goods. Limits: Only the checklist description is used. The page also reports invoice terminology; that conflation is not adopted. No retention period or contractual effect is imported. Exact editorial decisions still require independent acceptance; no review gate is promoted."
+        },
+        {
+          "source_id": "retail07-review-packing-list",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): Packing List introduction. A packing list itemizes package contents and can describe quantities, weights and package measurements. Limits: Export-document example only; no required format, customs declaration, attachment practice or legal compliance claim is adopted. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only an itemized description of shipment contents and package quantities or measurements. No prescribed format, customs compliance, attachment duty, shipping authorization, receipt acceptance or payment evidence is verified."
+        },
+        {
+          "source_id": "retail07-review-oxford-purchase-order",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): noun definition. A purchase order goes from the buying party to the selling party and describes the purchase. This direction distinguishes it from an internal purchasing request. Limits: Lexical evidence only; no merchant procedure, domain approval, morphology approval, media license or visual/listening approval is implied. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only the selected dictionary sense, attested wording or stated lexical distinction used in this record. No automated illustrative quotations, CEFR certification, morphology, pronunciation, artwork rights, professional procedure, legal effect or product eligibility is verified."
+        },
+        {
+          "source_id": "retail07-review-oxford-shipment",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): noun senses 1 and 2. A shipment can be a load of transported goods, distinct from the act of shipping. Incoming selects the direction toward the receiving location. Limits: Lexical evidence only; no merchant procedure, domain approval, morphology approval, media license or visual/listening approval is implied. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only the selected dictionary sense, attested wording or stated lexical distinction used in this record. No automated illustrative quotations, CEFR certification, morphology, pronunciation, artwork rights, professional procedure, legal effect or product eligibility is verified."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module07.02",
+      "text": "The stock count found a stock discrepancy: the inventory differs from the stock recorded, so the inventory adjustment needs review.",
+      "meaning": "Distinguish goods on hand from the recorded quantity.",
+      "context": "A worker reports a discrepancy without authorizing a record adjustment.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "stock",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "count",
+          "start": 10,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "found",
+          "start": 16,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "a",
+          "start": 22,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "stock",
+          "start": 24,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "discrepancy",
+          "start": 30,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": ":",
+          "start": 41,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 43,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "inventory",
+          "start": 47,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "differs",
+          "start": 57,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "from",
+          "start": 65,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 13,
+          "text": "stock",
+          "start": 74,
+          "end": 79
+        },
+        {
+          "index": 14,
+          "text": "recorded",
+          "start": 80,
+          "end": 88
+        },
+        {
+          "index": 15,
+          "text": ",",
+          "start": 88,
+          "end": 89
+        },
+        {
+          "index": 16,
+          "text": "so",
+          "start": 90,
+          "end": 92
+        },
+        {
+          "index": 17,
+          "text": "the",
+          "start": 93,
+          "end": 96
+        },
+        {
+          "index": 18,
+          "text": "inventory",
+          "start": 97,
+          "end": 106
+        },
+        {
+          "index": 19,
+          "text": "adjustment",
+          "start": 107,
+          "end": 117
+        },
+        {
+          "index": 20,
+          "text": "needs",
+          "start": 118,
+          "end": 123
+        },
+        {
+          "index": 21,
+          "text": "review",
+          "start": 124,
+          "end": 130
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 130,
+          "end": 131
+        }
+      ],
+      "focus_lexeme_ids": [
+        "stock-count.physical-quantity-check.n",
+        "stock-discrepancy.inventory-mismatch.n",
+        "inventory-adjustment.stock-record-change.n",
+        "inventory.recorded-goods.n",
+        "stock.goods-held.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex (AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "shopify-inventory",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        },
+        {
+          "source_id": "retail07-review-oxford-inventory",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): noun senses 1, 2 and 3. Inventory can name a list, the goods themselves, or accounting stock including materials and work in progress. The selected goods sense must not be replaced by the list sense in sentences. Limits: Lexical evidence only; no merchant procedure, domain approval, morphology approval, media license or visual/listening approval is implied. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only the selected dictionary sense, attested wording or stated lexical distinction used in this record. No automated illustrative quotations, CEFR certification, morphology, pronunciation, artwork rights, professional procedure, legal effect or product eligibility is verified."
+        },
+        {
+          "source_id": "retail07-review-oxford-stock",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): noun supply sense 1. Stock names goods available for sale, with in stock, out of stock and stock checks as ordinary combinations. Financial shares, liquid food and ancestry are separate senses. Limits: Lexical evidence only; no merchant procedure, domain approval, morphology approval, media license or visual/listening approval is implied. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only the selected dictionary sense, attested wording or stated lexical distinction used in this record. No automated illustrative quotations, CEFR certification, morphology, pronunciation, artwork rights, professional procedure, legal effect or product eligibility is verified."
+        },
+        {
+          "source_id": "retail07-review-cycle-count",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): What is cycle counting?; physical counting versus cycle counting. Cycle counting repeatedly checks selected product groups; a physical count checks actual goods and can expose differences from recorded quantities. Limits: Terminology only. No count frequency, sample size, statistical method or permission to change records is adopted. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only physical checking of inventory, recurring selected-group counts, and a possible difference from recorded quantities. Count frequency, sample size, statistical assurance, cause of loss and authority to adjust records remain excluded."
+        },
+        {
+          "source_id": "retail07-review-adjustment",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): Introduction, setting new inventory levels, unavailable inventory. The provider records quantity adjustments and their history, distinguishes physical counts from record changes, and separately tracks goods that are held but unavailable. Limits: Provider-specific inventory states and controls; no workflow, authorization, accounting policy or automatic adjustment is imported. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only recorded stock quantity, a quantity adjustment, and stock held but unavailable. No provider state model, workflow, access permission, account posting, adjustment authorization or inventory policy is verified."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module07.03",
+      "text": "Check the available supply, stock level, and reorder point before arranging replenishment.",
+      "meaning": "Review available quantities before replenishment.",
+      "context": "A worker checks the relevant stock records.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Check",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "available",
+          "start": 10,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "supply",
+          "start": 20,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 26,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "stock",
+          "start": 28,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "level",
+          "start": 34,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 39,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 9,
+          "text": "reorder",
+          "start": 45,
+          "end": 52
+        },
+        {
+          "index": 10,
+          "text": "point",
+          "start": 53,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": "before",
+          "start": 59,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "arranging",
+          "start": 66,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": "replenishment",
+          "start": 76,
+          "end": 89
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 89,
+          "end": 90
+        }
+      ],
+      "focus_lexeme_ids": [
+        "stock-level.quantity-held.n",
+        "reorder-point.replenishment-trigger-level.n",
+        "replenishment.supply-restoration.n",
+        "supply.available-quantity.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex (AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "shopify-inventory",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        },
+        {
+          "source_id": "retail07-review-oxford-supply",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): noun senses 1 and 3. The available-amount sense differs from the act of providing goods. A supply can be adequate, limited or exhausted; coordinating provision does not clearly select an available quantity. Limits: Lexical evidence only; no merchant procedure, domain approval, morphology approval, media license or visual/listening approval is implied. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only the selected dictionary sense, attested wording or stated lexical distinction used in this record. No automated illustrative quotations, CEFR certification, morphology, pronunciation, artwork rights, professional procedure, legal effect or product eligibility is verified."
+        },
+        {
+          "source_id": "retail07-review-adjustment",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): Introduction, setting new inventory levels, unavailable inventory. The provider records quantity adjustments and their history, distinguishes physical counts from record changes, and separately tracks goods that are held but unavailable. Limits: Provider-specific inventory states and controls; no workflow, authorization, accounting policy or automatic adjustment is imported. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only recorded stock quantity, a quantity adjustment, and stock held but unavailable. No provider state model, workflow, access permission, account posting, adjustment authorization or inventory policy is verified."
+        },
+        {
+          "source_id": "retail07-review-reorder-point",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): Reorder Point Planning introduction. The planning system uses a stock threshold to suggest a replenishment order, with lead time and demand as inputs. Limits: A software planning example only. No formula, threshold, purchase authority or economic recommendation is taught. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only a stock threshold used to suggest or trigger replenishment. No formula, quantity, forecasting accuracy, purchasing authority, financial recommendation or automatic order instruction is verified."
+        },
+        {
+          "source_id": "retail07-review-oxford-replenishment",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): noun definition and stock example. The noun names restoring a supply by replacing what has been used. It is a process, not an order document or a quantity by itself. Limits: Lexical evidence only; no merchant procedure, domain approval, morphology approval, media license or visual/listening approval is implied. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only the selected dictionary sense, attested wording or stated lexical distinction used in this record. No automated illustrative quotations, CEFR certification, morphology, pronunciation, artwork rights, professional procedure, legal effect or product eligibility is verified."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module07.04",
+      "text": "The supplier confirmed a backorder with a longer lead time for this consignment; a proposed stock transfer needs separate review.",
+      "meaning": "Describe an order delay and a separate proposed goods movement.",
+      "context": "A worker discusses a planned consignment and a separate proposed stock movement without authorizing the transfer.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "supplier",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "confirmed",
+          "start": 13,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 23,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "backorder",
+          "start": 25,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "with",
+          "start": 35,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "a",
+          "start": 40,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "longer",
+          "start": 42,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "lead",
+          "start": 49,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "time",
+          "start": 54,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "for",
+          "start": 59,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "this",
+          "start": 63,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": "consignment",
+          "start": 68,
+          "end": 79
+        },
+        {
+          "index": 13,
+          "text": ";",
+          "start": 79,
+          "end": 80
+        },
+        {
+          "index": 14,
+          "text": "a",
+          "start": 81,
+          "end": 82
+        },
+        {
+          "index": 15,
+          "text": "proposed",
+          "start": 83,
+          "end": 91
+        },
+        {
+          "index": 16,
+          "text": "stock",
+          "start": 92,
+          "end": 97
+        },
+        {
+          "index": 17,
+          "text": "transfer",
+          "start": 98,
+          "end": 106
+        },
+        {
+          "index": 18,
+          "text": "needs",
+          "start": 107,
+          "end": 112
+        },
+        {
+          "index": 19,
+          "text": "separate",
+          "start": 113,
+          "end": 121
+        },
+        {
+          "index": 20,
+          "text": "review",
+          "start": 122,
+          "end": 128
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 128,
+          "end": 129
+        }
+      ],
+      "focus_lexeme_ids": [
+        "backorder.unfilled-stock-order.n",
+        "lead-time.order-to-availability-time.n",
+        "consignment.sent-goods-group.n",
+        "stock-transfer.goods-location-move.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex (AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "shopify-inventory",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        },
+        {
+          "source_id": "retail07-review-oxford-backorder",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): noun definition and on back order pattern. The noun describes an order for a currently unavailable product. The source uses the open spelling back order; this consultation does not require a spelling migration of the existing closed form. Limits: Lexical evidence only; no merchant procedure, domain approval, morphology approval, media license or visual/listening approval is implied. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only the selected dictionary sense, attested wording or stated lexical distinction used in this record. No automated illustrative quotations, CEFR certification, morphology, pronunciation, artwork rights, professional procedure, legal effect or product eligibility is verified."
+        },
+        {
+          "source_id": "retail07-review-oxford-lead-time",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): noun definition. Lead time can span an order to delivery or the start to completion of production. The measured start and end events depend on the process. Limits: Lexical evidence only; no merchant procedure, domain approval, morphology approval, media license or visual/listening approval is implied. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only the selected dictionary sense, attested wording or stated lexical distinction used in this record. No automated illustrative quotations, CEFR certification, morphology, pronunciation, artwork rights, professional procedure, legal effect or product eligibility is verified."
+        },
+        {
+          "source_id": "retail07-review-oxford-consignment",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): countable goods sense. The selected noun is a group of goods sent or delivered somewhere. It does not require one vehicle, or mean a consignment-sales ownership agreement. Limits: Lexical evidence only; no merchant procedure, domain approval, morphology approval, media license or visual/listening approval is implied. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only the selected dictionary sense, attested wording or stated lexical distinction used in this record. No automated illustrative quotations, CEFR certification, morphology, pronunciation, artwork rights, professional procedure, legal effect or product eligibility is verified."
+        },
+        {
+          "source_id": "retail07-review-transfer",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): Stay on top of inventory movements with transfers. A transfer moves stock between identified origin and destination locations. The provider distinguishes in-transit goods from receipt at the destination. Limits: Provider example only; no transfer approval or instructions to accept goods are imported. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only stock movement between identified locations and the distinction between incoming or in-transit goods and receipt. No permission to transfer, acceptance decision, provider operation or proof of usable availability is verified."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module07.05",
+      "text": "Please identify the batch for each unit and record its lot number and serial number.",
+      "meaning": "Identify the production group and record group and individual product identifiers.",
+      "context": "A worker checks fictional goods that carry both lot and serial identifiers, distinguishing the production group from the codes.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "identify",
+          "start": 7,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "batch",
+          "start": 20,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "for",
+          "start": 26,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "each",
+          "start": 30,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "unit",
+          "start": 35,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "record",
+          "start": 44,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "its",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "lot",
+          "start": 55,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": "number",
+          "start": 59,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 13,
+          "text": "serial",
+          "start": 70,
+          "end": 76
+        },
+        {
+          "index": 14,
+          "text": "number",
+          "start": 77,
+          "end": 83
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 83,
+          "end": 84
+        }
+      ],
+      "focus_lexeme_ids": [
+        "batch.production-group.n",
+        "lot-number.batch-identifier.n",
+        "serial-number.individual-product-identifier.n",
+        "unit.single-stock-item.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex (AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "shopify-inventory",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        },
+        {
+          "source_id": "retail07-review-oxford-batch",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): noun senses 1 and 2. A batch is a group handled together; the production sense is an amount made at one time. The group itself differs from the code used to identify it. Limits: Lexical evidence only; no merchant procedure, domain approval, morphology approval, media license or visual/listening approval is implied. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only the selected dictionary sense, attested wording or stated lexical distinction used in this record. No automated illustrative quotations, CEFR certification, morphology, pronunciation, artwork rights, professional procedure, legal effect or product eligibility is verified."
+        },
+        {
+          "source_id": "retail07-review-lot-code",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): Introduction and product-attribute information. Batch/lot information, serial number and expiration date are distinct product data attributes. Together with the batch definition, this supports distinguishing group identifiers from unit identifiers. Limits: No barcode image, code construction, global uniqueness claim for a bare lot code, or compliance procedure is imported. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only the different roles of batch or lot information, individual serial identifiers, and other product attributes. No barcode artwork, code construction, global uniqueness of a bare lot identifier, tracing procedure or standards compliance is verified."
+        },
+        {
+          "source_id": "retail07-review-oxford-serial-number",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): noun definition. A serial number identifies a particular product unit. This contrasts with a batch identifier shared across a production group. Limits: Lexical evidence only; no merchant procedure, domain approval, morphology approval, media license or visual/listening approval is implied. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only the selected dictionary sense, attested wording or stated lexical distinction used in this record. No automated illustrative quotations, CEFR certification, morphology, pronunciation, artwork rights, professional procedure, legal effect or product eligibility is verified."
+        },
+        {
+          "source_id": "retail07-review-oxford-unit",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): noun business sense 2; separate measurement sense. The business sense is one product item. A measurement unit is a different sense and an incidental occurrence cannot establish a stock-item focus route. Limits: Lexical evidence only; no merchant procedure, domain approval, morphology approval, media license or visual/listening approval is implied. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only the selected dictionary sense, attested wording or stated lexical distinction used in this record. No automated illustrative quotations, CEFR certification, morphology, pronunciation, artwork rights, professional procedure, legal effect or product eligibility is verified."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module07.06",
+      "text": "Ask the supervisor how stock rotation and first in, first out relate to the sell-by date, best-before date, and expiration date shown.",
+      "meaning": "Ask about distinct date labels and stock-handling arrangements.",
+      "context": "A worker seeks product-specific local guidance for the different labels shown, without treating arrival order, sale guidance, quality dates and validity limits as interchangeable.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Ask",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "supervisor",
+          "start": 8,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "how",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "stock",
+          "start": 23,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "rotation",
+          "start": 29,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 38,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "first",
+          "start": 42,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "in",
+          "start": 48,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 50,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "first",
+          "start": 52,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": "out",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 12,
+          "text": "relate",
+          "start": 62,
+          "end": 68
+        },
+        {
+          "index": 13,
+          "text": "to",
+          "start": 69,
+          "end": 71
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 72,
+          "end": 75
+        },
+        {
+          "index": 15,
+          "text": "sell-by",
+          "start": 76,
+          "end": 83
+        },
+        {
+          "index": 16,
+          "text": "date",
+          "start": 84,
+          "end": 88
+        },
+        {
+          "index": 17,
+          "text": ",",
+          "start": 88,
+          "end": 89
+        },
+        {
+          "index": 18,
+          "text": "best-before",
+          "start": 90,
+          "end": 101
+        },
+        {
+          "index": 19,
+          "text": "date",
+          "start": 102,
+          "end": 106
+        },
+        {
+          "index": 20,
+          "text": ",",
+          "start": 106,
+          "end": 107
+        },
+        {
+          "index": 21,
+          "text": "and",
+          "start": 108,
+          "end": 111
+        },
+        {
+          "index": 22,
+          "text": "expiration",
+          "start": 112,
+          "end": 122
+        },
+        {
+          "index": 23,
+          "text": "date",
+          "start": 123,
+          "end": 127
+        },
+        {
+          "index": 24,
+          "text": "shown",
+          "start": 128,
+          "end": 133
+        },
+        {
+          "index": 25,
+          "text": ".",
+          "start": 133,
+          "end": 134
+        }
+      ],
+      "focus_lexeme_ids": [
+        "stock-rotation.ordered-stock-use.n",
+        "first-in-first-out.arrival-order-method.n",
+        "sell-by-date.retailer-sale-date.n",
+        "best-before-date.food-quality-date.n",
+        "expiration-date.stated-validity-end.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "shopify-inventory",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        },
+        {
+          "source_id": "retail07-review-rotation",
+          "status": "pending_term_check",
+          "scope": "Selected evidence (selected_page_passage): Stock rotation definition and seasonal distinction. Stock rotation prioritizes selected goods for sale; arrival order is one method, while seasonal circumstances can also affect the sequence. Limits: No universal rotation method or food-safety clearance is inferred. Exact editorial decisions still require independent acceptance; no review gate is promoted."
+        },
+        {
+          "source_id": "retail07-review-fifo",
+          "status": "pending_term_check",
+          "scope": "Selected evidence (selected_page_passage): Definition of the first-in, first-out stock rotation method. The stock-handling method prioritizes earlier received stock for sale or use. The article also discusses a distinct accounting application. Limits: Only physical stock-handling meaning is used. No valuation method, mandatory industry rule, expiry precedence or safety outcome is adopted. Exact editorial decisions still require independent acceptance; no review gate is promoted."
+        },
+        {
+          "source_id": "retail07-review-food-dates-us",
+          "status": "pending_term_check",
+          "scope": "Selected evidence (search_index_passage_direct_fetch_unavailable): Indexed passage on sell-by labeling and inventory management. The indexed official passage describes sell-by as guidance for how long a store displays a product. This supports the retail-display definition without a universal food-safety rule. Limits: Only the search-index passage was available; direct page retrieval failed. No current legal requirement or consumption guidance is asserted. Exact editorial decisions still require independent acceptance; no review gate is promoted."
+        },
+        {
+          "source_id": "retail07-review-food-dates-uk",
+          "status": "pending_term_check",
+          "scope": "Selected evidence (selected_page_passage): Date distinction; use-by dates; best before dates. In the UK guidance, use-by labels concern safety and best-before labels concern quality. Both depend on the relevant storage conditions. Limits: UK labeling sense only. No consumption decision, storage temperature, cooking/freezing extension or statutory advice is added to this vocabulary lesson. Exact editorial decisions still require independent acceptance; no review gate is promoted."
+        },
+        {
+          "source_id": "retail07-review-oxford-expiration-date",
+          "status": "pending_term_check",
+          "scope": "Selected evidence (selected_page_passage): noun definition and regional label. The phrase covers a stated end of document validity or intended product use; expiration date is labeled North American and expiry date British. It is broader than food safety alone. Limits: Lexical evidence only; no merchant procedure, domain approval, morphology approval, media license or visual/listening approval is implied. Exact editorial decisions still require independent acceptance; no review gate is promoted."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module07.07",
+      "text": "The customer reported a faulty item with damaged packaging and requested a replacement item; the original packaging is available.",
+      "meaning": "Record the reported condition and available packaging.",
+      "context": "A worker documents a return request without assuming eligibility.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "customer",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "reported",
+          "start": 13,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 22,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "faulty",
+          "start": 24,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "item",
+          "start": 31,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "with",
+          "start": 36,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "damaged",
+          "start": 41,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "packaging",
+          "start": 49,
+          "end": 58
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 59,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "requested",
+          "start": 63,
+          "end": 72
+        },
+        {
+          "index": 11,
+          "text": "a",
+          "start": 73,
+          "end": 74
+        },
+        {
+          "index": 12,
+          "text": "replacement",
+          "start": 75,
+          "end": 86
+        },
+        {
+          "index": 13,
+          "text": "item",
+          "start": 87,
+          "end": 91
+        },
+        {
+          "index": 14,
+          "text": ";",
+          "start": 91,
+          "end": 92
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 93,
+          "end": 96
+        },
+        {
+          "index": 16,
+          "text": "original",
+          "start": 97,
+          "end": 105
+        },
+        {
+          "index": 17,
+          "text": "packaging",
+          "start": 106,
+          "end": 115
+        },
+        {
+          "index": 18,
+          "text": "is",
+          "start": 116,
+          "end": 118
+        },
+        {
+          "index": 19,
+          "text": "available",
+          "start": 119,
+          "end": 128
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 128,
+          "end": 129
+        }
+      ],
+      "focus_lexeme_ids": [
+        "faulty-item.nonworking-product.n",
+        "damaged-packaging.harmed-package.n",
+        "replacement-item.substitute-product.n",
+        "original-packaging.supplied-product-packaging.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex (AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "shopify-inventory",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        },
+        {
+          "source_id": "retail07-review-oxford-faulty",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): adjective product sense 1. Faulty covers things not functioning or made correctly. The project retains its selected functional-defect sense rather than the separate reasoning sense. Limits: Lexical evidence only; no merchant procedure, domain approval, morphology approval, media license or visual/listening approval is implied. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only the selected dictionary sense, attested wording or stated lexical distinction used in this record. No automated illustrative quotations, CEFR certification, morphology, pronunciation, artwork rights, professional procedure, legal effect or product eligibility is verified."
+        },
+        {
+          "source_id": "retail07-review-oxford-packaging",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): noun material sense and original packaging combination. Packaging names protective or wrapping materials; original packaging is an attested combination. The materials differ from the process of packaging. Limits: Lexical evidence only; no merchant procedure, domain approval, morphology approval, media license or visual/listening approval is implied. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only the selected dictionary sense, attested wording or stated lexical distinction used in this record. No automated illustrative quotations, CEFR certification, morphology, pronunciation, artwork rights, professional procedure, legal effect or product eligibility is verified."
+        },
+        {
+          "source_id": "retail07-review-oxford-damage",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): verb physical-harm sense and damaged participle. Damage includes harm to an object. Damaged packaging describes harmed protective material and does not prove damage to the enclosed product. Limits: Lexical evidence only; no merchant procedure, domain approval, morphology approval, media license or visual/listening approval is implied. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only the selected dictionary sense, attested wording or stated lexical distinction used in this record. No automated illustrative quotations, CEFR certification, morphology, pronunciation, artwork rights, professional procedure, legal effect or product eligibility is verified."
+        },
+        {
+          "source_id": "retail07-review-oxford-replacement",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): noun sense 2 and replacement product combination. The countable sense names a thing supplied in place of another. It does not necessarily imply a new item, identical model, refund entitlement or improved quality. Limits: Lexical evidence only; no merchant procedure, domain approval, morphology approval, media license or visual/listening approval is implied. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only the selected dictionary sense, attested wording or stated lexical distinction used in this record. No automated illustrative quotations, CEFR certification, morphology, pronunciation, artwork rights, professional procedure, legal effect or product eligibility is verified."
+        },
+        {
+          "source_id": "retail07-review-returns-uk",
+          "status": "pending_term_check",
+          "scope": "Selected evidence (selected_page_passage): Faulty goods, unwanted goods and distance-sales distinctions. The guidance distinguishes faulty products from change-of-mind returns and contains rights that depend on the circumstances. Packaging can be evidence of purchase rather than a universal condition for a remedy. Limits: Jurisdictional boundary check only. No deadlines, refund guarantees, original-packaging requirement or merchant discretion overriding legal rights is imported. Exact editorial decisions still require independent acceptance; no review gate is promoted."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module07.08",
+      "text": "Could you check the return authorization before printing the return label for this return parcel?",
+      "meaning": "Request verification before preparing a return shipment.",
+      "context": "A colleague coordinates a specific authorized return process.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Could",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "you",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "check",
+          "start": 10,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "return",
+          "start": 20,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "authorization",
+          "start": 27,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "before",
+          "start": 41,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "printing",
+          "start": 48,
+          "end": 56
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 9,
+          "text": "return",
+          "start": 61,
+          "end": 67
+        },
+        {
+          "index": 10,
+          "text": "label",
+          "start": 68,
+          "end": 73
+        },
+        {
+          "index": 11,
+          "text": "for",
+          "start": 74,
+          "end": 77
+        },
+        {
+          "index": 12,
+          "text": "this",
+          "start": 78,
+          "end": 82
+        },
+        {
+          "index": 13,
+          "text": "return",
+          "start": 83,
+          "end": 89
+        },
+        {
+          "index": 14,
+          "text": "parcel",
+          "start": 90,
+          "end": 96
+        },
+        {
+          "index": 15,
+          "text": "?",
+          "start": 96,
+          "end": 97
+        }
+      ],
+      "focus_lexeme_ids": [
+        "return-authorization.return-approval-reference.n",
+        "return-label.return-shipping-label.n",
+        "return-parcel.goods-package-going-back.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "reviewed",
+        "domain": "pending",
+        "reviewer": "Codex (AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "shopify-inventory",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        },
+        {
+          "source_id": "retail07-review-return-authorization",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): Definition and What is an RMA number?. A return process can require approval and assign a reference number to an approved return. The reference helps identify the return; it does not by itself guarantee a particular remedy. Limits: Provider explanation only. No universal RMA requirement, return period, packaging condition or override of consumer rights is adopted. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only permission for a particular return and a reference identifying it. No universal authorization requirement, refund guarantee, return period, packaging condition, provider workflow or restriction of statutory rights is verified."
+        },
+        {
+          "source_id": "retail07-review-returns",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): Introduction; return reasons and return-shipping options. The provider distinguishes return reasons, shipping labels, exchange items and financial outcomes. Clothing reasons can include sizes that are too large or too small. Limits: No merchant policy, required customer explanation, refund entitlement, fee rate or instruction to create a return is adopted. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only the lexical roles of a return reason, returning package, shipping label, exchange item and unsuitable size. No required customer explanation, return eligibility, refund entitlement, fee, operational instruction or merchant policy is verified."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module07.09",
+      "text": "Please record the return reason, ask whether store credit is offered, and check whether a restocking fee applies.",
+      "meaning": "Record the stated reason and check the possible credit and fee arrangements separately.",
+      "context": "A colleague refers the specific return arrangements to an authorized supervisor without assuming eligibility or permission to charge a fee.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "record",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "return",
+          "start": 18,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "reason",
+          "start": 25,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 31,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "ask",
+          "start": 33,
+          "end": 36
+        },
+        {
+          "index": 7,
+          "text": "whether",
+          "start": 37,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "store",
+          "start": 45,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "credit",
+          "start": 51,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "is",
+          "start": 58,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": "offered",
+          "start": 61,
+          "end": 68
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 68,
+          "end": 69
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 14,
+          "text": "check",
+          "start": 74,
+          "end": 79
+        },
+        {
+          "index": 15,
+          "text": "whether",
+          "start": 80,
+          "end": 87
+        },
+        {
+          "index": 16,
+          "text": "a",
+          "start": 88,
+          "end": 89
+        },
+        {
+          "index": 17,
+          "text": "restocking",
+          "start": 90,
+          "end": 100
+        },
+        {
+          "index": 18,
+          "text": "fee",
+          "start": 101,
+          "end": 104
+        },
+        {
+          "index": 19,
+          "text": "applies",
+          "start": 105,
+          "end": 112
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 112,
+          "end": 113
+        }
+      ],
+      "focus_lexeme_ids": [
+        "return-reason.explanation-for-return.n",
+        "store-credit.seller-specific-value.n",
+        "restocking-fee.return-handling-charge.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "reviewed",
+        "domain": "pending",
+        "reviewer": "Codex (AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "shopify-inventory",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        },
+        {
+          "source_id": "retail07-review-returns",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): Introduction; return reasons and return-shipping options. The provider distinguishes return reasons, shipping labels, exchange items and financial outcomes. Clothing reasons can include sizes that are too large or too small. Limits: No merchant policy, required customer explanation, refund entitlement, fee rate or instruction to create a return is adopted. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only the lexical roles of a return reason, returning package, shipping label, exchange item and unsuitable size. No required customer explanation, return eligibility, refund entitlement, fee, operational instruction or merchant policy is verified."
+        },
+        {
+          "source_id": "retail07-review-store-credit",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): Introduction and customer balance. Store credit gives a customer value to apply to purchases with the issuing store and can be tracked as a balance. It is not necessarily a credit-card loan or a cash refund. Limits: Provider-specific account, channel, expiry and redemption restrictions are not generalized. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only value held for a customer to spend with the issuing seller. No account configuration, channel availability, expiry, redemption restriction, cash entitlement, credit-card borrowing or policy rule is verified."
+        },
+        {
+          "source_id": "retail07-review-return-rules",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): Restocking fee section. The provider treats a restocking fee as a charge attached to a return, separately from return shipping. It need not be described as proof that the goods will be resold. Limits: A configurable provider charge is not legal permission to impose it. No fee percentage or refund deduction procedure is taught. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only restocking fee as a charge for processing certain returns, distinct from return shipping. No legal permission, applicability decision, fee percentage or amount, deduction procedure, refund outcome or provider setup is verified."
+        },
+        {
+          "source_id": "retail07-review-returns-uk",
+          "status": "pending_term_check",
+          "scope": "Selected evidence (selected_page_passage): Faulty goods, unwanted goods and distance-sales distinctions. The guidance distinguishes faulty products from change-of-mind returns and contains rights that depend on the circumstances. Packaging can be evidence of purchase rather than a universal condition for a remedy. Limits: Jurisdictional boundary check only. No deadlines, refund guarantees, original-packaging requirement or merchant discretion overriding legal rights is imported. Exact editorial decisions still require independent acceptance; no review gate is promoted."
+        }
+      ]
+    },
+    {
+      "id": "expr.retail.module07.10",
+      "text": "Please report the unclear use-by date and identify the quarantine stock for review.",
+      "meaning": "Raise a label concern and point out goods awaiting assessment.",
+      "context": "A colleague reports an unclear UK-style safety-related food date and held goods for qualified review, without giving food-safety clearance.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "report",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "unclear",
+          "start": 18,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "use-by",
+          "start": 26,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "date",
+          "start": 33,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 38,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "identify",
+          "start": 42,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "quarantine",
+          "start": 55,
+          "end": 65
+        },
+        {
+          "index": 10,
+          "text": "stock",
+          "start": 66,
+          "end": 71
+        },
+        {
+          "index": 11,
+          "text": "for",
+          "start": 72,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": "review",
+          "start": 76,
+          "end": 82
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 82,
+          "end": 83
+        }
+      ],
+      "focus_lexeme_ids": [
+        "use-by-date.food-safety-date.n",
+        "quarantine-stock.goods-held-apart.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "reviewed",
+        "domain": "pending",
+        "reviewer": "Codex (AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "shopify-inventory",
+          "status": "pending_term_check",
+          "scope": "Original authored retail expression. Language and any required subject review remain pending."
+        },
+        {
+          "source_id": "retail07-review-food-dates-uk",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): Date distinction; use-by dates; best before dates. In the UK guidance, use-by labels concern safety and best-before labels concern quality. Both depend on the relevant storage conditions. Limits: UK labeling sense only. No consumption decision, storage temperature, cooking/freezing extension or statutory advice is added to this vocabulary lesson. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only the selected UK lexical distinction between safety-related use-by labels and quality-related best-before labels under stated conditions. The original GOV.UK subpage failed during the independent editorial review; its prior author consultation is retained, while the official alternate https://www.gov.uk/government/publications/student-guide-to-food-safety-and-hygiene/student-guide-to-food-safety-and-hygiene supplied that review's semantic crosscheck. This metadata pass claims no fresh retrieval. No consumption decision, cooking, freezing, storage instructions, legal rule, universal international meaning or safety certification is verified."
+        },
+        {
+          "source_id": "retail07-review-quarantine",
+          "status": "verified",
+          "scope": "Selected evidence (selected_page_passage): Introduction and blocking inventory. The software uses quarantine to separate and block inventory while a quality concern is considered. Held goods are not automatically cleared, discarded or returned. Limits: Software example only; no safety protocol, release criteria, physical segregation standard or authorization is taught. The selected lexical evidence supports the completed AI editorial language review of this exact record. No human, subject-matter, morphology, image, audio, CEFR or release approval is claimed. Verified scope: Only goods held apart from usable inventory while a concern is assessed. No safety protocol, physical segregation standard, disposition decision, sale or release criteria, certification or authorization is verified."
+        }
+      ]
+    }
+  ]
+}

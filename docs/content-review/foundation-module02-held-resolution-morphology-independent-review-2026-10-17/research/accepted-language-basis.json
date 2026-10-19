@@ -1,0 +1,44 @@
+{
+  "status": "previously_accepted_language_reproduced_as_research_input_no_new_acceptance",
+  "ensure": {
+    "id": "ensure.make-certain.v",
+    "text": "ensure",
+    "display_text": "ensure",
+    "pos": "verb",
+    "definition": "To make certain that a required result happens or a required condition is met.",
+    "example": "Please ensure that the form includes the reference number.",
+    "difficulty": "B2",
+    "regions": [
+      "general"
+    ],
+    "accepted_forms": [
+      "ensure",
+      "insure"
+    ]
+  },
+  "inform": {
+    "id": "inform.give-information.v",
+    "text": "inform",
+    "display_text": "inform",
+    "pos": "verb",
+    "definition": "To give someone information about something.",
+    "example": "Please inform the team if the meeting time changes.",
+    "difficulty": "B2",
+    "accepted_forms": [
+      "inform"
+    ],
+    "regions": [
+      "general"
+    ]
+  },
+  "collect": {
+    "id": "collect.gather.v",
+    "text": "collect",
+    "fields": {
+      "definition": "To bring items from several people or places into one group.",
+      "example": "Please collect one completed form from each team.",
+      "difficulty": "B1"
+    }
+  },
+  "ensure_variant_correction": "Use the final independent accepted_forms array ensure and insure. The older author candidate accepted only ensure and is not the accepted field source."
+}

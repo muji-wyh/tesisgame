@@ -1,0 +1,59 @@
+{
+  "schema": 1,
+  "status": "frozen_unexecuted_fifth10_native_candidate_sources",
+  "author": "/root/morph_review",
+  "actual_binding": {
+    "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+    "bytes": 3187477,
+    "raw_sha256": "7323bcb1baac6ea85817169bcc90325f9b54d587b19d4895ca3106ee7af0e015"
+  },
+  "future_outputs_bound": false,
+  "native_executed": false,
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 3416,
+      "raw_sha256": "e2b987db3e6f3519bf4eed2377f9d74cc1b351ffbd38782c73c4390f8235bf5c"
+    },
+    {
+      "path": "CONTRACT.md",
+      "bytes": 5934,
+      "raw_sha256": "390c8307a6b8325dad7a62ae692447bc454079c503797897fd1ff900ef444c3e"
+    },
+    {
+      "path": "run.cjs",
+      "bytes": 23431,
+      "raw_sha256": "0359ced35e82254e9e09f95bd5ca8b10748e8d4a6c482ed9d992c5e3fb6ed33d"
+    },
+    {
+      "path": "closure.json",
+      "bytes": 98715,
+      "raw_sha256": "7b2bbf2303149370150dfa8df8125c4d2bb0d1769de485069514d76a5302c236"
+    },
+    {
+      "path": "root-input.template.json",
+      "bytes": 1110,
+      "raw_sha256": "979edbbc066b50bf21ef24bdbf6aeae0537cfca2634d7addfc257884b4ab1fe5"
+    },
+    {
+      "path": "source-review.template.json",
+      "bytes": 141,
+      "raw_sha256": "0f5e7b05ea98ece9f452738b4b521aaa8d0752b52e2503989a2d7edcafae93ac"
+    },
+    {
+      "path": "afterimage-review.template.json",
+      "bytes": 636,
+      "raw_sha256": "559722de4a9eef958fde81988ff1e4fe94e1aa2034743149f06298e4ff48bdbb"
+    },
+    {
+      "path": "guard-cases.json",
+      "bytes": 4328,
+      "raw_sha256": "eb4c66f765351cbcc41c508cd51dd06761c88b1b101970e6302c0d26183dc08b"
+    },
+    {
+      "path": "author-observations.json",
+      "bytes": 1542,
+      "raw_sha256": "eaa76f4219d0a9edbdc0d9de8b95df67105d5d9951dc769102e85a0e50ead58a"
+    }
+  ]
+}

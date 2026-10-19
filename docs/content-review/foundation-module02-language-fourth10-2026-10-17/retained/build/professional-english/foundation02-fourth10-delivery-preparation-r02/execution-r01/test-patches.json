@@ -1,0 +1,113 @@
+{
+  "schema": 1,
+  "status": "prepared_exact_anchor_replacements",
+  "patches": [
+    {
+      "path": "tests/professional-content.test.cjs",
+      "before_sha256": "7ed495e35df7d66d646ba8a0090aee32e81b51759e278defc07da71f61e9473b",
+      "after_sha256": "7620d4196914eb136f7ee4375eb1c13bafb0f509cfacb9859794210b14ebfa86",
+      "before_artifact": "professional-content.test.cjs.before",
+      "after_artifact": "professional-content.test.cjs.after",
+      "exact_anchor_edits": [
+        {
+          "before": "function beforeFoundation02ThirdLanguage(entry) {",
+          "after": "const foundation02FourthLanguageRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/foundation-module02-language-fourth10-2026-10-17.json'), 'utf8'));\nfunction beforeFoundation02FourthLanguage(entry) {\n  const patches = foundation02FourthLanguageRecord.patches.filter(item => item.id === entry.id);\n  if (!patches.length) return entry;\n  assert.equal(patches.length, 1);\n  const patch = patches[0];\n  if (require('node:util').isDeepStrictEqual(entry, patch.before)) return structuredClone(patch.before);\n  assert.deepEqual(entry, patch.after, entry.id + ': exact later fourth-ten language and reviewed metadata');\n  return structuredClone(patch.before);\n}\nfunction beforeFoundation02FourthSources(sources) {\n  const additions = foundation02FourthLanguageRecord.sources;\n  assert.equal(additions.length, 20);\n  assert.deepEqual(sources.slice(-additions.length), additions, 'Exact fourth-ten source suffix required');\n  return sources.slice(0, -additions.length);\n}\nfunction beforeFoundation02ThirdLanguage(entry) {\n  entry = beforeFoundation02FourthLanguage(entry);",
+          "count": 1
+        },
+        {
+          "before": "function beforeFoundation02ThirdSources(sources) {",
+          "after": "function beforeFoundation02ThirdSources(sources) {\n  sources = beforeFoundation02FourthSources(sources);",
+          "count": 1
+        },
+        {
+          "before": "...foundation02ThirdLanguageRecord.patches].map(item => item.id)",
+          "after": "...foundation02ThirdLanguageRecord.patches, ...foundation02FourthLanguageRecord.patches].map(item => item.id)",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(result.summary.reviewed_lexemes, 138);",
+          "after": "assert.equal(result.summary.reviewed_lexemes, 148);",
+          "count": 1
+        },
+        {
+          "before": "assert.deepEqual(source.sources.slice(-16),r.sources);",
+          "after": "assert.deepEqual(beforeFoundation02FourthSources(source.sources).slice(-16),r.sources);",
+          "count": 1
+        },
+        {
+          "before": "hash(source.lexemes.filter(entry=>!ids.has(entry.id)))",
+          "after": "hash(source.lexemes.map(beforeFoundation02FourthLanguage).filter(entry=>!ids.has(entry.id)))",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(source.lexemes.filter(entry=>entry.review.status==='reviewed').length,138);assert.equal(source.lexemes.filter(entry=>entry.review.language==='reviewed').length,325);",
+          "after": "assert.equal(source.lexemes.map(beforeFoundation02FourthLanguage).filter(entry=>entry.review.status==='reviewed').length,138);assert.equal(source.lexemes.map(beforeFoundation02FourthLanguage).filter(entry=>entry.review.language==='reviewed').length,325);",
+          "count": 1
+        },
+        {
+          "before": "source.lexemes.filter(entry=>source.lexemeOrigins[entry.id]==='res://data/professional/lexemes/foundation-module02.json'&&entry.review.language==='reviewed').length,26",
+          "after": "source.lexemes.map(beforeFoundation02FourthLanguage).filter(entry=>source.lexemeOrigins[entry.id]==='res://data/professional/lexemes/foundation-module02.json'&&entry.review.language==='reviewed').length,26",
+          "count": 1
+        },
+        {
+          "before": "const audit=auditProfessionalContent({data:source});assert.equal(audit.summary.reviewed_lexemes,138);",
+          "after": "const historical={...source,lexemes:source.lexemes.map(beforeFoundation02FourthLanguage),sources:beforeFoundation02FourthSources(source.sources)};const audit=auditProfessionalContent({data:historical});assert.equal(audit.summary.reviewed_lexemes,138);",
+          "count": 1
+        },
+        {
+          "before": "const badSources=structuredClone(source.sources);badSources.at(-1).scope+=' Drift.';assert.throws(()=>beforeFoundation02ThirdSources(badSources));",
+          "after": "const badSources=structuredClone(source.sources);badSources.at(-21).scope+=' Drift.';assert.throws(()=>beforeFoundation02ThirdSources(badSources));",
+          "count": 1
+        }
+      ],
+      "appended_tests": 5,
+      "native": false,
+      "native_parse_and_execution_pending": false
+    },
+    {
+      "path": "tests/professional-retail-morphology.test.cjs",
+      "before_sha256": "04a5d72b3a7c5e3add28ef23e5e1db23fb30bcfd74d79a2e69efd28874c08282",
+      "after_sha256": "b5bfe27b11fccbdf4f399588e77eb730018228c65446404f9f9c8c545e0119c6",
+      "before_artifact": "professional-retail-morphology.test.cjs.before",
+      "after_artifact": "professional-retail-morphology.test.cjs.after",
+      "exact_anchor_edits": [
+        {
+          "before": "function beforeFoundation02ThirdLanguage(entry) {",
+          "after": "const foundation02FourthLanguageRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/foundation-module02-language-fourth10-2026-10-17.json'), 'utf8'));\nfunction beforeFoundation02FourthLanguage(entry) {\n  const patches = foundation02FourthLanguageRecord.patches.filter(item => item.id === entry.id);\n  if (!patches.length) return entry;\n  assert.equal(patches.length, 1);\n  const patch = patches[0];\n  if (require('node:util').isDeepStrictEqual(entry, patch.before)) return structuredClone(patch.before);\n  assert.deepEqual(entry, patch.after, entry.id + ': exact later fourth-ten language and reviewed metadata');\n  return structuredClone(patch.before);\n}\nfunction beforeFoundation02FourthSources(sources) {\n  const additions = foundation02FourthLanguageRecord.sources;\n  assert.equal(additions.length, 20);\n  assert.deepEqual(sources.slice(-additions.length), additions, 'Exact fourth-ten source suffix required');\n  return sources.slice(0, -additions.length);\n}\nfunction beforeFoundation02ThirdLanguage(entry) {\n  entry = beforeFoundation02FourthLanguage(entry);",
+          "count": 1
+        },
+        {
+          "before": "function beforeFoundation02ThirdSources(sources) {",
+          "after": "function beforeFoundation02ThirdSources(sources) {\n  sources = beforeFoundation02FourthSources(sources);",
+          "count": 1
+        }
+      ],
+      "appended_tests": 1,
+      "native": false,
+      "native_parse_and_execution_pending": false
+    },
+    {
+      "path": "tests/godot/professional_retail_morphology_tests.gd",
+      "before_sha256": "226160e3d454d1d19f2bb1c4e81a0c9749dcd354e4a8a71f21799f9ede0eb945",
+      "after_sha256": "db277170d8bc7285204b86784ba2f118cae8f01fa8311eb7ac55f5953cd039a0",
+      "before_artifact": "professional_retail_morphology_tests.gd.before",
+      "after_artifact": "professional_retail_morphology_tests.gd.after",
+      "exact_anchor_edits": [
+        {
+          "before": "\t_check_foundation02_third_language()",
+          "after": "\t_check_foundation02_third_language()\n\t_check_foundation02_fourth_language()",
+          "count": 1
+        },
+        {
+          "before": "func _f02t_reverse(entry: Dictionary) -> Dictionary:\n",
+          "after": "func _f02t_reverse(entry: Dictionary) -> Dictionary:\n\tvar fourth_language: Dictionary = _f02f_reverse(entry)\n\tif not fourth_language.ok:\n\t\treturn {\"ok\": false}\n\tentry = fourth_language.entry\n",
+          "count": 1
+        }
+      ],
+      "appended_tests": 1,
+      "native": true,
+      "native_parse_and_execution_pending": true
+    }
+  ],
+  "production_mutated": false
+}

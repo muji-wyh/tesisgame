@@ -1,0 +1,5610 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "requirement.needed-system-capability.n",
+      "text": "requirement",
+      "display_text": "requirement",
+      "pos": "noun",
+      "definition": "A condition or capability that a system or change is expected to satisfy.",
+      "example": "The requirement specifies how empty results should appear.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "requirement"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional requested capability beside a proposed interface.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "requirement.needed-system-capability.n.analysis.v1",
+        "lexeme_id": "requirement.needed-system-capability.n",
+        "text": "requirement",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.require",
+            "type": "stem",
+            "canonical": "require",
+            "surface": "require"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ment.suffix",
+            "type": "suffix",
+            "canonical": "ment",
+            "surface": "ment"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "requirement",
+            "rule": "suffix_attachment"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "user-story.user-centered-work-description.n",
+      "text": "user story",
+      "display_text": "user story",
+      "pos": "noun",
+      "definition": "A short description of a user's goal and the value of a proposed change.",
+      "example": "The user story explains why the filter is needed.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "user story"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional user goal connected to an interface change.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "user-story.user-centered-work-description.n.analysis.v1",
+        "lexeme_id": "user-story.user-centered-work-description.n",
+        "text": "user story",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.user",
+            "type": "stem",
+            "canonical": "user",
+            "surface": "user"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.story",
+            "type": "stem",
+            "canonical": "story",
+            "surface": "story"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "user story",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "acceptance-criteria.agreed-success-conditions.n",
+      "text": "acceptance criteria",
+      "display_text": "acceptance criteria",
+      "pos": "noun",
+      "definition": "Conditions used to decide whether a change meets its agreed requirements.",
+      "example": "The acceptance criteria include keyboard access.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "acceptance criteria"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional checklist of observable expected behaviors.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "acceptance-criteria.agreed-success-conditions.n.analysis.v1",
+        "lexeme_id": "acceptance-criteria.agreed-success-conditions.n",
+        "text": "acceptance criteria",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.accept",
+            "type": "stem",
+            "canonical": "accept",
+            "surface": "accept"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ance.suffix",
+            "type": "suffix",
+            "canonical": "ance",
+            "surface": "ance"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.criteria",
+            "type": "stem",
+            "canonical": "criteria",
+            "surface": "criteria"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "acceptance",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "acceptance criteria",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "specification.detailed-system-description.n",
+      "text": "specification",
+      "display_text": "specification",
+      "pos": "noun",
+      "definition": "A detailed description of required characteristics, performance, or arrangements for a product, system, component, or work.",
+      "example": "The specification defines the accepted input format.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "specification"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional component description with inputs and outputs.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        },
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-planning",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-cdc-home-definitions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-gov-waste-transfer",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-epa-recycling",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-quality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-hse-inspection",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-sales-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "prototype.early-design-model.n",
+      "text": "prototype",
+      "display_text": "prototype",
+      "pos": "noun",
+      "definition": "An early working or visual model used to explore a design.",
+      "example": "The prototype demonstrates the new navigation.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "prototype"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional early interface labeled as a design exploration.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "prototype.early-design-model.n.analysis.v1",
+        "lexeme_id": "prototype.early-design-model.n",
+        "text": "prototype",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.prototype",
+            "type": "atomic",
+            "canonical": "prototype",
+            "surface": "prototype"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        },
+        {
+          "source_id": "manufacturing-bls-assembly",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-nist-process-improvement",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-representatives",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "proof-of-concept.feasibility-demonstration.n",
+      "text": "proof of concept",
+      "display_text": "proof of concept",
+      "pos": "noun",
+      "definition": "A small experiment or implementation used to check whether an idea is feasible.",
+      "example": "The proof of concept tests the integration approach.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "proof of concept"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional small integration experiment beside its result.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "proof-of-concept.feasibility-demonstration.n.analysis.v1",
+        "lexeme_id": "proof-of-concept.feasibility-demonstration.n",
+        "text": "proof of concept",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.proof",
+            "type": "stem",
+            "canonical": "proof",
+            "surface": "proof"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.of",
+            "type": "stem",
+            "canonical": "of",
+            "surface": "of"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.concept",
+            "type": "stem",
+            "canonical": "concept",
+            "surface": "concept"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "proof of",
+            "rule": "word_boundary"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "proof of concept",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "feature.software-capability.n",
+      "text": "feature",
+      "display_text": "feature",
+      "pos": "noun",
+      "definition": "A distinct characteristic or capability of a product, service, or system.",
+      "example": "The feature lets users save their preferred view.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "feature"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional saved-view control in an application.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "feature.software-capability.n.analysis.v1",
+        "lexeme_id": "feature.software-capability.n",
+        "text": "feature",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.feature",
+            "type": "atomic",
+            "canonical": "feature",
+            "surface": "feature"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        },
+        {
+          "source_id": "zendesk-ticket-lifecycle",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "sales-bls-market-research",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-sales-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-onet-market-research",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "bug.unintended-program-problem.n",
+      "text": "bug",
+      "display_text": "bug",
+      "pos": "noun",
+      "definition": "A flaw in software that causes unintended or incorrect behavior.",
+      "example": "The bug appears when the list is empty.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "bug"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional empty-state failure recorded in an issue tracker.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "bug.unintended-program-problem.n.analysis.v1",
+        "lexeme_id": "bug.unintended-program-problem.n",
+        "text": "bug",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.bug",
+            "type": "atomic",
+            "canonical": "bug",
+            "surface": "bug"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        },
+        {
+          "source_id": "zendesk-ticket-lifecycle",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "issue.tracked-work-item.n",
+      "text": "issue",
+      "display_text": "issue",
+      "pos": "noun",
+      "definition": "A tracked item describing a problem, question, or piece of work.",
+      "example": "The issue includes the steps needed to reproduce the problem.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "issue"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional work item with problem details.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "issue.tracked-work-item.n.analysis.v1",
+        "lexeme_id": "issue.tracked-work-item.n",
+        "text": "issue",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.issue",
+            "type": "atomic",
+            "canonical": "issue",
+            "surface": "issue"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        },
+        {
+          "source_id": "zendesk-ticket-lifecycle",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "ticket.tracked-request-record.n",
+      "text": "ticket",
+      "display_text": "ticket",
+      "pos": "noun",
+      "definition": "A record used to track a request, problem, or assigned task.",
+      "example": "The support ticket is linked to the development issue.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "ticket"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional request record linked to an engineering work item.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "ticket.tracked-request-record.n.analysis.v1",
+        "lexeme_id": "ticket.tracked-request-record.n",
+        "text": "ticket",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.ticket",
+            "type": "atomic",
+            "canonical": "ticket",
+            "surface": "ticket"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        },
+        {
+          "source_id": "zendesk-ticket-lifecycle",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "backlog.uncompleted-work-list.n",
+      "text": "backlog",
+      "display_text": "backlog",
+      "pos": "noun",
+      "definition": "A prioritized collection of work that has not yet been completed.",
+      "example": "The team added the improvement to the backlog.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "backlog"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional ordered list of future work.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "backlog.uncompleted-work-list.n.analysis.v1",
+        "lexeme_id": "backlog.uncompleted-work-list.n",
+        "text": "backlog",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.back",
+            "type": "stem",
+            "canonical": "back",
+            "surface": "back"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.log",
+            "type": "atomic",
+            "canonical": "log",
+            "surface": "log"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "backlog",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        },
+        {
+          "source_id": "zendesk-ticket-lifecycle",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-lodging-managers",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "transport-bls-delivery-drivers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-hse-maintenance",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-hse-inspection",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-paralegals",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-bls-lawyers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-sra-confidentiality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "sprint.time-boxed-work-cycle.n",
+      "text": "sprint",
+      "display_text": "sprint",
+      "pos": "noun",
+      "definition": "A fixed-length work cycle used in some development methods.",
+      "example": "The team selected the work for the next sprint.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "sprint"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional work cycle with a defined start and end.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "sprint.time-boxed-work-cycle.n.analysis.v1",
+        "lexeme_id": "sprint.time-boxed-work-cycle.n",
+        "text": "sprint",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.sprint",
+            "type": "atomic",
+            "canonical": "sprint",
+            "surface": "sprint"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "iteration.development-cycle.n",
+      "text": "iteration",
+      "display_text": "iteration",
+      "pos": "noun",
+      "definition": "One repeated cycle of planning, development, review, or refinement.",
+      "example": "The next iteration will address the feedback.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "iteration"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional design progressing through successive refinements.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "milestone.significant-project-point.n",
+      "text": "milestone",
+      "display_text": "milestone",
+      "pos": "noun",
+      "definition": "A significant planned point or achievement in a project.",
+      "example": "The first usable release is the next milestone.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "milestone"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional project timeline with a major delivery point.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "milestone.significant-project-point.n.analysis.v1",
+        "lexeme_id": "milestone.significant-project-point.n",
+        "text": "milestone",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.milestone",
+            "type": "atomic",
+            "canonical": "milestone",
+            "surface": "milestone"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        },
+        {
+          "source_id": "bls-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "bls-lodging-managers",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "transport-bls-delivery-drivers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-laborers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-electricians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-plumbers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-planning",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-sales-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-bls-marketing-managers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "release.distributed-software-version.n",
+      "text": "release",
+      "display_text": "release",
+      "pos": "noun",
+      "definition": "A version of software made available to its intended users.",
+      "example": "This release contains the approved fixes.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "release"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional software version marked available for users.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "release.distributed-software-version.n.analysis.v1",
+        "lexeme_id": "release.distributed-software-version.n",
+        "text": "release",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.release",
+            "type": "atomic",
+            "canonical": "release",
+            "surface": "release"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "version.identified-software-state.n",
+      "text": "version",
+      "display_text": "version",
+      "pos": "noun",
+      "definition": "An identified state or edition of software or another maintained item.",
+      "example": "The version number appears in the settings panel.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "version"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional application showing its version identifier.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "version.identified-software-state.n.analysis.v1",
+        "lexeme_id": "version.identified-software-state.n",
+        "text": "version",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.version",
+            "type": "atomic",
+            "canonical": "version",
+            "surface": "version"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        },
+        {
+          "source_id": "zendesk-ticket-lifecycle",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "legal-bls-paralegals",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-us-court-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-us-courts-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "legal-ew-cpr-glossary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational overview, selected dictionary or legal-reference passages, court-record overview, or explicitly regional professional guidance only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "patch.targeted-software-change.n",
+      "text": "patch",
+      "display_text": "patch",
+      "pos": "noun",
+      "definition": "A change applied to software to correct or update specific behavior.",
+      "example": "The patch fixes the formatting problem.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "patch"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A small fictional software update linked to a known issue.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "patch.targeted-software-change.n.analysis.v1",
+        "lexeme_id": "patch.targeted-software-change.n",
+        "text": "patch",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.patch",
+            "type": "atomic",
+            "canonical": "patch",
+            "surface": "patch"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "hotfix.urgent-targeted-fix.n",
+      "text": "hotfix",
+      "display_text": "hotfix",
+      "pos": "noun",
+      "definition": "A targeted fix prepared for an urgent problem in an available system.",
+      "example": "The team reviewed the hotfix for the service failure.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "hotfix"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional urgent fix passing through review and validation.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "hotfix.urgent-targeted-fix.n.analysis.v1",
+        "lexeme_id": "hotfix.urgent-targeted-fix.n",
+        "text": "hotfix",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.hot",
+            "type": "stem",
+            "canonical": "hot",
+            "surface": "hot"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.fix",
+            "type": "stem",
+            "canonical": "fix",
+            "surface": "fix"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "hotfix",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "build-artifact.generated-build-output.n",
+      "text": "build artifact",
+      "display_text": "build artifact",
+      "pos": "noun",
+      "definition": "A file or package produced by a software build.",
+      "example": "The build artifact is ready for testing.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "build artifact"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional build output package with an identifier.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "build-artifact.generated-build-output.n.analysis.v1",
+        "lexeme_id": "build-artifact.generated-build-output.n",
+        "text": "build artifact",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.build",
+            "type": "atomic",
+            "canonical": "build",
+            "surface": "build"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.artifact",
+            "type": "stem",
+            "canonical": "artifact",
+            "surface": "artifact"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "build artifact",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "dependency-lockfile.resolved-dependency-record.n",
+      "text": "dependency lockfile",
+      "display_text": "dependency lockfile",
+      "pos": "noun",
+      "definition": "A file that records resolved dependency versions or related information for reproducible installation.",
+      "example": "The dependency lockfile changed after the approved update.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "dependency lockfile"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional dependency record with a reviewed version change.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "dependency-lockfile.resolved-dependency-record.n.analysis.v1",
+        "lexeme_id": "dependency-lockfile.resolved-dependency-record.n",
+        "text": "dependency lockfile",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.dependency",
+            "type": "stem",
+            "canonical": "dependency",
+            "surface": "dependency"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.lock",
+            "type": "stem",
+            "canonical": "lock",
+            "surface": "lock"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.file",
+            "type": "stem",
+            "canonical": "file",
+            "surface": "file"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "lockfile",
+            "rule": "closed_compound"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "dependency lockfile",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "configuration-file.settings-file.n",
+      "text": "configuration file",
+      "display_text": "configuration file",
+      "pos": "noun",
+      "definition": "A file containing settings used by software or tools.",
+      "example": "The configuration file sets the local service address.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "configuration file"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional settings file with non-sensitive example values.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "configuration-file.settings-file.n.analysis.v1",
+        "lexeme_id": "configuration-file.settings-file.n",
+        "text": "configuration file",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.configuration",
+            "type": "stem",
+            "canonical": "configuration",
+            "surface": "configuration"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.file",
+            "type": "stem",
+            "canonical": "file",
+            "surface": "file"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "configuration file",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "environment.software-running-context.n",
+      "text": "environment",
+      "display_text": "environment",
+      "pos": "noun",
+      "definition": "The set of systems, settings, and resources in which software runs.",
+      "example": "The issue occurs only in this environment.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "environment"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional application surrounded by its runtime settings and services.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "development-environment.software-building-context.n",
+      "text": "development environment",
+      "display_text": "development environment",
+      "pos": "noun",
+      "definition": "An environment used for creating and changing software.",
+      "example": "The development environment uses synthetic data.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "development environment"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional local development setup with invented records.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "development-environment.software-building-context.n.analysis.v1",
+        "lexeme_id": "development-environment.software-building-context.n",
+        "text": "development environment",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.develop",
+            "type": "stem",
+            "canonical": "develop",
+            "surface": "develop"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ment.suffix",
+            "type": "suffix",
+            "canonical": "ment",
+            "surface": "ment"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.environment",
+            "type": "stem",
+            "canonical": "environment",
+            "surface": "environment"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "development",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "development environment",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "staging-environment.pre-release-validation-context.n",
+      "text": "staging environment",
+      "display_text": "staging environment",
+      "pos": "noun",
+      "definition": "An environment used to validate changes before making them available in production.",
+      "example": "The team checked the change in the staging environment.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "staging environment"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional pre-release validation setup distinct from live service.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "staging-environment.pre-release-validation-context.n.analysis.v1",
+        "lexeme_id": "staging-environment.pre-release-validation-context.n",
+        "text": "staging environment",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.stage",
+            "type": "stem",
+            "canonical": "stage",
+            "surface": "stag"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ing.suffix",
+            "type": "suffix",
+            "canonical": "ing",
+            "surface": "ing"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.environment",
+            "type": "stem",
+            "canonical": "environment",
+            "surface": "environment"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "staging",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "staging environment",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "production-environment.live-service-context.n",
+      "text": "production environment",
+      "display_text": "production environment",
+      "pos": "noun",
+      "definition": "The environment serving the system's real intended users or work.",
+      "example": "The release is not yet in the production environment.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "production environment"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A conceptual live service separated from a test environment.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "production-environment.live-service-context.n.analysis.v1",
+        "lexeme_id": "production-environment.live-service-context.n",
+        "text": "production environment",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.production",
+            "type": "stem",
+            "canonical": "production",
+            "surface": "production"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.environment",
+            "type": "stem",
+            "canonical": "environment",
+            "surface": "environment"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "production environment",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "feature-flag.behavior-switch-setting.n",
+      "text": "feature flag",
+      "display_text": "feature flag",
+      "pos": "noun",
+      "definition": "A setting used to control whether a particular feature or behavior is enabled.",
+      "example": "The feature flag is disabled for this test group.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "feature flag"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional feature setting with an explicit enabled or disabled state.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "feature-flag.behavior-switch-setting.n.analysis.v1",
+        "lexeme_id": "feature-flag.behavior-switch-setting.n",
+        "text": "feature flag",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.feature",
+            "type": "atomic",
+            "canonical": "feature",
+            "surface": "feature"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.flag",
+            "type": "atomic",
+            "canonical": "flag",
+            "surface": "flag"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "feature flag",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "code-review.change-examination.n",
+      "text": "code review",
+      "display_text": "code review",
+      "pos": "noun",
+      "definition": "An examination of code changes to assess their correctness, clarity, or other requirements.",
+      "example": "The code review found an unhandled case.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "code review"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional code change with constructive review notes.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "code-review.change-examination.n.analysis.v1",
+        "lexeme_id": "code-review.change-examination.n",
+        "text": "code review",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.code",
+            "type": "stem",
+            "canonical": "code",
+            "surface": "code"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.re.prefix",
+            "type": "prefix",
+            "canonical": "re",
+            "surface": "re"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.view",
+            "type": "stem",
+            "canonical": "view",
+            "surface": "view"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "review",
+            "rule": "prefix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "code review",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "pull-request.proposed-branch-integration.n",
+      "text": "pull request",
+      "display_text": "pull request",
+      "pos": "noun",
+      "definition": "A proposal to integrate changes from one version-control branch into another.",
+      "example": "The pull request includes the validation results.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "pull request"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional proposed change with review and check statuses.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "pull-request.proposed-branch-integration.n.analysis.v1",
+        "lexeme_id": "pull-request.proposed-branch-integration.n",
+        "text": "pull request",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.pull",
+            "type": "atomic",
+            "canonical": "pull",
+            "surface": "pull"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.request",
+            "type": "atomic",
+            "canonical": "request",
+            "surface": "request"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "pull request",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "merge-conflict.incompatible-change-overlap.n",
+      "text": "merge conflict",
+      "display_text": "merge conflict",
+      "pos": "noun",
+      "definition": "A situation where version-control changes cannot be combined automatically.",
+      "example": "The merge conflict affects the shared settings file.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "merge conflict"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two fictional edits to the same area awaiting resolution.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "merge-conflict.incompatible-change-overlap.n.analysis.v1",
+        "lexeme_id": "merge-conflict.incompatible-change-overlap.n",
+        "text": "merge conflict",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.merge",
+            "type": "atomic",
+            "canonical": "merge",
+            "surface": "merge"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.conflict",
+            "type": "stem",
+            "canonical": "conflict",
+            "surface": "conflict"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "merge conflict",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "unit-test.small-component-check.n",
+      "text": "unit test",
+      "display_text": "unit test",
+      "pos": "noun",
+      "definition": "A test focused on a small unit of behavior in a chosen testing design.",
+      "example": "The unit test checks the empty-input case.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "unit test"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional small function paired with an isolated test.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "unit-test.small-component-check.n.analysis.v1",
+        "lexeme_id": "unit-test.small-component-check.n",
+        "text": "unit test",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.unit",
+            "type": "stem",
+            "canonical": "unit",
+            "surface": "unit"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.test",
+            "type": "stem",
+            "canonical": "test",
+            "surface": "test"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "unit test",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "integration-test.component-interaction-check.n",
+      "text": "integration test",
+      "display_text": "integration test",
+      "pos": "noun",
+      "definition": "A test of how components work together.",
+      "example": "The integration test checks the service and data store together.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "integration test"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two fictional components connected in a test arrangement.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "integration-test.component-interaction-check.n.analysis.v1",
+        "lexeme_id": "integration-test.component-interaction-check.n",
+        "text": "integration test",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.integration",
+            "type": "stem",
+            "canonical": "integration",
+            "surface": "integration"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.test",
+            "type": "stem",
+            "canonical": "test",
+            "surface": "test"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "integration test",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "end-to-end-test.complete-workflow-check.n",
+      "text": "end-to-end test",
+      "display_text": "end-to-end test",
+      "pos": "noun",
+      "definition": "A test that exercises a complete path through a system from the chosen starting point to the result.",
+      "example": "The end-to-end test completes the sign-in flow.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "end-to-end test"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional interface workflow traced from start to completion.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "end-to-end-test.complete-workflow-check.n.analysis.v1",
+        "lexeme_id": "end-to-end-test.complete-workflow-check.n",
+        "text": "end-to-end test",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.end",
+            "type": "stem",
+            "canonical": "end",
+            "surface": "end"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.to",
+            "type": "stem",
+            "canonical": "to",
+            "surface": "to"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.end",
+            "type": "stem",
+            "canonical": "end",
+            "surface": "end"
+          },
+          {
+            "id": "p4",
+            "canonical_id": "morph.test",
+            "type": "stem",
+            "canonical": "test",
+            "surface": "test"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "end-to",
+            "rule": "hyphenated_phrase"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "end-to-end",
+            "rule": "hyphenated_phrase"
+          },
+          {
+            "id": "n3",
+            "left": "n2",
+            "right": "p4",
+            "surface": "end-to-end test",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n3"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "regression-test.previous-behavior-protection-check.n",
+      "text": "regression test",
+      "display_text": "regression test",
+      "pos": "noun",
+      "definition": "A test intended to detect the return of a known problem or an unintended change in existing behavior.",
+      "example": "The regression test covers the earlier sorting bug.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "regression test"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A previously corrected fictional failure guarded by a test.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "regression-test.previous-behavior-protection-check.n.analysis.v1",
+        "lexeme_id": "regression-test.previous-behavior-protection-check.n",
+        "text": "regression test",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.regression",
+            "type": "stem",
+            "canonical": "regression",
+            "surface": "regression"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.test",
+            "type": "stem",
+            "canonical": "test",
+            "surface": "test"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "regression test",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "smoke-test.basic-system-function-check.n",
+      "text": "smoke test",
+      "display_text": "smoke test",
+      "pos": "noun",
+      "definition": "A small set of checks used to see whether essential functionality works before deeper testing.",
+      "example": "The smoke test runs after deployment.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "smoke test"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional short set of essential service checks.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "smoke-test.basic-system-function-check.n.analysis.v1",
+        "lexeme_id": "smoke-test.basic-system-function-check.n",
+        "text": "smoke test",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.smoke",
+            "type": "stem",
+            "canonical": "smoke",
+            "surface": "smoke"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.test",
+            "type": "stem",
+            "canonical": "test",
+            "surface": "test"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "smoke test",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "test-case.specified-test-scenario.n",
+      "text": "test case",
+      "display_text": "test case",
+      "pos": "noun",
+      "definition": "A defined test situation with inputs, conditions, and expected outcomes.",
+      "example": "The test case uses an empty dataset.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "test case"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional test scenario with input and expected output.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "test-case.specified-test-scenario.n.analysis.v1",
+        "lexeme_id": "test-case.specified-test-scenario.n",
+        "text": "test case",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.test",
+            "type": "stem",
+            "canonical": "test",
+            "surface": "test"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.case",
+            "type": "stem",
+            "canonical": "case",
+            "surface": "case"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "test case",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "test-fixture.prepared-test-support.n",
+      "text": "test fixture",
+      "display_text": "test fixture",
+      "pos": "noun",
+      "definition": "Prepared data, state, or resources used to run a test consistently.",
+      "example": "The test fixture contains only synthetic accounts.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "test fixture"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Invented account data beside a controlled test setup.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "test-fixture.prepared-test-support.n.analysis.v1",
+        "lexeme_id": "test-fixture.prepared-test-support.n",
+        "text": "test fixture",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.test",
+            "type": "stem",
+            "canonical": "test",
+            "surface": "test"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.fixture",
+            "type": "stem",
+            "canonical": "fixture",
+            "surface": "fixture"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "test fixture",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "mock.controlled-test-substitute.n",
+      "text": "mock",
+      "display_text": "mock",
+      "pos": "noun",
+      "definition": "A test substitute configured to provide behavior or verify specified interactions.",
+      "example": "The mock records calls to the notification service.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "mock"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional controlled service substitute recording expected calls.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "mock.controlled-test-substitute.n.analysis.v1",
+        "lexeme_id": "mock.controlled-test-substitute.n",
+        "text": "mock",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.mock",
+            "type": "atomic",
+            "canonical": "mock",
+            "surface": "mock"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "stub.predefined-test-response.n",
+      "text": "stub",
+      "display_text": "stub",
+      "pos": "noun",
+      "definition": "A simple test substitute that provides predefined behavior or responses.",
+      "example": "The stub returns a fixed sample response.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "stub"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional substitute returning the same prepared response.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "stub.predefined-test-response.n.analysis.v1",
+        "lexeme_id": "stub.predefined-test-response.n",
+        "text": "stub",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.stub",
+            "type": "atomic",
+            "canonical": "stub",
+            "surface": "stub"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "assertion.test-condition-check.n",
+      "text": "assertion",
+      "display_text": "assertion",
+      "pos": "noun",
+      "definition": "A check that states a condition expected to be true.",
+      "example": "The assertion checks that the result is empty.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "assertion"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional expected condition shown beside an actual result.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "expected-result.intended-test-outcome.n",
+      "text": "expected result",
+      "display_text": "expected result",
+      "pos": "noun",
+      "definition": "The outcome a test or operation is intended to produce.",
+      "example": "The expected result includes three matching records.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "expected result"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional test's intended output.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "expected-result.intended-test-outcome.n.analysis.v1",
+        "lexeme_id": "expected-result.intended-test-outcome.n",
+        "text": "expected result",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.expect",
+            "type": "stem",
+            "canonical": "expect",
+            "surface": "expect"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ed.suffix",
+            "type": "suffix",
+            "canonical": "ed",
+            "surface": "ed"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.result",
+            "type": "stem",
+            "canonical": "result",
+            "surface": "result"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "expected",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "expected result",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        },
+        {
+          "source_id": "zendesk-ticket-lifecycle",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "actual-result.observed-test-outcome.n",
+      "text": "actual result",
+      "display_text": "actual result",
+      "pos": "noun",
+      "definition": "The outcome that was observed when a test or operation ran.",
+      "example": "The actual result contains only two records.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "actual result"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional observed output compared with its test case.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "actual-result.observed-test-outcome.n.analysis.v1",
+        "lexeme_id": "actual-result.observed-test-outcome.n",
+        "text": "actual result",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.actual",
+            "type": "stem",
+            "canonical": "actual",
+            "surface": "actual"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.result",
+            "type": "stem",
+            "canonical": "result",
+            "surface": "result"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "actual result",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        },
+        {
+          "source_id": "zendesk-ticket-lifecycle",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "test-coverage.tested-system-extent.n",
+      "text": "test coverage",
+      "display_text": "test coverage",
+      "pos": "noun",
+      "definition": "A measure of which specified parts of a system have been exercised by tests.",
+      "example": "The report shows test coverage for the changed code.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "test coverage"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional coverage view with exercised and unexercised sections.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "test-coverage.tested-system-extent.n.analysis.v1",
+        "lexeme_id": "test-coverage.tested-system-extent.n",
+        "text": "test coverage",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.test",
+            "type": "stem",
+            "canonical": "test",
+            "surface": "test"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.cover",
+            "type": "stem",
+            "canonical": "cover",
+            "surface": "cover"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.age.suffix",
+            "type": "suffix",
+            "canonical": "age",
+            "surface": "age"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "coverage",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "test coverage",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "edge-case.boundary-or-unusual-case.n",
+      "text": "edge case",
+      "display_text": "edge case",
+      "pos": "noun",
+      "definition": "A situation at a boundary or an unusual combination of conditions.",
+      "example": "The edge case occurs when the final page is empty.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "edge case"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional empty final page marked for testing.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "edge-case.boundary-or-unusual-case.n.analysis.v1",
+        "lexeme_id": "edge-case.boundary-or-unusual-case.n",
+        "text": "edge case",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.edge",
+            "type": "stem",
+            "canonical": "edge",
+            "surface": "edge"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.case",
+            "type": "stem",
+            "canonical": "case",
+            "surface": "case"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "edge case",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "happy-path.ordinary-success-flow.n",
+      "text": "happy path",
+      "display_text": "happy path",
+      "pos": "noun",
+      "definition": "The normal successful path through a feature without exceptional conditions.",
+      "example": "The happy path works, but the failure case still needs review.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "happy path"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional successful flow through an interface.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "happy-path.ordinary-success-flow.n.analysis.v1",
+        "lexeme_id": "happy-path.ordinary-success-flow.n",
+        "text": "happy path",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.happy",
+            "type": "stem",
+            "canonical": "happy",
+            "surface": "happy"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.path",
+            "type": "stem",
+            "canonical": "path",
+            "surface": "path"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "happy path",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "reproduction-steps.failure-recreation-sequence.n",
+      "text": "reproduction steps",
+      "display_text": "reproduction steps",
+      "pos": "noun",
+      "definition": "A sequence of actions used to make a reported problem occur again.",
+      "example": "The issue includes clear reproduction steps.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "reproduction steps"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional ordered action list leading to a reproducible problem.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "reproduction-steps.failure-recreation-sequence.n.analysis.v1",
+        "lexeme_id": "reproduction-steps.failure-recreation-sequence.n",
+        "text": "reproduction steps",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.reproduction",
+            "type": "stem",
+            "canonical": "reproduction",
+            "surface": "reproduction"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.step",
+            "type": "stem",
+            "canonical": "step",
+            "surface": "step"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.s.suffix",
+            "type": "suffix",
+            "canonical": "s",
+            "surface": "s"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "steps",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "reproduction steps",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        },
+        {
+          "source_id": "zendesk-ticket-lifecycle",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-onet-tasks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "stack-trace.recorded-call-sequence.n",
+      "text": "stack trace",
+      "display_text": "stack trace",
+      "pos": "noun",
+      "definition": "A report of active or recorded function calls associated with an execution point or failure.",
+      "example": "The stack trace identifies the failing call.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "stack trace"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional sequence of function calls with one failure point highlighted.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "stack-trace.recorded-call-sequence.n.analysis.v1",
+        "lexeme_id": "stack-trace.recorded-call-sequence.n",
+        "text": "stack trace",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.stack",
+            "type": "atomic",
+            "canonical": "stack",
+            "surface": "stack"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.trace",
+            "type": "atomic",
+            "canonical": "trace",
+            "surface": "trace"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "stack trace",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "breakpoint.execution-pause-location.n",
+      "text": "breakpoint",
+      "display_text": "breakpoint",
+      "pos": "noun",
+      "definition": "A selected point where a debugger pauses program execution.",
+      "example": "The breakpoint is inside the validation function.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "breakpoint"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional code editor with a pause marker on one line.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "breakpoint.execution-pause-location.n.analysis.v1",
+        "lexeme_id": "breakpoint.execution-pause-location.n",
+        "text": "breakpoint",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.break",
+            "type": "stem",
+            "canonical": "break",
+            "surface": "break"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.point",
+            "type": "stem",
+            "canonical": "point",
+            "surface": "point"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "breakpoint",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "continuous-integration.frequent-change-integration-practice.n",
+      "text": "continuous integration",
+      "display_text": "continuous integration",
+      "pos": "noun",
+      "definition": "A practice of integrating changes frequently with automated checks.",
+      "example": "The continuous integration checks run for the proposed change.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "continuous integration"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional change triggering a build and automated checks.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "continuous-integration.frequent-change-integration-practice.n.analysis.v1",
+        "lexeme_id": "continuous-integration.frequent-change-integration-practice.n",
+        "text": "continuous integration",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.continuous",
+            "type": "stem",
+            "canonical": "continuous",
+            "surface": "continuous"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.integration",
+            "type": "stem",
+            "canonical": "integration",
+            "surface": "integration"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "continuous integration",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    },
+    {
+      "id": "continuous-delivery.release-ready-software-practice.n",
+      "text": "continuous delivery",
+      "display_text": "continuous delivery",
+      "pos": "noun",
+      "definition": "A practice of keeping validated software ready for release through a repeatable delivery process.",
+      "example": "The team is improving its continuous delivery process.",
+      "difficulty": "B2",
+      "accepted_forms": [
+        "continuous delivery"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional validated release path ending at a release decision.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "continuous-delivery.release-ready-software-practice.n.analysis.v1",
+        "lexeme_id": "continuous-delivery.release-ready-software-practice.n",
+        "text": "continuous delivery",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate. Lexical stems may require deeper linguistic analysis. Language review must verify boundaries and allomorphs before release; no syllable or length segmentation is inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.continuous",
+            "type": "stem",
+            "canonical": "continuous",
+            "surface": "continuous"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.delivery",
+            "type": "stem",
+            "canonical": "delivery",
+            "surface": "delivery"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "continuous delivery",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "github-flow",
+          "status": "pending_term_check",
+          "scope": "Context source only. Original definitions, usage, visual suitability, and morphology require term-level review."
+        }
+      ],
+      "editorial_notes": "Original draft definition, example, and context-illustration brief. No language, subject, morphological, or visual approval is claimed. Abstract context art is not approved for isolated picture identification."
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "status": "fresh_author_source_consultation_only_not_independent_acceptance",
+  "records": [
+    {
+      "id": "O-notify",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/notify",
+      "retrieved_at": "2026-10-16T21:40:00.1810772Z",
+      "http_status": 200,
+      "decoded_utf8_bytes": 79827,
+      "decoded_utf8_sha256": "f56c1df158e5aea18133eb8b5f0f97b50ccd8035637007bbeb786eb95ce1aad9",
+      "full_body_retained": false,
+      "hash_method": "UTF-8 encoding of Invoke-WebRequest decoded Content; not claimed as original network byte hash",
+      "selected_sense_tags": [
+        {
+          "tag": "<li class=\"sense\" htag=\"li\" id=\"notify_sng_1\" fkox5000=\"y\" hclass=\"sense\" fkcefr=\"c1\">",
+          "html_character_offset": 59536
+        }
+      ]
+    },
+    {
+      "id": "O-inform",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/inform",
+      "retrieved_at": "2026-10-16T21:40:00.7243793Z",
+      "http_status": 200,
+      "decoded_utf8_bytes": 85887,
+      "decoded_utf8_sha256": "69ef51faaaa68067e617e66acbe4bfbb17f297e43bec631d3c0e37442102c575",
+      "full_body_retained": false,
+      "hash_method": "UTF-8 encoding of Invoke-WebRequest decoded Content; not claimed as original network byte hash",
+      "selected_sense_tags": [
+        {
+          "tag": "<li class=\"sense\" ox3000=\"y\" htag=\"li\" cefr=\"b2\" sensenum=\"1\" id=\"inform_sng_1\" hclass=\"sense\">",
+          "html_character_offset": 59904
+        },
+        {
+          "tag": "<li class=\"sense\" hclass=\"sense\" id=\"inform_sng_2\" sensenum=\"2\" htag=\"li\">",
+          "html_character_offset": 66090
+        },
+        {
+          "tag": "<li class=\"sense\" id=\"inform_sng_3\" sensenum=\"3\" hclass=\"sense\" htag=\"li\">",
+          "html_character_offset": 66781
+        }
+      ]
+    },
+    {
+      "id": "P-CSV",
+      "url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/cefrj-vocabulary-profile-1.5.csv",
+      "retrieved_at": "2026-10-16T21:40:01.0056656Z",
+      "http_status": 200,
+      "decoded_utf8_bytes": 233214,
+      "decoded_utf8_sha256": "b0dd3c635f1c9a4fdf1490c7e5b7c48e8bbe55b652ad0c9860a95f98e10ae498",
+      "full_body_retained": false,
+      "hash_method": "UTF-8 encoding of Invoke-WebRequest decoded Content; not claimed as original network byte hash",
+      "header": "headword,pos,CEFR,CoreInventory 1,CoreInventory 2,Threshold",
+      "selected_rows": [
+        {
+          "physical_line": 3499,
+          "line": "inform,verb,B1,,,"
+        }
+      ],
+      "exact_notify_verb_present": false
+    },
+    {
+      "id": "P-TERMS",
+      "url": "https://raw.githubusercontent.com/openlanguageprofiles/olp-en-cefrj/master/README.md",
+      "retrieved_at": "2026-10-16T21:40:01.6030118Z",
+      "http_status": 200,
+      "decoded_utf8_bytes": 1956,
+      "decoded_utf8_sha256": "8b69f7366fa3c7be328cb9ba02ceb7b3725697f36125bb75b85131d664b5e359",
+      "full_body_retained": false,
+      "hash_method": "UTF-8 encoding of Invoke-WebRequest decoded Content; not claimed as original network byte hash",
+      "terms_observation": "CEFR-J vocabulary and grammar profiles permit research and commercial use without charge with proper citation; copyright Tono Laboratory at TUFS. Separate Octanove data terms are not the license for this v1.5 file."
+    }
+  ]
+}

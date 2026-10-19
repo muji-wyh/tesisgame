@@ -1,0 +1,104 @@
+{
+  "schema": 1,
+  "status": "author_research_proposal_not_independent_acceptance",
+  "author": "Codex runtime_recovery",
+  "date_local": "2026-10-17",
+  "primary_candidates": [
+    {
+      "lexeme_id": "ensure.make-certain.v",
+      "analysis_id": "ensure.make-certain.v.analysis.proposal.morphology.v1",
+      "kind": "morphological",
+      "exact_analysis_artifact": "analyses.proposed.json",
+      "recommended_for_independent_review": true,
+      "approved": false
+    },
+    {
+      "lexeme_id": "inform.give-information.v",
+      "analysis_id": "inform.give-information.v.analysis.proposal.morphology.v1",
+      "kind": "atomic",
+      "exact_analysis_artifact": "analyses.proposed.json",
+      "recommended_for_independent_review": true,
+      "approved": false
+    },
+    {
+      "lexeme_id": "collect.gather.v",
+      "analysis_id": "collect.gather.v.analysis.proposal.morphology.v1",
+      "kind": "atomic",
+      "exact_analysis_artifact": "analyses.proposed.json",
+      "recommended_for_independent_review": true,
+      "approved": false
+    }
+  ],
+  "rationale": [
+    {
+      "lexeme_id": "ensure.make-certain.v",
+      "modern_boundary": "en- + sure",
+      "finding": "A modern causative verb-forming prefix and a current adjective base supply a meaningful reading equivalent to making a result or condition certain. Whole-word Oxford/Collins definitions and the independently accepted result-focused example fit that reading. Collins's explicit historical en-/sure connection corroborates rather than independently proves the modern analysis.",
+      "alternatives": "The entire ensure form is supplied in ensure.atomic-alternative.proposed.json as a nonselected fallback, not a second simultaneously active analysis.",
+      "limits": "Do not read sure solely as someone's confidence or equate ensuring a condition with checking evidence, assuring a person, making a guarantee in law or providing insurance. Those lexical/specialist families are outside the accepted sense."
+    },
+    {
+      "lexeme_id": "inform.give-information.v",
+      "modern_boundary": "inform (intact base)",
+      "finding": "The selected present-day information-transfer meaning is best kept intact in this candidate. Historical formation from an into-prefix and shape/form base does not yield the accepted meaning by an ordinary negative-prefix or document-form rule. Verb forms independently show informed, supporting a derivative relationship without requiring an internal split of inform.",
+      "limits": "Atomic is an authored pedagogical boundary. A formal linguistic analysis may recognize inherited structure. No lexical level, phrase, clinical consent or media gate is changed by choosing an intact base."
+    },
+    {
+      "lexeme_id": "collect.gather.v",
+      "modern_boundary": "collect (intact base)",
+      "finding": "Selected gathering meaning and transparent collected/collecting derivatives support retaining collect as the base. Latin col-/com- and legere/collect- history is genuine. A separate classical lesson would require explicit root meaning, assimilation/allomorph evidence and pedagogical review; a syllable division or visible col+lect string is insufficient.",
+      "limits": "The candidate does not deny historical internal structure or prohibit a future sourced classical-root lesson. It excludes pickup/payment and all existing collection compound approvals."
+    }
+  ],
+  "canonical_family_proposal": {
+    "ensure": {
+      "prefix": "english.affix.en.causative / en-",
+      "base": "english.stem.sure.certain / sure",
+      "existing_en_family": "affix.en.prefix / en is currently used by pending encode and enable. That underspecified legacy identity is not declared wrong, split, renamed or approved here. Future reuse requires independent selected-sense review.",
+      "excluded": "Greek-location english.affix.en.in in empathy and Germanic suffix -en are not the same identity as this causative prefix. Shared letter shapes never authorize equivalence."
+    },
+    "inform": {
+      "new_identity": "english.atomic.inform.give-information / inform",
+      "held_identity": "morph.inform / inform in pending informed consent",
+      "reason": "Identical spelling and the ordinary inform/informed relationship make a future shared base plausible. The clinical adjective and consent phrase also require understanding and context, so lexical relationship alone does not approve their full graph or specialist meaning.",
+      "future_options": [
+        "Retain separate provisional IDs until independent morphology and clinical-family decisions are complete.",
+        "After such review, explicitly map only the accepted same-sense base occurrences to one canonical identity, preserving whole-graph and clinical review gates pending where appropriate. This research performs no remap."
+      ],
+      "standalone_adjective": "The separate clinical informed adjective has null morphology in the immutable corpus; it is not filled or approved here."
+    },
+    "collect": {
+      "new_identity": "english.atomic.collect.gather / collect",
+      "held_identity": "morph.collect / collect in current gathering draft and two pickup compounds",
+      "reason": "Sense-qualified teaching identity prevents an automatic same-spelling tile equivalence with pending waste-pickup uses. The related morph.collection pickup/payment compounds and any future collection decomposition remain separate decisions.",
+      "limits": "Changing the analysis part identity does not change collect.gather.v or migrate its accumulated lexical skills. The accepted same-ID gathering repair retains its separate historical-evidence caveat."
+    }
+  },
+  "runtime_implications": {
+    "type_does_not_isolate": "scripts/morphology_analysis.gd:87-90 hashes canonical_id and canonical form, deliberately excluding atomic/stem type. Notes or a type change alone cannot prevent shared tile compatibility.",
+    "pending_gate": "compile normally rejects pending morphology; these research candidates are not playable and do not bypass that gate.",
+    "atomic_exposure": "An intact atomic target produces whole-form exposure, not assessed spelling/composition mastery. The resolver omits Word Jelly spelling from atomic term requirements, so inform and collect need independently valid scored routes such as their accepted local phrase focuses.",
+    "variant": "The accepted ensure lexical projection includes both ensure and insure. The one-graph morphology contract requires exact canonical text ensure; this proposal neither removes insure nor treats its letters as negative in-.",
+    "readiness": "Image/audio, expression audio, practice reachability, module readiness and release remain independently pending; no split is manufactured to unlock an exercise."
+  },
+  "unresolved": [
+    "Independent reviewer decision on all three exact proposed teaching analyses and the ensure fallback.",
+    "Canonical-family policy for same form across selected ordinary, pickup, information-influencing and clinical uses.",
+    "Whether to share a reviewed causative en- base with any existing pending enable graph; no general en- remap is authorized.",
+    "Whether an ordinary informed derivative and the clinical informed-consent stem can share the proposed inform base after separate review; all clinical gates remain pending.",
+    "Populated-profile implications for old same-ID collect evidence and the coordinated new requirements namespace.",
+    "Variant presentation and practice behavior for accepted insure, without changing the canonical ensure target.",
+    "Actual final registry/curriculum/media/domain-policy binding after accepted integrated delivery."
+  ],
+  "not_changed": [
+    "accepted language fields and forms",
+    "source language approvals",
+    "lexical or module membership identities",
+    "old morphology graphs and historical holds",
+    "clinical and specialist entries",
+    "progress or wallet state",
+    "production and shared tests"
+  ],
+  "new_acceptance": false,
+  "final_live_binding": "UNBOUND"
+}

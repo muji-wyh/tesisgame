@@ -1,0 +1,9 @@
+{
+  "source_sha256": "0dc559c59bd63c4e812e7f3e31562a533cf59603d93c299218fe07eece297303",
+  "preview_sha256": "8b5e6e8c5564fdd6e16835ab16bf4a781bd5bcadc203a578448c8d6dfc2ffb6e",
+  "renderer": "sharp",
+  "version": "0.35.5",
+  "operation": "unmodified source rasterized at density 192",
+  "visual_review": "pending",
+  "production_changed": false
+}

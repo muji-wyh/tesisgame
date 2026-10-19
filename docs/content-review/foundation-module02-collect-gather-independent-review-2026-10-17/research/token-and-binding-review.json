@@ -1,0 +1,195 @@
+{
+  "schema": 1,
+  "status": "authored_token_and_semantic_binding_proposal_unreviewed",
+  "expression_id": "expr.foundation.module02.08",
+  "before_text": "Could you assist me while I collect the documents from reception and return the key?",
+  "proposed_text": "Could you assist me while I collect one form from each team and return the borrowed key?",
+  "before_token_count": 16,
+  "proposed_token_count": 18,
+  "proposed_tokens": [
+    {
+      "index": 0,
+      "text": "Could",
+      "start": 0,
+      "end": 5
+    },
+    {
+      "index": 1,
+      "text": "you",
+      "start": 6,
+      "end": 9
+    },
+    {
+      "index": 2,
+      "text": "assist",
+      "start": 10,
+      "end": 16
+    },
+    {
+      "index": 3,
+      "text": "me",
+      "start": 17,
+      "end": 19
+    },
+    {
+      "index": 4,
+      "text": "while",
+      "start": 20,
+      "end": 25
+    },
+    {
+      "index": 5,
+      "text": "I",
+      "start": 26,
+      "end": 27
+    },
+    {
+      "index": 6,
+      "text": "collect",
+      "start": 28,
+      "end": 35
+    },
+    {
+      "index": 7,
+      "text": "one",
+      "start": 36,
+      "end": 39
+    },
+    {
+      "index": 8,
+      "text": "form",
+      "start": 40,
+      "end": 44
+    },
+    {
+      "index": 9,
+      "text": "from",
+      "start": 45,
+      "end": 49
+    },
+    {
+      "index": 10,
+      "text": "each",
+      "start": 50,
+      "end": 54
+    },
+    {
+      "index": 11,
+      "text": "team",
+      "start": 55,
+      "end": 59
+    },
+    {
+      "index": 12,
+      "text": "and",
+      "start": 60,
+      "end": 63
+    },
+    {
+      "index": 13,
+      "text": "return",
+      "start": 64,
+      "end": 70
+    },
+    {
+      "index": 14,
+      "text": "the",
+      "start": 71,
+      "end": 74
+    },
+    {
+      "index": 15,
+      "text": "borrowed",
+      "start": 75,
+      "end": 83
+    },
+    {
+      "index": 16,
+      "text": "key",
+      "start": 84,
+      "end": 87
+    },
+    {
+      "index": 17,
+      "text": "?",
+      "start": 87,
+      "end": 88
+    }
+  ],
+  "assessed_bindings": [
+    {
+      "sense_id": "assist.help.v",
+      "before_token": {
+        "index": 2,
+        "text": "assist",
+        "start": 10,
+        "end": 16
+      },
+      "proposed_token": {
+        "index": 2,
+        "text": "assist",
+        "start": 10,
+        "end": 16
+      },
+      "morphological_form": "base form",
+      "binding": "Unchanged expression-level focus_lexeme_ids; token locations are review evidence, not a new production field."
+    },
+    {
+      "sense_id": "collect.gather.v",
+      "before_token": {
+        "index": 6,
+        "text": "collect",
+        "start": 28,
+        "end": 35
+      },
+      "proposed_token": {
+        "index": 6,
+        "text": "collect",
+        "start": 28,
+        "end": 35
+      },
+      "morphological_form": "base form",
+      "binding": "Unchanged expression-level focus_lexeme_ids; token locations are review evidence, not a new production field."
+    },
+    {
+      "sense_id": "return.send-back.v",
+      "before_token": {
+        "index": 12,
+        "text": "return",
+        "start": 69,
+        "end": 75
+      },
+      "proposed_token": {
+        "index": 13,
+        "text": "return",
+        "start": 64,
+        "end": 70
+      },
+      "morphological_form": "base form",
+      "binding": "Unchanged expression-level focus_lexeme_ids; token locations are review evidence, not a new production field."
+    }
+  ],
+  "contextual_sense_rationale": {
+    "assist.help.v": "The speaker requests help with two named routine activities; assist me selects the existing helping-a-person sense. The formal register remains intentional.",
+    "collect.gather.v": "One form from each of three teams produces a set from multiple sources. No preassembled reception bundle is being fetched.",
+    "return.send-back.v": "Borrowed explicitly modifies key, and the context supplies giving it back to reception. This matches the existing borrowed-item sense without widening to purchased-goods returns."
+  },
+  "production_schema_rule": "Production uses expression-level focus_lexeme_ids and ordered character-position tokens. No token-to-lexeme binding field exists here; this review map must not be copied as one.",
+  "assessment_rule": "The exact new complete sentence, context and token sequence require independent language/context review. Neighboring term approvals do not approve it.",
+  "source_consultations_fresh": [
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/assist_1",
+      "section": "Sense 1, formal label and assist somebody pattern",
+      "observed_on": "2026-10-17",
+      "method": "rendered_web_consultation",
+      "body_retained": false
+    },
+    {
+      "url": "https://www.collinsdictionary.com/dictionary/english/return",
+      "section": "COBUILD sense 3 borrowed/taken item, A2; separate sense 4 purchased-item return",
+      "observed_on": "2026-10-17",
+      "method": "rendered_web_consultation",
+      "body_retained": false
+    }
+  ]
+}

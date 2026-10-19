@@ -1,0 +1,218 @@
+{
+  "date": "2026-10-16",
+  "status": "accepted_pixels_and_provenance_copied_metadata_serialization_and_delivery_check_follow",
+  "accepted_proposal_sha256": "75b3e85a0cff12132af26cad6363d02a6418f44cd7643d6f46d59d5a4b772c50",
+  "copies": [
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/candidate/shopping-basket.png",
+      "target": "professional-media/fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3.png",
+      "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+      "bytes": 105604
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/integration-proposal/proposal.json",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/proposal.json",
+      "sha256": "75b3e85a0cff12132af26cad6363d02a6418f44cd7643d6f46d59d5a4b772c50",
+      "bytes": 3140
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/integration-proposal/independent-acceptance.json",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/independent-acceptance.json",
+      "sha256": "cea13bb4070bdea13c21e234f6e209a0a2b1f3b9a18b0b689c42c665bf20a162",
+      "bytes": 841
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/integration-proposal/asset-provenance.json",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/asset-provenance.json",
+      "sha256": "c751593342bd2f3a2a408962e580cf2a915495d82b9c59e64eba7b1b8bb75a6e",
+      "bytes": 5957
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/integration-proposal/media-resource.json",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/media-resource.json",
+      "sha256": "f129bbd7239090bd65508c32ffda6a2f75682ec2e11a5ad1c3f89627d0c22de7",
+      "bytes": 396
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/integration-proposal/entry-image.before.json",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/entry-image.before.json",
+      "sha256": "e3e50b67d9b8d6fc02a6dfc656eafbe877d4389638aa15196135ac10cea7b1e2",
+      "bytes": 618
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/integration-proposal/entry-image.after.json",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/entry-image.after.json",
+      "sha256": "c03420f59f447e55db36fb9de8ca215ea744aa2da57bf16fd408ec613ad8e435",
+      "bytes": 2166
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/integration-proposal/brief.delta.json",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/brief.delta.json",
+      "sha256": "071beda182cb77423756f4d94bcf0bd46b7d660d96f89354db6158f565eebcdc",
+      "bytes": 1080
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/integration-proposal/editorial-note.delta.json",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/editorial-note.delta.json",
+      "sha256": "0a8794d3868fb2bc6bcdb4b1bf0e58c9e03b132549e1fab85c994ad6516ed738",
+      "bytes": 2243
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/review-receipt.json",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/candidate-review-receipt.json",
+      "sha256": "0d7aa8f8ce232983cb44eb8368672f8d894d25ec007b63da9ff88ffe9ec4c592",
+      "bytes": 6502
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/candidate/actual-word-card-contact-3x.png",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/candidate/actual-word-card-contact-3x.png",
+      "sha256": "9fcd4d513c3f4b3a9cf7fb187ae0e26ac527d07a3d6b972116bbb24e89ebcc37",
+      "bytes": 71216
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/candidate/actual-word-card-contact.png",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/candidate/actual-word-card-contact.png",
+      "sha256": "fa56ff23bcd34bc2c8596da0c660808ec17945d9d26f26195c6ada9f78a6969b",
+      "bytes": 51030
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/candidate/cart-basket-confusability-contact-3x.png",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/candidate/cart-basket-confusability-contact-3x.png",
+      "sha256": "7cf566e6e35faa4741571cfeeb44157fecb5ecca6afc0c3be12fdc5bbba20321",
+      "bytes": 98858
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/candidate/cart-basket-confusability-contact.png",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/candidate/cart-basket-confusability-contact.png",
+      "sha256": "4c2c31cd6f29eaea32334b3bf5a9cb4db12b076e86b41711796f0ce82cfddc5a",
+      "bytes": 70585
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/candidate/match-matched.png",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/candidate/match-matched.png",
+      "sha256": "564c443bcd54dd9b1c212b827f38f82b56d09d24285d9d44fc16bb73ce16e9c0",
+      "bytes": 5408
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/candidate/match-unmatched.png",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/candidate/match-unmatched.png",
+      "sha256": "fc39c372a23a33e1c2663e503ed20fb055e093f1c834d255706df6bfb9deb83b",
+      "bytes": 4825
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/candidate/memory-matched.png",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/candidate/memory-matched.png",
+      "sha256": "07f2bfdbd992edb09b25f2881b4b76046520e922caea3202e48ddefc0ea8128b",
+      "bytes": 5035
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/candidate/memory-unmatched.png",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/candidate/memory-unmatched.png",
+      "sha256": "9aad34703dd9102b8bb27e937ebaba3c630c5b4f7e44914b0cc53f32994505cd",
+      "bytes": 4699
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/candidate/render-raw.png",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/candidate/render-raw.png",
+      "sha256": "b3ebc28219fd2e37e963865e4090d22cc67c5242948e4840d90fd32bcbdf79fc",
+      "bytes": 29070
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/candidate/render.log",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/candidate/render.log",
+      "sha256": "76fb740d6a183cc195f35b386e54bc94f8ed79eea8f5b7f754242b5529a152df",
+      "bytes": 372
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/candidate/report.json",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/candidate/report.json",
+      "sha256": "e936d5be3c9a811b3a15778b8b85f2a79b773cb10d241502682402ee3483d5ea",
+      "bytes": 5316
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/candidate/shopping-basket.png",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/candidate/shopping-basket.png",
+      "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+      "bytes": 105604
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/review-proposal.json",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/review-proposal.json",
+      "sha256": "2fc70d1d71710dbba65552de51712c83c31f754f0889173e2cc15435bdaa43a4",
+      "bytes": 8963
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/source-inspection/front-low.png",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/source-inspection/front-low.png",
+      "sha256": "4b21918525b429f469510cdfa6c37c325ba64c62ca3c95a6dc4824dfe5a0dd5e",
+      "bytes": 22332
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/source-inspection/front-three-quarter.png",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/source-inspection/front-three-quarter.png",
+      "sha256": "d4acb44ab82d683aa1a1818a96867ac23a80e7deb720fd5c0f4cc7ba5bbf216a",
+      "bytes": 27503
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/source-inspection/other-side.png",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/source-inspection/other-side.png",
+      "sha256": "52ee26618daee5574a4c87012409b3bf0daf7a8964547aa8e4b39781f3c12058",
+      "bytes": 32474
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/source-inspection/rear-three-quarter.png",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/source-inspection/rear-three-quarter.png",
+      "sha256": "ab2911240d0b724d6a48ec39959b458f75f6e0f451a6ee27c1be579ffabf4654",
+      "bytes": 19836
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/source-inspection/render.log",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/source-inspection/render.log",
+      "sha256": "4dc518debd15a59aae85868e99eb24f07e4b6a5cb1d419b6869e0a79c80c725e",
+      "bytes": 376
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/source-inspection/report.json",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/source-inspection/report.json",
+      "sha256": "56b8c6fc93de6b9f5a21b89781b0a8b169a615370d14f170e84d41e6c7518920",
+      "bytes": 800
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/shopping-basket/source-record.json",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/source-record.json",
+      "sha256": "5db0e3a11adf303bc116c6db0141e54fb734339541a7e5a4b3d8eefd7990e4c4",
+      "bytes": 3193
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/prepare-shopping-basket-inspection.cjs",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/scripts/prepare-shopping-basket-inspection.cjs",
+      "sha256": "efb01086b29090eda59d59778dfda101fc941ab29fe3777baaa4dec60d245d21",
+      "bytes": 2654
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/inspect-shopping-basket.gd",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/scripts/inspect-shopping-basket.gd",
+      "sha256": "c439358e1b225c563210053c340d78aa5427b9bb1403d6241bc2a2a59c3e0dc6",
+      "bytes": 3426
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/render-shopping-basket-candidate.gd",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/scripts/render-shopping-basket-candidate.gd",
+      "sha256": "4ef572fc89670bcc4b78a0129e25a8d5f9bf34477e0cac054bed3720f622eccc",
+      "bytes": 11273
+    },
+    {
+      "source": "build/professional-english/retail-term-art-review/prepare-shopping-basket-review.cjs",
+      "target": "docs/assets/sources/kenney-mini-market-retail-terms/shopping-basket/scripts/prepare-shopping-basket-review.cjs",
+      "sha256": "c7b6c97ab29f599c279c0820e5be7fd60498bad31877224feeb8a603e857f33f",
+      "bytes": 7912
+    }
+  ],
+  "protected_production_data_sha256": {
+    "data/professional/lexemes/retail-pilot.json": "12c40ed580248dcdecbfa7504ef57e33c792c8ba8a4a250bebf2c722b5cb1f3b",
+    "data/professional/courses/retail.json": "7124ef1d09da0c47f1d5fb2945bfebbe49e5f180f5fbdcd66fe73991ea7d4c61",
+    "data/professional/themes.json": "718bae2956226505281d5e8f62406d0b225b12834b00977f401cb517f068f9fd"
+  },
+  "protected_data_unchanged_by_copy": true,
+  "scope": "Only exact independently accepted immutable image bytes and durable provenance were copied. Original candidate review history is retained unchanged. The content owner serializes the approved image/brief/note delta; no other content gate is promoted."
+}

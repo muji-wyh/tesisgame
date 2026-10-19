@@ -6,6 +6,8 @@ signal word_attempted(event_id: String, word_ids: Array[String], correct: bool)
 const Data = preload("res://scripts/game_data.gd")
 const SpeechWords = preload("res://scripts/speech_words.gd")
 const WordSampler = preload("res://scripts/word_sampler.gd")
+const Context = preload("res://scripts/learning_context.gd")
+const LearningWord = preload("res://scripts/learning_word.gd")
 const THEMES: Array[String] = ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]
 const MATCH_PAIR_COUNT: int = 5
 const ROUND_CHEST_CHANCE: float = 0.5
@@ -32,23 +34,36 @@ var reward_id: String = ""
 var error: String = ""
 var last_correct: bool = false
 var _attempt_sequence: int = 0
+var learning_context: Dictionary = {}
 
 
-func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requested_adventure_id: String = "", required_word_id: String = "", requested_age_band_id: String = "3", random_chest_reward: bool = false) -> bool:
+func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requested_adventure_id: String = "", required_word_id: String = "", requested_age_band_id: String = "3", random_chest_reward: bool = false, requested_context: Dictionary = {}) -> bool:
+	var next_context: Dictionary = requested_context if not requested_context.is_empty() else Context.growth(int(requested_age_band_id), "match")
+	var professional: bool = next_context.get("track") == "professional"
+	if not Context.validate(next_context).is_empty() or next_context.mode not in ["match", "memory"] \
+		or not LearningWord.same_track(words, str(next_context.track)):
+		error = "Choose matching content for this learning path."
+		return false
 	var band: Dictionary = Data.age_band(requested_age_band_id)
-	if band.is_empty():
+	if not professional and band.is_empty():
 		error = "Please choose an available age level."
 		return false
 	var maximum_age: int = int(band.get("max_age", 3))
 	var eligible: Array = []
 	for word in words:
+		if professional:
+			if LearningWord.professional(word, str(next_context.mode)):
+				eligible.append(word)
+			continue
 		if not word is Dictionary or not word.has_all(["id", "min_age", "image"]):
 			error = "Learning words need an ID, a minimum age and a picture."
 			return false
 		if int(word.min_age) <= maximum_age and "match" in word.get("practice_modes", ["match", "memory"]):
 			eligible.append(word)
 	var saved_theme: String = theme_id
-	var repeating: bool = repeat_lesson and lesson_words.size() == MATCH_PAIR_COUNT and age_band_id == requested_age_band_id
+	var repeating: bool = repeat_lesson and lesson_words.size() == MATCH_PAIR_COUNT \
+		and not Context.identity(learning_context, false).is_empty() \
+		and Context.identity(learning_context, false) == Context.identity(next_context, false)
 	if repeating:
 		for previous in lesson_words:
 			if not eligible.any(func(word: Dictionary) -> bool: return word.id == previous.id):
@@ -65,7 +80,7 @@ func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requ
 	var fresh: Array = pool.filter(func(word: Dictionary) -> bool: return not previous_ids.has(word.id))
 	fresh.append_array(pool.filter(func(word: Dictionary) -> bool: return previous_ids.has(word.id)))
 	pool = fresh
-	if not requested_adventure_id.is_empty() and not repeating:
+	if not requested_adventure_id.is_empty() and not repeating and not professional:
 		var requested: Dictionary = {}
 		for adventure in Data.adventures(eligible):
 			if adventure.id == requested_adventure_id:
@@ -114,6 +129,48 @@ func reset(words: Array, seed_value: int = -1, repeat_lesson: bool = false, requ
 	error = ""
 	last_correct = false
 	_attempt_sequence = 0
+	learning_context = Context.freeze(next_context)
+	changed.emit()
+	return true
+
+
+func prepare_activity(mode: String, requested_age_band_id: String, seed_value: int = -1,
+	repeat_theme: bool = false, requested_context: Dictionary = {}) -> bool:
+	# Other games own their content and board. Shared presentation/settlement
+	# state must not require five picture-matching words to launch them.
+	var next_context: Dictionary = requested_context if not requested_context.is_empty() else Context.growth(int(requested_age_band_id), mode)
+	if mode not in ["phrase", "pop", "jelly", "word_jelly"] or not Context.validate(next_context).is_empty() \
+		or next_context.mode != mode:
+		error = "Choose an available game and learning age."
+		return false
+	var rng := RandomNumberGenerator.new()
+	if seed_value < 0:
+		rng.randomize()
+	else:
+		rng.seed = seed_value
+	if not repeat_theme:
+		theme_id = THEMES[rng.randi_range(0, THEMES.size() - 1)]
+	cards.clear()
+	lesson_words.clear()
+	matched_ids.clear()
+	feedback_ids.clear()
+	hint_ids.clear()
+	selected_id = ""
+	hints_used = 0
+	mistakes = 0
+	phase = "waiting"
+	age_band_id = requested_age_band_id
+	adventure_id = ""
+	adventure_name = "Your learning path"
+	chest_state = "closed"
+	chest_earned = mode == "phrase"
+	chest_reward_pair = 0
+	reward_theme = ""
+	reward_id = ""
+	error = ""
+	last_correct = false
+	_attempt_sequence = 0
+	learning_context = Context.freeze(next_context)
 	changed.emit()
 	return true
 

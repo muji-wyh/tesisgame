@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "status": "frozen_source_research_no_complete_image",
+  "files": [
+    {
+      "path": "docs/assets/sources/gift-wrap-source-recovery-r03/originals/coloured-gift-paper.jpg",
+      "bytes": 2029035,
+      "sha256": "920dd49078200158417f4e8b59ac83c869dde725fe4a915db1104665b1246312"
+    },
+    {
+      "path": "docs/assets/sources/gift-wrap-source-recovery-r03/originals/freesvg-187259-response.bin",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/assets/sources/gift-wrap-source-recovery-r03/originals/jewellery-shop-5.jpg",
+      "bytes": 2338137,
+      "sha256": "fee9901199bfb0aeaafe4b6591b553b0daccc78e8fa1d275119e2f2d23101bb8"
+    },
+    {
+      "path": "docs/assets/sources/gift-wrap-source-recovery-r03/originals/pexels-iris-35169413.jpg",
+      "bytes": 1556200,
+      "sha256": "31ad7139bdd7870e09832ae826f83e233d650c1d3a230a87f6ee2a944f00f29b"
+    },
+    {
+      "path": "docs/assets/sources/gift-wrap-source-recovery-r03/source-observations.json",
+      "bytes": 7910,
+      "sha256": "a26c04d1feaf8d092c537f21068fb1e944fe8c711d1e16b022af3cce68ea1426"
+    },
+    {
+      "path": "docs/assets/sources/gift-wrap-source-recovery-r03/source-review.json",
+      "bytes": 13171,
+      "sha256": "33825e802d458172e1db15d8d828dfc4063205b9a6b13a6311f2b2b5327f0fea"
+    },
+    {
+      "path": "docs/assets/sources/gift-wrap-source-recovery-r03/SOURCE.md",
+      "bytes": 1598,
+      "sha256": "1e0edb50a52fa350f14fad70075d63c3e908f49f02a6058ba459a939444b565d"
+    }
+  ]
+}

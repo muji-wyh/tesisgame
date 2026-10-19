@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "started_at": "2026-10-17T00:04:27.853Z",
+  "source": {
+    "path": "build/professional-english/foundation02-fifth10-native-route-repair-proposal-r01/repair.cjs",
+    "bytes": 24759,
+    "raw_sha256": "24ec0c9df7b0101fbb39e05d314a9a6ad08983af7cdaaa8ea1f54ccbe44cf4e0"
+  },
+  "input": {
+    "path": "build/professional-english/foundation02-fifth10-root-native-route-repair-r01/input.json",
+    "bytes": 2659,
+    "raw_sha256": "e5533d9c5876251b97df37e3c3dd2965b91eb711ecc67dc60cc24981d3b410fc"
+  },
+  "contract": {
+    "path": "build/professional-english/foundation02-fifth10-root-native-route-repair-r01/contract.json",
+    "bytes": 2030,
+    "raw_sha256": "d5704db3738ac08e4cfdb17f06a8dcdc1cc98475c8f263f038dbf33de90d2479"
+  },
+  "review": {
+    "path": "build/professional-english/foundation02-fifth10-native-route-repair-independent-review-r01/review.json",
+    "bytes": 5119,
+    "raw_sha256": "adf51eade6a466d24f1cc6e3b10471f99386b5bd6733c4642fa6fbc55e0492fb"
+  },
+  "command": [
+    "C:\\nvm4w\\nodejs\\node.exe",
+    "build/professional-english/foundation02-fifth10-native-route-repair-proposal-r01/repair.cjs",
+    "--root-input",
+    "build/professional-english/foundation02-fifth10-root-native-route-repair-r01/input.json",
+    "--root-input-sha256",
+    "e5533d9c5876251b97df37e3c3dd2965b91eb711ecc67dc60cc24981d3b410fc",
+    "--dispatch-token",
+    "<ephemeral token omitted>"
+  ],
+  "token_retained": false
+}

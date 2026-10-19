@@ -1,0 +1,35 @@
+{
+  "sequence": 1,
+  "kind": "check_only",
+  "executable": {
+    "path": "C:/Users/yaohuiwang/AppData/Local/Microsoft/WinGet/Packages/GodotEngine.GodotEngine_Microsoft.Winget.Source_8wekyb3d8bbwe/Godot_v4.7-stable_win64.exe",
+    "bytes": 178485256,
+    "raw_sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8"
+  },
+  "args": [
+    "--headless",
+    "--path",
+    "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-native-candidate-proposal-r01\\execution-r01\\project",
+    "--check-only",
+    "--script",
+    "res://tests/godot/professional_retail_morphology_tests.gd"
+  ],
+  "cwd": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\foundation02-fifth10-native-candidate-proposal-r01\\execution-r01\\project",
+  "started_at": "2026-10-16T23:50:32.993Z",
+  "finished_at": "2026-10-16T23:50:34.299Z",
+  "exit_code": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/command-1.stdout.log",
+    "bytes": 73,
+    "raw_sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d"
+  },
+  "stderr": {
+    "path": "build/professional-english/foundation02-fifth10-native-candidate-proposal-r01/execution-r01/command-1.stderr.log",
+    "bytes": 0,
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "summary": null,
+  "postcheck_ok": true
+}

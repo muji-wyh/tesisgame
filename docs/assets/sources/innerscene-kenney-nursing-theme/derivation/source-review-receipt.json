@@ -1,0 +1,392 @@
+{
+  "date": "2026-10-16",
+  "status": "acquired_sources_inspected_brief_pending_independent_root_review",
+  "source_models": [
+    {
+      "id": "privacy-curtain",
+      "sha256": "563b648b94f5f2dc87fa734c22021a1116461ee01733eae359907839ef2d1390",
+      "bounds": [
+        -1.16499996185303,
+        0,
+        -0.0658383965492249,
+        2.32999992370605,
+        2.34299993515015,
+        0.13167679309845
+      ],
+      "available_animations": 0
+    },
+    {
+      "id": "nurse-station",
+      "sha256": "74ee89a9add892597bcb569ea6080e7c4c85b792768898648f7d91334b79ebf8",
+      "bounds": [
+        -1.79999995231628,
+        0,
+        -0.405000001192093,
+        3.59999990463257,
+        1.1175000667572,
+        0.845000028610229
+      ],
+      "available_animations": 0
+    }
+  ],
+  "source_view_count": 8,
+  "source_capture_count": 16,
+  "production_mutated": false,
+  "protected_themes_sha256": "718bae2956226505281d5e8f62406d0b225b12834b00977f401cb517f068f9fd",
+  "protected_home_previews": [
+    {
+      "id": "retail",
+      "path": "assets/images/professional-previews/retail.png",
+      "sha256": "b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae"
+    },
+    {
+      "id": "software-data",
+      "path": "assets/images/professional-previews/software-data.png",
+      "sha256": "5c87d4a3045d91aa60a5fb4be951baa43834fb39fbf684a5ee7aa132daece5b2"
+    },
+    {
+      "id": "caregiving",
+      "path": "assets/images/professional-previews/caregiving.png",
+      "sha256": "5158de0b177ab2e5159ca226f18c6c5a8536b39dbaab69c18791c80cdeef421a"
+    },
+    {
+      "id": "food-service",
+      "path": "assets/images/professional-previews/food-service.png",
+      "sha256": "cb6952f9d40d6c9b7b074557e861e5bbe975c3826f83ed5eba83567313ec2ab3"
+    },
+    {
+      "id": "office-admin",
+      "path": "assets/images/professional-previews/office-admin.png",
+      "sha256": "6ba67a3c508d6211bea2370589837e7e445c561b9b9ae9a5811639d2746239c8"
+    },
+    {
+      "id": "hr-recruitment",
+      "path": "assets/images/professional-previews/hr-recruitment.png",
+      "sha256": "bb6ff2a331ad371a83fcc2eeadebe071fa275af3795d63054dc842646110f09a"
+    },
+    {
+      "id": "nursing",
+      "path": "assets/images/professional-previews/nursing.png",
+      "sha256": "9dea5958b2143012b69d0119ce3b6c2fe9c3eaa0ad5e5b544cdcedd632fa73ee"
+    },
+    {
+      "id": "warehouse-logistics",
+      "path": "assets/images/professional-previews/warehouse-logistics.png",
+      "sha256": "723cea4f1883ab238425f4f2c779e93030bbf5eda964f8fb52bd7c60b5be29f9"
+    },
+    {
+      "id": "hospitality-tourism",
+      "path": "assets/images/professional-previews/hospitality-tourism.png",
+      "sha256": "422cc920c1ab1dbbe090454a2b82b018a350f18650dff3287ff4e2af467c14ee"
+    },
+    {
+      "id": "education-childcare",
+      "path": "assets/images/professional-previews/education-childcare.png",
+      "sha256": "a65495ef4fc41b0a802547a036f3f90db9198ce0855006b16f017ddfa61b7d29"
+    },
+    {
+      "id": "transport-delivery",
+      "path": "assets/images/professional-previews/transport-delivery.png",
+      "sha256": "ce672584af56edb6608203a5f16d93f8a846eb324073c362118037164a7ef234"
+    },
+    {
+      "id": "manufacturing-maintenance",
+      "path": "assets/images/professional-previews/manufacturing-maintenance.png",
+      "sha256": "b9794f4f4ed02559b0fa2c1a810d2cd78d40252950aaa424e7656de2f9b06cb3"
+    },
+    {
+      "id": "cleaning-facilities",
+      "path": "assets/images/professional-previews/cleaning-facilities.png",
+      "sha256": "ec93a90cb516a727cac00af0b64875fc9c426a2a8c265db24bd7e7849e7a6c12"
+    },
+    {
+      "id": "construction-trades",
+      "path": "assets/images/professional-previews/construction-trades.png",
+      "sha256": "ee917b37e665e6326c291c899f9a09adbf03675d96d572913a9d40a5bd82e6b6"
+    },
+    {
+      "id": "it-support",
+      "path": "assets/images/professional-previews/it-support.png",
+      "sha256": "c78665355a7ec8447d4575e19167b9a8e06452e3f8066174ef0e20a92d129048"
+    },
+    {
+      "id": "customer-support",
+      "path": "assets/images/professional-previews/customer-support.png",
+      "sha256": "5a3a35221e881999e047390136f1cbe8a12aa238102e3b309bd2df3fe1cd6b8d"
+    },
+    {
+      "id": "accounting-finance",
+      "path": "assets/images/professional-previews/accounting-finance.png",
+      "sha256": "31ea949bb0ca8e5774302dd8b22e18066a189baac9ad736d7935980c2e2c171a"
+    },
+    {
+      "id": "sales-marketing",
+      "path": "assets/images/professional-previews/sales-marketing.png",
+      "sha256": "283866d94d5fbe50b66f602bffe428632dcebcb188d8ef2db59fd769157437c7"
+    },
+    {
+      "id": "clinical-medicine",
+      "path": "assets/images/professional-previews/clinical-medicine.png",
+      "sha256": "6b52f53f4d60046db67b948f5a2dfc8e4dc7604e8cee5b34ba1f020c93048367"
+    },
+    {
+      "id": "legal-paralegal",
+      "path": "assets/images/professional-previews/legal-paralegal.png",
+      "sha256": "0ef10dbaf2d1f7e8879beefaa10e02058a2a1a95343fc33e948e2f7a119a0eb6"
+    }
+  ],
+  "review": "source-visual-review.json",
+  "brief": "brief.md",
+  "evidence": [
+    {
+      "path": "build/professional-english/nursing-theme-review/acquire-sources.cjs",
+      "sha256": "1751e765684baaf727e93c742e425f03c0ba8dbda906eca9b0cdf1a9859250e8",
+      "bytes": 5219
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/acquired/acquisition-receipt.json",
+      "sha256": "f58c79943d9e325d5209ed519735371a017c16bdc2bdd11c08bbc1c39a80eed3",
+      "bytes": 7857
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/License.txt",
+      "sha256": "0ef3667d547d93dea1e3e47aa1c323eaef4913f25c0f2c2cfe31899f2ee134b7",
+      "bytes": 614
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/bookcaseClosedDoors.glb",
+      "sha256": "ff33f535acdb1825c0e958a293642b39665adcae0b1317b650e83d2bb687f4e2",
+      "bytes": 22644
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/cabinetBedDrawerTable.glb",
+      "sha256": "fec6271639df5aff9f8ac75d6679385eab2abb7c8d2f51abeba3ed689ddb6f0d",
+      "bytes": 12200
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/chairCushion.glb",
+      "sha256": "33544228984857f2cb502b58452fed72157335f9b1caf29e96da5c9094c53fdc",
+      "bytes": 12588
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/floorFull.glb",
+      "sha256": "99fc5df646d8dc605d6fe35001fe5b15bb7b269cc5c65f4f7793fbc76ff3d822",
+      "bytes": 2260
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/wall.glb",
+      "sha256": "69273d5d623bddfce41d12d4e5eeb5621ea04f1edcbd8f35c00a60c2fd3258b7",
+      "bytes": 3340
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/wallWindow.glb",
+      "sha256": "166a10fddb8a78d942bc2791186913f7015dfee8501d20efd7a7b8f196fc5c3e",
+      "bytes": 10744
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/acquired/kenney/Mini Characters/License.txt",
+      "sha256": "28358ae5accc85b572eb42507956afc8beae05acb4648bb9026a5714d421b785",
+      "bytes": 718
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/acquired/kenney/Mini Characters/Models/GLB format/Textures/colormap.png",
+      "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e",
+      "bytes": 8706
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/acquired/kenney/Mini Characters/Models/GLB format/wheelchair.glb",
+      "sha256": "cb7b6cbebc7bbe238ae926b26305661eb66e17659fafa8fa0c098f5e7955fabe",
+      "bytes": 56680
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/acquired/library-terms.html",
+      "sha256": "8643dd0b074ba8296680498bece03e35b23fd5a9299846e03096302f6a02cd76",
+      "bytes": 35154
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/acquired/LICENSE-CC0.txt",
+      "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "bytes": 7048
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/acquired/nurse-station/nurse-station-with-low-accessible-counter.glb",
+      "sha256": "74ee89a9add892597bcb569ea6080e7c4c85b792768898648f7d91334b79ebf8",
+      "bytes": 700584
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/acquired/nurse-station/source-inventory.json",
+      "sha256": "4edfb30da0b0a2522d3ba9eab0dc1badac94ed8dce3d9a7dd5e26af6c59f9441",
+      "bytes": 3751
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/acquired/nurse-station/source-page.html",
+      "sha256": "6a217282a15ad1321dd6274df7cbd97944653af20b42c467280371d37ac4e222",
+      "bytes": 47927
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/acquired/privacy-curtain/privacy-curtain-and-ceiling-track.glb",
+      "sha256": "563b648b94f5f2dc87fa734c22021a1116461ee01733eae359907839ef2d1390",
+      "bytes": 330268
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/acquired/privacy-curtain/source-inventory.json",
+      "sha256": "5103204d2f703c2a2ed43e13dbde5488e98c17b3bdeccbfeacd21429f1f4316a",
+      "bytes": 3207
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/acquired/privacy-curtain/source-page.html",
+      "sha256": "2fed1dd78486a9cc4526fcc06e9210d2ac767d4d61bff182895696dcff8f501d",
+      "bytes": 47635
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/brief.md",
+      "sha256": "029bcef467d6d55f1208af688c64a48a3a8a97272d42bad66db6e37c3c46b315",
+      "bytes": 6833
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/build-source-contact.py",
+      "sha256": "90afcc6fc8266d12d63f00c454ef0fab1999cbda2bb243501fb230514018bd39",
+      "bytes": 1220
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/existing-source-record.json",
+      "sha256": "0a108ef273891c99da810d2f29b39b89febf7deb5c436b8f92b2ef44bb2be269",
+      "bytes": 12642
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/inspect-sources.gd",
+      "sha256": "f5aa06f77b69f269d44ee15535c71ded35f6ff3451b76dd5a2bd188da173edc6",
+      "bytes": 4909
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/inspect-textile-structure.cjs",
+      "sha256": "853e45fdf361771647292820c5834274e7d98806a9e468b90becaa982cddf572",
+      "bytes": 2695
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/package-source-review.cjs",
+      "sha256": "07bbff26bb06325b0a634b2d880e3e82ab57bc0ab978d34171e8a0c5eac01a1b",
+      "bytes": 2648
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/prepare-source-record.cjs",
+      "sha256": "7ba36c6764a0268f50245c1af1cb4d5fb4bf9472a3c2d6d05d7c55c2895f6d78",
+      "bytes": 4330
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/protected-baseline.json",
+      "sha256": "32e8e25bcdbf7c634263bab852ef40915aaf74393f29d49a1ec86928fb46afea",
+      "bytes": 4140
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/source-inspection/nurse-station-front-level-phone.png",
+      "sha256": "405152b77ae507db2d22a7980fbf7e3ee84aa88d89da345aeeec8f39bfd0e966",
+      "bytes": 15709
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/source-inspection/nurse-station-front-level.png",
+      "sha256": "3525e8bf0124fb4a77a1cb41e352886d804d3c90cab2381f16bbc4c682c267e6",
+      "bytes": 118134
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/source-inspection/nurse-station-front-three-quarter-phone.png",
+      "sha256": "7eb03a8d5980fab2375ac14dfa1fd60c8092d239bade2f660c32414cd7cf99ec",
+      "bytes": 20883
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/source-inspection/nurse-station-front-three-quarter.png",
+      "sha256": "1f091b049864976f42ddd51a5de4c4f223a532d62370060a90ced7902915415f",
+      "bytes": 134102
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/source-inspection/nurse-station-rear-three-quarter-phone.png",
+      "sha256": "10ce2c442f8a0a4ff2f8fb7291a12e5efc040338fe995dc75542188e88a66c30",
+      "bytes": 23254
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/source-inspection/nurse-station-rear-three-quarter.png",
+      "sha256": "ae3be3bcab15e558bfac8327790202eef9fef589b7cde6238afd3e4a2e1e6e33",
+      "bytes": 106795
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/source-inspection/nurse-station-side-phone.png",
+      "sha256": "5b8c7810140c85275587db3ba965ba54ae578a0f365e3fe8b2413337aa9e87c5",
+      "bytes": 10913
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/source-inspection/nurse-station-side.png",
+      "sha256": "ace583469105829ad619dde671706870bda16b5de98628d990f18169af054515",
+      "bytes": 66114
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/source-inspection/privacy-curtain-front-level-phone.png",
+      "sha256": "08cd17ff42868efcaf63a1d92fc8b584d3c0cd2d9ea758bc8264d69089cd0fda",
+      "bytes": 33043
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/source-inspection/privacy-curtain-front-level.png",
+      "sha256": "aac2c90f3435f2a0332be6b9f8659799c430a1329bbbf1092d50b2baa7eb6766",
+      "bytes": 127169
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/source-inspection/privacy-curtain-front-three-quarter-phone.png",
+      "sha256": "c683a3fae80d1583eddb4598af944889d64fe9bc40abb748b9398aa9c62a1d65",
+      "bytes": 28249
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/source-inspection/privacy-curtain-front-three-quarter.png",
+      "sha256": "3c204bab2ca9eac5e0cc0946b5a483ac07a2e4e9efdcac5f5223c59308c8810b",
+      "bytes": 99757
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/source-inspection/privacy-curtain-rear-three-quarter-phone.png",
+      "sha256": "f8b967c72dbdd08c02d81d9311cbb59a707b7f2570b38e0005599e794cf47fa8",
+      "bytes": 26286
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/source-inspection/privacy-curtain-rear-three-quarter.png",
+      "sha256": "81b3154fb0cfa954d41654114b94b4f503ee043ed4c3afe99ea831358affdae6",
+      "bytes": 92651
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/source-inspection/privacy-curtain-side-phone.png",
+      "sha256": "c585454a3e7538b7cda45f040ce70b98f13f161e1b21f3602f75ad0b89152f3f",
+      "bytes": 8995
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/source-inspection/privacy-curtain-side.png",
+      "sha256": "a7a44a8918f6768bdc0cae38dcf567cd2283fe53cc8c1305603b4afefb36f6f1",
+      "bytes": 35346
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/source-inspection/render.log",
+      "sha256": "b7f1abaf2f1fa0e1ca36b8786e47ee297f4dec6f22a6082b48ba2c0093e0c8c3",
+      "bytes": 387
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/source-inspection/report.json",
+      "sha256": "fcf3740f43e4145b008880f113a251f7da423deba1c2dfcc54a49b8ddf2e1ab6",
+      "bytes": 34866
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/source-inspection/source-contact.png",
+      "sha256": "e6bdc9a43e0831ff3844d91cc0f6819f72f7e8a28e0131c1832b0d4f45bc35f1",
+      "bytes": 170283
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/source-visual-review.json",
+      "sha256": "25e8426a6bdf4809ed3e6a74a6c41a9ff7dd1bc7e1aa6ca6dd49f25b6eb68ee3",
+      "bytes": 3376
+    },
+    {
+      "path": "build/professional-english/nursing-theme-review/textile-structure.json",
+      "sha256": "e01fac6be9c3dc8624e60f90d09c1b0ed2df840f68823c57fbcb067d8a0f3c45",
+      "bytes": 1152
+    }
+  ],
+  "limitations": [
+    "No complete theme composition exists yet.",
+    "All selected sources are static; no cloth deformation or motion atlas was authored.",
+    "No clinical, participant, physical-device, audio or module-readiness approval."
+  ]
+}

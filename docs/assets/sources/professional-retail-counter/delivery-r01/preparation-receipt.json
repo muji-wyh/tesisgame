@@ -1,0 +1,329 @@
+{
+  "schema": 1,
+  "status": "prepared_unbound_no_production_writes",
+  "recorded_at": "2026-10-16T08:26:08.763Z",
+  "checks": 499,
+  "failures": 0,
+  "author_receipt_raw_sha256": "c06028630c91070f11d42a3eb57349b294b9d9331f0881faf31fc6c00bce7fd0",
+  "root_image_review_raw_sha256": "ea82b3f6d34b192268bda35332f749870d18608201e22a87e41a5288739bec88",
+  "evidence_files": 79,
+  "source_files": 20,
+  "render_dependencies": 5,
+  "syntax_checks": [
+    {
+      "path": "delivery-r01/delivery-lib.cjs",
+      "raw_sha256": "3804509f911cab166b684b4d49d718645e11f6ad8ba56790285f4a696c7659ff",
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "path": "delivery-r01/bind-current-baseline.cjs",
+      "raw_sha256": "56feef12ae796b5b65c47c912763604f9bf2b50875336ca4358909acffb2f92c",
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "path": "delivery-r01/integrate-reviewed.cjs",
+      "raw_sha256": "9ae9d52973ef739529d0edbf7626591af9dcfd1b8f17fffbf625d318dce2c0f2",
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "rejection_checks": {
+    "historical_validation_registry_mismatch": true,
+    "wrong_root_acceptance_hash": true,
+    "missing_explicit_baseline_hash": true
+  },
+  "delivery_files": {
+    "delivery-lib.cjs": "3804509f911cab166b684b4d49d718645e11f6ad8ba56790285f4a696c7659ff",
+    "bind-current-baseline.cjs": "56feef12ae796b5b65c47c912763604f9bf2b50875336ca4358909acffb2f92c",
+    "integrate-reviewed.cjs": "9ae9d52973ef739529d0edbf7626591af9dcfd1b8f17fffbf625d318dce2c0f2",
+    "HANDOFF.md": "77af31dcf4b283c8d5e0c1ebe11abdd20fbb4a524fda003cc01cf106e5b6b95f",
+    "source-doc-draft.md": "a775937b650c9c30965a64190bb63531949e5f31b3f85e0976fbcfb1ae473fc0"
+  },
+  "current_registry_observation_only": "d1caec76221920c17e1ba8fb14cb612fb9102e89ba2302610255b8b6e9e163bb",
+  "proposed_registry_observation_only": "de41a84edd03e9ea838ae8f7b67852d9c81d39b7454e548728e4bdc52e08c8f3",
+  "observation_boundary": "These hashes document read-only preparation and are not a permitted integration baseline. Root must bind an exact later successful post-fifth10 validation before integration.",
+  "resource": {
+    "id": "sha256:c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a",
+    "sha256": "c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a",
+    "path": "professional-media/c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a.png",
+    "kind": "image",
+    "format": "png",
+    "compressed_bytes": 31426,
+    "decoded_bytes": 1200128,
+    "width": 512,
+    "height": 293
+  },
+  "proposed_patch": {
+    "before": {
+      "id": "counter.service-surface.n",
+      "text": "counter",
+      "display_text": "counter",
+      "pos": "noun",
+      "definition": "A raised work surface used to serve customers.",
+      "example": "Please place the parcel on the counter.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "counter"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Show a broad, raised service surface with a solid front, a small parcel resting on top, a staff side behind it, and clear customer standing space in front. Crop around the surface and front panel. Exclude a dominant register, refund receipt, or order handoff that would turn the image into a particular service function.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "professional.counter.service-surface.n.morphology.retail03.proposal.v2",
+        "lexeme_id": "counter.service-surface.n",
+        "text": "counter",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.counter",
+            "canonical": "counter",
+            "type": "atomic",
+            "surface": "counter",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ],
+        "review": {
+          "status": "reviewed",
+          "draft_author": "Codex (AI source consultation; not human or subject-matter approval)",
+          "notes": "Deliberate current-base teaching depth after examining the service-table derivation through counting plus a place/object formative descended from -atorium. The source distinguishes this from count plus agent -er. This scope preserves the modern counter stem and does not deny that history or manufacture a count/person-er graph. Atomic collection is exposure only, not composition mastery. The same service-surface sense is retained in Retail and Food Service; no counting-person or opposing-prefix sense is included.",
+          "references": [
+            "https://www.merriam-webster.com/dictionary/counter"
+          ],
+          "source_record_ids": [
+            "retail03-morph-mw-counter"
+          ],
+          "independent_review": "completed_exact_first10_v2_graph_and_current_stem_depth",
+          "reviewer": "Codex (independent AI morphology review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16",
+          "acceptance_record": "data/professional/provenance/retail-module03-morphology-first10-2026-10-16.json"
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "reviewed",
+        "domain": "pending",
+        "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "bls-cashiers",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "retail03-collins-counter",
+          "status": "verified",
+          "scope": "Selected passage consulted: COBUILD countable noun sense 1. The customer-service noun denotes the shop or cafe serving surface, not the opposing prefix or a counting person. Selected noun sense only; no artwork, recordings, or historical analysis approved. This editorial proposal does not approve language, morphology, domain practice, or media."
+        }
+      ],
+      "editorial_notes": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the customer-serving surface noun. The surface is shared across different store functions; it does not specify payment, pickup, or returns. Retain counter; a desk, table, or checkout is not automatically the same sense. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Required domain review remains pending. Independent AI morphology review was completed on 2026-10-16 for this exact graph at the documented modern-stem depth; this is not human or subject-matter approval. Picture suitability and word-media production remain pending. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready."
+    },
+    "after": {
+      "id": "counter.service-surface.n",
+      "text": "counter",
+      "display_text": "counter",
+      "pos": "noun",
+      "definition": "A raised work surface used to serve customers.",
+      "example": "Please place the parcel on the counter.",
+      "difficulty": "A2",
+      "accepted_forms": [
+        "counter"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "match",
+        "memory",
+        "pop",
+        "jelly",
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "integrated",
+          "path": "res://professional-media/c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a.png",
+          "sha256": "c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a",
+          "source": "Kenney Furniture Kit 2.1: https://kenney.nl/assets/furniture-kit; Kenney Car Kit 3.1: https://kenney.nl/assets/car-kit",
+          "creator": "Kenney",
+          "license": "CC0 1.0",
+          "acquisition_status": "integrated",
+          "review": {
+            "status": "reviewed",
+            "reviewer": "Codex root independent AI source, physical-sense and minimum-card picture review",
+            "reviewed_at": "2026-10-16"
+          },
+          "brief": "Show a broad, raised service surface with a solid front, a small parcel resting on top, a staff side behind it, and clear customer standing space in front. Crop around the surface and front panel. Exclude a dominant register, refund receipt, or order handoff that would turn the image into a particular service function.",
+          "picture_suitable": true,
+          "available_animations": [],
+          "adaptations": [
+            "Four complete acquired Furniture Kit 2.1 kitchenBar models form a broad raised surface with a solid front and a perpendicular staff-side return. Original geometry, materials, textures and source child transforms are preserved; only complete model roots are placed and rotated, then the common assembly is recentered.",
+            "One complete acquired Car Kit 3.1 box model supplies the small sealed parcel. Its original geometry, materials, texture and child transforms are preserved; the root is uniformly scaled to 0.16, rotated -10 degrees and placed at the countertop height of 0.42. No added register, refund receipt, printed label or service-function prop is used.",
+            "The orthographic camera is at [-1.1,1.8,4], aimed at [0,0.24,0], size 1.55. Ambient energy 0.18 and directional energy 0.38 illuminate a transparent 768 by 768 render. The complete alpha bounds remain within the frame; a 16-pixel margin and proportional Lanczos downscale produce 512 by 293.",
+            "Independent root review covers the exact broad-return image and actual Match 126 by 72 and Memory 144 by 74 cards, including the real badge and matched alpha. The pale top has reduced contour contrast on white and the badge overlaps the far-right return, while the solid front and staff-side recess remain readable. This scoped AI picture review is not a participant recognition study, service-function classification, domain approval or module-readiness claim."
+          ]
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "professional.counter.service-surface.n.morphology.retail03.proposal.v2",
+        "lexeme_id": "counter.service-surface.n",
+        "text": "counter",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.counter",
+            "canonical": "counter",
+            "type": "atomic",
+            "surface": "counter",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ],
+        "review": {
+          "status": "reviewed",
+          "draft_author": "Codex (AI source consultation; not human or subject-matter approval)",
+          "notes": "Deliberate current-base teaching depth after examining the service-table derivation through counting plus a place/object formative descended from -atorium. The source distinguishes this from count plus agent -er. This scope preserves the modern counter stem and does not deny that history or manufacture a count/person-er graph. Atomic collection is exposure only, not composition mastery. The same service-surface sense is retained in Retail and Food Service; no counting-person or opposing-prefix sense is included.",
+          "references": [
+            "https://www.merriam-webster.com/dictionary/counter"
+          ],
+          "source_record_ids": [
+            "retail03-morph-mw-counter"
+          ],
+          "independent_review": "completed_exact_first10_v2_graph_and_current_stem_depth",
+          "reviewer": "Codex (independent AI morphology review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16",
+          "acceptance_record": "data/professional/provenance/retail-module03-morphology-first10-2026-10-16.json"
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "reviewed",
+        "domain": "pending",
+        "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16"
+      },
+      "references": [
+        {
+          "source_id": "bls-cashiers",
+          "status": "pending_term_check",
+          "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+        },
+        {
+          "source_id": "bls-food-preparation",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+        },
+        {
+          "source_id": "retail03-collins-counter",
+          "status": "verified",
+          "scope": "Selected passage consulted: COBUILD countable noun sense 1. The customer-service noun denotes the shop or cafe serving surface, not the opposing prefix or a counting person. Selected noun sense only; no artwork, recordings, or historical analysis approved. This editorial proposal does not approve language, morphology, domain practice, or media."
+        }
+      ],
+      "editorial_notes": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the customer-serving surface noun. The surface is shared across different store functions; it does not specify payment, pickup, or returns. Retain counter; a desk, table, or checkout is not automatically the same sense. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Required domain review remains pending. Independent AI morphology review was completed on 2026-10-16 for this exact graph at the documented modern-stem depth; this is not human or subject-matter approval. The counter image has completed scoped physical-sense picture review and integration; word audio remains pending. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready."
+    }
+  },
+  "protected_counter_fields_sha256": "fe8b3c65c3b8391f7024d59d9b3fb37a2d195e1c1814a16ef9a8b087d2dbd9cd",
+  "required_remaining": [
+    "Root-confirmed successful combined post-fifth10 validation",
+    "Root-owned baseline binding and explicit preimages hash",
+    "Root serializer review and one-shot integration",
+    "Production-loader/card pixel comparison and teardown",
+    "Root-owned tests/docs and post-integration combined validation"
+  ],
+  "production_content_written": false,
+  "baseline_bound": false,
+  "integration_executed": false,
+  "godot_invoked": false
+}

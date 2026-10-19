@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "started_at": "2026-10-16T19:09:19.047Z",
+  "finished_at": "2026-10-16T19:20:44.849Z",
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "log_sha256": "8c138bf02dc6e5f70551c9901c0939c30ad2ca945727ef6845222f442e4359d6",
+  "verification": {
+    "receipt_sha256": "2c9ad5292d4a5bd87d9631138d6206121172af1615d2deed5b563de233e9c232",
+    "source_inputs": 13318,
+    "output_files": 117,
+    "descriptor": {
+      "path": "res://data/professional/domain-policy/generated/release.json",
+      "bytes": 954,
+      "sha256": "28e8f954bb11e201d685190b295b90117c80ca922b43d6369f55052f71fd200b"
+    },
+    "ready_modules": 0,
+    "unavailable_modules": 200,
+    "decoded_pack": {
+      "bytes": 120258184,
+      "sha256": "f854fd4426e52bccafc7b5246902e7efc23cded132f33167444a525831dd410d"
+    },
+    "generated_inventory": [
+      {
+        "bytes": 20705,
+        "path": "res://data/professional/domain-policy/generated/index.json",
+        "sha256": "21aa9d49135b574f12dcff2fdb2295a3fae329b0a6765ac3a914e90944994ac0"
+      },
+      {
+        "bytes": 954,
+        "path": "res://data/professional/domain-policy/generated/release.json",
+        "sha256": "28e8f954bb11e201d685190b295b90117c80ca922b43d6369f55052f71fd200b"
+      },
+      {
+        "bytes": 91201,
+        "path": "res://data/professional/domain-policy/generated/themes.json",
+        "sha256": "2bf6d483cae7b3d38c96945719612a5394a9aa6e2d94d63db9a12b4b55edc669"
+      }
+    ],
+    "retained_work_dir": "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-domain-web-ff413491-1363-4a1b-98da-b6449126884a"
+  },
+  "verification_error": null,
+  "changed_inputs": [
+    "data/professional/domain-policy/generated/index.json",
+    "data/professional/domain-policy/generated/release.json",
+    "data/professional/domain-policy/generated/themes.json",
+    "professional-media/01b2666324e5e373b75799535d8a78494a6afe8225c4b82147975d55405c96e5.wav.import",
+    "professional-media/0f883c09be9a86be9f30e444953d001d3a385ba71034e60ceb4181fc0b9aa763.wav.import",
+    "professional-media/150246ccfdd916301a660583fc5e552a7fb585fb4ccb2317b9ed4a40ebd1da56.wav.import",
+    "professional-media/202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76.png.import",
+    "professional-media/3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3.wav.import",
+    "professional-media/39df6ba3406a891283f99379ca8526d93fc8f3279b571134c0213dd824282224.wav.import",
+    "professional-media/3ac2473ca471d66026d60577db7f4c874dfbc2848cc859bc8b137d582b312714.png.import",
+    "professional-media/41acd015cae790a0fb5242364776d2b52daa675450cf0b4f54da1a4d2c3c64f5.png.import",
+    "professional-media/65da9fe84c071420a9755e31b80b1f81cfe38277cba55210930c2289ee30e973.png.import",
+    "professional-media/685b544dbb353f3a1f3fb999fbe3f541cb94874d0e4543ad0cba774c39fd4bc3.wav.import",
+    "professional-media/6c7d2ac0e733214faf920a4a0781d0458b6b891a92aa07b7ab433b501d19de72.wav.import",
+    "professional-media/712103b48aec2ae2a8a8b1b7365d6ae652e3887de1cb11a313c389de552c6ed9.png.import",
+    "professional-media/7487ee641b0cea58e5de43f619f03dead5d382444928d408c71d3811b60761b8.png.import",
+    "professional-media/778fcf9304a06cd7ed04566cdc1f9bf28997bfbdbcd6e757f20ff9c3cb6282e3.wav.import",
+    "professional-media/8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8.png.import",
+    "professional-media/8d4713a7e8576fa065ad1c9e1b18edcfc10b192254182fad626392a2de71893f.wav.import",
+    "professional-media/a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c.png.import",
+    "professional-media/aac69f3394f2acd4486e68e32213e328849c204f0ddced680f56011c65ce4e12.wav.import",
+    "professional-media/acd48c920c631906e6ff0775cf3f373c247687fcb128b41e3ce0f3bdf668ba45.wav.import",
+    "professional-media/afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c.png.import",
+    "professional-media/b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1.png.import",
+    "professional-media/b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae.png.import",
+    "professional-media/bddc3c2dd3b889c785195a572b95a33455c047e097e927232c735b3b43a24f04.png.import",
+    "professional-media/c73f0a77c42d84a6dbf3d4d2036398a792511d1a1e4e139aad65f7a492aebe7a.png.import",
+    "professional-media/cad8619dad6e225ce73c835ce5e90f7252c42af3c546aaa393adcd8db3e0f3a2.wav.import",
+    "professional-media/eac283976fb82cf02f379188ea62c524207c422fc15eda02e93e204b060743fe.png.import",
+    "professional-media/f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png.import",
+    "professional-media/fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3.png.import",
+    "scripts/professional_domain_release.gd",
+    "scripts/professional_domain_release.gd.uid"
+  ],
+  "ok": true,
+  "scope": "Actual local Web build, native raw-PCK closure verification and persisted receipt verification. No deployment, browser gameplay or ready-module acceptance."
+}

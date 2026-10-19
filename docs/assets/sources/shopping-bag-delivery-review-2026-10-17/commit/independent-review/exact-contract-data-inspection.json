@@ -1,0 +1,122 @@
+{
+  "schema": 1,
+  "status": "independent_raw_data_hash_inspection_passed",
+  "reviewer": "Codex runtime_recovery",
+  "recorded_at": "2026-10-16T22:42:24.6947200Z",
+  "contract": {
+    "path": "build/professional-english/shopping-bag-root-commit-r01/contract.json",
+    "bytes": 58680,
+    "sha256": "94d2dd3c166a57f4dc5ec7e456944edf4f131e6769ebce4385b4977414f9ee0b"
+  },
+  "union": {
+    "binding": {
+      "path": "build/professional-english/shopping-bag-delivery-preparation-r02/actual-baseline-binding.json",
+      "bytes": 1066218,
+      "sha256": "1506caf881745539b971881e978e5a5f60fc8de8640066169953f6ee45417da6"
+    },
+    "prior_supplement": {
+      "path": "build/professional-english/shopping-bag-projected-validation-r01/dependency-supplement.json",
+      "bytes": 7705,
+      "sha256": "08c8fbcf2d1b1427954a0e1951b216ae23e361184613e8b08c2bc874b3fa46d8"
+    },
+    "media_supplement": {
+      "path": "build/professional-english/shopping-bag-projected-validation-r02/dependency-supplement.json",
+      "bytes": 5004,
+      "sha256": "b938822e5668fec48d5670af8faa208362befce63c53d96c814abd4c9663882d"
+    },
+    "candidate_supplements": [
+      {
+        "path": "build/professional-english/shopping-bag-projected-validation-r03/dependency-supplement.json",
+        "bytes": 1322759,
+        "sha256": "28d2b28166257f9129eda7f74236f4ab1f3e82fe1d7a8a5de52e5603618ede03"
+      }
+    ],
+    "stage_counts": [
+      5085,
+      5097,
+      5120,
+      11569
+    ],
+    "sorted_map_sha256": "1c8b9be1759c60981de41e563e873ceecb1e7bf0f274dbd66db6cdffe0589a36",
+    "candidate_map_exact": true,
+    "conflicts": 0,
+    "case_aliases": 0,
+    "current_files_checked": 11569,
+    "current_bytes_checked": 997346602,
+    "hash_mismatches": 0,
+    "size_mismatches": 0,
+    "reparse_points": 0
+  },
+  "candidate": {
+    "runner": {
+      "path": "build/professional-english/shopping-bag-projected-validation-r03/run.cjs",
+      "bytes": 7657,
+      "sha256": "815e2387471801fbaeb148a1c27a668265fe352a6b3875b37b381b948bf03073"
+    },
+    "input": {
+      "path": "build/professional-english/shopping-bag-projected-validation-r03/input.json",
+      "bytes": 1672323,
+      "sha256": "55c0586a8f09ed0e4378d53e47fa8c1f8972cd728d05452ae5cb5b14e9da34ce"
+    },
+    "receipt": {
+      "path": "build/professional-english/shopping-bag-projected-validation-r03/attempt-001/receipt.json",
+      "bytes": 469175,
+      "sha256": "9a5ee12cf7ac2c4f6f6e41e7a05357a365eab570a5da1d4ce2a696143c73c121"
+    },
+    "command_witness": {
+      "path": "build/professional-english/shopping-bag-final-artifacts-r01/candidate-command-witness.json",
+      "bytes": 564,
+      "sha256": "084aaf9405b2f70b5d6df6cb1bc712cfd647608efc93aa80c593ad90681eda80"
+    },
+    "ok": true,
+    "callbacks": 255,
+    "callback_suites": [
+      {
+        "Name": "tests/professional-content.test.cjs",
+        "Count": 192
+      },
+      {
+        "Name": "tests/professional-retail-media.test.cjs",
+        "Count": 25
+      },
+      {
+        "Name": "tests/professional-retail-morphology.test.cjs",
+        "Count": 38
+      }
+    ],
+    "observed_inputs": 3216,
+    "audit": {
+      "summary": {
+        "courses": 20,
+        "modules": 200,
+        "themes": 21,
+        "unique_lexemes": 4939,
+        "vocabulary_memberships": 10000,
+        "vocabulary_memberships_target": 10000,
+        "vocabulary_memberships_remaining": 0,
+        "expressions": 1620,
+        "expression_memberships": 2000,
+        "expression_memberships_target": 2000,
+        "expression_memberships_remaining": 0,
+        "ready_modules": 0,
+        "reviewed_lexemes": 148,
+        "morphology_authored": 4045,
+        "morphology_reviewed": 89,
+        "integrated_word_images": 9,
+        "integrated_word_audio": 12,
+        "release_ready": false
+      },
+      "errors": 0,
+      "warnings": 29395
+    }
+  },
+  "execution": {
+    "inspection": "PowerShell/.NET raw file and JSON/hash checks only",
+    "project_source_imported": false,
+    "project_tests_executed": false,
+    "probe_executed": false,
+    "native_executed": false,
+    "transaction_executed": false,
+    "production_mutated": false
+  }
+}

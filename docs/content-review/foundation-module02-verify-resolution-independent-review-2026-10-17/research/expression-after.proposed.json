@@ -1,0 +1,196 @@
+{
+  "id": "expr.foundation.module02.04",
+  "text": "Please check the form, correct any error, and ensure that the reference number is included before you submit it.",
+  "meaning": "Ask someone to examine a form, remove mistakes, and make certain it contains a reference number before sending it for processing.",
+  "context": "A worker prepares a fictional workshop registration form. Its reference number must be entered before the form is sent for routine processing.",
+  "tokens": [
+    {
+      "index": 0,
+      "text": "Please",
+      "start": 0,
+      "end": 6
+    },
+    {
+      "index": 1,
+      "text": "check",
+      "start": 7,
+      "end": 12
+    },
+    {
+      "index": 2,
+      "text": "the",
+      "start": 13,
+      "end": 16
+    },
+    {
+      "index": 3,
+      "text": "form",
+      "start": 17,
+      "end": 21
+    },
+    {
+      "index": 4,
+      "text": ",",
+      "start": 21,
+      "end": 22
+    },
+    {
+      "index": 5,
+      "text": "correct",
+      "start": 23,
+      "end": 30
+    },
+    {
+      "index": 6,
+      "text": "any",
+      "start": 31,
+      "end": 34
+    },
+    {
+      "index": 7,
+      "text": "error",
+      "start": 35,
+      "end": 40
+    },
+    {
+      "index": 8,
+      "text": ",",
+      "start": 40,
+      "end": 41
+    },
+    {
+      "index": 9,
+      "text": "and",
+      "start": 42,
+      "end": 45
+    },
+    {
+      "index": 10,
+      "text": "ensure",
+      "start": 46,
+      "end": 52
+    },
+    {
+      "index": 11,
+      "text": "that",
+      "start": 53,
+      "end": 57
+    },
+    {
+      "index": 12,
+      "text": "the",
+      "start": 58,
+      "end": 61
+    },
+    {
+      "index": 13,
+      "text": "reference",
+      "start": 62,
+      "end": 71
+    },
+    {
+      "index": 14,
+      "text": "number",
+      "start": 72,
+      "end": 78
+    },
+    {
+      "index": 15,
+      "text": "is",
+      "start": 79,
+      "end": 81
+    },
+    {
+      "index": 16,
+      "text": "included",
+      "start": 82,
+      "end": 90
+    },
+    {
+      "index": 17,
+      "text": "before",
+      "start": 91,
+      "end": 97
+    },
+    {
+      "index": 18,
+      "text": "you",
+      "start": 98,
+      "end": 101
+    },
+    {
+      "index": 19,
+      "text": "submit",
+      "start": 102,
+      "end": 108
+    },
+    {
+      "index": 20,
+      "text": "it",
+      "start": 109,
+      "end": 111
+    },
+    {
+      "index": 21,
+      "text": ".",
+      "start": 111,
+      "end": 112
+    }
+  ],
+  "focus_lexeme_ids": [
+    "ensure.make-certain.v",
+    "correct.put-right.v",
+    "error.mistake.n",
+    "check.examine.v",
+    "submit.send-for-consideration.v"
+  ],
+  "practice_modes": [
+    "phrase"
+  ],
+  "media": {
+    "audio": {
+      "status": "pending",
+      "path": null,
+      "sha256": null,
+      "source": null,
+      "creator": null,
+      "license": null,
+      "acquisition_status": "not_started",
+      "review": {
+        "status": "pending"
+      },
+      "voice": "ava-sweet",
+      "voice_settings": {
+        "voice": "en-US-AvaNeural",
+        "rate": "-15%",
+        "pitch": "+8Hz",
+        "volume": "+0%",
+        "postprocessing": false
+      }
+    }
+  },
+  "review": {
+    "status": "pending",
+    "language": "pending",
+    "domain": "not_required",
+    "reviewer": null,
+    "reviewed_at": null
+  },
+  "references": [
+    {
+      "source_id": "british-council-requests",
+      "status": "pending_term_check",
+      "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+    },
+    {
+      "source_id": "foundation02-verify-resolution-oxford-ensure",
+      "status": "pending_term_check",
+      "scope": "Proposed ensure-that outcome clause only; the full original sentence and all assessed neighboring senses await separate expression review."
+    },
+    {
+      "source_id": "foundation02-verify-resolution-collins-ensure",
+      "status": "pending_term_check",
+      "scope": "Proposed ensure-that outcome clause only; the full original sentence and all assessed neighboring senses await separate expression review."
+    }
+  ]
+}

@@ -1,0 +1,743 @@
+{
+  "schema": 1,
+  "status": "static_r02_input_inventory_frozen_no_candidate_execution",
+  "recorded_at": "2026-10-16T21:14:59.523Z",
+  "input_pins_sha256": "54982d9d4421d9cb0629167fa8b9644e7b825094882372aeaa34c2381e8ff750",
+  "files_measured": 864,
+  "original_input_context_union": 803,
+  "preserved_r01_input_pin_count": 800,
+  "persisted_third10_inputs_exact": 686,
+  "historical_context_files": 355,
+  "exact_historical_file_differences": [
+    {
+      "path": "data/professional/lexemes/foundation-module02.json",
+      "historical_raw_sha256": "03953236a30d636a7d6db0f0f921d076910886e1f2f1834730ba1302b5b0ac41",
+      "current_raw_sha256": "bec08364a841f92351d04cd4c891bbd9d7de6dbf00f9949cc58f18e2551962ad"
+    },
+    {
+      "path": "data/professional/sources.json",
+      "historical_raw_sha256": "148f9191f91891a564bb79dbce428c60b3b4b1a07e1374135cc0d6a0619165b9",
+      "current_raw_sha256": "268caddf5f9acb1d806729200b1edf6ffe4d4dec7a737d1f57d176238500ae58"
+    }
+  ],
+  "independent_failure_diagnosis_inventory_sha256": "01936ecbb484020da8d50155d4955d42a4312834ec4ca8bae475c5a85fb9e92f",
+  "failed_r01_receipt_sha256": "9305ef12ea2570f4f0502751b551670e1cf992601c9978251b9150100025ab07",
+  "freeze_source_before_sha256": "a762a1256495cec9a270e289ffa2d487267359e4a92d7b57fefeb819e498cf42",
+  "freeze_source_after_sha256": "a762a1256495cec9a270e289ffa2d487267359e4a92d7b57fefeb819e498cf42",
+  "all_observed_inputs_stable": true,
+  "all_local_sources_stable": true,
+  "exact_donor_groups": [
+    {
+      "id": "submit.send-for-consideration.v",
+      "history": "first10",
+      "history_path": "data/professional/provenance/foundation-module01-language-first10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        70
+      ],
+      "whole_row_json_sha256": [
+        "05662ea5632582d8cc32d216b3d4708fc1030cd9fb26bd226c49da91e8e45391"
+      ],
+      "entry_json_sha256": "038741f5b1ef9768262a06de00e2e984b6224a83e492b52b59f3d502bd86ccaa",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "submit.send-for-consideration.v",
+      "history": "second10",
+      "history_path": "data/professional/provenance/foundation-module01-language-second10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        70
+      ],
+      "whole_row_json_sha256": [
+        "05662ea5632582d8cc32d216b3d4708fc1030cd9fb26bd226c49da91e8e45391"
+      ],
+      "entry_json_sha256": "038741f5b1ef9768262a06de00e2e984b6224a83e492b52b59f3d502bd86ccaa",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "submit.send-for-consideration.v",
+      "history": "third10",
+      "history_path": "data/professional/provenance/foundation-module01-language-third10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        70
+      ],
+      "whole_row_json_sha256": [
+        "05662ea5632582d8cc32d216b3d4708fc1030cd9fb26bd226c49da91e8e45391"
+      ],
+      "entry_json_sha256": "038741f5b1ef9768262a06de00e2e984b6224a83e492b52b59f3d502bd86ccaa",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "submit.send-for-consideration.v",
+      "history": "fourth10",
+      "history_path": "data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        70
+      ],
+      "whole_row_json_sha256": [
+        "05662ea5632582d8cc32d216b3d4708fc1030cd9fb26bd226c49da91e8e45391"
+      ],
+      "entry_json_sha256": "038741f5b1ef9768262a06de00e2e984b6224a83e492b52b59f3d502bd86ccaa",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "submit.send-for-consideration.v",
+      "history": "fifth10",
+      "history_path": "data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        70
+      ],
+      "whole_row_json_sha256": [
+        "05662ea5632582d8cc32d216b3d4708fc1030cd9fb26bd226c49da91e8e45391"
+      ],
+      "entry_json_sha256": "038741f5b1ef9768262a06de00e2e984b6224a83e492b52b59f3d502bd86ccaa",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "approve.authorize.v",
+      "history": "first10",
+      "history_path": "data/professional/provenance/foundation-module01-language-first10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        71
+      ],
+      "whole_row_json_sha256": [
+        "6ae7f0b1dcc27c81a02cc18da31f9829a4e8bdc802c42c144a86906e7e17ca17"
+      ],
+      "entry_json_sha256": "ab2837be0d8b9679afb1fb01e5f4eab5016e3a6da46af9b9118379d515ad0919",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "approve.authorize.v",
+      "history": "second10",
+      "history_path": "data/professional/provenance/foundation-module01-language-second10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        71
+      ],
+      "whole_row_json_sha256": [
+        "6ae7f0b1dcc27c81a02cc18da31f9829a4e8bdc802c42c144a86906e7e17ca17"
+      ],
+      "entry_json_sha256": "ab2837be0d8b9679afb1fb01e5f4eab5016e3a6da46af9b9118379d515ad0919",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "approve.authorize.v",
+      "history": "third10",
+      "history_path": "data/professional/provenance/foundation-module01-language-third10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        71
+      ],
+      "whole_row_json_sha256": [
+        "6ae7f0b1dcc27c81a02cc18da31f9829a4e8bdc802c42c144a86906e7e17ca17"
+      ],
+      "entry_json_sha256": "ab2837be0d8b9679afb1fb01e5f4eab5016e3a6da46af9b9118379d515ad0919",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "approve.authorize.v",
+      "history": "fourth10",
+      "history_path": "data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        71
+      ],
+      "whole_row_json_sha256": [
+        "6ae7f0b1dcc27c81a02cc18da31f9829a4e8bdc802c42c144a86906e7e17ca17"
+      ],
+      "entry_json_sha256": "ab2837be0d8b9679afb1fb01e5f4eab5016e3a6da46af9b9118379d515ad0919",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "approve.authorize.v",
+      "history": "fifth10",
+      "history_path": "data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        71
+      ],
+      "whole_row_json_sha256": [
+        "6ae7f0b1dcc27c81a02cc18da31f9829a4e8bdc802c42c144a86906e7e17ca17"
+      ],
+      "entry_json_sha256": "ab2837be0d8b9679afb1fb01e5f4eab5016e3a6da46af9b9118379d515ad0919",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "reject.decline-acceptance.v",
+      "history": "first10",
+      "history_path": "data/professional/provenance/foundation-module01-language-first10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        72
+      ],
+      "whole_row_json_sha256": [
+        "868c97a1991957483fd6260f3f4562c48e7c5b17b514cb231eea6378dec4f3e4"
+      ],
+      "entry_json_sha256": "e5b950450545df6a6e40bc550486729bf27e5e90850a236d23a834f579918184",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "reject.decline-acceptance.v",
+      "history": "second10",
+      "history_path": "data/professional/provenance/foundation-module01-language-second10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        72
+      ],
+      "whole_row_json_sha256": [
+        "868c97a1991957483fd6260f3f4562c48e7c5b17b514cb231eea6378dec4f3e4"
+      ],
+      "entry_json_sha256": "e5b950450545df6a6e40bc550486729bf27e5e90850a236d23a834f579918184",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "reject.decline-acceptance.v",
+      "history": "third10",
+      "history_path": "data/professional/provenance/foundation-module01-language-third10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        72
+      ],
+      "whole_row_json_sha256": [
+        "868c97a1991957483fd6260f3f4562c48e7c5b17b514cb231eea6378dec4f3e4"
+      ],
+      "entry_json_sha256": "e5b950450545df6a6e40bc550486729bf27e5e90850a236d23a834f579918184",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "reject.decline-acceptance.v",
+      "history": "fourth10",
+      "history_path": "data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        72
+      ],
+      "whole_row_json_sha256": [
+        "868c97a1991957483fd6260f3f4562c48e7c5b17b514cb231eea6378dec4f3e4"
+      ],
+      "entry_json_sha256": "e5b950450545df6a6e40bc550486729bf27e5e90850a236d23a834f579918184",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "reject.decline-acceptance.v",
+      "history": "fifth10",
+      "history_path": "data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        72
+      ],
+      "whole_row_json_sha256": [
+        "868c97a1991957483fd6260f3f4562c48e7c5b17b514cb231eea6378dec4f3e4"
+      ],
+      "entry_json_sha256": "e5b950450545df6a6e40bc550486729bf27e5e90850a236d23a834f579918184",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "sign.write-name.v",
+      "history": "first10",
+      "history_path": "data/professional/provenance/foundation-module01-language-first10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        73
+      ],
+      "whole_row_json_sha256": [
+        "80a3692257863ce44cc747eba40d272b1e8a208141080d134c2c7aa8520c583d"
+      ],
+      "entry_json_sha256": "7b5c5821f734e07d7e5adb4c870e10275785f5217acc8130e29cde1c274360a7",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "sign.write-name.v",
+      "history": "second10",
+      "history_path": "data/professional/provenance/foundation-module01-language-second10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        73
+      ],
+      "whole_row_json_sha256": [
+        "80a3692257863ce44cc747eba40d272b1e8a208141080d134c2c7aa8520c583d"
+      ],
+      "entry_json_sha256": "7b5c5821f734e07d7e5adb4c870e10275785f5217acc8130e29cde1c274360a7",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "sign.write-name.v",
+      "history": "third10",
+      "history_path": "data/professional/provenance/foundation-module01-language-third10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        73
+      ],
+      "whole_row_json_sha256": [
+        "80a3692257863ce44cc747eba40d272b1e8a208141080d134c2c7aa8520c583d"
+      ],
+      "entry_json_sha256": "7b5c5821f734e07d7e5adb4c870e10275785f5217acc8130e29cde1c274360a7",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "sign.write-name.v",
+      "history": "fourth10",
+      "history_path": "data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        73
+      ],
+      "whole_row_json_sha256": [
+        "80a3692257863ce44cc747eba40d272b1e8a208141080d134c2c7aa8520c583d"
+      ],
+      "entry_json_sha256": "7b5c5821f734e07d7e5adb4c870e10275785f5217acc8130e29cde1c274360a7",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "sign.write-name.v",
+      "history": "fifth10",
+      "history_path": "data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json",
+      "count": 2,
+      "indices": [
+        73,
+        90
+      ],
+      "whole_row_json_sha256": [
+        "80a3692257863ce44cc747eba40d272b1e8a208141080d134c2c7aa8520c583d",
+        "80a3692257863ce44cc747eba40d272b1e8a208141080d134c2c7aa8520c583d"
+      ],
+      "entry_json_sha256": "7b5c5821f734e07d7e5adb4c870e10275785f5217acc8130e29cde1c274360a7",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "delay.late-occurrence.n",
+      "history": "first10",
+      "history_path": "data/professional/provenance/foundation-module01-language-first10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        74
+      ],
+      "whole_row_json_sha256": [
+        "9b151a9dff594d0f89f35a79ce141dba2b1e83bed7393e668907a29ad384c72d"
+      ],
+      "entry_json_sha256": "af2c19270729a0b41440613703e70f772bfcfc5777f5d1c22d60c78fa86b497f",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "delay.late-occurrence.n",
+      "history": "second10",
+      "history_path": "data/professional/provenance/foundation-module01-language-second10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        74
+      ],
+      "whole_row_json_sha256": [
+        "9b151a9dff594d0f89f35a79ce141dba2b1e83bed7393e668907a29ad384c72d"
+      ],
+      "entry_json_sha256": "af2c19270729a0b41440613703e70f772bfcfc5777f5d1c22d60c78fa86b497f",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "delay.late-occurrence.n",
+      "history": "third10",
+      "history_path": "data/professional/provenance/foundation-module01-language-third10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        74
+      ],
+      "whole_row_json_sha256": [
+        "9b151a9dff594d0f89f35a79ce141dba2b1e83bed7393e668907a29ad384c72d"
+      ],
+      "entry_json_sha256": "af2c19270729a0b41440613703e70f772bfcfc5777f5d1c22d60c78fa86b497f",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "delay.late-occurrence.n",
+      "history": "fourth10",
+      "history_path": "data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        74
+      ],
+      "whole_row_json_sha256": [
+        "9b151a9dff594d0f89f35a79ce141dba2b1e83bed7393e668907a29ad384c72d"
+      ],
+      "entry_json_sha256": "af2c19270729a0b41440613703e70f772bfcfc5777f5d1c22d60c78fa86b497f",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "delay.late-occurrence.n",
+      "history": "fifth10",
+      "history_path": "data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        74
+      ],
+      "whole_row_json_sha256": [
+        "9b151a9dff594d0f89f35a79ce141dba2b1e83bed7393e668907a29ad384c72d"
+      ],
+      "entry_json_sha256": "af2c19270729a0b41440613703e70f772bfcfc5777f5d1c22d60c78fa86b497f",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "error.mistake.n",
+      "history": "first10",
+      "history_path": "data/professional/provenance/foundation-module01-language-first10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        75
+      ],
+      "whole_row_json_sha256": [
+        "adab82987dff3d4fb387a335584c1485c07fe70bb579a5160f5f338ff5d83c98"
+      ],
+      "entry_json_sha256": "7514df83cb0ac37ce167bbef07ae9e23d040adcee65a7d905ea01223da6ed63a",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "error.mistake.n",
+      "history": "second10",
+      "history_path": "data/professional/provenance/foundation-module01-language-second10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        75
+      ],
+      "whole_row_json_sha256": [
+        "adab82987dff3d4fb387a335584c1485c07fe70bb579a5160f5f338ff5d83c98"
+      ],
+      "entry_json_sha256": "7514df83cb0ac37ce167bbef07ae9e23d040adcee65a7d905ea01223da6ed63a",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "error.mistake.n",
+      "history": "third10",
+      "history_path": "data/professional/provenance/foundation-module01-language-third10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        75
+      ],
+      "whole_row_json_sha256": [
+        "adab82987dff3d4fb387a335584c1485c07fe70bb579a5160f5f338ff5d83c98"
+      ],
+      "entry_json_sha256": "7514df83cb0ac37ce167bbef07ae9e23d040adcee65a7d905ea01223da6ed63a",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "error.mistake.n",
+      "history": "fourth10",
+      "history_path": "data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        75
+      ],
+      "whole_row_json_sha256": [
+        "adab82987dff3d4fb387a335584c1485c07fe70bb579a5160f5f338ff5d83c98"
+      ],
+      "entry_json_sha256": "7514df83cb0ac37ce167bbef07ae9e23d040adcee65a7d905ea01223da6ed63a",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "error.mistake.n",
+      "history": "fifth10",
+      "history_path": "data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        75
+      ],
+      "whole_row_json_sha256": [
+        "adab82987dff3d4fb387a335584c1485c07fe70bb579a5160f5f338ff5d83c98"
+      ],
+      "entry_json_sha256": "7514df83cb0ac37ce167bbef07ae9e23d040adcee65a7d905ea01223da6ed63a",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "fault.equipment-defect.n",
+      "history": "first10",
+      "history_path": "data/professional/provenance/foundation-module01-language-first10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        76
+      ],
+      "whole_row_json_sha256": [
+        "2a0b7381a71ba5de73186101e54e787bb21b75e9aa35a96bc54941bf0468706c"
+      ],
+      "entry_json_sha256": "dc00596d3b1ffa3d679fb48f2f0eda5eb7a75a1a56ed814ada7573bb7bb086e2",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "fault.equipment-defect.n",
+      "history": "second10",
+      "history_path": "data/professional/provenance/foundation-module01-language-second10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        76
+      ],
+      "whole_row_json_sha256": [
+        "2a0b7381a71ba5de73186101e54e787bb21b75e9aa35a96bc54941bf0468706c"
+      ],
+      "entry_json_sha256": "dc00596d3b1ffa3d679fb48f2f0eda5eb7a75a1a56ed814ada7573bb7bb086e2",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "fault.equipment-defect.n",
+      "history": "third10",
+      "history_path": "data/professional/provenance/foundation-module01-language-third10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        76
+      ],
+      "whole_row_json_sha256": [
+        "2a0b7381a71ba5de73186101e54e787bb21b75e9aa35a96bc54941bf0468706c"
+      ],
+      "entry_json_sha256": "dc00596d3b1ffa3d679fb48f2f0eda5eb7a75a1a56ed814ada7573bb7bb086e2",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "fault.equipment-defect.n",
+      "history": "fourth10",
+      "history_path": "data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        76
+      ],
+      "whole_row_json_sha256": [
+        "2a0b7381a71ba5de73186101e54e787bb21b75e9aa35a96bc54941bf0468706c"
+      ],
+      "entry_json_sha256": "dc00596d3b1ffa3d679fb48f2f0eda5eb7a75a1a56ed814ada7573bb7bb086e2",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "fault.equipment-defect.n",
+      "history": "fifth10",
+      "history_path": "data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        76
+      ],
+      "whole_row_json_sha256": [
+        "2a0b7381a71ba5de73186101e54e787bb21b75e9aa35a96bc54941bf0468706c"
+      ],
+      "entry_json_sha256": "dc00596d3b1ffa3d679fb48f2f0eda5eb7a75a1a56ed814ada7573bb7bb086e2",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "damage.physical-harm.n",
+      "history": "first10",
+      "history_path": "data/professional/provenance/foundation-module01-language-first10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        77
+      ],
+      "whole_row_json_sha256": [
+        "287e65e42effbdace6e51f32f505f2631430478d4df8cfd4b32f588abd6edb69"
+      ],
+      "entry_json_sha256": "d131750f070c36735e95b6f54594eeb6e0dbe4675f88ced94ae6e4051df42706",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "damage.physical-harm.n",
+      "history": "second10",
+      "history_path": "data/professional/provenance/foundation-module01-language-second10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        77
+      ],
+      "whole_row_json_sha256": [
+        "287e65e42effbdace6e51f32f505f2631430478d4df8cfd4b32f588abd6edb69"
+      ],
+      "entry_json_sha256": "d131750f070c36735e95b6f54594eeb6e0dbe4675f88ced94ae6e4051df42706",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "damage.physical-harm.n",
+      "history": "third10",
+      "history_path": "data/professional/provenance/foundation-module01-language-third10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        77
+      ],
+      "whole_row_json_sha256": [
+        "287e65e42effbdace6e51f32f505f2631430478d4df8cfd4b32f588abd6edb69"
+      ],
+      "entry_json_sha256": "d131750f070c36735e95b6f54594eeb6e0dbe4675f88ced94ae6e4051df42706",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "damage.physical-harm.n",
+      "history": "fourth10",
+      "history_path": "data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        77
+      ],
+      "whole_row_json_sha256": [
+        "287e65e42effbdace6e51f32f505f2631430478d4df8cfd4b32f588abd6edb69"
+      ],
+      "entry_json_sha256": "d131750f070c36735e95b6f54594eeb6e0dbe4675f88ced94ae6e4051df42706",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "damage.physical-harm.n",
+      "history": "fifth10",
+      "history_path": "data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        77
+      ],
+      "whole_row_json_sha256": [
+        "287e65e42effbdace6e51f32f505f2631430478d4df8cfd4b32f588abd6edb69"
+      ],
+      "entry_json_sha256": "d131750f070c36735e95b6f54594eeb6e0dbe4675f88ced94ae6e4051df42706",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "shortage.insufficient-supply.n",
+      "history": "first10",
+      "history_path": "data/professional/provenance/foundation-module01-language-first10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        78
+      ],
+      "whole_row_json_sha256": [
+        "4ecbe7721c22627159d21d63fcdf35ab4682750ef38379277850240fe38f4d73"
+      ],
+      "entry_json_sha256": "c0cf47c8ef306fd2ab271e3d87a5fa5eed850902d02f40614b01823629d09a05",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "shortage.insufficient-supply.n",
+      "history": "second10",
+      "history_path": "data/professional/provenance/foundation-module01-language-second10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        78
+      ],
+      "whole_row_json_sha256": [
+        "4ecbe7721c22627159d21d63fcdf35ab4682750ef38379277850240fe38f4d73"
+      ],
+      "entry_json_sha256": "c0cf47c8ef306fd2ab271e3d87a5fa5eed850902d02f40614b01823629d09a05",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "shortage.insufficient-supply.n",
+      "history": "third10",
+      "history_path": "data/professional/provenance/foundation-module01-language-third10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        78
+      ],
+      "whole_row_json_sha256": [
+        "4ecbe7721c22627159d21d63fcdf35ab4682750ef38379277850240fe38f4d73"
+      ],
+      "entry_json_sha256": "c0cf47c8ef306fd2ab271e3d87a5fa5eed850902d02f40614b01823629d09a05",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "shortage.insufficient-supply.n",
+      "history": "fourth10",
+      "history_path": "data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        78
+      ],
+      "whole_row_json_sha256": [
+        "4ecbe7721c22627159d21d63fcdf35ab4682750ef38379277850240fe38f4d73"
+      ],
+      "entry_json_sha256": "c0cf47c8ef306fd2ab271e3d87a5fa5eed850902d02f40614b01823629d09a05",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "shortage.insufficient-supply.n",
+      "history": "fifth10",
+      "history_path": "data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        78
+      ],
+      "whole_row_json_sha256": [
+        "4ecbe7721c22627159d21d63fcdf35ab4682750ef38379277850240fe38f4d73"
+      ],
+      "entry_json_sha256": "c0cf47c8ef306fd2ab271e3d87a5fa5eed850902d02f40614b01823629d09a05",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "missing.not-present.adj",
+      "history": "first10",
+      "history_path": "data/professional/provenance/foundation-module01-language-first10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        79
+      ],
+      "whole_row_json_sha256": [
+        "dfa5698db81715b39aab3165070c7c77ea75d050895d7f15726f6986b280d75d"
+      ],
+      "entry_json_sha256": "7c1690f74ebe3d99a10e98ad6e575c95eae7675d6b2727a840d278227158c91c",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "missing.not-present.adj",
+      "history": "second10",
+      "history_path": "data/professional/provenance/foundation-module01-language-second10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        79
+      ],
+      "whole_row_json_sha256": [
+        "dfa5698db81715b39aab3165070c7c77ea75d050895d7f15726f6986b280d75d"
+      ],
+      "entry_json_sha256": "7c1690f74ebe3d99a10e98ad6e575c95eae7675d6b2727a840d278227158c91c",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "missing.not-present.adj",
+      "history": "third10",
+      "history_path": "data/professional/provenance/foundation-module01-language-third10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        79
+      ],
+      "whole_row_json_sha256": [
+        "dfa5698db81715b39aab3165070c7c77ea75d050895d7f15726f6986b280d75d"
+      ],
+      "entry_json_sha256": "7c1690f74ebe3d99a10e98ad6e575c95eae7675d6b2727a840d278227158c91c",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "missing.not-present.adj",
+      "history": "fourth10",
+      "history_path": "data/professional/provenance/foundation-module01-language-fourth10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        79
+      ],
+      "whole_row_json_sha256": [
+        "dfa5698db81715b39aab3165070c7c77ea75d050895d7f15726f6986b280d75d"
+      ],
+      "entry_json_sha256": "7c1690f74ebe3d99a10e98ad6e575c95eae7675d6b2727a840d278227158c91c",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    },
+    {
+      "id": "missing.not-present.adj",
+      "history": "fifth10",
+      "history_path": "data/professional/provenance/foundation-module01-language-fifth10-2026-10-16.json",
+      "count": 1,
+      "indices": [
+        79
+      ],
+      "whole_row_json_sha256": [
+        "dfa5698db81715b39aab3165070c7c77ea75d050895d7f15726f6986b280d75d"
+      ],
+      "entry_json_sha256": "7c1690f74ebe3d99a10e98ad6e575c95eae7675d6b2727a840d278227158c91c",
+      "resource": "res://data/professional/lexemes/foundation-module02.json"
+    }
+  ],
+  "exact_donor_group_count": 50,
+  "exact_whole_donor_row_count": 51,
+  "original_fifth10_array_matches_exact_preimage_concatenation": true,
+  "candidate_implementation_imported_or_executed": false,
+  "projected_afterimages_generated": false,
+  "syntax_or_shared_tests_dispatched": false,
+  "native_dispatched": false,
+  "production_mutated": false,
+  "historical_scripts_replayed": false,
+  "method": "Node built-in raw-byte SHA256 observations and JSON donor comparisons, then only exclusive reviewer-owned metadata writes. No project or candidate code imports."
+}

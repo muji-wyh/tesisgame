@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "status": "research_collection_dispatch_recorded",
+  "recorded_at": "2026-10-16T19:09:15.1657466Z",
+  "source_files": [
+    {
+      "path": "build/professional-english/foundation-module02-language-review/fourth10-research-r01/snapshot.cjs",
+      "raw_sha256": "e976e176cc3bb7df80bb966e7dcf62d1bc7ec66162a0e57a3e5f66749a0b4084"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/fourth10-research-r01/collect-html-metadata.cjs",
+      "raw_sha256": "89a69381b876d3d59a142d5b50f906a901c341d298e332ae94b36973877250b2"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-10-16T21:17:49.8824390Z",
+  "wrapper_sha256": "6f565c2e6dd23d3f67582d66608a9b7d7e5ec1a4b767d8a1063db711997c6c06",
+  "execution": false,
+  "author_inventory_sha256": "aece2564d2a9f0d6261ba57f8613fc862b5541f5fba01e80bb3f8c8651384ff6",
+  "independent_review_sha256": "2511462555e4235129d032aa51bd214aa3d0ae725b92b8cc9cd251de34c7d969",
+  "scope": "Fresh root-owned syntax and single r02 scratch preparation. Original failed r01 preserved."
+}

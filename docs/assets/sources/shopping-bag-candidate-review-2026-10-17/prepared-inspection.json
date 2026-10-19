@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "status": "prepared_candidate_independently_inspected_for_native_dispatch",
+  "reviewer": "root",
+  "frozen_inputs_sha256": "ff7f3b93ca1fa060d2440d3b908c9ef80767dcc2a28c0f5e06161a25c4f90564",
+  "preparation_receipt_sha256": "d255e8adbed792f45f0b5d77773e37dc7287f5fec4584c76afac1c20b077e709",
+  "resources": [
+    {
+      "id": "sha256:f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+      "sha256": "f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+      "path": "professional-media/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png",
+      "kind": "image",
+      "format": "png",
+      "compressed_bytes": 135843,
+      "decoded_bytes": 1695744,
+      "width": 414,
+      "height": 512
+    },
+    {
+      "id": "sha256:fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+      "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+      "path": "professional-media/fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3.png",
+      "kind": "image",
+      "format": "png",
+      "compressed_bytes": 105604,
+      "decoded_bytes": 1859584,
+      "width": 512,
+      "height": 454
+    }
+  ],
+  "production_files": 1444,
+  "input_files": 722,
+  "original_brief": "Show a reusable fabric shopping bag upright with two handles and a few purchased items peeking above the opening. Make the flexible sides and carrying handles clearly distinct from a rigid shopping basket. Reject a backpack, paper-only carrier definition, wheeled trolley, or decorative gift bag that obscures the intended shopping use.",
+  "proposed_brief": "Show a plain open retail shopping bag upright in a three-quarter view, with a tall solid-sided body, two separate loop handles and a visible opening. Preserve the inspected 3dicons dynamic color source. Keep the tall solid body and paired loops visually distinct from the accepted squat slotted shopping basket. Exclude wheels, backpack straps, a closed top, a bow, a gift tag, tissue paper and gift-specific decoration. The illustration does not narrow the definition to a particular material or require visible contents.",
+  "production_acceptance": false,
+  "image_accepted": false,
+  "brief_revision_accepted": false
+}

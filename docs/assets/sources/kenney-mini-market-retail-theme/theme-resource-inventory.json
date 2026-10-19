@@ -1,0 +1,59 @@
+{
+  "notice": "Theme-only resource records. Merge these exact four records into every actual Retail module media manifest once its real lesson resources are available. This is not a ready module manifest.",
+  "resources": [
+    {
+      "id": "sha256:8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8",
+      "sha256": "8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8",
+      "path": "professional-media/8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8.png",
+      "kind": "image",
+      "format": "png",
+      "compressed_bytes": 79563,
+      "decoded_bytes": 4718592,
+      "width": 768,
+      "height": 768
+    },
+    {
+      "id": "sha256:afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c",
+      "sha256": "afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c",
+      "path": "professional-media/afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c.png",
+      "kind": "image",
+      "format": "png",
+      "compressed_bytes": 120608,
+      "decoded_bytes": 4718592,
+      "width": 768,
+      "height": 768
+    },
+    {
+      "id": "sha256:b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae",
+      "sha256": "b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae",
+      "path": "professional-media/b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae.png",
+      "kind": "image",
+      "format": "png",
+      "compressed_bytes": 91063,
+      "decoded_bytes": 1310720,
+      "width": 512,
+      "height": 320
+    },
+    {
+      "id": "sha256:202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76",
+      "sha256": "202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76",
+      "path": "professional-media/202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76.png",
+      "kind": "image",
+      "format": "png",
+      "compressed_bytes": 357001,
+      "decoded_bytes": 5358080,
+      "width": 920,
+      "height": 728
+    }
+  ],
+  "budget": {
+    "notice": "Theme-only candidate; each real module must add all lesson media and validate the combined inventory before readiness.",
+    "resource_count": 4,
+    "compressed_bytes": 648235,
+    "decoded_bytes": 16105984,
+    "compressed_limit": 10485760,
+    "decoded_limit": 33554432,
+    "remaining_compressed_bytes": 9837525,
+    "remaining_decoded_bytes": 17448448
+  }
+}

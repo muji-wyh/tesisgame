@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "status": "accepted_exact_frozen_r03_for_one_root_projected_validation_attempt",
+  "candidate": {
+    "directory": "build/professional-english/shopping-bag-projected-validation-r03",
+    "runner_sha256": "815e2387471801fbaeb148a1c27a668265fe352a6b3875b37b381b948bf03073",
+    "input_sha256": "55c0586a8f09ed0e4378d53e47fa8c1f8972cd728d05452ae5cb5b14e9da34ce",
+    "dependency_supplement_sha256": "28d2b28166257f9129eda7f74236f4ab1f3e82fe1d7a8a5de52e5603618ede03"
+  },
+  "dispatch_approval": true,
+  "maximum_attempts": 1,
+  "project_execution_by_reviewer": false,
+  "verified": {
+    "expected_inputs": 11569,
+    "evidence_files": 93,
+    "additional_dependency_union": 6449,
+    "prepared_artifacts": 42,
+    "overlay_targets": 34,
+    "replacements": 4,
+    "additions_and_prospective_metadata": 30,
+    "hash_mismatches": 0,
+    "registry_after_sha256": "dcfe28d7c7c6048206b740459a65ce9b482ba2768d388b0b29d7ab31174ed1a0",
+    "r01_failed_receipt_preserved": true,
+    "r01_callbacks_executed": 0,
+    "r02_undispatched_preserved": true,
+    "r03_attempt_absent": true
+  },
+  "dependency_review": "Independent static read-site inspection and conservative exact immutable reference closure include validator media/theme references, retained language-review evidence, lineage/binding nested reads, literal diagnostics, media retained_evidence-relative reads, native local files and predecessor hashes, and latest transaction states. The unchanged runner will reject any additional unpinned read.",
+  "limits": [
+    "Authorizes one fresh r03 projected audit and synchronous affected test callbacks only.",
+    "No production writes, guarded commit, persisted suite/native/browser dispatch, new language or human approval are established by this source/input review.",
+    "If candidate fails, preserve its exact source/input/attempt and prepare a fresh revision; do not replay."
+  ],
+  "related_reviews": [
+    {
+      "path": "build/professional-english/shopping-bag-preparation-source-review-r02/candidate-dispatch-review-r02.json",
+      "sha256": "072493c31fc50f1ae54c7c919da1c6a88e92c6dbf70951c8154fd55e1dee3b5e"
+    }
+  ]
+}

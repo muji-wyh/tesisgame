@@ -1,0 +1,242 @@
+{
+  "status": "author_semantic_classification_not_acceptance",
+  "lexical_contexts": [
+    {
+      "id": "notify.inform.v",
+      "resource": "res://data/professional/lexemes/foundation-module02.json",
+      "disposition": "held_current_identity_proposed_retirement_only",
+      "production_changed": false,
+      "new_approval": false
+    },
+    {
+      "id": "estimate.informed-work-approximation.n",
+      "resource": "res://data/professional/lexemes/software-data-module10.json",
+      "disposition": "informed_adjective_separate_not_approved",
+      "production_changed": false,
+      "new_approval": false
+    },
+    {
+      "id": "informed-consent.informed-voluntary-care-agreement.n",
+      "resource": "res://data/professional/lexemes/nursing-module07.json",
+      "disposition": "clinical_consent_and_pending_morph_inform_family_separate",
+      "production_changed": false,
+      "new_approval": false
+    },
+    {
+      "id": "outage-notice.message-informing-users-of-service-unavailability.n",
+      "resource": "res://data/professional/lexemes/it-support-module10.json",
+      "disposition": "giving_information_in_unscored_definition_no_new_focus_or_approval",
+      "production_changed": false,
+      "new_approval": false
+    },
+    {
+      "id": "estimate.make-informed-approximation.v",
+      "resource": "res://data/professional/lexemes/education-module05.json",
+      "disposition": "informed_adjective_separate_not_approved",
+      "production_changed": false,
+      "new_approval": false
+    },
+    {
+      "id": "formative-assessment.assessment-used-to-inform-ongoing-learning.n",
+      "resource": "res://data/professional/lexemes/education-module06.json",
+      "disposition": "influence_meaning_excluded",
+      "production_changed": false,
+      "new_approval": false
+    },
+    {
+      "id": "training-needs-analysis.review-to-identify-what-training-is-needed.n",
+      "resource": "res://data/professional/lexemes/hr-module07.json",
+      "disposition": "influence_meaning_in_image_brief_excluded",
+      "production_changed": false,
+      "new_approval": false
+    },
+    {
+      "id": "defects-liability-period.contract-defined-period-for-notifying-or-addressing-defects.n",
+      "resource": "res://data/professional/lexemes/construction-module10.json",
+      "disposition": "formal_contract_notifying_specialist_context_unchanged",
+      "production_changed": false,
+      "new_approval": false
+    },
+    {
+      "id": "predictive-maintenance.maintenance-informed-by-predictions-of-equipment-condition.n",
+      "resource": "res://data/professional/lexemes/manufacturing-module07.json",
+      "disposition": "influence_meaning_excluded",
+      "production_changed": false,
+      "new_approval": false
+    },
+    {
+      "id": "lessons-learned.insights-from-experience-for-future-work.n",
+      "resource": "res://data/professional/lexemes/manufacturing-module10.json",
+      "disposition": "influence_meaning_excluded",
+      "production_changed": false,
+      "new_approval": false
+    },
+    {
+      "id": "market-research.systematic-collection-and-analysis-of-market-information.n",
+      "resource": "res://data/professional/lexemes/sales-module07.json",
+      "disposition": "influence_meaning_excluded",
+      "production_changed": false,
+      "new_approval": false
+    },
+    {
+      "id": "screening-test.test-used-to-identify-possible-condition-before-symptoms.n",
+      "resource": "res://data/professional/lexemes/clinical-module07.json",
+      "disposition": "informed_clinical_discussion_adjective_separate",
+      "production_changed": false,
+      "new_approval": false
+    },
+    {
+      "id": "informed.having-relevant-information-and-understanding-for-decision.a",
+      "resource": "res://data/professional/lexemes/clinical-module08.json",
+      "disposition": "distinct_informed_adjective_identity_no_transfer",
+      "production_changed": false,
+      "new_approval": false
+    },
+    {
+      "id": "debit-note.document-notifying-debit-adjustment-or-additional-amount.n",
+      "resource": "res://data/professional/lexemes/accounting-module06.json",
+      "disposition": "financial_notifying_context_unchanged_no_specialist_acceptance",
+      "production_changed": false,
+      "new_approval": false
+    },
+    {
+      "id": "notice-of-appeal.document-formally-notifying-intention-to-appeal.n",
+      "resource": "res://data/professional/lexemes/legal-module06.json",
+      "disposition": "formal_legal_notifying_context_unchanged_no_specialist_acceptance",
+      "production_changed": false,
+      "new_approval": false
+    }
+  ],
+  "expression_contexts": [
+    {
+      "id": "expr.foundation.module02.02",
+      "resource": "res://data/professional/expressions/foundation-module02.json",
+      "disposition": "only_proposed_notify_to_inform_text_token_and_focus_replacement",
+      "currently_scores_notify": true,
+      "production_changed": false,
+      "new_approval": false
+    },
+    {
+      "id": "expr.retail.module08.10",
+      "resource": "res://data/professional/expressions/retail-module08.json",
+      "disposition": "informed_adjective_in_meaning_separate",
+      "currently_scores_notify": false,
+      "production_changed": false,
+      "new_approval": false
+    },
+    {
+      "id": "expr.software_data.module08.06",
+      "resource": "res://data/professional/expressions/software-data-module08.json",
+      "disposition": "influence_meaning_excluded",
+      "currently_scores_notify": false,
+      "production_changed": false,
+      "new_approval": false
+    },
+    {
+      "id": "expr.nursing.module07.09",
+      "resource": "res://data/professional/expressions/nursing-module07.json",
+      "disposition": "clinical_informed_consent_distinct_focus_unchanged",
+      "currently_scores_notify": false,
+      "production_changed": false,
+      "new_approval": false
+    },
+    {
+      "id": "expr.hospitality_tourism.module06.06",
+      "resource": "res://data/professional/expressions/hospitality-module06.json",
+      "disposition": "giving_information_result_state_unscored_no_new_focus_or_approval",
+      "currently_scores_notify": false,
+      "production_changed": false,
+      "new_approval": false
+    },
+    {
+      "id": "expr.transport_delivery.module10.06",
+      "resource": "res://data/professional/expressions/transport-module10.json",
+      "disposition": "giving_information_verb_unscored_no_new_focus_or_approval",
+      "currently_scores_notify": false,
+      "production_changed": false,
+      "new_approval": false
+    },
+    {
+      "id": "expr.education_childcare.module06.09",
+      "resource": "res://data/professional/expressions/education-module06.json",
+      "disposition": "influence_meaning_in_explanation_excluded",
+      "currently_scores_notify": false,
+      "production_changed": false,
+      "new_approval": false
+    },
+    {
+      "id": "expr.education_childcare.module06.10",
+      "resource": "res://data/professional/expressions/education-module06.json",
+      "disposition": "influence_meaning_excluded",
+      "currently_scores_notify": false,
+      "production_changed": false,
+      "new_approval": false
+    },
+    {
+      "id": "expr.education_childcare.module08.09",
+      "resource": "res://data/professional/expressions/education-module08.json",
+      "disposition": "giving_information_passive_unscored_safety_context_no_approval",
+      "currently_scores_notify": false,
+      "production_changed": false,
+      "new_approval": false
+    },
+    {
+      "id": "expr.education_childcare.module09.02",
+      "resource": "res://data/professional/expressions/education-module09.json",
+      "disposition": "influence_meaning_excluded",
+      "currently_scores_notify": false,
+      "production_changed": false,
+      "new_approval": false
+    },
+    {
+      "id": "expr.education_childcare.module10.08",
+      "resource": "res://data/professional/expressions/education-module10.json",
+      "disposition": "influence_meaning_excluded",
+      "currently_scores_notify": false,
+      "production_changed": false,
+      "new_approval": false
+    },
+    {
+      "id": "expr.hr_recruitment.module07.06",
+      "resource": "res://data/professional/expressions/hr-module07.json",
+      "disposition": "influence_meaning_excluded",
+      "currently_scores_notify": false,
+      "production_changed": false,
+      "new_approval": false
+    },
+    {
+      "id": "expr.hr_recruitment.module09.07",
+      "resource": "res://data/professional/expressions/hr-module09.json",
+      "disposition": "influence_meaning_in_explanation_excluded",
+      "currently_scores_notify": false,
+      "production_changed": false,
+      "new_approval": false
+    },
+    {
+      "id": "expr.cleaning_facilities.module10.09",
+      "resource": "res://data/professional/expressions/cleaning-module10.json",
+      "disposition": "influence_meaning_excluded",
+      "currently_scores_notify": false,
+      "production_changed": false,
+      "new_approval": false
+    },
+    {
+      "id": "expr.clinical_medicine.module07.07",
+      "resource": "res://data/professional/expressions/clinical-module07.json",
+      "disposition": "informed_adjective_in_clinical_context_separate",
+      "currently_scores_notify": false,
+      "production_changed": false,
+      "new_approval": false
+    },
+    {
+      "id": "expr.clinical_medicine.module08.02",
+      "resource": "res://data/professional/expressions/clinical-module08.json",
+      "disposition": "distinct_informed_adjective_focus_unchanged",
+      "currently_scores_notify": false,
+      "production_changed": false,
+      "new_approval": false
+    }
+  ],
+  "related_headwords_inspected": 76,
+  "limits": "The surface/context regex and named headword families are bounded scans, not exhaustive semantic or derivative coverage. Every unrelated entry and expression stays exact."
+}

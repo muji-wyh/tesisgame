@@ -1,0 +1,79 @@
+{
+  "schema": 1,
+  "author": "/root",
+  "inherited_author": "/root/runtime_recovery",
+  "prior_inventory": {
+    "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r01/source-inventory.json",
+    "bytes": 1405,
+    "raw_sha256": "ae29e404eceb8523bd7d4bb4fe26f3dbd8ff3b66d5d0ce585eebd40b84bf8b90"
+  },
+  "prior_review": {
+    "path": "build/professional-english/foundation02-fifth10-preparation-guard-independent-review-r01/review.json",
+    "bytes": 9819,
+    "raw_sha256": "b38a0ce1bd4338c8abf4509cad1c63ae31798228cf9c6762d73e0380e7e81d38"
+  },
+  "edits": [
+    {
+      "from": "const OWN = 'build/professional-english/foundation02-fifth10-preparation-guard-proposal-r01';",
+      "to": "const OWN = 'build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02';"
+    },
+    {
+      "from": "const AUTHOR = '/root/runtime_recovery';",
+      "to": "const AUTHOR = '/root'; // r02 author; r01 was authored by /root/runtime_recovery."
+    },
+    {
+      "from": "assert(!['/root', '/root/recover_delivery', AUTHOR].includes(identity));",
+      "to": "assert(!['/root', '/root/recover_delivery', '/root/runtime_recovery', AUTHOR].includes(identity));"
+    },
+    {
+      "from": "          const expectedLine = lineOf(genuine.source, spec.marker);\n          const match = String(failure.stack).match(/fifth10-frozen-binding\\.cjs:(\\d+):\\d+/);\n          assert(match, 'Missing frozen binding assertion frame');\n          result.expected_assertion = {line:expectedLine,source_fragment:spec.marker};\n          result.actual_first_binding_frame_line = Number(match[1]);\n          assert.equal(Number(match[1]), expectedLine, 'Rejected by an earlier or unrelated assertion');",
+      "to": "          const expectedSite = assertionSite(genuine.source, spec.marker);\n          const match = String(failure.stack).match(/fifth10-frozen-binding\\.cjs:(\\d+):(\\d+)/);\n          assert(match, 'Missing frozen binding assertion frame');\n          const actualSite = {line:Number(match[1]),column:Number(match[2])};\n          result.expected_assertion = {...expectedSite,source_fragment:spec.marker};\n          result.actual_first_binding_frame = actualSite;\n          assert.equal(actualSite.line, expectedSite.line, 'Rejected by an earlier or unrelated assertion line');\n          assert(actualSite.column >= expectedSite.column_start && actualSite.column < expectedSite.column_end,\n            'Rejected by a neighboring or unrelated assertion on the same line');"
+    },
+    {
+      "from": "function lineOf(source, fragment) {\n  const start = source.indexOf(fragment);\n  assert(start >= 0 && source.indexOf(fragment, start + 1) === -1, 'Unique frozen assertion anchor: ' + fragment);\n  return source.slice(0,start).split('\\n').length;\n}",
+      "to": "function assertionSite(source, fragment) {\n  const start = source.indexOf(fragment);\n  assert(start >= 0 && source.indexOf(fragment, start + 1) === -1, 'Unique frozen assertion anchor: ' + fragment);\n  const assertions = [...fragment.matchAll(/\\bassert(?=\\.|\\()/g)];\n  assert.equal(assertions.length, 1, 'Exactly one assertion in each marker');\n  const first = start + assertions[0].index, end = start + fragment.length;\n  assert(!source.slice(first, end).includes('\\n'), 'One-line assertion span required');\n  const lineStart = source.lastIndexOf('\\n', first - 1) + 1;\n  return {line:source.slice(0,first).split('\\n').length,column_start:first-lineStart+1,column_end:end-lineStart+1};\n}"
+    },
+    {
+      "from": "f=>{f.review.reviewer='/root/memory_guard_distinct_reviewer';}",
+      "to": "f=>{f.review.reviewer=f.binding.roles.independent_reviewer==='/root/memory_guard_distinct_reviewer' ? '/root/memory_guard_alternate_reviewer' : '/root/memory_guard_distinct_reviewer';}"
+    },
+    {
+      "from": "'assert.deepEqual(review.source_inventory, input.source_inventory);',f=>{f.reviewPinMutation=change;}",
+      "to": "(suffix.startsWith('binding_') ? 'assert.deepEqual(review.actual_binding, input.binding);' : 'assert.deepEqual(review.source_inventory, input.source_inventory);'),f=>{f.reviewPinMutation=change;}"
+    },
+    {
+      "from": "'assert.equal(persistedInput.committed_journal.path, receiptRelative(commit.state.path));',\n    f=>f.editPersistedInput(d=>{d.committed_journal.sha256=differentHash(d.committed_journal.sha256);})",
+      "to": "'assert.equal(persistedInput.committed_journal.sha256, commit.state.sha256);',\n    f=>f.editPersistedInput(d=>{d.committed_journal.sha256=differentHash(d.committed_journal.sha256);})"
+    },
+    {
+      "from": "const pin = stage[key];assert(pin, 'Missing ' + key);assert.equal(pin.raw_sha256, expectedHash, key);",
+      "to": "assert.equal(pin.raw_sha256, expectedHash, key);",
+      "count": 2
+    },
+    {
+      "from": "assert.equal(journal.schema, 1);assert.equal(journal.status, 'committed');assert.equal(journal.prepared_sha256, selected.prepared_sha256);",
+      "to": "assert.equal(journal.prepared_sha256, selected.prepared_sha256);",
+      "count": 1
+    },
+    {
+      "from": "const original = read(canonical);assert.deepEqual(bytes, original, 'Durable journal copy differs from actual original');",
+      "to": "assert.deepEqual(bytes, original, 'Durable journal copy differs from actual original');",
+      "count": 1
+    },
+    {
+      "from": "assert.equal(commit.committed, true);assert.equal(Object.hasOwn(commit, 'result'), false, 'Use the genuine top-level bag receipt');",
+      "to": "assert.equal(Object.hasOwn(commit, 'result'), false, 'Use the genuine top-level bag receipt');",
+      "count": 1
+    },
+    {
+      "from": "assert.equal(persisted.postcheck_error, null);shaValue(persisted.source_sha256, 'Bag persisted source');",
+      "to": "assert.equal(persisted.postcheck_error, null);",
+      "count": 1
+    },
+    {
+      "from": "'assert.equal(command.exit_code, 0);assert.equal(command.error, null);assert.equal(command.signal, null);',",
+      "to": "'assert.equal(command.'+key+', '+(key==='exit_code'?'0':'null')+');',"
+    }
+  ],
+  "executed": false
+}

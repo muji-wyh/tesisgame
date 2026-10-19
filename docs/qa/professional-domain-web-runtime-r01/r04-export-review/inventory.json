@@ -1,0 +1,80 @@
+{
+  "schema": 1,
+  "status": "frozen_independent_export_artifact_review",
+  "directory": "docs/qa/professional-domain-web-runtime-r01/r04-export-review",
+  "recorded_at": "2026-10-16T20:51:24.0086416Z",
+  "files": [
+    {
+      "path": "docs/qa/professional-domain-web-runtime-r01/r04-export-review/inspect-r02.ps1",
+      "bytes": 17362,
+      "sha256": "f2ee2a0a78e400358d874813fefd6ca057b1e311432c62a4c64d4197770ad245"
+    },
+    {
+      "path": "docs/qa/professional-domain-web-runtime-r01/r04-export-review/inspect-r03.ps1",
+      "bytes": 17354,
+      "sha256": "313f777fa63952df2a37678f76ef63a0f2476ecc8016462523badafff4d9d345"
+    },
+    {
+      "path": "docs/qa/professional-domain-web-runtime-r01/r04-export-review/inspect-r04.ps1",
+      "bytes": 17595,
+      "sha256": "51315c370dc6f97915591680760e214a9a86be474629504ee05cdb985ee4aed9"
+    },
+    {
+      "path": "docs/qa/professional-domain-web-runtime-r01/r04-export-review/inspect.ps1",
+      "bytes": 17298,
+      "sha256": "8434f2ce7be88c6addbf58b2b34cc3f9b9d052476ad7de30c6eb83b754498023"
+    },
+    {
+      "path": "docs/qa/professional-domain-web-runtime-r01/r04-export-review/inspection-failure-r01.json",
+      "bytes": 1072,
+      "sha256": "0887ed7096ad5471f7945ce49bfed7455f074a469a75131861a64871f954c45e"
+    },
+    {
+      "path": "docs/qa/professional-domain-web-runtime-r01/r04-export-review/inspection-failure-r02.json",
+      "bytes": 592,
+      "sha256": "5032ef097e84f54e4ae14293b88bd6f0fa1a95723f011ad9266272d784d065e1"
+    },
+    {
+      "path": "docs/qa/professional-domain-web-runtime-r01/r04-export-review/inspection-failure-r03.json",
+      "bytes": 1122,
+      "sha256": "723dc6760860b032f8305651083025823c7aea56ce3f805b217c7d5b480b2eb5"
+    },
+    {
+      "path": "docs/qa/professional-domain-web-runtime-r01/r04-export-review/inspection-r04.json",
+      "bytes": 321660,
+      "sha256": "90675e73a961fe7c7d3ac648d101f4b2f11bf2f053c1bd113e0094bfe014fb5c"
+    },
+    {
+      "path": "docs/qa/professional-domain-web-runtime-r01/r04-export-review/inspection-start-r02.json",
+      "bytes": 423,
+      "sha256": "33b3ff1151a84d7e4c3f2adfb5bf8a40dcfcc16ee596a253f1440753642c368f"
+    },
+    {
+      "path": "docs/qa/professional-domain-web-runtime-r01/r04-export-review/inspection-start-r03.json",
+      "bytes": 423,
+      "sha256": "4fd93317248145d421a190056a2d672cbae64cf915c1964fad946a48822fd7ea"
+    },
+    {
+      "path": "docs/qa/professional-domain-web-runtime-r01/r04-export-review/inspection-start-r04.json",
+      "bytes": 423,
+      "sha256": "cf8d7a3dc8b1d0be00306372add3b10a06b6822153336f6bd1bb940111c3c4ed"
+    },
+    {
+      "path": "docs/qa/professional-domain-web-runtime-r01/r04-export-review/inspection-start.json",
+      "bytes": 419,
+      "sha256": "422ca383eac6be1544cd41b51bb6fcced9ac2b2640b13b86847e25210efa0331"
+    },
+    {
+      "path": "docs/qa/professional-domain-web-runtime-r01/r04-export-review/README.md",
+      "bytes": 2516,
+      "sha256": "570974e150d55f1e675c98fe7cdfc1ee4ab7f52ba0d13d497336cade236b700e"
+    },
+    {
+      "path": "docs/qa/professional-domain-web-runtime-r01/r04-export-review/review.json",
+      "bytes": 3096,
+      "sha256": "84fa176e1bfbb090bdab117096d58e54eecbc8271e7473017e63dd01110a9cd0"
+    }
+  ],
+  "no_fixture_stage_replayed": true,
+  "no_production_edits": true
+}

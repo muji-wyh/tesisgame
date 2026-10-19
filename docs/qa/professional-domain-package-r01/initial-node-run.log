@@ -1,0 +1,52 @@
+▶ Professional domain release preserves source, package and application-pin authority boundaries
+  ✔ complete current source compiles and independently audits as 200 unavailable modules (24295.3685ms)
+  ✔ fresh output and snapshot paths cannot overwrite retained evidence (1.0192ms)
+  ✔ nonempty decisions fails independent source reconstruction (13609.3735ms)
+  ✔ orphan governed source fails independent source reconstruction (15642.4028ms)
+  ✔ missing selected source fails independent source reconstruction (10566.6262ms)
+  ✔ duplicate module membership fails independent source reconstruction (15170.0278ms)
+  ✔ promoting a real incomplete module fails unchanged readiness/media gates (12071.7995ms)
+  ✔ changed descriptor pin target cannot pass the independent package audit (9703.6311ms)
+  ✔ same-length theme corruption cannot pass the independent package audit (11885.7992ms)
+  ✔ invented unavailable payload cannot pass the independent package audit (12452.9209ms)
+  ✔ extra generated member cannot pass the independent package audit (1616.5224ms)
+  ✔ empty generated directory cannot pass the independent package audit (1454.069ms)
+  ✔ missing index cannot pass the independent package audit (1594.8558ms)
+  ✔ hash-rebound index availability still must equal current source status (12291.6324ms)
+  ✔ compiler catches concurrent source change after its source load (18688.7542ms)
+  ✔ auditor catches output drift after reconstructing expected artifacts (15745.6101ms)
+  ✔ separate copied synthetic ready fixture passes the real compiler and independent media gates (41316.8365ms)
+  ✔ rebinding changed selected policy rows does not fool independent reconstruction (13222.3567ms)
+  ✔ missing copied source media cannot be legitimized by a new compile (13933.4873ms)
+  ✖ package preparation installs a fixed pin and preserves previous generations and evidence (5405.4ms)
+  ✔ strict emitted codec preserves bounded values and refuses ambiguous JSON (1.5286ms)
+✖ Professional domain release preserves source, package and application-pin authority boundaries (279995.193ms)
+ℹ Retained Professional domain evidence: Q:\.codex\worktrees\current-age-vocabulary\tesisgame\build\professional-english\domain-application-release-r01\node-attempt-c5qvIC
+ℹ tests 22
+ℹ suites 0
+ℹ pass 20
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 280351.6004
+
+✖ failing tests:
+
+test at tests\professional-domain-release.test.cjs:221:11
+✖ package preparation installs a fixed pin and preserves previous generations and evidence (5405.4ms)
+  Error: EEXIST: file already exists, mkdir 'Q:\.codex\worktrees\current-age-vocabulary\tesisgame\build\professional-english\domain-application-release-r01\node-attempt-c5qvIC\simulated-application\scripts'
+      at Object.mkdirSync (node:fs:1348:26)
+      at TestContext.<anonymous> (Q:\.codex\worktrees\current-age-vocabulary\tesisgame\tests\professional-domain-release.test.cjs:223:8)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1103:25)
+      at Test.start (node:internal/test_runner/test:1000:17)
+      at TestContext.test (node:internal/test_runner/test:367:20)
+      at TestContext.<anonymous> (Q:\.codex\worktrees\current-age-vocabulary\tesisgame\tests\professional-domain-release.test.cjs:221:11)
+      at async Test.run (node:internal/test_runner/test:1110:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    errno: -4075,
+    code: 'EEXIST',
+    syscall: 'mkdir',
+    path: 'Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame\\build\\professional-english\\domain-application-release-r01\\node-attempt-c5qvIC\\simulated-application\\scripts'
+  }

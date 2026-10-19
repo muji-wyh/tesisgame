@@ -1,0 +1,1652 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.nursing.module10.01",
+      "text": "The handover, briefing, and debrief identify the action item and its owner.",
+      "meaning": "Clarify responsibility during team communication.",
+      "context": "A fictional care-team coordination exercise.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "handover",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": ",",
+          "start": 12,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "briefing",
+          "start": 14,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 22,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 6,
+          "text": "debrief",
+          "start": 28,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "identify",
+          "start": 36,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "action",
+          "start": 49,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": "item",
+          "start": 56,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 61,
+          "end": 64
+        },
+        {
+          "index": 12,
+          "text": "its",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 13,
+          "text": "owner",
+          "start": 69,
+          "end": 74
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 74,
+          "end": 75
+        }
+      ],
+      "focus_lexeme_ids": [
+        "handover.responsibility-transfer.n",
+        "briefing.short-work-information-session.n",
+        "debrief.after-event-review.n",
+        "action-item.agreed-follow-up-task.n",
+        "owner.task-responsible-person.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module10.02",
+      "text": "The escalation and follow-up address outstanding work, pending decisions, and items on hold.",
+      "meaning": "Describe the current state of agreed work.",
+      "context": "A team discusses a fictional coordination list.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "escalation",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "and",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "follow-up",
+          "start": 19,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "address",
+          "start": 29,
+          "end": 36
+        },
+        {
+          "index": 5,
+          "text": "outstanding",
+          "start": 37,
+          "end": 48
+        },
+        {
+          "index": 6,
+          "text": "work",
+          "start": 49,
+          "end": 53
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 53,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": "pending",
+          "start": 55,
+          "end": 62
+        },
+        {
+          "index": 9,
+          "text": "decisions",
+          "start": 63,
+          "end": 72
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 72,
+          "end": 73
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 74,
+          "end": 77
+        },
+        {
+          "index": 12,
+          "text": "items",
+          "start": 78,
+          "end": 83
+        },
+        {
+          "index": 13,
+          "text": "on",
+          "start": 84,
+          "end": 86
+        },
+        {
+          "index": 14,
+          "text": "hold",
+          "start": 87,
+          "end": 91
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 91,
+          "end": 92
+        }
+      ],
+      "focus_lexeme_ids": [
+        "escalation.higher-support-referral.n",
+        "follow-up.later-progress-action.n",
+        "outstanding.not-yet-completed.a",
+        "pending.awaiting-decision-or-action.a",
+        "on-hold.temporarily-paused.a"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module10.03",
+      "text": "The admission, discharge, transfer, and referral involve different care transitions.",
+      "meaning": "Distinguish service events.",
+      "context": "A learner reviews a fictional care timeline.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "admission",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": ",",
+          "start": 13,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "discharge",
+          "start": 15,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 24,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": "transfer",
+          "start": 26,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 34,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "referral",
+          "start": 40,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "involve",
+          "start": 49,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "different",
+          "start": 57,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": "care",
+          "start": 67,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "transitions",
+          "start": 72,
+          "end": 83
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 83,
+          "end": 84
+        }
+      ],
+      "focus_lexeme_ids": [
+        "admission.entry-into-care-service.n",
+        "discharge.conclusion-of-care-episode.n",
+        "transfer.move-between-care-settings.n",
+        "referral.request-for-other-service-assessment.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module10.04",
+      "text": "The patient asked about triage, the ward round, and how the multidisciplinary team would include them in the case conference.",
+      "meaning": "Explain the purpose of team activities.",
+      "context": "A patient asks about participation in care discussions.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "patient",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "asked",
+          "start": 12,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "about",
+          "start": 18,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "triage",
+          "start": 24,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 30,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "ward",
+          "start": 36,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": "round",
+          "start": 41,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 46,
+          "end": 47
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 48,
+          "end": 51
+        },
+        {
+          "index": 11,
+          "text": "how",
+          "start": 52,
+          "end": 55
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 13,
+          "text": "multidisciplinary",
+          "start": 60,
+          "end": 77
+        },
+        {
+          "index": 14,
+          "text": "team",
+          "start": 78,
+          "end": 82
+        },
+        {
+          "index": 15,
+          "text": "would",
+          "start": 83,
+          "end": 88
+        },
+        {
+          "index": 16,
+          "text": "include",
+          "start": 89,
+          "end": 96
+        },
+        {
+          "index": 17,
+          "text": "them",
+          "start": 97,
+          "end": 101
+        },
+        {
+          "index": 18,
+          "text": "in",
+          "start": 102,
+          "end": 104
+        },
+        {
+          "index": 19,
+          "text": "the",
+          "start": 105,
+          "end": 108
+        },
+        {
+          "index": 20,
+          "text": "case",
+          "start": 109,
+          "end": 113
+        },
+        {
+          "index": 21,
+          "text": "conference",
+          "start": 114,
+          "end": 124
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 124,
+          "end": 125
+        }
+      ],
+      "focus_lexeme_ids": [
+        "triage.care-priority-assessment.n",
+        "ward-round.team-patient-review-visit.n",
+        "multidisciplinary-team.several-profession-care-team.n",
+        "case-conference.coordinated-care-case-meeting.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module10.05",
+      "text": "The charge nurse, community nurse, specialist nurse, student nurse, and nursing associate explained their roles.",
+      "meaning": "Clarify the responsibilities in a particular service.",
+      "context": "A fictional introduction using locally defined roles.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "charge",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "nurse",
+          "start": 11,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 16,
+          "end": 17
+        },
+        {
+          "index": 4,
+          "text": "community",
+          "start": 18,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "nurse",
+          "start": 28,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 33,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "specialist",
+          "start": 35,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "nurse",
+          "start": 46,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 51,
+          "end": 52
+        },
+        {
+          "index": 10,
+          "text": "student",
+          "start": 53,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": "nurse",
+          "start": 61,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 66,
+          "end": 67
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 68,
+          "end": 71
+        },
+        {
+          "index": 14,
+          "text": "nursing",
+          "start": 72,
+          "end": 79
+        },
+        {
+          "index": 15,
+          "text": "associate",
+          "start": 80,
+          "end": 89
+        },
+        {
+          "index": 16,
+          "text": "explained",
+          "start": 90,
+          "end": 99
+        },
+        {
+          "index": 17,
+          "text": "their",
+          "start": 100,
+          "end": 105
+        },
+        {
+          "index": 18,
+          "text": "roles",
+          "start": 106,
+          "end": 111
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 111,
+          "end": 112
+        }
+      ],
+      "focus_lexeme_ids": [
+        "charge-nurse.shift-or-area-nursing-lead.n",
+        "community-nurse.community-based-nursing-professional.n",
+        "specialist-nurse.specialized-nursing-professional.n",
+        "student-nurse.nursing-program-learner.n",
+        "nursing-associate.regulated-nursing-support-role.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module10.06",
+      "text": "The healthcare provider explained primary care, secondary care, outpatient, inpatient, and day case arrangements.",
+      "meaning": "Describe local service terminology.",
+      "context": "A patient asks about unfamiliar service labels.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "healthcare",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "provider",
+          "start": 15,
+          "end": 23
+        },
+        {
+          "index": 3,
+          "text": "explained",
+          "start": 24,
+          "end": 33
+        },
+        {
+          "index": 4,
+          "text": "primary",
+          "start": 34,
+          "end": 41
+        },
+        {
+          "index": 5,
+          "text": "care",
+          "start": 42,
+          "end": 46
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 46,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "secondary",
+          "start": 48,
+          "end": 57
+        },
+        {
+          "index": 8,
+          "text": "care",
+          "start": 58,
+          "end": 62
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 62,
+          "end": 63
+        },
+        {
+          "index": 10,
+          "text": "outpatient",
+          "start": 64,
+          "end": 74
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 74,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": "inpatient",
+          "start": 76,
+          "end": 85
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 85,
+          "end": 86
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 87,
+          "end": 90
+        },
+        {
+          "index": 15,
+          "text": "day",
+          "start": 91,
+          "end": 94
+        },
+        {
+          "index": 16,
+          "text": "case",
+          "start": 95,
+          "end": 99
+        },
+        {
+          "index": 17,
+          "text": "arrangements",
+          "start": 100,
+          "end": 112
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 112,
+          "end": 113
+        }
+      ],
+      "focus_lexeme_ids": [
+        "healthcare-provider.care-providing-person-or-organization.n",
+        "primary-care.first-contact-general-healthcare.n",
+        "secondary-care.specialist-care-service-level.n",
+        "outpatient.person-attending-without-admission.n",
+        "inpatient.person-admitted-to-hospital-care.n",
+        "day-case.planned-same-day-admission.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module10.07",
+      "text": "The team discussed the home visit, rehabilitation, respite care, and long-term care options with the person.",
+      "meaning": "Describe a shared discussion about support.",
+      "context": "A fictional care-planning conversation without selecting treatment.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "team",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "discussed",
+          "start": 9,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "home",
+          "start": 23,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "visit",
+          "start": 28,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 33,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "rehabilitation",
+          "start": 35,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 49,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "respite",
+          "start": 51,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "care",
+          "start": 59,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 63,
+          "end": 64
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 13,
+          "text": "long-term",
+          "start": 69,
+          "end": 78
+        },
+        {
+          "index": 14,
+          "text": "care",
+          "start": 79,
+          "end": 83
+        },
+        {
+          "index": 15,
+          "text": "options",
+          "start": 84,
+          "end": 91
+        },
+        {
+          "index": 16,
+          "text": "with",
+          "start": 92,
+          "end": 96
+        },
+        {
+          "index": 17,
+          "text": "the",
+          "start": 97,
+          "end": 100
+        },
+        {
+          "index": 18,
+          "text": "person",
+          "start": 101,
+          "end": 107
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 107,
+          "end": 108
+        }
+      ],
+      "focus_lexeme_ids": [
+        "home-visit.care-visit-to-home.n",
+        "rehabilitation.function-and-participation-support.n",
+        "respite-care.temporary-caregiver-relief-support.n",
+        "long-term-care.ongoing-support-for-persistent-needs.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module10.08",
+      "text": "The clinician explained the difference between palliative care and end-of-life care and asked about the person's preferences.",
+      "meaning": "Clarify terms sensitively.",
+      "context": "A fictional conversation about care priorities.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "clinician",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "explained",
+          "start": 14,
+          "end": 23
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 4,
+          "text": "difference",
+          "start": 28,
+          "end": 38
+        },
+        {
+          "index": 5,
+          "text": "between",
+          "start": 39,
+          "end": 46
+        },
+        {
+          "index": 6,
+          "text": "palliative",
+          "start": 47,
+          "end": 57
+        },
+        {
+          "index": 7,
+          "text": "care",
+          "start": 58,
+          "end": 62
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 9,
+          "text": "end-of-life",
+          "start": 67,
+          "end": 78
+        },
+        {
+          "index": 10,
+          "text": "care",
+          "start": 79,
+          "end": 83
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 84,
+          "end": 87
+        },
+        {
+          "index": 12,
+          "text": "asked",
+          "start": 88,
+          "end": 93
+        },
+        {
+          "index": 13,
+          "text": "about",
+          "start": 94,
+          "end": 99
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 100,
+          "end": 103
+        },
+        {
+          "index": 15,
+          "text": "person's",
+          "start": 104,
+          "end": 112
+        },
+        {
+          "index": 16,
+          "text": "preferences",
+          "start": 113,
+          "end": 124
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 124,
+          "end": 125
+        }
+      ],
+      "focus_lexeme_ids": [
+        "palliative-care.serious-illness-quality-of-life-care.n",
+        "end-of-life-care.care-near-end-of-life.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module10.09",
+      "text": "Discharge planning records the discharge destination, transport arrangement, and follow-up appointment to support continuity of care.",
+      "meaning": "Describe coordinated planning information.",
+      "context": "A team reviews a fictional departure plan.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Discharge",
+          "start": 0,
+          "end": 9
+        },
+        {
+          "index": 1,
+          "text": "planning",
+          "start": 10,
+          "end": 18
+        },
+        {
+          "index": 2,
+          "text": "records",
+          "start": 19,
+          "end": 26
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": "discharge",
+          "start": 31,
+          "end": 40
+        },
+        {
+          "index": 5,
+          "text": "destination",
+          "start": 41,
+          "end": 52
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 52,
+          "end": 53
+        },
+        {
+          "index": 7,
+          "text": "transport",
+          "start": 54,
+          "end": 63
+        },
+        {
+          "index": 8,
+          "text": "arrangement",
+          "start": 64,
+          "end": 75
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 75,
+          "end": 76
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 77,
+          "end": 80
+        },
+        {
+          "index": 11,
+          "text": "follow-up",
+          "start": 81,
+          "end": 90
+        },
+        {
+          "index": 12,
+          "text": "appointment",
+          "start": 91,
+          "end": 102
+        },
+        {
+          "index": 13,
+          "text": "to",
+          "start": 103,
+          "end": 105
+        },
+        {
+          "index": 14,
+          "text": "support",
+          "start": 106,
+          "end": 113
+        },
+        {
+          "index": 15,
+          "text": "continuity",
+          "start": 114,
+          "end": 124
+        },
+        {
+          "index": 16,
+          "text": "of",
+          "start": 125,
+          "end": 127
+        },
+        {
+          "index": 17,
+          "text": "care",
+          "start": 128,
+          "end": 132
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 132,
+          "end": 133
+        }
+      ],
+      "focus_lexeme_ids": [
+        "discharge-planning.preparation-for-care-episode-end.n",
+        "discharge-destination.place-after-care-discharge.n",
+        "transport-arrangement.planned-travel-support.n",
+        "follow-up-appointment.later-care-review-meeting.n",
+        "continuity-of-care.connected-care-over-time.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.nursing.module10.10",
+      "text": "The team reviewed bed availability, staffing level, workload, caseload, skill mix, supervision, and accountability.",
+      "meaning": "Discuss the resources and responsibilities of a service.",
+      "context": "A fictional team-planning meeting.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "team",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "reviewed",
+          "start": 9,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "bed",
+          "start": 18,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "availability",
+          "start": 22,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 34,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "staffing",
+          "start": 36,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "level",
+          "start": 45,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 50,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "workload",
+          "start": 52,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 60,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": "caseload",
+          "start": 62,
+          "end": 70
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 70,
+          "end": 71
+        },
+        {
+          "index": 13,
+          "text": "skill",
+          "start": 72,
+          "end": 77
+        },
+        {
+          "index": 14,
+          "text": "mix",
+          "start": 78,
+          "end": 81
+        },
+        {
+          "index": 15,
+          "text": ",",
+          "start": 81,
+          "end": 82
+        },
+        {
+          "index": 16,
+          "text": "supervision",
+          "start": 83,
+          "end": 94
+        },
+        {
+          "index": 17,
+          "text": ",",
+          "start": 94,
+          "end": 95
+        },
+        {
+          "index": 18,
+          "text": "and",
+          "start": 96,
+          "end": 99
+        },
+        {
+          "index": 19,
+          "text": "accountability",
+          "start": 100,
+          "end": 114
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 114,
+          "end": 115
+        }
+      ],
+      "focus_lexeme_ids": [
+        "bed-availability.usable-care-bed-status.n",
+        "staffing-level.available-staff-amount-and-composition.n",
+        "workload.amount-of-assigned-work.n",
+        "caseload.assigned-cases-or-patients.n",
+        "skill-mix.combination-of-staff-capabilities.n",
+        "supervision.oversight-and-professional-support.n",
+        "accountability.answerability-for-professional-actions.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "nmc-code",
+          "status": "pending_term_check",
+          "scope": "Authoritative context consulted; this original draft still requires term-level language, clinical, regional, and morphology review."
+        }
+      ]
+    }
+  ]
+}

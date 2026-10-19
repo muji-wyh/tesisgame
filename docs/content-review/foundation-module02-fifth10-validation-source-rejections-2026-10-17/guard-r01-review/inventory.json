@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "status": "frozen_guard_source_review_changes_requested",
+  "reviewer": "/root/recover_delivery",
+  "reviewed_guard_author": "/root/runtime_recovery",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 3024,
+      "raw_sha256": "01b605acea223b6469628bfedfd5d2fc6e0e37cfcaf7c580ae53b00ede0fbc12"
+    },
+    {
+      "path": "inputs.json",
+      "bytes": 8244,
+      "raw_sha256": "2be5f6ab73c305d977398f1e6236c374d03b90c94b598e5b50ba9943df022597"
+    },
+    {
+      "path": "inspection.json",
+      "bytes": 3336,
+      "raw_sha256": "58d44b0e9658a70af095c3e71138d59c767c35303ea38b9591c481a2c8edfc6e"
+    },
+    {
+      "path": "original-recheck.json",
+      "bytes": 8588,
+      "raw_sha256": "dfc8589136e117a089877987e96a590e6d4bfdee72e88f3f372f2535afda7b14"
+    },
+    {
+      "path": "review.json",
+      "bytes": 9819,
+      "raw_sha256": "b38a0ce1bd4338c8abf4509cad1c63ae31798228cf9c6762d73e0380e7e81d38"
+    }
+  ],
+  "guard_source_accepted_for_execution": false,
+  "actual_binding_accepted": false,
+  "preparation_execution_accepted": false,
+  "source_or_vm_executed": false,
+  "production_mutated": false,
+  "inventory_self_excluded": true
+}

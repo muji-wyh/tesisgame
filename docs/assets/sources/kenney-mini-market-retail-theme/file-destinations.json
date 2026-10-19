@@ -1,0 +1,202 @@
+{
+  "status": "integrated_media_sources_and_records_theme_pending",
+  "files": [
+    {
+      "source": "delivery/professional-media/8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8.png",
+      "destination": "professional-media/8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8.png",
+      "sha256": "8979f22e76fad1a5076d0e53d4742e6438556687904b88bda3263fca5e608be8",
+      "bytes": 79563,
+      "role": "environment",
+      "installed": true
+    },
+    {
+      "source": "delivery/professional-media/afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c.png",
+      "destination": "professional-media/afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c.png",
+      "sha256": "afeb6d06873937052415be8ddc4a7c33f4d0a4be03f73835fba3ac04b763b11c",
+      "bytes": 120608,
+      "role": "props",
+      "installed": true
+    },
+    {
+      "source": "delivery/professional-media/b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae.png",
+      "destination": "professional-media/b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae.png",
+      "sha256": "b643ac85d0eea1891ba79700a24dfb695d5d4251eb04df27659f871664c33aae",
+      "bytes": 91063,
+      "role": "home",
+      "installed": true
+    },
+    {
+      "source": "delivery/professional-media/202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76.png",
+      "destination": "professional-media/202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76.png",
+      "sha256": "202ce09cf60fb08ab3dbb813021ed401ac747dc8392ae30447571782fa8fae76",
+      "bytes": 357001,
+      "role": "ambient_motion_sheet",
+      "installed": true
+    },
+    {
+      "source": "sources/mini-market/License.txt",
+      "destination": "docs/assets/sources/kenney-mini-market-retail-theme/License.txt",
+      "sha256": "5ee4df809330c05896f223c97f250cc1bdc13b46a370eb464533c85c94146070",
+      "bytes": 767,
+      "role": "original_license",
+      "installed": true
+    },
+    {
+      "source": "sources/mini-market/Models/GLB format/floor.glb",
+      "destination": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/floor.glb",
+      "sha256": "b18da447e10ae1afb327c90bc316590c780c68b04097a038f3fbb26fd28ca0f8",
+      "bytes": 3928,
+      "role": "original_source",
+      "installed": true
+    },
+    {
+      "source": "sources/mini-market/Models/GLB format/wall.glb",
+      "destination": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/wall.glb",
+      "sha256": "a926d264ec7d6a4344ee36e732f2f179469bfb727b89e5ada9d61226ff5eff2c",
+      "bytes": 4352,
+      "role": "original_source",
+      "installed": true
+    },
+    {
+      "source": "sources/mini-market/Models/GLB format/wall-window.glb",
+      "destination": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/wall-window.glb",
+      "sha256": "58b59e2c18459b2190298021506882bc5f521289c694519c1b2cd6439e409cb0",
+      "bytes": 15628,
+      "role": "original_source",
+      "installed": true
+    },
+    {
+      "source": "sources/mini-market/Models/GLB format/freezers-standing.glb",
+      "destination": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/freezers-standing.glb",
+      "sha256": "0fe103e694d7b9a733d2c1a8dde3fcb15fd355d63aba376aa8d7aa8e752ed9a1",
+      "bytes": 15340,
+      "role": "original_source",
+      "installed": true
+    },
+    {
+      "source": "sources/mini-market/Models/GLB format/shelf-boxes.glb",
+      "destination": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/shelf-boxes.glb",
+      "sha256": "3f340fe9207a4b85739d8d11104cf5b4cad3a130afcbfc1fadb47c17d6a9e210",
+      "bytes": 56780,
+      "role": "original_source",
+      "installed": true
+    },
+    {
+      "source": "sources/mini-market/Models/GLB format/shelf-bags.glb",
+      "destination": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/shelf-bags.glb",
+      "sha256": "17725a5f680aff17dbc6ac3398ef0339d78b5b76bbfaa29292a5084479c4bd69",
+      "bytes": 78444,
+      "role": "original_source",
+      "installed": true
+    },
+    {
+      "source": "sources/mini-market/Models/GLB format/display-fruit.glb",
+      "destination": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/display-fruit.glb",
+      "sha256": "4cc38dcbd0f703d5bc829ff4a627648872dd3f6578f3e7e01fdcee066367873b",
+      "bytes": 62976,
+      "role": "original_source",
+      "installed": true
+    },
+    {
+      "source": "sources/mini-market/Models/GLB format/display-bread.glb",
+      "destination": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/display-bread.glb",
+      "sha256": "33a57fee0e331e5e40df5f0dc7af302e93266fd978dda810ab9f0ea4a2c205d1",
+      "bytes": 36640,
+      "role": "original_source",
+      "installed": true
+    },
+    {
+      "source": "sources/mini-market/Models/GLB format/cash-register.glb",
+      "destination": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/cash-register.glb",
+      "sha256": "155f2eb666dea3a931d133a4953379898c8adb4b827ab60b86cae07235b9b598",
+      "bytes": 20332,
+      "role": "original_source",
+      "installed": true
+    },
+    {
+      "source": "sources/mini-market/Models/GLB format/shopping-cart.glb",
+      "destination": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/shopping-cart.glb",
+      "sha256": "8933fdece5c43b619ea6902fa03a5fea9f490486048ae7543cc8b03ee98c98dd",
+      "bytes": 34832,
+      "role": "original_source",
+      "installed": true
+    },
+    {
+      "source": "sources/mini-market/Models/GLB format/shopping-basket.glb",
+      "destination": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/shopping-basket.glb",
+      "sha256": "a7704926cb56c5a9ab74488230fc7c4d7b914387c59e9c1b6f62376965c0ea7d",
+      "bytes": 25864,
+      "role": "original_source",
+      "installed": true
+    },
+    {
+      "source": "sources/mini-market/Models/GLB format/character-employee.glb",
+      "destination": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/character-employee.glb",
+      "sha256": "8774b93a5ff11af146176505035cc351d37a8a69ad0b1fde612bba9c8ffa84cc",
+      "bytes": 215836,
+      "role": "original_source",
+      "installed": true
+    },
+    {
+      "source": "sources/mini-market/Models/GLB format/wall-door-rotate.glb",
+      "destination": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/wall-door-rotate.glb",
+      "sha256": "de539cafdc80c9944258105cbf5d57303a3a020e588b4a611fa4f4ce90cf5b29",
+      "bytes": 38492,
+      "role": "original_source",
+      "installed": true
+    },
+    {
+      "source": "sources/mini-market/Models/GLB format/fence-door-rotate.glb",
+      "destination": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/fence-door-rotate.glb",
+      "sha256": "ae8b3335ad034a104d314c95ecbfd0b3521ccfe76812a5b63ad41018f80cee87",
+      "bytes": 36148,
+      "role": "original_source",
+      "installed": true
+    },
+    {
+      "source": "sources/mini-market/Models/GLB format/Textures/colormap.png",
+      "destination": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/Textures/colormap.png",
+      "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e",
+      "bytes": 8706,
+      "role": "original_source",
+      "installed": true
+    },
+    {
+      "source": "source-inventory.json",
+      "destination": "docs/assets/sources/kenney-mini-market-retail-theme/scratch-source-inventory.json",
+      "sha256": "77ed85404663ba0ba0ff7330d716adb6465d9a2e068e3515f8c386cae9803c70",
+      "role": "immutable_original_acquisition_provenance",
+      "installed": true
+    },
+    {
+      "source": "integration-proposal/file-destinations.json",
+      "destination": "docs/assets/sources/kenney-mini-market-retail-theme/file-destinations.json",
+      "role": "exact_copy_mapping",
+      "installed": true
+    },
+    {
+      "source": "integration-proposal/production-provenance.json",
+      "destination": "docs/assets/sources/kenney-mini-market-retail-theme/source-inventory.json",
+      "role": "production_destination_map_with_scoped_review",
+      "installed": true
+    },
+    {
+      "source": "integration-proposal/SOURCE.md",
+      "destination": "docs/assets/sources/kenney-mini-market-retail-theme/SOURCE.md",
+      "role": "human_readable_source_and_review_record",
+      "installed": true
+    },
+    {
+      "source": "integration-proposal/PRODUCTION-NOTE.md",
+      "destination": "docs/assets/professional-retail-theme.md",
+      "role": "integration_and_readiness_record",
+      "installed": true
+    },
+    {
+      "source": "integration-proposal/theme-resource-inventory.json",
+      "destination": "docs/assets/sources/kenney-mini-market-retail-theme/theme-resource-inventory.json",
+      "role": "theme_only_inventory_not_a_module_manifest",
+      "installed": true
+    }
+  ]
+}

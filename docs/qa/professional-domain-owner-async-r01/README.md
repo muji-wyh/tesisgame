@@ -1,0 +1,19 @@
+# Asynchronous compiled-module owner: isolated native result
+
+On 2026-10-17, the new scratch owner candidate passed **125 native checks with zero failures** in 3,584 ms. All 23 frozen execution inputs stayed unchanged. This is a runtime ownership milestone; no production policy or curriculum approval was installed.
+
+The candidate reads a fixed synthetic descriptor, then reads and hash-checks its index/theme/module bytes in chunks of at most 16 KiB. It processes multiple steps within a 4 ms elapsed-time budget and at most 32 steps per turn. Native decoding, validation, resolution and copying remain indivisible; the budget does not establish a maximum slice duration. The owner registers opaque tokens only for a current successful request, returns defensive gameplay copies, retains one verified module cache, and clears pending authority on cancellation or retirement.
+
+The isolated project uses the retained r03 synthetic ready fixture, the existing r01 index/payload validators, and unchanged copies of eight current production scripts, including the real catalog/resolver. It preserves null domain exceptions, exact 50/10 membership, theme/media-manifest checks and existing mode gates. No media files were fetched or decoded.
+
+The native run reached all 19 planned cancellation boundaries, including between actual payload read/hash chunks. Cancelled work left no token, new module-cache insertion, publication, active job or open file. Other checks covered supported-API mutation, forged/foreign/stale tokens, warm zero-owner-I/O reuse, rapid ready/draft/ready replacement, completion reentrancy, retirement/reconfiguration, draft refusal, and mode/revision gates.
+
+The cold fixture read 396,374 bytes across four files: 707 descriptor bytes, 20,888 index bytes, 91,201 theme bytes and a 283,578-byte payload. It used 42 steps over eight process turns. Warm reuse added three steps over two turns with zero additional owner reads/bytes. The catalog still reads its media manifest. These counters and the total test duration do not establish cold/warm latency or Web responsiveness targets.
+
+Exact sources remain under `build/professional-english/runtime-continuation-2026-10-17-r01/`. The executed full owner is `attempts/attempt-002/project/candidate_owner.gd`, SHA-256 `5ca565b95bad3702c4592acb0b6c34a3c786abd1bba20b66bd1951e5f0a93a50`; its test is `attempts/attempt-002/project/candidate_tests.gd`, SHA-256 `dcd2335b6ce61240291f1faedbd166320e8b42c61e9d58c2d1f4947e694a2ea8`. Preparation reuses the validator tail from `domain-policy-runtime-fixture-r01/fixture_owner.gd` and records that exact tail's hash. `owner-head.gd`, `prepare.cjs` and `run-native.cjs` are candidate/harness sources, not production integrations.
+
+The [validation receipt](validation-receipt.json), [complete assertions](native-report.json), [native log](native.log), and [execution input inventory](execution-input-inventory.json) are byte-identical copies from attempt-002. The receipt SHA-256 is `de933b0123ac674a1c30a6e62fa08df6f2b83da26fa6b56fadeb18ff411c3d1f`. Godot was 4.7 stable. Do not replay the completed attempt.
+
+Attempt-001 remains unexecuted and immutable. Root review identified that one chunk/phase per frame imposed an avoidable cold-latency floor; attempt-002 uses budgeted multiple-step processing. No failed execution was discarded or described as passing.
+
+Remaining gates are the current-source compiler/auditor and app-owned descriptor, exact PCK inventory verification, actual round-loader/media/ProfessionalPlay integration, corrupted/missing-package and invalid-replacement execution for this async owner, decoder parity, real single-thread Web behavior, memory measurement and latency/slice benchmarks. The fixed fixture descriptor explicitly grants no production authority. Existing real modules and all separate review gates are unchanged.

@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 9,
+  "status": "applied",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "55882ba316b7a9619a2ddfac1f6bb4d3c9c2ed4089cef9985ba4fa7f0a64ddd4",
+  "recorded_at": "2026-10-16T22:48:02.053Z",
+  "index": 3,
+  "path": "tests/professional-retail-media.test.cjs"
+}

@@ -1,0 +1,18 @@
+{
+  "label": "jelly_match_flow-runtime",
+  "command": [
+    "godot",
+    "--headless",
+    "--path",
+    "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+    "--script",
+    "res://tests/godot/jelly_match_flow_tests.gd"
+  ],
+  "started_at": "2026-10-16T19:51:05.091Z",
+  "finished_at": "2026-10-16T19:52:08.497Z",
+  "exit_code": 0,
+  "signal": null,
+  "error": null,
+  "log_sha256": "124edf2d77365b073a1839b05a8a5e5a6008a90e6edbbcac16636e486e20384e",
+  "ok": true
+}

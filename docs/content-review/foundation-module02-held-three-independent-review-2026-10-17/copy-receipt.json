@@ -1,0 +1,183 @@
+{
+  "schema": 1,
+  "ok": true,
+  "time": "2026-10-16T21:07:48.230Z",
+  "files": [
+    {
+      "source": "build/professional-english/foundation02-held-six-research-r01/inventory.json",
+      "destination": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/research/inventory.json",
+      "bytes": 2487,
+      "sha256": "68813f88a92eefba3ac1f03921ce2080c65cec6f989d8988f14e4a6958923d22"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-six-research-r01/HANDOFF.md",
+      "destination": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/research/HANDOFF.md",
+      "bytes": 4676,
+      "sha256": "4ad789ff3ee4f69f115b6e52a307da9c7089609032d2c93a4c0521af265a14f8"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-six-research-r01/PROPOSALS.md",
+      "destination": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/research/PROPOSALS.md",
+      "bytes": 8331,
+      "sha256": "78795d371d0fa363f24aa5777720bd41855797e0b48b846287ebfe292a21d652"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-six-research-r01/SOURCE-LEDGER.md",
+      "destination": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/research/SOURCE-LEDGER.md",
+      "bytes": 12555,
+      "sha256": "f9b30b87e2a2e3f4760cb5ca996ae9e7b2a77dd113f555a77c1982ff34fdb862"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-six-research-r01/capture-context.cjs",
+      "destination": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/research/capture-context.cjs",
+      "bytes": 5479,
+      "sha256": "369e3f02c123509b7acd6ed660ba9867b268186b6164a3dce771fbf9284c7046"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-six-research-r01/context.json",
+      "destination": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/research/context.json",
+      "bytes": 188846,
+      "sha256": "ae77d3ec5e9c4a40af8877d718e3dae001ed15bc9d82d7c283f7560f8254a1cd"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-six-research-r01/fetch-source-metadata.cjs",
+      "destination": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/research/fetch-source-metadata.cjs",
+      "bytes": 3288,
+      "sha256": "a991cf4b3bffae17c8018351239013c110a6cedcad7f8a971c715582d82d82e1"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-six-research-r01/foundation-module02.before.json",
+      "destination": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/research/foundation-module02.before.json",
+      "bytes": 267505,
+      "sha256": "bec08364a841f92351d04cd4c891bbd9d7de6dbf00f9949cc58f18e2551962ad"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-six-research-r01/fresh-http-retrieval.json",
+      "destination": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/research/fresh-http-retrieval.json",
+      "bytes": 10498,
+      "sha256": "7b2ddb198f91624655fd23c361734bd025ef8bd72e3454dcbf2ec88a900c5219"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-six-research-r01/input-pins.json",
+      "destination": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/research/input-pins.json",
+      "bytes": 66462,
+      "sha256": "145f828566461bae0dbe0d10e4c579163c6e315fefc03361fc452284365b4762"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-six-research-r01/integrity-summary.json",
+      "destination": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/research/integrity-summary.json",
+      "bytes": 2264,
+      "sha256": "c62f5a26d85f5a4c1f3ab61f0031a347c9884816c06ab59d8752a621142ff541"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-six-research-r01/proposal-fields.json",
+      "destination": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/research/proposal-fields.json",
+      "bytes": 8907,
+      "sha256": "68d601c7d6cbb05177aa4a4667d474fc4a7b542d1fd41d003c94fa8b853ed3fc"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-six-research-r01/retained-reviews/1.json",
+      "destination": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/research/retained-reviews/1.json",
+      "bytes": 23927,
+      "sha256": "2d95fb5e1f08ed79a2b9de27ad2e031e36139385acf0d6d0e3e7a13b1a6f865e"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-six-research-r01/retained-reviews/2.json",
+      "destination": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/research/retained-reviews/2.json",
+      "bytes": 43281,
+      "sha256": "2aaac3d8672600001faa104594a221ed1d079caf9723cc5495d1172de7fb0c4d"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-six-research-r01/retained-reviews/3.json",
+      "destination": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/research/retained-reviews/3.json",
+      "bytes": 80788,
+      "sha256": "92c5b326565f95d9dacb8c11f8ca6684b5c39200b4ebcae57f3108a3c7a720b1"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-six-research-r01/seal-inventory.cjs",
+      "destination": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/research/seal-inventory.cjs",
+      "bytes": 3067,
+      "sha256": "d41a53ed9d0ade04f1cc2a95c4d06ebe88975d12ca126fb983a2751c66a80b40"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-three-independent-review-r01/inventory.json",
+      "destination": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/independent/inventory.json",
+      "bytes": 2434,
+      "sha256": "e2ff507d70142e5c94f63b953ce04e080a85e69d398f8981d33c8b96229624ff"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-three-independent-review-r01/REVIEW.md",
+      "destination": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/independent/REVIEW.md",
+      "bytes": 8471,
+      "sha256": "45bb37be53141c32322f2c2cae5d6c381037e086ec4c04013664a6ba875c6e1f"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-three-independent-review-r01/assemble-review-record.cjs",
+      "destination": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/independent/assemble-review-record.cjs",
+      "bytes": 16021,
+      "sha256": "2c95bd3b3899fe6fb2e581857d4dd59d9268a76fd325896c7e6d8c063da52b7a"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-three-independent-review-r01/assembly-receipt.json",
+      "destination": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/independent/assembly-receipt.json",
+      "bytes": 2195,
+      "sha256": "3c631f01ce62f3ad4295fa84f3ff5356a151dacf6ebf8013cc6b6c02875441c6"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-three-independent-review-r01/context-checks.json",
+      "destination": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/independent/context-checks.json",
+      "bytes": 66405,
+      "sha256": "2a4a1c5b34e3e5dc8d8b44af82ae654d7369bca049ed576984c78536cd07cdfc"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-three-independent-review-r01/fresh-independent-http.json",
+      "destination": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/independent/fresh-independent-http.json",
+      "bytes": 5713,
+      "sha256": "ec0925018bc4a19645c6e1b7c1c0695acc6f05241d373d884f5815e322d1ba84"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-three-independent-review-r01/input-verification.json",
+      "destination": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/independent/input-verification.json",
+      "bytes": 122799,
+      "sha256": "e68dbb74b29aa63d40bfe27f13c1dac7de88156f8f7cf231b69ca7fc739f24d4"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-three-independent-review-r01/language-projections.json",
+      "destination": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/independent/language-projections.json",
+      "bytes": 64341,
+      "sha256": "531122b370d14a559791f360b04c3b373c697fcf92f94dc8ab6428861a9304cf"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-three-independent-review-r01/reference-retrieval-start.json",
+      "destination": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/independent/reference-retrieval-start.json",
+      "bytes": 1412,
+      "sha256": "276389f66a00baa9868fd2ae7cb7fce062b15972095e123c902d3bffb599ec89"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-three-independent-review-r01/retrieve-reference-evidence.cjs",
+      "destination": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/independent/retrieve-reference-evidence.cjs",
+      "bytes": 4297,
+      "sha256": "fd50917549ee2a40f63db12d2ed4bdc0c7be8a9893ecb8ea740c4dd35a3ebf87"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-three-independent-review-r01/reviewer-decisions.json",
+      "destination": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/independent/reviewer-decisions.json",
+      "bytes": 9851,
+      "sha256": "80d07670034418d6a973d1a776d4e410903e6fa274ea1aa3daf3ef91c4a0da39"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-three-independent-review-r01/seal-inventory.cjs",
+      "destination": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/independent/seal-inventory.cjs",
+      "bytes": 2559,
+      "sha256": "7ba9a2713eb8872768fc286e1404f9562eee537c9aadcbd7a3bdb9f241f70cbc"
+    },
+    {
+      "source": "build/professional-english/foundation02-held-three-independent-review-r01/source-observations.json",
+      "destination": "docs/content-review/foundation-module02-held-three-independent-review-2026-10-17/independent/source-observations.json",
+      "bytes": 9348,
+      "sha256": "a2cf97e889a612c071063c0f6a8ecd89a97118689bd7e0dbb2372a52daa6a72f"
+    }
+  ],
+  "production_changed": false,
+  "scope": "Exact immutable research and independent three-field review copied. No production hold released and no new source consultation or runtime validation."
+}

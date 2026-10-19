@@ -1,0 +1,12 @@
+{
+  "accepted": true,
+  "date": "2026-10-16",
+  "proposal_raw_sha256": "75b3e85a0cff12132af26cad6363d02a6418f44cd7643d6f46d59d5a4b772c50",
+  "asset_provenance_raw_sha256": "c751593342bd2f3a2a408962e580cf2a915495d82b9c59e64eba7b1b8bb75a6e",
+  "candidate_sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+  "image_after_json_sha256": "c42e46b66006a37da97d49473123642dd0da7fd86e065cdc2c162d5640b9b017",
+  "source_files_verified": 3,
+  "unchanged_other_entry_fields": true,
+  "visual_scope": "Root inspected exact full image, actual minimum Match and Memory cards in both states, and accepted cart/basket side-by-side comparison. Raised handle and open rigid basket remain distinct from the wheeled cart. Empty-brief adjustment accepted. No participant recognition or delivery claim.",
+  "production_mutated": false
+}

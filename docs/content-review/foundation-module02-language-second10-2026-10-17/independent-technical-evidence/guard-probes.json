@@ -1,0 +1,80 @@
+{
+  "schema": 1,
+  "ok": true,
+  "scope": "Nine in-memory negative preflight probes, all writes denied. Synthetic review fixture is not a persisted acceptance.",
+  "production_mutated": false,
+  "native_dispatched": false,
+  "delivery_source": {
+    "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/deliver.cjs",
+    "raw_sha256": "4f6a713d84c65650e17fa82161a718e238ef1cf001903e7f43f9deaf7f24f483"
+  },
+  "executed_source": {
+    "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02-independent-technical-r01/guard-probes.cjs",
+    "raw_sha256": "fe5e0b9af450166e3484aa5e7d2e371e861ea9e01e378ee56d0e391ce2862ef3"
+  },
+  "cases": [
+    {
+      "name": "missing root exclusive window",
+      "rejected": true,
+      "error_code": "ERR_ASSERTION",
+      "transaction_reached": false,
+      "mutation_reached": false
+    },
+    {
+      "name": "wrong binding hash",
+      "rejected": true,
+      "error_code": "ERR_ASSERTION",
+      "transaction_reached": false,
+      "mutation_reached": false
+    },
+    {
+      "name": "existing transaction rejects replay",
+      "rejected": true,
+      "error_code": "ERR_ASSERTION",
+      "transaction_reached": false,
+      "mutation_reached": false
+    },
+    {
+      "name": "existing destination document directory rejects overwrite",
+      "rejected": true,
+      "error_code": "ERR_ASSERTION",
+      "transaction_reached": false,
+      "mutation_reached": false
+    },
+    {
+      "name": "unaccepted technical review",
+      "rejected": true,
+      "error_code": "ERR_ASSERTION",
+      "transaction_reached": false,
+      "mutation_reached": false
+    },
+    {
+      "name": "omitted native afterimage review",
+      "rejected": true,
+      "error_code": "ERR_ASSERTION",
+      "transaction_reached": false,
+      "mutation_reached": false
+    },
+    {
+      "name": "omitted preparation execution witness review",
+      "rejected": true,
+      "error_code": "ERR_ASSERTION",
+      "transaction_reached": false,
+      "mutation_reached": false
+    },
+    {
+      "name": "failed preparation completion",
+      "rejected": true,
+      "error_code": "ERR_ASSERTION",
+      "transaction_reached": false,
+      "mutation_reached": false
+    },
+    {
+      "name": "changed preparation source witness",
+      "rejected": true,
+      "error_code": "ERR_ASSERTION",
+      "transaction_reached": false,
+      "mutation_reached": false
+    }
+  ]
+}

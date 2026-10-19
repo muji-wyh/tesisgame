@@ -1,0 +1,1604 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "administrative-assistant.worker-supporting-office-administration.n",
+      "text": "administrative assistant",
+      "display_text": "administrative assistant",
+      "pos": "noun",
+      "definition": "A worker who supports administrative activities such as documents, schedules, and communication.",
+      "example": "The administrative assistant coordinates the meeting documents.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "administrative assistant"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A capable adult organizing fictional office materials in an inclusive workplace.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "administrative-assistant.worker-supporting-office-administration.n.analysis.v1",
+        "lexeme_id": "administrative-assistant.worker-supporting-office-administration.n",
+        "text": "administrative assistant",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, a selected combining form, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.administrative",
+            "type": "stem",
+            "canonical": "administrative",
+            "surface": "administrative"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.assistant",
+            "type": "stem",
+            "canonical": "assistant",
+            "surface": "assistant"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "administrative assistant",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original office-communication draft. Language, records, privacy, access authority, financial scope, local workplace requirements, regional usage, and morphology require qualified review. No legal entitlement, record-disposal deadline, tax calculation, financial instruction, equipment repair, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "office-manager.person-coordinating-office-operations.n",
+      "text": "office manager",
+      "display_text": "office manager",
+      "pos": "noun",
+      "definition": "A person responsible for coordinating an office's operations within the assigned role.",
+      "example": "Ask the office manager who approves the room changes.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "office manager"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A friendly adult coordinating office resources with colleagues.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "office-manager.person-coordinating-office-operations.n.analysis.v1",
+        "lexeme_id": "office-manager.person-coordinating-office-operations.n",
+        "text": "office manager",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, a selected combining form, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.office",
+            "type": "stem",
+            "canonical": "office",
+            "surface": "office"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.manage",
+            "type": "stem",
+            "canonical": "manage",
+            "surface": "manag"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.er.suffix",
+            "type": "suffix",
+            "canonical": "er",
+            "surface": "er"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "manager",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "office manager",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original office-communication draft. Language, records, privacy, access authority, financial scope, local workplace requirements, regional usage, and morphology require qualified review. No legal entitlement, record-disposal deadline, tax calculation, financial instruction, equipment repair, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "executive-assistant.worker-providing-support-to-executives.n",
+      "text": "executive assistant",
+      "display_text": "executive assistant",
+      "pos": "noun",
+      "definition": "A worker who provides administrative and organizational support to one or more executives.",
+      "example": "The executive assistant will confirm the approved meeting arrangements.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "executive assistant"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A capable adult coordinating a fictional executive schedule without status stereotypes.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "executive-assistant.worker-providing-support-to-executives.n.analysis.v1",
+        "lexeme_id": "executive-assistant.worker-providing-support-to-executives.n",
+        "text": "executive assistant",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, a selected combining form, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.executive",
+            "type": "stem",
+            "canonical": "executive",
+            "surface": "executive"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.assistant",
+            "type": "stem",
+            "canonical": "assistant",
+            "surface": "assistant"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "executive assistant",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original office-communication draft. Language, records, privacy, access authority, financial scope, local workplace requirements, regional usage, and morphology require qualified review. No legal entitlement, record-disposal deadline, tax calculation, financial instruction, equipment repair, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "office-clerk.worker-performing-general-clerical-tasks.n",
+      "text": "office clerk",
+      "display_text": "office clerk",
+      "pos": "noun",
+      "definition": "A worker who performs general clerical tasks such as record entry, filing, and correspondence.",
+      "example": "The office clerk has located the requested record.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "office clerk"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A capable adult retrieving a fictional office record.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "office-clerk.worker-performing-general-clerical-tasks.n.analysis.v1",
+        "lexeme_id": "office-clerk.worker-performing-general-clerical-tasks.n",
+        "text": "office clerk",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, a selected combining form, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.office",
+            "type": "stem",
+            "canonical": "office",
+            "surface": "office"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.clerk",
+            "type": "stem",
+            "canonical": "clerk",
+            "surface": "clerk"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "office clerk",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original office-communication draft. Language, records, privacy, access authority, financial scope, local workplace requirements, regional usage, and morphology require qualified review. No legal entitlement, record-disposal deadline, tax calculation, financial instruction, equipment repair, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "facilities-coordinator.worker-coordinating-building-services.n",
+      "text": "facilities coordinator",
+      "display_text": "facilities coordinator",
+      "pos": "noun",
+      "definition": "A worker who coordinates assigned building, workspace, or facilities-service activities.",
+      "example": "The facilities coordinator will review the reported lighting issue.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "facilities coordinator"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A friendly adult coordinating a fictional building service request.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "facilities-coordinator.worker-coordinating-building-services.n.analysis.v1",
+        "lexeme_id": "facilities-coordinator.worker-coordinating-building-services.n",
+        "text": "facilities coordinator",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, a selected combining form, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.facilities",
+            "type": "stem",
+            "canonical": "facilities",
+            "surface": "facilities"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.coordinator",
+            "type": "stem",
+            "canonical": "coordinator",
+            "surface": "coordinator"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "facilities coordinator",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original office-communication draft. Language, records, privacy, access authority, financial scope, local workplace requirements, regional usage, and morphology require qualified review. No legal entitlement, record-disposal deadline, tax calculation, financial instruction, equipment repair, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "records-manager.person-overseeing-records-management.n",
+      "text": "records manager",
+      "display_text": "records manager",
+      "pos": "noun",
+      "definition": "A person responsible for managing records under the applicable organizational requirements.",
+      "example": "The records manager will advise on the retention schedule.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "records manager"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An adult reviewing a fictional records classification and retention plan.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "records-manager.person-overseeing-records-management.n.analysis.v1",
+        "lexeme_id": "records-manager.person-overseeing-records-management.n",
+        "text": "records manager",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, a selected combining form, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.record",
+            "type": "stem",
+            "canonical": "record",
+            "surface": "record"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.s.suffix",
+            "type": "suffix",
+            "canonical": "s",
+            "surface": "s"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.manage",
+            "type": "stem",
+            "canonical": "manage",
+            "surface": "manag"
+          },
+          {
+            "id": "p4",
+            "canonical_id": "affix.er.suffix",
+            "type": "suffix",
+            "canonical": "er",
+            "surface": "er"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "records",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p3",
+            "right": "p4",
+            "surface": "manager",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n3",
+            "left": "n1",
+            "right": "n2",
+            "surface": "records manager",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n3"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "nara-records-scheduling",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original office-communication draft. Language, records, privacy, access authority, financial scope, local workplace requirements, regional usage, and morphology require qualified review. No legal entitlement, record-disposal deadline, tax calculation, financial instruction, equipment repair, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "procurement-officer.worker-handling-authorized-purchasing-processes.n",
+      "text": "procurement officer",
+      "display_text": "procurement officer",
+      "pos": "noun",
+      "definition": "A worker responsible for assigned purchasing or supplier-selection activities.",
+      "example": "The procurement officer will check the proposed supplier quotation.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "procurement officer"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A capable adult reviewing fictional supplier documents without an implied purchase decision.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "procurement-officer.worker-handling-authorized-purchasing-processes.n.analysis.v1",
+        "lexeme_id": "procurement-officer.worker-handling-authorized-purchasing-processes.n",
+        "text": "procurement officer",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, a selected combining form, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.procure",
+            "type": "stem",
+            "canonical": "procure",
+            "surface": "procure"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ment.suffix",
+            "type": "suffix",
+            "canonical": "ment",
+            "surface": "ment"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.officer",
+            "type": "stem",
+            "canonical": "officer",
+            "surface": "officer"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "procurement",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "procurement officer",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original office-communication draft. Language, records, privacy, access authority, financial scope, local workplace requirements, regional usage, and morphology require qualified review. No legal entitlement, record-disposal deadline, tax calculation, financial instruction, equipment repair, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "finance-contact.designated-person-for-finance-queries.n",
+      "text": "finance contact",
+      "display_text": "finance contact",
+      "pos": "noun",
+      "definition": "A designated person or team contact for relevant financial questions.",
+      "example": "The finance contact will confirm the invoice reference.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "finance contact"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional office directory identifying the appropriate finance-query role.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "finance-contact.designated-person-for-finance-queries.n.analysis.v1",
+        "lexeme_id": "finance-contact.designated-person-for-finance-queries.n",
+        "text": "finance contact",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, a selected combining form, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.finance",
+            "type": "stem",
+            "canonical": "finance",
+            "surface": "finance"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.contact",
+            "type": "stem",
+            "canonical": "contact",
+            "surface": "contact"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "finance contact",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original office-communication draft. Language, records, privacy, access authority, financial scope, local workplace requirements, regional usage, and morphology require qualified review. No legal entitlement, record-disposal deadline, tax calculation, financial instruction, equipment repair, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "organization-chart.diagram-of-organizational-roles-and-relationships.n",
+      "text": "organization chart",
+      "display_text": "organization chart",
+      "pos": "noun",
+      "definition": "A diagram showing roles, units, or reporting relationships in an organization.",
+      "example": "The organization chart identifies the facilities team.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "organization chart",
+        "organisation chart",
+        "organizational chart",
+        "organisational chart"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional inclusive organization chart with roles rather than personal data.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "organization-chart.diagram-of-organizational-roles-and-relationships.n.analysis.v1",
+        "lexeme_id": "organization-chart.diagram-of-organizational-roles-and-relationships.n",
+        "text": "organization chart",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, a selected combining form, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.organization",
+            "type": "stem",
+            "canonical": "organization",
+            "surface": "organization"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.chart",
+            "type": "stem",
+            "canonical": "chart",
+            "surface": "chart"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "organization chart",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "hr-bls-pay-benefits",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-ico-employment-index",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original office-communication draft. Language, records, privacy, access authority, financial scope, local workplace requirements, regional usage, and morphology require qualified review. No legal entitlement, record-disposal deadline, tax calculation, financial instruction, equipment repair, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "job-description.written-account-of-role-duties.n",
+      "text": "job description",
+      "display_text": "job description",
+      "pos": "noun",
+      "definition": "A written account of a role's duties, responsibilities, and relevant requirements.",
+      "example": "Check the current job description before assigning the new task.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "job description"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional role description with duties and responsibilities clearly separated.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "job-description.written-account-of-role-duties.n.analysis.v1",
+        "lexeme_id": "job-description.written-account-of-role-duties.n",
+        "text": "job description",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, a selected combining form, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.job",
+            "type": "stem",
+            "canonical": "job",
+            "surface": "job"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.description",
+            "type": "stem",
+            "canonical": "description",
+            "surface": "description"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "job description",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "education-bls-preschool",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-assistants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-elementary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-pay-benefits",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-acas-job-advertising",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original office-communication draft. Language, records, privacy, access authority, financial scope, local workplace requirements, regional usage, and morphology require qualified review. No legal entitlement, record-disposal deadline, tax calculation, financial instruction, equipment repair, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "induction.introduction-to-workplace-and-role.n",
+      "text": "induction",
+      "display_text": "induction",
+      "pos": "noun",
+      "definition": "An introduction that helps someone understand a new workplace, role, or activity.",
+      "example": "The induction includes the approved information-security contacts.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "induction"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A welcoming adult workplace orientation with fictional guidance materials.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "education-bls-preschool",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-childcare",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-assistants",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "education-bls-elementary",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, educational, family, inclusion, safeguarding, and terminology context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-training-development",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-bls-specialists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original office-communication draft. Language, records, privacy, access authority, financial scope, local workplace requirements, regional usage, and morphology require qualified review. No legal entitlement, record-disposal deadline, tax calculation, financial instruction, equipment repair, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "leave-request.request-for-authorized-time-away.n",
+      "text": "leave request",
+      "display_text": "leave request",
+      "pos": "noun",
+      "definition": "A request for authorized time away from work under the applicable arrangements.",
+      "example": "The leave request is awaiting a decision.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "leave request"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional time-away request showing pending status without an entitlement claim.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "leave-request.request-for-authorized-time-away.n.analysis.v1",
+        "lexeme_id": "leave-request.request-for-authorized-time-away.n",
+        "text": "leave request",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, a selected combining form, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.leave",
+            "type": "stem",
+            "canonical": "leave",
+            "surface": "leave"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.request",
+            "type": "stem",
+            "canonical": "request",
+            "surface": "request"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "leave request",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "hr-bls-pay-benefits",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "hr-ico-employment-index",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, recruitment, employment-record index, pay-benefit, or training context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original office-communication draft. Language, records, privacy, access authority, financial scope, local workplace requirements, regional usage, and morphology require qualified review. No legal entitlement, record-disposal deadline, tax calculation, financial instruction, equipment repair, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "out-of-office-message.automatic-notice-of-work-absence.n",
+      "text": "out-of-office message",
+      "display_text": "out-of-office message",
+      "pos": "noun",
+      "definition": "A message indicating that someone is away or unavailable, often sent automatically.",
+      "example": "The out-of-office message gives an approved alternative contact.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "out-of-office message"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional automatic reply containing limited work-related contact information.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "out-of-office-message.automatic-notice-of-work-absence.n.analysis.v1",
+        "lexeme_id": "out-of-office-message.automatic-notice-of-work-absence.n",
+        "text": "out-of-office message",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, a selected combining form, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.out",
+            "type": "stem",
+            "canonical": "out",
+            "surface": "out"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.of",
+            "type": "stem",
+            "canonical": "of",
+            "surface": "of"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.office",
+            "type": "stem",
+            "canonical": "office",
+            "surface": "office"
+          },
+          {
+            "id": "p4",
+            "canonical_id": "morph.message",
+            "type": "stem",
+            "canonical": "message",
+            "surface": "message"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "out-of",
+            "rule": "hyphenated_compound"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "out-of-office",
+            "rule": "hyphenated_compound"
+          },
+          {
+            "id": "n3",
+            "left": "n2",
+            "right": "p4",
+            "surface": "out-of-office message",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n3"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-office-admin",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "ico-data-minimization",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original office-communication draft. Language, records, privacy, access authority, financial scope, local workplace requirements, regional usage, and morphology require qualified review. No legal entitlement, record-disposal deadline, tax calculation, financial instruction, equipment repair, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    }
+  ]
+}

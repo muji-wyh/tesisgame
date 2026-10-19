@@ -1,0 +1,98 @@
+{
+  "schema": 1,
+  "status": "unexecuted_r02_author_delivery_proposal_ready_for_independent_source_review",
+  "recorded_at": "2026-10-16T21:14:59.526Z",
+  "author": "Codex runtime_recovery delivery proposal author",
+  "directory": "build/professional-english/foundation02-fourth10-delivery-preparation-r02",
+  "repository_root": "Q:/.codex/worktrees/current-age-vocabulary/tesisgame",
+  "input_files_pinned": 864,
+  "original_input_context_union": 803,
+  "third10_validated_inputs_exact": 686,
+  "registry_before_sha256": "fb45e1d9c7cbf479bf06ac0c00b39ec28de473c96c86cc1b071c72a572f8d437",
+  "historical_research_registry_sha256": "f470936fc3bff7ff619b3af057a20cf5e05034013bbf08948e380847228dc4c5",
+  "independent_language_review_sha256": "58993d8767ec701e37613fdee70d75e94f22a68d467b94157ea41a211bc9f8bd",
+  "independent_failure_diagnosis_inventory_sha256": "01936ecbb484020da8d50155d4955d42a4312834ec4ca8bae475c5a85fb9e92f",
+  "accepted_language_projections": 10,
+  "actual_content_changed_entries": 6,
+  "content_field_edits": {
+    "difficulty": 6,
+    "definition": 1,
+    "example": 1
+  },
+  "proposed_source_additions": 20,
+  "exact_historical_donor_groups": 50,
+  "exact_whole_donor_rows": 51,
+  "production_mutated": false,
+  "shared_tests_mutated": false,
+  "candidate_implementation_imported_or_executed": false,
+  "static_source_derivation_and_metadata_writers_executed": true,
+  "syntax_checked": false,
+  "projected_afterimages_generated": false,
+  "tests_or_native_dispatched": false,
+  "historical_scripts_replayed": false,
+  "new_language_approval": false,
+  "independent_source_review_pending": true,
+  "artifacts": [
+    {
+      "path": "author-coverage-r02.cjs",
+      "bytes": 3959,
+      "raw_sha256": "ca74606235ce905a2d566d62dc84de3c5525dfd9d70f9acd76413eaec9430c6e"
+    },
+    {
+      "path": "author-r02.cjs",
+      "bytes": 6551,
+      "raw_sha256": "5bf19ff7a5ab8628f24a4222c07aa7202d9898e795bfe3ffc396fd66105deb8b"
+    },
+    {
+      "path": "coverage-supplement.json",
+      "bytes": 2482,
+      "raw_sha256": "e54a9bcc19f2b34c0d8d875213e3e692d8a7ca643973141b27f9459a0a8625f0"
+    },
+    {
+      "path": "freeze-inputs.cjs",
+      "bytes": 14047,
+      "raw_sha256": "a762a1256495cec9a270e289ffa2d487267359e4a92d7b57fefeb819e498cf42"
+    },
+    {
+      "path": "HANDOFF.md",
+      "bytes": 5776,
+      "raw_sha256": "620c9ddd91788662d7227ca7ab79fdf5083735daece06d042f75c95789646e39"
+    },
+    {
+      "path": "input-freeze-receipt.json",
+      "bytes": 28854,
+      "raw_sha256": "8b619da5373a9125cfb5338c801294210ea73b3af1f2d3fbb05f1d8133d74828"
+    },
+    {
+      "path": "input-pins.json",
+      "bytes": 242074,
+      "raw_sha256": "54982d9d4421d9cb0629167fa8b9644e7b825094882372aeaa34c2381e8ff750"
+    },
+    {
+      "path": "prepare.cjs",
+      "bytes": 9161,
+      "raw_sha256": "612d9b98fd62b62492f7140a034ccb29a8c75fb07fc2937fa6b7787e35c98621"
+    },
+    {
+      "path": "projection.cjs",
+      "bytes": 23650,
+      "raw_sha256": "c07b67580921610e94425d3f2c01b620203163d7a6ef40be2a4ebe07edf12da9"
+    },
+    {
+      "path": "revision-derivation.json",
+      "bytes": 5199,
+      "raw_sha256": "317d94037e9ccd27a6c38feb34bb199fec697d61f0f22ddbb1a4b6b2b181164c"
+    },
+    {
+      "path": "test-transforms.cjs",
+      "bytes": 23426,
+      "raw_sha256": "7886b3c0d03766f2f0a3f460e6e2cbf391384338fe747f8defa2ce308d1d4dc9"
+    },
+    {
+      "path": "TRANSACTION.md",
+      "bytes": 5763,
+      "raw_sha256": "ceddf90d4066c4a2c6ed806c46e9a6ecc10de5025d37a21c054fc35b7746b052"
+    }
+  ],
+  "self_excluded": true
+}

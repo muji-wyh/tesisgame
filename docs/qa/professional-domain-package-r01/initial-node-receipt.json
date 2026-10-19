@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "kind": "professional_domain_focused_node_dispatch",
+  "started_at": "2026-10-16T18:54:58.0043513Z",
+  "finished_at": "2026-10-16T18:59:38.5542074Z",
+  "command": "node --test tests/professional-domain-release.test.cjs",
+  "exit_code": 1,
+  "log_path": "build\\professional-english\\domain-application-release-r01\\node-focused-r01.log",
+  "log_sha256": "6176828acd15fee8be957633e6591f281aacde0cd5c206c6e7455d92e82beb06",
+  "native_execution": false,
+  "real_package_installation": false,
+  "web_export": false
+}

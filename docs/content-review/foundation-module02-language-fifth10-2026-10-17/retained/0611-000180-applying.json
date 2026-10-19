@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "sequence": 180,
+  "status": "applying",
+  "prepared_sha256": "e70ae73d803941d2400d0a9973a6b851ae9f8e06ba3d0b1771686fecb46dfc3a",
+  "previous_state_sha256": "7e6238737c3c8b312628766450bdaff2db75181bcaa368440a48f60ef5fc6a4f",
+  "recorded_at": "2026-10-16T22:48:27.686Z",
+  "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/CALL-GRAPH.md",
+  "work": "work/23e392b3-a94f-4972-bf2e-1a96787e5c47.bin"
+}

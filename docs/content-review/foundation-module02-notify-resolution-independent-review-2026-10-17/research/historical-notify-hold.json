@@ -1,0 +1,113 @@
+{
+  "id": "notify.inform.v",
+  "value": {
+    "id": "notify.inform.v",
+    "text": "notify",
+    "display_text": "notify",
+    "pos": "verb",
+    "definition": "To formally tell someone information they need to know.",
+    "example": "Please notify the team if the meeting time changes.",
+    "difficulty": "A2",
+    "accepted_forms": [
+      "notify"
+    ],
+    "regions": [
+      "general"
+    ],
+    "practice_modes": [
+      "word_jelly",
+      "phrase"
+    ],
+    "media": {
+      "image": {
+        "status": "pending",
+        "path": null,
+        "sha256": null,
+        "source": null,
+        "creator": null,
+        "license": null,
+        "acquisition_status": "not_started",
+        "review": {
+          "status": "pending"
+        },
+        "brief": "A meeting change notification reaching all affected colleagues.",
+        "picture_suitable": false,
+        "available_animations": [],
+        "adaptations": []
+      },
+      "audio": {
+        "status": "pending",
+        "path": null,
+        "sha256": null,
+        "source": null,
+        "creator": null,
+        "license": null,
+        "acquisition_status": "not_started",
+        "review": {
+          "status": "pending"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      }
+    },
+    "morphology": {
+      "schema": 1,
+      "id": "notify.inform.v.analysis.v1",
+      "lexeme_id": "notify.inform.v",
+      "text": "notify",
+      "kind": "atomic",
+      "review": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": "Proposed intact modern teaching unit, not a claim that the word lacks historical morphology. The history concerns making known from Latin notus. Splitting modern not + ify without a carefully explained Latin root would misleadingly present the English negative not. Keep the headword intact pending that decision. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+        "references": [
+          "https://www.merriam-webster.com/dictionary/notify"
+        ]
+      },
+      "parts": [
+        {
+          "id": "p1",
+          "canonical_id": "morph.notify",
+          "type": "atomic",
+          "canonical": "notify",
+          "surface": "notify"
+        }
+      ],
+      "nodes": [],
+      "roots": [
+        "p1"
+      ]
+    },
+    "review": {
+      "status": "pending",
+      "language": "pending",
+      "domain": "not_required",
+      "reviewer": null,
+      "reviewed_at": null
+    },
+    "references": [
+      {
+        "source_id": "british-council-requests",
+        "status": "pending_term_check",
+        "scope": "Workplace communication context only; this original definition and example await term-level review."
+      },
+      {
+        "source_id": "foundation-mw-notify",
+        "status": "pending_term_check",
+        "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+      }
+    ],
+    "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+  },
+  "whole_entry_json_sha256": "7aaf8490d372bb3c8490c2824955a59e92c3d3dfe4416cb73d772cc6413a0cdc",
+  "decision": "Preserve the whole draft. Oxford selected formal-informing fkcefr=c1 is independently confirmed. Collins gives formal register but no selected level; no direct lower-level evidence resolves the current A2 difficulty. Do not clamp C1 to B2.",
+  "reference_or_note_additions": 0,
+  "review_gate_changes": 0
+}

@@ -1,0 +1,30 @@
+# Foundation positions 21-30: nine accepted language entries and one hold
+
+This is a frozen unbound delivery for deadline, break, overtime, availability, calendar, agenda, invitation, update and reminder. Root independently accepted the exact author candidates in the immutable ../root-language-review-r01.json: raw SHA-256 a921f57e732ba3cf21540b087ed25eaf9da8f9dd1e3700937335b8bd6677f4ad; JSON SHA-256 f715899ae94be0539fd572924c66647a4486102d0e9bb306950aa368fbf4bec2. The original author ledger, source observations, context review and before/candidate snapshots remain unchanged.
+
+Attendance remains its entire original parsed entry, language pending and stored A2 unaccepted. Its full-entry JSON SHA-256 is a7699c3e58649791eaee79817f87879c2ce6b2418e729768c6f1a43c19b3594e. Neither attendance-only source record enters the live source registry, and no attendance reference or editorial note is added. Both consulted sources and the held author candidate remain durable historical evidence.
+
+The nine accepted candidates retain five exact definition revisions, one hours-explicit overtime example and six difficulty revisions. Sixteen source records are copied exactly from the author ledger; only the new references on the accepted nine become verified for the bounded lexical review. Every older reference remains exact, including update's morphology consultations. The source records remain consulted acquisition evidence rather than licensed media or independent certifications.
+
+The accepted editorial levels are deadline B2, break A2, overtime B2, availability B1, calendar B1, agenda B2, invitation A2, update B1 and reminder B1. Break's actual Oxford A1 label remains literal. Overtime preserves Oxford C1 and Collins B2 as a disagreement. Availability, update and reminder have no observed selected-source level and remain explicitly independent editorial placements. Current language notes replace only the exact superseded draft clause, preserve the remaining original note text, and record the root decision and narrow sense limits. Original and author notes are retained in patch snapshots.
+
+The delivery protects all forms and regions, all morphology and media, 200 selected memberships, 156 unique scoped lexemes, 57 expressions, 79 modules, 116 existing source records, ten Growth files and six prior artifacts. Only nine language gates, representing 180 memberships, are accepted. Overall review follows the existing domain-not-required rule. All five expression ambiguity holds and the policy-update alternative remain. No whole-expression binding, specialist, media, morphology or release approval is introduced.
+
+The current live envelopes are read during preparation. Unrelated barcode imagery and all other current records are preserved. The executable binder is explicitly pinned to successful R22 at build/professional-english/continuation-validation-r22.json, raw SHA-256 ccc5f7777a8ec7be8838d7cb54c1386e13afcaea8d472e6dc0a9fb0759416465. Preparation verifies that validation and its exact measured inputs read-only. Registry and prospective envelope hashes in the scratch receipt are informational; no baseline has been bound. Root must run the supplied binder to capture exact current raw preimages before serialization. A different validation requires a separately reviewed delivery revision.
+
+## Files and verification
+
+- delivery-proposal.json contains the exact nine before/accepted-author/after records, sixteen sources, entire attendance hold and candidate hashes.
+- durable-provenance-draft.json retains root acceptance, author evidence, patches, source history, protected context and the complete proposed history-copy manifest.
+- preparation-receipt.json and artifact-inventory.json freeze all inputs, code, outputs and test previews. The scratch-preview receipt records schema/content audit results, preserved inputs and guard counts.
+- dry-run.cjs rechecks the frozen proposal without writing files, binding a baseline or executing tests.
+- persisted-test-transforms.cjs provides pure exact-preimage transformations and a read-only CLI plan. The two preview/tests/*.cjs files are prepared replacements, never executed here.
+- bind-current-baseline.cjs creates fresh scratch preimages and a binding receipt only after the frozen package, R22, every measured input and every current Professional JSON pass.
+- integrate-reviewed.cjs supplies the guarded content transaction; update-persisted-tests.cjs supplies the separate guarded test transaction after content is committed. Both default to read-only plans and provide explicit recovery.
+- INTEGRATION.md gives the exact root-executed bind, dry-run, commit, test-preview, test-apply and recovery commands. The helper and plan adapter are byte-identical to their previously validated versions.
+
+The two CJS test previews use post-barcode shared-test inputs. They add third10 provenance to the accepted-ID union; increase reviewed senses from 81 to 90 on this input; assert 180 accepted memberships, sixteen sources and the exact attendance hold; and use full-entry equality before historical reversal. Third10 reversal occurs before second10/first10 where required. Retail module03 fourth10's protected update/reminder records receive the same strict handling. The native attendance donor is unchanged and needs no third10 source modification. The five added Node test cases are source previews only, not passing test results.
+
+Retail04 third10 has no selected lexeme overlap with this frozen context. Root plans Foundation before Retail04; that later delivery must regenerate its test previews from these installed Foundation test outputs or compose a separately reviewed exact transform. A changed shared-test preimage invalidates these particular previews; it never authorizes blind replacement.
+
+No production/shared-test write, native execution, runtime probe or test suite was performed. Preparation is write-once. Do not rerun it or overwrite frozen evidence; use the read-only dry-run and root-owned transactions.

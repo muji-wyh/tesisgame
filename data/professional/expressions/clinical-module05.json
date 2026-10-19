@@ -1,0 +1,1826 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.clinical_medicine.module05.01",
+      "text": "We will assess the available information, observe relevant changes, monitor the stated trend and measure the agreed quantity.",
+      "meaning": "Describe the intended assessment tasks without prescribing care.",
+      "context": "Clarifying a supervised assessment plan.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "We",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "will",
+          "start": 3,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "assess",
+          "start": 8,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "available",
+          "start": 19,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "information",
+          "start": 29,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 40,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "observe",
+          "start": 42,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "relevant",
+          "start": 50,
+          "end": 58
+        },
+        {
+          "index": 9,
+          "text": "changes",
+          "start": 59,
+          "end": 66
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 66,
+          "end": 67
+        },
+        {
+          "index": 11,
+          "text": "monitor",
+          "start": 68,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 76,
+          "end": 79
+        },
+        {
+          "index": 13,
+          "text": "stated",
+          "start": 80,
+          "end": 86
+        },
+        {
+          "index": 14,
+          "text": "trend",
+          "start": 87,
+          "end": 92
+        },
+        {
+          "index": 15,
+          "text": "and",
+          "start": 93,
+          "end": 96
+        },
+        {
+          "index": 16,
+          "text": "measure",
+          "start": 97,
+          "end": 104
+        },
+        {
+          "index": 17,
+          "text": "the",
+          "start": 105,
+          "end": 108
+        },
+        {
+          "index": 18,
+          "text": "agreed",
+          "start": 109,
+          "end": 115
+        },
+        {
+          "index": 19,
+          "text": "quantity",
+          "start": 116,
+          "end": 124
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 124,
+          "end": 125
+        }
+      ],
+      "focus_lexeme_ids": [
+        "assess.evaluate-care-information.v",
+        "observe.notice-care-information.v",
+        "monitor.follow-condition-over-time.v",
+        "measure.find-dimensions.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module05.02",
+      "text": "Please document the discussion, record the source, identify the uncertainty and describe the finding accurately.",
+      "meaning": "Request clear documentation of information and uncertainty.",
+      "context": "Preparing a clinical note.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "document",
+          "start": 7,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 16,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": "discussion",
+          "start": 20,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 30,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "record",
+          "start": 32,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 39,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "source",
+          "start": 43,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 49,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "identify",
+          "start": 51,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "uncertainty",
+          "start": 64,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 76,
+          "end": 79
+        },
+        {
+          "index": 13,
+          "text": "describe",
+          "start": 80,
+          "end": 88
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 89,
+          "end": 92
+        },
+        {
+          "index": 15,
+          "text": "finding",
+          "start": 93,
+          "end": 100
+        },
+        {
+          "index": 16,
+          "text": "accurately",
+          "start": 101,
+          "end": 111
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 111,
+          "end": 112
+        }
+      ],
+      "focus_lexeme_ids": [
+        "document.make-care-record.v",
+        "record.store-observed-information.v",
+        "identify.establish-identity-or-nature.v",
+        "describe.give-details-in-words.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module05.03",
+      "text": "The clinician will listen first and explain what examine, palpate and auscultate mean before discussing the assessment.",
+      "meaning": "Describe communication about examination terms.",
+      "context": "Explaining vocabulary during a consultation.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "clinician",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "will",
+          "start": 14,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "listen",
+          "start": 19,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": "first",
+          "start": 26,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "explain",
+          "start": 36,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "what",
+          "start": 44,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "examine",
+          "start": 49,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 56,
+          "end": 57
+        },
+        {
+          "index": 10,
+          "text": "palpate",
+          "start": 58,
+          "end": 65
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 12,
+          "text": "auscultate",
+          "start": 70,
+          "end": 80
+        },
+        {
+          "index": 13,
+          "text": "mean",
+          "start": 81,
+          "end": 85
+        },
+        {
+          "index": 14,
+          "text": "before",
+          "start": 86,
+          "end": 92
+        },
+        {
+          "index": 15,
+          "text": "discussing",
+          "start": 93,
+          "end": 103
+        },
+        {
+          "index": 16,
+          "text": "the",
+          "start": 104,
+          "end": 107
+        },
+        {
+          "index": 17,
+          "text": "assessment",
+          "start": 108,
+          "end": 118
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 118,
+          "end": 119
+        }
+      ],
+      "focus_lexeme_ids": [
+        "listen.attend-to-spoken-information.v",
+        "examine.assess-by-clinical-examination.v",
+        "palpate.assess-through-touch.v",
+        "auscultate.listen-to-body-sounds.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module05.04",
+      "text": "Please inspect the report, evaluate its context, review the history, interpret the wording and investigate the discrepancy.",
+      "meaning": "Request a careful review of conflicting information.",
+      "context": "Discussing a record discrepancy with the responsible professional.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "inspect",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "report",
+          "start": 19,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 25,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "evaluate",
+          "start": 27,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "its",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "context",
+          "start": 40,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 47,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "review",
+          "start": 49,
+          "end": 55
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": "history",
+          "start": 60,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 67,
+          "end": 68
+        },
+        {
+          "index": 13,
+          "text": "interpret",
+          "start": 69,
+          "end": 78
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 79,
+          "end": 82
+        },
+        {
+          "index": 15,
+          "text": "wording",
+          "start": 83,
+          "end": 90
+        },
+        {
+          "index": 16,
+          "text": "and",
+          "start": 91,
+          "end": 94
+        },
+        {
+          "index": 17,
+          "text": "investigate",
+          "start": 95,
+          "end": 106
+        },
+        {
+          "index": 18,
+          "text": "the",
+          "start": 107,
+          "end": 110
+        },
+        {
+          "index": 19,
+          "text": "discrepancy",
+          "start": 111,
+          "end": 122
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 122,
+          "end": 123
+        }
+      ],
+      "focus_lexeme_ids": [
+        "inspect.examine-visually.v",
+        "evaluate.judge-care-information.v",
+        "review.reconsider-care-information.v",
+        "interpret.understand-meaning-of-information.v",
+        "investigate.examine-information-to-understand-issue.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module05.05",
+      "text": "To diagnose the condition, the clinician may elicit details, synthesize information, correlate findings and differentiate possible explanations.",
+      "meaning": "Describe components of clinical reasoning without a diagnostic algorithm.",
+      "context": "Discussing how a qualified clinician considers evidence.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "To",
+          "start": 0,
+          "end": 2
+        },
+        {
+          "index": 1,
+          "text": "diagnose",
+          "start": 3,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 12,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "condition",
+          "start": 16,
+          "end": 25
+        },
+        {
+          "index": 4,
+          "text": ",",
+          "start": 25,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "clinician",
+          "start": 31,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": "may",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "elicit",
+          "start": 45,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "details",
+          "start": 52,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 59,
+          "end": 60
+        },
+        {
+          "index": 11,
+          "text": "synthesize",
+          "start": 61,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "information",
+          "start": 72,
+          "end": 83
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 83,
+          "end": 84
+        },
+        {
+          "index": 14,
+          "text": "correlate",
+          "start": 85,
+          "end": 94
+        },
+        {
+          "index": 15,
+          "text": "findings",
+          "start": 95,
+          "end": 103
+        },
+        {
+          "index": 16,
+          "text": "and",
+          "start": 104,
+          "end": 107
+        },
+        {
+          "index": 17,
+          "text": "differentiate",
+          "start": 108,
+          "end": 121
+        },
+        {
+          "index": 18,
+          "text": "possible",
+          "start": 122,
+          "end": 130
+        },
+        {
+          "index": 19,
+          "text": "explanations",
+          "start": 131,
+          "end": 143
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 143,
+          "end": 144
+        }
+      ],
+      "focus_lexeme_ids": [
+        "diagnose.identify-health-condition-through-clinical-assessment.v",
+        "elicit.draw-out-information-or-response.v",
+        "synthesize.combine-information-into-coherent-understanding.v",
+        "correlate.examine-relationship-between-items-of-information.v",
+        "differentiate.distinguish-between-possibilities-or-features.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module05.06",
+      "text": "Does the clinician suspect an acute condition or a chronic one, and what remains impossible to exclude?",
+      "meaning": "Clarify uncertainty and the described course.",
+      "context": "Discussing the wording of a clinical assessment.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Does",
+          "start": 0,
+          "end": 4
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 5,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "clinician",
+          "start": 9,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "suspect",
+          "start": 19,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "an",
+          "start": 27,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "acute",
+          "start": 30,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "condition",
+          "start": 36,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "or",
+          "start": 46,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "a",
+          "start": 49,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "chronic",
+          "start": 51,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "one",
+          "start": 59,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 62,
+          "end": 63
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 13,
+          "text": "what",
+          "start": 68,
+          "end": 72
+        },
+        {
+          "index": 14,
+          "text": "remains",
+          "start": 73,
+          "end": 80
+        },
+        {
+          "index": 15,
+          "text": "impossible",
+          "start": 81,
+          "end": 91
+        },
+        {
+          "index": 16,
+          "text": "to",
+          "start": 92,
+          "end": 94
+        },
+        {
+          "index": 17,
+          "text": "exclude",
+          "start": 95,
+          "end": 102
+        },
+        {
+          "index": 18,
+          "text": "?",
+          "start": 102,
+          "end": 103
+        }
+      ],
+      "focus_lexeme_ids": [
+        "suspect.consider-something-possible-without-confirmation.v",
+        "acute.recent-or-short-course-clinical.a",
+        "chronic.persistent-or-long-course-clinical.a",
+        "exclude.determine-possibility-is-not-supported-to-required-degree.v"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module05.07",
+      "text": "Please clarify whether the reported symptoms are diffuse, intermittent, persistent, recurrent or progressive in the respect being described.",
+      "meaning": "Request precise descriptions without assuming the terms are mutually exclusive.",
+      "context": "Clarifying a symptom history.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "clarify",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "whether",
+          "start": 15,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 23,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "reported",
+          "start": 27,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": "symptoms",
+          "start": 36,
+          "end": 44
+        },
+        {
+          "index": 6,
+          "text": "are",
+          "start": 45,
+          "end": 48
+        },
+        {
+          "index": 7,
+          "text": "diffuse",
+          "start": 49,
+          "end": 56
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 56,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "intermittent",
+          "start": 58,
+          "end": 70
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 70,
+          "end": 71
+        },
+        {
+          "index": 11,
+          "text": "persistent",
+          "start": 72,
+          "end": 82
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 82,
+          "end": 83
+        },
+        {
+          "index": 13,
+          "text": "recurrent",
+          "start": 84,
+          "end": 93
+        },
+        {
+          "index": 14,
+          "text": "or",
+          "start": 94,
+          "end": 96
+        },
+        {
+          "index": 15,
+          "text": "progressive",
+          "start": 97,
+          "end": 108
+        },
+        {
+          "index": 16,
+          "text": "in",
+          "start": 109,
+          "end": 111
+        },
+        {
+          "index": 17,
+          "text": "the",
+          "start": 112,
+          "end": 115
+        },
+        {
+          "index": 18,
+          "text": "respect",
+          "start": 116,
+          "end": 123
+        },
+        {
+          "index": 19,
+          "text": "being",
+          "start": 124,
+          "end": 129
+        },
+        {
+          "index": 20,
+          "text": "described",
+          "start": 130,
+          "end": 139
+        },
+        {
+          "index": 21,
+          "text": ".",
+          "start": 139,
+          "end": 140
+        }
+      ],
+      "focus_lexeme_ids": [
+        "diffuse.spread-over-broad-area-without-sharp-boundaries.a",
+        "intermittent.occurring-with-periods-of-absence.a",
+        "persistent.continuing-over-time.a",
+        "recurrent.returning-after-periods-of-improvement-or-absence.a",
+        "progressive.developing-or-increasing-over-time.a"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module05.08",
+      "text": "The clinician explained that benign and malignant describe a different distinction from congenital and acquired.",
+      "meaning": "Separate tumor terminology from timing of development.",
+      "context": "Discussing report wording without inferring a diagnosis.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "clinician",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "explained",
+          "start": 14,
+          "end": 23
+        },
+        {
+          "index": 3,
+          "text": "that",
+          "start": 24,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "benign",
+          "start": 29,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 36,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "malignant",
+          "start": 40,
+          "end": 49
+        },
+        {
+          "index": 7,
+          "text": "describe",
+          "start": 50,
+          "end": 58
+        },
+        {
+          "index": 8,
+          "text": "a",
+          "start": 59,
+          "end": 60
+        },
+        {
+          "index": 9,
+          "text": "different",
+          "start": 61,
+          "end": 70
+        },
+        {
+          "index": 10,
+          "text": "distinction",
+          "start": 71,
+          "end": 82
+        },
+        {
+          "index": 11,
+          "text": "from",
+          "start": 83,
+          "end": 87
+        },
+        {
+          "index": 12,
+          "text": "congenital",
+          "start": 88,
+          "end": 98
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 99,
+          "end": 102
+        },
+        {
+          "index": 14,
+          "text": "acquired",
+          "start": 103,
+          "end": 111
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 111,
+          "end": 112
+        }
+      ],
+      "focus_lexeme_ids": [
+        "benign.noncancerous-in-described-tumor-context.a",
+        "malignant.cancerous-with-potential-for-invasive-growth-or-spread.a",
+        "congenital.present-from-birth.a",
+        "acquired.developed-after-birth-rather-than-present-at-birth.a"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module05.09",
+      "text": "Please specify whether the tender area is proximal or distal, and whether the described structure is superficial or deep.",
+      "meaning": "Clarify location and anatomical depth.",
+      "context": "Checking an examination description with the clinician.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "specify",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "whether",
+          "start": 15,
+          "end": 22
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 23,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "tender",
+          "start": 27,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "area",
+          "start": 34,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "is",
+          "start": 39,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "proximal",
+          "start": 42,
+          "end": 50
+        },
+        {
+          "index": 8,
+          "text": "or",
+          "start": 51,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "distal",
+          "start": 54,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 60,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "whether",
+          "start": 66,
+          "end": 73
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 74,
+          "end": 77
+        },
+        {
+          "index": 14,
+          "text": "described",
+          "start": 78,
+          "end": 87
+        },
+        {
+          "index": 15,
+          "text": "structure",
+          "start": 88,
+          "end": 97
+        },
+        {
+          "index": 16,
+          "text": "is",
+          "start": 98,
+          "end": 100
+        },
+        {
+          "index": 17,
+          "text": "superficial",
+          "start": 101,
+          "end": 112
+        },
+        {
+          "index": 18,
+          "text": "or",
+          "start": 113,
+          "end": 115
+        },
+        {
+          "index": 19,
+          "text": "deep",
+          "start": 116,
+          "end": 120
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 120,
+          "end": 121
+        }
+      ],
+      "focus_lexeme_ids": [
+        "tender.painful-or-uncomfortable-on-touch-or-pressure.a",
+        "proximal.nearer-to-origin-or-attachment.a",
+        "distal.farther-from-origin-or-attachment.a",
+        "superficial.at-or-near-body-surface.a",
+        "deep.farther-beneath-body-surface.a"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.clinical_medicine.module05.10",
+      "text": "The note should specify what is stable, deteriorating or improving, rather than leaving the clinical description unexplained.",
+      "meaning": "Request a precise description of change.",
+      "context": "Reviewing a handover note.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "note",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "should",
+          "start": 9,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "specify",
+          "start": 16,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "what",
+          "start": 24,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "is",
+          "start": 29,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "stable",
+          "start": 32,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 38,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "deteriorating",
+          "start": 40,
+          "end": 53
+        },
+        {
+          "index": 9,
+          "text": "or",
+          "start": 54,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "improving",
+          "start": 57,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 66,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": "rather",
+          "start": 68,
+          "end": 74
+        },
+        {
+          "index": 13,
+          "text": "than",
+          "start": 75,
+          "end": 79
+        },
+        {
+          "index": 14,
+          "text": "leaving",
+          "start": 80,
+          "end": 87
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 88,
+          "end": 91
+        },
+        {
+          "index": 16,
+          "text": "clinical",
+          "start": 92,
+          "end": 100
+        },
+        {
+          "index": 17,
+          "text": "description",
+          "start": 101,
+          "end": 112
+        },
+        {
+          "index": 18,
+          "text": "unexplained",
+          "start": 113,
+          "end": 124
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 124,
+          "end": 125
+        }
+      ],
+      "focus_lexeme_ids": [
+        "stable.not-changing-significantly-in-described-clinical-respect.a",
+        "deteriorating.becoming-worse-in-described-clinical-respect.a",
+        "improving.becoming-better-in-described-clinical-respect.a"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "clinical-bls-physicians",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-ahrq-diagnosis-education",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "clinical-medline-word-parts",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, clinical communication, laboratory/imaging context or selected word-part reference only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

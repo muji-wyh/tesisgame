@@ -1,0 +1,1401 @@
+{
+  "schema": 1,
+  "plan_sha256": "28c763178d2247e7e1fdce7290fa11799d8cce05709d3da696e2f7aeec9dfeb6",
+  "target_manifest": [
+    {
+      "path": "data/professional/lexemes/retail-pilot.json",
+      "before": {
+        "bytes": 358948,
+        "sha256": "7efcb9f1ce7cd931982ca6978278f547e05745059762c3558f5ef1864faea897"
+      },
+      "after": {
+        "bytes": 360374,
+        "sha256": "e5029b78d5093acc9d35440df78a5e34e0fdd29d08a2617104a8f7c57efa0df2"
+      },
+      "noop": false
+    },
+    {
+      "path": "tests/professional-content.test.cjs",
+      "before": {
+        "bytes": 346365,
+        "sha256": "7620d4196914eb136f7ee4375eb1c13bafb0f509cfacb9859794210b14ebfa86"
+      },
+      "after": {
+        "bytes": 347272,
+        "sha256": "0519ea34d948fa75bddc1e29cbfc70f97e7667a4495a947719fbd9ac36cabe28"
+      },
+      "noop": false
+    },
+    {
+      "path": "tests/professional-retail-morphology.test.cjs",
+      "before": {
+        "bytes": 88429,
+        "sha256": "b5bfe27b11fccbdf4f399588e77eb730018228c65446404f9f9c8c545e0119c6"
+      },
+      "after": {
+        "bytes": 89132,
+        "sha256": "8280c7159fc3852cc9c5c80c6a17f0b3963ad8e66f5803adbcabe3d798702a29"
+      },
+      "noop": false
+    },
+    {
+      "path": "tests/professional-retail-media.test.cjs",
+      "before": {
+        "bytes": 43354,
+        "sha256": "c7c21856950d7e2a73ae4dc311de15d1a8adebacc6b62b708e0f08308d8901a4"
+      },
+      "after": {
+        "bytes": 52548,
+        "sha256": "6a278d2dd88941a51e2b4b401af8e21893156c72fcb40a8e05ea7dd63e6e8ef7"
+      },
+      "noop": false
+    },
+    {
+      "path": "professional-media/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png",
+      "before": null,
+      "after": {
+        "bytes": 135843,
+        "sha256": "f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb"
+      },
+      "noop": false
+    },
+    {
+      "path": "data/professional/provenance/retail-shopping-bag-image-2026-10-17.json",
+      "before": null,
+      "after": {
+        "bytes": 126206,
+        "sha256": "2fdd0ad9c9526a7c1dad5b490bdb0a9663c0b8b2e1aa321f373d9c63d8e63880"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/professional-retail-shopping-bag.md",
+      "before": null,
+      "after": {
+        "bytes": 5734,
+        "sha256": "107aa26fded69319e27f87902c1570973845b3a40474ae10b982d26c1c944070"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/actual-baseline-binding.json",
+      "before": null,
+      "after": {
+        "bytes": 1066218,
+        "sha256": "1506caf881745539b971881e978e5a5f60fc8de8640066169953f6ee45417da6"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-committed-state.json",
+      "before": null,
+      "after": {
+        "bytes": 43202,
+        "sha256": "93c800d4ed9c94c47932d0f2b807d4d13e4a0c1330bcc5ed1cf8882a235a48b1"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/attempt-001/command-1.log",
+      "before": null,
+      "after": {
+        "bytes": 591,
+        "sha256": "ae490723b3003afdf5acb56d9d1d2523220eaff867fbd91a26fab1b06dd02757"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/attempt-001/command-2.log",
+      "before": null,
+      "after": {
+        "bytes": 24787,
+        "sha256": "b3f3a6a6f56ce381a742951e4cff7d2266eb7de55e8fc52054d2d5cc7dbeed07"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/attempt-001/command-3.log",
+      "before": null,
+      "after": {
+        "bytes": 130,
+        "sha256": "c04bf5168c4951be761afab31633b5a6d5e4fdb537a8a4f81c74f259bdfb09a2"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/attempt-001/command-4.log",
+      "before": null,
+      "after": {
+        "bytes": 241,
+        "sha256": "4a8a7d0fc0ef12f47710cf805557f896c6ad96529ce1cdd2f30cc40a0ac97023"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/attempt-001/receipt.json",
+      "before": null,
+      "after": {
+        "bytes": 2818,
+        "sha256": "f25fbeb4fa8fafe08b0431653a5a9171d8369581aed104faad3e0161bbaf40f7"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/attempt-001/start.json",
+      "before": null,
+      "after": {
+        "bytes": 121586,
+        "sha256": "c843fe0b209c8201ccd832db9db05852a10a415900b0e3ba605a7e2b1957121c"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/fourth10-persisted/invoke.cjs",
+      "before": null,
+      "after": {
+        "bytes": 4817,
+        "sha256": "ec257f224e091177f1f8b7193bd3f96ec5773cc96e975377c8d6c276cfb7b491"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/independent-proposal-review/review.json",
+      "before": null,
+      "after": {
+        "bytes": 2542,
+        "sha256": "f56ba6b21b583e4ebb59b933ca82b982394512be31400f1c2fb6e0cf83407f8f"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/author-proposal.cjs",
+      "before": null,
+      "after": {
+        "bytes": 12592,
+        "sha256": "e0d42ff834a2bb9782ced13841ffaa25291aea459962d306ae31ee99189366c0"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/entry-afterimage.proposed.json",
+      "before": null,
+      "after": {
+        "bytes": 8310,
+        "sha256": "c4b48631733df905c383a60ca2ef04724722f2ee80065e6f607e9bef7a61a804"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/entry-preimage.json",
+      "before": null,
+      "after": {
+        "bytes": 6908,
+        "sha256": "cec2b375554a5a6ac2e834aa24074fb8b3924f83b1c992e8c6a69804e0e73760"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/evidence-lock.json",
+      "before": null,
+      "after": {
+        "bytes": 5439,
+        "sha256": "b4ca859f33cd3a38384396808e4b9d68069ba5ff6a82ba924aafb98ee2d03baf"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/generation-observation.json",
+      "before": null,
+      "after": {
+        "bytes": 899,
+        "sha256": "a6bebdb163914e0ec51a843fc71a605a3e773e85da94bbe55df4c3e51a66eea4"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/image-descriptor.proposed.json",
+      "before": null,
+      "after": {
+        "bytes": 1646,
+        "sha256": "f60ef7ca8846b15eb89000b7937cae10c74749d5a649a56e32400252f9ab16f5"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/integration-plan.md",
+      "before": null,
+      "after": {
+        "bytes": 6919,
+        "sha256": "e5c2c0136a93634d7270fecdb4ced873db02e8c9a330d5d06795d435522df1b0"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/inventory.json",
+      "before": null,
+      "after": {
+        "bytes": 2795,
+        "sha256": "5289682bdc2ebe875adac1f70b7985fe2dd665d4ade232b89b4386f26341716e"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/media/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png",
+      "before": null,
+      "after": {
+        "bytes": 135843,
+        "sha256": "f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/patch.proposed.json",
+      "before": null,
+      "after": {
+        "bytes": 17945,
+        "sha256": "2246e79884a86f127524cd816900dedc7dede75052b256b45b687899a4f395ad"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/production-document-template.md",
+      "before": null,
+      "after": {
+        "bytes": 5072,
+        "sha256": "5550617be9d2479f85be87647313d7a3536b0aa634a34d0a2c39111c7ebbdfe2"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/production-provenance-template.json",
+      "before": null,
+      "after": {
+        "bytes": 28499,
+        "sha256": "2a11e657629bf2e85c580af055cd21e02ee2cbe759acfdef2fa11272b41d7605"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/protected-media-observation.json",
+      "before": null,
+      "after": {
+        "bytes": 37782,
+        "sha256": "54c830fad620fedfa5f74ed281c229adc2f2dae268f555ddee75e78e7349d613"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/README.md",
+      "before": null,
+      "after": {
+        "bytes": 4063,
+        "sha256": "6c9fc3f9110ea7a93026130e7bc632b5aff8795a0c2dbca099ea96d69fb172c5"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/rebase-contract.json",
+      "before": null,
+      "after": {
+        "bytes": 2346,
+        "sha256": "f614de18d3f439a8e655901e4a57ef0c1bf704429fd26c7dafae9a2112da9ea5"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/resource.json",
+      "before": null,
+      "after": {
+        "bytes": 396,
+        "sha256": "ae02c1cc16a1c4d6e1827dfe9adfb072370010d3b5821a3db5beb410838bda64"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/proposal/test-delta-plan.md",
+      "before": null,
+      "after": {
+        "bytes": 6523,
+        "sha256": "203df8a9a09a116bcbd69dff313724ce21015f558a4ea7ad0bab3a8dd9f4a700"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/author-inventory.json",
+      "before": null,
+      "after": {
+        "bytes": 3842,
+        "sha256": "411183ccbbae70f854d5a1c2d5cb929d2c0f423a45e728ac49bcdf9c67ebae70"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r01/dependency-supplement.json",
+      "before": null,
+      "after": {
+        "bytes": 7705,
+        "sha256": "08c8fbcf2d1b1427954a0e1951b216ae23e361184613e8b08c2bc874b3fa46d8"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-preparation-source-review-r02/final-source-review.json",
+      "before": null,
+      "after": {
+        "bytes": 7382,
+        "sha256": "52425b72e4f13b010e047f9ac4a7ec4342aa15fd8a1c6f9aa00506b0c1384814"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-root-preparation-r02/invoke.cjs",
+      "before": null,
+      "after": {
+        "bytes": 4479,
+        "sha256": "cb32743b45ffc74e3256b51d31449db26f5b34b2a1f9d89b388d3cdeaa74e0a7"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-root-preparation-r02/input.json",
+      "before": null,
+      "after": {
+        "bytes": 5126,
+        "sha256": "1faaad6c220269ed2ea618f0d7cc7cba1a5f02d2513932252c85be1b28294a5f"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-root-preparation-r02/prepared-inspection.json",
+      "before": null,
+      "after": {
+        "bytes": 3605,
+        "sha256": "1e138273d2e95948f7429af2ba85f9500d22a718032953eb0226facf75d06a77"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-root-preparation-r02/attempt-001/start.json",
+      "before": null,
+      "after": {
+        "bytes": 235,
+        "sha256": "f58d3d27a0a822ece9e2588ad3df6fd29495a32fae7798f7e8f40538c08a620f"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-root-preparation-r02/attempt-001/receipt.json",
+      "before": null,
+      "after": {
+        "bytes": 1798,
+        "sha256": "6324cb02e67d6d76d48bebe77233c5b47cb9349cdbd3b84a5f03ae9fe76035cf"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-root-preparation-r02/attempt-001/command-1.log",
+      "before": null,
+      "after": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-root-preparation-r02/attempt-001/command-2.log",
+      "before": null,
+      "after": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-root-preparation-r02/attempt-001/command-3.log",
+      "before": null,
+      "after": {
+        "bytes": 200,
+        "sha256": "79eb9fa313549d3148159aef67eccf4d449442b9885a00f1eb29d0832f278473"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/preparation-receipt.json",
+      "before": null,
+      "after": {
+        "bytes": 7565,
+        "sha256": "153b3071e6d24e51da2bd26cf39bb3e0873f684182d19fd289960ae88deab443"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/execution-end.json",
+      "before": null,
+      "after": {
+        "bytes": 145,
+        "sha256": "0e09473185a8c1176724b3e7e74591c952b17f3765b0fe7fb93f2a22787324b4"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/execution-start.json",
+      "before": null,
+      "after": {
+        "bytes": 215,
+        "sha256": "78257edffadfef2f5ce1b8fff0684315716b3f31050f8de1abc5b9cca439c026"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png",
+      "before": null,
+      "after": {
+        "bytes": 135843,
+        "sha256": "f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/production-document.prepared.md",
+      "before": null,
+      "after": {
+        "bytes": 5072,
+        "sha256": "5550617be9d2479f85be87647313d7a3536b0aa634a34d0a2c39111c7ebbdfe2"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/production-provenance.prepared.json",
+      "before": null,
+      "after": {
+        "bytes": 80997,
+        "sha256": "a11d6cfa4fca3b3d5a782ae0e30fedbd982e9b19d71996c9f69f9d6bf4e00640"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-content.test.cjs.after",
+      "before": null,
+      "after": {
+        "bytes": 347272,
+        "sha256": "0519ea34d948fa75bddc1e29cbfc70f97e7667a4495a947719fbd9ac36cabe28"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-content.test.cjs.before",
+      "before": null,
+      "after": {
+        "bytes": 346365,
+        "sha256": "7620d4196914eb136f7ee4375eb1c13bafb0f509cfacb9859794210b14ebfa86"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-retail-media.test.cjs.after",
+      "before": null,
+      "after": {
+        "bytes": 52548,
+        "sha256": "6a278d2dd88941a51e2b4b401af8e21893156c72fcb40a8e05ea7dd63e6e8ef7"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-retail-media.test.cjs.before",
+      "before": null,
+      "after": {
+        "bytes": 43354,
+        "sha256": "c7c21856950d7e2a73ae4dc311de15d1a8adebacc6b62b708e0f08308d8901a4"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-retail-morphology.test.cjs.after",
+      "before": null,
+      "after": {
+        "bytes": 89132,
+        "sha256": "8280c7159fc3852cc9c5c80c6a17f0b3963ad8e66f5803adbcabe3d798702a29"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/professional-retail-morphology.test.cjs.before",
+      "before": null,
+      "after": {
+        "bytes": 88429,
+        "sha256": "b5bfe27b11fccbdf4f399588e77eb730018228c65446404f9f9c8c545e0119c6"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/projection-observation.json",
+      "before": null,
+      "after": {
+        "bytes": 1371,
+        "sha256": "4e1ea7e83606656a73af0258f27673456ba9c425f28d0f96635d0db79cec3177"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retail-pilot.json.after",
+      "before": null,
+      "after": {
+        "bytes": 360374,
+        "sha256": "e5029b78d5093acc9d35440df78a5e34e0fdd29d08a2617104a8f7c57efa0df2"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retail-pilot.json.before",
+      "before": null,
+      "after": {
+        "bytes": 358948,
+        "sha256": "7efcb9f1ce7cd931982ca6978278f547e05745059762c3558f5ef1864faea897"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/000.bin",
+      "before": null,
+      "after": {
+        "bytes": 1066218,
+        "sha256": "1506caf881745539b971881e978e5a5f60fc8de8640066169953f6ee45417da6"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/001.bin",
+      "before": null,
+      "after": {
+        "bytes": 43202,
+        "sha256": "93c800d4ed9c94c47932d0f2b807d4d13e4a0c1330bcc5ed1cf8882a235a48b1"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/002.bin",
+      "before": null,
+      "after": {
+        "bytes": 591,
+        "sha256": "ae490723b3003afdf5acb56d9d1d2523220eaff867fbd91a26fab1b06dd02757"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/003.bin",
+      "before": null,
+      "after": {
+        "bytes": 24787,
+        "sha256": "b3f3a6a6f56ce381a742951e4cff7d2266eb7de55e8fc52054d2d5cc7dbeed07"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/004.bin",
+      "before": null,
+      "after": {
+        "bytes": 130,
+        "sha256": "c04bf5168c4951be761afab31633b5a6d5e4fdb537a8a4f81c74f259bdfb09a2"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/005.bin",
+      "before": null,
+      "after": {
+        "bytes": 241,
+        "sha256": "4a8a7d0fc0ef12f47710cf805557f896c6ad96529ce1cdd2f30cc40a0ac97023"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/006.bin",
+      "before": null,
+      "after": {
+        "bytes": 2818,
+        "sha256": "f25fbeb4fa8fafe08b0431653a5a9171d8369581aed104faad3e0161bbaf40f7"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/007.bin",
+      "before": null,
+      "after": {
+        "bytes": 121586,
+        "sha256": "c843fe0b209c8201ccd832db9db05852a10a415900b0e3ba605a7e2b1957121c"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/008.bin",
+      "before": null,
+      "after": {
+        "bytes": 4817,
+        "sha256": "ec257f224e091177f1f8b7193bd3f96ec5773cc96e975377c8d6c276cfb7b491"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/009.bin",
+      "before": null,
+      "after": {
+        "bytes": 2542,
+        "sha256": "f56ba6b21b583e4ebb59b933ca82b982394512be31400f1c2fb6e0cf83407f8f"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/010.bin",
+      "before": null,
+      "after": {
+        "bytes": 12592,
+        "sha256": "e0d42ff834a2bb9782ced13841ffaa25291aea459962d306ae31ee99189366c0"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/011.bin",
+      "before": null,
+      "after": {
+        "bytes": 8310,
+        "sha256": "c4b48631733df905c383a60ca2ef04724722f2ee80065e6f607e9bef7a61a804"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/012.bin",
+      "before": null,
+      "after": {
+        "bytes": 6908,
+        "sha256": "cec2b375554a5a6ac2e834aa24074fb8b3924f83b1c992e8c6a69804e0e73760"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/013.bin",
+      "before": null,
+      "after": {
+        "bytes": 5439,
+        "sha256": "b4ca859f33cd3a38384396808e4b9d68069ba5ff6a82ba924aafb98ee2d03baf"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/014.bin",
+      "before": null,
+      "after": {
+        "bytes": 899,
+        "sha256": "a6bebdb163914e0ec51a843fc71a605a3e773e85da94bbe55df4c3e51a66eea4"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/015.bin",
+      "before": null,
+      "after": {
+        "bytes": 1646,
+        "sha256": "f60ef7ca8846b15eb89000b7937cae10c74749d5a649a56e32400252f9ab16f5"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/016.bin",
+      "before": null,
+      "after": {
+        "bytes": 6919,
+        "sha256": "e5c2c0136a93634d7270fecdb4ced873db02e8c9a330d5d06795d435522df1b0"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/017.bin",
+      "before": null,
+      "after": {
+        "bytes": 2795,
+        "sha256": "5289682bdc2ebe875adac1f70b7985fe2dd665d4ade232b89b4386f26341716e"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/018.bin",
+      "before": null,
+      "after": {
+        "bytes": 135843,
+        "sha256": "f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/019.bin",
+      "before": null,
+      "after": {
+        "bytes": 17945,
+        "sha256": "2246e79884a86f127524cd816900dedc7dede75052b256b45b687899a4f395ad"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/020.bin",
+      "before": null,
+      "after": {
+        "bytes": 5072,
+        "sha256": "5550617be9d2479f85be87647313d7a3536b0aa634a34d0a2c39111c7ebbdfe2"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/021.bin",
+      "before": null,
+      "after": {
+        "bytes": 28499,
+        "sha256": "2a11e657629bf2e85c580af055cd21e02ee2cbe759acfdef2fa11272b41d7605"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/022.bin",
+      "before": null,
+      "after": {
+        "bytes": 37782,
+        "sha256": "54c830fad620fedfa5f74ed281c229adc2f2dae268f555ddee75e78e7349d613"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/023.bin",
+      "before": null,
+      "after": {
+        "bytes": 4063,
+        "sha256": "6c9fc3f9110ea7a93026130e7bc632b5aff8795a0c2dbca099ea96d69fb172c5"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/024.bin",
+      "before": null,
+      "after": {
+        "bytes": 2346,
+        "sha256": "f614de18d3f439a8e655901e4a57ef0c1bf704429fd26c7dafae9a2112da9ea5"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/025.bin",
+      "before": null,
+      "after": {
+        "bytes": 396,
+        "sha256": "ae02c1cc16a1c4d6e1827dfe9adfb072370010d3b5821a3db5beb410838bda64"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/retained-evidence/026.bin",
+      "before": null,
+      "after": {
+        "bytes": 6523,
+        "sha256": "203df8a9a09a116bcbd69dff313724ce21015f558a4ea7ad0bab3a8dd9f4a700"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/target-plan.json",
+      "before": null,
+      "after": {
+        "bytes": 14712,
+        "sha256": "321b6ed0a4d0b66721b36c2d53de9bd3416277641fa1fd227650dd5a45321e98"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/execution-r01/test-edit-ledger.json",
+      "before": null,
+      "after": {
+        "bytes": 5842,
+        "sha256": "f33a04f002b5577d7a2fc7991c227fa994f3be1ed1739cc5c4e508696ec2a1b5"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/CALL-GRAPH.md",
+      "before": null,
+      "after": {
+        "bytes": 4735,
+        "sha256": "3f2dfd713551f1f613aea2314060e6396af03a7d31b7ea1e0b528ee2dd4c9895"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/README.md",
+      "before": null,
+      "after": {
+        "bytes": 6490,
+        "sha256": "eb8d24e061c4de42b6855b891abdcdac4d0648a8ea5b799f1e7ce3497df97341"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/TRANSACTION.md",
+      "before": null,
+      "after": {
+        "bytes": 8530,
+        "sha256": "2a8cd346cdc921809b5249b5a6ed7de4676c3e6326dcbc1bdd4449617210937d"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/actual-baseline-binding.template.json",
+      "before": null,
+      "after": {
+        "bytes": 1296,
+        "sha256": "ffc634dea77443f1e716b1e13588c6b54a560e4e8f1c79f6e024f5320e60b8dd"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/author-final-binding-r02.cjs",
+      "before": null,
+      "after": {
+        "bytes": 18014,
+        "sha256": "88852307fca1e7011fca0d6692ab639053520e939275e5edab864c91b1864f86"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/author-final-binding-r03.cjs",
+      "before": null,
+      "after": {
+        "bytes": 18091,
+        "sha256": "7752c72b792a237bee5e55194b142d2346f9dcbac45d1ea7b1aa073a70c1330a"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/author-final-binding.cjs",
+      "before": null,
+      "after": {
+        "bytes": 17952,
+        "sha256": "d5a2a00ca9be2afb26f3b0b09525088e86ab1cebf56f4b0191beed775c227d11"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/authoring-failure-r01.json",
+      "before": null,
+      "after": {
+        "bytes": 821,
+        "sha256": "98104062825e4bd656df249bd8a430cce204150383da072b833b678ad99ffee2"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/authoring-failure-r02.json",
+      "before": null,
+      "after": {
+        "bytes": 1038,
+        "sha256": "953502d4c18d05f3d20e37d274533672239acf4f0bb59b9772e931e65528c4a1"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/before-final-binding/CALL-GRAPH.md",
+      "before": null,
+      "after": {
+        "bytes": 4647,
+        "sha256": "e3153c70f50a20f34de6cfd1f4e70c7ca247f1c969f8580484fd85d857b1f6e8"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/before-final-binding/README.md",
+      "before": null,
+      "after": {
+        "bytes": 3764,
+        "sha256": "392edee62ba4e1491e3a78d964c955d35d1c15a67db09728f4770b9100a21dc8"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/before-final-binding/TRANSACTION.md",
+      "before": null,
+      "after": {
+        "bytes": 7811,
+        "sha256": "1e995292f284bb94d361e58f6c46ffabb5c6f19b94bd21e903805d1745456d65"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/before-final-binding/actual-baseline-binding.template.json",
+      "before": null,
+      "after": {
+        "bytes": 1296,
+        "sha256": "ffc634dea77443f1e716b1e13588c6b54a560e4e8f1c79f6e024f5320e60b8dd"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/before-final-binding/inventory.json",
+      "before": null,
+      "after": {
+        "bytes": 1149,
+        "sha256": "9be28421c62debef7e8e7d83c96e1322dec4067d152eefdc95012a5525f59b1b"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/before-final-binding/prepare.cjs",
+      "before": null,
+      "after": {
+        "bytes": 13736,
+        "sha256": "43df78cfc9bc34320bbade08f993c3bd4ed5f2d81be8213ed0a11c42a38f6da2"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/before-final-binding/test-transforms.cjs",
+      "before": null,
+      "after": {
+        "bytes": 12710,
+        "sha256": "a7762bbac0e687baf26aa784d7c0fb9533d834b309406ae98759b88aa5b619a7"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/prepare.cjs",
+      "before": null,
+      "after": {
+        "bytes": 16395,
+        "sha256": "7bd4b4399ba9dd3eb1f7900c0b0522f717dd783246731fca3543d9965e4f2c46"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/retained-evidence-allowlist.json",
+      "before": null,
+      "after": {
+        "bytes": 6763,
+        "sha256": "9a95872e5824dbfb6a6399745a5a4ba34e6c74de9c87dd7290376513bfbe9c5d"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/retained-evidence-pins.json",
+      "before": null,
+      "after": {
+        "bytes": 9521,
+        "sha256": "907007cf33ba0556deea402b9251f5a9fda0ff793e1faf787857cc36497f6e4d"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-delivery-preparation-r02/test-transforms.cjs",
+      "before": null,
+      "after": {
+        "bytes": 12710,
+        "sha256": "a7762bbac0e687baf26aa784d7c0fb9533d834b309406ae98759b88aa5b619a7"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r01/run.cjs",
+      "before": null,
+      "after": {
+        "bytes": 7657,
+        "sha256": "815e2387471801fbaeb148a1c27a668265fe352a6b3875b37b381b948bf03073"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r01/input.json",
+      "before": null,
+      "after": {
+        "bytes": 755325,
+        "sha256": "e391994e98771ff5148da8b8ff85fd55b6e5af885d8a371333a4a876a388e484"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r01/attempt-001/start.json",
+      "before": null,
+      "after": {
+        "bytes": 235,
+        "sha256": "f9605aa728ec270ddb3fc9051ccc6ba00c6a9ca60712eceeef9b5c15576e9130"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r01/attempt-001/receipt.json",
+      "before": null,
+      "after": {
+        "bytes": 63055,
+        "sha256": "e5d4b2cf9a9ac657b92404f4f4f0b7a57ed460f058fc30ee550a92734d26a978"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-preparation-source-review-r02/candidate-dispatch-review-r01.json",
+      "before": null,
+      "after": {
+        "bytes": 7270,
+        "sha256": "6c6992a4c1171b542d2c1e10bc1318cd75be11b56f0dbf0715cb4dea58cbe992"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r02/r01-failure-inspection.json",
+      "before": null,
+      "after": {
+        "bytes": 653,
+        "sha256": "dcc7f076095c0fd5bee53fb0a50ad9e39dc0b2e95016322e0b8e54fdc3ba43a5"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r02/authoring-failure-r01.json",
+      "before": null,
+      "after": {
+        "bytes": 357,
+        "sha256": "5f881879e22600a0def08a53f3d08633a89856d22355dac0f3e6f6b97a0ebee8"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r02/dependency-supplement.json",
+      "before": null,
+      "after": {
+        "bytes": 5004,
+        "sha256": "b938822e5668fec48d5670af8faa208362befce63c53d96c814abd4c9663882d"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r02/run.cjs",
+      "before": null,
+      "after": {
+        "bytes": 7657,
+        "sha256": "815e2387471801fbaeb148a1c27a668265fe352a6b3875b37b381b948bf03073"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r02/input.json",
+      "before": null,
+      "after": {
+        "bytes": 759905,
+        "sha256": "0d25315b1d2ab178fbe4445d4412e54b7de03743d9f241822d14554f84900408"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-preparation-source-review-r02/candidate-r03-recursive-dependency-supplement.json",
+      "before": null,
+      "after": {
+        "bytes": 5415977,
+        "sha256": "6bc3e1804aa16c00a34554cc320eb9d2217dbcd5758093da2438032c3834f062"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r03/candidate-r03-recursive-dependency-supplement.json",
+      "before": null,
+      "after": {
+        "bytes": 5415977,
+        "sha256": "6bc3e1804aa16c00a34554cc320eb9d2217dbcd5758093da2438032c3834f062"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-preparation-source-review-r02/candidate-r03-derived-path-coverage.json",
+      "before": null,
+      "after": {
+        "bytes": 243081,
+        "sha256": "1ca0917426af502fa3aa08084afdeb1ab488bae8e103a9230f0ea06023b1ab3a"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r03/candidate-r03-derived-path-coverage.json",
+      "before": null,
+      "after": {
+        "bytes": 243081,
+        "sha256": "1ca0917426af502fa3aa08084afdeb1ab488bae8e103a9230f0ea06023b1ab3a"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-preparation-source-review-r02/candidate-r03-derived-recursive-supplement.json",
+      "before": null,
+      "after": {
+        "bytes": 256925,
+        "sha256": "6e423a80b14411ee12e88d85f107f4a28ea4b79bfd2da026f5a61ac4782c68e1"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r03/candidate-r03-derived-recursive-supplement.json",
+      "before": null,
+      "after": {
+        "bytes": 256925,
+        "sha256": "6e423a80b14411ee12e88d85f107f4a28ea4b79bfd2da026f5a61ac4782c68e1"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r03/dependency-supplement.json",
+      "before": null,
+      "after": {
+        "bytes": 1322759,
+        "sha256": "28d2b28166257f9129eda7f74236f4ab1f3e82fe1d7a8a5de52e5603618ede03"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r03/run.cjs",
+      "before": null,
+      "after": {
+        "bytes": 7657,
+        "sha256": "815e2387471801fbaeb148a1c27a668265fe352a6b3875b37b381b948bf03073"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r03/input.json",
+      "before": null,
+      "after": {
+        "bytes": 1672323,
+        "sha256": "55c0586a8f09ed0e4378d53e47fa8c1f8972cd728d05452ae5cb5b14e9da34ce"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r03/attempt-001/start.json",
+      "before": null,
+      "after": {
+        "bytes": 235,
+        "sha256": "96fa6b02f931ca7563b0d8b6762a6d394876a53e604cf3e1323bc56192c20d1d"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-projected-validation-r03/attempt-001/receipt.json",
+      "before": null,
+      "after": {
+        "bytes": 469175,
+        "sha256": "9a5ee12cf7ac2c4f6f6e41e7a05357a365eab570a5da1d4ce2a696143c73c121"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-preparation-source-review-r02/candidate-dispatch-review-r03.json",
+      "before": null,
+      "after": {
+        "bytes": 2150,
+        "sha256": "8883524cdb26493966562035e0e545736337c92b4b2aa60a94f8a5602ba41832"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-final-artifacts-r01/finalize.cjs",
+      "before": null,
+      "after": {
+        "bytes": 7814,
+        "sha256": "b81bedb10e69a41eeb9d032d7e015a6bee599e5d4b35a3920003e66698910f06"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-final-artifacts-r01/candidate-command-witness.json",
+      "before": null,
+      "after": {
+        "bytes": 564,
+        "sha256": "084aaf9405b2f70b5d6df6cb1bc712cfd647608efc93aa80c593ad90681eda80"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-preparation-source-review-r02/finalizer-source-review-r01.json",
+      "before": null,
+      "after": {
+        "bytes": 1255,
+        "sha256": "a0158786f29b84e07e7933b331213ad6aecd50ff82501b7426e14c18ca677a24"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-final-artifacts-r01/input.json",
+      "before": null,
+      "after": {
+        "bytes": 21736,
+        "sha256": "1ed7c57c0e4c12447504617f687040a8a9ac1af118bbc9a79ab256cb143e1ada"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-preparation-source-review-r02/candidate-dispatch-review-r02.json",
+      "before": null,
+      "after": {
+        "bytes": 1884,
+        "sha256": "072493c31fc50f1ae54c7c919da1c6a88e92c6dbf70951c8154fd55e1dee3b5e"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-preparation-source-review-r02/finalizer-input-review-r01.json",
+      "before": null,
+      "after": {
+        "bytes": 45091,
+        "sha256": "f667b9eb3363500f5b7e6dbfc763559024b8076903d5b7dd57cd16d1c55fd97b"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-preparation-source-review-r02/finalizer-output-review-r01.json",
+      "before": null,
+      "after": {
+        "bytes": 2204,
+        "sha256": "f862d5299f71d0c06ae4e05b4b7605246cf8ab310b606b1eec2737b3d8b1143f"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-final-artifacts-r01/output/additional-retained-files.json",
+      "before": null,
+      "after": {
+        "bytes": 43297,
+        "sha256": "5e6fc0bb60079eb18cb5341ed2c812aad931c40747d4419f529ac24ce003925a"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-final-artifacts-r01/output/receipt.json",
+      "before": null,
+      "after": {
+        "bytes": 933,
+        "sha256": "335a506fab04693264326416e294c466c7820ba52bdc32044c209e8cb9da858c"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-commit-independent-review-r01/source-review.json",
+      "before": null,
+      "after": {
+        "bytes": 5427,
+        "sha256": "4fdfdd1a4dc4037711c4c6666ed4beec2842da373fb63beb72e84602391cea8b"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-commit-independent-review-r01/inspection.json",
+      "before": null,
+      "after": {
+        "bytes": 18142,
+        "sha256": "7946b3eafb4874256ec8bc7c08fc560ba88b9a74e042ac7d185905801d7e4024"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-commit-independent-review-r01/inventory.json",
+      "before": null,
+      "after": {
+        "bytes": 919,
+        "sha256": "f99e091e7ece2a899df31fd6e50ef5b79054d678cc9849d01a516f4ed554c2d5"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-commit-independent-review-r01/guard-wrapper-source-review.json",
+      "before": null,
+      "after": {
+        "bytes": 4518,
+        "sha256": "24fda5acf522c3503ed5011135be5d320632afa8b2b289afde2fe9c79796e29d"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-commit-independent-review-r01/guard-wrapper-review-inventory.json",
+      "before": null,
+      "after": {
+        "bytes": 694,
+        "sha256": "d2b505c502f5930cddaced894997b982e74e249351a5e0ad49b4c3ee610cab95"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-commit-proposal-r01/commit.cjs",
+      "before": null,
+      "after": {
+        "bytes": 27037,
+        "sha256": "b522c987354d2e526cc9194b0dd5239b2592b07aa30f4ddd7bd16261e2c3c087"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-commit-proposal-r01/guard-probe.cjs",
+      "before": null,
+      "after": {
+        "bytes": 13318,
+        "sha256": "606b14e55469c212d39e24e16a0bcbdf51e3c46330bc8ecf5bb23b732a11bdf7"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-commit-proposal-r01/author-inventory.json",
+      "before": null,
+      "after": {
+        "bytes": 946,
+        "sha256": "808263de137b0bde79084a3481970c38d1508621e33c3c1b7ba5ec45ab91891d"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-commit-proposal-r01/probe-inventory.json",
+      "before": null,
+      "after": {
+        "bytes": 655,
+        "sha256": "c3c82ce666381f4ea33c152be1849f94a13d69792cbdae47f34ed7fce5c5ed2e"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-commit-proposal-r01/README.md",
+      "before": null,
+      "after": {
+        "bytes": 7293,
+        "sha256": "8e40a4d8f02d8035e318d8a889c4d8be3bf949db2ce1d474932f32ea72f9ecbc"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-commit-proposal-r01/GUARD-PROBE.md",
+      "before": null,
+      "after": {
+        "bytes": 2003,
+        "sha256": "0b0ebad559de4e06462baf41a41ddf64d296c7c96a9e1990c4ba5fa186379948"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-commit-proposal-r01/input.template.json",
+      "before": null,
+      "after": {
+        "bytes": 1656,
+        "sha256": "15def0e5e0a19e7ca6abbae797e07f1996b494f851288cca3423fa3e5fae0350"
+      },
+      "noop": false
+    },
+    {
+      "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/final-evidence/build/professional-english/shopping-bag-root-guard-r01/invoke.cjs",
+      "before": null,
+      "after": {
+        "bytes": 4739,
+        "sha256": "af25df7aac66b176586ae39725ad5d89420c1af8c83774b8b050ff9fd4f2e573"
+      },
+      "noop": false
+    }
+  ],
+  "input_union": {
+    "path": "build/professional-english/shopping-bag-projected-validation-r03/input.json",
+    "sha256": "55c0586a8f09ed0e4378d53e47fa8c1f8972cd728d05452ae5cb5b14e9da34ce",
+    "count": 11569,
+    "pin_map_sha256": "1c8b9be1759c60981de41e563e873ceecb1e7bf0f274dbd66db6cdffe0589a36"
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-10-16T09:26:13.716Z",
+  "status": "root_accepts_nine_exact_language_candidates_pending_guarded_integration",
+  "reviewer": "Codex root independent AI editorial review; no human or specialty credential claimed",
+  "proposal": {
+    "path": "build/professional-english/foundation-module01-language-review/first10/independent-review-r01/language-review-proposal.json",
+    "raw_sha256": "5c2b512b3869514919f24f7e1ac569436d8e9487edf5d7572ea9f5702fb6dde6",
+    "json_sha256": "356e4c3d7e6c81c1a121582f53825959b16bc455b0d5a5cef6268b6a237c397f"
+  },
+  "root_source_crosschecks": {
+    "path": "build/professional-english/foundation-module01-language-review/first10/root-review-r01/source-crosschecks.json",
+    "raw_sha256": "44b1aaa7eca4e28a4f2ae81fc0092848bba25a1e14f21b9f48b5ac32817f954a"
+  },
+  "accepted": [
+    {
+      "id": "colleague.workmate.n",
+      "candidate_entry_json_sha256": "9ca819a2be419e03b68cee71e048f981111af195b8959738128bd16e12976b7f",
+      "decision": "accept",
+      "definition": "Someone who works with another person in the same organization or profession.",
+      "example": "My colleague handles the afternoon deliveries.",
+      "difficulty": {
+        "stored": "A2",
+        "reviewed_candidate": "A2",
+        "observed_selected_source_label": "A2",
+        "independent_editorial_basis": "Selected Oxford Working life A2 supports the editorial placement.",
+        "dictionary_level_certification": false
+      },
+      "limits": "Coworker and workmate are related vocabulary, not additional exact spellings."
+    },
+    {
+      "id": "employee.worker.n",
+      "candidate_entry_json_sha256": "c7a1b254586eb1e838f736c69c22c652b5b7023f0bed1e84226fdb5c15f9ed10",
+      "decision": "accept",
+      "definition": "A person who works for an organization or another person in return for pay.",
+      "example": "The new employee checked next week's work schedule.",
+      "difficulty": {
+        "stored": "A2",
+        "reviewed_candidate": "A2",
+        "observed_selected_source_label": "A2",
+        "independent_editorial_basis": "Selected Oxford Working life A2 supports the editorial placement.",
+        "dictionary_level_certification": false
+      },
+      "limits": "This ordinary word definition does not determine employee versus contractor status under law."
+    },
+    {
+      "id": "employer.hiring-organization.n",
+      "candidate_entry_json_sha256": "1c3980d37058ca821592a64732fc2cf113f2cdfbd617336733a7ef0f35cd19ad",
+      "decision": "accept",
+      "definition": "A person or organization that has people working for them in paid jobs.",
+      "example": "My employer offered a training session for new staff.",
+      "difficulty": {
+        "stored": "A2",
+        "reviewed_candidate": "A2",
+        "observed_selected_source_label": "A2",
+        "independent_editorial_basis": "Selected Oxford Business and Working life A2 support the editorial placement.",
+        "dictionary_level_certification": false
+      },
+      "limits": "Offering this training is an example, not a general duty. Employer is not interchangeable with manager, supervisor or owner."
+    },
+    {
+      "id": "manager.work-leader.n",
+      "candidate_entry_json_sha256": "005bb2f8e2717244e33db9662bb620f0d51c90a3e7bf356b67eb3ec15db716c1",
+      "decision": "accept",
+      "definition": "A person responsible for running an organization or part of it, or for organizing a group's work.",
+      "example": "The manager arranged for another employee to work the evening shift.",
+      "difficulty": {
+        "stored": "A2",
+        "reviewed_candidate": "A2",
+        "observed_selected_source_label": "A2",
+        "independent_editorial_basis": "Oxford workplace sense 1 carries Jobs, Business and Shopping A2; other manager senses are excluded.",
+        "dictionary_level_certification": false
+      },
+      "limits": "Exclude software tools, sports and entertainment-specific senses. There is no universal manager-supervisor hierarchy."
+    },
+    {
+      "id": "team.working-group.n",
+      "candidate_entry_json_sha256": "72f51b80f5315996a423a8618a9b25d08e1e780ea8cda721017865e8e55fa04f",
+      "decision": "accept",
+      "definition": "A group of people who work together toward a shared aim.",
+      "example": "Our team meets briefly every morning.",
+      "difficulty": {
+        "stored": "A2",
+        "reviewed_candidate": "A2",
+        "observed_selected_source_label": null,
+        "independent_editorial_basis": "Independent editorial placement, not dictionary CEFR certification. The specified work group, short concrete routine example and recurring shared-work contexts are suitable for the project A2 entry band. The specification explicitly calls difficulty editorial. No separate Oxford working-sense level was observed; sports A1 and animal C2 are not transferred.",
+        "dictionary_level_certification": false
+      },
+      "limits": "This decision resolves the author open difficulty question only as an editorial placement. It does not supply an external sense-level rating or evaluate a specialist team role."
+    },
+    {
+      "id": "department.organization-section.n",
+      "candidate_entry_json_sha256": "89733cacdb4772762919ffc64ce6b455a9156c83df392d1b1bf1834044ee7ed5",
+      "decision": "accept",
+      "definition": "A section of an organization with a particular area of work.",
+      "example": "The finance department handles the invoice.",
+      "difficulty": {
+        "stored": "A2",
+        "reviewed_candidate": "A2",
+        "observed_selected_source_label": "A2",
+        "independent_editorial_basis": "The selected Oxford organizational sense has A2 topic labels.",
+        "dictionary_level_certification": false
+      },
+      "limits": "Dept is an abbreviation rather than a newly accepted full-word answer. Specialized department terms and their domain gates remain separate."
+    },
+    {
+      "id": "customer.buyer.n",
+      "candidate_entry_json_sha256": "b00aa2d2f9700bcb81f895f005c50ff39270e0ac890e3e3d6849675d50af7d12",
+      "decision": "accept",
+      "definition": "A person or organization that buys goods or services.",
+      "example": "The customer asked about the delivery date.",
+      "difficulty": {
+        "stored": "A2",
+        "reviewed_candidate": "A2",
+        "observed_selected_source_label": "A1",
+        "independent_editorial_basis": "Accept A2 only as the curriculum entry floor: the observed Oxford buyer-sense label remains A1. A simpler noun may be taught in this A2 course, and the field is editorial difficulty. This is not an A1-to-A2 lexical conversion or dictionary certification.",
+        "dictionary_level_certification": false
+      },
+      "limits": "Customer and client overlap; do not invent a goods-versus-services boundary. Background prospect language does not widen this definition or create new scored bindings."
+    },
+    {
+      "id": "client.service-customer.n",
+      "candidate_entry_json_sha256": "3398bc0c6d8967a57cb2c23cdefe3d0082b03e0b8095092878140edf0652177a",
+      "decision": "accept_refined_candidate_only",
+      "definition": "A person or organization that receives professional advice or services.",
+      "example": "The client requested an update on the project.",
+      "difficulty": {
+        "stored": "A2",
+        "reviewed_candidate": "B1",
+        "observed_selected_source_label": "B1",
+        "independent_editorial_basis": "Oxford professional advice or services sense has Business B1. Its computing C2 label is excluded.",
+        "dictionary_level_certification": false
+      },
+      "limits": "The author phrase from a person or business is replaced only in the reviewed candidate. Public or nonprofit provider coverage is a bounded editorial inference from organization and social-work evidence, not an explicitly enumerated dictionary sector list. Legal representation, privilege and contractual acceptance remain outside this review."
+    },
+    {
+      "id": "visitor.temporary-guest.n",
+      "candidate_entry_json_sha256": "65dea199b5e76534e8b9607f28e9d93f30bcda51ee7d6eb94bf09f1d2905c33a",
+      "decision": "accept",
+      "definition": "A person who comes to a place to see someone or something for a limited time.",
+      "example": "The visitor signed in at reception.",
+      "difficulty": {
+        "stored": "A2",
+        "reviewed_candidate": "A2",
+        "observed_selected_source_label": "A1",
+        "independent_editorial_basis": "Accept A2 as an editorial curriculum floor while retaining the actual Oxford physical-visit A1 observation. The field does not become a dictionary-certified A2 rating.",
+        "dictionary_level_certification": false
+      },
+      "limits": "Website visitors are separate. The example illustrates one local reception practice, not universal sign-in or access rights."
+    }
+  ],
+  "held": [
+    {
+      "id": "supervisor.work-overseer.n",
+      "decision": "preserve_entire_live_record_unchanged",
+      "wording_only_acceptance": "Accept the directing-and-checking definition and retained progress example as wording only. The team's possessive is correct. This separate wording conclusion does not clear the full language gate.",
+      "reason": {
+        "stored": "A2",
+        "reviewed_candidate": "A2",
+        "observed_selected_source_label": "C1",
+        "independent_editorial_basis": "The selected Oxford supervisor and supervise labels are C1. The current enum permits only A2, B1 and B2. The preserved A2 field is not accepted and must not be marked reviewed by this proposal.",
+        "dictionary_level_certification": false
+      },
+      "required_resolution": "A separately reviewed difficulty or curriculum policy decision is required before full language acceptance. No such change is made here."
+    }
+  ],
+  "scope": "Nine ordinary noun language decisions across 180 memberships only. Preserve all 200 selected memberships and full contextual scope; no expression-wide approval or new scoring binding. Client uses the exact refined receives definition at B1. Team A2 is an editorial judgment; customer and visitor A2 are course-floor placements with observed Oxford A1 retained separately. Supervisor A2 is unaccepted and its entire current entry remains unchanged.",
+  "protected": "All morphology, media, voice, domain, forms, regions, practice modes, unrelated entries, expressions, modules, course and release readiness remain unchanged. Overall lexical review follows only existing language/domain semantics; it does not establish content/media/module readiness.",
+  "production_changed": false,
+  "native_runtime_required_for_this_language_decision": false
+}

@@ -1,0 +1,123 @@
+{
+  "status": "single_candidate_and_exact_empty_brief_revision_pending_independent_root_visual_review",
+  "sense_id": "shopping-basket.store-container.n",
+  "definition": "A small container with handles used to carry items while shopping.",
+  "accepted_forms": [
+    "shopping basket"
+  ],
+  "source": {
+    "url": "https://kenney.nl/assets/mini-market",
+    "creator": "Kenney; Fleur Keijsers; Guus Vermeulen",
+    "license": "CC0 1.0",
+    "acquisition_status": "Previously acquired retained original source, inspected for suitability; not term media integration.",
+    "original_files": [
+      {
+        "path": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/shopping-basket.glb",
+        "sha256": "a7704926cb56c5a9ab74488230fc7c4d7b914387c59e9c1b6f62376965c0ea7d",
+        "bytes": 25864
+      },
+      {
+        "path": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/Textures/colormap.png",
+        "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e",
+        "bytes": 8706
+      },
+      {
+        "path": "docs/assets/sources/kenney-mini-market-retail-theme/License.txt",
+        "sha256": "5ee4df809330c05896f223c97f250cc1bdc13b46a370eb464533c85c94146070",
+        "bytes": 767
+      }
+    ],
+    "available_animations": []
+  },
+  "candidate": {
+    "path": "build/professional-english/retail-term-art-review/shopping-basket/candidate/shopping-basket.png",
+    "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+    "bytes": 105604
+  },
+  "prospective_resource": {
+    "id": "sha256:fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+    "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+    "kind": "image",
+    "format": "png",
+    "path": "professional-media/fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3.png",
+    "width": 512,
+    "height": 454,
+    "compressed_bytes": 105604,
+    "decoded_bytes": 1859584
+  },
+  "exact_brief_revision": {
+    "before": "Use a three-quarter view of a compact rigid store basket with raised carrying handles and a few recognizable groceries below the rim. Handles and the small handheld scale should remain obvious. Reject wheels, fabric sides, a giant trolley, or a picnic-lid design. Inspect the Mini Market shopping-basket lead before rendering.",
+    "after": "Show an empty compact rigid retail shopping basket in a three-quarter view, with its raised hand-carry handle and open basket clearly visible at the actual minimum card size. Keep the handheld basket distinct from a wheeled shopping cart. Exclude wheels, fabric sides, a lid, and groceries that obscure the handle or opening. Use the inspected original Mini Market shopping-basket mesh without geometry or material changes.",
+    "reason": "Root accepted the narrow empty-basket adjustment after source inspection: the raised hand-carry handle, opening and absence of wheels should stay readable at minimum card size. Added groceries would obscure these cues. The original brief is preserved here and in the source record."
+  },
+  "exact_future_note_delta": {
+    "before": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the small handheld shopping container noun. Keep the physical basket distinct from the online shopping sense. Retain shopping basket; basket alone is broader, and a bag is a different container. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Domain review is not required for the current memberships. The authored morphology graph remains pending review. Picture suitability and word-media production remain pending. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready.",
+    "after": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the small handheld shopping container noun. Keep the physical basket distinct from the online shopping sense. Retain shopping basket; basket alone is broader, and a bag is a different container. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Domain review is not required for the current memberships. The authored morphology graph remains pending review. The shopping-basket image has completed scoped physical-sense picture review and integration; word audio remains pending. The empty-basket composition keeps the raised carrying handle and opening readable. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready.",
+    "replacement_before": "Picture suitability and word-media production remain pending.",
+    "replacement_after": "The shopping-basket image has completed scoped physical-sense picture review and integration; word audio remains pending. The empty-basket composition keeps the raised carrying handle and opening readable.",
+    "condition": "Apply only after independent candidate/descriptor acceptance and exact image integration."
+  },
+  "preimages": {
+    "method": "SHA-256 of UTF-8 JSON.stringify(value), no trailing newline, native property order",
+    "file_sha256": "12c40ed580248dcdecbfa7504ef57e33c792c8ba8a4a250bebf2c722b5cb1f3b",
+    "entry_sha256": "8ce7021f9ab782bb70991e6807afb7454ae74143b9feaa34ef214cba53d822c0",
+    "media_image_sha256": "6b39475b29a1d63c10c457d06d78285cf744768727e0f2133e918efd11e5505c",
+    "editorial_notes_sha256": "e55c4f7ead2a30aa62b1767a2492f54f11214f1d9271ecaf693ff6b41b316ce4"
+  },
+  "visual_inspection": {
+    "reviewer": "Codex finish_difficulty agent; independent root candidate review pending",
+    "source_views": 4,
+    "selected_source_view": "source-inspection/rear-three-quarter.png",
+    "camera": {
+      "orthographic_size": 0.7,
+      "position": [
+        3,
+        2.4,
+        -4
+      ],
+      "target": [
+        0,
+        0.125,
+        0
+      ]
+    },
+    "findings": [
+      "The original mesh is a rigid green basket with a raised light-colored handle, an open top and no wheels, fabric sides or lid.",
+      "The chosen rear three-quarter view shades the broad handle face, preserving contrast against the actual light card surface without changing materials.",
+      "At minimum Match and Memory sizes, the handle and open basket remain visible in both unmatched and matched states.",
+      "The adjacent accepted cart has a taller body, a rear push handle and visible wheels; the basket has an arching carrying handle and no wheels. The comparison does not depend solely on color."
+    ],
+    "limitations": [
+      "The source is stylized and has no independent human scale cue.",
+      "The eight-card comparison is an agent visual inspection, not a participant recognition test.",
+      "Native candidate textures were assigned directly to actual WordCard controls for isolated artwork QA; this does not establish production delivery."
+    ]
+  },
+  "native_qa": {
+    "process_exit_code": 0,
+    "checks": 32,
+    "failures": 0,
+    "report": {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/candidate/report.json",
+      "sha256": "e936d5be3c9a811b3a15778b8b85f2a79b773cb10d241502682402ee3483d5ea",
+      "bytes": 5316
+    },
+    "four_state_contact": {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/candidate/actual-word-card-contact.png",
+      "sha256": "fa56ff23bcd34bc2c8596da0c660808ec17945d9d26f26195c6ada9f78a6969b",
+      "bytes": 51030
+    },
+    "confusability_contact": {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/candidate/cart-basket-confusability-contact.png",
+      "sha256": "4c2c31cd6f29eaea32334b3bf5a9cb4db12b076e86b41711796f0ce82cfddc5a",
+      "bytes": 70585
+    },
+    "actual_dimensions": "Match 126 x 72 with 102 x 52 picture area; Memory 144 x 74 with 120 x 54 picture area; actual matched badge and 0.68 picture alpha retained."
+  },
+  "protected_scope": "No production change has been made for this basket. A future accepted delta is limited to media.image and the exact note replacement. All other entry fields, all other entries, audio, morphology, language status, course/module status and theme metadata are outside this proposal.",
+  "adaptations": [
+    "Original acquired source geometry/materials/external colormap, unchanged.",
+    "One three-quarter static camera with neutral ambient and warm directional lighting; no added grocery or procedural model geometry.",
+    "768 x 768 transparent source render, alpha-bounds crop with 16-pixel margin and Lanczos reduction to 512 x 454."
+  ]
+}

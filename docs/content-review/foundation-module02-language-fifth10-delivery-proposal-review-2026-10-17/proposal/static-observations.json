@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "status": "static_builtin_json_and_hash_checks_complete",
+  "accepted_projections_compared": 8,
+  "held_whole_entries_compared": 2,
+  "exact_content_edits": {
+    "definition": 4,
+    "example": 1,
+    "difficulty": 5
+  },
+  "source_records_proposed": 16,
+  "excluded_source_ids": [
+    "foundation02-language-fifth10-oxford-unsafe",
+    "foundation02-language-fifth10-collins-unsafe",
+    "foundation02-language-fifth10-oxford-hazard",
+    "foundation02-language-fifth10-collins-hazard"
+  ],
+  "donor_groups": 50,
+  "whole_donor_rows": 50,
+  "context_counts": {
+    "selected_entries": 10,
+    "memberships": 200,
+    "containing_modules": 20,
+    "expressions_scanned": 1620,
+    "surface_hit_expressions": 90,
+    "surface_pairs": 100,
+    "derivative_hit_expressions": 81,
+    "focus_expressions": 4,
+    "related_identities": 46,
+    "inherited_expression_holds": 17,
+    "prior_lexical_holds": 4,
+    "source_files": 350,
+    "containing_module_expressions": 10,
+    "new_whole_entry_holds": 1,
+    "new_expression_acceptances": 0,
+    "new_scored_bindings": 0
+  },
+  "all_frozen_context_rows_compared_to_current": true,
+  "accepted_preimages_match_current_and_frozen_fourth10_afterimage": true,
+  "whole_registry_bound": false,
+  "project_or_proposal_modules_imported": false,
+  "syntax_checks_run": false,
+  "tests_run": false,
+  "native_run": false,
+  "production_mutated": false,
+  "method": "Built-in raw file reads, SHA256 and structured JSON equality only; static JSON artifacts written exclusively in this new proposal directory."
+}

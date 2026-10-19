@@ -1,0 +1,171 @@
+{
+  "schema": 1,
+  "status": "draft_author_research_pending_independent_acceptance",
+  "author": "Codex recover_delivery research author; not an independent language approver",
+  "consulted_on": "2026-10-17",
+  "timezone": "Asia/Shanghai",
+  "method": "Original Oxford and Collins publisher pages opened through the web connector. Oxford HTML sense attributes separately retrieved directly and retained with body hashes and byte counts, without source bodies. Source descriptions are authored summaries; no publisher examples, exercises, media or full dictionary entries are imported.",
+  "failed_accesses": [],
+  "global_limits": [
+    "Author proposals only. Independent acceptance is pending for every definition, example and editorial difficulty projection.",
+    "Only definition, example and difficulty can differ in the candidate projection. All identity, references, review gates, region metadata, accepted forms, morphology, media and existing editorial notes remain exact.",
+    "Oxford literal cefr and fkcefr attributes are retained separately. An absent attribute or absent rendered selected label means not observed. Footer Word of the Day levels do not describe these selected entries.",
+    "Collins B1+ remains B1+ in evidence. Proposed B1 or B2 values are editorial judgments supported by the separately identified Oxford sense; B1+ is never silently converted.",
+    "Ordinary lexical review cannot accept an expression, professional procedure, specialist sense, morphology, media, human review, module or release. All four earlier lexical holds and all inherited expression holds remain exact.",
+    "No new regional label is proposed. A label on another sense, example, phrase or dictionary subsection is not assigned to the selected sense."
+  ],
+  "entries": [
+    {
+      "term": "submit",
+      "id": "submit.send-for-consideration.v",
+      "disposition": "proposed",
+      "proposed_fields": {"definition": "To send a document, request, or proposal for someone to review or decide on.", "example": "Please submit the request before Friday.", "difficulty": "B2"},
+      "selected_sense": "Sending a document or request for consideration or a decision. The retained deadline example concerns a request.",
+      "language_rationale": "The authored definition makes the selected send-for-consideration identity explicit and removes the broader processing catch-all, which could be read as any computer operation. The existing request example is retained.",
+      "difficulty_rationale": "Oxford sense 1 cefr b2 and Collins COBUILD sense 2 B2 agree. Propose B2 instead of draft A2.",
+      "hold_reason": null,
+      "excluded_scope": "Yielding to authority, submitting oneself to treatment or control, the law/formal submit-that assertion, submit-button as a noun compound, and domain-specific filing requirements are separate.",
+      "context_boundary": "Foundation02.04 remains exact and pending with held verify and unintegrated correct. The care-system record context is unscored and does not establish clinical or system-process acceptance. Retail submit button is an existing separate noun identity, not this verb binding.",
+      "proposed_note": "Proposed send-for-consideration definition, original request example, and editorial B2. This does not approve legal filing, system processing, submit-button compounds or any expression gate.",
+      "sources": [
+        {"publisher":"Oxford University Press","kind":"oxford","url":"https://www.oxfordlearnersdictionaries.com/definition/english/submit","selected_section":"Transitive sense 1, rendered lines 112-123","sense_ids":["submit_sng_1"],"rendered_selected_level":null,"rendered_label_scope":null,"summary":"A document or proposal is presented to an authority for consideration. The request example fits this selected sense.","regional_register":"No regional restriction or explicit formal label is attached to selected sense 1. The action has an institutional context; the explicit formal label on sense 2 is separate.","other_sense_boundary":"Yielding is sense 2, C1; submit-that assertion is law/formal sense 3, C2. Neither expands the selected meaning."},
+        {"publisher":"HarperCollins","kind":"collins","url":"https://www.collinsdictionary.com/dictionary/english/submit","selected_section":"COBUILD sense 2, rendered lines 235-242","sense_ids":[],"rendered_selected_level":"B2","rendered_label_scope":"Selected formal sending-for-consideration verb","summary":"The selected verb sends a proposal, report or request to a recipient for consideration or decision.","regional_register":"No selected regional restriction is displayed. Formality is part of the described action.","other_sense_boundary":"Unwilling submission to another's demands is sense 1 and is not proposed."}
+      ]
+    },
+    {
+      "term":"approve","id":"approve.authorize.v","disposition":"proposed",
+      "proposed_fields":{"definition":"To officially agree to or accept something.","example":"The manager will approve the revised schedule.","difficulty":"B2"},
+      "selected_sense":"Official agreement to a plan or request, represented by a manager's decision about a revised schedule.",
+      "language_rationale":"Retain the existing official-agreement definition and schedule example. Read the broad object within the selected plan/request meaning, not personal approval or product certification.",
+      "difficulty_rationale":"Oxford selected sense 2 has cefr b2 and a B2 topic. Collins selected sense 3 is B1+, retained literally. Propose editorial B2 from Oxford; do not round or convert Collins B1+.",
+      "hold_reason":null,
+      "excluded_scope":"Approve of as personal opinion, approval of a product/person as meeting a standard, approved adjectives, certification, transaction authorization rules and legal rights clearance are separate.",
+      "context_boundary":"Foundation02.03 remains pending even though approve/reject share an ordinary request context. Most of the 74 surface contexts use approved as a modifier or status; none receives a new selected-verb binding. The usage-rights context remains specialist/legal and unapproved.",
+      "proposed_note":"Proposed ordinary official-agreement verb at editorial B2, retaining exact definition/example. Oxford B2 and Collins B1+ remain explicit; approval of language grants no real authorization or specialist acceptance.",
+      "sources":[
+        {"publisher":"Oxford University Press","kind":"oxford","url":"https://www.oxfordlearnersdictionaries.com/definition/english/approve","selected_section":"Transitive official-agreement sense 2, rendered lines 144-177","sense_ids":["approve_sng_2"],"rendered_selected_level":"B2","rendered_label_scope":"Opinion and argument topic attached to selected sense 2","summary":"The selected transitive use officially accepts a plan or request. The manager-and-schedule example belongs to this decision meaning.","regional_register":"No regional restriction is shown on the selected sense. Nearby formal possessive-gerund guidance belongs to approve of.","other_sense_boundary":"Sense 1 expresses a favorable opinion; sense 3 certifies suitability or correctness. Neither is automatically accepted by this plan/request proposal."},
+        {"publisher":"HarperCollins","kind":"collins","url":"https://www.collinsdictionary.com/dictionary/english/approve","selected_section":"COBUILD authority/plan sense 3, rendered lines 239-246","sense_ids":[],"rendered_selected_level":"B1+","rendered_label_scope":"Selected authority giving formal agreement to a plan","summary":"A person with authority agrees to a plan and permits it to proceed. This supports the schedule decision without supporting every approved-status context.","regional_register":"No selected regional restriction is shown.","other_sense_boundary":"Opinion and admiration senses 1-2 are B2. Official suitability of a product/person is separate sense 4 with no observed level."}
+      ]
+    },
+    {
+      "term":"reject","id":"reject.decline-acceptance.v","disposition":"proposed",
+      "proposed_fields":{"definition":"To decide not to accept a proposal, request, or item.","example":"The team may reject a proposal that does not meet the requirements.","difficulty":"B1"},
+      "selected_sense":"Declining a proposal or request; the existing definition also names an item, but no product-quality classification is approved by this proposal.",
+      "language_rationale":"Retain the definition. Replace misses the requirements with does not meet the requirements for a clearer, idiomatic workplace example; the team remains the decision maker.",
+      "difficulty_rationale":"Oxford proposal/request sense 1 has cefr b1 and a Business B1 topic. Collins corresponding COBUILD sense 1 is B2. Propose editorial B1 for the bounded request/proposal use, preserving the disagreement.",
+      "hold_reason":null,
+      "excluded_scope":"Hiring or admissions rejection, rejecting beliefs or people, biological transplant rejection, quality-control rejection criteria, the reject noun and reject-rate compound remain separate.",
+      "context_boundary":"The only exact surface expression is Foundation02.03, with approve and clarification. Keep its whole entry, focus list and pending review exact. The related reject-rate noun is not an added binding.",
+      "proposed_note":"Proposed ordinary refusal-to-accept sense at editorial B1, with a clearer requirements example. Oxford B1 and Collins B2 remain explicit; no hiring, medical, quality-control or expression approval follows.",
+      "sources":[
+        {"publisher":"Oxford University Press","kind":"oxford","url":"https://www.oxfordlearnersdictionaries.com/definition/english/reject_1","selected_section":"Sense 1, rendered lines 113-135; contrast quality and transplant senses at 182-214","sense_ids":["reject_sng_1"],"rendered_selected_level":"B1","rendered_label_scope":"Business topic attached to proposal/request sense 1","summary":"The first sense declines acceptance or consideration of an idea or request. Separate senses address candidates, inadequate product quality and transplanted organs.","regional_register":"No selected regional restriction or formal-register label is shown.","other_sense_boundary":"Other Oxford senses also carry B1 metadata, but matching levels do not merge their meanings or authorize specialist review."},
+        {"publisher":"HarperCollins","kind":"collins","url":"https://www.collinsdictionary.com/dictionary/english/reject","selected_section":"COBUILD sense 1, rendered lines 224-231","sense_ids":[],"rendered_selected_level":"B2","rendered_label_scope":"Selected proposal/request/offer refusal","summary":"The selected verb declines an offered proposal or request. The source supports the ordinary refusal meaning.","regional_register":"No selected regional restriction is shown. The noun has separate pronunciation and is excluded.","other_sense_boundary":"Beliefs, unsuccessful applicants, interpersonal rejection, transplantation, machines rejecting coins and the product noun are separate listed uses."}
+      ]
+    },
+    {
+      "term":"sign","id":"sign.write-name.v","disposition":"proposed",
+      "proposed_fields":{"definition":"To write one's name on a document as a form of identification or agreement.","example":"Please sign the attendance sheet.","difficulty":"A2"},
+      "selected_sense":"Writing one's name on a document, illustrated by an attendance sheet.",
+      "language_rationale":"The current definition and simple attendance example fit the selected name-writing action. No legal effect of a signature is asserted.",
+      "difficulty_rationale":"Oxford selected sense 1 has cefr a2 and attached A2 topics. Collins name-writing verb sense 6 is B1. Retain editorial A2 for the bounded attendance-sheet use and preserve Collins B1.",
+      "hold_reason":null,
+      "excluded_scope":"Signing an employment contract in the recruit/employ sense, gestures, sign languages, clinical signs, warning notices, sign-in/sign-out, sign-off, electronic-signature validity and legal execution requirements are separate.",
+      "context_boundary":"All nine sign-form surface expressions are other nouns, compounds or sign-in. None focuses this selected ID. The derivative screen includes electronic/signature stamps but confers no selected verb or legal acceptance.",
+      "proposed_note":"Proposed retention of the name-writing definition, attendance example and editorial A2. Oxford A2 and Collins B1 remain explicit; every existing sign-related noun, phrasal verb and domain gate remains separate.",
+      "sources":[
+        {"publisher":"Oxford University Press","kind":"oxford","url":"https://www.oxfordlearnersdictionaries.com/definition/english/sign_2","selected_section":"Your-name sense 1, rendered lines 113-150","sense_ids":["sign_sng_7"],"rendered_selected_level":"A2","rendered_label_scope":"Discussion and agreement / Law and justice topics attached to selected name-writing sense","summary":"The selected action puts one's name on a document to identify authorship, agreement or authenticity. Digital signing is an example, not a legal-validity rule.","regional_register":"No selected regional restriction is shown.","other_sense_boundary":"Employing or joining an organization is separate C1 sense 2. Gesturing, sign languages and idioms are not this selected action."},
+        {"publisher":"HarperCollins","kind":"collins","url":"https://www.collinsdictionary.com/dictionary/english/sign","selected_section":"COBUILD document/name-writing verb sense 6, rendered lines 267-272","sense_ids":[],"rendered_selected_level":"B1","rendered_label_scope":"Selected name-writing verb, not A2 sign-board noun","summary":"The selected verb records a person's name on a document for authorship, agreement or witnessing. This supports the attendance example at the lexical level.","regional_register":"No selected regional restriction is displayed.","other_sense_boundary":"Notices, gestures and evidence nouns, sign-language use and employment signing are separately listed. Their levels are not transferred."}
+      ]
+    },
+    {
+      "term":"delay","id":"delay.late-occurrence.n","disposition":"proposed",
+      "proposed_fields":{"definition":"A period of waiting caused by something happening later than expected.","example":"There is a short delay with the delivery.","difficulty":"A2"},
+      "selected_sense":"A wait associated with an event taking place later than expected, represented by a delivery.",
+      "language_rationale":"Retain the ordinary late-event noun definition and delivery example. This does not define a command to postpone or an engineered time-delay mechanism.",
+      "difficulty_rationale":"Collins selected variable-noun sense 4 is A2. Oxford corresponding waiting-period noun sense 1 is cefr b2. Retain editorial A2 for the simple delivery use based on Collins, preserving the substantial source disagreement for independent review.",
+      "hold_reason":null,
+      "excluded_scope":"The verb causing lateness, deliberate procrastination, legal-delay consequences, technical timing systems and specialist production/delivery-delay compounds remain separate.",
+      "context_boundary":"Foundation02.02 remains an inherited exact expression hold with held notify. TransportDelivery.05.10 uses delay as a separate verb. Production/delivery compounds retain their own identities and pending gates.",
+      "proposed_note":"Proposed ordinary delivery-wait noun at unchanged editorial A2. Collins A2 and Oxford B2 remain explicit; no inference clears notify, the shared expression or delay as a verb.",
+      "sources":[
+        {"publisher":"Oxford University Press","kind":"oxford","url":"https://www.oxfordlearnersdictionaries.com/definition/english/delay_1","selected_section":"Waiting-period noun sense 1, rendered lines 105-115","sense_ids":["delay_sng_1"],"rendered_selected_level":null,"rendered_label_scope":null,"summary":"The first noun sense describes waiting when a problem slows an event or makes it late. Delivery waiting fits that sense.","regional_register":"No selected regional restriction is shown. Regional travel collocations elsewhere on the page do not label delay itself.","other_sense_boundary":"The separate noun sense about not acting immediately and the linked verb are outside this bounded waiting-period proposal."},
+        {"publisher":"HarperCollins","kind":"collins","url":"https://www.collinsdictionary.com/dictionary/english/delay","selected_section":"COBUILD variable-noun sense 4, rendered lines 251-257","sense_ids":[],"rendered_selected_level":"A2","rendered_label_scope":"Selected late-occurrence noun","summary":"The selected noun describes an event occurring later than its expected or planned time.","regional_register":"No selected regional restriction is shown.","other_sense_boundary":"Verb senses carry B1+ or B2; the deliberate failure-to-act noun is separately unlabelled. None replaces the selected noun label."}
+      ]
+    },
+    {
+      "term":"error","id":"error.mistake.n","disposition":"proposed",
+      "proposed_fields":{"definition":"Something incorrect in information, work, or a system's operation.","example":"There is an error in the telephone number.","difficulty":"A2"},
+      "selected_sense":"An incorrect item or mistake, represented by an inaccurate telephone number.",
+      "language_rationale":"Retain the existing wording and number example. The system-operation wording remains ordinary language and does not accept a diagnosis, system guarantee, statistical definition or specialist reporting rule.",
+      "difficulty_rationale":"Oxford selected element has fkcefr a2, with no cefr attribute. Collins selected general-mistake sense is B2. Retain editorial A2 for the bounded number-error example, preserving the literal Oxford attribute name and Collins disagreement.",
+      "hold_reason":null,
+      "excluded_scope":"Clinical medication or diagnostic errors, accounting cutoff/payroll errors, technical error budgets/codes/messages, statistical error and specialist causation or responsibility claims are separate.",
+      "context_boundary":"Foundation02.04 stays pending with held verify. Error-budget, medication-error, diagnostic-error, cutoff-error and payroll-error contexts retain distinct scored identities; an ordinary language proposal does not accept those domains.",
+      "proposed_note":"Proposed retention of the ordinary-mistake definition/example and editorial A2. Oxford fkcefr a2 and Collins B2 remain distinct observations. More-formal-than-mistake guidance is retained as research, not a new metadata field.",
+      "sources":[
+        {"publisher":"Oxford University Press","kind":"oxford","url":"https://www.oxfordlearnersdictionaries.com/definition/english/error","selected_section":"General mistake sense, rendered lines 103-139","sense_ids":["error_sng_1"],"rendered_selected_level":null,"rendered_label_scope":null,"summary":"The ordinary noun concerns mistakes in work, figures or facts. The source separately links technical error terms.","regional_register":"The synonym guidance calls error more formal than mistake; it is not region restricted. A British informal label belongs to howler, not error.","other_sense_boundary":"Linked statistical/computing compounds are separate entries. Examples involving health or computers do not grant specialist acceptance."},
+        {"publisher":"HarperCollins","kind":"collins","url":"https://www.collinsdictionary.com/dictionary/english/error","selected_section":"COBUILD variable-noun sense 1, rendered lines 224-232","sense_ids":[],"rendered_selected_level":"B2","rendered_label_scope":"Selected general incorrect-act/mistake noun","summary":"The selected noun describes something judged incorrect, including calculations and judgments. It supports the mistake meaning without an A2 label.","regional_register":"No selected regional or formal-register label is displayed; Oxford's relative formality remains a separate observation.","other_sense_boundary":"Idioms are separately linked. Their presence does not change the ordinary telephone-number scope."}
+      ]
+    },
+    {
+      "term":"fault","id":"fault.equipment-defect.n","disposition":"proposed",
+      "proposed_fields":{"definition":"A defect that prevents equipment or a system from working properly.","example":"The printer has developed a fault.","difficulty":"B2"},
+      "selected_sense":"An equipment or system defect interfering with correct operation, represented by a printer.",
+      "language_rationale":"Retain the existing bounded equipment definition and printer example. Working improperly does not necessarily mean total failure; no repair method is supplied.",
+      "difficulty_rationale":"Oxford equipment-defect sense 3 has cefr b2. Collins broader imperfection sense 3 is B2 and includes technical faults. Propose B2; do not borrow Collins responsibility sense B1.",
+      "hold_reason":null,
+      "excluded_scope":"Blame or legal responsibility, personality weaknesses, geological faults, tennis faults, the criticism verb, diagnostic methods and technical fault classifications are separate.",
+      "context_boundary":"Foundation02.06 stays exact and pending. Ordinary reported defects and specialist diagnosing/repairing contexts retain their domain gates; fault code, fault diagnosis and recurring/intermittent fault remain separate lexical compounds.",
+      "proposed_note":"Proposed equipment-defect noun with unchanged definition/example and editorial B2. Source agreement concerns this lexical meaning only, not machine safety, causation or specialist work.",
+      "sources":[
+        {"publisher":"Oxford University Press","kind":"oxford","url":"https://www.oxfordlearnersdictionaries.com/definition/english/fault_1","selected_section":"Something-wrong sense 3, rendered lines 184-205","sense_ids":["fault_sng_3"],"rendered_selected_level":null,"rendered_label_scope":null,"summary":"This sense includes a machine or system problem that interferes with correct operation. Developing an equipment fault supports the printer example.","regional_register":"No selected regional restriction is shown.","other_sense_boundary":"Responsibility and character weaknesses precede this sense. Geological and sport meanings follow separately; none is accepted here."},
+        {"publisher":"HarperCollins","kind":"collins","url":"https://www.collinsdictionary.com/dictionary/english/fault","selected_section":"COBUILD imperfection sense 3, rendered lines 237-248","sense_ids":[],"rendered_selected_level":"B2","rendered_label_scope":"Broader imperfection/weakness noun including technical faults","summary":"The selected subsection covers imperfections and includes machine defects. It corroborates the narrower equipment reading.","regional_register":"No selected regional restriction is shown.","other_sense_boundary":"Responsibility is B1, while the selected technical-containing sense is B2. Criticism as a verb, geology and tennis remain separate."}
+      ]
+    },
+    {
+      "term":"damage","id":"damage.physical-harm.n","disposition":"proposed",
+      "proposed_fields":{"definition":"Physical harm that makes something less useful or less sound.","example":"The box arrived with visible damage.","difficulty":"B1"},
+      "selected_sense":"Physical harm to an object, represented by a delivered box.",
+      "language_rationale":"Retain the existing physical-harm definition and box example. This bounded use does not cover damage to reputation or money awarded by a court.",
+      "difficulty_rationale":"Oxford selected physical-harm noun sense 1 has cefr b1. Collins corresponding uncountable noun sense 3 is B1+, kept literally. Propose editorial B1 from Oxford without converting B1+.",
+      "hold_reason":null,
+      "excluded_scope":"The damage verb and damaged/damaging modifiers, abstract or reputational harm, medical assessment, criminal liability, compensation and legal plural damages remain separate.",
+      "context_boundary":"Four exact-form expression contexts report physical harm or name damage-report/surface-damage compounds. All remain unscored for this selected ID. The legal damages expression and identity are exact, separately preserved boundaries in the derivative/identity screen, not plural physical damage.",
+      "proposed_note":"Proposed object-harm noun with unchanged wording/example and editorial B1. Oxford B1 and Collins B1+ remain distinct. No medical, legal, inspection or condition-assessment acceptance follows.",
+      "sources":[
+        {"publisher":"Oxford University Press","kind":"oxford","url":"https://www.oxfordlearnersdictionaries.com/definition/english/damage_1","selected_section":"Physical-harm uncountable noun sense 1, rendered lines 107-121","sense_ids":["damage_sng_1"],"rendered_selected_level":null,"rendered_label_scope":null,"summary":"The first noun sense concerns physical harm that reduces an object's condition or usefulness. The damaged-box setting fits it.","regional_register":"No selected regional restriction is shown; the selected noun is uncountable.","other_sense_boundary":"Abstract harmful effects are sense 2, B2, while legal damages are separate sense 3, C1. Those labels and meanings are excluded."},
+        {"publisher":"HarperCollins","kind":"collins","url":"https://www.collinsdictionary.com/dictionary/english/damage","selected_section":"COBUILD physical-harm uncountable noun sense 3, rendered lines 248-253","sense_ids":[],"rendered_selected_level":"B1+","rendered_label_scope":"Selected physical-harm noun, not the preceding verb","summary":"The selected noun names harm to an object. A following noun concerns wider harmful effects, and plural damages denotes court-ordered compensation.","regional_register":"No selected regional restriction is shown; the selected noun is uncountable.","other_sense_boundary":"The physical-harm verb also has B1+ but is not the selected part of speech. Abstract B2 and unlabelled legal damages remain separate."}
+      ]
+    },
+    {
+      "term":"shortage","id":"shortage.insufficient-supply.n","disposition":"proposed",
+      "proposed_fields":{"definition":"A situation in which there is not enough of something needed.","example":"A shortage of packaging has slowed the dispatch.","difficulty":"B2"},
+      "selected_sense":"An insufficient amount of a needed resource, represented by packaging supplies.",
+      "language_rationale":"Retain the definition and packaging example. The example reports a supply problem; it does not establish a financial discrepancy, blame or an inventory measurement rule.",
+      "difficulty_rationale":"Oxford selected element has fkcefr b2, with no cefr attribute; Collins selected noun is B2. Propose B2 with the literal Oxford attribute preserved.",
+      "hold_reason":null,
+      "excluded_scope":"Accounting cash shortage as a counted-versus-recorded difference, specialist material/stock measurements, and unrelated short adjective uses remain separate.",
+      "context_boundary":"Material shortage, stock shortage and cash shortage appear as separate scored compounds. The cash-count discrepancy must not inherit the resource-supply definition. A derivative-screen hit on short message is explicitly unrelated.",
+      "proposed_note":"Proposed ordinary insufficient-resource noun at editorial B2, retaining exact definition/example. Oxford fkcefr b2 and Collins B2 agree; specialist compounds and expression gates remain separate.",
+      "sources":[
+        {"publisher":"Oxford University Press","kind":"oxford","url":"https://www.oxfordlearnersdictionaries.com/definition/english/shortage","selected_section":"Single needed-quantity noun sense, rendered lines 103-121","sense_ids":["shortage_sng_1"],"rendered_selected_level":null,"rendered_label_scope":null,"summary":"The noun describes an inadequate supply of needed people or things. Packaging supplies fit this ordinary meaning.","regional_register":"No selected regional restriction is shown; countable and uncountable uses are available.","other_sense_boundary":"The Word of the Day B2 footer belongs to reasonably, not shortage. The selected B2 evidence is the fkcefr attribute."},
+        {"publisher":"HarperCollins","kind":"collins","url":"https://www.collinsdictionary.com/dictionary/english/shortage","selected_section":"COBUILD variable noun, rendered lines 224-233","sense_ids":[],"rendered_selected_level":"B2","rendered_label_scope":"Selected insufficient-quantity noun","summary":"The noun denotes an amount below what is needed. The source also permits a noun modifier and an of-complement.","regional_register":"No selected regional restriction is shown.","other_sense_boundary":"The no-shortage construction signals abundance and does not change the selected insufficient-supply sense. Cash-accounting rules are not defined here."}
+      ]
+    },
+    {
+      "term":"missing","id":"missing.not-present.adj","disposition":"proposed",
+      "proposed_fields":{"definition":"Not present where expected or needed.","example":"One page is missing from the document.","difficulty":"A2"},
+      "selected_sense":"A thing or expected component is absent, including a page not present in a document; omission and loss are both possible without asserting a cause.",
+      "language_rationale":"Retain the cause-neutral definition and page example. Oxford distinguishes out-of-place/lost things from omitted content; both can underlie an absent page, so the candidate does not invent which occurred.",
+      "difficulty_rationale":"Oxford senses 1 and 4 both have cefr a2. Collins lost-item and absent-part senses 1 and 2 are A2; omission sense 3 shows no level. Retain A2 using Oxford for both bounded readings; the absence of a Collins omission label stays explicit.",
+      "hold_reason":null,
+      "excluded_scope":"Missing persons or people missing after an accident/battle, miss as a verb, missed visits/collections/targets, near miss, and technical missing-value semantics remain separate.",
+      "context_boundary":"Fifteen surface expressions concern absent things, data or references. No expression focuses this ID. Missing-value and missing-invoice identities stay separate; professional record completeness, recovery and safety remain unapproved.",
+      "proposed_note":"Proposed retention of ordinary absent-item/expected-component adjective and editorial A2. Oxford A2 supports absence and omission; Collins A2 supports lost/removed parts but gives no omission label. No cause or person-status inference is made.",
+      "sources":[
+        {"publisher":"Oxford University Press","kind":"oxford","url":"https://www.oxfordlearnersdictionaries.com/definition/english/missing","selected_section":"Thing out-of-place sense 1, lines 105-119; expected content omitted sense 4, lines 186-195","sense_ids":["missing_sng_1","missing_sng_4"],"rendered_selected_level":null,"rendered_label_scope":null,"summary":"One sense covers absent or lost objects and missing pages; another covers material not included when expected. The page example need not establish which cause applies.","regional_register":"The selected senses are not region restricted. An especially British label belongs to a go-missing example, not the adjective generally.","other_sense_boundary":"Missing people and people unaccounted for after accidents or battles are separate senses, despite their Oxford A2 metadata."},
+        {"publisher":"HarperCollins","kind":"collins","url":"https://www.collinsdictionary.com/dictionary/english/missing","selected_section":"COBUILD lost-object sense 1, lines 222-230; absent-part sense 2, 232-235; omitted-content sense 3, 237-244","sense_ids":[],"rendered_selected_level":"A2 for senses 1 and 2; no level observed for sense 3","rendered_label_scope":"Separate lost-item and absent-part labels; omission has no selected label","summary":"The page separates misplaced things, removed parts and omitted content. This supports a cause-neutral absent-page reading while keeping their evidence distinct.","regional_register":"No selected regional restriction is displayed; senses 1 and 3 commonly follow linking verbs.","other_sense_boundary":"Missing people is separate B2 sense 4. It is excluded from this ordinary document example and level proposal."}
+      ]
+    }
+  ]
+}

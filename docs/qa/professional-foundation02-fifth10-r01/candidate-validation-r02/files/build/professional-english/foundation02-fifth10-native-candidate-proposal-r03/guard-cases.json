@@ -1,0 +1,133 @@
+{
+  "schema": 1,
+  "status": "unexecuted_source_review_cases_only",
+  "author": "/root/morph_review",
+  "scope": "Root-owned syntax and isolated gate validation remain separate. These are design cases, not executed evidence and not assertion-location claims.",
+  "cases": [
+    {
+      "id": "unbound_template",
+      "change": "Use the unbound root-input template.",
+      "expected": "Reject before candidate output creation or child execution."
+    },
+    {
+      "id": "root_input_hash",
+      "change": "Provide a different raw hash for the selected root input.",
+      "expected": "Reject before candidate output creation or child execution."
+    },
+    {
+      "id": "source_inventory_drift",
+      "change": "Change a frozen native source member or its complete pin.",
+      "expected": "Reject before candidate output creation or child execution."
+    },
+    {
+      "id": "source_self_approval",
+      "change": "Name /root/morph_review as the native source reviewer.",
+      "expected": "Reject before candidate output creation or child execution."
+    },
+    {
+      "id": "source_acceptance_pin",
+      "change": "Change the source acceptance inventory path, bytes or hash.",
+      "expected": "Reject the unequal complete pin."
+    },
+    {
+      "id": "binding_pin",
+      "change": "Select another binding path, byte length or hash.",
+      "expected": "Reject before native execution."
+    },
+    {
+      "id": "baseline_drift",
+      "change": "Change any of the 12,443 actual-binding input bytes.",
+      "expected": "Reject before candidate output creation or child execution."
+    },
+    {
+      "id": "copy_closure_gap",
+      "change": "Omit a source pin or introduce an unpinned file in a complete copy root.",
+      "expected": "Reject the independently derived exact closure or exact directory comparison."
+    },
+    {
+      "id": "preparation_not_successful",
+      "change": "Supply failed/missing preparation, wrong final status or a retained failed-attempt marker.",
+      "expected": "Reject before candidate output creation or child execution."
+    },
+    {
+      "id": "preparation_artifact_drift",
+      "change": "Change any actual prepared artifact named by the receipt.",
+      "expected": "Reject its full raw pin."
+    },
+    {
+      "id": "plan_gap_or_alias",
+      "change": "Omit or duplicate a target, change its path, bytes, preimage, artifact or afterimage identity.",
+      "expected": "Reject the complete target closure, exact artifact pin or preimage linkage."
+    },
+    {
+      "id": "output_author_approval",
+      "change": "Use /root/recover_delivery, /root/runtime_recovery or /root as the independent afterimage reviewer.",
+      "expected": "Reject before candidate output creation or child execution."
+    },
+    {
+      "id": "output_acceptance_pin",
+      "change": "Change any complete binding, preparation or frozen preparation-source pin covered by afterimage acceptance.",
+      "expected": "Reject the exact acceptance mismatch."
+    },
+    {
+      "id": "missing_donor_or_bag",
+      "change": "Omit a complete donor history or the actual delivered bag resource from the copied closure.",
+      "expected": "Reject before candidate output creation or child execution."
+    },
+    {
+      "id": "unselected_executable",
+      "change": "Leave Godot unbound, choose a relative/PATH command, symlink, non-executable extension or wrong byte pin.",
+      "expected": "Reject before candidate output creation or child execution."
+    },
+    {
+      "id": "consumed_output",
+      "change": "Dispatch with an existing execution-r01, including a failed attempt.",
+      "expected": "Reject without overwriting or retrying it."
+    },
+    {
+      "id": "native_spawn_or_exit_failure",
+      "change": "A root-owned isolated execution encounters spawn error, signal or nonzero status.",
+      "expected": "Retain available logs and command status; rehash every protected input and completed copy; retain failure receipt."
+    },
+    {
+      "id": "native_false_success",
+      "change": "The actual suite exits zero without one positive-check, zero-failure summary, or prints ERROR/SCRIPT ERROR/FAIL.",
+      "expected": "Fail the attempt, retain logs and run the unconditional postchecks."
+    },
+    {
+      "id": "post_command_drift",
+      "change": "A child changes an original input, completed isolated copy, executable or required production absence.",
+      "expected": "Attempt every recheck, retain all errors, fail the attempt and run the final recheck."
+    },
+    {
+      "id": "copy_failure",
+      "change": "A copy fails after some isolated files have been written.",
+      "expected": "Retain planned and completed copy manifests, rehash all protected inputs and completed copies, and preserve a failed one-shot attempt."
+    },
+    {
+      "id": "repair_contract_drift",
+      "change": "Use a repair input with any contract change from the exact reviewed d5704d contract.",
+      "expected": "Reject before candidate output creation or child execution."
+    },
+    {
+      "id": "repair_external_evidence_missing",
+      "change": "Provide familiar r04 preparation statuses without successful correction receipt, completed attempt, full output manifest and successful root dispatch witness.",
+      "expected": "Reject before candidate output creation or child execution."
+    },
+    {
+      "id": "repair_failure_marker",
+      "change": "Leave a failure.json in the external repair attempt.",
+      "expected": "Reject even if preparation-looking files exist."
+    },
+    {
+      "id": "repair_output_delta",
+      "change": "Change any seventh output, any second target afterimage, or the exact safe-only source correction.",
+      "expected": "Reject the full output comparison, restored plan, restored ledger or exact source derivation."
+    },
+    {
+      "id": "repair_lineage_or_acceptance",
+      "change": "Omit or alter original r03 source acceptance, failed r01 evidence, correction lineage or the output acceptance correction pin object.",
+      "expected": "Reject the missing historical gates or full raw pin mismatch."
+    }
+  ]
+}

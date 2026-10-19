@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "status": "source_candidate_prepared_not_rendered",
+  "source_svg_sha256": "0dc559c59bd63c4e812e7f3e31562a533cf59603d93c299218fe07eece297303",
+  "label_svg_sha256": "2d940717763a735bcb9d061e432ad6ed737fba6f71079532decf845a98c36ba4",
+  "label_png_sha256": "8bd302160da9c1380dfbda97a2b83cf93e62daec067ec6057e0b86ecb70740b0",
+  "renderer_origin": "build/professional-english/retail-term-art-review/counter-r01/render-broad-return.gd",
+  "renderer_origin_sha256": "de0877f706bf8a2685d31d213695d8b20c11bfce8618bd71b4a091930a133ab7",
+  "renderer_sha256": "b70663f6c6f5aba6233125cf86b3618aec29bd5a3336542d58aa5dce3329b067",
+  "original_parcel_sha256": "b773815c791d2708a2a70f1a9bb6d197d7211269ad96e273f9e364ea536c1b18",
+  "adaptations": [
+    "Crop source graphic to its existing barcode label, retaining all bars and spaces.",
+    "Apply sourced label to an unchanged complete Kenney parcel via a planar artwork surface.",
+    "Intentional close-up framing shows the package edge; no source geometry is deleted or distorted."
+  ],
+  "source_visual_review": "Root inspected full source barcode and existing original parcel front render. Label retained for candidate exploration; black source backdrop not selected.",
+  "claims_excluded": [
+    "production integration",
+    "valid machine-readable encoding",
+    "real product identity",
+    "human recognition study"
+  ],
+  "production_changed": false
+}

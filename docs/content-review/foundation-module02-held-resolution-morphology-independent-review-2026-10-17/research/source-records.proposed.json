@@ -1,0 +1,105 @@
+{
+  "schema": 1,
+  "status": "unregistered_author_consultation_rows_pending_review",
+  "sources": [
+    {
+      "id": "foundation02-held-morphology-oxford-ensure",
+      "title": "Oxford Advanced Learner's Dictionary: ensure",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/ensure",
+      "status": "consulted",
+      "consulted_on": "2026-10-17",
+      "scope": "Fresh author consultation: Selected result/condition sense; Word Origin. The current verb concerns making an outcome or condition definite. Its French history is reported as connected to earlier assure forms. That historical relationship alone does not decide a current teaching split. Morphology and canonical-family decisions require independent review; no lexical, clinical, media or release approval is granted.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation02-held-morphology-oxford-en-prefix",
+      "title": "Oxford Advanced Learner's Dictionary: en- prefix",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/en_1",
+      "status": "consulted",
+      "consulted_on": "2026-10-17",
+      "scope": "Fresh author consultation: Verb-forming prefix, causative sense 2. The modern prefix has a causative reading used before an adjective base. Its location/condition sense is separately described. This is the prefix entry, not the -en suffix entry. Morphology and canonical-family decisions require independent review; no lexical, clinical, media or release approval is granted.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation02-held-morphology-oxford-sure",
+      "title": "Oxford Advanced Learner's Dictionary: sure adjective",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/sure_1",
+      "status": "consulted",
+      "consulted_on": "2026-10-17",
+      "scope": "Fresh author consultation: Result-certainty uses and make sure sense 1. The base expresses certainty, including outcomes certain to occur. The make-sure entry distinguishes bringing about a result from checking a fact; the candidate selects the result reading. Morphology and canonical-family decisions require independent review; no lexical, clinical, media or release approval is granted.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation02-held-morphology-collins-ensure",
+      "title": "Collins dictionaries: ensure",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/ensure",
+      "status": "consulted",
+      "consulted_on": "2026-10-17",
+      "scope": "Fresh author consultation: Selected outcome sense and American English word history. The whole-word result meaning aligns with the accepted candidate. Word history explicitly links en- with a French predecessor of sure. This corroborates the base boundary while remaining historical evidence. Morphology and canonical-family decisions require independent review; no lexical, clinical, media or release approval is granted.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation02-held-morphology-collins-en-prefix",
+      "title": "Collins dictionaries: en- prefix",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/en",
+      "status": "consulted",
+      "consulted_on": "2026-10-17",
+      "scope": "Fresh author consultation: British English en- 1 causative sense; American English prefix. Causative use on adjective/noun bases is current. The entry describes productive English formation modeled on French loans and separately distinguishes the Greek in/within prefix and -en suffix. Morphology and canonical-family decisions require independent review; no lexical, clinical, media or release approval is granted.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation02-held-morphology-oxford-inform",
+      "title": "Oxford Advanced Learner's Dictionary: inform",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/inform",
+      "status": "consulted",
+      "consulted_on": "2026-10-17",
+      "scope": "Fresh author consultation: Recipient-information sense, verb forms and Word Origin. Current giving-information and influence meanings are separate. The forms include informed and informing. Historical development concerns shaping or forming the mind, through an into-prefix and form/shape base; it is not negative in- or a document-form meaning. Morphology and canonical-family decisions require independent review; no lexical, clinical, media or release approval is granted.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation02-held-morphology-oxford-informed",
+      "title": "Oxford Advanced Learner's Dictionary: informed adjective",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/informed",
+      "status": "consulted",
+      "consulted_on": "2026-10-17",
+      "scope": "Fresh author consultation: Knowledgeable person/state and decision based on understanding. The adjective includes having knowledge and a decision grounded in understanding. This supports a plausible family relation to inform while showing why having been told something alone does not settle an informed decision or clinical consent. Morphology and canonical-family decisions require independent review; no lexical, clinical, media or release approval is granted.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation02-held-morphology-oxford-collect",
+      "title": "Oxford Advanced Learner's Dictionary: collect verb",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/collect_1",
+      "status": "consulted",
+      "consulted_on": "2026-10-17",
+      "scope": "Fresh author consultation: Bring-together sense, distinct take-away sense, verb forms and Word Origin. The selected sense brings items together from several sources; pickup is separate. Forms retain collect before inflections. The historical chain passes through Latin collect- and colligere, with together and gather/choose elements. Morphology and canonical-family decisions require independent review; no lexical, clinical, media or release approval is granted.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation02-held-morphology-collins-collect",
+      "title": "Collins dictionaries: collect",
+      "publisher": "HarperCollins Publishers",
+      "url": "https://www.collinsdictionary.com/dictionary/english/collect",
+      "status": "consulted",
+      "consulted_on": "2026-10-17",
+      "scope": "Fresh author consultation: Selected gathering sense, verb forms and verb word history. Gathering from several people/places is distinct from pickup and payment meanings. Historical analysis describes Latin col-/com-, legere and participial development. The prayer noun and unrelated senses are excluded from the proposal. Morphology and canonical-family decisions require independent review; no lexical, clinical, media or release approval is granted.",
+      "asset_license": null,
+      "assets_acquired": false
+    }
+  ]
+}

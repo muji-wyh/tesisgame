@@ -1,0 +1,3504 @@
+{
+	"authority": "none",
+	"cases": [
+		{
+			"forbidden_phase": "descriptor_read",
+			"id": "missing-descriptor",
+			"phases": [
+				{
+					"phase": "descriptor_open",
+					"selection": 2
+				},
+				{
+					"phase": "error",
+					"selection": 2
+				}
+			],
+			"result": {
+				"code": "invalid_fixture",
+				"error": "Missing fixture resource.",
+				"expressions": [],
+				"ok": false,
+				"words": []
+			},
+			"selection": 2,
+			"state": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 0,
+				"epoch": 1,
+				"installed": false,
+				"largest_read_chunk": 0,
+				"largest_steps_per_turn": 2,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 0,
+				"process_turns": 1,
+				"publications": 0,
+				"selection": 2,
+				"steps": 2
+			}
+		},
+		{
+			"forbidden_phase": "descriptor_validate",
+			"id": "descriptor-nonobject",
+			"phases": [
+				{
+					"phase": "descriptor_open",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_read",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_decode",
+					"selection": 2
+				},
+				{
+					"phase": "error",
+					"selection": 2
+				}
+			],
+			"result": {
+				"code": "invalid_fixture",
+				"error": "Fixture resource is not a JSON object.",
+				"expressions": [],
+				"ok": false,
+				"words": []
+			},
+			"selection": 2,
+			"state": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 3,
+				"epoch": 1,
+				"installed": false,
+				"largest_read_chunk": 3,
+				"largest_steps_per_turn": 4,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 1,
+				"process_turns": 1,
+				"publications": 0,
+				"selection": 2,
+				"steps": 4
+			}
+		},
+		{
+			"forbidden_phase": "index_open",
+			"id": "descriptor-unsupported",
+			"phases": [
+				{
+					"phase": "descriptor_open",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_read",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_decode",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_validate",
+					"selection": 2
+				},
+				{
+					"phase": "error",
+					"selection": 2
+				}
+			],
+			"result": {
+				"code": "invalid_fixture",
+				"error": "Fixture descriptor is unavailable or unsupported.",
+				"expressions": [],
+				"ok": false,
+				"words": []
+			},
+			"selection": 2,
+			"state": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 741,
+				"epoch": 1,
+				"installed": false,
+				"largest_read_chunk": 741,
+				"largest_steps_per_turn": 5,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 1,
+				"process_turns": 1,
+				"publications": 0,
+				"selection": 2,
+				"steps": 5
+			}
+		},
+		{
+			"forbidden_phase": "index_open",
+			"id": "descriptor-caller-path",
+			"phases": [
+				{
+					"phase": "descriptor_open",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_read",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_decode",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_validate",
+					"selection": 2
+				},
+				{
+					"phase": "error",
+					"selection": 2
+				}
+			],
+			"result": {
+				"code": "invalid_fixture",
+				"error": "Fixture descriptor contains an invalid fixed resource.",
+				"expressions": [],
+				"ok": false,
+				"words": []
+			},
+			"selection": 2,
+			"state": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 729,
+				"epoch": 1,
+				"installed": false,
+				"largest_read_chunk": 729,
+				"largest_steps_per_turn": 4,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 1,
+				"process_turns": 2,
+				"publications": 0,
+				"selection": 2,
+				"steps": 5
+			}
+		},
+		{
+			"forbidden_phase": "index_read",
+			"id": "missing-index",
+			"phases": [
+				{
+					"phase": "descriptor_open",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_read",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_decode",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_validate",
+					"selection": 2
+				},
+				{
+					"phase": "index_open",
+					"selection": 2
+				},
+				{
+					"phase": "error",
+					"selection": 2
+				}
+			],
+			"result": {
+				"code": "invalid_fixture",
+				"error": "Missing fixture resource.",
+				"expressions": [],
+				"ok": false,
+				"words": []
+			},
+			"selection": 2,
+			"state": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 747,
+				"epoch": 1,
+				"installed": false,
+				"largest_read_chunk": 747,
+				"largest_steps_per_turn": 6,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 1,
+				"process_turns": 1,
+				"publications": 0,
+				"selection": 2,
+				"steps": 6
+			}
+		},
+		{
+			"forbidden_phase": "index_decode",
+			"id": "index-hash",
+			"phases": [
+				{
+					"phase": "descriptor_open",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_read",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_decode",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_validate",
+					"selection": 2
+				},
+				{
+					"phase": "index_open",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "error",
+					"selection": 2
+				}
+			],
+			"result": {
+				"code": "invalid_fixture",
+				"error": "Fixture resource digest differs.",
+				"expressions": [],
+				"ok": false,
+				"words": []
+			},
+			"selection": 2,
+			"state": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 21629,
+				"epoch": 1,
+				"installed": false,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 8,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 2,
+				"process_turns": 1,
+				"publications": 0,
+				"selection": 2,
+				"steps": 8
+			}
+		},
+		{
+			"forbidden_phase": "index_read",
+			"id": "index-length",
+			"phases": [
+				{
+					"phase": "descriptor_open",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_read",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_decode",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_validate",
+					"selection": 2
+				},
+				{
+					"phase": "index_open",
+					"selection": 2
+				},
+				{
+					"phase": "error",
+					"selection": 2
+				}
+			],
+			"result": {
+				"code": "invalid_fixture",
+				"error": "Fixture resource length differs or exceeds its bound.",
+				"expressions": [],
+				"ok": false,
+				"words": []
+			},
+			"selection": 2,
+			"state": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 745,
+				"epoch": 1,
+				"installed": false,
+				"largest_read_chunk": 745,
+				"largest_steps_per_turn": 5,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 2,
+				"process_turns": 2,
+				"publications": 0,
+				"selection": 2,
+				"steps": 6
+			}
+		},
+		{
+			"forbidden_phase": "themes_open",
+			"id": "index-policy",
+			"phases": [
+				{
+					"phase": "descriptor_open",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_read",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_decode",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_validate",
+					"selection": 2
+				},
+				{
+					"phase": "index_open",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_decode",
+					"selection": 2
+				},
+				{
+					"phase": "index_validate",
+					"selection": 2
+				},
+				{
+					"phase": "error",
+					"selection": 2
+				}
+			],
+			"result": {
+				"code": "invalid_fixture",
+				"error": "Unsupported compiled fixture index.",
+				"expressions": [],
+				"ok": false,
+				"words": []
+			},
+			"selection": 2,
+			"state": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 30118,
+				"epoch": 1,
+				"installed": false,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 8,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 2,
+				"process_turns": 2,
+				"publications": 0,
+				"selection": 2,
+				"steps": 10
+			}
+		},
+		{
+			"forbidden_phase": "themes_open",
+			"id": "index-duplicate",
+			"phases": [
+				{
+					"phase": "descriptor_open",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_read",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_decode",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_validate",
+					"selection": 2
+				},
+				{
+					"phase": "index_open",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_decode",
+					"selection": 2
+				},
+				{
+					"phase": "index_validate",
+					"selection": 2
+				},
+				{
+					"phase": "error",
+					"selection": 2
+				}
+			],
+			"result": {
+				"code": "invalid_fixture",
+				"error": "Duplicate fixture module identity.",
+				"expressions": [],
+				"ok": false,
+				"words": []
+			},
+			"selection": 2,
+			"state": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 30125,
+				"epoch": 1,
+				"installed": false,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 7,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 2,
+				"process_turns": 3,
+				"publications": 0,
+				"selection": 2,
+				"steps": 10
+			}
+		},
+		{
+			"forbidden_phase": "themes_open",
+			"id": "index-unsafe-path",
+			"phases": [
+				{
+					"phase": "descriptor_open",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_read",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_decode",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_validate",
+					"selection": 2
+				},
+				{
+					"phase": "index_open",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_decode",
+					"selection": 2
+				},
+				{
+					"phase": "index_validate",
+					"selection": 2
+				},
+				{
+					"phase": "error",
+					"selection": 2
+				}
+			],
+			"result": {
+				"code": "invalid_fixture",
+				"error": "Invalid fixture ready descriptor.",
+				"expressions": [],
+				"ok": false,
+				"words": []
+			},
+			"selection": 2,
+			"state": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 30075,
+				"epoch": 1,
+				"installed": false,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 9,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 2,
+				"process_turns": 2,
+				"publications": 0,
+				"selection": 2,
+				"steps": 10
+			}
+		},
+		{
+			"forbidden_phase": "themes_read",
+			"id": "missing-themes",
+			"phases": [
+				{
+					"phase": "descriptor_open",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_read",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_decode",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_validate",
+					"selection": 2
+				},
+				{
+					"phase": "index_open",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_decode",
+					"selection": 2
+				},
+				{
+					"phase": "index_validate",
+					"selection": 2
+				},
+				{
+					"phase": "themes_open",
+					"selection": 2
+				},
+				{
+					"phase": "error",
+					"selection": 2
+				}
+			],
+			"result": {
+				"code": "invalid_fixture",
+				"error": "Missing fixture resource.",
+				"expressions": [],
+				"ok": false,
+				"words": []
+			},
+			"selection": 2,
+			"state": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 21637,
+				"epoch": 1,
+				"installed": false,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 9,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 2,
+				"process_turns": 2,
+				"publications": 0,
+				"selection": 2,
+				"steps": 11
+			}
+		},
+		{
+			"forbidden_phase": "themes_decode",
+			"id": "themes-hash",
+			"phases": [
+				{
+					"phase": "descriptor_open",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_read",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_decode",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_validate",
+					"selection": 2
+				},
+				{
+					"phase": "index_open",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_decode",
+					"selection": 2
+				},
+				{
+					"phase": "index_validate",
+					"selection": 2
+				},
+				{
+					"phase": "themes_open",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "error",
+					"selection": 2
+				}
+			],
+			"result": {
+				"code": "invalid_fixture",
+				"error": "Fixture resource digest differs.",
+				"expressions": [],
+				"ok": false,
+				"words": []
+			},
+			"selection": 2,
+			"state": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 112832,
+				"epoch": 1,
+				"installed": false,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 9,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 3,
+				"process_turns": 3,
+				"publications": 0,
+				"selection": 2,
+				"steps": 17
+			}
+		},
+		{
+			"forbidden_phase": "select",
+			"id": "themes-duplicate",
+			"phases": [
+				{
+					"phase": "descriptor_open",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_read",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_decode",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_validate",
+					"selection": 2
+				},
+				{
+					"phase": "index_open",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_decode",
+					"selection": 2
+				},
+				{
+					"phase": "index_validate",
+					"selection": 2
+				},
+				{
+					"phase": "themes_open",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_decode",
+					"selection": 2
+				},
+				{
+					"phase": "themes_validate",
+					"selection": 2
+				},
+				{
+					"phase": "error",
+					"selection": 2
+				}
+			],
+			"result": {
+				"code": "invalid_fixture",
+				"error": "Fixture theme identity is invalid.",
+				"expressions": [],
+				"ok": false,
+				"words": []
+			},
+			"selection": 2,
+			"state": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 111869,
+				"epoch": 1,
+				"installed": false,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 12,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 3,
+				"process_turns": 3,
+				"publications": 0,
+				"selection": 2,
+				"steps": 19
+			}
+		},
+		{
+			"forbidden_phase": "payload_read",
+			"id": "missing-payload",
+			"phases": [
+				{
+					"phase": "descriptor_open",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_read",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_decode",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_validate",
+					"selection": 2
+				},
+				{
+					"phase": "index_open",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_decode",
+					"selection": 2
+				},
+				{
+					"phase": "index_validate",
+					"selection": 2
+				},
+				{
+					"phase": "themes_open",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_decode",
+					"selection": 2
+				},
+				{
+					"phase": "themes_validate",
+					"selection": 2
+				},
+				{
+					"phase": "select",
+					"selection": 2
+				},
+				{
+					"phase": "payload_open",
+					"selection": 2
+				},
+				{
+					"phase": "error",
+					"selection": 2
+				}
+			],
+			"result": {
+				"code": "invalid_fixture",
+				"error": "Missing fixture resource.",
+				"expressions": [],
+				"ok": false,
+				"words": []
+			},
+			"selection": 2,
+			"state": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 112840,
+				"epoch": 1,
+				"installed": true,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 7,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 3,
+				"process_turns": 6,
+				"publications": 0,
+				"selection": 2,
+				"steps": 21
+			}
+		},
+		{
+			"forbidden_phase": "payload_decode",
+			"id": "payload-hash",
+			"phases": [
+				{
+					"phase": "descriptor_open",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_read",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_decode",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_validate",
+					"selection": 2
+				},
+				{
+					"phase": "index_open",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_decode",
+					"selection": 2
+				},
+				{
+					"phase": "index_validate",
+					"selection": 2
+				},
+				{
+					"phase": "themes_open",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_decode",
+					"selection": 2
+				},
+				{
+					"phase": "themes_validate",
+					"selection": 2
+				},
+				{
+					"phase": "select",
+					"selection": 2
+				},
+				{
+					"phase": "payload_open",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "error",
+					"selection": 2
+				}
+			],
+			"result": {
+				"code": "invalid_fixture",
+				"error": "Fixture resource digest differs.",
+				"expressions": [],
+				"ok": false,
+				"words": []
+			},
+			"selection": 2,
+			"state": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 396412,
+				"epoch": 1,
+				"installed": true,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 16,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 4,
+				"process_turns": 5,
+				"publications": 0,
+				"selection": 2,
+				"steps": 39
+			}
+		},
+		{
+			"forbidden_phase": "payload_read",
+			"id": "payload-length",
+			"phases": [
+				{
+					"phase": "descriptor_open",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_read",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_decode",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_validate",
+					"selection": 2
+				},
+				{
+					"phase": "index_open",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_decode",
+					"selection": 2
+				},
+				{
+					"phase": "index_validate",
+					"selection": 2
+				},
+				{
+					"phase": "themes_open",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_decode",
+					"selection": 2
+				},
+				{
+					"phase": "themes_validate",
+					"selection": 2
+				},
+				{
+					"phase": "select",
+					"selection": 2
+				},
+				{
+					"phase": "payload_open",
+					"selection": 2
+				},
+				{
+					"phase": "error",
+					"selection": 2
+				}
+			],
+			"result": {
+				"code": "invalid_fixture",
+				"error": "Fixture resource length differs or exceeds its bound.",
+				"expressions": [],
+				"ok": false,
+				"words": []
+			},
+			"selection": 2,
+			"state": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 121324,
+				"epoch": 1,
+				"installed": true,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 8,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 4,
+				"process_turns": 5,
+				"publications": 0,
+				"selection": 2,
+				"steps": 21
+			}
+		},
+		{
+			"forbidden_phase": "resolve",
+			"id": "payload-identity",
+			"phases": [
+				{
+					"phase": "descriptor_open",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_read",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_decode",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_validate",
+					"selection": 2
+				},
+				{
+					"phase": "index_open",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_decode",
+					"selection": 2
+				},
+				{
+					"phase": "index_validate",
+					"selection": 2
+				},
+				{
+					"phase": "themes_open",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_decode",
+					"selection": 2
+				},
+				{
+					"phase": "themes_validate",
+					"selection": 2
+				},
+				{
+					"phase": "select",
+					"selection": 2
+				},
+				{
+					"phase": "payload_open",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_decode",
+					"selection": 2
+				},
+				{
+					"phase": "payload_validate",
+					"selection": 2
+				},
+				{
+					"phase": "error",
+					"selection": 2
+				}
+			],
+			"result": {
+				"code": "invalid_fixture",
+				"error": "Compiled fixture payload identity differs.",
+				"expressions": [],
+				"ok": false,
+				"words": []
+			},
+			"selection": 2,
+			"state": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 508438,
+				"epoch": 1,
+				"installed": true,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 24,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 4,
+				"process_turns": 8,
+				"publications": 0,
+				"selection": 2,
+				"steps": 47
+			}
+		},
+		{
+			"forbidden_phase": "resolve",
+			"id": "payload-membership",
+			"phases": [
+				{
+					"phase": "descriptor_open",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_read",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_decode",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_validate",
+					"selection": 2
+				},
+				{
+					"phase": "index_open",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_decode",
+					"selection": 2
+				},
+				{
+					"phase": "index_validate",
+					"selection": 2
+				},
+				{
+					"phase": "themes_open",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_decode",
+					"selection": 2
+				},
+				{
+					"phase": "themes_validate",
+					"selection": 2
+				},
+				{
+					"phase": "select",
+					"selection": 2
+				},
+				{
+					"phase": "payload_open",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_decode",
+					"selection": 2
+				},
+				{
+					"phase": "payload_validate",
+					"selection": 2
+				},
+				{
+					"phase": "error",
+					"selection": 2
+				}
+			],
+			"result": {
+				"code": "invalid_fixture",
+				"error": "Compiled fixture selected membership count differs.",
+				"expressions": [],
+				"ok": false,
+				"words": []
+			},
+			"selection": 2,
+			"state": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 502572,
+				"epoch": 1,
+				"installed": true,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 18,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 4,
+				"process_turns": 7,
+				"publications": 0,
+				"selection": 2,
+				"steps": 47
+			}
+		},
+		{
+			"forbidden_phase": "resolve",
+			"id": "payload-exception",
+			"phases": [
+				{
+					"phase": "descriptor_open",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_read",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_decode",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_validate",
+					"selection": 2
+				},
+				{
+					"phase": "index_open",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_decode",
+					"selection": 2
+				},
+				{
+					"phase": "index_validate",
+					"selection": 2
+				},
+				{
+					"phase": "themes_open",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_decode",
+					"selection": 2
+				},
+				{
+					"phase": "themes_validate",
+					"selection": 2
+				},
+				{
+					"phase": "select",
+					"selection": 2
+				},
+				{
+					"phase": "payload_open",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_decode",
+					"selection": 2
+				},
+				{
+					"phase": "payload_validate",
+					"selection": 2
+				},
+				{
+					"phase": "error",
+					"selection": 2
+				}
+			],
+			"result": {
+				"code": "invalid_fixture",
+				"error": "Compiled fixture domain row is invalid or grants an exception.",
+				"expressions": [],
+				"ok": false,
+				"words": []
+			},
+			"selection": 2,
+			"state": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 508470,
+				"epoch": 1,
+				"installed": true,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 11,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 4,
+				"process_turns": 7,
+				"publications": 0,
+				"selection": 2,
+				"steps": 47
+			}
+		},
+		{
+			"forbidden_phase": "resolve",
+			"id": "payload-domain-review",
+			"phases": [
+				{
+					"phase": "descriptor_open",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_read",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_decode",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_validate",
+					"selection": 2
+				},
+				{
+					"phase": "index_open",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_decode",
+					"selection": 2
+				},
+				{
+					"phase": "index_validate",
+					"selection": 2
+				},
+				{
+					"phase": "themes_open",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_decode",
+					"selection": 2
+				},
+				{
+					"phase": "themes_validate",
+					"selection": 2
+				},
+				{
+					"phase": "select",
+					"selection": 2
+				},
+				{
+					"phase": "payload_open",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_decode",
+					"selection": 2
+				},
+				{
+					"phase": "payload_validate",
+					"selection": 2
+				},
+				{
+					"phase": "error",
+					"selection": 2
+				}
+			],
+			"result": {
+				"code": "invalid_fixture",
+				"error": "Compiled fixture requires the original lexical and expression domain reviews.",
+				"expressions": [],
+				"ok": false,
+				"words": []
+			},
+			"selection": 2,
+			"state": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 508452,
+				"epoch": 1,
+				"installed": true,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 18,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 4,
+				"process_turns": 5,
+				"publications": 0,
+				"selection": 2,
+				"steps": 47
+			}
+		},
+		{
+			"forbidden_phase": "publish",
+			"id": "missing-media-manifest",
+			"phases": [
+				{
+					"phase": "descriptor_open",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_read",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_decode",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_validate",
+					"selection": 2
+				},
+				{
+					"phase": "index_open",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_decode",
+					"selection": 2
+				},
+				{
+					"phase": "index_validate",
+					"selection": 2
+				},
+				{
+					"phase": "themes_open",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_decode",
+					"selection": 2
+				},
+				{
+					"phase": "themes_validate",
+					"selection": 2
+				},
+				{
+					"phase": "select",
+					"selection": 2
+				},
+				{
+					"phase": "payload_open",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_decode",
+					"selection": 2
+				},
+				{
+					"phase": "payload_validate",
+					"selection": 2
+				},
+				{
+					"phase": "resolve",
+					"selection": 2
+				},
+				{
+					"phase": "error",
+					"selection": 2
+				}
+			],
+			"result": {
+				"code": "content_unavailable",
+				"error": "The module media manifest is unavailable. Please retry.",
+				"expressions": [],
+				"ok": false,
+				"words": []
+			},
+			"selection": 2,
+			"state": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 508450,
+				"epoch": 1,
+				"installed": true,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 22,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 4,
+				"process_turns": 6,
+				"publications": 0,
+				"selection": 2,
+				"steps": 48
+			}
+		},
+		{
+			"forbidden_phase": "publish",
+			"id": "media-manifest-hash",
+			"phases": [
+				{
+					"phase": "descriptor_open",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_read",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_decode",
+					"selection": 2
+				},
+				{
+					"phase": "descriptor_validate",
+					"selection": 2
+				},
+				{
+					"phase": "index_open",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_read",
+					"selection": 2
+				},
+				{
+					"phase": "index_decode",
+					"selection": 2
+				},
+				{
+					"phase": "index_validate",
+					"selection": 2
+				},
+				{
+					"phase": "themes_open",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_read",
+					"selection": 2
+				},
+				{
+					"phase": "themes_decode",
+					"selection": 2
+				},
+				{
+					"phase": "themes_validate",
+					"selection": 2
+				},
+				{
+					"phase": "select",
+					"selection": 2
+				},
+				{
+					"phase": "payload_open",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_read",
+					"selection": 2
+				},
+				{
+					"phase": "payload_decode",
+					"selection": 2
+				},
+				{
+					"phase": "payload_validate",
+					"selection": 2
+				},
+				{
+					"phase": "resolve",
+					"selection": 2
+				},
+				{
+					"phase": "error",
+					"selection": 2
+				}
+			],
+			"result": {
+				"code": "hash_mismatch",
+				"error": "The media manifest failed its SHA-256 integrity check.",
+				"ok": false,
+				"retryable": true
+			},
+			"selection": 2,
+			"state": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 508444,
+				"epoch": 1,
+				"installed": true,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 27,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 4,
+				"process_turns": 8,
+				"publications": 0,
+				"selection": 2,
+				"steps": 48
+			}
+		}
+	],
+	"checks": [
+		{
+			"check": "missing-descriptor: corrupted/missing package is rejected",
+			"passed": true
+		},
+		{
+			"check": "missing-descriptor: exact expected rejection family",
+			"passed": true
+		},
+		{
+			"check": "missing-descriptor: failure exposes no request token",
+			"passed": true
+		},
+		{
+			"check": "missing-descriptor: failed package cannot seed module cache or publish",
+			"passed": true
+		},
+		{
+			"check": "missing-descriptor: failure releases active job and file",
+			"passed": true
+		},
+		{
+			"check": "missing-descriptor: rejected before forbidden phase descriptor_read",
+			"passed": true
+		},
+		{
+			"check": "missing-descriptor: one terminal error transition",
+			"passed": true
+		},
+		{
+			"check": "missing-descriptor: no token can be forged after failure",
+			"passed": true
+		},
+		{
+			"check": "descriptor-nonobject: corrupted/missing package is rejected",
+			"passed": true
+		},
+		{
+			"check": "descriptor-nonobject: exact expected rejection family",
+			"passed": true
+		},
+		{
+			"check": "descriptor-nonobject: failure exposes no request token",
+			"passed": true
+		},
+		{
+			"check": "descriptor-nonobject: failed package cannot seed module cache or publish",
+			"passed": true
+		},
+		{
+			"check": "descriptor-nonobject: failure releases active job and file",
+			"passed": true
+		},
+		{
+			"check": "descriptor-nonobject: rejected before forbidden phase descriptor_validate",
+			"passed": true
+		},
+		{
+			"check": "descriptor-nonobject: one terminal error transition",
+			"passed": true
+		},
+		{
+			"check": "descriptor-nonobject: no token can be forged after failure",
+			"passed": true
+		},
+		{
+			"check": "descriptor-unsupported: corrupted/missing package is rejected",
+			"passed": true
+		},
+		{
+			"check": "descriptor-unsupported: exact expected rejection family",
+			"passed": true
+		},
+		{
+			"check": "descriptor-unsupported: failure exposes no request token",
+			"passed": true
+		},
+		{
+			"check": "descriptor-unsupported: failed package cannot seed module cache or publish",
+			"passed": true
+		},
+		{
+			"check": "descriptor-unsupported: failure releases active job and file",
+			"passed": true
+		},
+		{
+			"check": "descriptor-unsupported: rejected before forbidden phase index_open",
+			"passed": true
+		},
+		{
+			"check": "descriptor-unsupported: one terminal error transition",
+			"passed": true
+		},
+		{
+			"check": "descriptor-unsupported: no token can be forged after failure",
+			"passed": true
+		},
+		{
+			"check": "descriptor-caller-path: corrupted/missing package is rejected",
+			"passed": true
+		},
+		{
+			"check": "descriptor-caller-path: exact expected rejection family",
+			"passed": true
+		},
+		{
+			"check": "descriptor-caller-path: failure exposes no request token",
+			"passed": true
+		},
+		{
+			"check": "descriptor-caller-path: failed package cannot seed module cache or publish",
+			"passed": true
+		},
+		{
+			"check": "descriptor-caller-path: failure releases active job and file",
+			"passed": true
+		},
+		{
+			"check": "descriptor-caller-path: rejected before forbidden phase index_open",
+			"passed": true
+		},
+		{
+			"check": "descriptor-caller-path: one terminal error transition",
+			"passed": true
+		},
+		{
+			"check": "descriptor-caller-path: no token can be forged after failure",
+			"passed": true
+		},
+		{
+			"check": "missing-index: corrupted/missing package is rejected",
+			"passed": true
+		},
+		{
+			"check": "missing-index: exact expected rejection family",
+			"passed": true
+		},
+		{
+			"check": "missing-index: failure exposes no request token",
+			"passed": true
+		},
+		{
+			"check": "missing-index: failed package cannot seed module cache or publish",
+			"passed": true
+		},
+		{
+			"check": "missing-index: failure releases active job and file",
+			"passed": true
+		},
+		{
+			"check": "missing-index: rejected before forbidden phase index_read",
+			"passed": true
+		},
+		{
+			"check": "missing-index: one terminal error transition",
+			"passed": true
+		},
+		{
+			"check": "missing-index: no token can be forged after failure",
+			"passed": true
+		},
+		{
+			"check": "index-hash: corrupted/missing package is rejected",
+			"passed": true
+		},
+		{
+			"check": "index-hash: exact expected rejection family",
+			"passed": true
+		},
+		{
+			"check": "index-hash: failure exposes no request token",
+			"passed": true
+		},
+		{
+			"check": "index-hash: failed package cannot seed module cache or publish",
+			"passed": true
+		},
+		{
+			"check": "index-hash: failure releases active job and file",
+			"passed": true
+		},
+		{
+			"check": "index-hash: rejected before forbidden phase index_decode",
+			"passed": true
+		},
+		{
+			"check": "index-hash: one terminal error transition",
+			"passed": true
+		},
+		{
+			"check": "index-hash: no token can be forged after failure",
+			"passed": true
+		},
+		{
+			"check": "index-length: corrupted/missing package is rejected",
+			"passed": true
+		},
+		{
+			"check": "index-length: exact expected rejection family",
+			"passed": true
+		},
+		{
+			"check": "index-length: failure exposes no request token",
+			"passed": true
+		},
+		{
+			"check": "index-length: failed package cannot seed module cache or publish",
+			"passed": true
+		},
+		{
+			"check": "index-length: failure releases active job and file",
+			"passed": true
+		},
+		{
+			"check": "index-length: rejected before forbidden phase index_read",
+			"passed": true
+		},
+		{
+			"check": "index-length: one terminal error transition",
+			"passed": true
+		},
+		{
+			"check": "index-length: no token can be forged after failure",
+			"passed": true
+		},
+		{
+			"check": "index-policy: corrupted/missing package is rejected",
+			"passed": true
+		},
+		{
+			"check": "index-policy: exact expected rejection family",
+			"passed": true
+		},
+		{
+			"check": "index-policy: failure exposes no request token",
+			"passed": true
+		},
+		{
+			"check": "index-policy: failed package cannot seed module cache or publish",
+			"passed": true
+		},
+		{
+			"check": "index-policy: failure releases active job and file",
+			"passed": true
+		},
+		{
+			"check": "index-policy: rejected before forbidden phase themes_open",
+			"passed": true
+		},
+		{
+			"check": "index-policy: one terminal error transition",
+			"passed": true
+		},
+		{
+			"check": "index-policy: no token can be forged after failure",
+			"passed": true
+		},
+		{
+			"check": "index-duplicate: corrupted/missing package is rejected",
+			"passed": true
+		},
+		{
+			"check": "index-duplicate: exact expected rejection family",
+			"passed": true
+		},
+		{
+			"check": "index-duplicate: failure exposes no request token",
+			"passed": true
+		},
+		{
+			"check": "index-duplicate: failed package cannot seed module cache or publish",
+			"passed": true
+		},
+		{
+			"check": "index-duplicate: failure releases active job and file",
+			"passed": true
+		},
+		{
+			"check": "index-duplicate: rejected before forbidden phase themes_open",
+			"passed": true
+		},
+		{
+			"check": "index-duplicate: one terminal error transition",
+			"passed": true
+		},
+		{
+			"check": "index-duplicate: no token can be forged after failure",
+			"passed": true
+		},
+		{
+			"check": "index-unsafe-path: corrupted/missing package is rejected",
+			"passed": true
+		},
+		{
+			"check": "index-unsafe-path: exact expected rejection family",
+			"passed": true
+		},
+		{
+			"check": "index-unsafe-path: failure exposes no request token",
+			"passed": true
+		},
+		{
+			"check": "index-unsafe-path: failed package cannot seed module cache or publish",
+			"passed": true
+		},
+		{
+			"check": "index-unsafe-path: failure releases active job and file",
+			"passed": true
+		},
+		{
+			"check": "index-unsafe-path: rejected before forbidden phase themes_open",
+			"passed": true
+		},
+		{
+			"check": "index-unsafe-path: one terminal error transition",
+			"passed": true
+		},
+		{
+			"check": "index-unsafe-path: no token can be forged after failure",
+			"passed": true
+		},
+		{
+			"check": "missing-themes: corrupted/missing package is rejected",
+			"passed": true
+		},
+		{
+			"check": "missing-themes: exact expected rejection family",
+			"passed": true
+		},
+		{
+			"check": "missing-themes: failure exposes no request token",
+			"passed": true
+		},
+		{
+			"check": "missing-themes: failed package cannot seed module cache or publish",
+			"passed": true
+		},
+		{
+			"check": "missing-themes: failure releases active job and file",
+			"passed": true
+		},
+		{
+			"check": "missing-themes: rejected before forbidden phase themes_read",
+			"passed": true
+		},
+		{
+			"check": "missing-themes: one terminal error transition",
+			"passed": true
+		},
+		{
+			"check": "missing-themes: no token can be forged after failure",
+			"passed": true
+		},
+		{
+			"check": "themes-hash: corrupted/missing package is rejected",
+			"passed": true
+		},
+		{
+			"check": "themes-hash: exact expected rejection family",
+			"passed": true
+		},
+		{
+			"check": "themes-hash: failure exposes no request token",
+			"passed": true
+		},
+		{
+			"check": "themes-hash: failed package cannot seed module cache or publish",
+			"passed": true
+		},
+		{
+			"check": "themes-hash: failure releases active job and file",
+			"passed": true
+		},
+		{
+			"check": "themes-hash: rejected before forbidden phase themes_decode",
+			"passed": true
+		},
+		{
+			"check": "themes-hash: one terminal error transition",
+			"passed": true
+		},
+		{
+			"check": "themes-hash: no token can be forged after failure",
+			"passed": true
+		},
+		{
+			"check": "themes-duplicate: corrupted/missing package is rejected",
+			"passed": true
+		},
+		{
+			"check": "themes-duplicate: exact expected rejection family",
+			"passed": true
+		},
+		{
+			"check": "themes-duplicate: failure exposes no request token",
+			"passed": true
+		},
+		{
+			"check": "themes-duplicate: failed package cannot seed module cache or publish",
+			"passed": true
+		},
+		{
+			"check": "themes-duplicate: failure releases active job and file",
+			"passed": true
+		},
+		{
+			"check": "themes-duplicate: rejected before forbidden phase select",
+			"passed": true
+		},
+		{
+			"check": "themes-duplicate: one terminal error transition",
+			"passed": true
+		},
+		{
+			"check": "themes-duplicate: no token can be forged after failure",
+			"passed": true
+		},
+		{
+			"check": "missing-payload: corrupted/missing package is rejected",
+			"passed": true
+		},
+		{
+			"check": "missing-payload: exact expected rejection family",
+			"passed": true
+		},
+		{
+			"check": "missing-payload: failure exposes no request token",
+			"passed": true
+		},
+		{
+			"check": "missing-payload: failed package cannot seed module cache or publish",
+			"passed": true
+		},
+		{
+			"check": "missing-payload: failure releases active job and file",
+			"passed": true
+		},
+		{
+			"check": "missing-payload: rejected before forbidden phase payload_read",
+			"passed": true
+		},
+		{
+			"check": "missing-payload: one terminal error transition",
+			"passed": true
+		},
+		{
+			"check": "missing-payload: no token can be forged after failure",
+			"passed": true
+		},
+		{
+			"check": "payload-hash: corrupted/missing package is rejected",
+			"passed": true
+		},
+		{
+			"check": "payload-hash: exact expected rejection family",
+			"passed": true
+		},
+		{
+			"check": "payload-hash: failure exposes no request token",
+			"passed": true
+		},
+		{
+			"check": "payload-hash: failed package cannot seed module cache or publish",
+			"passed": true
+		},
+		{
+			"check": "payload-hash: failure releases active job and file",
+			"passed": true
+		},
+		{
+			"check": "payload-hash: rejected before forbidden phase payload_decode",
+			"passed": true
+		},
+		{
+			"check": "payload-hash: one terminal error transition",
+			"passed": true
+		},
+		{
+			"check": "payload-hash: no token can be forged after failure",
+			"passed": true
+		},
+		{
+			"check": "payload-length: corrupted/missing package is rejected",
+			"passed": true
+		},
+		{
+			"check": "payload-length: exact expected rejection family",
+			"passed": true
+		},
+		{
+			"check": "payload-length: failure exposes no request token",
+			"passed": true
+		},
+		{
+			"check": "payload-length: failed package cannot seed module cache or publish",
+			"passed": true
+		},
+		{
+			"check": "payload-length: failure releases active job and file",
+			"passed": true
+		},
+		{
+			"check": "payload-length: rejected before forbidden phase payload_read",
+			"passed": true
+		},
+		{
+			"check": "payload-length: one terminal error transition",
+			"passed": true
+		},
+		{
+			"check": "payload-length: no token can be forged after failure",
+			"passed": true
+		},
+		{
+			"check": "payload-identity: corrupted/missing package is rejected",
+			"passed": true
+		},
+		{
+			"check": "payload-identity: exact expected rejection family",
+			"passed": true
+		},
+		{
+			"check": "payload-identity: failure exposes no request token",
+			"passed": true
+		},
+		{
+			"check": "payload-identity: failed package cannot seed module cache or publish",
+			"passed": true
+		},
+		{
+			"check": "payload-identity: failure releases active job and file",
+			"passed": true
+		},
+		{
+			"check": "payload-identity: rejected before forbidden phase resolve",
+			"passed": true
+		},
+		{
+			"check": "payload-identity: one terminal error transition",
+			"passed": true
+		},
+		{
+			"check": "payload-identity: no token can be forged after failure",
+			"passed": true
+		},
+		{
+			"check": "payload-membership: corrupted/missing package is rejected",
+			"passed": true
+		},
+		{
+			"check": "payload-membership: exact expected rejection family",
+			"passed": true
+		},
+		{
+			"check": "payload-membership: failure exposes no request token",
+			"passed": true
+		},
+		{
+			"check": "payload-membership: failed package cannot seed module cache or publish",
+			"passed": true
+		},
+		{
+			"check": "payload-membership: failure releases active job and file",
+			"passed": true
+		},
+		{
+			"check": "payload-membership: rejected before forbidden phase resolve",
+			"passed": true
+		},
+		{
+			"check": "payload-membership: one terminal error transition",
+			"passed": true
+		},
+		{
+			"check": "payload-membership: no token can be forged after failure",
+			"passed": true
+		},
+		{
+			"check": "payload-exception: corrupted/missing package is rejected",
+			"passed": true
+		},
+		{
+			"check": "payload-exception: exact expected rejection family",
+			"passed": true
+		},
+		{
+			"check": "payload-exception: failure exposes no request token",
+			"passed": true
+		},
+		{
+			"check": "payload-exception: failed package cannot seed module cache or publish",
+			"passed": true
+		},
+		{
+			"check": "payload-exception: failure releases active job and file",
+			"passed": true
+		},
+		{
+			"check": "payload-exception: rejected before forbidden phase resolve",
+			"passed": true
+		},
+		{
+			"check": "payload-exception: one terminal error transition",
+			"passed": true
+		},
+		{
+			"check": "payload-exception: no token can be forged after failure",
+			"passed": true
+		},
+		{
+			"check": "payload-domain-review: corrupted/missing package is rejected",
+			"passed": true
+		},
+		{
+			"check": "payload-domain-review: exact expected rejection family",
+			"passed": true
+		},
+		{
+			"check": "payload-domain-review: failure exposes no request token",
+			"passed": true
+		},
+		{
+			"check": "payload-domain-review: failed package cannot seed module cache or publish",
+			"passed": true
+		},
+		{
+			"check": "payload-domain-review: failure releases active job and file",
+			"passed": true
+		},
+		{
+			"check": "payload-domain-review: rejected before forbidden phase resolve",
+			"passed": true
+		},
+		{
+			"check": "payload-domain-review: one terminal error transition",
+			"passed": true
+		},
+		{
+			"check": "payload-domain-review: no token can be forged after failure",
+			"passed": true
+		},
+		{
+			"check": "missing-media-manifest: corrupted/missing package is rejected",
+			"passed": true
+		},
+		{
+			"check": "missing-media-manifest: exact expected rejection family",
+			"passed": true
+		},
+		{
+			"check": "missing-media-manifest: failure exposes no request token",
+			"passed": true
+		},
+		{
+			"check": "missing-media-manifest: failed package cannot seed module cache or publish",
+			"passed": true
+		},
+		{
+			"check": "missing-media-manifest: failure releases active job and file",
+			"passed": true
+		},
+		{
+			"check": "missing-media-manifest: rejected before forbidden phase publish",
+			"passed": true
+		},
+		{
+			"check": "missing-media-manifest: one terminal error transition",
+			"passed": true
+		},
+		{
+			"check": "missing-media-manifest: no token can be forged after failure",
+			"passed": true
+		},
+		{
+			"check": "media-manifest-hash: corrupted/missing package is rejected",
+			"passed": true
+		},
+		{
+			"check": "media-manifest-hash: exact expected rejection family",
+			"passed": true
+		},
+		{
+			"check": "media-manifest-hash: failure exposes no request token",
+			"passed": true
+		},
+		{
+			"check": "media-manifest-hash: failed package cannot seed module cache or publish",
+			"passed": true
+		},
+		{
+			"check": "media-manifest-hash: failure releases active job and file",
+			"passed": true
+		},
+		{
+			"check": "media-manifest-hash: rejected before forbidden phase publish",
+			"passed": true
+		},
+		{
+			"check": "media-manifest-hash: one terminal error transition",
+			"passed": true
+		},
+		{
+			"check": "media-manifest-hash: no token can be forged after failure",
+			"passed": true
+		},
+		{
+			"check": "Valid owner A starts from the unchanged audited synthetic module",
+			"passed": true
+		},
+		{
+			"check": "Valid A content traverses exact current production catalog/resolver",
+			"passed": true
+		},
+		{
+			"check": "A loses token/cache/installed metadata before constructing B",
+			"passed": true
+		},
+		{
+			"check": "Invalid replacement B refuses A's old token before I/O",
+			"passed": true
+		},
+		{
+			"check": "B's fixed bad pin cannot be replaced with caller token/content/descriptor",
+			"passed": true
+		},
+		{
+			"check": "Failed B cannot inherit retired A's cache or publication authority",
+			"passed": true
+		},
+		{
+			"check": "Retrying B fails on the same immutable bad package",
+			"passed": true
+		},
+		{
+			"check": "Retry performs fresh B verification without warm fallback to A",
+			"passed": true
+		},
+		{
+			"check": "Reconfiguring invalid B cannot revive A or bypass its pin",
+			"passed": true
+		},
+		{
+			"check": "Previously returned content remains independent copied data",
+			"passed": true
+		},
+		{
+			"check": "A separate valid C can recover without reviving the retired A token",
+			"passed": true
+		},
+		{
+			"check": "malformed: valid predecessor is prepared",
+			"passed": true
+		},
+		{
+			"check": "malformed: invalid replacement revokes predecessor token immediately",
+			"passed": true
+		},
+		{
+			"check": "malformed: failed replacement cannot return predecessor success",
+			"passed": true
+		},
+		{
+			"check": "malformed: previously verified cache remains data without replacement authority",
+			"passed": true
+		},
+		{
+			"check": "malformed: immutable installed data handles rejection without extra owner I/O",
+			"passed": true
+		},
+		{
+			"check": "draft: valid predecessor is prepared",
+			"passed": true
+		},
+		{
+			"check": "draft: invalid replacement revokes predecessor token immediately",
+			"passed": true
+		},
+		{
+			"check": "draft: failed replacement cannot return predecessor success",
+			"passed": true
+		},
+		{
+			"check": "draft: previously verified cache remains data without replacement authority",
+			"passed": true
+		},
+		{
+			"check": "draft: immutable installed data handles rejection without extra owner I/O",
+			"passed": true
+		},
+		{
+			"check": "foreign-course: valid predecessor is prepared",
+			"passed": true
+		},
+		{
+			"check": "foreign-course: invalid replacement revokes predecessor token immediately",
+			"passed": true
+		},
+		{
+			"check": "foreign-course: failed replacement cannot return predecessor success",
+			"passed": true
+		},
+		{
+			"check": "foreign-course: previously verified cache remains data without replacement authority",
+			"passed": true
+		},
+		{
+			"check": "foreign-course: immutable installed data handles rejection without extra owner I/O",
+			"passed": true
+		},
+		{
+			"check": "wrong-revision: valid predecessor is prepared",
+			"passed": true
+		},
+		{
+			"check": "wrong-revision: invalid replacement revokes predecessor token immediately",
+			"passed": true
+		},
+		{
+			"check": "wrong-revision: failed replacement cannot return predecessor success",
+			"passed": true
+		},
+		{
+			"check": "wrong-revision: previously verified cache remains data without replacement authority",
+			"passed": true
+		},
+		{
+			"check": "wrong-revision: immutable installed data handles rejection without extra owner I/O",
+			"passed": true
+		},
+		{
+			"check": "unavailable-mode: valid predecessor is prepared",
+			"passed": true
+		},
+		{
+			"check": "unavailable-mode: invalid replacement revokes predecessor token immediately",
+			"passed": true
+		},
+		{
+			"check": "unavailable-mode: failed replacement cannot return predecessor success",
+			"passed": false
+		},
+		{
+			"check": "Mode replacement keeps actual production mode gate",
+			"passed": true
+		},
+		{
+			"check": "unavailable-mode: previously verified cache remains data without replacement authority",
+			"passed": true
+		},
+		{
+			"check": "unavailable-mode: immutable installed data handles rejection without extra owner I/O",
+			"passed": true
+		},
+		{
+			"check": "A subsequent valid request recovers after all rejected replacements",
+			"passed": true
+		}
+	],
+	"count": 214,
+	"failures": 1,
+	"schema": 1,
+	"scope": "Fixed synthetic package rejection and replacement only. Exact previous owner logic and current production catalog/resolver. No PCK/app trust, media fetch, browser, memory or latency acceptance."
+}

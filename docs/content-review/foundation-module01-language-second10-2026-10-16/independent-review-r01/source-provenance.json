@@ -1,0 +1,155 @@
+{
+  "schema": 1,
+  "status": "fresh_independent_selected_passage_review_complete",
+  "date": "2026-10-16",
+  "reviewer": "Codex foundation_review (independent AI editorial language review; not human or subject-matter approval)",
+  "method": "All thirteen supporting URLs were freshly opened with the web tool, and the selected definitions, grammar, spelling and labels were read directly. The saved observations are original concise paraphrases; no source page, example, audio or picture is acquired.",
+  "sources": [
+    {
+      "source_id": "foundation01-language-second10-oxford-contractor",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/contractor",
+      "consulted_on": "2026-10-16",
+      "access": "fresh_direct_web_open_selected_passages",
+      "observed_selected_sense_level": null,
+      "section": "Contracted provider noun, selected entry and examples",
+      "independent_observation": "The entry covers an individual or company engaged under contract for work or supply. The repair example is within this sense. No selected level was visible; the separate rotating footer is excluded.",
+      "assets_acquired": false,
+      "asset_license": null
+    },
+    {
+      "source_id": "foundation01-language-second10-oxford-trainee",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/trainee",
+      "consulted_on": "2026-10-16",
+      "access": "fresh_direct_web_open_selected_passages",
+      "observed_selected_sense_level": "B2",
+      "section": "Job learner noun; Education and Jobs topic labels",
+      "independent_observation": "The person receives instruction for a job. This supports the revised definition and working-with-a-colleague example. Both selected topic labels show B2.",
+      "assets_acquired": false,
+      "asset_license": null
+    },
+    {
+      "source_id": "foundation01-language-second10-oxford-receptionist",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/receptionist",
+      "consulted_on": "2026-10-16",
+      "access": "fresh_direct_web_open_selected_passages",
+      "observed_selected_sense_level": "A2",
+      "section": "Arrivals and telephone inquiries role; Holidays and Jobs topic labels",
+      "independent_observation": "The role handles arriving people and phone callers at workplaces. The front-desk example illustrates the ordinary role without specifying every duty. Both selected labels show A2.",
+      "assets_acquired": false,
+      "asset_license": null
+    },
+    {
+      "source_id": "foundation01-language-second10-oxford-coordinator",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/coordinator",
+      "consulted_on": "2026-10-16",
+      "access": "fresh_direct_web_open_selected_passages",
+      "observed_selected_sense_level": null,
+      "section": "Organizer noun and British spelling note",
+      "independent_observation": "The role brings activity parts and participants together. British co-ordinator is explicitly listed. No selected CEFR label was visible; a footer label belongs to another word.",
+      "assets_acquired": false,
+      "asset_license": null
+    },
+    {
+      "source_id": "foundation01-language-second10-oxford-contact",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/contact_1",
+      "consulted_on": "2026-10-16",
+      "access": "fresh_direct_web_open_selected_passages",
+      "observed_selected_sense_level": null,
+      "section": "Sense 4 person; separate communication, touching and point-of-contact passages",
+      "independent_observation": "The countable person sense involves someone known who can assist in work. Communication, physical touch and exposed-person senses are separate. Point of contact permits a place or person. No selected person-level label was visible.",
+      "assets_acquired": false,
+      "asset_license": null
+    },
+    {
+      "source_id": "foundation01-language-second10-oxford-supplier",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/supplier",
+      "consulted_on": "2026-10-16",
+      "access": "fresh_direct_web_open_selected_passages",
+      "observed_selected_sense_level": null,
+      "section": "Goods-provider noun",
+      "independent_observation": "The selected noun covers a person or company supplying goods. It does not require the recipient to be an organization. The selected entry supplies no observed CEFR label; services-only providers are outside this chosen goods sense.",
+      "assets_acquired": false,
+      "asset_license": null
+    },
+    {
+      "source_id": "foundation01-language-second10-oxford-schedule",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/schedule_1",
+      "consulted_on": "2026-10-16",
+      "access": "fresh_direct_web_open_selected_passages",
+      "observed_selected_sense_level": "A2",
+      "section": "Sense 1 work timing plan; separate timetable and written-list senses",
+      "independent_observation": "The selected plan organizes work by time and has Working life A2. Regional labels attached to school or transport timetable senses are not transferred. Financial written lists remain a separate sense.",
+      "assets_acquired": false,
+      "asset_license": null
+    },
+    {
+      "source_id": "foundation01-language-second10-oxford-shift",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/shift_1",
+      "consulted_on": "2026-10-16",
+      "access": "fresh_direct_web_open_selected_passages",
+      "observed_selected_sense_level": "B1",
+      "section": "Sense 1 period of work and Business topic label",
+      "independent_observation": "The selected work period is associated with alternating workers and has Business B1. The worker-group noun and change senses are separate. Its examples permit ordinary individual references to a shift.",
+      "assets_acquired": false,
+      "asset_license": null
+    },
+    {
+      "source_id": "foundation01-language-second10-oxford-appointment",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/appointment",
+      "consulted_on": "2026-10-16",
+      "access": "fresh_direct_web_open_selected_passages",
+      "observed_selected_sense_level": "B1",
+      "section": "Sense 1 arranged meeting or visit; Healthcare and Working life labels",
+      "independent_observation": "The selected arrangement concerns meeting or visiting at a set time. Its two topic labels are B1. Appointment to a job is a separate sense and cannot supply evidence for this entry.",
+      "assets_acquired": false,
+      "asset_license": null
+    },
+    {
+      "source_id": "foundation01-language-second10-oxford-meeting",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/meeting",
+      "consulted_on": "2026-10-16",
+      "access": "fresh_direct_web_open_selected_passages",
+      "observed_selected_sense_level": "A1",
+      "section": "Sense 1 discussion or decision event; Working life and Business labels",
+      "independent_observation": "The selected event involves discussion or decisions and explicitly includes virtual meetings. Both selected labels are A1. Participant-group, encounter and other meanings do not replace this event sense.",
+      "assets_acquired": false,
+      "asset_license": null
+    },
+    {
+      "source_id": "foundation01-language-second10-collins-contact",
+      "url": "https://www.collinsdictionary.com/dictionary/english/contact",
+      "consulted_on": "2026-10-16",
+      "access": "fresh_direct_web_open_selected_passages",
+      "observed_selected_sense_level": "B1+",
+      "section": "COBUILD sense 10 countable helpful person",
+      "independent_observation": "The selected person in an organization or profession can help or provide information and is marked B1+. The A2 communication verb and B1 communication noun are separate. B1+ is retained literally.",
+      "assets_acquired": false,
+      "asset_license": null
+    },
+    {
+      "source_id": "foundation01-language-second10-merriam-shift",
+      "url": "https://www.merriam-webster.com/dictionary/shift",
+      "consulted_on": "2026-10-16",
+      "access": "fresh_direct_web_open_selected_passages",
+      "observed_selected_sense_level": null,
+      "section": "Main noun sense 4b(2), with neighboring group and rotation senses distinguished",
+      "independent_observation": "The selected work-or-duty period is scheduled. This independently supports the author wording without requiring the definition to assert a replacement group. No CEFR evidence is supplied.",
+      "assets_acquired": false,
+      "asset_license": null
+    },
+    {
+      "source_id": "foundation01-language-second10-collins-shift",
+      "url": "https://www.collinsdictionary.com/dictionary/english/shift",
+      "consulted_on": "2026-10-16",
+      "access": "fresh_direct_web_open_selected_passages",
+      "observed_selected_sense_level": "B2",
+      "section": "COBUILD sense 6 work periods and worker groups",
+      "independent_observation": "The selected passage describes recurring work periods and the groups working them, marked B2. It differs from the Oxford B1 observation. Neither frequency bands nor unrelated verb uses are used for level selection.",
+      "assets_acquired": false,
+      "asset_license": null
+    }
+  ],
+  "failed_author_accesses_excluded": 4,
+  "difficulty_boundary": "Observed labels remain literal and sense-specific. Editorial curriculum placement is a separate reasoned decision; it neither certifies dictionary CEFR nor translates B1+ into another source label.",
+  "rights": "Consultation conveys no asset license. Only original short observations are retained."
+}

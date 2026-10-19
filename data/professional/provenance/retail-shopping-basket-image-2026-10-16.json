@@ -1,0 +1,215 @@
+{
+  "schema": 1,
+  "status": "accepted_picture_descriptor_persisted_separate_delivery_verification_required",
+  "accepted_proposal_raw_sha256": "75b3e85a0cff12132af26cad6363d02a6418f44cd7643d6f46d59d5a4b772c50",
+  "independent_approval": {
+    "accepted": true,
+    "date": "2026-10-16",
+    "proposal_raw_sha256": "75b3e85a0cff12132af26cad6363d02a6418f44cd7643d6f46d59d5a4b772c50",
+    "asset_provenance_raw_sha256": "c751593342bd2f3a2a408962e580cf2a915495d82b9c59e64eba7b1b8bb75a6e",
+    "candidate_sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+    "image_after_json_sha256": "c42e46b66006a37da97d49473123642dd0da7fd86e065cdc2c162d5640b9b017",
+    "source_files_verified": 3,
+    "unchanged_other_entry_fields": true,
+    "visual_scope": "Root inspected exact full image, actual minimum Match and Memory cards in both states, and accepted cart/basket side-by-side comparison. Raised handle and open rigid basket remain distinct from the wheeled cart. Empty-brief adjustment accepted. No participant recognition or delivery claim.",
+    "production_mutated": false
+  },
+  "proposal": {
+    "status": "exact_basket_image_brief_and_note_integration_proposal_pending_descriptor_acceptance",
+    "sense_id": "shopping-basket.store-container.n",
+    "file": "data/professional/lexemes/retail-pilot.json",
+    "protected_scope": "Only this entry media.image including the explicitly approved empty-basket brief and the exact editorial_notes replacement may change. All other entry fields, note content, other entries, audio, morphology, course/module status and theme metadata remain outside this delta.",
+    "preimage_hash_method": "SHA-256 over UTF-8 JSON.stringify(value), native property order and no trailing newline",
+    "current_full_file_sha256": "12c40ed580248dcdecbfa7504ef57e33c792c8ba8a4a250bebf2c722b5cb1f3b",
+    "current_entry_sha256": "8ce7021f9ab782bb70991e6807afb7454ae74143b9feaa34ef214cba53d822c0",
+    "image_preimage_sha256": "6b39475b29a1d63c10c457d06d78285cf744768727e0f2133e918efd11e5505c",
+    "image_after_sha256": "c42e46b66006a37da97d49473123642dd0da7fd86e065cdc2c162d5640b9b017",
+    "editorial_notes_preimage_sha256": "e55c4f7ead2a30aa62b1767a2492f54f11214f1d9271ecaf693ff6b41b316ce4",
+    "editorial_notes_after_sha256": "00f2dddc74113bf6329347659ef358fabb3daa324f5f8ab0c1b2f7913e68f947",
+    "original_candidate_receipt_sha256": "0d7aa8f8ce232983cb44eb8368672f8d894d25ec007b63da9ff88ffe9ec4c592",
+    "candidate": {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/candidate/shopping-basket.png",
+      "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+      "bytes": 105604
+    },
+    "target_image": "professional-media/fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3.png",
+    "resource": {
+      "id": "sha256:fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+      "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+      "kind": "image",
+      "format": "png",
+      "path": "professional-media/fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3.png",
+      "width": 512,
+      "height": 454,
+      "compressed_bytes": 105604,
+      "decoded_bytes": 1859584
+    },
+    "exact_image_delta": "entry-image.after.json",
+    "exact_brief_delta": "brief.delta.json",
+    "exact_note_delta": "editorial-note.delta.json",
+    "suitability_proposal": "asset-provenance.json",
+    "validation": {
+      "schema_errors": [],
+      "entry_fields_outside_image_and_exact_note_identical": true,
+      "source_hashes_verified": 3
+    },
+    "plan": [
+      "Root reviews this exact descriptor/brief/note delta before mutation.",
+      "Art owner copies only exact accepted PNG bytes and durable provenance, preserving original brief/history.",
+      "Content owner applies exact image/note delta after checking preimages; no other gates are promoted.",
+      "After the native slot is released, verify persisted descriptor through actual raw loader/cache/WordArt/WordCard and release path. Actual incomplete modules must remain rejected.",
+      "Content owner runs the appropriate content checks after serialized deltas."
+    ],
+    "verification_manifest_scope": "One image inspection inventory, not a production module manifest and not a playable module."
+  },
+  "image_before": {
+    "status": "pending",
+    "path": null,
+    "sha256": null,
+    "source": null,
+    "creator": null,
+    "license": null,
+    "acquisition_status": "not_started",
+    "review": {
+      "status": "pending"
+    },
+    "brief": "Use a three-quarter view of a compact rigid store basket with raised carrying handles and a few recognizable groceries below the rim. Handles and the small handheld scale should remain obvious. Reject wheels, fabric sides, a giant trolley, or a picnic-lid design. Inspect the Mini Market shopping-basket lead before rendering.",
+    "picture_suitable": true,
+    "available_animations": [],
+    "adaptations": []
+  },
+  "image_after": {
+    "status": "integrated",
+    "path": "res://professional-media/fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3.png",
+    "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+    "source": "https://kenney.nl/assets/mini-market",
+    "creator": "Kenney; Fleur Keijsers; Guus Vermeulen",
+    "license": "CC0 1.0",
+    "acquisition_status": "integrated",
+    "review": {
+      "status": "reviewed",
+      "reviewer": "Codex source inspection and independent root physical-sense picture review at actual minimum Match and Memory card sizes, including cart/basket comparison",
+      "reviewed_at": "2026-10-16"
+    },
+    "brief": "Show an empty compact rigid retail shopping basket in a three-quarter view, with its raised hand-carry handle and open basket clearly visible at the actual minimum card size. Keep the handheld basket distinct from a wheeled shopping cart. Exclude wheels, fabric sides, a lid, and groceries that obscure the handle or opening. Use the inspected original Mini Market shopping-basket mesh without geometry or material changes.",
+    "picture_suitable": true,
+    "available_animations": [],
+    "adaptations": [
+      "Rendered the acquired Mini Market shopping-basket mesh with its original geometry, materials and external colormap; no model parts, textures or groceries were invented.",
+      "Three-quarter view shades the raised hand-carry handle for contrast against the actual light card surface. The empty basket preserves the handle and opening; the original groceries-in-basket brief and its accepted revision are retained in provenance.",
+      "768 by 768 transparent source render, alpha-bounds crop with a 16-pixel margin, and Lanczos reduction to 512 by 454. The exact accepted PNG is retained without further conversion.",
+      "Independently inspected in actual native WordCard at Match 126 by 72 and Memory 144 by 74, unmatched and matched with the real badge and alpha tint, including side-by-side comparison with the accepted cart. This is agent picture review, not a participant recognition test; see docs/assets/professional-retail-shopping-basket.md for source history and separate delivery verification."
+    ]
+  },
+  "editorial_note_delta": {
+    "before": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the small handheld shopping container noun. Keep the physical basket distinct from the online shopping sense. Retain shopping basket; basket alone is broader, and a bag is a different container. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Domain review is not required for the current memberships. The authored morphology graph remains pending review. Picture suitability and word-media production remain pending. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready.",
+    "after": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the small handheld shopping container noun. Keep the physical basket distinct from the online shopping sense. Retain shopping basket; basket alone is broader, and a bag is a different container. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Domain review is not required for the current memberships. The authored morphology graph remains pending review. The shopping-basket image has completed scoped physical-sense picture review and integration; word audio remains pending. The empty-basket composition keeps the raised carrying handle and opening readable. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready.",
+    "replacement_before": "Picture suitability and word-media production remain pending.",
+    "replacement_after": "The shopping-basket image has completed scoped physical-sense picture review and integration; word audio remains pending. The empty-basket composition keeps the raised carrying handle and opening readable.",
+    "condition": "Apply only after independent candidate/descriptor acceptance and exact image integration."
+  },
+  "asset_provenance": {
+    "sense_id": "shopping-basket.store-container.n",
+    "source": "https://kenney.nl/assets/mini-market",
+    "creator": "Kenney; Fleur Keijsers; Guus Vermeulen",
+    "license": "CC0 1.0",
+    "acquired_source_files": [
+      {
+        "path": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/shopping-basket.glb",
+        "sha256": "a7704926cb56c5a9ab74488230fc7c4d7b914387c59e9c1b6f62376965c0ea7d",
+        "bytes": 25864
+      },
+      {
+        "path": "docs/assets/sources/kenney-mini-market-retail-theme/Models/GLB format/Textures/colormap.png",
+        "sha256": "0d4947d34ff32acf4a359c7f22ca784e057e7e72f622170a9a77b6fc88fdb70e",
+        "bytes": 8706
+      },
+      {
+        "path": "docs/assets/sources/kenney-mini-market-retail-theme/License.txt",
+        "sha256": "5ee4df809330c05896f223c97f250cc1bdc13b46a370eb464533c85c94146070",
+        "bytes": 767
+      }
+    ],
+    "available_animations": [],
+    "accepted_png": {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/candidate/shopping-basket.png",
+      "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+      "bytes": 105604
+    },
+    "acceptance": {
+      "date": "2026-10-16",
+      "reviewer": "Independent root agent",
+      "accepted_sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+      "scope": "Physical-sense basket picture in actual minimum Match/Memory card states and cart/basket comparison; no participant recognition claim or module release.",
+      "decision": "Raised handle, rim and rigid small basket are readable, no wheels, and clearly distinct from the accepted cart in these rendered states. Empty-basket brief adjustment accepted."
+    },
+    "original_and_revised_brief": {
+      "before": "Use a three-quarter view of a compact rigid store basket with raised carrying handles and a few recognizable groceries below the rim. Handles and the small handheld scale should remain obvious. Reject wheels, fabric sides, a giant trolley, or a picnic-lid design. Inspect the Mini Market shopping-basket lead before rendering.",
+      "after": "Show an empty compact rigid retail shopping basket in a three-quarter view, with its raised hand-carry handle and open basket clearly visible at the actual minimum card size. Keep the handheld basket distinct from a wheeled shopping cart. Exclude wheels, fabric sides, a lid, and groceries that obscure the handle or opening. Use the inspected original Mini Market shopping-basket mesh without geometry or material changes.",
+      "reason": "Root accepted the narrow empty-basket adjustment after source inspection: the raised hand-carry handle, opening and absence of wheels should stay readable at minimum card size. Added groceries would obscure these cues. The original brief is preserved here and in the source record."
+    },
+    "suitability": {
+      "reviewer": "Codex source and native-card inspection plus completed independent root physical-sense picture review; no participant recognition claim",
+      "source_views": 4,
+      "selected_source_view": "source-inspection/rear-three-quarter.png",
+      "camera": {
+        "orthographic_size": 0.7,
+        "position": [
+          3,
+          2.4,
+          -4
+        ],
+        "target": [
+          0,
+          0.125,
+          0
+        ]
+      },
+      "findings": [
+        "The original mesh is a rigid green basket with a raised light-colored handle, an open top and no wheels, fabric sides or lid.",
+        "The chosen rear three-quarter view shades the broad handle face, preserving contrast against the actual light card surface without changing materials.",
+        "At minimum Match and Memory sizes, the handle and open basket remain visible in both unmatched and matched states.",
+        "The adjacent accepted cart has a taller body, a rear push handle and visible wheels; the basket has an arching carrying handle and no wheels. The comparison does not depend solely on color."
+      ],
+      "limitations": [
+        "The source is stylized and has no independent human scale cue.",
+        "The eight-card comparison is an agent visual inspection, not a participant recognition test.",
+        "Native candidate textures were assigned directly to actual WordCard controls for isolated artwork QA; this does not establish production delivery."
+      ],
+      "status": "reviewed_scoped_physical_sense_picture"
+    },
+    "candidate_review_proposal": {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/review-proposal.json",
+      "sha256": "2fc70d1d71710dbba65552de51712c83c31f754f0889173e2cc15435bdaa43a4",
+      "bytes": 8963
+    },
+    "candidate_review_receipt": {
+      "path": "build/professional-english/retail-term-art-review/shopping-basket/review-receipt.json",
+      "sha256": "0d7aa8f8ce232983cb44eb8368672f8d894d25ec007b63da9ff88ffe9ec4c592",
+      "bytes": 6502
+    },
+    "native_qa": {
+      "process_exit_code": 0,
+      "checks": 32,
+      "failures": 0,
+      "report": {
+        "path": "build/professional-english/retail-term-art-review/shopping-basket/candidate/report.json",
+        "sha256": "e936d5be3c9a811b3a15778b8b85f2a79b773cb10d241502682402ee3483d5ea",
+        "bytes": 5316
+      },
+      "four_state_contact": {
+        "path": "build/professional-english/retail-term-art-review/shopping-basket/candidate/actual-word-card-contact.png",
+        "sha256": "fa56ff23bcd34bc2c8596da0c660808ec17945d9d26f26195c6ada9f78a6969b",
+        "bytes": 51030
+      },
+      "confusability_contact": {
+        "path": "build/professional-english/retail-term-art-review/shopping-basket/candidate/cart-basket-confusability-contact.png",
+        "sha256": "4c2c31cd6f29eaea32334b3bf5a9cb4db12b076e86b41711796f0ce82cfddc5a",
+        "bytes": 70585
+      },
+      "actual_dimensions": "Match 126 x 72 with 102 x 52 picture area; Memory 144 x 74 with 120 x 54 picture area; actual matched badge and 0.68 picture alpha retained."
+    },
+    "production_delivery_verification": "Pending exact descriptor/brief/note acceptance, serialized integration and native production-path check."
+  },
+  "protected_fields": "All lexeme fields outside media.image (including the exact independently accepted empty-basket brief) and the exact editorial-note sentence are unchanged. Course/module, language, domain, morphology and audio gates are preserved."
+}

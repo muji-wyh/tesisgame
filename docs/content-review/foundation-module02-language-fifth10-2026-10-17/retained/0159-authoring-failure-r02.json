@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "status": "author_binding_static_dependency_path_failure_preserved",
+  "source": "build/professional-english/shopping-bag-delivery-preparation-r02/author-final-binding-r02.cjs",
+  "raw_sha256": "88852307fca1e7011fca0d6692ab639053520e939275e5edab864c91b1864f86",
+  "command": "node build/professional-english/shopping-bag-delivery-preparation-r02/author-final-binding-r02.cjs",
+  "exit_code": 1,
+  "error": "Historical counter image retained_files has archive-relative path and repository-relative destination. The author incorrectly read root README.md before checking the expected counter README hash.",
+  "actual_sha256": "3cd05b0ed95aa62c87eb06bf737b97f6688ef1116375dfeb285abf2a66197343",
+  "expected_sha256": "af4ffa538a881a10f37b5021af993a8381369f09c40573a025324321af7073ba",
+  "source_executed": true,
+  "binding_outputs_created": false,
+  "preparation_executed": false,
+  "project_or_test_execution": false,
+  "production_mutated": false,
+  "correction_source": "author-final-binding-r03.cjs"
+}

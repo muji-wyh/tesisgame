@@ -1,0 +1,652 @@
+{
+  "schema": 1,
+  "status": "completed_independent_AI_language_review_no_production_promotion",
+  "reviewer": "Codex recover_delivery, separate from the attendance_review research author",
+  "reviewed_on": "2026-10-17",
+  "scope": "Exact definition, example and editorial difficulty fields in the frozen ten-entry ledger; language/evidence/level/context review and exact preservation of nonlanguage holds.",
+  "author_package": {
+    "path": "build/professional-english/foundation-module02-language-review/third10-research-r01",
+    "durable_copy": "docs/content-review/foundation-module02-language-third10-research-2026-10-17",
+    "inventory_sha256": "22300622a4d3497aae3622d555a950577b0322a784c3ea64f1e5a77c762123c6",
+    "candidate_ledger_sha256": "939bfedea01a17bce2bf97b29dcc607d29423a8622b855107e73b4402b2fa026",
+    "source_index_sha256": "3aa44ebf382d9e71d9ca3064b4f77c928c1c39603fba58781d6b266104287d46",
+    "context_screen_sha256": "ca6775e8ac2a10fad0ef761a73004956873c97866cff138e08879ee2fe044c0c",
+    "successful_execution_sha256": "fe0932d4dd61c5a66357b922ed16c96e580372ca5fd7452b34b923519c908c2e"
+  },
+  "production_baseline": {
+    "path": "data/professional/lexemes/foundation-module02.json",
+    "raw_sha256": "03953236a30d636a7d6db0f0f921d076910886e1f2f1834730ba1302b5b0ac41",
+    "registry_json_sha256": "f470936fc3bff7ff619b3af057a20cf5e05034013bbf08948e380847228dc4c5",
+    "hash_basis": "Raw file bytes; entry hashes are SHA256 of UTF-8 JSON.stringify(entry) preserving parsed key order."
+  },
+  "method": [
+    "Read frozen source observations, source metadata, complete entry projections and context boundaries; independently assess lexical fit, idiom, selected sense and editorial level.",
+    "Verify raw hashes for all 13 author inventory artifacts, two execution/inventory witnesses and all 353 recorded production source files.",
+    "Read-only static JSON hashing reconstructs the registry, 200 memberships and 20 containing modules, checks all ten entry/preimage/projection hashes, 17 inherited expression holds, prior collect/notify holds and complete image mismatch.",
+    "Compare current snapshots for all 39 screened expressions, four focus expressions and 43 related lexical identities. No application validator, author script, Node test, native test or build was run."
+  ],
+  "limitations": [
+    "Original publisher pages were not reopened in this independent pass, as instructed by the coordinator. Oxford body hashes and minimal attributes are author-captured evidence; the absent HTML bodies cannot be rehashed. Collins rendered semantics and levels are author-recorded observations, not a fresh independent source retrieval.",
+    "The source URLs, selected sense IDs and Oxford metadata cross-bind consistently, including assist redirecting to assist_1. This confirms frozen evidence consistency, not publisher-page authenticity or continued availability.",
+    "Editorial levels are scoped teaching judgments, not psychometric CEFR certification. Preserve literal source disagreements, missing labels, Oxford fkcefr and Collins B1+.",
+    "The 39-expression classification screen is reviewed as frozen author evidence; static comparison confirms its current snapshots. No new exhaustive expression-search test was dispatched.",
+    "No human, specialist, whole-expression, morphology, media, domain, module or release acceptance is granted. This artifact does not perform production integration or review-gate transitions."
+  ],
+  "summary": {
+    "language_decisions": 8,
+    "whole_entry_holds": 2,
+    "definitions_changed": 0,
+    "examples_changed": 0,
+    "difficulty_changes": 7,
+    "source_observations": 20,
+    "source_files_current": 353,
+    "memberships_bound": 200,
+    "containing_modules_bound": 20,
+    "expression_snapshots_current": 39,
+    "term_expression_pairs_in_screen": 42,
+    "focus_expressions_current": 4,
+    "related_identities_current": 43,
+    "inherited_expression_holds_current": 17,
+    "prior_lexical_holds_current": 2,
+    "production_changes": 0,
+    "tests_run": 0,
+    "native_runs": 0
+  },
+  "entries": [
+    {
+      "id": "correct.put-right.v",
+      "term": "correct",
+      "decision": "accept_exact_bounded_language_fields",
+      "review_type": "independent_AI_language_review",
+      "human_or_specialist_acceptance": false,
+      "before_entry_sha256": "4edcff620c45c2889866270d6b31315e1f7b74c173d037d80608172c1237c6f2",
+      "content_projection_sha256": "4edcff620c45c2889866270d6b31315e1f7b74c173d037d80608172c1237c6f2",
+      "accepted_fields": {
+        "definition": "To change something so that an error is removed.",
+        "example": "Please correct the spelling of the company name.",
+        "difficulty": "A2"
+      },
+      "changed_fields": [],
+      "rationale": "Accept the exact error-removal definition and company-name spelling example at editorial A2. The transitive verb, object and requested correction align. Oxford selected verb sense 1 records A1; Collins selected verb sense 5 records B2. A2 is an editorial placement for this bounded spelling task, not an average of source levels and not borrowed from the Collins A2 adjective. Teacher marking, correcting a person and all adjective or participial uses remain outside the decision.",
+      "selected_source_observations": [
+        {
+          "id": "foundation02-language-third10-oxford-correct",
+          "publisher": "Oxford University Press",
+          "url": "https://www.oxfordlearnersdictionaries.com/definition/english/correct_2",
+          "selected_section": "Verb sense 1, rendered lines 120-133",
+          "observed_rendered_selected_level": null,
+          "observed_html_selected_levels": [
+            {
+              "element_id": "correct_sng_6",
+              "sense_number": "1",
+              "cefr": "a1",
+              "fkcefr": null,
+              "html_offset": 60625
+            }
+          ],
+          "regional_register": "No region or formal-register restriction is shown on the selected verb sense. British and American pronunciation/forms are available.",
+          "other_sense_boundary": "Sense 2 teacher marking has B1 metadata. The adjective is a separate entry; do not borrow its labels."
+        },
+        {
+          "id": "foundation02-language-third10-collins-correct",
+          "publisher": "HarperCollins",
+          "url": "https://www.collinsdictionary.com/dictionary/english/correct",
+          "selected_section": "COBUILD verb sense 5, rendered lines 287-294",
+          "observed_rendered_selected_level": "B2",
+          "observed_html_selected_levels": [],
+          "regional_register": "The selected verb has no regional label. Formal labels on nearby adjective senses must not be transferred to this verb.",
+          "other_sense_boundary": "Adjective senses 1 and 2 show A2; those are excluded from the verb-level rationale."
+        }
+      ],
+      "context_action": "Only the ordinary error-removal verb is proposed. Correct adjective uses, corrected modifiers and specialized record-correction procedures receive no acceptance. Foundation02.04 also contains held verify and remains wholly pending.",
+      "excluded_scope": "The adjective meaning accurate, teacher marking, correcting a person, punishment, medical treatment and statistical adjustment remain outside this proposal.",
+      "other_fields": "Retain exactly: identity, accepted forms, regions, practice modes, review gates, historical references, editorial notes, morphology, image/audio, memberships and all expressions. Proposed editorial notes remain review material."
+    },
+    {
+      "id": "adjust.change-slightly.v",
+      "term": "adjust",
+      "decision": "accept_exact_bounded_language_fields",
+      "review_type": "independent_AI_language_review",
+      "human_or_specialist_acceptance": false,
+      "before_entry_sha256": "ac149fbdd7182b706ad56408debc2527d7f860b76afdb7a8d138c869f4d57861",
+      "content_projection_sha256": "5561169c1a7c733a2c17a6ae5a712f552eceee546a2ae89a4cccf313f18a57e5",
+      "accepted_fields": {
+        "definition": "To make a small change so that something fits or works better.",
+        "example": "We can adjust the meeting time by ten minutes.",
+        "difficulty": "B2"
+      },
+      "changed_fields": [
+        "difficulty"
+      ],
+      "rationale": "Accept the exact small-change definition and ten-minute meeting example at B2. The explicit small interval fits improving suitability without implying personal adaptation. Both selected publisher senses support B2. The Indian English kindly adjust idiom, insurance adjustment and adaptation senses are separate.",
+      "selected_source_observations": [
+        {
+          "id": "foundation02-language-third10-oxford-adjust",
+          "publisher": "Oxford University Press",
+          "url": "https://www.oxfordlearnersdictionaries.com/definition/english/adjust",
+          "selected_section": "Transitive sense 1, rendered lines 114-133",
+          "observed_rendered_selected_level": null,
+          "observed_html_selected_levels": [
+            {
+              "element_id": "adjust_sng_1",
+              "sense_number": "1",
+              "cefr": "b2",
+              "fkcefr": null,
+              "html_offset": 59894
+            }
+          ],
+          "regional_register": "The selected sense is not region restricted. The distinct kindly adjust idiom is marked Indian English.",
+          "other_sense_boundary": "Adaptation is sense 2; tidying clothing is sense 3. Neither expands the selected scope."
+        },
+        {
+          "id": "foundation02-language-third10-collins-adjust",
+          "publisher": "HarperCollins",
+          "url": "https://www.collinsdictionary.com/dictionary/english/adjust",
+          "selected_section": "COBUILD transitive sense 3, rendered lines 239-244",
+          "observed_rendered_selected_level": "B2",
+          "observed_html_selected_levels": [],
+          "regional_register": "No regional restriction is shown for the selected ordinary transitive sense.",
+          "other_sense_boundary": "Insurance assessment appears in a separate British dictionary subsection and is not proposed."
+        }
+      ],
+      "context_action": "Foundation02.07 contains this time adjustment alongside held postpone and cancellation; the expression remains exact and pending.",
+      "excluded_scope": "Getting used to circumstances, the Indian English phrase kindly adjust, arranging clothes, eyesight adaptation and insurance-claim adjustment are separate.",
+      "other_fields": "Retain exactly: identity, accepted forms, regions, practice modes, review gates, historical references, editorial notes, morphology, image/audio, memberships and all expressions. Proposed editorial notes remain review material."
+    },
+    {
+      "id": "reschedule.change-time.v",
+      "term": "reschedule",
+      "decision": "accept_exact_bounded_language_fields",
+      "review_type": "independent_AI_language_review",
+      "human_or_specialist_acceptance": false,
+      "before_entry_sha256": "97f3a7691f09518d23829d5482140f153fb92e79cd0b376d3790bd2a47b040c1",
+      "content_projection_sha256": "c9e0f504c01f71f969c8b0e7b1389829a7e5da983a11cd88baf46e8457baaed8",
+      "accepted_fields": {
+        "definition": "To arrange a new time or date for a planned activity.",
+        "example": "We need to reschedule the training session.",
+        "difficulty": "B2"
+      },
+      "changed_fields": [
+        "difficulty"
+      ],
+      "rationale": "Accept the exact planned-activity definition and training-session example at B2. A new time or date can be earlier or later; this does not import the later-only entailment of postpone. Collins event sense 1 supplies B2; Oxford event sense 1 supplies semantic support with no observed selected CEFR label. Debt restructuring is excluded.",
+      "selected_source_observations": [
+        {
+          "id": "foundation02-language-third10-oxford-reschedule",
+          "publisher": "Oxford University Press",
+          "url": "https://www.oxfordlearnersdictionaries.com/definition/english/reschedule",
+          "selected_section": "Event sense 1, rendered lines 101-114",
+          "observed_rendered_selected_level": null,
+          "observed_html_selected_levels": [
+            {
+              "element_id": "reschedule_sng_1",
+              "sense_number": "1",
+              "cefr": null,
+              "fkcefr": null,
+              "html_offset": 59604
+            }
+          ],
+          "regional_register": "British and US pronunciations differ; no regional meaning restriction is shown for event scheduling.",
+          "other_sense_boundary": "The displayed C2 footer labels the Word of the Day spoiler, not reschedule. No selected level is observed."
+        },
+        {
+          "id": "foundation02-language-third10-collins-reschedule",
+          "publisher": "HarperCollins",
+          "url": "https://www.collinsdictionary.com/dictionary/english/reschedule",
+          "selected_section": "COBUILD event sense 1, rendered lines 224-235",
+          "observed_rendered_selected_level": "B2",
+          "observed_html_selected_levels": [],
+          "regional_register": "The page distinguishes US pronunciation; the selected meaning has no regional restriction.",
+          "other_sense_boundary": "Debt repayment extensions are separately listed in sense 2 and excluded."
+        }
+      ],
+      "context_action": "No current expression text or focus ID matches the reschedule inflections. That absence creates no expression approval or binding.",
+      "excluded_scope": "Debt repayment restructuring is a separate financial sense. Unlike postpone, event rescheduling does not require every change to be later.",
+      "other_fields": "Retain exactly: identity, accepted forms, regions, practice modes, review gates, historical references, editorial notes, morphology, image/audio, memberships and all expressions. Proposed editorial notes remain review material."
+    },
+    {
+      "id": "postpone.delay-until-later.v",
+      "term": "postpone",
+      "decision": "hold_whole_entry_unchanged",
+      "review_type": "independent_AI_language_review",
+      "human_or_specialist_acceptance": false,
+      "before_entry_sha256": "ba004741e07d1dddcc8e1f69ebea15717ad97d90ea87f483e72559846a17cded",
+      "content_projection_sha256": "ba004741e07d1dddcc8e1f69ebea15717ad97d90ea87f483e72559846a17cded",
+      "accepted_fields": null,
+      "changed_fields": [],
+      "rationale": "Hold the complete entry unchanged. Its definition and next-week example coherently express movement to a later time, but the reviewed evidence records Oxford fkcefr=c1/C1 and literal Collins B1+. The existing A2 is not newly accepted. A later editorial placement or schema/scope decision must be explicit; do not clamp C1 or round B1+ into B2.",
+      "selected_source_observations": [
+        {
+          "id": "foundation02-language-third10-oxford-postpone",
+          "publisher": "Oxford University Press",
+          "url": "https://www.oxfordlearnersdictionaries.com/definition/english/postpone",
+          "selected_section": "Single event-delay sense, rendered lines 111-139",
+          "observed_rendered_selected_level": "C1",
+          "observed_html_selected_levels": [
+            {
+              "element_id": "postpone_sng_1",
+              "sense_number": null,
+              "cefr": null,
+              "fkcefr": "c1",
+              "html_offset": 59518
+            }
+          ],
+          "regional_register": "No regional restriction is displayed for the ordinary delay sense.",
+          "other_sense_boundary": "The literal HTML attribute is fkcefr, not cefr. Etymological post/pone information does not grant morphology approval."
+        },
+        {
+          "id": "foundation02-language-third10-collins-postpone",
+          "publisher": "HarperCollins",
+          "url": "https://www.collinsdictionary.com/dictionary/english/postpone",
+          "selected_section": "COBUILD unnumbered verb sense, rendered lines 224-233",
+          "observed_rendered_selected_level": "B1+",
+          "observed_html_selected_levels": [],
+          "regional_register": "No regional restriction is shown for this selected sense.",
+          "other_sense_boundary": "B1+ is recorded exactly; no automatic conversion to B1 or B2. A priority-ranking sense occurs in another dictionary section."
+        }
+      ],
+      "context_action": "Foundation02.07 remains pending and contains this held focus ID. Language research does not approve its historically authored post/pone morphology.",
+      "excluded_scope": "Lower-priority ranking and specialist loan-repayment arrangements are outside the ordinary meeting/review example. Postponing requires later timing, unlike general rescheduling.",
+      "other_fields": "Retain exactly: identity, accepted forms, regions, practice modes, review gates, historical references, editorial notes, morphology, image/audio, memberships and all expressions. Proposed editorial notes remain review material."
+    },
+    {
+      "id": "cancel.stop-arrangement.v",
+      "term": "cancel",
+      "decision": "accept_exact_bounded_language_fields",
+      "review_type": "independent_AI_language_review",
+      "human_or_specialist_acceptance": false,
+      "before_entry_sha256": "3e29486ea31be172a6616b4b2bea4271ed123081d7b72799b371953471accd18",
+      "content_projection_sha256": "6e647b39ff985830f47621315604f5f1c1e6ca979b87301913b6df22bc10a590",
+      "accepted_fields": {
+        "definition": "To decide that a planned activity or arrangement will not happen.",
+        "example": "Please cancel the duplicate booking.",
+        "difficulty": "B2"
+      },
+      "changed_fields": [
+        "difficulty"
+      ],
+      "rationale": "Accept the exact planned-activity/arrangement definition and duplicate-booking example at B2. An ordinary booking can be stopped from going ahead without claiming contract validity, fee entitlement or debt relief. Oxford separately records planned-event sense 1 and arrangement/order sense 2 at B2; Collins combines ordinary arrangements/orders at literal B1+. Accept editorial B2 from the Oxford evidence without normalizing B1+ or merging legal consequences. Existing accepted forms and general region stay exact despite recorded UK/US inflection spellings.",
+      "selected_source_observations": [
+        {
+          "id": "foundation02-language-third10-oxford-cancel",
+          "publisher": "Oxford University Press",
+          "url": "https://www.oxfordlearnersdictionaries.com/definition/english/cancel",
+          "selected_section": "Planned-event sense 1, lines 116-126; contrast ordinary agreement/order cancellation in sense 2, lines 129-135",
+          "observed_rendered_selected_level": "B2",
+          "observed_html_selected_levels": [
+            {
+              "element_id": "cancel_sng_1",
+              "sense_number": "1",
+              "cefr": "b2",
+              "fkcefr": null,
+              "html_offset": 63511
+            },
+            {
+              "element_id": "cancel_sng_2",
+              "sense_number": "2",
+              "cefr": "b2",
+              "fkcefr": null,
+              "html_offset": 65945
+            }
+          ],
+          "regional_register": "Base cancel is unrestricted. The forms table distinguishes British cancelled/cancelling from US canceled/canceling; accepted forms and morphology remain unchanged.",
+          "other_sense_boundary": "Stamp/ticket marking and social exclusion are separate senses; C2 for social exclusion is not this booking decision."
+        },
+        {
+          "id": "foundation02-language-third10-collins-cancel",
+          "publisher": "HarperCollins",
+          "url": "https://www.collinsdictionary.com/dictionary/english/cancel",
+          "selected_section": "COBUILD sense 1 ordinary arrangements/orders, rendered lines 222-233",
+          "observed_rendered_selected_level": "B1+",
+          "observed_html_selected_levels": [],
+          "regional_register": "The forms note explicitly uses canceled/canceling in American English and cancelled/cancelling otherwise. No new scored forms are proposed.",
+          "other_sense_boundary": "Official invalidation of documents/policies/debt, social exclusion and stamp/cheque marking are separately numbered and excluded."
+        }
+      ],
+      "context_action": "The existing duplicate booking belongs to ordinary arrangements. Oxford separates event cancellation from ending agreements; the proposal does not merge all their legal consequences. Foundation02.07 remains pending and still includes held postpone.",
+      "excluded_scope": "Legal validity, debt relief, insurance-policy consequences, stamp/ticket invalidation, social exclusion and mathematical cancel-out meanings are excluded. The booking example claims no authority or cancellation policy.",
+      "other_fields": "Retain exactly: identity, accepted forms, regions, practice modes, review gates, historical references, editorial notes, morphology, image/audio, memberships and all expressions. Proposed editorial notes remain review material."
+    },
+    {
+      "id": "resolve.solve-problem.v",
+      "term": "resolve",
+      "decision": "accept_exact_bounded_language_fields",
+      "review_type": "independent_AI_language_review",
+      "human_or_specialist_acceptance": false,
+      "before_entry_sha256": "47e7a02f3ee04124047d13ef6fdcdbf0c03b0b41fb811e7481a1d9b532d2c04c",
+      "content_projection_sha256": "ec22c9dbe842be313991780a07b31f61fc4b559f52df39e5afd58adbef6c9150",
+      "accepted_fields": {
+        "definition": "To deal successfully with a problem or disagreement.",
+        "example": "The support team helped resolve the login problem.",
+        "difficulty": "B2"
+      },
+      "changed_fields": [
+        "difficulty"
+      ],
+      "rationale": "Accept the exact successful-problem/disagreement definition and support-team login example at B2. Helped resolve is grammatical and denotes successful resolution, not merely investigating a problem. Oxford selected problem-solving sense 1 records B2; Collins corroborates meaning with no observed selected level. Preserve the formal register observation. No technical solution, decision/vote sense, whole-expression meaning or re/solve morphology is accepted.",
+      "selected_source_observations": [
+        {
+          "id": "foundation02-language-third10-oxford-resolve",
+          "publisher": "Oxford University Press",
+          "url": "https://www.oxfordlearnersdictionaries.com/definition/english/resolve_1",
+          "selected_section": "Problem-solving sense 1, rendered lines 103-157",
+          "observed_rendered_selected_level": "B2",
+          "observed_html_selected_levels": [
+            {
+              "element_id": "resolve_sng_1",
+              "sense_number": "1",
+              "cefr": "b2",
+              "fkcefr": null,
+              "html_offset": 60059
+            }
+          ],
+          "regional_register": "The verb is marked formal; no region restriction is shown for the selected problem-solving sense.",
+          "other_sense_boundary": "Deciding firmly and voting on a resolution are separately C2; those levels and senses are excluded."
+        },
+        {
+          "id": "foundation02-language-third10-collins-resolve",
+          "publisher": "HarperCollins",
+          "url": "https://www.collinsdictionary.com/dictionary/english/resolve",
+          "selected_section": "COBUILD verb sense 1, rendered lines 224-233",
+          "observed_rendered_selected_level": null,
+          "observed_html_selected_levels": [],
+          "regional_register": "The selected sense is marked formal with no regional restriction.",
+          "other_sense_boundary": "Firm decisions, the determination noun and resolving into a clearer form are separate; no selected CEFR label is displayed."
+        }
+      ],
+      "context_action": "Foundation02.05 and surface uses involving software merging, room conflicts and construction decisions remain exact and pending. Lexical approval would not endorse technical procedures or the authored re/solve analysis.",
+      "excluded_scope": "Making a firm personal decision, formal votes, determination as a noun, technical decomposition, musical resolution and resolving again are excluded.",
+      "other_fields": "Retain exactly: identity, accepted forms, regions, practice modes, review gates, historical references, editorial notes, morphology, image/audio, memberships and all expressions. Proposed editorial notes remain review material."
+    },
+    {
+      "id": "assist.help.v",
+      "term": "assist",
+      "decision": "accept_exact_bounded_language_fields",
+      "review_type": "independent_AI_language_review",
+      "human_or_specialist_acceptance": false,
+      "before_entry_sha256": "fbe20f09cea87913fb259b5c1fabfb7010001df0fbf0465ee384655d351b8443",
+      "content_projection_sha256": "131ed10b7a7e51fada1e452b671a34879b7ce80622ed6277440f79200a5b750e",
+      "accepted_fields": {
+        "definition": "To help someone carry out an activity.",
+        "example": "Could you assist the visitor with the sign-in form?",
+        "difficulty": "B1"
+      },
+      "changed_fields": [
+        "difficulty"
+      ],
+      "rationale": "Accept the exact helping-a-person definition and visitor/sign-in-form example at editorial B1. Assist a person with a task is idiomatic; the formal register fits a courteous workplace request. Oxford selected helping sense records B1 and Collins the comparable task-help sense records B2. Retain the disagreement explicitly; B1 is a bounded editorial choice, not universal source consensus. Assisted living, clinical procedures, sports nouns and financial assistance remain separate.",
+      "selected_source_observations": [
+        {
+          "id": "foundation02-language-third10-oxford-assist",
+          "publisher": "Oxford University Press",
+          "url": "https://www.oxfordlearnersdictionaries.com/definition/english/assist_1",
+          "selected_section": "Helping-a-person sense 1, rendered lines 103-144",
+          "observed_rendered_selected_level": "B1",
+          "observed_html_selected_levels": [
+            {
+              "element_id": "assist_sng_3",
+              "sense_number": "1",
+              "cefr": "b1",
+              "fkcefr": null,
+              "html_offset": 59486
+            }
+          ],
+          "regional_register": "Formal verb with no selected regional restriction.",
+          "other_sense_boundary": "Helping a process occur more easily is a separate sense 2. The sports noun is a separate entry."
+        },
+        {
+          "id": "foundation02-language-third10-collins-assist",
+          "publisher": "HarperCollins",
+          "url": "https://www.collinsdictionary.com/dictionary/english/assist",
+          "selected_section": "COBUILD task-help sense 1, rendered lines 224-233",
+          "observed_rendered_selected_level": "B2",
+          "observed_html_selected_levels": [],
+          "regional_register": "No separate regional label appears on this selected COBUILD sense; Oxford's formal label remains part of the candidate rationale.",
+          "other_sense_boundary": "Information/advice/money support and a factor facilitating a task are separately listed. No care-service or sports-noun acceptance follows."
+        }
+      ],
+      "context_action": "Foundation02.08 remains pending because its collect pickup binding is held and its return use has no inferred borrowed-key acceptance. Assisted living remains a separate scored noun compound.",
+      "excluded_scope": "Sports assists as nouns, assisted-living services, clinical or personal-care procedures, financial aid and a thing facilitating a process are not accepted under this ordinary verb proposal.",
+      "other_fields": "Retain exactly: identity, accepted forms, regions, practice modes, review gates, historical references, editorial notes, morphology, image/audio, memberships and all expressions. Proposed editorial notes remain review material."
+    },
+    {
+      "id": "verify.establish-accuracy.v",
+      "term": "verify",
+      "decision": "hold_whole_entry_unchanged",
+      "review_type": "independent_AI_language_review",
+      "human_or_specialist_acceptance": false,
+      "before_entry_sha256": "d900dc371a4f37e536e5b252470b50fc85e988fc799ab279f2ef836e9ea43e9a",
+      "content_projection_sha256": "d900dc371a4f37e536e5b252470b50fc85e988fc799ab279f2ef836e9ea43e9a",
+      "accepted_fields": null,
+      "changed_fields": [],
+      "rationale": "Hold the complete entry unchanged. Its current evidence-checking definition and comparison against the order record are plausible and already distinguish checking from unsupported assertion. Oxford checking and confirming senses both record C1; Collins has no observed selected level. That does not justify the existing A2 or a B2 clamp. Any later selected-sense acceptance must explicitly preserve the checking activity and separately resolve placement; no rewrite or synonym substitution is accepted here.",
+      "selected_source_observations": [
+        {
+          "id": "foundation02-language-third10-oxford-verify",
+          "publisher": "Oxford University Press",
+          "url": "https://www.oxfordlearnersdictionaries.com/definition/english/verify",
+          "selected_section": "Checking sense 1 at lines 103-120; contrast confirming sense 2 at lines 123-127",
+          "observed_rendered_selected_level": "C1",
+          "observed_html_selected_levels": [
+            {
+              "element_id": "verify_sng_1",
+              "sense_number": "1",
+              "cefr": "c1",
+              "fkcefr": null,
+              "html_offset": 59527
+            }
+          ],
+          "regional_register": "Formal verb with no selected regional restriction.",
+          "other_sense_boundary": "The B2 Word of the Day footer belongs to reasonably, not verify. Historical legal origin is not subject approval."
+        },
+        {
+          "id": "foundation02-language-third10-collins-verify",
+          "publisher": "HarperCollins",
+          "url": "https://www.collinsdictionary.com/dictionary/english/verify",
+          "selected_section": "COBUILD checking sense 1, rendered lines 224-231; contrast confirmation sense 2 at lines 241-248",
+          "observed_rendered_selected_level": null,
+          "observed_html_selected_levels": [],
+          "regional_register": "No selected regional label is displayed; Oxford separately marks the verb formal.",
+          "other_sense_boundary": "No selected CEFR label is displayed. The dictionary supports the distinction and ordinary checking use but not A2 placement."
+        }
+      ],
+      "context_action": "Preserve every verify surface context, including the inherited verified-status-page hold, privacy, legal, account and security contexts. Foundation02.04 and the authored veri/fy analysis remain pending.",
+      "excluded_scope": "Legal verification, scientific validation, authentication/security guarantees and confirming a statement without the selected checking activity are not approved.",
+      "other_fields": "Retain exactly: identity, accepted forms, regions, practice modes, review gates, historical references, editorial notes, morphology, image/audio, memberships and all expressions. Proposed editorial notes remain review material."
+    },
+    {
+      "id": "locate.find-position.v",
+      "term": "locate",
+      "decision": "accept_exact_bounded_language_fields",
+      "review_type": "independent_AI_language_review",
+      "human_or_specialist_acceptance": false,
+      "before_entry_sha256": "50d1695b419138e56ba0f88bbda2276819de8e9829ee29ddb1da67f3120c8a2e",
+      "content_projection_sha256": "6c8b5f7eaeffe8cecadb25a348e8c8430a476d7b901588ab988b4937207be00a",
+      "accepted_fields": {
+        "definition": "To find where someone or something is.",
+        "example": "I am trying to locate the original document.",
+        "difficulty": "B1"
+      },
+      "changed_fields": [
+        "difficulty"
+      ],
+      "rationale": "Accept the exact find-position definition and original-document example at editorial B1. Trying to locate describes a search rather than falsely asserting that the document has already been found. Oxford selected finding sense 1 records B1; Collins selected finding sense records B2 and formal register. Retain both observations. Collins B1+ for siting and mainly-US business establishment do not support this choice or a regional restriction.",
+      "selected_source_observations": [
+        {
+          "id": "foundation02-language-third10-oxford-locate",
+          "publisher": "Oxford University Press",
+          "url": "https://www.oxfordlearnersdictionaries.com/definition/english/locate",
+          "selected_section": "Transitive finding sense 1, rendered lines 112-135",
+          "observed_rendered_selected_level": null,
+          "observed_html_selected_levels": [
+            {
+              "element_id": "locate_sng_1",
+              "sense_number": "1",
+              "cefr": "b1",
+              "fkcefr": null,
+              "html_offset": 59405
+            }
+          ],
+          "regional_register": "No regional restriction is shown on the selected finding sense. The especially North American label belongs to business establishment sense 3.",
+          "other_sense_boundary": "Siting/building something and starting a business in a place are separate; their labels are not transferred."
+        },
+        {
+          "id": "foundation02-language-third10-collins-locate",
+          "publisher": "HarperCollins",
+          "url": "https://www.collinsdictionary.com/dictionary/english/locate",
+          "selected_section": "COBUILD find-position sense 1, rendered lines 224-233",
+          "observed_rendered_selected_level": "B2",
+          "observed_html_selected_levels": [],
+          "regional_register": "The selected finding sense is formal. Mainly US/business applies only to separate sense 3.",
+          "other_sense_boundary": "Placing/building is separate sense 2 with B1+; that lower label is not evidence for the finding sense."
+        }
+      ],
+      "context_action": "Four expression surface uses concern locating things or records; none currently scores this selected ID. Keep all focus lists and domain gates exact, with no new bindings.",
+      "excluded_scope": "Putting or building something in a location, establishing a business, located as an adjective, localization and technical identification procedures remain outside this selected finding sense.",
+      "other_fields": "Retain exactly: identity, accepted forms, regions, practice modes, review gates, historical references, editorial notes, morphology, image/audio, memberships and all expressions. Proposed editorial notes remain review material."
+    },
+    {
+      "id": "attach.add-to-message.v",
+      "term": "attach",
+      "decision": "accept_exact_bounded_language_fields",
+      "review_type": "independent_AI_language_review",
+      "human_or_specialist_acceptance": false,
+      "before_entry_sha256": "6791206dc01c63a9f0c99697655749bfa0a4ad72cc084b991026a3c1613e9091",
+      "content_projection_sha256": "cffb31c9766e001619f5a8b7816bd305701eb49b7daf1ccdda4d76e5278f4264",
+      "accepted_fields": {
+        "definition": "To include a file with an electronic message.",
+        "example": "Please attach the completed form to your email.",
+        "difficulty": "B1"
+      },
+      "changed_fields": [
+        "difficulty"
+      ],
+      "rationale": "Accept the exact file-with-electronic-message definition and form/email example at B1. The electronic context is explicit in both fields. Oxford attach_sng_6 sense 2 and Collins computing sense 5 independently recorded in the author evidence both support B1. Physical fastening and ambiguous document attachments do not inherit this binding. Completed form does not approve the separate form-filling sense of complete or its pending image brief.",
+      "selected_source_observations": [
+        {
+          "id": "foundation02-language-third10-oxford-attach",
+          "publisher": "Oxford University Press",
+          "url": "https://www.oxfordlearnersdictionaries.com/definition/english/attach",
+          "selected_section": "Electronic-document sense 2, rendered lines 130-134",
+          "observed_rendered_selected_level": null,
+          "observed_html_selected_levels": [
+            {
+              "element_id": "attach_sng_6",
+              "sense_number": "2",
+              "cefr": "b1",
+              "fkcefr": null,
+              "html_offset": 63286
+            }
+          ],
+          "regional_register": "No regional restriction is displayed for the email sense.",
+          "other_sense_boundary": "The rendered Phones/email/internet B1 topic is attached to sense 1, not independently displayed on sense 2. The selected B1 comes from sense 2 HTML metadata."
+        },
+        {
+          "id": "foundation02-language-third10-collins-attach",
+          "publisher": "HarperCollins",
+          "url": "https://www.collinsdictionary.com/dictionary/english/attach",
+          "selected_section": "COBUILD computing sense 5, rendered lines 260-264",
+          "observed_rendered_selected_level": "B1",
+          "observed_html_selected_levels": [],
+          "regional_register": "The selected sense is labelled computing, with no regional restriction. This is everyday file-message vocabulary, not systems/security approval.",
+          "other_sense_boundary": "Physical joining in sense 1 also shows B1 but is not selected. Contract conditions and attributed qualities are separate."
+        }
+      ],
+      "context_action": "The five matching expression texts do not expressly identify email/message attachment and must not acquire this scored ID. The completed form in the example grants no acceptance to complete's separate form-filling sense.",
+      "excluded_scope": "Physical fastening, joining someone, emotional attachment, attributing importance or blame, attaching contractual conditions and legal seizure remain separate.",
+      "other_fields": "Retain exactly: identity, accepted forms, regions, practice modes, review gates, historical references, editorial notes, morphology, image/audio, memberships and all expressions. Proposed editorial notes remain review material."
+    }
+  ],
+  "nonlanguage_preservation": {
+    "all_entry_nonlanguage_fields_exact": true,
+    "held_ids": [
+      "postpone.delay-until-later.v",
+      "verify.establish-accuracy.v"
+    ],
+    "prior_lexical_holds": [
+      {
+        "id": "collect.gather.v",
+        "whole_entry_json_sha256": "177f9fc35b0d348ddcc3cdf60c43dd5119d145acfe781d17c2b988e1b6d77981",
+        "decision": "Preserve the whole draft. Gathering and pickup are separate in both sources. The pickup-focused example/image/expression does not resolve the stable gather ID, and Collins British pickup marking is broader than Oxford person-example marking. No independently supported scope/region decision has resolved the hold.",
+        "action": "retain_exact_no_new_references_or_gate_changes"
+      },
+      {
+        "id": "notify.inform.v",
+        "whole_entry_json_sha256": "7aaf8490d372bb3c8490c2824955a59e92c3d3dfe4416cb73d772cc6413a0cdc",
+        "decision": "Preserve the whole draft. Oxford selected formal-informing fkcefr=c1 is independently confirmed. Collins gives formal register but no selected level; no direct lower-level evidence resolves the current A2 difficulty. Do not clamp C1 to B2.",
+        "action": "retain_exact_no_new_references_or_gate_changes"
+      }
+    ],
+    "focus_expression_ids": [
+      "expr.foundation.module02.04",
+      "expr.foundation.module02.05",
+      "expr.foundation.module02.07",
+      "expr.foundation.module02.08"
+    ],
+    "inherited_expression_hold_ids": [
+      "expr.clinical_medicine.module07.05",
+      "expr.customer_support.module03.08",
+      "expr.customer_support.module07.08",
+      "expr.foundation.module01.03",
+      "expr.foundation.module01.06",
+      "expr.foundation.module01.08",
+      "expr.foundation.module02.02",
+      "expr.hospitality_tourism.module05.04",
+      "expr.hospitality_tourism.module09.02",
+      "expr.hospitality_tourism.module09.08",
+      "expr.legal_paralegal.module09.02",
+      "expr.legal_paralegal.module09.08",
+      "expr.office_admin.module05.07",
+      "expr.office_admin.module06.03",
+      "expr.office_admin.module09.01",
+      "expr.sales_marketing.module04.07",
+      "expr.transport_delivery.module09.06"
+    ],
+    "related_identity_count": 43,
+    "expression_acceptances": 0,
+    "new_scored_bindings": 0,
+    "complete_form_image": {
+      "id": "complete.finish.v",
+      "whole_entry_sha256": "63f724e5609017e7ea9077c84221bd2cd68f5c7f70b212034eb2d8603dbcec14",
+      "state": "Existing form-image mismatch remains live, pending, unchanged and unapproved."
+    },
+    "special_context_limits": [
+      "Correct adjectives and corrected participial modifiers do not become this verb.",
+      "Assisted living stays a separate scored noun compound.",
+      "All five attach surface contexts lack an explicit electronic-message meaning and receive no new binding.",
+      "Foundation02.04, .05, .07 and .08 remain exact and pending; held verify, postpone and collect prevent inferred whole-expression acceptance.",
+      "Domain contexts, including privacy, payments, legal, care, construction and IT, retain their current specialist and expression gates."
+    ]
+  },
+  "execution_history": {
+    "failed_first_attempt": {
+      "path": "assembly-attempt-001.json",
+      "sha256": "02d0c2d32a5223286c3d5c42f518fd6c547e8cbe7f0ebf3503f5b10ed49fe133",
+      "status": 1,
+      "issue": "schemaErrors received lexeme.schema.json instead of the short schema name and attempted lexeme.schema.json.schema.json",
+      "retained_unchanged": true,
+      "counted_as_success": false
+    },
+    "successful_replacement": {
+      "path": "assembly-attempt-r02.json",
+      "sha256": "fe0932d4dd61c5a66357b922ed16c96e580372ca5fd7452b34b923519c908c2e",
+      "status": 0,
+      "script": "assemble-r02.cjs",
+      "no_completed_script_replayed": true
+    }
+  },
+  "evidence": [
+    {
+      "path": "static-bindings.json",
+      "sha256": "62f41b3f8a66ce54270086cb25a3b6d3272fe8d7846fec39993f5dfd85dcc349"
+    },
+    {
+      "path": "static-hashes.cjs",
+      "sha256": "7b6a8e332229ce6916e4a16041e10cdea9849ee1666da1eb90778f32757fb6fa"
+    },
+    {
+      "path": "static-hashes.json",
+      "sha256": "b7ce3d5e689e6b979f57262abb68d47f66c7f09fc4a65592ec4ca94c740f6aad"
+    }
+  ]
+}

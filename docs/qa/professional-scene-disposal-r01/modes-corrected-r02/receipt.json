@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "started_at": "2026-10-16T19:54:20.256Z",
+  "finished_at": "2026-10-16T19:55:00.158Z",
+  "results": [
+    {
+      "label": "professional_scene_modes_disposal-syntax",
+      "command": [
+        "godot",
+        "--headless",
+        "--path",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+        "--check-only",
+        "--script",
+        "res://tests/godot/professional_scene_modes_disposal_tests.gd"
+      ],
+      "started_at": "2026-10-16T19:54:20.272Z",
+      "finished_at": "2026-10-16T19:54:21.942Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log_sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d",
+      "ok": true
+    },
+    {
+      "label": "professional_scene_modes_disposal-runtime",
+      "command": [
+        "godot",
+        "--headless",
+        "--path",
+        "Q:\\.codex\\worktrees\\current-age-vocabulary\\tesisgame",
+        "--script",
+        "res://tests/godot/professional_scene_modes_disposal_tests.gd"
+      ],
+      "started_at": "2026-10-16T19:54:21.946Z",
+      "finished_at": "2026-10-16T19:54:59.886Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log_sha256": "1a9ac8d1311cbdfcebe542decb1d07dbd70712a292d6448dd0b59b5f0c2a0396",
+      "ok": true
+    }
+  ],
+  "planned_executions": 2,
+  "inputs_unchanged": true,
+  "input_count": 271,
+  "ok": true,
+  "scope": "Other five actual Professional views disposal with corrected native-only fixture. Real browser host publications remain unproven. No compiled Web success, curriculum, media approval, physical-device, performance or acoustic acceptance."
+}

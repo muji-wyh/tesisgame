@@ -1,0 +1,1731 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.warehouse_logistics.module07.01",
+      "text": "Confirm the quantity of each stock item before comparing the inventory report with the inventory held at this site.",
+      "meaning": "Compare recorded quantities with the goods held.",
+      "context": "A worker prepares an inventory comparison.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Confirm",
+          "start": 0,
+          "end": 7
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 8,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "quantity",
+          "start": 12,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "of",
+          "start": 21,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "each",
+          "start": 24,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "stock",
+          "start": 29,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "item",
+          "start": 35,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "before",
+          "start": 40,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "comparing",
+          "start": 47,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 10,
+          "text": "inventory",
+          "start": 61,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": "report",
+          "start": 71,
+          "end": 77
+        },
+        {
+          "index": 12,
+          "text": "with",
+          "start": 78,
+          "end": 82
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 83,
+          "end": 86
+        },
+        {
+          "index": 14,
+          "text": "inventory",
+          "start": 87,
+          "end": 96
+        },
+        {
+          "index": 15,
+          "text": "held",
+          "start": 97,
+          "end": 101
+        },
+        {
+          "index": 16,
+          "text": "at",
+          "start": 102,
+          "end": 104
+        },
+        {
+          "index": 17,
+          "text": "this",
+          "start": 105,
+          "end": 109
+        },
+        {
+          "index": 18,
+          "text": "site",
+          "start": 110,
+          "end": 114
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 114,
+          "end": 115
+        }
+      ],
+      "focus_lexeme_ids": [
+        "quantity.amount-expressed-with-unit.n",
+        "stock.goods-held.n",
+        "inventory-report.stock-summary.n",
+        "inventory.recorded-goods.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.warehouse_logistics.module07.02",
+      "text": "The in-transit stock belongs to a stock transfer; traceability records must show its source and destination.",
+      "meaning": "Describe records needed to follow a stock movement.",
+      "context": "A worker checks goods moving between recorded locations.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "in-transit",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "stock",
+          "start": 15,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "belongs",
+          "start": 21,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "to",
+          "start": 29,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "a",
+          "start": 32,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "stock",
+          "start": 34,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "transfer",
+          "start": 40,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": ";",
+          "start": 48,
+          "end": 49
+        },
+        {
+          "index": 9,
+          "text": "traceability",
+          "start": 50,
+          "end": 62
+        },
+        {
+          "index": 10,
+          "text": "records",
+          "start": 63,
+          "end": 70
+        },
+        {
+          "index": 11,
+          "text": "must",
+          "start": 71,
+          "end": 75
+        },
+        {
+          "index": 12,
+          "text": "show",
+          "start": 76,
+          "end": 80
+        },
+        {
+          "index": 13,
+          "text": "its",
+          "start": 81,
+          "end": 84
+        },
+        {
+          "index": 14,
+          "text": "source",
+          "start": 85,
+          "end": 91
+        },
+        {
+          "index": 15,
+          "text": "and",
+          "start": 92,
+          "end": 95
+        },
+        {
+          "index": 16,
+          "text": "destination",
+          "start": 96,
+          "end": 107
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 107,
+          "end": 108
+        }
+      ],
+      "focus_lexeme_ids": [
+        "in-transit-stock.inventory-recorded-as-moving-between-locations.n",
+        "stock-transfer.goods-location-move.n",
+        "traceability.ability-to-follow-product-history.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.warehouse_logistics.module07.03",
+      "text": "Confirm the bin location and location code before reporting a stock discrepancy or requesting an inventory adjustment.",
+      "meaning": "Check the location before requesting a record correction.",
+      "context": "A worker reports a difference without changing the count independently.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Confirm",
+          "start": 0,
+          "end": 7
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 8,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "bin",
+          "start": 12,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "location",
+          "start": 16,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 25,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "location",
+          "start": 29,
+          "end": 37
+        },
+        {
+          "index": 6,
+          "text": "code",
+          "start": 38,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "before",
+          "start": 43,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "reporting",
+          "start": 50,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "a",
+          "start": 60,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": "stock",
+          "start": 62,
+          "end": 67
+        },
+        {
+          "index": 11,
+          "text": "discrepancy",
+          "start": 68,
+          "end": 79
+        },
+        {
+          "index": 12,
+          "text": "or",
+          "start": 80,
+          "end": 82
+        },
+        {
+          "index": 13,
+          "text": "requesting",
+          "start": 83,
+          "end": 93
+        },
+        {
+          "index": 14,
+          "text": "an",
+          "start": 94,
+          "end": 96
+        },
+        {
+          "index": 15,
+          "text": "inventory",
+          "start": 97,
+          "end": 106
+        },
+        {
+          "index": 16,
+          "text": "adjustment",
+          "start": 107,
+          "end": 117
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 117,
+          "end": 118
+        }
+      ],
+      "focus_lexeme_ids": [
+        "bin-location.identified-storage-position-in-warehouse.n",
+        "location-code.identifier-for-storage-or-work-position.n",
+        "stock-discrepancy.inventory-mismatch.n",
+        "inventory-adjustment.stock-record-change.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.warehouse_logistics.module07.04",
+      "text": "Perpetual inventory records stock transactions; a quality check may identify a defect and show why a faulty item needs separate review.",
+      "meaning": "Distinguish transaction recording from a product-quality concern.",
+      "context": "A worker checks why a defective item has been flagged.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Perpetual",
+          "start": 0,
+          "end": 9
+        },
+        {
+          "index": 1,
+          "text": "inventory",
+          "start": 10,
+          "end": 19
+        },
+        {
+          "index": 2,
+          "text": "records",
+          "start": 20,
+          "end": 27
+        },
+        {
+          "index": 3,
+          "text": "stock",
+          "start": 28,
+          "end": 33
+        },
+        {
+          "index": 4,
+          "text": "transactions",
+          "start": 34,
+          "end": 46
+        },
+        {
+          "index": 5,
+          "text": ";",
+          "start": 46,
+          "end": 47
+        },
+        {
+          "index": 6,
+          "text": "a",
+          "start": 48,
+          "end": 49
+        },
+        {
+          "index": 7,
+          "text": "quality",
+          "start": 50,
+          "end": 57
+        },
+        {
+          "index": 8,
+          "text": "check",
+          "start": 58,
+          "end": 63
+        },
+        {
+          "index": 9,
+          "text": "may",
+          "start": 64,
+          "end": 67
+        },
+        {
+          "index": 10,
+          "text": "identify",
+          "start": 68,
+          "end": 76
+        },
+        {
+          "index": 11,
+          "text": "a",
+          "start": 77,
+          "end": 78
+        },
+        {
+          "index": 12,
+          "text": "defect",
+          "start": 79,
+          "end": 85
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 86,
+          "end": 89
+        },
+        {
+          "index": 14,
+          "text": "show",
+          "start": 90,
+          "end": 94
+        },
+        {
+          "index": 15,
+          "text": "why",
+          "start": 95,
+          "end": 98
+        },
+        {
+          "index": 16,
+          "text": "a",
+          "start": 99,
+          "end": 100
+        },
+        {
+          "index": 17,
+          "text": "faulty",
+          "start": 101,
+          "end": 107
+        },
+        {
+          "index": 18,
+          "text": "item",
+          "start": 108,
+          "end": 112
+        },
+        {
+          "index": 19,
+          "text": "needs",
+          "start": 113,
+          "end": 118
+        },
+        {
+          "index": 20,
+          "text": "separate",
+          "start": 119,
+          "end": 127
+        },
+        {
+          "index": 21,
+          "text": "review",
+          "start": 128,
+          "end": 134
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 134,
+          "end": 135
+        }
+      ],
+      "focus_lexeme_ids": [
+        "perpetual-inventory.system-updating-stock-records-for-transactions.n",
+        "quality-check.standard-conformity-check.n",
+        "defect.product-flaw.n",
+        "faulty-item.nonworking-product.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.warehouse_logistics.module07.05",
+      "text": "Check how the local system distinguishes available stock, allocated stock, and a stock reservation when reporting stock availability.",
+      "meaning": "Clarify the meaning of available stock in the local system.",
+      "context": "A worker reviews inventory status before promising supply.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Check",
+          "start": 0,
+          "end": 5
+        },
+        {
+          "index": 1,
+          "text": "how",
+          "start": 6,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 10,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "local",
+          "start": 14,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "system",
+          "start": 20,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "distinguishes",
+          "start": 27,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "available",
+          "start": 41,
+          "end": 50
+        },
+        {
+          "index": 7,
+          "text": "stock",
+          "start": 51,
+          "end": 56
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 56,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "allocated",
+          "start": 58,
+          "end": 67
+        },
+        {
+          "index": 10,
+          "text": "stock",
+          "start": 68,
+          "end": 73
+        },
+        {
+          "index": 11,
+          "text": ",",
+          "start": 73,
+          "end": 74
+        },
+        {
+          "index": 12,
+          "text": "and",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 13,
+          "text": "a",
+          "start": 79,
+          "end": 80
+        },
+        {
+          "index": 14,
+          "text": "stock",
+          "start": 81,
+          "end": 86
+        },
+        {
+          "index": 15,
+          "text": "reservation",
+          "start": 87,
+          "end": 98
+        },
+        {
+          "index": 16,
+          "text": "when",
+          "start": 99,
+          "end": 103
+        },
+        {
+          "index": 17,
+          "text": "reporting",
+          "start": 104,
+          "end": 113
+        },
+        {
+          "index": 18,
+          "text": "stock",
+          "start": 114,
+          "end": 119
+        },
+        {
+          "index": 19,
+          "text": "availability",
+          "start": 120,
+          "end": 132
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 132,
+          "end": 133
+        }
+      ],
+      "focus_lexeme_ids": [
+        "available-stock.inventory-eligible-for-stated-demand.n",
+        "allocated-stock.inventory-assigned-to-specific-demand.n",
+        "stock-reservation.arrangement-holding-stock-for-demand.n",
+        "stock-availability.goods-ready-for-sale.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.warehouse_logistics.module07.06",
+      "text": "Ask whether the product recall has triggered an inventory freeze and whether a recount request is approved.",
+      "meaning": "Clarify restrictions and permission for a recount.",
+      "context": "A worker checks the arrangements for affected stock.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Ask",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "whether",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 12,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "product",
+          "start": 16,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "recall",
+          "start": 24,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "has",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "triggered",
+          "start": 35,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "an",
+          "start": 45,
+          "end": 47
+        },
+        {
+          "index": 8,
+          "text": "inventory",
+          "start": 48,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": "freeze",
+          "start": 58,
+          "end": 64
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": "whether",
+          "start": 69,
+          "end": 76
+        },
+        {
+          "index": 12,
+          "text": "a",
+          "start": 77,
+          "end": 78
+        },
+        {
+          "index": 13,
+          "text": "recount",
+          "start": 79,
+          "end": 86
+        },
+        {
+          "index": 14,
+          "text": "request",
+          "start": 87,
+          "end": 94
+        },
+        {
+          "index": 15,
+          "text": "is",
+          "start": 95,
+          "end": 97
+        },
+        {
+          "index": 16,
+          "text": "approved",
+          "start": 98,
+          "end": 106
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 106,
+          "end": 107
+        }
+      ],
+      "focus_lexeme_ids": [
+        "inventory-freeze.temporary-restriction-on-specified-stock-activity.n",
+        "recount-request.request-for-another-stock-count.n",
+        "product-recall.product-withdrawal-request.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.warehouse_logistics.module07.07",
+      "text": "The blind count does not show the expected quantity to the counter; record any concerns about stock rotation separately.",
+      "meaning": "Distinguish quantity counting from rotation concerns.",
+      "context": "A worker records different observations during an inventory check.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "blind",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "count",
+          "start": 10,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "does",
+          "start": 16,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "not",
+          "start": 21,
+          "end": 24
+        },
+        {
+          "index": 5,
+          "text": "show",
+          "start": 25,
+          "end": 29
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 7,
+          "text": "expected",
+          "start": 34,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "quantity",
+          "start": 43,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": "to",
+          "start": 52,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 55,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": "counter",
+          "start": 59,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": ";",
+          "start": 66,
+          "end": 67
+        },
+        {
+          "index": 13,
+          "text": "record",
+          "start": 68,
+          "end": 74
+        },
+        {
+          "index": 14,
+          "text": "any",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 15,
+          "text": "concerns",
+          "start": 79,
+          "end": 87
+        },
+        {
+          "index": 16,
+          "text": "about",
+          "start": 88,
+          "end": 93
+        },
+        {
+          "index": 17,
+          "text": "stock",
+          "start": 94,
+          "end": 99
+        },
+        {
+          "index": 18,
+          "text": "rotation",
+          "start": 100,
+          "end": 108
+        },
+        {
+          "index": 19,
+          "text": "separately",
+          "start": 109,
+          "end": 119
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 119,
+          "end": 120
+        }
+      ],
+      "focus_lexeme_ids": [
+        "blind-count.stock-count-with-expected-quantity-hidden.n",
+        "stock-rotation.ordered-stock-use.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.warehouse_logistics.module07.08",
+      "text": "Report the stockout, check the reorder point, and confirm the replenishment task and replenishment quantity.",
+      "meaning": "Review replenishment information after a shortage.",
+      "context": "A worker reports an unavailable item to the planner.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Report",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 7,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "stockout",
+          "start": 11,
+          "end": 19
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 19,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "check",
+          "start": 21,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "reorder",
+          "start": 31,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": "point",
+          "start": 39,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 44,
+          "end": 45
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 46,
+          "end": 49
+        },
+        {
+          "index": 10,
+          "text": "confirm",
+          "start": 50,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 58,
+          "end": 61
+        },
+        {
+          "index": 12,
+          "text": "replenishment",
+          "start": 62,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": "task",
+          "start": 76,
+          "end": 80
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 81,
+          "end": 84
+        },
+        {
+          "index": 15,
+          "text": "replenishment",
+          "start": 85,
+          "end": 98
+        },
+        {
+          "index": 16,
+          "text": "quantity",
+          "start": 99,
+          "end": 107
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 107,
+          "end": 108
+        }
+      ],
+      "focus_lexeme_ids": [
+        "stockout.absence-of-stock-needed-to-meet-demand.n",
+        "replenishment-task.assigned-work-to-restore-stock-supply.n",
+        "replenishment-quantity.amount-specified-for-stock-restoration.n",
+        "reorder-point.replenishment-trigger-level.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.warehouse_logistics.module07.09",
+      "text": "The minimum stock, maximum stock, and safety stock figures depend on the agreed planning method.",
+      "meaning": "Distinguish planning levels without supplying thresholds.",
+      "context": "Reviewing an inventory plan.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "minimum",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "stock",
+          "start": 12,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 17,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "maximum",
+          "start": 19,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "stock",
+          "start": 27,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 32,
+          "end": 33
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 34,
+          "end": 37
+        },
+        {
+          "index": 8,
+          "text": "safety",
+          "start": 38,
+          "end": 44
+        },
+        {
+          "index": 9,
+          "text": "stock",
+          "start": 45,
+          "end": 50
+        },
+        {
+          "index": 10,
+          "text": "figures",
+          "start": 51,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": "depend",
+          "start": 59,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "on",
+          "start": 66,
+          "end": 68
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 69,
+          "end": 72
+        },
+        {
+          "index": 14,
+          "text": "agreed",
+          "start": 73,
+          "end": 79
+        },
+        {
+          "index": 15,
+          "text": "planning",
+          "start": 80,
+          "end": 88
+        },
+        {
+          "index": 16,
+          "text": "method",
+          "start": 89,
+          "end": 95
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 95,
+          "end": 96
+        }
+      ],
+      "focus_lexeme_ids": [
+        "minimum-stock.lower-stock-target-under-planning-policy.n",
+        "maximum-stock.upper-stock-target-under-planning-policy.n",
+        "safety-stock.inventory-buffer-for-supply-or-demand-variation.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.warehouse_logistics.module07.10",
+      "text": "Ask how the expiration date, use-by date, and best-before date affect first expired, first out and shelf life under local requirements.",
+      "meaning": "Ask which date meanings and requirements apply to stock rotation.",
+      "context": "A worker seeks qualified clarification of product-specific date labels.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Ask",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "how",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 8,
+          "end": 11
+        },
+        {
+          "index": 3,
+          "text": "expiration",
+          "start": 12,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "date",
+          "start": 23,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 27,
+          "end": 28
+        },
+        {
+          "index": 6,
+          "text": "use-by",
+          "start": 29,
+          "end": 35
+        },
+        {
+          "index": 7,
+          "text": "date",
+          "start": 36,
+          "end": 40
+        },
+        {
+          "index": 8,
+          "text": ",",
+          "start": 40,
+          "end": 41
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 10,
+          "text": "best-before",
+          "start": 46,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": "date",
+          "start": 58,
+          "end": 62
+        },
+        {
+          "index": 12,
+          "text": "affect",
+          "start": 63,
+          "end": 69
+        },
+        {
+          "index": 13,
+          "text": "first",
+          "start": 70,
+          "end": 75
+        },
+        {
+          "index": 14,
+          "text": "expired",
+          "start": 76,
+          "end": 83
+        },
+        {
+          "index": 15,
+          "text": ",",
+          "start": 83,
+          "end": 84
+        },
+        {
+          "index": 16,
+          "text": "first",
+          "start": 85,
+          "end": 90
+        },
+        {
+          "index": 17,
+          "text": "out",
+          "start": 91,
+          "end": 94
+        },
+        {
+          "index": 18,
+          "text": "and",
+          "start": 95,
+          "end": 98
+        },
+        {
+          "index": 19,
+          "text": "shelf",
+          "start": 99,
+          "end": 104
+        },
+        {
+          "index": 20,
+          "text": "life",
+          "start": 105,
+          "end": 109
+        },
+        {
+          "index": 21,
+          "text": "under",
+          "start": 110,
+          "end": 115
+        },
+        {
+          "index": 22,
+          "text": "local",
+          "start": 116,
+          "end": 121
+        },
+        {
+          "index": 23,
+          "text": "requirements",
+          "start": 122,
+          "end": 134
+        },
+        {
+          "index": 24,
+          "text": ".",
+          "start": 134,
+          "end": 135
+        }
+      ],
+      "focus_lexeme_ids": [
+        "first-expired-first-out.stock-selection-by-earliest-expiration.n",
+        "shelf-life.period-of-specified-product-suitability.n",
+        "expiration-date.stated-validity-end.n",
+        "use-by-date.food-safety-date.n",
+        "best-before-date.food-quality-date.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-material-recording-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    }
+  ]
+}

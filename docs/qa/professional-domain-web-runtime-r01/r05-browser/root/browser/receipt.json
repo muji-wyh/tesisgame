@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "stage": "browser",
+  "command": [
+    "C:\\nvm4w\\nodejs\\node.exe",
+    "build/professional-english/domain-runtime-web-browser-r05/browser.cjs"
+  ],
+  "started_at": "2026-10-16T20:59:48.808Z",
+  "finished_at": "2026-10-16T21:00:01.174Z",
+  "exit_code": 0,
+  "signal": null,
+  "error": null,
+  "inputs": [
+    {
+      "path": "build/professional-english/domain-runtime-web-browser-r05/inventory.json",
+      "bytes": 2060,
+      "sha256": "86978ca1b5921ef3a945c806d0c6c92d25bf2b467c636d820bf8b9c1168e4a24"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-browser-r05/proposal.json",
+      "bytes": 5898,
+      "sha256": "3b52a39be761dc8f8566e605877965a87129a9fae44b4df232ed0fbf14b60ce3"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-browser-r05/inherited-inputs.json",
+      "bytes": 11062,
+      "sha256": "e38f78572410065afc3c5bfc4f8053b332e9c911c6e9af83c1824a72a85af432"
+    }
+  ],
+  "source": {
+    "path": "build/professional-english/domain-runtime-web-browser-r05/browser.cjs",
+    "bytes": 11244,
+    "sha256": "74f38e7351444c3b441f5263e9931f06a624d6ab15736096c6892ede5d0d363b"
+  },
+  "inputs_unchanged": true,
+  "log_sha256": "b542c3b83ef806366f2de0bb6609914e08cf8c13fa28115a96fa3e8ec7142f99",
+  "ok": true,
+  "scope": "One browser-only supplement stage of the successful r04 export; no new export or native proof, no production acceptance."
+}

@@ -1,0 +1,349 @@
+{
+  "schema": 1,
+  "status": "root_ten_scoped_language_acceptances_pending_guarded_delivery",
+  "date": "2026-10-16T12:01:32.071Z",
+  "reviewer": "Codex root (independent AI language review; not human or specialist approval)",
+  "root_review_recorded": true,
+  "author_ledger_json_sha256": "bbc8b3feab69e52fec9559d34fcc13a9424e4a2182356ef37fd3f0785c7124c8",
+  "context_review_json_sha256": "cb32bed0274a0832013c1659d451c5de1a1ff40b2191a9d4bab8e0ae6b377e3f",
+  "author_inventory_raw_sha256": "356f6a4fddc108211e8aa8e8d9ea3de881e6627a934e08f0e4f013932231725b",
+  "decisions": [
+    {
+      "id": "feedback.response-information.n",
+      "text": "feedback",
+      "decision": "accept_exact_author_language_candidate",
+      "candidate_entry_json_sha256": "5ad3d5bc4bb1a2015400717647c3cd4440fa6b90696f4807dbd42ec4faf71121",
+      "before_entry_json_sha256": "b7cb6263bfcbb3db2fc5f5c5b9331da61e25928ed50dfd6856b2131d1ecb60cc",
+      "reason": "The revision covers evaluative information as well as comments, with the retained trainer/presentation example selecting ordinary response information. Both selected passages show B2. The noun stays uncountable and separate from signal feedback or feed back.",
+      "editorial_difficulty": "B2",
+      "observed_source_levels": {
+        "oxford": "B2",
+        "collins": "B2"
+      },
+      "production_acceptance": false
+    },
+    {
+      "id": "permission.authorized-consent.n",
+      "text": "permission",
+      "decision": "accept_exact_author_language_candidate",
+      "candidate_entry_json_sha256": "1ebdd48ce649f26ada366fcf37d9cdc422979dfbeb07d55cc809bd4d917bb42d",
+      "before_entry_json_sha256": "8f5d30dec70aacb51038eb1565b821365cc4719b0e6b74d3b3320a3069cee4b2",
+      "reason": "The bounded schedule-change example selects ordinary authority-given allowance. Retain editorial A2 with Oxford A2 and Collins B1 preserved literally. This does not accept software access settings, written permission documents or consent validity.",
+      "editorial_difficulty": "A2",
+      "observed_source_levels": {
+        "oxford": "A2",
+        "collins": "B1"
+      },
+      "production_acceptance": false
+    },
+    {
+      "id": "responsibility.assigned-duty.n",
+      "text": "responsibility",
+      "decision": "accept_exact_author_language_candidate",
+      "candidate_entry_json_sha256": "0143d7c51353b431fd491e7562ae7c963b1b1b49439dc408133810fef89beb28",
+      "before_entry_json_sha256": "f225827d8b8dfb2d5f0e64d0bf9ed911aeed7003ed09f6a6842b0576c66c91c2",
+      "reason": "The assigned-duty meaning is clear, and one of my responsibilities naturally illustrates a countable duty without adding a plural answer form. Collins assigned duties B2 supports the proposed course placement. Blame, liability and actual authority remain separate.",
+      "editorial_difficulty": "B2",
+      "observed_source_levels": {
+        "oxford": null,
+        "collins": "B2"
+      },
+      "production_acceptance": false
+    },
+    {
+      "id": "task.work-item.n",
+      "text": "task",
+      "decision": "accept_exact_author_language_candidate",
+      "candidate_entry_json_sha256": "3ce32046f6a533f6d0988763d304b4bf00b46ef14fff59cb2d61c73520e58d10",
+      "before_entry_json_sha256": "f430ae5dcf55fc5aec6ae8a9ae6aaba316882fe0688354c7805ddd3af411baf5",
+      "reason": "The welcome-pack example selects a concrete work item. Retain A2 supported by Oxford, with the Collins B2 disagreement explicit. Difficulty and membership of a larger project are not necessary conditions. Computing task processes are excluded.",
+      "editorial_difficulty": "A2",
+      "observed_source_levels": {
+        "oxford": "A2",
+        "collins": "B2"
+      },
+      "production_acceptance": false
+    },
+    {
+      "id": "role.work-function.n",
+      "text": "role",
+      "decision": "accept_exact_author_language_candidate",
+      "candidate_entry_json_sha256": "f80504f06da8abbb2a344259219866d2cbdb8f52d8e25ba84ab65cfbb6e8c69c",
+      "before_entry_json_sha256": "b054a04d7696daccde04dd6e8b4bb5e4262be53adc30e2938d5c96440fd21da5",
+      "reason": "The revised person-or-group definition accommodates a department while retaining organizational function. Collins B2 supports the placement; actor A2/B1+ evidence is excluded. Neither work titles nor this lexical acceptance establish authority or professional competence.",
+      "editorial_difficulty": "B2",
+      "observed_source_levels": {
+        "oxford": null,
+        "collins": "B2"
+      },
+      "production_acceptance": false
+    },
+    {
+      "id": "priority.relative-importance.n",
+      "text": "priority",
+      "decision": "accept_exact_author_language_candidate",
+      "candidate_entry_json_sha256": "e92b652185b63cc4910b9b0b74936a5d68ac71250cba64ce847cb2dd8a2b326e",
+      "before_entry_json_sha256": "00a6f452a9ffb9c1515235cdd25db8ed0b290511766614e30e7d354a62081c01",
+      "reason": "Retain the existing relative-importance definition and high-priority delivery example. Accept B2 as an independent editorial placement for comparison and work ordering, with no selected-source CEFR claim. Countable important-item B2 and traffic C2 are other senses; no operational priority policy is accepted.",
+      "editorial_difficulty": "B2",
+      "observed_source_levels": {
+        "oxford": null,
+        "collins": null
+      },
+      "production_acceptance": false
+    },
+    {
+      "id": "location.place.n",
+      "text": "location",
+      "decision": "accept_exact_author_language_candidate",
+      "candidate_entry_json_sha256": "1c3309ea0ae3906b2810fa807aa36fc36afe0920f021493588856de372de38a0",
+      "before_entry_json_sha256": "4622a582b8e10c3a29f5c5ab06d6dfb1ddd37631d349ffe7e45df4fdc489d7aa",
+      "reason": "The revision directly includes places where activities occur and matches meeting location. Accept editorial B1 using Oxford selected B1 while preserving Collins literal B1+ and its separate exact-position B2. Logical file or memory locations remain separate.",
+      "editorial_difficulty": "B1",
+      "observed_source_levels": {
+        "oxford": "B1",
+        "collins": "B1+"
+      },
+      "production_acceptance": false
+    },
+    {
+      "id": "address.postal-location.n",
+      "text": "address",
+      "decision": "accept_exact_author_language_candidate",
+      "candidate_entry_json_sha256": "158d4859eef4c49c962a238080ae892e493b27eb8cf65505cdf96840afee1dcc",
+      "before_entry_json_sha256": "92314118c3cfb5a0c9edc1694e0daeb31629b65b0892089cda4a1c37e8e8a99b",
+      "reason": "Postal or physical-location details can be spoken, so removing necessarily written improves precision. Retain the A2 course floor while preserving selected Collins A1. Electronic addresses and verbal address remain outside scope, and the ambiguous invitation expression stays held.",
+      "editorial_difficulty": "A2",
+      "observed_source_levels": {
+        "oxford": null,
+        "collins": "A1"
+      },
+      "production_acceptance": false
+    },
+    {
+      "id": "signature.written-name.n",
+      "text": "signature",
+      "decision": "accept_exact_author_language_candidate",
+      "candidate_entry_json_sha256": "2823112e20db2eaa3babb4f9d1534b02bd9632f2014b97feec2f79fe09266d44",
+      "before_entry_json_sha256": "b1a3356900aa7fd1147ff16f06ef5b31925514de078aa2592384066ddcc20998",
+      "reason": "The retained characteristic written-name definition and form example match the ordinary noun. Collins B1 supports placement. Signing acts, stamps, electronic authentication, style and prescription senses receive no acceptance; no legal effect is inferred.",
+      "editorial_difficulty": "B1",
+      "observed_source_levels": {
+        "oxford": null,
+        "collins": "B1"
+      },
+      "production_acceptance": false
+    },
+    {
+      "id": "time-zone.regional-time.n",
+      "text": "time zone",
+      "decision": "accept_exact_author_language_candidate",
+      "candidate_entry_json_sha256": "750ee4a51048ed2d8769da5c70fb5f3fb9a768a016cab717363e284204a1be5e",
+      "before_entry_json_sha256": "c48031610741f30a0f7ff133bef037bb51d2ba9cfd4f6ea999024e999d73a1d7",
+      "reason": "The retained shared-standard-time-region definition matches ordinary cross-location scheduling. Oxford selected B2 supports placement. Simplified 24-zone or universal one-hour-offset claims are excluded; no actual conversion or daylight-saving rule is approved.",
+      "editorial_difficulty": "B2",
+      "observed_source_levels": {
+        "oxford": "B2",
+        "collins": null
+      },
+      "production_acceptance": false
+    }
+  ],
+  "accepted_candidates": [
+    {
+      "id": "feedback.response-information.n",
+      "candidate_json_sha256": "5ad3d5bc4bb1a2015400717647c3cd4440fa6b90696f4807dbd42ec4faf71121",
+      "scope": "Ordinary language wording, example and editorial course difficulty; no new answer forms."
+    },
+    {
+      "id": "permission.authorized-consent.n",
+      "candidate_json_sha256": "1ebdd48ce649f26ada366fcf37d9cdc422979dfbeb07d55cc809bd4d917bb42d",
+      "scope": "Ordinary language wording, example and editorial course difficulty; no new answer forms."
+    },
+    {
+      "id": "responsibility.assigned-duty.n",
+      "candidate_json_sha256": "0143d7c51353b431fd491e7562ae7c963b1b1b49439dc408133810fef89beb28",
+      "scope": "Ordinary language wording, example and editorial course difficulty; no new answer forms."
+    },
+    {
+      "id": "task.work-item.n",
+      "candidate_json_sha256": "3ce32046f6a533f6d0988763d304b4bf00b46ef14fff59cb2d61c73520e58d10",
+      "scope": "Ordinary language wording, example and editorial course difficulty; no new answer forms."
+    },
+    {
+      "id": "role.work-function.n",
+      "candidate_json_sha256": "f80504f06da8abbb2a344259219866d2cbdb8f52d8e25ba84ab65cfbb6e8c69c",
+      "scope": "Ordinary language wording, example and editorial course difficulty; no new answer forms."
+    },
+    {
+      "id": "priority.relative-importance.n",
+      "candidate_json_sha256": "e92b652185b63cc4910b9b0b74936a5d68ac71250cba64ce847cb2dd8a2b326e",
+      "scope": "Ordinary language wording, example and editorial course difficulty; no new answer forms."
+    },
+    {
+      "id": "location.place.n",
+      "candidate_json_sha256": "1c3309ea0ae3906b2810fa807aa36fc36afe0920f021493588856de372de38a0",
+      "scope": "Ordinary language wording, example and editorial course difficulty; no new answer forms."
+    },
+    {
+      "id": "address.postal-location.n",
+      "candidate_json_sha256": "158d4859eef4c49c962a238080ae892e493b27eb8cf65505cdf96840afee1dcc",
+      "scope": "Ordinary language wording, example and editorial course difficulty; no new answer forms."
+    },
+    {
+      "id": "signature.written-name.n",
+      "candidate_json_sha256": "2823112e20db2eaa3babb4f9d1534b02bd9632f2014b97feec2f79fe09266d44",
+      "scope": "Ordinary language wording, example and editorial course difficulty; no new answer forms."
+    },
+    {
+      "id": "time-zone.regional-time.n",
+      "candidate_json_sha256": "750ee4a51048ed2d8769da5c70fb5f3fb9a768a016cab717363e284204a1be5e",
+      "scope": "Ordinary language wording, example and editorial course difficulty; no new answer forms."
+    }
+  ],
+  "preserved_entry_ids": [
+    "supervisor.work-overseer.n",
+    "attendance.presence-record.n"
+  ],
+  "root_direct_source_crosschecks": [
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/priority",
+      "finding": "The selected rank/precedence sense is distinct from a countable important item. Neither selected passage showed CEFR. B2 remains an independent editorial placement, with all priority-policy domain holds unchanged.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.collinsdictionary.com/dictionary/english/priority",
+      "finding": "The selected rank/precedence sense is distinct from a countable important item. Neither selected passage showed CEFR. B2 remains an independent editorial placement, with all priority-policy domain holds unchanged.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/address_1",
+      "finding": "Postal/location details can be spoken, so removing necessarily-written is supported. Collins selected postal A1 is literal; course A2 is a floor, not a source level. Computing/electronic addresses stay distinct.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.collinsdictionary.com/dictionary/english/address",
+      "finding": "Postal/location details can be spoken, so removing necessarily-written is supported. Collins selected postal A1 is literal; course A2 is a floor, not a source level. Computing/electronic addresses stay distinct.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/time-zone",
+      "finding": "Oxford selected topic B2 supports bounded scheduling placement. Collins shared-standard-time region supports the retained definition. Simplified 24-zone/one-hour-adjacency claims are not adopted.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.collinsdictionary.com/dictionary/english/time-zone",
+      "finding": "Oxford selected topic B2 supports bounded scheduling placement. Collins shared-standard-time region supports the retained definition. Simplified 24-zone/one-hour-adjacency claims are not adopted.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/permission",
+      "finding": "Oxford selected authorization A2 and Collins selected B1 disagree. A2 is reasonable for the bounded schedule-change example. Electronic permissions and written permissions are separate senses; current ambiguity holds remain.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.collinsdictionary.com/dictionary/english/permission",
+      "finding": "Oxford selected authorization A2 and Collins selected B1 disagree. A2 is reasonable for the bounded schedule-change example. Electronic permissions and written permissions are separate senses; current ambiguity holds remain.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/task_1",
+      "finding": "Oxford ordinary work-item A2 contrasts with Collins B2. Concrete welcome-pack work supports bounded A2; no difficulty/project requirement or operating-system sense is imported.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.collinsdictionary.com/dictionary/english/task",
+      "finding": "Oxford ordinary work-item A2 contrasts with Collins B2. Concrete welcome-pack work supports bounded A2; no difficulty/project requirement or operating-system sense is imported.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/role",
+      "finding": "Oxford organizational position/function and Collins position/function B2 support the narrowed definition and B2 placement. Actor A2/B1+ labels are separate. A role is not proof of authority or professional competence.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.collinsdictionary.com/dictionary/english/role",
+      "finding": "Oxford organizational position/function and Collins position/function B2 support the narrowed definition and B2 placement. Actor A2/B1+ labels are separate. A role is not proof of authority or professional competence.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/feedback",
+      "finding": "Both selected response-to-work passages show B2. Evaluation/information broadens comments appropriately while excluding electrical and control feedback. Uncountability and one-word noun remain.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.collinsdictionary.com/dictionary/english/feedback",
+      "finding": "Both selected response-to-work passages show B2. Evaluation/information broadens comments appropriately while excluding electrical and control feedback. Uncountability and one-word noun remain.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/responsibility",
+      "finding": "Oxford permits countable assigned duties, and Collins plural duties B2 supports the proposed example one of my responsibilities. Duty is not blame, legal liability or universal authority.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.collinsdictionary.com/dictionary/english/responsibility",
+      "finding": "Oxford permits countable assigned duties, and Collins plural duties B2 supports the proposed example one of my responsibilities. Duty is not blame, legal liability or universal authority.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/location",
+      "finding": "Selected general place supports an activity location. Oxford B1 and Collins literal B1+ remain separate from Collins exact-position B2. B1 is editorial, not a rounded Collins level.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.collinsdictionary.com/dictionary/english/location",
+      "finding": "Selected general place supports an activity location. Oxford B1 and Collins literal B1+ remain separate from Collins exact-position B2. B1 is editorial, not a rounded Collins level.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/signature",
+      "finding": "The ordinary characteristic written-name noun supports the retained meaning and Collins B1 placement. A signing act, style, stamp, prescription or electronic authentication does not acquire acceptance.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.collinsdictionary.com/dictionary/english/signature",
+      "finding": "The ordinary characteristic written-name noun supports the retained meaning and Collins B1 placement. A signing act, style, stamp, prescription or electronic authentication does not acquire acceptance.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    }
+  ],
+  "root_source_crosscheck_record": {
+    "path": "root-source-crosschecks-r01.json",
+    "raw_sha256": "e7e27a5736e923b0ca295e25db539fa273bdbe24441b4c9850fbe9d929310e55"
+  },
+  "context_decision": "Root inspected all 111 matching expression texts and classifications, the ten local expressions (five matching and five additional), and 65 related definitions/boundaries. Preserve all expressions and focus bindings, the three new ambiguity holds and all nine historical holds. Postal/electronic addresses, ordinary allowance/software access settings, work/biological roles, physical/logical places and written/electronic signatures remain distinct. This is lexical compatibility review only; no full-expression or domain acceptance.",
+  "integration_scope": [
+    "Integrate the exact ten accepted candidates only after root reviews guarded delivery against a fresh successful current baseline.",
+    "Add the twenty exact consulted sources and preserve literal source labels. Attendance-only third10 sources remain excluded.",
+    "Set only the ten language gates and narrowly scoped lexical references. Overall language/domain status follows existing not-required rules; morphology and media remain separate.",
+    "Replace exact superseded pending-language notes while retaining original snapshots and recording the independent acceptance in current notes.",
+    "Preserve identity, all noncandidate definitions/examples, forms, regions, practice modes, memberships, expressions, domain gates, morphology, media, Growth and module readiness.",
+    "Supervisor, attendance and all twelve expression holds remain complete unchanged entries."
+  ],
+  "tests_executed": false,
+  "native_runtime_executed": false,
+  "production_mutated": false,
+  "shared_tests_mutated": false,
+  "baseline_bound": false,
+  "next_step": "Complete unbound guarded delivery and shared-test previews after successful R27; root must inspect, bind and serialize."
+}

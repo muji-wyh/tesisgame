@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "status": "constructed_binding_pending_independent_actual_binding_review",
+  "finished_at": "2026-10-16T23:14:03.345Z",
+  "root_capture_input": {
+    "path": "build/professional-english/foundation02-fifth10-root-capture-r02/input.json",
+    "bytes": 11856,
+    "raw_sha256": "9e6dd6fd5afa6f230dc79331bfbb94cf2b5c81d622aee4758c6ea466d7a01c1c"
+  },
+  "helper_source_inventory": {
+    "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/source-inventory.json",
+    "bytes": 1826,
+    "raw_sha256": "b52fea9c2181064d024d35a05f599ad3b24897e2402927031f13e449e5a10993"
+  },
+  "independent_helper_source_review": {
+    "path": "build/professional-english/foundation02-fifth10-root-binding-independent-review-r02/review.json",
+    "bytes": 8919,
+    "raw_sha256": "43173b9061e326e27a60e87d54f5d0c72527b14e70c6df6c490a456f0eb53c78"
+  },
+  "actual_binding": {
+    "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+    "bytes": 3187477,
+    "raw_sha256": "7323bcb1baac6ea85817169bcc90325f9b54d587b19d4895ca3106ee7af0e015"
+  },
+  "artifacts": [
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/capture-start.json",
+      "bytes": 823,
+      "raw_sha256": "33d6087e01dc172c9f3763444c7df2f3ac7da8f318c00ac8d3b17788e355f0e2"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/actual-baseline-binding.json",
+      "bytes": 3187477,
+      "raw_sha256": "7323bcb1baac6ea85817169bcc90325f9b54d587b19d4895ca3106ee7af0e015"
+    },
+    {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/capture-observations.json",
+      "bytes": 3096,
+      "raw_sha256": "778709b710c3e308701c234439d011b322d42e3ecdd14541fa970b7908ada157"
+    }
+  ],
+  "actual_binding_independently_accepted": false,
+  "preparation_execution_accepted": false,
+  "preparation_executed": false,
+  "project_or_proposal_code_imported": false,
+  "syntax_or_test_or_native_executed": false,
+  "production_mutated": false
+}

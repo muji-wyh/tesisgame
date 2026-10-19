@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "status": "barcode_image_baseline_bound_no_production_writes",
+  "checks": 2559,
+  "preimages_raw_sha256": "effb464f0af5ab5f57ddc46a9e88ebbdd43b31e9b6f73788c628be8989e78126",
+  "preparation_receipt_raw_sha256": "3c43d922515528427964d5e869ea2a9c1e64ee0885865d3b90a596271be69510",
+  "baseline_registry_sha256": "f8f2fefe0ce63dc21b017f54fad2f4b28ffad840eec942bace8070c812d51a9f",
+  "proposed_registry_sha256": "1687245735b74c94c4f5f759e3af61b92c4e82c66c4a1e1e6528bb7d7d25ccd0",
+  "validation_raw_sha256": "bda844b73114579366c603fa6f685d811a9ff576ce36cff831933346220668b0",
+  "root_image_review_raw_sha256": "ac23be3deccc03aee4bbb6e03e30e5f9a910f8ca7c9e7da2c2df80c08d920f2b",
+  "serializer_raw_sha256": "bb6ba2fe9a657b25e615b779dfd139d7b46ff656710800107cd343f00b898a15",
+  "production_content_written": false
+}

@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "status": "prepared_pending_root_native_dispatch",
+  "frozen_inputs_sha256": "ff7f3b93ca1fa060d2440d3b908c9ef80767dcc2a28c0f5e06161a25c4f90564",
+  "guarded_production_files": 1444,
+  "guarded_input_files": 722,
+  "baseline_receipt_sha256": "509d64c10012756c7d44d0cdf6fb9b204a3c1cbfe1c4e0e76434ea2af36a33f8",
+  "source_bytes_unchanged": true,
+  "brief_revision_accepted": false,
+  "scripts_parsed": false,
+  "tests_run": false,
+  "native_run": false,
+  "image_accepted": false,
+  "production_writes": false
+}

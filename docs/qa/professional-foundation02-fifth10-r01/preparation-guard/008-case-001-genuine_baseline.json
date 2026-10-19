@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "id": "genuine_baseline",
+  "specification": null,
+  "classification": "unmodified_actual_binding_and_independent_acceptance",
+  "expected": "accept",
+  "mutation": "Use cached exact real root input, both genuine receipt schemas, complete actual pins and real acceptance without rewriting any bytes.",
+  "synthetic_in_memory_only": false,
+  "source_sha256": "022fc186186ade95d6d58908932db5520652f39a1417255c3c5080a4e4841f1b",
+  "actual_preparation_input": {
+    "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+    "bytes": 1191,
+    "raw_sha256": "f8a61b805220a2d6e64788a92960a35bd280af3c45b1f265dbdcf91955b81549"
+  },
+  "opened": true,
+  "recheck_passed": true,
+  "passed": true,
+  "positive_schema_evidence": {
+    "fourth10_schema": "foundation02_fourth10_nested_result_v1",
+    "shopping_bag_schema": "shopping_bag_top_level_commit_and_persisted_input_v1",
+    "fourth10_targets": 133,
+    "shopping_bag_targets": 153,
+    "bag_tests": {
+      "tests": 255,
+      "pass": 255,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "independent_reviewer": "/root/morph_review",
+    "journal_copies": {
+      "fourth10": [],
+      "shopping_bag": []
+    }
+  },
+  "virtual_io": {
+    "imports": [
+      "node:fs",
+      "node:path",
+      "node:crypto",
+      "node:assert/strict"
+    ],
+    "file_reads": 25260,
+    "directory_reads": 4,
+    "existence_reads": 1634,
+    "denied": []
+  },
+  "virtual_changes": []
+}

@@ -1,0 +1,30 @@
+Q:\.codex\worktrees\current-age-vocabulary\tesisgame\tools\run-godot.cjs:20
+    throw new Error(`Godot failed (exit ${result.status}):\n${output}`);
+    ^
+
+Error: Godot failed (exit 1):
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+Scene disposal observation: {"active_releases":[{"audio_inside_tree":true,"audio_streams":1,"card_images":10,"library_images":0,"play_closed":true,"view_inside_tree":true}],"publications":[{"kind":"changed","phase":"restoring","play_closed":false},{"kind":"changed","phase":"restoring","play_closed":false}],"stage":"owner","trace":["child:@Node@332","store","active_lease_release","play","child:@Node@326","child:VocabularyLoading","child:InputActivity","child:FinishConfirmation","child:RewardConfetti","child:ChestCoins","child:@Timer@320","audio","child:@Node@310","library","child:GrowthNotebook","child:SettlementDialog","child:HomeScreen","child:GameArea","child:WorkplaceEnvironment","child:JellyGarden","child:@ColorRect@2","app"]}
+Scene disposal observation: {"active_releases":[{"audio_inside_tree":true,"audio_streams":1,"card_images":10,"library_images":0,"play_closed":true,"view_inside_tree":true}],"publications":[{"kind":"changed","phase":"restoring","play_closed":false},{"kind":"changed","phase":"restoring","play_closed":false}],"stage":"media","trace":["child:@Node@907","store","active_lease_release","play","child:@Node@901","child:VocabularyLoading","child:InputActivity","child:FinishConfirmation","child:RewardConfetti","child:ChestCoins","child:@Timer@895","audio","child:@Node@885","library","child:GrowthNotebook","child:SettlementDialog","child:HomeScreen","child:GameArea","child:WorkplaceEnvironment","child:JellyGarden","child:@ColorRect@577","app"]}
+Scene disposal observation: {"active_releases":[{"audio_inside_tree":true,"audio_streams":1,"card_images":10,"library_images":0,"play_closed":true,"view_inside_tree":true}],"publications":[{"kind":"changed","phase":"restoring","play_closed":false},{"kind":"changed","phase":"restoring","play_closed":false}],"stage":"storage","trace":["child:@Node@1482","store","active_lease_release","play","child:@Node@1476","child:VocabularyLoading","child:InputActivity","child:FinishConfirmation","child:RewardConfetti","child:ChestCoins","child:@Timer@1470","audio","child:@Node@1460","library","child:GrowthNotebook","child:SettlementDialog","child:HomeScreen","child:GameArea","child:WorkplaceEnvironment","child:JellyGarden","child:@ColorRect@1152","app"]}
+Professional scene disposal: 76 checks, 6 failures
+FAIL: owner: no UI publication occurs once scene teardown starts
+FAIL: owner: views and audio drop professional resources before the active lease is released
+FAIL: media: no UI publication occurs once scene teardown starts
+FAIL: media: views and audio drop professional resources before the active lease is released
+FAIL: storage: no UI publication occurs once scene teardown starts
+FAIL: storage: views and audio drop professional resources before the active lease is released
+
+    at runGodot (Q:\.codex\worktrees\current-age-vocabulary\tesisgame\tools\run-godot.cjs:20:11)
+    at Object.<anonymous> (Q:\.codex\worktrees\current-age-vocabulary\tesisgame\tools\run-godot.cjs:29:18)
+    at Module._compile (node:internal/modules/cjs/loader:1804:14)
+    at Object..js (node:internal/modules/cjs/loader:1936:10)
+    at Module.load (node:internal/modules/cjs/loader:1525:32)
+    at Module._load (node:internal/modules/cjs/loader:1327:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47
+
+Node.js v24.13.1

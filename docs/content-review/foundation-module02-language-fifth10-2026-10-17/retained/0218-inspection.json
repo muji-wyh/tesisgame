@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "status": "preserved_parser_failure_after_successful_child_commands",
+  "original_receipt_sha256": "8680e417f593aa1e04225e258b9390e1cb944c7d91cf378288ff19011de2204d",
+  "child_tests_from_raw_spec_reporter": {
+    "tests": 255,
+    "pass": 255,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "child_commands_exit_zero": true,
+  "original_wrapper_ok": false,
+  "original_postcheck_error": null,
+  "journal_states": 308,
+  "installed_targets": 153,
+  "stages": 153,
+  "backups": 4,
+  "active_lock_absent": true,
+  "production_mutated": false,
+  "tests_replayed": false,
+  "scope": "Independent raw log and complete journal/target inspection. Does not alter or accept the failed wrapper receipt."
+}

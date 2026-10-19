@@ -1,0 +1,236 @@
+{
+  "status": "integrated_art_and_ready_ambient_theme_pending",
+  "theme_id": "professional_nursing",
+  "source_models": [
+    {
+      "id": "bed",
+      "creator": "Innerscene",
+      "license": "CC0-1.0",
+      "source_sha256": "2d66623eaa1162b358d404df5288ce6a29416fc506b50ffd0718d832435c1ab5",
+      "original_source": "docs/assets/sources/innerscene-hospital-bed/hospital-bed-raised-backrest.glb",
+      "retained_source": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/hospital-bed/hospital-bed-raised-backrest.glb",
+      "acquisition_status": "acquired_original_source",
+      "source_available_animations": [],
+      "source_clip_count": 0,
+      "source": "https://www.innerscene.com/tools/library/3d-parts/hospital-bed-raised-backrest-6bb95542"
+    },
+    {
+      "id": "bedside",
+      "source": "https://kenney.nl/assets/furniture-kit",
+      "creator": "Kenney",
+      "license": "CC0 1.0",
+      "source_sha256": "fec6271639df5aff9f8ac75d6679385eab2abb7c8d2f51abeba3ed689ddb6f0d",
+      "original_source": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/cabinetBedDrawerTable.glb",
+      "retained_source": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/kenney/Furniture Kit/Models/GLTF format/cabinetBedDrawerTable.glb",
+      "acquisition_status": "acquired_original_source",
+      "source_available_animations": [],
+      "source_clip_count": 0
+    },
+    {
+      "id": "cart",
+      "creator": "Innerscene",
+      "license": "CC0-1.0",
+      "source_sha256": "ecab70adf0e563f62cd27a1baf21380868c0c0e52a5c1b2e93f5873b1a8c02f6",
+      "original_source": "docs/assets/sources/innerscene-medical-supply-cart/medical-supply-cart.glb",
+      "retained_source": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/supply-cart/medical-supply-cart.glb",
+      "acquisition_status": "acquired_original_source",
+      "source_available_animations": [],
+      "source_clip_count": 0,
+      "source": "https://www.innerscene.com/tools/library/3d-parts/three-shelf-medical-supply-cart-45cc326c"
+    },
+    {
+      "id": "chair",
+      "source": "https://kenney.nl/assets/furniture-kit",
+      "creator": "Kenney",
+      "license": "CC0 1.0",
+      "source_sha256": "33544228984857f2cb502b58452fed72157335f9b1caf29e96da5c9094c53fdc",
+      "original_source": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/chairCushion.glb",
+      "retained_source": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/kenney/Furniture Kit/Models/GLTF format/chairCushion.glb",
+      "acquisition_status": "acquired_original_source",
+      "source_available_animations": [],
+      "source_clip_count": 0
+    },
+    {
+      "id": "curtain",
+      "source": "https://www.innerscene.com/tools/library/3d-parts/privacy-curtain-and-ceiling-track-0353bfbc",
+      "creator": "Innerscene",
+      "license": "CC0-1.0",
+      "source_sha256": "563b648b94f5f2dc87fa734c22021a1116461ee01733eae359907839ef2d1390",
+      "original_source": "build/professional-english/nursing-theme-review/acquired/privacy-curtain/privacy-curtain-and-ceiling-track.glb",
+      "retained_source": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/privacy-curtain/privacy-curtain-and-ceiling-track.glb",
+      "acquisition_status": "acquired_original_source",
+      "source_available_animations": [],
+      "source_clip_count": 0
+    },
+    {
+      "id": "floor",
+      "source": "https://kenney.nl/assets/furniture-kit",
+      "creator": "Kenney",
+      "license": "CC0 1.0",
+      "source_sha256": "99fc5df646d8dc605d6fe35001fe5b15bb7b269cc5c65f4f7793fbc76ff3d822",
+      "original_source": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/floorFull.glb",
+      "retained_source": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/kenney/Furniture Kit/Models/GLTF format/floorFull.glb",
+      "acquisition_status": "acquired_original_source",
+      "source_available_animations": [],
+      "source_clip_count": 0
+    },
+    {
+      "id": "station",
+      "source": "https://www.innerscene.com/tools/library/3d-parts/nurse-station-with-low-accessible-counter-ef78cf3d",
+      "creator": "Innerscene",
+      "license": "CC0-1.0",
+      "source_sha256": "74ee89a9add892597bcb569ea6080e7c4c85b792768898648f7d91334b79ebf8",
+      "original_source": "build/professional-english/nursing-theme-review/acquired/nurse-station/nurse-station-with-low-accessible-counter.glb",
+      "retained_source": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/nurse-station/nurse-station-with-low-accessible-counter.glb",
+      "acquisition_status": "acquired_original_source",
+      "source_available_animations": [],
+      "source_clip_count": 0
+    },
+    {
+      "id": "storage",
+      "source": "https://kenney.nl/assets/furniture-kit",
+      "creator": "Kenney",
+      "license": "CC0 1.0",
+      "source_sha256": "ff33f535acdb1825c0e958a293642b39665adcae0b1317b650e83d2bb687f4e2",
+      "original_source": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/bookcaseClosedDoors.glb",
+      "retained_source": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/kenney/Furniture Kit/Models/GLTF format/bookcaseClosedDoors.glb",
+      "acquisition_status": "acquired_original_source",
+      "source_available_animations": [],
+      "source_clip_count": 0
+    },
+    {
+      "id": "wall",
+      "source": "https://kenney.nl/assets/furniture-kit",
+      "creator": "Kenney",
+      "license": "CC0 1.0",
+      "source_sha256": "69273d5d623bddfce41d12d4e5eeb5621ea04f1edcbd8f35c00a60c2fd3258b7",
+      "original_source": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/wall.glb",
+      "retained_source": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/kenney/Furniture Kit/Models/GLTF format/wall.glb",
+      "acquisition_status": "acquired_original_source",
+      "source_available_animations": [],
+      "source_clip_count": 0
+    },
+    {
+      "id": "wheelchair",
+      "source": "https://kenney.nl/assets/mini-characters",
+      "creator": "Kenney",
+      "license": "CC0 1.0",
+      "source_sha256": "cb7b6cbebc7bbe238ae926b26305661eb66e17659fafa8fa0c098f5e7955fabe",
+      "original_source": "build/professional-english/nursing-theme-review/acquired/kenney/Mini Characters/Models/GLB format/wheelchair.glb",
+      "retained_source": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/kenney/Mini Characters/Models/GLB format/wheelchair.glb",
+      "acquisition_status": "acquired_original_source",
+      "source_available_animations": [],
+      "source_clip_count": 0
+    },
+    {
+      "id": "window",
+      "source": "https://kenney.nl/assets/furniture-kit",
+      "creator": "Kenney",
+      "license": "CC0 1.0",
+      "source_sha256": "166a10fddb8a78d942bc2791186913f7015dfee8501d20efd7a7b8f196fc5c3e",
+      "original_source": "build/professional-english/nursing-theme-review/acquired/kenney/Furniture Kit/Models/GLTF format/wallWindow.glb",
+      "retained_source": "docs/assets/sources/innerscene-kenney-nursing-theme/originals/kenney/Furniture Kit/Models/GLTF format/wallWindow.glb",
+      "acquisition_status": "acquired_original_source",
+      "source_available_animations": [],
+      "source_clip_count": 0
+    }
+  ],
+  "source_animation_count": 0,
+  "authored_motion": {
+    "id": "nursing-curtain-hem-sway",
+    "frames": 16,
+    "fps": 2,
+    "seconds": 8,
+    "rest_frame": 0,
+    "authored": true,
+    "cloth_simulation": false,
+    "upper_fixed_fraction": 0.55,
+    "maximum_hem_displacement_meters": 0.02,
+    "hardware_meshes_fixed": 29,
+    "derivation": "docs/assets/sources/innerscene-kenney-nursing-theme/derivation/motion-r01/textile-motion.gd"
+  },
+  "source_review": {
+    "status": "reviewed",
+    "reviewer": "Codex independent source/frame/pose review and measured native timing; no continuous playback or clinical procedure claim",
+    "reviewed_at": "2026-10-16"
+  },
+  "accepted_candidate": {
+    "path": "build/professional-english/nursing-theme-review/motion-r02/candidate-profile.json",
+    "sha256": "4e9fde424d0825cd34478f9e22ea12618688353de02df36ea6f094542d56ee35",
+    "bytes": 7499
+  },
+  "independent_review": {
+    "path": "build/professional-english/nursing-theme-review/motion-r04-independent-review/independent-review-receipt.json",
+    "sha256": "70db99c044ab12873a7ad6cc14b2fcfa30b90297e71a351beec23c03dabf9f85",
+    "bytes": 22187
+  },
+  "assets": [
+    {
+      "id": "sha256:712103b48aec2ae2a8a8b1b7365d6ae652e3887de1cb11a313c389de552c6ed9",
+      "sha256": "712103b48aec2ae2a8a8b1b7365d6ae652e3887de1cb11a313c389de552c6ed9",
+      "path": "professional-media/712103b48aec2ae2a8a8b1b7365d6ae652e3887de1cb11a313c389de552c6ed9.png",
+      "kind": "image",
+      "format": "png",
+      "compressed_bytes": 132580,
+      "decoded_bytes": 8388608,
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "sha256:65da9fe84c071420a9755e31b80b1f81cfe38277cba55210930c2289ee30e973",
+      "sha256": "65da9fe84c071420a9755e31b80b1f81cfe38277cba55210930c2289ee30e973",
+      "path": "professional-media/65da9fe84c071420a9755e31b80b1f81cfe38277cba55210930c2289ee30e973.png",
+      "kind": "image",
+      "format": "png",
+      "compressed_bytes": 191183,
+      "decoded_bytes": 8388608,
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "sha256:41acd015cae790a0fb5242364776d2b52daa675450cf0b4f54da1a4d2c3c64f5",
+      "sha256": "41acd015cae790a0fb5242364776d2b52daa675450cf0b4f54da1a4d2c3c64f5",
+      "path": "professional-media/41acd015cae790a0fb5242364776d2b52daa675450cf0b4f54da1a4d2c3c64f5.png",
+      "kind": "image",
+      "format": "png",
+      "compressed_bytes": 189671,
+      "decoded_bytes": 8388608,
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "sha256:3ac2473ca471d66026d60577db7f4c874dfbc2848cc859bc8b137d582b312714",
+      "sha256": "3ac2473ca471d66026d60577db7f4c874dfbc2848cc859bc8b137d582b312714",
+      "path": "professional-media/3ac2473ca471d66026d60577db7f4c874dfbc2848cc859bc8b137d582b312714.png",
+      "kind": "image",
+      "format": "png",
+      "compressed_bytes": 259369,
+      "decoded_bytes": 7109632,
+      "width": 1048,
+      "height": 848
+    }
+  ],
+  "limitations": [
+    "Illustrative empty care setting without procedure, patient, signage or readings claims.",
+    "Saved source/native frame and pose review plus measured timing; no continuous audiovisual or browser claim.",
+    "Production course and module gates remain unchanged."
+  ],
+  "evidence": {
+    "main": {
+      "path": "build/professional-english/nursing-theme-review/main-r02/review-receipt.json",
+      "sha256": "76e107e6c7f0e1ed3ed18af1c93f8f809d3f5338ed283c1ad1f980f97f74d1fe",
+      "bytes": 15087
+    },
+    "home": {
+      "path": "build/professional-english/nursing-theme-review/home-r01/report.json",
+      "sha256": "d699f7033ab3ad3402dbda0bf6226288d77500f62e1b7e11162bd6599871c690",
+      "bytes": 7404
+    },
+    "production": {
+      "path": "build/professional-english/nursing-theme-review/integration/runtime/report.json",
+      "sha256": "692a0d7439072f5823ad54be35f6ec685e8de4228755fdb55b4a676f5c753177",
+      "bytes": 3229
+    }
+  },
+  "note": "Historical proposal source inventory omitted bed/cart URL fields. This durable record resolves them from the preserved original source inventories; no source asset or proposal was modified."
+}

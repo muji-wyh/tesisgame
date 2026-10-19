@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "copied_at": "2026-10-17T00:54:22.332Z",
+  "files": [
+    {
+      "source": "build/professional-english/growth-morphology-current-evidence-review-r01/README.md",
+      "path": "docs/qa/professional-growth-current-evidence-2026-10-17/README.md",
+      "bytes": 2502,
+      "raw_sha256": "fd43bf750b54ec43f27b878f397878e1151377c526dcab332e4e9de5849a1f5f"
+    },
+    {
+      "source": "build/professional-english/growth-morphology-current-evidence-review-r01/input-pins.json",
+      "path": "docs/qa/professional-growth-current-evidence-2026-10-17/input-pins.json",
+      "bytes": 22576,
+      "raw_sha256": "a931e61aee1c09e90337f7a09a5acd2b1dc234661100017fcf3a801bda92d711"
+    },
+    {
+      "source": "build/professional-english/growth-morphology-current-evidence-review-r01/inspect-evidence.cjs",
+      "path": "docs/qa/professional-growth-current-evidence-2026-10-17/inspect-evidence.cjs",
+      "bytes": 15676,
+      "raw_sha256": "fb710accf14dd77c0887028f175e79fd79126f8027aa833db5a334e50df98996"
+    },
+    {
+      "source": "build/professional-english/growth-morphology-current-evidence-review-r01/inventory.json",
+      "path": "docs/qa/professional-growth-current-evidence-2026-10-17/inventory.json",
+      "bytes": 633,
+      "raw_sha256": "de7eebab165253bb5fc602fb2fdaf636d19fb6644b78e22a423c5b34691b26c5"
+    },
+    {
+      "source": "build/professional-english/growth-morphology-current-evidence-review-r01/review.json",
+      "path": "docs/qa/professional-growth-current-evidence-2026-10-17/review.json",
+      "bytes": 36035,
+      "raw_sha256": "0abfdadd20653c35693ac744b3dbf20a6424087068a52011298058241e31b07b"
+    }
+  ]
+}

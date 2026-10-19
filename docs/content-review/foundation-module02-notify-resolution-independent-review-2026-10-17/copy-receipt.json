@@ -1,0 +1,258 @@
+{
+  "schema": 1,
+  "scope": "Exact immutable research and independent-review copies; no production integration or live baseline acceptance.",
+  "files": [
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-research-r01/ancillary-input-pins.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/research/ancillary-input-pins.json",
+      "sha256": "1bb58648bc6273c8def38310991585ec89db4e9e61fe0fb44b9806b4b4225ea5",
+      "bytes": 3412
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-research-r01/context-dispositions.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/research/context-dispositions.json",
+      "sha256": "5cc8f94c6cfe14afc68d260675b70dcdb3de6d5454f1956ec72a2fc385af4ed8",
+      "bytes": 10061
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-research-r01/context-summary.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/research/context-summary.json",
+      "sha256": "51aacfdc2107697c0eaef93c00d86a31bc8b880b938cf8ddf1c2a6920df52037",
+      "bytes": 759
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-research-r01/expression-contexts.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/research/expression-contexts.json",
+      "sha256": "706deb97b6232b7f9f3bda24f9f624c529473245eab3fb3ea27ed570fae5cb12",
+      "bytes": 71429
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-research-r01/expression-memberships.before.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/research/expression-memberships.before.json",
+      "sha256": "ffb901bd00f423009f722783f5a3e1ad995d6506459591e13d51b94743a2a234",
+      "bytes": 13347
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-research-r01/expression.before.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/research/expression.before.json",
+      "sha256": "565537fa8abee850ab705f7c9c8c09e83955bc86ea3b45fdda90fb416675c9ea",
+      "bytes": 2997
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-research-r01/expression.proposed.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/research/expression.proposed.json",
+      "sha256": "a1cbd0ca79d5a5269be743f1f9a8fa2753c6a31dea8f827e00ef846e1e48b903",
+      "bytes": 3406
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-research-r01/fresh-http-metadata.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/research/fresh-http-metadata.json",
+      "sha256": "7e8a8a5ff2384d88bb1ab65af0346d88d91ea26eaf9419211a542d112fe3b826",
+      "bytes": 3450
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-research-r01/HANDOFF.md",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/research/HANDOFF.md",
+      "sha256": "a8dac3ebba15f857b6ba989ccbea58ce786129c52c38750bffdaeaa7fc189c08",
+      "bytes": 2679
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-research-r01/headword-inventory.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/research/headword-inventory.json",
+      "sha256": "ac9d2f36810b9e3400cd2792e91b05c589c88cbf13d1ffdda39a932676503353",
+      "bytes": 1172347
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-research-r01/historical-notify-hold.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/research/historical-notify-hold.json",
+      "sha256": "5336b9a8a22f4ce972a4491e75938aa015d37ffbedf9ed50645fc45449cc2313",
+      "bytes": 3951
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-research-r01/inform.proposed.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/research/inform.proposed.json",
+      "sha256": "c2e649ebf7775dc9d9735e6fe5ac0ab83ba14ba793050c347911d451d099bc4a",
+      "bytes": 4780
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-research-r01/input-pins.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/research/input-pins.json",
+      "sha256": "dc07eb4a93c7c7f482b928d6e3a725e8535c9f5087d67892ba9af73859841644",
+      "bytes": 64667
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-research-r01/integrity-observation.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/research/integrity-observation.json",
+      "sha256": "5acb8681587759f79ae92547dd641452b61a47ca698496f5f9e25f2fd43135fb",
+      "bytes": 699
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-research-r01/lexical-contexts.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/research/lexical-contexts.json",
+      "sha256": "275428d3c6050e7f7196dff1df49bc67fba6ca0d570a027a8c453c21b713287b",
+      "bytes": 89209
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-research-r01/membership-substitutions.proposed.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/research/membership-substitutions.proposed.json",
+      "sha256": "5af674137a545349f1f31049bbd16162f41102d341b72bc45315dafde560d9c0",
+      "bytes": 8547
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-research-r01/memberships.before.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/research/memberships.before.json",
+      "sha256": "e48c84bfcf35befe683e20367ed418f31ef06c8b567d319ca8e75e9aca3fccd8",
+      "bytes": 41387
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-research-r01/notify.before.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/research/notify.before.json",
+      "sha256": "0c4f41badbf7981fe614d0382c81dcaef99ef882ead515b0abd9d33ff3e05dc0",
+      "bytes": 3274
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-research-r01/PROGRESS-AND-REVISION.md",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/research/PROGRESS-AND-REVISION.md",
+      "sha256": "059127d4994adf3cecf223dca834aa2d5b81275aa58c4ccaa946304e64f00002",
+      "bytes": 4401
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-research-r01/proposal-fields.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/research/proposal-fields.json",
+      "sha256": "148af98608db08fafd1b9bf3cc6ee3e8b5d70b9ef227bbd8663aa8bb4359d069",
+      "bytes": 3169
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-research-r01/PROPOSAL.md",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/research/PROPOSAL.md",
+      "sha256": "d2191514a7ed0cb356fdab5e7da3019fbcb30aacb011f83e7b976649ec084ad1",
+      "bytes": 6573
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-research-r01/README.md",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/research/README.md",
+      "sha256": "0a7d110756524dc606445bbba0bb7034cfd41a020cc94d77a6e1bcaa4aeea952",
+      "bytes": 3493
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-research-r01/related-headword-contexts.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/research/related-headword-contexts.json",
+      "sha256": "99c6b153af71a9491a42e4f0489f4d5394e02810a5ed86af8b42bf8f1b481e86",
+      "bytes": 435695
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-research-r01/SOURCE-LEDGER.md",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/research/SOURCE-LEDGER.md",
+      "sha256": "744996217875bfab5fd1d44b9652e5cd62ec5880b358d25a65625d90507d5425",
+      "bytes": 4595
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-research-r01/source-observations.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/research/source-observations.json",
+      "sha256": "21e10bfa37d51f485b914c0f125b8a8816081e9f33a138c41213269a6762d195",
+      "bytes": 4293
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-research-r01/source-records.proposed.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/research/source-records.proposed.json",
+      "sha256": "feccb6bc222913363035667ef0fef2e9106abe8b57634b12b1dca2c0fa0ad41f",
+      "bytes": 2853
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-research-r01/static-observations.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/research/static-observations.json",
+      "sha256": "a93f31bc2ec42f89d38fe09f26ac8cd3bcba1fb0232e5535a0afa3f61a3f9b6c",
+      "bytes": 2409
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-research-r01/inventory.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/research/inventory.json",
+      "sha256": "6a07be9bca42e4972208889afc7bb3da91e214bc651ddaf4bb8c3a6f8e41e010",
+      "bytes": 4675
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-independent-review-r01/accepted-expression-language-projection.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/independent-review/accepted-expression-language-projection.json",
+      "sha256": "08323c46bd1ead445935972c32688a25431b71244f92305454392ccac6b89b47",
+      "bytes": 2085
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-independent-review-r01/accepted-lexical-fields.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/independent-review/accepted-lexical-fields.json",
+      "sha256": "01e4492eadff7ea4b1739efe4f44d1f24bbd2cbe4f84502e7a6fd88e0227a2c6",
+      "bytes": 347
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-independent-review-r01/context-and-identity-audit.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/independent-review/context-and-identity-audit.json",
+      "sha256": "3f79487a4018977cf5f9435507a355f6cd3068426ef0828b5385e1264f5d978d",
+      "bytes": 12701
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-independent-review-r01/immutable-corpus-comparison.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/independent-review/immutable-corpus-comparison.json",
+      "sha256": "029557ee2c732cfb6a43f07d8dd88bd01054e9198166aed937304f25b3e7ec74",
+      "bytes": 112458
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-independent-review-r01/independent-source-observations.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/independent-review/independent-source-observations.json",
+      "sha256": "9fbd4b767745129789a43a88b7cba450824e13c23c7b6e2616cb03a1c15692d8",
+      "bytes": 6270
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-independent-review-r01/input-audit.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/independent-review/input-audit.json",
+      "sha256": "bdb270db2238fc6f9f48f9e01652b9907b77fb70f85d732c5cf6218bd56e01a9",
+      "bytes": 2045
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-independent-review-r01/membership-audit.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/independent-review/membership-audit.json",
+      "sha256": "6c43f80cf2f2f76f5e1d781304ccf634f639e0516a8095034ce6fa265384f01c",
+      "bytes": 8967
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-independent-review-r01/progress-and-revision-review.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/independent-review/progress-and-revision-review.json",
+      "sha256": "0ad3a5db1ef10bc5c2d5b5109b4e805192b4138f106c04db9f0dd89bffa67c60",
+      "bytes": 6655
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-independent-review-r01/README.md",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/independent-review/README.md",
+      "sha256": "6e174604fc3ddeda7a6e0e120124d01c16dd365d341fe3cae14eb8551b1fef1f",
+      "bytes": 4386
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-independent-review-r01/reviewer-decisions.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/independent-review/reviewer-decisions.json",
+      "sha256": "bcf5fc537644394bac3a138cc0b6222caebd66a8dd1c251f20e73e25cfccc62f",
+      "bytes": 6044
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-independent-review-r01/source-code-pins.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/independent-review/source-code-pins.json",
+      "sha256": "c91f2c0fd20a2955746bc0a21cb78026e6becde890b750326df7c33a37787b4b",
+      "bytes": 2054
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-independent-review-r01/supplemental-identity-contexts.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/independent-review/supplemental-identity-contexts.json",
+      "sha256": "772b71b58c13b3e505b828032e1a1745ab08d454b2ef911b0965a3bbd2fd65a3",
+      "bytes": 15256
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-resolution-independent-review-r01/inventory.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/independent-review/inventory.json",
+      "sha256": "84d0c340f3309d01b4939aa3263aae7af13508a9c82eb0dda64a4c96c51574a3",
+      "bytes": 2340
+    },
+    {
+      "source": "build/professional-english/foundation02-notify-root-source-observations-r01/observations.json",
+      "path": "docs/content-review/foundation-module02-notify-resolution-independent-review-2026-10-17/root-rendered-source-observations.json",
+      "sha256": "b39bb2bd04c6df009fc820e2b3db14dcec77c28213921e1265c1d3ab2f1da4dd",
+      "bytes": 1596
+    }
+  ]
+}

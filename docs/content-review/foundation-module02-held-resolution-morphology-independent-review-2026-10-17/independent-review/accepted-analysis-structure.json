@@ -1,0 +1,79 @@
+[
+  {
+    "schema": 1,
+    "lexeme_id": "ensure.make-certain.v",
+    "text": "ensure",
+    "kind": "morphological",
+    "parts": [
+      {
+        "id": "p1",
+        "canonical_id": "english.affix.en.causative",
+        "type": "prefix",
+        "canonical": "en-",
+        "surface": "en",
+        "break_offsets": []
+      },
+      {
+        "id": "p2",
+        "canonical_id": "english.stem.sure.certain",
+        "type": "stem",
+        "canonical": "sure",
+        "surface": "sure",
+        "break_offsets": []
+      }
+    ],
+    "nodes": [
+      {
+        "id": "n1",
+        "left": "p1",
+        "right": "p2",
+        "surface": "ensure",
+        "rule": "prefix_attachment",
+        "break_offsets": []
+      }
+    ],
+    "roots": [
+      "n1"
+    ]
+  },
+  {
+    "schema": 1,
+    "lexeme_id": "inform.give-information.v",
+    "text": "inform",
+    "kind": "atomic",
+    "parts": [
+      {
+        "id": "p1",
+        "canonical_id": "english.atomic.inform.give-information",
+        "type": "atomic",
+        "canonical": "inform",
+        "surface": "inform",
+        "break_offsets": []
+      }
+    ],
+    "nodes": [],
+    "roots": [
+      "p1"
+    ]
+  },
+  {
+    "schema": 1,
+    "lexeme_id": "collect.gather.v",
+    "text": "collect",
+    "kind": "atomic",
+    "parts": [
+      {
+        "id": "p1",
+        "canonical_id": "english.atomic.collect.gather",
+        "type": "atomic",
+        "canonical": "collect",
+        "surface": "collect",
+        "break_offsets": []
+      }
+    ],
+    "nodes": [],
+    "roots": [
+      "p1"
+    ]
+  }
+]

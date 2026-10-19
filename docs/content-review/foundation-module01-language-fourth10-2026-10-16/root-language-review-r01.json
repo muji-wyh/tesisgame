@@ -1,0 +1,297 @@
+{
+  "schema": 1,
+  "status": "root_ten_scoped_language_acceptances_pending_guarded_delivery",
+  "date": "2026-10-16T11:32:02.697Z",
+  "reviewer": "Codex root (independent AI language review; not human or specialist approval)",
+  "root_review_recorded": true,
+  "author_ledger_json_sha256": "7b0912391dfa6f852769379622f23ed6a764d3f0f86fe1c798deae0ba04d32e8",
+  "context_review_json_sha256": "8f02831121d93c88510cac103298479bc5fd5214e06c3bbaa26b00aac245b560",
+  "author_inventory_raw_sha256": "dc3eeabf98696383be13ea117571a23802d7269000ae2be231c1ca3a934189ff",
+  "decisions": [
+    {
+      "id": "announcement.public-message.n",
+      "text": "announcement",
+      "decision": "accept_exact_author_language_candidate",
+      "candidate_entry_json_sha256": "0080ac6e10e469b6bbb3b37c42e4fc9b2a7f135d381b46fef1cd1ff2d4e1f059",
+      "before_entry_json_sha256": "c52e8659db528a87bf0b360fccd9aa98115127be6bee7a08cd7cc574e25513e0",
+      "reason": "The revised definition selects an information statement delivered to a group, with speech and writing both included; the opening-hours example is unambiguous. Accept the proposed B2 as a conservative editorial course placement for this public-information noun, while retaining the literal Collins B1+ observation. Neither a conversion nor dictionary B2 certification is claimed.",
+      "editorial_difficulty": "B2",
+      "observed_source_levels": {
+        "oxford": null,
+        "collins": "B1+"
+      },
+      "production_acceptance": false
+    },
+    {
+      "id": "message.communication.n",
+      "text": "message",
+      "decision": "accept_exact_author_language_candidate",
+      "candidate_entry_json_sha256": "29ef1c2dd01c6151c647babd463d706240aa2a284fd01b57cf88e83ee6890e56",
+      "before_entry_json_sha256": "59bba185780049f7cabc86fed771f49b0984ba3c69d13f6681c77b10ff9310fc",
+      "reason": "The recipient-directed information definition and delivery-team example fit the selected communication noun. Retain A2 only as the course floor; the observed Oxford and Collins A1 labels remain literal. Program data packets and a literary central idea are separate senses.",
+      "editorial_difficulty": "A2",
+      "observed_source_levels": {
+        "oxford": "A1",
+        "collins": "A1"
+      },
+      "production_acceptance": false
+    },
+    {
+      "id": "email.electronic-message.n",
+      "text": "email",
+      "decision": "accept_exact_author_language_candidate",
+      "candidate_entry_json_sha256": "23e1ac482bd4737543aef8cdbbfb066823ca4e0beacd21864cdf3f0290630d8c",
+      "before_entry_json_sha256": "da3d6ab21b8caa142a3b21daaff34ede5e7c4657616b510695d39ef876666a6a",
+      "reason": "The definition and an email example select one message. Oxford separates the countable message from the service, while Collins uses one A1 variable-noun entry with both. Retain A2 as the course floor without transferring the verb A2 label. Existing email spelling and general region remain exact.",
+      "editorial_difficulty": "A2",
+      "observed_source_levels": {
+        "oxford": null,
+        "collins": "A1"
+      },
+      "production_acceptance": false
+    },
+    {
+      "id": "phone-call.telephone-conversation.n",
+      "text": "phone call",
+      "decision": "accept_exact_author_language_candidate",
+      "candidate_entry_json_sha256": "d65518cd935694a3d2044e0b79e61a8c899277bdfb85b86e58f7aa3043a12328",
+      "before_entry_json_sha256": "d78744964ecf89785ef8575bf006f5a24c9b385cf30b476a6b724c09991ea736",
+      "reason": "The definition selects an actual telephone conversation, supported by the selected Oxford and Collins A1 evidence. Retain the A2 course floor and exact two-word form. Unanswered attempts and queued calls are not silently narrowed or approved by this sense.",
+      "editorial_difficulty": "A2",
+      "observed_source_levels": {
+        "oxford": "A1",
+        "collins": "A1"
+      },
+      "production_acceptance": false
+    },
+    {
+      "id": "voicemail.recorded-message.n",
+      "text": "voicemail",
+      "decision": "accept_exact_author_language_candidate",
+      "candidate_entry_json_sha256": "e741895f021f75a2bd7bac0b2c9bb7844f9e4ff4b5e81c6a676c034daf33fb7a",
+      "before_entry_json_sha256": "5a10975b9d98065aa677eb511cc2d27f06cb42a988eeceb1c21703dab6fdcac6",
+      "reason": "The revised definition accurately selects a stored spoken message for later playback without requiring that every recording follow an unanswered call. Merriam-Webster 2b directly supports the countable message. Accept editorial B1 for familiar recorded-message handling, with no selected-source CEFR certification; system-only B1 evidence is not transferred.",
+      "editorial_difficulty": "B1",
+      "observed_source_levels": {
+        "oxford": null,
+        "collins": null,
+        "mw": null
+      },
+      "production_acceptance": false
+    },
+    {
+      "id": "extension.internal-phone-number.n",
+      "text": "extension",
+      "decision": "accept_exact_author_language_candidate",
+      "candidate_entry_json_sha256": "3a9609b3e19a4d47d8895cb3743ab40a1fe0e9bf2242fc5cee4ce4f6cdb1fdef",
+      "before_entry_json_sha256": "428dccaef1eed178421776cb6513e8ca0af49c57e7183f7d7d1c82f0ab77e6dc",
+      "reason": "The stored internal-number meaning is supported by numbered telephone-line definitions and examples. Accept editorial B2 for this bounded everyday office use, preserving the selected Collins B2 and Oxford C1 disagreement. Ext. remains an observation rather than an additional answer form.",
+      "editorial_difficulty": "B2",
+      "observed_source_levels": {
+        "oxford": "C1",
+        "collins": "B2"
+      },
+      "production_acceptance": false
+    },
+    {
+      "id": "introduction.first-acquaintance.n",
+      "text": "introduction",
+      "decision": "accept_exact_author_language_candidate",
+      "candidate_entry_json_sha256": "fa8ac5461cb2c8fc98df9b21fd401ee86d838c19d179a2f6c9666926e2f957b8",
+      "before_entry_json_sha256": "6af2bd2dc3f6631d1d7fa54e9e27ceb103743e6ae5e2a04ef2760d8d8144249c",
+      "reason": "The revised example clearly introduces two colleagues to one another and removes the introductory-talk ambiguity. Accept the unchanged people-acquaintance definition and editorial B1 for describing this social act. No level from a book opening or introductory course is transferred, and ambiguous expression bindings remain held.",
+      "editorial_difficulty": "B1",
+      "observed_source_levels": {
+        "oxford": null,
+        "collins": null
+      },
+      "production_acceptance": false
+    },
+    {
+      "id": "greeting.welcome-message.n",
+      "text": "greeting",
+      "decision": "accept_exact_author_language_candidate",
+      "candidate_entry_json_sha256": "ed0ec9800a462ff9bc64fc75fe87bbf801bd25a719b1d920cfd69414d8c66cf7",
+      "before_entry_json_sha256": "20d690ff65424e8f1bbb6db7fc26bb17e17ad84e23977ea7687371f184cbcf89",
+      "reason": "Words or actions acknowledging an arriving person and the visitor example match the selected meeting sense. Accept the proposed B2 as a conservative editorial placement for the lexical noun in this course, with literal Collins B1+ retained. This is not a statement that greeting someone or saying hello requires B2 proficiency; written seasonal wishes remain separate.",
+      "editorial_difficulty": "B2",
+      "observed_source_levels": {
+        "oxford": null,
+        "collins": "B1+"
+      },
+      "production_acceptance": false
+    },
+    {
+      "id": "conversation.spoken-exchange.n",
+      "text": "conversation",
+      "decision": "accept_exact_author_language_candidate",
+      "candidate_entry_json_sha256": "72e3df5e5b0424449b52b9b8765b830adc5f9f07a91e2d2f208720850f2e6308",
+      "before_entry_json_sha256": "34ed0082420e48ef4ffd2841605f950569b46e7eece0ce16fa0ee67cf063ae6e",
+      "reason": "Usually informal accurately qualifies the spoken-exchange definition without making informality mandatory. The schedule example fits and Collins labels the selected talk sense A2. Keep text-only and modality-uncertain contexts separate, without narrowing their existing broader meanings.",
+      "editorial_difficulty": "A2",
+      "observed_source_levels": {
+        "oxford": null,
+        "collins": "A2"
+      },
+      "production_acceptance": false
+    },
+    {
+      "id": "discussion.consideration-talk.n",
+      "text": "discussion",
+      "decision": "accept_exact_author_language_candidate",
+      "candidate_entry_json_sha256": "f685aad08b178f4432544f6b47c58ab875b04b2134f2f642716c5d8d8055dacb",
+      "before_entry_json_sha256": "b2cf2107d7568450353727c0852e63d8e2d222b68be30c8f95d0da127ce0f886",
+      "reason": "The topic-focused detailed conversation definition and delivery-problem example are clear. Oxford labels this selected exchange A2 and distinguishes a written treatment. No specialist conclusion, agreement or permission follows from lexical acceptance.",
+      "editorial_difficulty": "A2",
+      "observed_source_levels": {
+        "oxford": "A2"
+      },
+      "production_acceptance": false
+    }
+  ],
+  "accepted_candidates": [
+    {
+      "id": "announcement.public-message.n",
+      "candidate_json_sha256": "0080ac6e10e469b6bbb3b37c42e4fc9b2a7f135d381b46fef1cd1ff2d4e1f059",
+      "scope": "Ordinary language wording, example and editorial course difficulty; no new answer forms."
+    },
+    {
+      "id": "message.communication.n",
+      "candidate_json_sha256": "29ef1c2dd01c6151c647babd463d706240aa2a284fd01b57cf88e83ee6890e56",
+      "scope": "Ordinary language wording, example and editorial course difficulty; no new answer forms."
+    },
+    {
+      "id": "email.electronic-message.n",
+      "candidate_json_sha256": "23e1ac482bd4737543aef8cdbbfb066823ca4e0beacd21864cdf3f0290630d8c",
+      "scope": "Ordinary language wording, example and editorial course difficulty; no new answer forms."
+    },
+    {
+      "id": "phone-call.telephone-conversation.n",
+      "candidate_json_sha256": "d65518cd935694a3d2044e0b79e61a8c899277bdfb85b86e58f7aa3043a12328",
+      "scope": "Ordinary language wording, example and editorial course difficulty; no new answer forms."
+    },
+    {
+      "id": "voicemail.recorded-message.n",
+      "candidate_json_sha256": "e741895f021f75a2bd7bac0b2c9bb7844f9e4ff4b5e81c6a676c034daf33fb7a",
+      "scope": "Ordinary language wording, example and editorial course difficulty; no new answer forms."
+    },
+    {
+      "id": "extension.internal-phone-number.n",
+      "candidate_json_sha256": "3a9609b3e19a4d47d8895cb3743ab40a1fe0e9bf2242fc5cee4ce4f6cdb1fdef",
+      "scope": "Ordinary language wording, example and editorial course difficulty; no new answer forms."
+    },
+    {
+      "id": "introduction.first-acquaintance.n",
+      "candidate_json_sha256": "fa8ac5461cb2c8fc98df9b21fd401ee86d838c19d179a2f6c9666926e2f957b8",
+      "scope": "Ordinary language wording, example and editorial course difficulty; no new answer forms."
+    },
+    {
+      "id": "greeting.welcome-message.n",
+      "candidate_json_sha256": "ed0ec9800a462ff9bc64fc75fe87bbf801bd25a719b1d920cfd69414d8c66cf7",
+      "scope": "Ordinary language wording, example and editorial course difficulty; no new answer forms."
+    },
+    {
+      "id": "conversation.spoken-exchange.n",
+      "candidate_json_sha256": "72e3df5e5b0424449b52b9b8765b830adc5f9f07a91e2d2f208720850f2e6308",
+      "scope": "Ordinary language wording, example and editorial course difficulty; no new answer forms."
+    },
+    {
+      "id": "discussion.consideration-talk.n",
+      "candidate_json_sha256": "f685aad08b178f4432544f6b47c58ab875b04b2134f2f642716c5d8d8055dacb",
+      "scope": "Ordinary language wording, example and editorial course difficulty; no new answer forms."
+    }
+  ],
+  "preserved_entry_ids": [
+    "supervisor.work-overseer.n",
+    "attendance.presence-record.n"
+  ],
+  "root_direct_source_crosschecks": [
+    {
+      "url": "https://www.collinsdictionary.com/dictionary/english/announcement",
+      "finding": "Selected public-information statement carries B1+; act and printed-notice senses remain distinct.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.collinsdictionary.com/dictionary/english/greeting",
+      "finding": "Selected meeting acknowledgment carries B1+ and includes words and actions.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.merriam-webster.com/dictionary/voice%20mail",
+      "finding": "Sense 2b supports one recorded message, separate from the system and collective received messages; no CEFR label.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/introduction",
+      "finding": "People sense 2 describes making someone known; the visible A2 topic belongs to the book/speech opening sense.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.collinsdictionary.com/dictionary/english/extension",
+      "finding": "Telephone sense 5 carries B2 and provides numbered-extension examples and ext. abbreviation.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/extension",
+      "finding": "Telephone sense 10 carries Phones, email and the internet C1; retain disagreement with Collins.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/message_1",
+      "finding": "Recipient-directed written/spoken information and electronic-message senses show A1; literary ideas and other uses stay separate.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/email_1",
+      "finding": "Countable message is separately defined; the visible A1 topic is under the service sense.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.collinsdictionary.com/dictionary/english/email",
+      "finding": "A1 variable noun combines the system and a countable message example; A2 is the separate verb. Spelling variants are recorded without adding answer forms.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/phone-call",
+      "finding": "The act of speaking over the phone has the visible A1 topic label.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.collinsdictionary.com/dictionary/english/conversation",
+      "finding": "Selected talking sense is usually informal and carries A2.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/discussion",
+      "finding": "Topic-focused conversation has A2; the separate written/speech treatment also has A2 without merging meanings.",
+      "consulted_on": "2026-10-16",
+      "access": "root_direct_web_open_selected_passages"
+    }
+  ],
+  "context_decision": "Root inspected all 46 matching expression texts, contexts and per-match observations, seven other local expression observations, and 40 related definitions/boundaries. Preserve all expression records and focus bindings, including the four current and five prior ambiguity holds. A spoken lexical sense does not narrow broader text/signed communication contexts. This is lexical compatibility review, not independent full expression or specialist acceptance.",
+  "integration_scope": [
+    "Integrate the exact ten accepted candidates only after reviewing the guarded delivery against a fresh successful current baseline.",
+    "Twenty consulted source records may be added; failed Cambridge accesses remain excluded. Literal source labels and editorial levels remain separate.",
+    "Set language review for the ten accepted senses and narrowly scoped lexical references only. Overall status follows existing domain-not-required rules, with morphology and media still separate.",
+    "Replace only exact superseded pending-language editorial clauses while retaining original notes in before snapshots and recording acceptance in current notes.",
+    "Preserve identity, all noncandidate definitions/examples, accepted forms, regions, practice modes, memberships, all expressions, domain gates, morphology, media, Growth and module readiness.",
+    "Supervisor, attendance and all current/prior expression holds remain complete unchanged entries; they are not accepted by this record."
+  ],
+  "tests_executed": false,
+  "native_runtime_executed": false,
+  "production_mutated": false,
+  "shared_tests_mutated": false,
+  "baseline_bound": false,
+  "next_step": "Prepare an exact guarded delivery and shared-test previews against successful R25; root must inspect, accept and serialize the result."
+}

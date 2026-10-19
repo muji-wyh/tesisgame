@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "status": "frozen-prepared-not-executed",
+  "date": "2026-10-17",
+  "scope": "r02 narrow canonical session-progress assertion and runtime type diagnostics; inherited real lifecycle and all preservation guards; static authoring only.",
+  "predecessor_inventory_sha256": "96d02fb46ab915a5c519b9ba3591f7a208b054df5b20d7bd5aa5a62ecf483280",
+  "excludes": [
+    "inventory.json",
+    "future attempt-001 output"
+  ],
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "31cbfac1ecb745daeed41a3a6a376e20ac84c663d2703fab5a2675755edcfb41",
+      "bytes": 8554
+    },
+    {
+      "path": "assets.md",
+      "sha256": "c7ff910730f8201cb66fafbcd510f26e2cc09ec93c7d85ec7615bb6afa434aa0",
+      "bytes": 1759
+    },
+    {
+      "path": "diagnosis-and-lineage.json",
+      "sha256": "14890bd5505c583f23aa39e617c19bceb7d6e85f45f8e01cf92d09c40de6d882",
+      "bytes": 8494
+    },
+    {
+      "path": "inputs.json",
+      "sha256": "9c4c671b5761b93ea87ba749836f0b5e95319e4ef490f34c4c58220fb1bdc996",
+      "bytes": 105874
+    },
+    {
+      "path": "preparation-result.json",
+      "sha256": "b46620ac947e1121372b54db8037e1909602c671347dd54fb4af77583e0d3a38",
+      "bytes": 576
+    },
+    {
+      "path": "preparation-start.json",
+      "sha256": "019ba0700bf02db90da3ba7c448dd6b66020aa42c46fba23f27b2ef2d9f24ef3",
+      "bytes": 311
+    },
+    {
+      "path": "prepare-proposal.cjs",
+      "sha256": "6313310db8ef55a7619276b5e6a0b0cd6f8289ab88cb3e774d3d51a56237e62e",
+      "bytes": 19045
+    },
+    {
+      "path": "probe.gd",
+      "sha256": "d529805cbe127207a4eb280e99ef02e80ea2cb03016c2d22876086205197b1be",
+      "bytes": 22666
+    },
+    {
+      "path": "probe_ui.gd",
+      "sha256": "448c0e7685e37ca7671fdfb13a5c053d53edaed182f16b7888ad65ab5488bf7d",
+      "bytes": 1532
+    },
+    {
+      "path": "probe_ui.tscn",
+      "sha256": "1b3a2a0913b79903ecd20a534b938e3bbb20fb0a4806ffb7a67634a8bff1bbc0",
+      "bytes": 335
+    },
+    {
+      "path": "run-once.cjs",
+      "sha256": "4017101edcdbc72abc291e76d92a6d9d1c62ae31acedb16168fe12fb23ae7785",
+      "bytes": 5735
+    }
+  ]
+}

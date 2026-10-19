@@ -1,0 +1,1938 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "warehouse-management-system.software-for-coordinating-warehouse-activities.n",
+      "text": "warehouse management system",
+      "display_text": "warehouse management system",
+      "pos": "noun",
+      "definition": "Software used to record and coordinate warehouse activities such as stock locations, receipts, and orders.",
+      "example": "The warehouse management system shows a pending receipt.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "warehouse management system",
+        "WMS"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional warehouse-software screen showing harmless stock locations and task statuses.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "warehouse-management-system.software-for-coordinating-warehouse-activities.n.analysis.v1",
+        "lexeme_id": "warehouse-management-system.software-for-coordinating-warehouse-activities.n",
+        "text": "warehouse management system",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.ware",
+            "type": "stem",
+            "canonical": "ware",
+            "surface": "ware"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.house",
+            "type": "stem",
+            "canonical": "house",
+            "surface": "house"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.manage",
+            "type": "stem",
+            "canonical": "manage",
+            "surface": "manage"
+          },
+          {
+            "id": "p4",
+            "canonical_id": "affix.ment.suffix",
+            "type": "suffix",
+            "canonical": "ment",
+            "surface": "ment"
+          },
+          {
+            "id": "p5",
+            "canonical_id": "morph.system",
+            "type": "stem",
+            "canonical": "system",
+            "surface": "system"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "warehouse",
+            "rule": "closed_compound"
+          },
+          {
+            "id": "n2",
+            "left": "p3",
+            "right": "p4",
+            "surface": "management",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n3",
+            "left": "n1",
+            "right": "n2",
+            "surface": "warehouse management",
+            "rule": "word_boundary"
+          },
+          {
+            "id": "n4",
+            "left": "n3",
+            "right": "p5",
+            "surface": "warehouse management system",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n4"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-shipping-receiving-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "transport-management-system.software-for-coordinating-transport-activities.n",
+      "text": "transport management system",
+      "display_text": "transport management system",
+      "pos": "noun",
+      "definition": "Software used to plan, record, or coordinate transport activities.",
+      "example": "The transport management system has a different collection reference.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "transport management system",
+        "transportation management system",
+        "TMS"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional transport-software screen with invented shipment and booking records.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "transport-management-system.software-for-coordinating-transport-activities.n.analysis.v1",
+        "lexeme_id": "transport-management-system.software-for-coordinating-transport-activities.n",
+        "text": "transport management system",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.transport",
+            "type": "stem",
+            "canonical": "transport",
+            "surface": "transport"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.manage",
+            "type": "stem",
+            "canonical": "manage",
+            "surface": "manage"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "affix.ment.suffix",
+            "type": "suffix",
+            "canonical": "ment",
+            "surface": "ment"
+          },
+          {
+            "id": "p4",
+            "canonical_id": "morph.system",
+            "type": "stem",
+            "canonical": "system",
+            "surface": "system"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p2",
+            "right": "p3",
+            "surface": "management",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p1",
+            "right": "n1",
+            "surface": "transport management",
+            "rule": "word_boundary"
+          },
+          {
+            "id": "n3",
+            "left": "n2",
+            "right": "p4",
+            "surface": "transport management system",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n3"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-shipping-receiving-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-gps-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "barcode-symbology.defined-pattern-system-for-barcode-data.n",
+      "text": "barcode symbology",
+      "display_text": "barcode symbology",
+      "pos": "noun",
+      "definition": "A defined system of patterns and encoding rules used to represent data in a barcode.",
+      "example": "Ask which barcode symbology the receiving system supports.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "barcode symbology"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two clearly fictional nonfunctional barcode examples with their format names represented as draft labels.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "barcode-symbology.defined-pattern-system-for-barcode-data.n.analysis.v1",
+        "lexeme_id": "barcode-symbology.defined-pattern-system-for-barcode-data.n",
+        "text": "barcode symbology",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.bar",
+            "type": "stem",
+            "canonical": "bar",
+            "surface": "bar"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.code",
+            "type": "stem",
+            "canonical": "code",
+            "surface": "code"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.symbology",
+            "type": "stem",
+            "canonical": "symbology",
+            "surface": "symbology"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "barcode",
+            "rule": "closed_compound"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "barcode symbology",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-shipping-receiving-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "scan-event.record-of-specific-scanning-action.n",
+      "text": "scan event",
+      "display_text": "scan event",
+      "pos": "noun",
+      "definition": "A recorded occurrence of a scanning action, with the information captured under the system's rules.",
+      "example": "The scan event is recorded with a timestamp.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "scan event"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional event record pairing a scanner symbol with an invented time and identifier.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "scan-event.record-of-specific-scanning-action.n.analysis.v1",
+        "lexeme_id": "scan-event.record-of-specific-scanning-action.n",
+        "text": "scan event",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.scan",
+            "type": "stem",
+            "canonical": "scan",
+            "surface": "scan"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.event",
+            "type": "stem",
+            "canonical": "event",
+            "surface": "event"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "scan event",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-shipping-receiving-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-gps-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "scan-failure.unsuccessful-attempt-to-capture-scan-data.n",
+      "text": "scan failure",
+      "display_text": "scan failure",
+      "pos": "noun",
+      "definition": "An attempt to scan that does not capture the required data successfully.",
+      "example": "Report the scan failure and the displayed error message.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "scan failure"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional handheld screen showing an unsuccessful scan message without real codes.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "scan-failure.unsuccessful-attempt-to-capture-scan-data.n.analysis.v1",
+        "lexeme_id": "scan-failure.unsuccessful-attempt-to-capture-scan-data.n",
+        "text": "scan failure",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.scan",
+            "type": "stem",
+            "canonical": "scan",
+            "surface": "scan"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.failure",
+            "type": "stem",
+            "canonical": "failure",
+            "surface": "failure"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "scan failure",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-shipping-receiving-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-gps-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "duplicate-scan.scan-record-repeating-same-intended-event.n",
+      "text": "duplicate scan",
+      "display_text": "duplicate scan",
+      "pos": "noun",
+      "definition": "A scan record that repeats an event intended to be recorded once.",
+      "example": "Ask the system support team whether this entry is a duplicate scan.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "duplicate scan"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two fictional event records flagged for review without automatically deleting either one.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "duplicate-scan.scan-record-repeating-same-intended-event.n.analysis.v1",
+        "lexeme_id": "duplicate-scan.scan-record-repeating-same-intended-event.n",
+        "text": "duplicate scan",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.duplicate",
+            "type": "stem",
+            "canonical": "duplicate",
+            "surface": "duplicate"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.scan",
+            "type": "stem",
+            "canonical": "scan",
+            "surface": "scan"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "duplicate scan",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-shipping-receiving-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-gps-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "location-scan.scan-capturing-storage-location-identifier.n",
+      "text": "location scan",
+      "display_text": "location scan",
+      "pos": "noun",
+      "definition": "A scan used to capture or confirm a storage-location identifier.",
+      "example": "The task needs the correct location scan before the record can be reviewed.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "location scan"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional device screen linking a scan record to an invented storage-location identifier.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "location-scan.scan-capturing-storage-location-identifier.n.analysis.v1",
+        "lexeme_id": "location-scan.scan-capturing-storage-location-identifier.n",
+        "text": "location scan",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.location",
+            "type": "stem",
+            "canonical": "location",
+            "surface": "location"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.scan",
+            "type": "stem",
+            "canonical": "scan",
+            "surface": "scan"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "location scan",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-shipping-receiving-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "transport-ups-tracking-status",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-gps-overview",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "item-master.central-record-of-item-reference-information.n",
+      "text": "item master",
+      "display_text": "item master",
+      "pos": "noun",
+      "definition": "A central set of reference information about an item, such as its identifier and defined units.",
+      "example": "Ask the authorized data owner to review the item master.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "item master"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional item-reference screen containing a product identifier and unit fields.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "item-master.central-record-of-item-reference-information.n.analysis.v1",
+        "lexeme_id": "item-master.central-record-of-item-reference-information.n",
+        "text": "item master",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.item",
+            "type": "stem",
+            "canonical": "item",
+            "surface": "item"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.master",
+            "type": "stem",
+            "canonical": "master",
+            "surface": "master"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "item master",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-shipping-receiving-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "unit-of-measure.specified-basis-for-stating-quantity.n",
+      "text": "unit of measure",
+      "display_text": "unit of measure",
+      "pos": "noun",
+      "definition": "The specified unit or counting basis used to express a quantity.",
+      "example": "Confirm the unit of measure before comparing the two quantities.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "unit of measure"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two fictional quantity records with clearly different unit fields and a comparison-review note.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "unit-of-measure.specified-basis-for-stating-quantity.n.analysis.v1",
+        "lexeme_id": "unit-of-measure.specified-basis-for-stating-quantity.n",
+        "text": "unit of measure",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.unit",
+            "type": "stem",
+            "canonical": "unit",
+            "surface": "unit"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.of",
+            "type": "stem",
+            "canonical": "of",
+            "surface": "of"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.measure",
+            "type": "stem",
+            "canonical": "measure",
+            "surface": "measure"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "unit of",
+            "rule": "word_boundary"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "unit of measure",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-shipping-receiving-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-carpenters",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-bls-inspectors",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "construction-hse-planning",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, construction planning, site induction, or health-topic context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-machinists",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-bls-quality",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "manufacturing-hse-inspection",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, manufacturing improvement, equipment inspection, maintenance planning, or hazardous-energy overview context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "goods-receipt.record-of-goods-received.n",
+      "text": "goods receipt",
+      "display_text": "goods receipt",
+      "pos": "noun",
+      "definition": "A record that goods have been received under the organization's process.",
+      "example": "The goods receipt does not match the delivered quantity.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "goods receipt"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional receipt record beside labeled incoming cartons without payment or ownership claims.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "goods-receipt.record-of-goods-received.n.analysis.v1",
+        "lexeme_id": "goods-receipt.record-of-goods-received.n",
+        "text": "goods receipt",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.good",
+            "type": "stem",
+            "canonical": "good",
+            "surface": "good"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.s.suffix",
+            "type": "suffix",
+            "canonical": "s",
+            "surface": "s"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.receipt",
+            "type": "stem",
+            "canonical": "receipt",
+            "surface": "receipt"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "goods",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "goods receipt",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-shipping-receiving-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "accounting-bls-clerks",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-irs-recordkeeping",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-govuk-company-records",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "accounting-cfpb-overdraft",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational and public financial-reporting context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "goods-issue.record-of-goods-released-from-stock.n",
+      "text": "goods issue",
+      "display_text": "goods issue",
+      "pos": "noun",
+      "definition": "A record that goods have been released from stock for a specified purpose.",
+      "example": "The goods issue identifies the order and stock location.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "goods issue"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional stock-issue record with an invented order reference and location.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "goods-issue.record-of-goods-released-from-stock.n.analysis.v1",
+        "lexeme_id": "goods-issue.record-of-goods-released-from-stock.n",
+        "text": "goods issue",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.good",
+            "type": "stem",
+            "canonical": "good",
+            "surface": "good"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.s.suffix",
+            "type": "suffix",
+            "canonical": "s",
+            "surface": "s"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.issue",
+            "type": "stem",
+            "canonical": "issue",
+            "surface": "issue"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "goods",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "goods issue",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-shipping-receiving-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "movement-record.record-of-goods-moving-between-locations.n",
+      "text": "movement record",
+      "display_text": "movement record",
+      "pos": "noun",
+      "definition": "A record describing a movement of goods between identified locations.",
+      "example": "The movement record has the wrong destination code.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "movement record"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional record connecting two labeled stock locations without a handling demonstration.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "movement-record.record-of-goods-moving-between-locations.n.analysis.v1",
+        "lexeme_id": "movement-record.record-of-goods-moving-between-locations.n",
+        "text": "movement record",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.move",
+            "type": "stem",
+            "canonical": "move",
+            "surface": "move"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ment.suffix",
+            "type": "suffix",
+            "canonical": "ment",
+            "surface": "ment"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.record",
+            "type": "stem",
+            "canonical": "record",
+            "surface": "record"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "movement",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "movement record",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-shipping-receiving-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "stock-status.assigned-category-describing-stock-condition-or-availability.n",
+      "text": "stock status",
+      "display_text": "stock status",
+      "pos": "noun",
+      "definition": "A category assigned to stock to describe its condition, availability, or restriction under the system's rules.",
+      "example": "Confirm what this stock status means in the local system.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "stock status"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional stock screen with distinct available and held statuses and a definitions reference.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "stock-status.assigned-category-describing-stock-condition-or-availability.n.analysis.v1",
+        "lexeme_id": "stock-status.assigned-category-describing-stock-condition-or-availability.n",
+        "text": "stock status",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.stock",
+            "type": "stem",
+            "canonical": "stock",
+            "surface": "stock"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.status",
+            "type": "stem",
+            "canonical": "status",
+            "surface": "status"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "stock status",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-shipping-receiving-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "audit-count.stock-count-used-for-independent-record-check.n",
+      "text": "audit count",
+      "display_text": "audit count",
+      "pos": "noun",
+      "definition": "A stock count carried out to check inventory records as part of an audit or verification process.",
+      "example": "Ask the reviewer about the scope of the audit count.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "audit count"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional verification-count record presented beside the inventory record being checked.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "audit-count.stock-count-used-for-independent-record-check.n.analysis.v1",
+        "lexeme_id": "audit-count.stock-count-used-for-independent-record-check.n",
+        "text": "audit count",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.audit",
+            "type": "stem",
+            "canonical": "audit",
+            "surface": "audit"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.count",
+            "type": "stem",
+            "canonical": "count",
+            "surface": "count"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "audit count",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-shipping-receiving-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "system-discrepancy.difference-between-system-data-and-compared-information.n",
+      "text": "system discrepancy",
+      "display_text": "system discrepancy",
+      "pos": "noun",
+      "definition": "A difference between information held in a system and the information against which it is checked.",
+      "example": "Report the system discrepancy with the relevant reference numbers.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "system discrepancy"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two original fictional records with a clearly identified mismatch awaiting review.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "system-discrepancy.difference-between-system-data-and-compared-information.n.analysis.v1",
+        "lexeme_id": "system-discrepancy.difference-between-system-data-and-compared-information.n",
+        "text": "system discrepancy",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.system",
+            "type": "stem",
+            "canonical": "system",
+            "surface": "system"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.discrepancy",
+            "type": "stem",
+            "canonical": "discrepancy",
+            "surface": "discrepancy"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "system discrepancy",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-shipping-receiving-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, shipment-record, inventory, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original warehouse-communication draft. Language, machinery identity, load and site safety, stock controls, transport records, local authorization, regional usage, and morphology require qualified review. No driving, lifting, loading, energy-isolation, repair, emergency, shipping-law, tariff, or valuation procedure is taught. Image brief only; no artwork has been acquired."
+    }
+  ]
+}

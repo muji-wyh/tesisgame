@@ -1,0 +1,89 @@
+{
+  "schema": 1,
+  "status": "passed_draft_structural_and_preservation_checks",
+  "recorded_at": "2026-10-16T18:56:29.700Z",
+  "scope": "Author integrity checks and candidate audit only. No independent language, human, subject-matter, full validation or release acceptance.",
+  "production_writes": 0,
+  "native_execution": false,
+  "executed_source_equality_verified": true,
+  "assembly_start_raw_sha256": "7f7bfa6480180bfe0f393f83213776f05f68ac49ada59639efe76a49e628fef1",
+  "source_files_preserved": 353,
+  "candidate_entries": 10,
+  "proposals": 8,
+  "held_unchanged": 2,
+  "actual_content_changes": 7,
+  "allowed_changed_fields": [
+    "definition",
+    "example",
+    "difficulty"
+  ],
+  "actual_changed_fields": [
+    "difficulty"
+  ],
+  "references_added": 0,
+  "review_gate_changes": 0,
+  "source_records_registered": 0,
+  "context": {
+    "selected_entries": 10,
+    "memberships": 200,
+    "containing_modules": 20,
+    "expressions_scanned": 1620,
+    "surface_hit_expressions": 39,
+    "surface_lexeme_expression_pairs": 42,
+    "existing_focus_expressions": 4,
+    "related_identities": 43,
+    "inherited_expression_holds": 17,
+    "prior_lexical_holds": 2,
+    "source_files": 353,
+    "new_expression_acceptances": 0,
+    "new_scored_bindings": 0
+  },
+  "before_audit": {
+    "summary": {
+      "courses": 20,
+      "modules": 200,
+      "themes": 21,
+      "unique_lexemes": 4939,
+      "vocabulary_memberships": 10000,
+      "vocabulary_memberships_target": 10000,
+      "vocabulary_memberships_remaining": 0,
+      "expressions": 1620,
+      "expression_memberships": 2000,
+      "expression_memberships_target": 2000,
+      "expression_memberships_remaining": 0,
+      "ready_modules": 0,
+      "reviewed_lexemes": 130,
+      "morphology_authored": 4045,
+      "morphology_reviewed": 89,
+      "integrated_word_images": 8,
+      "integrated_word_audio": 12,
+      "release_ready": false
+    },
+    "errors": 0,
+    "warnings": 29432
+  },
+  "after_audit": {
+    "summary": {
+      "courses": 20,
+      "modules": 200,
+      "themes": 21,
+      "unique_lexemes": 4939,
+      "vocabulary_memberships": 10000,
+      "vocabulary_memberships_target": 10000,
+      "vocabulary_memberships_remaining": 0,
+      "expressions": 1620,
+      "expression_memberships": 2000,
+      "expression_memberships_target": 2000,
+      "expression_memberships_remaining": 0,
+      "ready_modules": 0,
+      "reviewed_lexemes": 130,
+      "morphology_authored": 4045,
+      "morphology_reviewed": 89,
+      "integrated_word_images": 8,
+      "integrated_word_audio": 12,
+      "release_ready": false
+    },
+    "errors": 0,
+    "warnings": 29432
+  }
+}

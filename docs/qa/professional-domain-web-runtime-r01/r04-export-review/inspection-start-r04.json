@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "started_at": "2026-10-16T20:50:31.8803066Z",
+  "inspector": {
+    "path": "docs/qa/professional-domain-web-runtime-r01/r04-export-review/inspect-r04.ps1",
+    "bytes": 17595,
+    "sha256": "51315c370dc6f97915591680760e214a9a86be474629504ee05cdb985ee4aed9"
+  },
+  "method": "Read-only JSON/source/hash review and direct binary PCK parsing; no artifact producer or native/browser/test replay."
+}

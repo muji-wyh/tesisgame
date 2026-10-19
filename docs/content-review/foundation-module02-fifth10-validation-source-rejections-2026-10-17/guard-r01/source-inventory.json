@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "status": "frozen_unexecuted_fifth10_memory_guard_sources",
+  "author": "/root/runtime_recovery",
+  "required_dispatcher": "/root",
+  "files": [
+    {
+      "path": "CASE-COVERAGE.md",
+      "bytes": 2989,
+      "raw_sha256": "57c54d3f15e98a85e8b903834b7f07c01a22f1111401aeed04c63e9aaad12506"
+    },
+    {
+      "path": "README.md",
+      "bytes": 6432,
+      "raw_sha256": "45401cf9cb4344b4d4b9538f44a9b0a957580865254e00c0a51f7a392c73f4bf"
+    },
+    {
+      "path": "author-observations.json",
+      "bytes": 4357,
+      "raw_sha256": "915d088880f6f5bdedbf1ce4ef73f6d5fd841df5e54fce17f17aa509ee51daa8"
+    },
+    {
+      "path": "dependencies.json",
+      "bytes": 6792,
+      "raw_sha256": "f0da8477479d6b1ac5310f6527dc5a832088a5b854751cd2096d734c94ccfe5f"
+    },
+    {
+      "path": "guard.cjs",
+      "bytes": 44590,
+      "raw_sha256": "bf2d06df37109966ed2d08226c047fac3f6ff385334531a41c5526cb1838a8bd"
+    },
+    {
+      "path": "root-input.template.json",
+      "bytes": 1206,
+      "raw_sha256": "5e7bb9251478d3014a70abcc75e9ecf881fefd8525e98f19c249574e781ee20d"
+    }
+  ],
+  "actual_binding_selected": false,
+  "independent_preparation_acceptance_authored": false,
+  "source_modules_imported": false,
+  "syntax_checks_run": false,
+  "vm_or_guard_cases_run": false,
+  "preparation_or_project_code_run": false,
+  "production_mutated": false,
+  "inventory_self_excluded": true
+}

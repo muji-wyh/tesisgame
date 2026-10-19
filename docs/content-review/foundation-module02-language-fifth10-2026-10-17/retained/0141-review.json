@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "status": "accepted_actual_prepared_outputs_for_root_candidate_native_validation",
+  "reviewer": "Codex recover_delivery independent technical output reviewer",
+  "recorded_at": "2026-10-16T21:26:07.022Z",
+  "preparation_receipt": {
+    "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/execution-r01/preparation-receipt.json",
+    "bytes": 226840,
+    "raw_sha256": "b6f797200a9c856b189dfcc3bf1dc20e65a8b9aac361b62bd3959ae460311f4d"
+  },
+  "root_preparation_witness": {
+    "path": "build/professional-english/foundation02-fourth10-root-preparation-r02/execution/receipt.json",
+    "bytes": 8613,
+    "raw_sha256": "b3597a51b6d3a501ddcd507471582b6370eff9c1a1904bbc557d84cfff69a82c"
+  },
+  "source_review": {
+    "path": "build/professional-english/foundation02-fourth10-preparation-source-review-r02/review.json",
+    "bytes": 3115,
+    "raw_sha256": "2511462555e4235129d032aa51bd214aa3d0ae725b92b8cc9cd251de34c7d969"
+  },
+  "inspection": {
+    "path": "build/professional-english/foundation02-fourth10-prepared-output-review-r02/inspection.json",
+    "bytes": 29402,
+    "raw_sha256": "edd347aa083986ce7de304c27b3ae6ccf9c5dcc047774feb5d38475ef0564cfd"
+  },
+  "current_input_measurements": {
+    "path": "build/professional-english/foundation02-fourth10-prepared-output-review-r02/input-measurements.json",
+    "bytes": 352709,
+    "raw_sha256": "8950e600b3f81f61cc72dae6e2514c4e982ca0cc6ef95e93536b86a01652dd67"
+  },
+  "technical_prepared_output_accepted": true,
+  "accepted_language_decisions": 10,
+  "new_language_approval": false,
+  "delivery_metadata_references_and_context_accepted_for_candidate_validation": true,
+  "findings": [
+    "Ten exact accepted language projections; six difficulty edits, one definition edit and one example edit. Every other content field and every unselected Foundation02 entry is exact.",
+    "Review metadata names the scoped independent AI language reviewer. Twenty consulted source records and two lexical references per entry preserve source observations, literal disagreements and acquisition limits.",
+    "All expressions, courses, themes, memberships, four lexical holds and the complete form/image mismatch are preserved. Exact fourth-then-third data reversal recovers both pinned registries and original research file bytes.",
+    "All50 history/ID groups and all51 complete donor rows match before entries. Historical fifth10 sign multiplicity remains two with both complete rows checked.",
+    "Three test afterimages contain exactly14 recorded anchor edits plus5 content,1 morphology and1 native appended check. Removing those additions recovers every test preimage byte.",
+    "Root witness confirms three syntax commands and one successful scratch preparation, with230 projected callbacks. All864 current inputs and13 proposal sources remain exact."
+  ],
+  "blockers_to_candidate_native_validation": [],
+  "native_parse_and_execution_pending": true,
+  "actual_persisted_tests_pending": true,
+  "guarded_commit_not_reviewed": true,
+  "production_or_commit_accepted": false,
+  "readiness": {
+    "ready_modules": 0,
+    "release_ready": false,
+    "domain_morphology_media_human_specialist_gates_unchanged": true
+  },
+  "reviewer_project_code_imported": false,
+  "reviewer_preparation_test_or_native_dispatched": false,
+  "production_modified": false
+}

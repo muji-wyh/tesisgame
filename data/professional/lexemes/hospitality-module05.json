@@ -1,0 +1,1454 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "welcome.receive-arriving-person-in-friendly-way.v",
+      "text": "welcome",
+      "display_text": "welcome",
+      "pos": "verb",
+      "definition": "To receive an arriving person in a friendly and positive way.",
+      "example": "We welcome guests and ask how we can help.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "welcome"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A friendly receptionist acknowledging an arriving guest without assuming physical contact or assistance needs.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-concierges",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "greet.acknowledge-person-with-words-or-gesture.v",
+      "text": "greet",
+      "display_text": "greet",
+      "pos": "verb",
+      "definition": "To acknowledge someone with words or a suitable gesture when meeting them.",
+      "example": "Greet the guest and introduce yourself.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "greet"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two people exchanging a friendly greeting at a fictional reception desk.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "greet.acknowledge-person-with-words-or-gesture.v.analysis.v1",
+        "lexeme_id": "greet.acknowledge-person-with-words-or-gesture.v",
+        "text": "greet",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.greet",
+            "type": "atomic",
+            "canonical": "greet",
+            "surface": "greet"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-concierges",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "offer.present-something-for-person-to-accept-or-decline.v",
+      "text": "offer",
+      "display_text": "offer",
+      "pos": "verb",
+      "definition": "To present something that another person may accept or decline.",
+      "example": "Offer the available options and respect the guest's choice.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "offer"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A friendly staff member presenting two clearly described options while the guest chooses.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-concierges",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "suggest.put-forward-idea-for-consideration.v",
+      "text": "suggest",
+      "display_text": "suggest",
+      "pos": "verb",
+      "definition": "To put forward an idea or option for someone to consider.",
+      "example": "May I suggest checking the updated opening times?",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "suggest"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A friendly staff member sharing a fictional information card as an optional idea.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "professional.suggest.put-forward-idea-for-consideration.v.morphology.v3",
+        "lexeme_id": "suggest.put-forward-idea-for-consideration.v",
+        "text": "suggest",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "part1",
+            "canonical_id": "english.affix.sub.under",
+            "type": "prefix",
+            "canonical": "sub-",
+            "surface": "sug",
+            "break_offsets": []
+          },
+          {
+            "id": "part2",
+            "canonical_id": "english.root.gest.carry",
+            "type": "root",
+            "canonical": "gest",
+            "surface": "gest",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "part1",
+            "right": "part2",
+            "rule": "authored-sub-sug-allomorph-plus-gest-carry",
+            "surface": "suggest",
+            "break_offsets": []
+          }
+        ],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex root (independent AI morphology review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16",
+          "draft_author": "Codex (AI source consultation and editorial proposal; not human approval)",
+          "notes": "Collins explicitly records sug- as the before-g allomorph of sub- in suggest. The suggest/ingest histories corroborate gest as the participial realization of the carry/bear family. Sub.under is a historical identity here, not a claim that proposing an idea literally means carrying something underneath. The dictionary traces the furnishing/bringing-forward development into the selected proposal sense. The graph neither selects the modern sales acronym sug nor treats the unrelated noun gest as its base.",
+          "references": [
+            "https://www.merriam-webster.com/dictionary/suggest",
+            "https://www.etymonline.com/word/suggest",
+            "https://www.etymonline.com/word/sub-",
+            "https://www.collinsdictionary.com/us/dictionary/english/sug",
+            "https://www.merriam-webster.com/dictionary/ingest"
+          ],
+          "source_record_ids": [
+            "mw-suggest-new",
+            "etym-suggest-hold9",
+            "etym-sub-hold9",
+            "collins-sug-hold9",
+            "mw-ingest-hold9"
+          ],
+          "source_consultation": "Term-specific new consultation plus explicitly inherited prior-pass evidence; see proposal source registries.",
+          "independent_review": "completed_scoped_ai_morphology_review",
+          "review_scope": "Independent AI morphology review of the nine exact selected verb senses, authored allomorphs and permitted composition graphs. Explore is a deliberately reviewed current whole stem, not a denial of its disputed history. Whole meanings, media, rewards and non-morphology gates remain unchanged. No qualified human or domain-review claim.",
+          "approval_record": "res://data/professional/provenance/morphology-hold9-review-2026-10-16.json"
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-concierges",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, and regional usage require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired. A separate independent AI morphology review by the root reviewer was completed on 2026-10-16 for this exact verb sense, its source-supported morpheme identities, authored allomorphs, spelling reconstruction, and permitted composition graph. This is not human or subject-matter approval. Language, required domain review, media, and course/module readiness remain pending."
+    },
+    {
+      "id": "follow-up.take-further-action-on-earlier-matter.v",
+      "text": "follow up",
+      "display_text": "follow up",
+      "pos": "verb",
+      "definition": "To take further action or seek an update on an earlier matter.",
+      "example": "I will follow up on your request with the responsible team.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "follow up"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional request record linked to a later update without a promised outcome.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "follow-up.take-further-action-on-earlier-matter.v.analysis.v1",
+        "lexeme_id": "follow-up.take-further-action-on-earlier-matter.v",
+        "text": "follow up",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.follow",
+            "type": "stem",
+            "canonical": "follow",
+            "surface": "follow"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.up",
+            "type": "stem",
+            "canonical": "up",
+            "surface": "up"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "follow up",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-concierges",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "transport-bls-delivery-drivers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-onet-couriers",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "transport-hse-loading",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, vehicle, road, carrier, or positioning context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "translate.express-content-in-another-language.v",
+      "text": "translate",
+      "display_text": "translate",
+      "pos": "verb",
+      "definition": "To express written or other content in another language while preserving its intended meaning.",
+      "example": "Ask the approved language provider to translate the booking information.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "translate"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional document presented in two language formats with a qualified language-support contact.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-concierges",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "interpret.convey-spoken-or-signed-language-in-another-language.v",
+      "text": "interpret",
+      "display_text": "interpret",
+      "pos": "verb",
+      "definition": "To convey spoken or signed communication in another language.",
+      "example": "Ask whether a qualified person is available to interpret the conversation.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "interpret"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A friendly fictional conversation supported by a professional interpreter without assuming a companion must interpret.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-concierges",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "launder.wash-and-care-for-clothes-or-linen.v",
+      "text": "launder",
+      "display_text": "launder",
+      "pos": "verb",
+      "definition": "To wash clothes or linen and carry out the related fabric-care process.",
+      "example": "The housekeeping team will confirm how the item may be laundered.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "launder"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Closed fictional laundry bags and an approved fabric-care reference without temperature or chemical instructions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-concierges",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "check-in.complete-arrival-registration-for-booked-service.v",
+      "text": "check in",
+      "display_text": "check in",
+      "pos": "verb",
+      "definition": "To complete the arrival-registration process for accommodation or another booked service.",
+      "example": "The guest would like to check in under the confirmed booking.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "check in"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A friendly fictional arrival-registration interaction with no visible private guest information.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "check-in.complete-arrival-registration-for-booked-service.v.analysis.v1",
+        "lexeme_id": "check-in.complete-arrival-registration-for-booked-service.v",
+        "text": "check in",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.check",
+            "type": "stem",
+            "canonical": "check",
+            "surface": "check"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.in",
+            "type": "stem",
+            "canonical": "in",
+            "surface": "in"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "check in",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-concierges",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "check-out.complete-departure-process-for-accommodation.v",
+      "text": "check out",
+      "display_text": "check out",
+      "pos": "verb",
+      "definition": "To complete the departure process for an accommodation stay.",
+      "example": "The guest is ready to check out and review the bill.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "check out"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A friendly fictional departure interaction with a private bill-review screen.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "check-out.complete-departure-process-for-accommodation.v.analysis.v1",
+        "lexeme_id": "check-out.complete-departure-process-for-accommodation.v",
+        "text": "check out",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.check",
+            "type": "stem",
+            "canonical": "check",
+            "surface": "check"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.out",
+            "type": "stem",
+            "canonical": "out",
+            "surface": "out"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "check out",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-concierges",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "register.enter-required-details-in-authorized-record.v",
+      "text": "register",
+      "display_text": "register",
+      "pos": "verb",
+      "definition": "To enter the required details in an authorized record or system.",
+      "example": "Ask which details are needed to register the guest under the applicable process.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "register"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An original fictional registration form with invented information and a clear purpose statement.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-concierges",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "escort.accompany-person-to-a-place.v",
+      "text": "escort",
+      "display_text": "escort",
+      "pos": "verb",
+      "definition": "To accompany a person to a place as part of an agreed service or responsibility.",
+      "example": "Ask whether the guest would like someone to escort them to the meeting room.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "escort"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A staff member accompanying a consenting guest along a clear fictional route without physical guiding instructions.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-concierges",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "accommodate.make-suitable-arrangements-for-stated-need.v",
+      "text": "accommodate",
+      "display_text": "accommodate",
+      "pos": "verb",
+      "definition": "To make suitable arrangements for a stated need or request within the relevant circumstances.",
+      "example": "We will check how the available arrangements can accommodate your requirements.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "accommodate"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A friendly discussion of specific guest requirements and available options without a universal-suitability claim.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-concierges",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "upgrade.change-booking-to-higher-service-category.v",
+      "text": "upgrade",
+      "display_text": "upgrade",
+      "pos": "verb",
+      "definition": "To change a booking or service to a higher category under the applicable arrangements.",
+      "example": "Confirm the availability and cost before offering to upgrade the room.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "upgrade"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "Two fictional room categories compared with clearly stated availability and price information.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "upgrade.change-booking-to-higher-service-category.v.analysis.v1",
+        "lexeme_id": "upgrade.change-booking-to-higher-service-category.v",
+        "text": "upgrade",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "affix.up.prefix",
+            "type": "prefix",
+            "canonical": "up",
+            "surface": "up"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.grade",
+            "type": "stem",
+            "canonical": "grade",
+            "surface": "grade"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "upgrade",
+            "rule": "prefix_attachment"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-concierges",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "extend.increase-agreed-duration-or-period.v",
+      "text": "extend",
+      "display_text": "extend",
+      "pos": "verb",
+      "definition": "To increase an agreed duration or period through the relevant arrangement.",
+      "example": "The guest would like to extend the stay by one night.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "extend"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional stay calendar showing a requested extra night awaiting confirmation.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": null,
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-concierges",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "wake.cause-person-to-stop-sleeping.v",
+      "text": "wake",
+      "display_text": "wake",
+      "pos": "verb",
+      "definition": "To cause someone to stop sleeping.",
+      "example": "The guest has asked for a call to wake them at the agreed time.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "wake"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional requested wake-up call record beside a phone without disturbing an unconsenting person.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "wake.cause-person-to-stop-sleeping.v.analysis.v1",
+        "lexeme_id": "wake.cause-person-to-stop-sleeping.v",
+        "text": "wake",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern constituents, word boundaries, and named spelling changes. Qualified linguistic review must verify semantic transparency, lexicalization, allomorphs, and deeper analysis of intact stems. No syllable or length-based cuts are inferred. Null analyses remain separate from atomic classifications.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.wake",
+            "type": "atomic",
+            "canonical": "wake",
+            "surface": "wake"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-concierges",
+          "status": "pending_term_check",
+          "scope": "Occupational, guest-service, tourism, accessibility, or workplace-safety context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original hospitality-communication draft. Language, room and booking categories, guest accounts, accessibility, privacy, local authorization, tourism information, regional usage, and morphology require qualified review. No cleaning, lifting, appliance operation, repair, emergency, guiding technique, tax calculation, visa eligibility, or universal legal entitlement is taught. Image brief only; no artwork has been acquired."
+    }
+  ]
+}

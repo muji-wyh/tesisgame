@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "started_at": "2026-10-16T18:32:04.373Z",
+  "completed_at": "2026-10-16T18:35:28.982Z",
+  "entrypoint": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/prepare.cjs",
+  "source_files": [
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/delivery-lib.cjs",
+      "raw_sha256": "a094e1b7f81f8259f1a00b2e37b3b5daae589ba7a7c6ac1970040ab7d6e54fbb"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/test-transforms.cjs",
+      "raw_sha256": "65e236565b29148ab220a4ce7ac7ff3894f06e2f8ef20c64c8855713a593450b"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/prepare.cjs",
+      "raw_sha256": "b81f3f19fae42219cac0e5e00aade2bb1af56e37ddb5d0edf4b2800307f9218f"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/deliver.cjs",
+      "raw_sha256": "4f6a713d84c65650e17fa82161a718e238ef1cf001903e7f43f9deaf7f24f483"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/baseline-config.json",
+      "raw_sha256": "d3eb180e31c07370640cc1ac3b60f7fe5d7a71aa17b66219bb3637d9efb8d665"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/HANDOFF.md",
+      "raw_sha256": "f18ef9ef4e3a5ce106c34cecc625327a2e985933b8a6c21d3ac7bd9c7647888f"
+    }
+  ],
+  "execution_start_raw_sha256": "19da19b632871145fc09609bacb5b0339b6aad0bc51d4a4172b5eef44e490b0e",
+  "preparation_receipt_raw_sha256": "9523482f6e7c511ba093fb52ba19f17de4e32d37306e6cd503b96951456557ef",
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": "{\"status\":\"prepared_pending_technical_review\",\"receipt\":\"build/professional-english/foundation-module02-language-review/second10-delivery-r02/preparation-receipt.json\",\"receipt_sha256\":\"9523482f6e7c511ba093fb52ba19f17de4e32d37306e6cd503b96951456557ef\",\"binding_sha256\":\"2710e773bf4744b782a3801a687726c4a14c547084e8217311e886189b31f15c\",\"projected_callbacks\":217,\"errors\":0,\"reviewed_lexemes\":130,\"ready_modules\":0,\"native_execution_pending\":true,\"production_mutated\":false}\n",
+  "stderr": "",
+  "executed_source_equality_verified": true,
+  "witness_verification_error": null,
+  "production_mutated": false
+}

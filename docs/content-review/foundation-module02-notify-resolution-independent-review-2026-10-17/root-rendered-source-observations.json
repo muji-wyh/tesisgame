@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "status": "fresh_rendered_source_observations_only_not_proposal_acceptance",
+  "observer": "Codex root",
+  "recorded_at": "2026-10-16T21:47:10.797Z",
+  "sources": [
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/inform",
+      "tool_reference": "turn118300view0",
+      "observation": "Selected recipient-information sense supports inform somebody of/about something and inform somebody that. Its Crime and punishment topic is rendered B2. The separate influence sense and inform yourself are distinct. The author-recorded selected cefr=b2 raw attribute was not freshly retrieved by root."
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/notify",
+      "tool_reference": "turn118300view1",
+      "observation": "The selected formal official informing sense and synonym relationship to inform are visible. Selected C1 is not rendered in this view; the author-recorded fkcefr=c1 and word-list row remain author evidence. Footer B2 belongs to reasonably, not notify."
+    },
+    {
+      "url": "https://www.collinsdictionary.com/dictionary/english/inform",
+      "tool_reference": "turn118300view2",
+      "observation": "Selected ordinary recipient-information sense is explicitly B1+. Inform on and influence/permeation uses are separate. This literal label is not reported as B2."
+    }
+  ],
+  "limits": "Fresh rendered pages only. No new raw HTML retrieval, independent CEFR-J row retrieval, media import or full publisher body archive. No proposal acceptance, production change or test dispatch."
+}

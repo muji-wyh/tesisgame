@@ -1,0 +1,476 @@
+{
+  "schema": 1,
+  "status": "accepted_image_and_contextual_native_evidence",
+  "sense_id": "gift-wrap.wrapping-paper.n",
+  "proposed_target": "data/professional/provenance/retail-gift-wrap-image-2026-10-17.json",
+  "source_review": {
+    "path": "docs/assets/sources/gift-wrap-brief-resolution-r01/review.json",
+    "bytes": 16352,
+    "sha256": "a94da229bb67838d251f08b145c4c89e573d89684955884c67cd1bde9931581e"
+  },
+  "source": {
+    "title": "Wraping Paper",
+    "creator": "j4p4n",
+    "url": "https://freesvg.org/index.php/wraping-paper",
+    "published_raster_url": "https://freesvg.org/img/1576573760wrapingpaper.png",
+    "license": "CC0 1.0 Universal / Public Domain",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "terms_url": "https://freesvg.org/pages/terms-and-conditions",
+    "attribution": "Wraping Paper by j4p4n, FreeSVG, CC0 1.0. Published raster retained unchanged; review derivative crops transparent margins only.",
+    "original": {
+      "path": "docs/assets/sources/gift-wrap-brief-resolution-r01/freesvg-187259-displayed-raster.png",
+      "bytes": 1442999,
+      "sha256": "da47681a1d8721d1c177772be79bec683a09315a025aa4375379889f2ec27b7a"
+    },
+    "crop": {
+      "path": "docs/assets/sources/gift-wrap-brief-resolution-r01/freesvg-187259-alpha-crop.png",
+      "bytes": 36970,
+      "sha256": "c97a15eac5680c4ffaf0d70f3c6b7a740fd86a4a804c3d517e13f21d52caf789",
+      "width": 600,
+      "height": 173,
+      "source_rect_xywh": [
+        0,
+        217,
+        600,
+        173
+      ]
+    },
+    "acquisition_status": "published_raster_and_exact_alpha_crop_acquired_not_installed_by_this_proposal",
+    "available_animations": [],
+    "vector_acquired": false,
+    "lineage_limit": "Related OpenClipart requests timed out. No equality to an OpenClipart SVG or raster is claimed."
+  },
+  "original_brief": "Show a large loose sheet and partly unrolled roll of decorative paper beside one partly wrapped present, with the paper as the main subject. Use a cheerful repeating motif without text. Reject a completed gift box alone, a wrapping action close-up, a ribbon-only picture, or patterned cloth.",
+  "revised_brief": "Show decorative gift-wrapping paper as the dominant subject, preferably a partly unrolled roll with a broad visible paper tail and a cheerful text-free pattern. Make the paper edge and rolled layers clear. A present may provide optional context. Exclude cloth, ribbon-only imagery, completed gifts alone and distracting clutter.",
+  "review_scope": {
+    "source_and_license": "Retained acquisition review plus root source inspection.",
+    "static_visual": "Root inspected the retained static size sheet and accepted the contextual/library direction with term and definition. This is AI review, not human picture approval.",
+    "native_display": "Actual r03 synthetic native render and scoped AI still review passed; exact current candidate binding and verification are recorded separately.",
+    "isolated_picture_scoring": "disabled_by_picture_suitable_false",
+    "non_picture_exercises": "Only Word Jelly is declared. The reviewed gift plus wrap graph remains unchanged; its spelling/composition route and library inclusion are retained. Match, Memory, Pop and picture Jelly are excluded and no Phrase exercise is added.",
+    "completed_module_or_course": false
+  },
+  "resource": {
+    "path": "res://professional-media/c97a15eac5680c4ffaf0d70f3c6b7a740fd86a4a804c3d517e13f21d52caf789.png",
+    "sha256": "c97a15eac5680c4ffaf0d70f3c6b7a740fd86a4a804c3d517e13f21d52caf789",
+    "kind": "image",
+    "format": "png",
+    "compressed_bytes": 36970,
+    "decoded_bytes": 830400,
+    "width": 600,
+    "height": 173
+  },
+  "patch": {
+    "schema": 1,
+    "status": "source_only_proposed_afterimages_not_installed_or_executed",
+    "sense_id": "gift-wrap.wrapping-paper.n",
+    "condition": "The integrated and reviewed fields in the afterimage describe the intended installed state after root accepts and installs the exact delta. They do not record production installation, native display acceptance, course readiness or human picture approval.",
+    "target": "data/professional/lexemes/retail-pilot.json",
+    "before_raw_sha256": "e5029b78d5093acc9d35440df78a5e34e0fdd29d08a2617104a8f7c57efa0df2",
+    "after_raw_sha256": "dee9e024d357c343aaa89b75b19cb5edbccdfe9d7d9595ead8613d7b847402c0",
+    "before_entry_json_sha256": "2fd752205a7a5dbdf35a69ed77cf91d9d35e4342999cc23104b21f5472c50467",
+    "after_entry_json_sha256": "401ae29f8d864b10de09b9cd5d5ed937257b250768c756deb7c1d8606e0b22b2",
+    "allowed_fields": [
+      "media.image",
+      "practice_modes: exact array [word_jelly]",
+      "editorial_notes: one exact clause replacement"
+    ],
+    "note_replacement": {
+      "before": "Picture suitability and word-image production remain pending.",
+      "after": "The gift-wrap image has completed scoped AI source and contextual still review for display with the term and definition; this is not human picture approval. The accepted decorative-paper brief replaces the earlier three-object composition, which remains in retained provenance. The exact acquired raster crop removes transparent padding only; no SVG, rig or animation was acquired. Isolated picture scoring is disabled because the pale roll and decorative pattern are weak at small card sizes. The Word Jelly spelling/composition route remains declared; Match, Memory, Pop and picture Jelly are not declared for this image."
+    },
+    "asset_target": "professional-media/c97a15eac5680c4ffaf0d70f3c6b7a740fd86a4a804c3d517e13f21d52caf789.png",
+    "resource": {
+      "path": "res://professional-media/c97a15eac5680c4ffaf0d70f3c6b7a740fd86a4a804c3d517e13f21d52caf789.png",
+      "sha256": "c97a15eac5680c4ffaf0d70f3c6b7a740fd86a4a804c3d517e13f21d52caf789",
+      "kind": "image",
+      "format": "png",
+      "compressed_bytes": 36970,
+      "decoded_bytes": 830400,
+      "width": 600,
+      "height": 173
+    },
+    "protected": [
+      "media.audio",
+      "morphology",
+      "all other gift fields",
+      "all other retail entries and raw bytes"
+    ],
+    "no_changes": [
+      "schema",
+      "runtime",
+      "lexical source registry",
+      "module status",
+      "module media manifest",
+      "curriculum membership",
+      "theme",
+      "expression",
+      "Growth"
+    ],
+    "historical_source_review_clarification": "The frozen source review grouped Word Jelly with isolated-picture modes. Root retained the real Word Jelly spelling route. Independent r01 review then found that keeping the four impossible picture declarations contradicted picture_suitable=false. This separate r02 declares only word_jelly and leaves all r01 artifacts unchanged.",
+    "required_values": {
+      "practice_modes": [
+        "word_jelly"
+      ],
+      "picture_suitable": false
+    },
+    "supersedes_source_proposal": {
+      "path": "build/professional-english/gift-wrap-integration-proposal-r01/inventory.json",
+      "bytes": 2311,
+      "sha256": "8a1257c3c5066222f6a547b51ff8b67130dd981f5eca6d83f9a20bf7fb341857"
+    }
+  },
+  "approved_audio": {
+    "path": "res://professional-media/cad8619dad6e225ce73c835ce5e90f7252c42af3c546aaa393adcd8db3e0f3a2.wav",
+    "sha256": "cad8619dad6e225ce73c835ce5e90f7252c42af3c546aaa393adcd8db3e0f3a2",
+    "source": "res://docs/assets/sources/professional-retail-ava/bag-wrap/listening-approval-2026-10-16.json",
+    "change": "none"
+  },
+  "implementation": {
+    "installation_receipt": "build/professional-english/gift-wrap-install-work-r01/installation-receipt.json",
+    "installation_requires_committed_receipt": true,
+    "current_candidate_validation": "build/professional-english/gift-wrap-install-work-r01/validation-r01/receipt.json",
+    "persisted_verification": "build/professional-english/gift-wrap-install-work-r01/persisted-validation-r01/receipt.json",
+    "human_picture_approval": false,
+    "new_listening_approval": false,
+    "ready_modules": 0
+  },
+  "finalization": "This retained record binds accepted source and native evidence. Installation and persisted verification are established only by the separate actual receipts; immutable proposal and failed r01/r02 evidence remain unchanged.",
+  "proposal_revision": {
+    "revision": "r02",
+    "frozen_r01_inventory": {
+      "path": "build/professional-english/gift-wrap-integration-proposal-r01/inventory.json",
+      "bytes": 2311,
+      "sha256": "8a1257c3c5066222f6a547b51ff8b67130dd981f5eca6d83f9a20bf7fb341857"
+    },
+    "independent_r01_review": {
+      "path": "build/professional-english/gift-wrap-integration-independent-review-r01/review.md",
+      "bytes": 5362,
+      "sha256": "5d62e19d45e54452926942442f1aa811adb4f5d3ecd33998de25e4644f7257d8"
+    },
+    "mode_correction": {
+      "path": "build/professional-english/gift-wrap-integration-independent-review-r01/mode-correction-recommendation.json",
+      "bytes": 2346,
+      "sha256": "ff6acc7c2608983e15c37ce41ca083fd6b2af724692ec3c9d161d0e41db5650c"
+    },
+    "r01_unchanged": true
+  },
+  "entry_before": {
+    "id": "gift-wrap.wrapping-paper.n",
+    "text": "gift wrap",
+    "display_text": "gift wrap",
+    "pos": "noun",
+    "definition": "Decorative paper used to cover a present.",
+    "example": "The customer chose blue gift wrap.",
+    "difficulty": "A2",
+    "accepted_forms": [
+      "gift wrap",
+      "wrapping paper"
+    ],
+    "regions": [
+      "general"
+    ],
+    "practice_modes": [
+      "match",
+      "memory",
+      "pop",
+      "jelly",
+      "word_jelly"
+    ],
+    "media": {
+      "image": {
+        "status": "pending",
+        "path": null,
+        "sha256": null,
+        "source": null,
+        "creator": null,
+        "license": null,
+        "acquisition_status": "not_started",
+        "review": {
+          "status": "pending"
+        },
+        "brief": "Show a large loose sheet and partly unrolled roll of decorative paper beside one partly wrapped present, with the paper as the main subject. Use a cheerful repeating motif without text. Reject a completed gift box alone, a wrapping action close-up, a ribbon-only picture, or patterned cloth.",
+        "picture_suitable": true,
+        "available_animations": [],
+        "adaptations": []
+      },
+      "audio": {
+        "status": "integrated",
+        "path": "res://professional-media/cad8619dad6e225ce73c835ce5e90f7252c42af3c546aaa393adcd8db3e0f3a2.wav",
+        "sha256": "cad8619dad6e225ce73c835ce5e90f7252c42af3c546aaa393adcd8db3e0f3a2",
+        "source": "res://docs/assets/sources/professional-retail-ava/bag-wrap/listening-approval-2026-10-16.json",
+        "creator": "Microsoft Ava Neural; original project term text",
+        "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact shopping bag and gift wrap samples approved in the continuation chat; see bag-wrap listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      }
+    },
+    "morphology": {
+      "schema": 1,
+      "id": "professional.gift-wrap.wrapping-paper.n.morphology.retail03.fifth10.proposal.v1",
+      "lexeme_id": "gift-wrap.wrapping-paper.n",
+      "text": "gift wrap",
+      "kind": "phrase",
+      "parts": [
+        {
+          "id": "p1",
+          "canonical_id": "morph.gift",
+          "canonical": "gift",
+          "type": "word",
+          "surface": "gift",
+          "break_offsets": []
+        },
+        {
+          "id": "p2",
+          "canonical_id": "morph.wrap",
+          "canonical": "wrap",
+          "type": "word",
+          "surface": "wrap",
+          "break_offsets": []
+        }
+      ],
+      "nodes": [
+        {
+          "id": "whole",
+          "left": "p1",
+          "right": "p2",
+          "surface": "gift wrap",
+          "rule": "preserve-word-boundary",
+          "break_offsets": [
+            5
+          ]
+        }
+      ],
+      "roots": [
+        "whole"
+      ],
+      "review": {
+        "status": "reviewed",
+        "draft_author": "Codex retail_content (AI source consultation; not human or specialist approval)",
+        "notes": "Current present gift plus covering-material wrap. This complete noun means decorative paper, verified on the Oxford noun page. Give-related history does not create give-plus-t. The related covering-action family is preserved without converting the gift-wrap verb into an accepted noun answer; wrapping paper needs its own exact graph.",
+        "references": [
+          "https://www.dictionary.com/browse/gift",
+          "https://www.dictionary.com/browse/wrap",
+          "https://www.oxfordlearnersdictionaries.com/definition/english/gift-wrap_1"
+        ],
+        "source_record_ids": [
+          "retail03-morph-fifth10-dcom-gift",
+          "retail03-morph-fifth10-dcom-wrap",
+          "retail03-morph-fifth10-oxford-gift-wrap-noun"
+        ],
+        "independent_review": "completed_exact_graph_and_selected_canonical_family_review",
+        "reviewer": "Codex root (independent AI morphology review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16",
+        "acceptance_record": "data/professional/provenance/retail-module03-morphology-fifth10-2026-10-16.json"
+      }
+    },
+    "review": {
+      "status": "reviewed",
+      "language": "reviewed",
+      "domain": "not_required",
+      "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+      "reviewed_at": "2026-10-16"
+    },
+    "references": [
+      {
+        "source_id": "bls-cashiers",
+        "status": "pending_term_check",
+        "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+      },
+      {
+        "source_id": "retail03-ox-gift-wrap",
+        "status": "verified",
+        "scope": "Selected passage consulted: Uncountable noun definition. The selected sense is decorative wrapping paper, not the act or verb of wrapping. Selected lexical sense and explicitly stated alternatives only. Unrelated word-of-the-day level labels do not rate this term. No media acquired. This editorial proposal does not approve language, morphology, domain practice, or media."
+      }
+    ],
+    "editorial_notes": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the decorative paper noun. The consulted Oxford noun entry, rather than a verb-only gift-wrap page, supports this meaning. Add wrapping paper for the same material sense. Do not make gift-wrap as a verb an interchangeable answer. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Domain review is not required for the current memberships. Independent AI morphology review was completed on 2026-10-16 for this exact graph at the documented modern-stem depth; this is not human or subject-matter approval. Picture suitability and word-image production remain pending. The exact Ava word recording has user listening approval and is integrated. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready."
+  },
+  "entry_after": {
+    "id": "gift-wrap.wrapping-paper.n",
+    "text": "gift wrap",
+    "display_text": "gift wrap",
+    "pos": "noun",
+    "definition": "Decorative paper used to cover a present.",
+    "example": "The customer chose blue gift wrap.",
+    "difficulty": "A2",
+    "accepted_forms": [
+      "gift wrap",
+      "wrapping paper"
+    ],
+    "regions": [
+      "general"
+    ],
+    "practice_modes": [
+      "word_jelly"
+    ],
+    "media": {
+      "image": {
+        "status": "integrated",
+        "path": "res://professional-media/c97a15eac5680c4ffaf0d70f3c6b7a740fd86a4a804c3d517e13f21d52caf789.png",
+        "sha256": "c97a15eac5680c4ffaf0d70f3c6b7a740fd86a4a804c3d517e13f21d52caf789",
+        "source": "res://docs/assets/sources/gift-wrap-brief-resolution-r01/review.json",
+        "creator": "j4p4n",
+        "license": "CC0 1.0 Universal / Public Domain",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex root (independent AI scoped source and contextual still review; not human picture approval); see docs/assets/sources/gift-wrap-brief-resolution-r01/review.json",
+          "reviewed_at": "2026-10-17"
+        },
+        "brief": "Show decorative gift-wrapping paper as the dominant subject, preferably a partly unrolled roll with a broad visible paper tail and a cheerful text-free pattern. Make the paper edge and rolled layers clear. A present may provide optional context. Exclude cloth, ribbon-only imagery, completed gifts alone and distracting clutter.",
+        "picture_suitable": false,
+        "available_animations": [],
+        "adaptations": [
+          "Acquired FreeSVG published 600 by 600 raster, Wraping Paper by j4p4n, under CC0 1.0; no SVG was acquired.",
+          "Exact alpha-bounds rectangle [0, 217, 600, 173] removes transparent padding only; retained source evidence reports zero RGBA mismatches.",
+          "Exact 600 by 173 PNG copied without re-encoding, resizing, recoloring, repainting, rotation, stretching or removal of visible pixels; no rig or animation was acquired."
+        ]
+      },
+      "audio": {
+        "status": "integrated",
+        "path": "res://professional-media/cad8619dad6e225ce73c835ce5e90f7252c42af3c546aaa393adcd8db3e0f3a2.wav",
+        "sha256": "cad8619dad6e225ce73c835ce5e90f7252c42af3c546aaa393adcd8db3e0f3a2",
+        "source": "res://docs/assets/sources/professional-retail-ava/bag-wrap/listening-approval-2026-10-16.json",
+        "creator": "Microsoft Ava Neural; original project term text",
+        "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "User (exact shopping bag and gift wrap samples approved in the continuation chat; see bag-wrap listening-approval-2026-10-16.json)",
+          "reviewed_at": "2026-10-16"
+        },
+        "voice": "ava-sweet",
+        "voice_settings": {
+          "voice": "en-US-AvaNeural",
+          "rate": "-15%",
+          "pitch": "+8Hz",
+          "volume": "+0%",
+          "postprocessing": false
+        }
+      }
+    },
+    "morphology": {
+      "schema": 1,
+      "id": "professional.gift-wrap.wrapping-paper.n.morphology.retail03.fifth10.proposal.v1",
+      "lexeme_id": "gift-wrap.wrapping-paper.n",
+      "text": "gift wrap",
+      "kind": "phrase",
+      "parts": [
+        {
+          "id": "p1",
+          "canonical_id": "morph.gift",
+          "canonical": "gift",
+          "type": "word",
+          "surface": "gift",
+          "break_offsets": []
+        },
+        {
+          "id": "p2",
+          "canonical_id": "morph.wrap",
+          "canonical": "wrap",
+          "type": "word",
+          "surface": "wrap",
+          "break_offsets": []
+        }
+      ],
+      "nodes": [
+        {
+          "id": "whole",
+          "left": "p1",
+          "right": "p2",
+          "surface": "gift wrap",
+          "rule": "preserve-word-boundary",
+          "break_offsets": [
+            5
+          ]
+        }
+      ],
+      "roots": [
+        "whole"
+      ],
+      "review": {
+        "status": "reviewed",
+        "draft_author": "Codex retail_content (AI source consultation; not human or specialist approval)",
+        "notes": "Current present gift plus covering-material wrap. This complete noun means decorative paper, verified on the Oxford noun page. Give-related history does not create give-plus-t. The related covering-action family is preserved without converting the gift-wrap verb into an accepted noun answer; wrapping paper needs its own exact graph.",
+        "references": [
+          "https://www.dictionary.com/browse/gift",
+          "https://www.dictionary.com/browse/wrap",
+          "https://www.oxfordlearnersdictionaries.com/definition/english/gift-wrap_1"
+        ],
+        "source_record_ids": [
+          "retail03-morph-fifth10-dcom-gift",
+          "retail03-morph-fifth10-dcom-wrap",
+          "retail03-morph-fifth10-oxford-gift-wrap-noun"
+        ],
+        "independent_review": "completed_exact_graph_and_selected_canonical_family_review",
+        "reviewer": "Codex root (independent AI morphology review; not human or subject-matter approval)",
+        "reviewed_at": "2026-10-16",
+        "acceptance_record": "data/professional/provenance/retail-module03-morphology-fifth10-2026-10-16.json"
+      }
+    },
+    "review": {
+      "status": "reviewed",
+      "language": "reviewed",
+      "domain": "not_required",
+      "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+      "reviewed_at": "2026-10-16"
+    },
+    "references": [
+      {
+        "source_id": "bls-cashiers",
+        "status": "pending_term_check",
+        "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+      },
+      {
+        "source_id": "retail03-ox-gift-wrap",
+        "status": "verified",
+        "scope": "Selected passage consulted: Uncountable noun definition. The selected sense is decorative wrapping paper, not the act or verb of wrapping. Selected lexical sense and explicitly stated alternatives only. Unrelated word-of-the-day level labels do not rate this term. No media acquired. This editorial proposal does not approve language, morphology, domain practice, or media."
+      }
+    ],
+    "editorial_notes": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the decorative paper noun. The consulted Oxford noun entry, rather than a verb-only gift-wrap page, supports this meaning. Add wrapping paper for the same material sense. Do not make gift-wrap as a verb an interchangeable answer. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Domain review is not required for the current memberships. Independent AI morphology review was completed on 2026-10-16 for this exact graph at the documented modern-stem depth; this is not human or subject-matter approval. The gift-wrap image has completed scoped AI source and contextual still review for display with the term and definition; this is not human picture approval. The accepted decorative-paper brief replaces the earlier three-object composition, which remains in retained provenance. The exact acquired raster crop removes transparent padding only; no SVG, rig or animation was acquired. Isolated picture scoring is disabled because the pale roll and decorative pattern are weak at small card sizes. The Word Jelly spelling/composition route remains declared; Match, Memory, Pop and picture Jelly are not declared for this image. The exact Ava word recording has user listening approval and is integrated. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready."
+  },
+  "accepted_proposal": {
+    "path": "build/professional-english/gift-wrap-integration-proposal-r02/inventory.json",
+    "bytes": 2673,
+    "sha256": "df51778e30edcd830253b70c20db0ddda913be5915698519a66354b6d820b6e3"
+  },
+  "native_evidence": {
+    "receipt": {
+      "path": "build/professional-english/gift-wrap-native-work-r03/execution-r03/receipt.json",
+      "bytes": 125811,
+      "sha256": "cbc03ec8d32c4fc57fd6c8b8e85715a790f72f719421082803e441beeddb4e09"
+    },
+    "review": {
+      "path": "build/professional-english/gift-wrap-native-independent-review-r03/review.md",
+      "bytes": 4821,
+      "sha256": "a95a998f6e4fe235381f61573b9dda05e161299b7eb951f025e2c7d60d2cb0d8"
+    },
+    "inventory": {
+      "path": "build/professional-english/gift-wrap-native-independent-review-r03/inventory.json",
+      "bytes": 784,
+      "sha256": "aebf3d6e24f7083e01aa19bf90ab15caa4e677e40a38352cc7ea7b6b541dd42c"
+    },
+    "visual": {
+      "path": "build/professional-english/gift-wrap-native-independent-review-r03/visual-review.json",
+      "bytes": 22394,
+      "sha256": "13f096d38a89074cfb551754f19be302842a6c51c859f9967dc90ae27decb87a"
+    },
+    "source_review": {
+      "path": "build/professional-english/gift-wrap-native-work-r03/execution-r03/root-source-review.json",
+      "bytes": 1649,
+      "sha256": "0910ff5c63c5c1b144d0f326fee5ae984fbeee89c53b36dfe05e2f4b15b67fba"
+    }
+  }
+}

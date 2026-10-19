@@ -1,0 +1,77 @@
+{
+  "checks": [
+    {
+      "check": "Request respects request from the earliest session notification",
+      "passed": false
+    },
+    {
+      "check": "Request respects cancel from the earliest session notification",
+      "passed": false
+    },
+    {
+      "check": "Request respects leave from the earliest session notification",
+      "passed": false
+    },
+    {
+      "check": "Request freezes only supported context fields before the first callback",
+      "passed": false
+    },
+    {
+      "check": "Loader callback request cannot be overwritten by the outer request return",
+      "passed": false
+    },
+    {
+      "check": "Loader callback cancel cannot be overwritten by the outer request return",
+      "passed": false
+    },
+    {
+      "check": "Loader callback leave cannot be overwritten by the outer request return",
+      "passed": false
+    },
+    {
+      "check": "Nested request keeps its state after cancel session notification",
+      "passed": false
+    },
+    {
+      "check": "Nested request keeps its state after leave session notification",
+      "passed": false
+    },
+    {
+      "check": "Restoring an active round cannot overwrite a nested newer request",
+      "passed": false
+    },
+    {
+      "check": "Pending cancellation preserves the active claimed Access lease",
+      "passed": true
+    },
+    {
+      "check": "Controller teardown releases that active Access lease exactly once",
+      "passed": true
+    },
+    {
+      "check": "Ready notification request suppresses the obsolete round_prepared event",
+      "passed": false
+    },
+    {
+      "check": "Opening callback request discards the obsolete storage result",
+      "passed": false
+    },
+    {
+      "check": "Retry preserves a nested selection from the retry notification",
+      "passed": false
+    },
+    {
+      "check": "Retry preserves a nested selection from the leave notification",
+      "passed": false
+    },
+    {
+      "check": "An unchanged current opening still publishes its original selection and source",
+      "passed": true
+    }
+  ],
+  "count": 17,
+  "invariant_failures": 14,
+  "schema": 1,
+  "scope": "Historical failing observations only; not counted as a passing current suite. Four empty-pending historical paths are excluded to avoid intentional engine aborts.",
+  "source": "saved exact preimage"
+}

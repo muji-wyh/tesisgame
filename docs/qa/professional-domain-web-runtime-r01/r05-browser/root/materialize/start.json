@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "started_at": "2026-10-16T20:59:29.001Z",
+  "command": [
+    "C:\\nvm4w\\nodejs\\node.exe",
+    "build/professional-english/domain-runtime-web-browser-r05/materialize.cjs"
+  ],
+  "inputs": [
+    {
+      "path": "build/professional-english/domain-runtime-web-browser-r05/inventory.json",
+      "bytes": 2060,
+      "sha256": "86978ca1b5921ef3a945c806d0c6c92d25bf2b467c636d820bf8b9c1168e4a24"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-browser-r05/proposal.json",
+      "bytes": 5898,
+      "sha256": "3b52a39be761dc8f8566e605877965a87129a9fae44b4df232ed0fbf14b60ce3"
+    },
+    {
+      "path": "build/professional-english/domain-runtime-web-browser-r05/inherited-inputs.json",
+      "bytes": 11062,
+      "sha256": "e38f78572410065afc3c5bfc4f8053b332e9c911c6e9af83c1824a72a85af432"
+    }
+  ],
+  "source": {
+    "path": "build/professional-english/domain-runtime-web-browser-r05/materialize.cjs",
+    "bytes": 2810,
+    "sha256": "3454f6742bb6a028860a2b7458edb1be2b204816f2c031ec8b64a99f4990bb66"
+  },
+  "dispatch_source": {
+    "path": "build\\professional-english\\domain-runtime-web-root-r05\\dispatch-source.json",
+    "bytes": 761,
+    "sha256": "7ef10e8868c6dce98136cf77f327d23b9afe71d6585af8aa2ed4da0992ea1e04"
+  }
+}

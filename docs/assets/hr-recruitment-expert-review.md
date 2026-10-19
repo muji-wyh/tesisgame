@@ -1,0 +1,41 @@
+# HR & Recruitment expert-review brief
+
+## Status and scope
+
+The integrated draft contains 500 distinct canonical senses and 100 expressions: the shared 100/20 foundation plus 400 specialist memberships and 80 specialist expressions. Every module has 50 senses and 10 expressions. This expansion creates 296 senses and reuses 104. Independent semantic and expression review found and corrected canonical duplication, pay-period wording, final-pay scope, burnout wording, inconsistency, and the negative-prefix analysis of impartial. All language, HR-domain, morphology, regional, picture-suitability, and production-media approvals remain pending. No module is ready.
+
+All 400 specialist senses have a scored route within their own module. There are 243 new pending graphs: five explicit atomic decisions and 238 composites. The 53 null analyses retain same-module Phrase assessment. Exact reconstruction and exercise coverage do not establish linguistic or professional accuracy.
+
+This course teaches workplace communication using fictional examples. It does not prescribe hiring or dismissal decisions, screening, background checks, deductions, benefits, legal entitlements, disciplinary procedures, investigations, medical assessment, or information-disclosure permission. Employment arrangements, role authority, legal requirements, and regional meanings need qualified review for the intended launch regions.
+
+## Review assignments
+
+| Area | Required decisions |
+|---|---|
+| Spaces and equipment | Verify meeting, interview, training, and records terminology. A projection screen is a physical presentation surface; an office is a workspace. Artwork must avoid real personnel data and universal workplace arrangements. |
+| Roles and employment terms | Review applicant, candidate, intern, apprentice, qualification, competency, salary, wage, commission, benefits, pension, employment status, and contract language. Do not infer a qualification, entitlement, status, or authorization from a job title. |
+| Actions and descriptions | Confirm recruit, interview, appoint, assess, induct, retain, resign, retire, disclose, anonymize, mediate, impartial, inclusive, objective, and confidential in context. Employment promotion and transfer differ from retail promotion and moving a person in care. |
+| Recruitment and selection | Review resume, referee, shortlist noun and verb, vacancy, criteria, rubric, skills test, work sample, interview panel, and bias. The shared work sample is produced evidence, not a second identity for a work-sample testing method. No screening process or real applicant judgment is supplied. |
+| Learning and support | Verify onboarding, buddy, mentor, mentee, probation, induction, learning management system, workshops, and professional development. Existing Education identities are reused for equivalent meanings. Learning platform and scoring rubric do not add counted synonyms. |
+| Concerns and fairness | Review grievance, allegation, evidence, witness, discrepancy, inconsistency, bias, stereotype, appeal, and workplace concerns. Inconsistency concerns uneven treatment across comparable situations; discrepancy concerns records or values expected to match. An allegation or concern is not an established fact. |
+| Burnout | Preserve occupational context and exhaustion, distance or cynicism, and diminished professional effectiveness. The consulted WHO overview states that burnout is not classified there as a medical condition. Do not turn vocabulary into diagnosis, screening, or treatment. |
+| Payroll and information | Distinguish a pay period from the cutoff and pay date. Final pay is pay due in connection with the end of employment under applicable arrangements. Review deduction, error, records, access, data minimization, retention, and confidentiality without implying a universal legal basis or financial calculation. |
+| Employment changes | Review notice, resignation, retirement, transfer, secondment, redeployment, handover, outstanding work, and follow-up. Secondment uses the temporary-assignment verb second, not the ordinal or unit of time. A vocabulary definition does not promise a procedure or outcome. |
+| Canonical reuse | Work sample and assess share broadened definitions covering learning, skill, or performance evidence, with Education examples retained. Rubric and learning management system retain their previous definitions. Care-needs assessment remains a separate identity. Verify contextual reuse without duplicating ordinary synonyms. |
+| Morphology | Review semantic transparency and lexicalization in workshop, burnout, onboarding, offboarding, and compounds. Impartial has canonical negative in with surface im and an explicit in_to_im_before_p rule. Check final-e and y-to-i spelling changes, underpayment/overpayment, absenteeism, redeployment, and the abbreviation e- in e-learning. Null analyses remain unknown rather than atomic. |
+| Regional forms | Review resume and CV distinctions, enrol/enroll spellings, reasonable adjustment/accommodation, pay terminology, employment status, and local role labels. Accepted forms are candidates and do not create additional inventory counts. |
+| Media | Acquire and inspect appropriate production assets; record original source, creator, license, acquisition status, and available animations. All new image suitability flags remain false. Audio retains ava-sweet: en-US-AvaNeural, rate -15%, pitch +8Hz, volume +0%, no postprocessing. |
+
+## Consulted sources and access limits
+
+Thirteen records under `hr-` IDs retain exact URLs, publishers, dates, and scopes in the source registry:
+
+- [BLS Human Resources Specialists](https://www.bls.gov/ooh/business-and-financial/human-resources-specialists.htm), [O*NET Human Resources Specialists](https://www.onetonline.org/link/summary/13-1071.00), and BLS compensation/benefits and training/development role pages provide occupational context. They do not certify every term, authorize checks, or establish universal qualification and entitlement rules.
+- [CIPD recruitment introduction](https://www.cipd.org/en/knowledge/factsheets/recruitment-factsheet/) was read only at the public introduction and contents level. The membership-gated substantive factsheet was not consulted.
+- ACAS job-advertising and interview-selection passages provide UK-specific context. They do not supply a universal scoring model, screening permission, or hiring decision.
+- [ICO employment information](https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/employment/) was consulted only as a landing page. Its recruitment link is listed under draft guidance with consultations closed. Linked detailed guidance was not read; no lawful basis or retention period is inferred.
+- The [WHO burnout overview](https://www.who.int/news/item/28-05-2019-burn-out-an-occupational-phenomenon-international-classification-of-diseases), dated 28 May 2019, supports the occupational context, three dimensions, and not-medical-condition wording. Full ICD-11 text, tests, and treatment were not adopted.
+- [OPM Work Samples and Simulations](https://www.opm.gov/policy-data-oversight/assessment-and-selection/other-assessment-methods/work-samples-and-simulations/) was read at its opening method-description paragraphs. The distinction between an assessment method and a produced-work item informed editorial canonical reuse; it is not OPM endorsement. Linked tests and scoring methods were not adopted.
+- Actual Merriam-Webster entries for [impartial](https://www.merriam-webster.com/dictionary/impartial), [im-](https://www.merriam-webster.com/dictionary/im-), and [in-](https://www.merriam-webster.com/dictionary/in-) support a targeted pending negative-prefix candidate. The negative prefix and its im- form before b, m, or p are distinct from spatial in and unrelated IM abbreviations. Syllable dots were not used as morpheme boundaries.
+
+All references remain `pending_term_check`. No page supplies asset rights or approves the whole course. Before changing a release gate, record reviewer identity, relevant expertise, review date, region, source edition, exact entry ID, decision, and revised wording. Picture suitability, morphology, pronunciation, asset provenance, packaging, and complete themes each require their own evidence.

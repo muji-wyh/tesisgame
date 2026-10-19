@@ -4,10 +4,20 @@ const { runGodot } = require('./run-godot.cjs');
 
 const root = path.resolve(__dirname, '..');
 const groups = {
-  vocabulary: { godot: ['vocabulary_loader_tests', 'vocabulary_loading_flow_tests'], node: ['vocabulary-loader', 'vocabulary-packs'] },
+  vocabulary: {
+    godot: ['vocabulary_loader_tests', 'vocabulary_loading_flow_tests', 'learning_content_tests', 'professional_picture_exclusions_tests',
+      'learning_context_flow_tests', 'learning_path_selector_tests', 'learning_theme_art_tests', 'professional_game_adapters_tests',
+      'professional_media_tests', 'professional_approved_audio_tests', 'professional_retail_morphology_tests', 'professional_media_bundles_tests',
+      'professional_progress_tests', 'professional_domain_owner_tests', 'professional_round_loader_tests', 'professional_store_tests',
+      'professional_session_tests', 'professional_play_tests', 'professional_application_flow_tests', 'professional_scene_disposal_tests',
+      'professional_scene_modes_disposal_tests', 'professional_view_teardown_tests', 'professional_word_library_tests', 'professional_held_six_routes_tests'],
+    node: ['vocabulary-loader', 'vocabulary-packs', 'professional-content', 'professional-approved-audio', 'professional-retail-morphology',
+      'professional-retail-media', 'professional-voice-generation', 'professional-picture-exclusions', 'professional-media',
+      'professional-media-bundles', 'professional-media-package', 'professional-progress', 'professional-domain-release', 'professional-domain-web', 'professional-held-six-routes']
+  },
   jelly: { godot: ['jelly_match_model_tests', 'jelly_match_view_tests', 'jelly_loot_meter_tests', 'jelly_chest_celebration_tests', 'jelly_chest_tap_tests', 'jelly_header_layout_tests', 'jelly_match_flow_tests', 'jelly_finish_confirmation_tests', 'danger_game_over_tests', 'jelly_queued_upgrade_settlement_tests', 'jelly_finish_pull_tests', 'jelly_backdrop_tests', 'jelly_result_coin_tests', 'jelly_match_audio_tests', 'coin_audio_tests', 'pop_reward_room_tests'], node: ['jelly-host', 'jelly-reward-art', 'chest-milestone-art'] },
-  'word-jelly': { godot: ['word_jelly_model_tests', 'word_jelly_word_reveal_tests', 'word_jelly_view_tests', 'word_jelly_merge_speech_tests', 'jelly_chest_tap_tests', 'jelly_header_layout_tests', 'word_jelly_flow_tests', 'word_jelly_powerup_flow_tests', 'word_jelly_powerup_button_tests', 'jelly_finish_confirmation_tests', 'danger_game_over_tests', 'jelly_queued_upgrade_settlement_tests', 'jelly_finish_pull_tests', 'jelly_backdrop_tests', 'coin_wallet_tests', 'coin_audio_tests', 'game_library_tests'] },
-  growth: { godot: ['growth_state_tests', 'growth_flow_tests', 'word_sampler_tests', 'pip_growth_tests', 'pip_age_motion_tests'], node: ['growth-host', 'growth-vocabulary'] },
+  'word-jelly': { godot: ['growth_morphology_tests', 'morphology_tests', 'word_jelly_morphology_tests', 'word_jelly_authored_drag_tests', 'word_jelly_model_tests', 'word_jelly_word_reveal_tests', 'word_jelly_view_tests', 'word_jelly_morphology_view_tests', 'word_jelly_merge_speech_tests', 'jelly_chest_tap_tests', 'jelly_header_layout_tests', 'word_jelly_flow_tests', 'word_jelly_powerup_flow_tests', 'word_jelly_powerup_button_tests', 'jelly_finish_confirmation_tests', 'danger_game_over_tests', 'jelly_queued_upgrade_settlement_tests', 'jelly_finish_pull_tests', 'jelly_backdrop_tests', 'coin_wallet_tests', 'coin_audio_tests', 'game_library_tests', 'game_mode_preview_tests'] },
+  growth: { godot: ['growth_morphology_tests', 'growth_state_tests', 'growth_flow_tests', 'word_sampler_tests', 'pip_growth_tests', 'pip_age_motion_tests'], node: ['growth-host', 'growth-vocabulary', 'growth-morphology'] },
   core: {
     godot: [
       'run_tests', 'match_hint_payment_tests', 'adventure_model_tests', 'adventure_scene_tests', 'settlement_modal_tests', 'medal_progress_tests',
@@ -27,7 +37,7 @@ const groups = {
   },
   flow: {
     godot: [
-      'steady_match_tests', 'layout_tests', 'three_mode_tests', 'game_library_tests', 'layout_finish_tests',
+      'steady_match_tests', 'layout_tests', 'three_mode_tests', 'game_library_tests', 'game_mode_preview_tests', 'layout_finish_tests',
       'collection_polish_tests', 'navigation_removal_tests', 'scroll_momentum_tests', 'pip_mode_menu_tests', 'scrollbar_visibility_tests', 'theme_review_tests',
       'presentation_tests', 'playful_words_tests'
     ]
@@ -47,7 +57,7 @@ const groups = {
     node: ['voice-host', 'local-speech-host', 'speech-debug-host', 'voice-pop-reference-assets', 'pop-reward-host']
   },
   'layout-release': { godot: ['layout_release_tests'] },
-  themes: { godot: ['new_theme_tests', 'pip_outfit_tests'], node: ['pip-wardrobe', 'world-audio'] },
+  themes: { godot: ['new_theme_tests', 'pip_outfit_tests'], node: ['pip-wardrobe', 'world-audio', 'theme-motion'] },
   'pip-audio': { godot: ['pip_audio_tests'] },
   'pip-feedback': { godot: ['reward_confetti_tests', 'pip_gameplay_motion_tests', 'pip_gameplay_feedback_tests', 'pip_expression_tests',
     'round_celebration_tests', 'round_celebration_audio_tests', 'round_celebration_flow_tests'] },
@@ -77,8 +87,10 @@ function createPlan(names = ['all']) {
 function runTests(plan) {
   for (const [index, suite] of plan.godot.entries()) {
     console.log(`\n[Godot ${index + 1}/${plan.godot.length}] ${suite.file}`);
-    // The vocabulary layout suite checks all 1,550 labels and representative scenes at six sizes.
-    const timeout = suite.file.endsWith('/vocabulary_layout_tests.gd') ? 600000 : 180000;
+    // Large layout suites keep every assertion while allowing their measured native runtime.
+    // Vocabulary covers 1,550 labels; Word Jelly covers 23,000+ assertions at fourteen sizes.
+    const timeout = suite.file.endsWith('/vocabulary_layout_tests.gd') ? 600000
+      : suite.file.endsWith('/word_jelly_view_tests.gd') ? 300000 : 180000;
     const result = runGodot(['--headless', ...suite.options, '--path', '.', '--script', `res://${suite.file}`], { timeout });
     process.stdout.write(result.stdout || '');
     process.stderr.write(result.stderr || '');

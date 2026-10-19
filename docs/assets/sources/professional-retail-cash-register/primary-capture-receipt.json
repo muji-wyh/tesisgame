@@ -1,0 +1,30 @@
+{
+  "captured_at": "2026-10-16T11:30:34.863Z",
+  "purpose": "Primary source text retention for scratch-only asset review; page artwork is not production art.",
+  "browser_attempts": [
+    {
+      "browser": "Edge",
+      "outcome": "First named-browser creation timed out. Fresh inventory and explicit Edge browser ID succeeded; source page and explicit CC0/free-commercial-use statement inspected."
+    }
+  ],
+  "responses": [
+    {
+      "url": "https://tinytreats.itch.io/bakery-interior",
+      "final_url": "https://tinytreats.itch.io/bakery-interior",
+      "status": 200,
+      "file": "source-page.html",
+      "bytes": 32660,
+      "sha256": "039009326c7e45b318cabc8692f1ae905ea21eb4aae6954ce25e4ab55f527591",
+      "content_type": "text/html"
+    },
+    {
+      "url": "https://www.patreon.com/tinytreats/posts/tiny-treats-now-131367880",
+      "final_url": "https://www.patreon.com/tinytreats/posts/tiny-treats-now-131367880",
+      "status": 403,
+      "file": "creator-post.html",
+      "bytes": 5627,
+      "sha256": "c33e6a9e431005edbd6e5cfe9a9930406e0cf63de09a08773f9d5ff12a1e16ab",
+      "content_type": "text/html; charset=UTF-8"
+    }
+  ]
+}

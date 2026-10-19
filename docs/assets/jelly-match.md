@@ -319,16 +319,18 @@ See
 | Falling gel makes contact | `assets/audio/jelly-match/land.wav` | rubberduck `slime_16.ogg` | 220 ms | −16.0 dBFS |
 | Two jelly surfaces first touch | `assets/imported-audio/jelly-interaction/contact.wav` | User-selected Wet & Springy / Contact; greenlinker and rubberduck | 135 ms | −14.143 dBFS |
 | Two gel bodies commit to a merge | `assets/imported-audio/jelly-interaction/merge-together-v3.wav` | User-selected Jelly Merge Together v3; greenlinker and rubberduck | 440 ms | −14.473 dBFS |
-| Completed item clears with elastic release | `assets/audio/jelly-match/clear.wav` | rubberduck `slime_16.ogg` with Aeva `boing.flac` | 340 ms | −7.5 dBFS |
+| Completed item is collected | `assets/audio/jelly-match/collect-{do,re,mi,fa,sol,la,ti}.wav` | Seven relative major-scale adaptations of rubberduck `slime_16.ogg` with Aeva `boing.flac` | 240 ms each | At or below −7.5 dBFS |
 | Each full-board countdown beat | `assets/audio/jelly-match/danger.wav` | `Audio/question_001.ogg` | 491 ms | −12.00 dBFS |
 
 These are measurements of the final PCM files. The selected contact and v3 merge
 retain their approved samples, duration and pitch; their RMS levels are −31.615
 and −30.613 dBFS. Both use runtime gain 1.0 with the existing pronunciation duck.
 The former 620 ms merge remains in the historical material asset record but is
-no longer assigned to gameplay. The clear retains its original WAV checksum,
-runtime gain 0.90 and 0.70-second trigger. Its gel-skin release and spring layer
-are unchanged.
+no longer assigned to gameplay. Collection advances through seven shorter
+[collection notes](jelly-collection-audio.md) in Do, Re, Mi, Fa, Sol, La, Ti order
+per accepted `pop` event, then repeats from Do. The original clear
+WAV remains unchanged as the source master; runtime gain 0.90 and the existing
+collection event boundaries are preserved.
 
 Contact plays once when a dragged jelly first touches another body's outline,
 including a new contact first detected at pointer-up. Holding the same contact
@@ -512,8 +514,8 @@ Each collection creates an independent content-sized burst in the upper
 playfield, with varied placement and scale and an elastic entrance. Direct taps
 retain the 1.95-second reading beat and selected-word pronunciation. Collect
 batches launch a new burst every 120 ms, retaining older bursts for 480-860 ms
-according to screen space; batch pickups never pronounce words. The unchanged
-`clear.wav` cue fires at the 180 ms manual-pop boundary or the 60 ms batch-pop
-boundary. Speech ducking, mute and interruption rules remain shared with
+according to screen space; batch pickups never pronounce words. The next ascending
+[collection note](jelly-collection-audio.md) fires at the 180 ms manual-pop
+boundary or the 60 ms batch-pop boundary. Speech ducking, mute and interruption rules remain shared with
 ordinary gameplay. See [Jelly Words](jelly-words.md) for the active reveal and
 collection behavior.

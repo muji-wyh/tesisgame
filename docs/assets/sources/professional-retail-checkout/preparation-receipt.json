@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-16",
+  "status": "prepared_frozen_for_root_read_only_inspection",
+  "checks": 62,
+  "failures": 0,
+  "retained_source_files": 24,
+  "complete_models": 6,
+  "script_syntax": "Both CJS files passed node --check. GDScript has not been parsed or run.",
+  "native_rendering": false,
+  "production_mutations": false,
+  "files": {
+    "prepare-sources.cjs": "9e6d58dd6a0ea3549b10d913960725f5990478980d328c1001b300042f4abd92",
+    "run-native-probe.cjs": "2aeeed51a81e3691c32c85d44e511b0939a38abaffd00f12f4e06048b6d7a30b",
+    "inspect-sources.gd": "1a94177d1c8e3064977fb461724a634e739861c25ffb7de13c63a4de55cd2f08",
+    "probe-composition.gd": "a86a91e175f0434f11c70826eefd579ca7ea04450a3696e1665c9e5e6f543558",
+    "source-record.json": "ea4f1e66fb38f55ea908a6d52c69bbddea86ae62dceaf232d6b22bc62f59fe91",
+    "composition-decision.json": "3ad6642a2a0c9d67545cc9802419892a4efd60baa50d3892a596d31326deb6d8",
+    "README.md": "7840cc9d9cbcd7144920b1c44343db7c043a541f29ed75022b4a0a9edada8f3b"
+  }
+}

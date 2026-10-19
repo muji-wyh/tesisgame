@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "status": "root_authorized_one_shot_fifth10_memory_guard",
+  "dispatcher": "/root",
+  "guard_author": "/root",
+  "entrypoint": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/guard.cjs",
+  "output": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/attempt-001",
+  "root_confirms_guard_source_reviewed": true,
+  "production_writers_yielded": true,
+  "execute_preparation_or_project_code": false,
+  "guard_source_inventory": {
+    "path": "build/professional-english/foundation02-fifth10-preparation-guard-proposal-r02/source-inventory.json",
+    "bytes": 1546,
+    "raw_sha256": "e3b9cd630ccb4edfc3985ba8e5925029911f853616d2730935c944cfab8c1c78"
+  },
+  "preparation_root_input": {
+    "path": "build/professional-english/foundation02-fifth10-root-preparation-r03/input.json",
+    "bytes": 1191,
+    "raw_sha256": "f8a61b805220a2d6e64788a92960a35bd280af3c45b1f265dbdcf91955b81549"
+  },
+  "actual_capture": {
+    "source_inventory": {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/source-inventory.json",
+      "bytes": 1826,
+      "raw_sha256": "b52fea9c2181064d024d35a05f599ad3b24897e2402927031f13e449e5a10993"
+    },
+    "independent_source_review": {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-independent-review-r02/review.json",
+      "bytes": 8919,
+      "raw_sha256": "43173b9061e326e27a60e87d54f5d0c72527b14e70c6df6c490a456f0eb53c78"
+    },
+    "root_input": {
+      "path": "build/professional-english/foundation02-fifth10-root-capture-r02/input.json",
+      "bytes": 11856,
+      "raw_sha256": "9e6dd6fd5afa6f230dc79331bfbb94cf2b5c81d622aee4758c6ea466d7a01c1c"
+    },
+    "receipt": {
+      "path": "build/professional-english/foundation02-fifth10-root-binding-proposal-r02/execution-r01/capture-receipt.json",
+      "bytes": 2168,
+      "raw_sha256": "76a258ee372ea2b20c38d0cc6a6d17eda26f9992512bda6c4391672a2dd950fe"
+    }
+  },
+  "note": "Root inspected the separate independent guard r02 source acceptance and actual binding acceptance. Current production writers are yielded; only separate source-only proposals/reviews are active. This dispatch permits memory-only guard fixtures and no actual preparation/project execution.",
+  "independent_guard_source_review": {
+    "path": "build/professional-english/foundation02-fifth10-preparation-guard-independent-review-r02/review.json",
+    "bytes": 6345,
+    "raw_sha256": "422c67a7b90f18689b68f0a152e1a83440c11f9353bea28a56ee43d9b2b7b3bd"
+  }
+}

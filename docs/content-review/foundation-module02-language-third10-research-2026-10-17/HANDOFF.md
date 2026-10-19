@@ -1,0 +1,15 @@
+# Foundation02 third-ten draft research
+
+This frozen author package proposes eight bounded language decisions and holds postpone and verify unchanged. It grants no independent acceptance. Read candidate-ledger.json with source-index.json, research-notes.json, oxford-html-metadata.json and context-screen.json.
+
+Proposals retain the existing definition and example. Editorial levels: correct A2; adjust, reschedule, cancel and resolve B2; assist, locate and attach B1. Only seven difficulty fields differ in the in-memory projection. Postpone retains literal Oxford C1 and Collins B1+ evidence; verify retains Oxford C1 and no observed Collins level. Both stay exact pending an independent decision. All source disagreements, absent labels and selected sense boundaries remain explicit.
+
+The package pins the current R33 registry f470936fc3bff7ff619b3af057a20cf5e05034013bbf08948e380847228dc4c5 and 353 source-file hashes. The audit has zero errors, 130 reviewed lexemes and zero ready modules, unchanged by research. The source author cannot independently approve the proposals. No production, source registry, shared tests or checkpoint has been edited, and no native tests ran.
+
+Context preservation covers 200 memberships, 39 matching expressions, 42 term-expression pairs, four focus expressions, 43 related identities, 17 inherited expression holds and exact prior collect/notify whole-entry holds. Adjective correct, participial modifiers, assisted living, ambiguous attachment uses and specialist contexts do not acquire selected verb bindings. Foundation02.04, .05, .07 and .08 remain exact and pending; mixed held targets block any inferred whole-expression acceptance. Complete's pending form-image mismatch remains live and unapproved.
+
+Independent review should reopen original selected publisher senses, preserve literal Oxford attributes and Collins B1+, check formal/regional boundaries, examine ordinary booking cancellation against Oxford's separate event/agreement senses, and consider the held verify checking/confirming distinction. It should approve or hold exact definition/example/difficulty projections only. Proposed editorial notes are review material and not live updates. No morphology, media, domain, human or release approval is implied.
+
+The first assembly stopped before writing proposal outputs because its schema API argument used a filename rather than the required short schema name. Its executed code, start manifest and failed attempt log are retained unchanged. The fresh assemble-r02.cjs corrects only that invocation and uses separate execution witnesses.
+
+The original Oxford pages were consulted in memory; only source hashes and minimal metadata were retained. Collins observations come from rendered original publisher pages. Cambridge cancel returned an access error and was not used. Do not rerun completed collection or assembly scripts. Any revision must be a new artifact with its own lineage. Root owns future delivery, historical test adjustments and combined validation.

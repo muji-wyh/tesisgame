@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-10-16T18:34:55.611Z",
+  "root_review": "Read dependency map and verified exact frozen artifacts, 52 static reference files and 5 absences. This is a next-step proposal, not implemented production behavior or a completed acceptance gate.",
+  "files": [
+    {
+      "file": "README.md",
+      "source": "build/professional-english/runtime-application-integration-next-r01/README.md",
+      "sha256": "a0fc051d7e2dff2e22d5af00ead71e11bb07635ec61a3db086d928e73be28c2f"
+    },
+    {
+      "file": "source-inputs.json",
+      "source": "build/professional-english/runtime-application-integration-next-r01/source-inputs.json",
+      "sha256": "ba441335a4bde59fb569b244adee6597bff60a626798d668ab39ea059a7f8734"
+    },
+    {
+      "file": "artifact-inventory.json",
+      "source": "build/professional-english/runtime-application-integration-next-r01/artifact-inventory.json",
+      "sha256": "3f126ab0bb039df1faea9432a46a540f4c5565050af8281b7b9443eae1c5ec87"
+    }
+  ]
+}

@@ -11,7 +11,7 @@ import sys
 import uuid
 
 
-EDGE_TTS_VERSION = "7.2.8"
+EDGE_TTS_VERSION = "7.3.1"
 PROFILE = {"voice": "en-US-AvaNeural", "rate": "-15%", "pitch": "+8Hz", "volume": "+0%"}
 MAX_ATTEMPTS = 3
 MAX_CONCURRENCY = 2

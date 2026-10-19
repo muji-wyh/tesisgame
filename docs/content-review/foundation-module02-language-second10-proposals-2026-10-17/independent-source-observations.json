@@ -1,0 +1,221 @@
+{
+  "schema": 1,
+  "reviewer": "Codex recover_delivery independent AI language reviewer; not human or specialist approval",
+  "reviewed_on": "2026-10-17",
+  "method": "The reviewer directly opened all twenty original Oxford/Collins URLs before reading frozen candidates. Oxford raw original URLs were additionally fetched independently with Node fetch; a supplementary scan explicitly checked both cefr and fkcefr attributes. Only selected identifiers, original summaries and response-body metadata are retained; raw pages were not saved.",
+  "extraction_correction": "The preliminary raw scan looked only for fkcefr, so it did not observe cefr on eight pages. This supplementary scan corrects that extraction limitation; preliminary absence never established absence of a level.",
+  "raw_hash_limits": "SHA256 values identify unsaved response bytes at the stated retrieval instant, not persistent source snapshots, author artifact hashes, or expected hashes for later dynamic requests.",
+  "sources": [
+    {
+      "term": "complete",
+      "oxford": {
+        "url": "https://www.oxfordlearnersdictionaries.com/definition/english/complete_2",
+        "http_status": 200,
+        "raw_body_bytes": 84440,
+        "raw_body_sha256": "963e109d2a9828f5465c1e2765f67f60bdb62bbde5ff50eeb9e4fb6b1c26e474",
+        "retrieved_at": "2026-10-16T18:02:38.702Z",
+        "selected_sense_element": "complete_sng_6",
+        "selected_html_attribute": "cefr",
+        "literal_html_level": "a1",
+        "selected_rendered_topic_level": null,
+        "topic_scope": null
+      },
+      "collins": {
+        "url": "https://www.collinsdictionary.com/dictionary/english/complete",
+        "selected_sense": "8 and 9",
+        "literal_rendered_selected_level": "A2"
+      },
+      "finding": "Finishing work or an activity is separate from form filling (Oxford 2; Collins 10) and making a set whole."
+    },
+    {
+      "term": "prepare",
+      "oxford": {
+        "url": "https://www.oxfordlearnersdictionaries.com/definition/english/prepare",
+        "http_status": 200,
+        "raw_body_bytes": 94263,
+        "raw_body_sha256": "f19803b79ec836976fb9d73381f8556e585f2184e4150e0f3bf3981a9a648a26",
+        "retrieved_at": "2026-10-16T18:02:38.525Z",
+        "selected_sense_element": "prepare_sng_1",
+        "selected_html_attribute": "cefr",
+        "literal_html_level": "a1",
+        "selected_rendered_topic_level": null,
+        "topic_scope": null
+      },
+      "collins": {
+        "url": "https://www.collinsdictionary.com/dictionary/english/prepare",
+        "selected_sense": "1",
+        "literal_rendered_selected_level": "A2"
+      },
+      "finding": "Transitive making-ready supports the room example. Food preparation and self-preparation are distinct."
+    },
+    {
+      "term": "arrange",
+      "oxford": {
+        "url": "https://www.oxfordlearnersdictionaries.com/definition/english/arrange",
+        "http_status": 200,
+        "raw_body_bytes": 89053,
+        "raw_body_sha256": "35a917a9333d5bd438f2352c27d1a76d02a103bf14859102927f744f13bd4240",
+        "retrieved_at": "2026-10-16T18:02:38.916Z",
+        "selected_sense_element": "arrange_sng_1",
+        "selected_html_attribute": "cefr",
+        "literal_html_level": "a2",
+        "selected_rendered_topic_level": null,
+        "topic_scope": null
+      },
+      "collins": {
+        "url": "https://www.collinsdictionary.com/dictionary/english/arrange",
+        "selected_sense": "1",
+        "literal_rendered_selected_level": "B1"
+      },
+      "finding": "Event/meeting planning is distinct from putting objects in physical order and adapting music."
+    },
+    {
+      "term": "collect",
+      "oxford": {
+        "url": "https://www.oxfordlearnersdictionaries.com/definition/english/collect_1",
+        "http_status": 200,
+        "raw_body_bytes": 98506,
+        "raw_body_sha256": "5230895b11497d92dd081dce6889caf6f9dbfad4b76fd5691da969aa5a48f4b3",
+        "retrieved_at": "2026-10-16T18:02:38.964Z",
+        "selected_sense_element": "collect_sng_6",
+        "selected_html_attribute": "cefr",
+        "literal_html_level": "b1",
+        "selected_rendered_topic_level": null,
+        "topic_scope": null
+      },
+      "collins": {
+        "url": "https://www.collinsdictionary.com/dictionary/english/collect",
+        "selected_sense": "3",
+        "literal_rendered_selected_level": "A2"
+      },
+      "finding": "Pickup differs from gathering (Oxford 1, cefr=a2; Collins 1, B1). Collins labels pickup British; Oxford explicitly labels person-pickup examples British. General-region gather identity remains unresolved."
+    },
+    {
+      "term": "deliver",
+      "oxford": {
+        "url": "https://www.oxfordlearnersdictionaries.com/definition/english/deliver",
+        "http_status": 200,
+        "raw_body_bytes": 101505,
+        "raw_body_sha256": "3fe8a2b82322af6451e1670c0af37b82e1e85c8276dbc25eaaf6a29990517f13",
+        "retrieved_at": "2026-10-16T18:02:38.963Z",
+        "selected_sense_element": "deliver_sng_1",
+        "selected_html_attribute": "cefr",
+        "literal_html_level": "b1",
+        "selected_rendered_topic_level": "B1",
+        "topic_scope": "Shopping"
+      },
+      "collins": {
+        "url": "https://www.collinsdictionary.com/dictionary/english/deliver",
+        "selected_sense": "1",
+        "literal_rendered_selected_level": "B1"
+      },
+      "finding": "Physical items to a destination/recipient are supported. Information, speech, promised outcomes and childbirth are separate."
+    },
+    {
+      "term": "replace",
+      "oxford": {
+        "url": "https://www.oxfordlearnersdictionaries.com/definition/english/replace",
+        "http_status": 200,
+        "raw_body_bytes": 87213,
+        "raw_body_sha256": "c798891a421ff3bcbe5104e3e833734b28044913f1b58cfec7b0a3de8d8780ca",
+        "retrieved_at": "2026-10-16T18:02:38.448Z",
+        "selected_sense_element": "replace_sng_3",
+        "selected_html_attribute": "cefr",
+        "literal_html_level": "a2",
+        "selected_rendered_topic_level": null,
+        "topic_scope": null
+      },
+      "collins": {
+        "url": "https://www.collinsdictionary.com/dictionary/english/replace",
+        "selected_sense": "3",
+        "literal_rendered_selected_level": "B1"
+      },
+      "finding": "Damaged/old-item replacement supports the narrowed candidate. General substitution has separate Oxford 2 A2 and literal Collins 2 B1+; putting the same object back is separate."
+    },
+    {
+      "term": "return",
+      "oxford": {
+        "url": "https://www.oxfordlearnersdictionaries.com/definition/english/return_1",
+        "http_status": 200,
+        "raw_body_bytes": 112595,
+        "raw_body_sha256": "6f77862856290c03712c892870955e02f3d22acbdbd0ed301e390a2301a0aaf7",
+        "retrieved_at": "2026-10-16T18:02:38.965Z",
+        "selected_sense_element": "return_sng_2",
+        "selected_html_attribute": "cefr",
+        "literal_html_level": "b1",
+        "selected_rendered_topic_level": "B1",
+        "topic_scope": "Shopping"
+      },
+      "collins": {
+        "url": "https://www.collinsdictionary.com/dictionary/english/return",
+        "selected_sense": "3",
+        "literal_rendered_selected_level": "A2"
+      },
+      "finding": "Transitive borrowed/taken-object return supports the borrowed-key candidate. Purchased-goods return is a separate unlabeled Collins sense; travel, software return and noun compounds are excluded."
+    },
+    {
+      "term": "report",
+      "oxford": {
+        "url": "https://www.oxfordlearnersdictionaries.com/definition/english/report_2",
+        "http_status": 200,
+        "raw_body_bytes": 110673,
+        "raw_body_sha256": "10ebf621aacc67956d19b28f4ea04c24c9b2031be7d84e9b7567e01af26c70e8",
+        "retrieved_at": "2026-10-16T18:02:39.292Z",
+        "selected_sense_element": "report_sng_1",
+        "selected_html_attribute": "cefr",
+        "literal_html_level": "a2",
+        "selected_rendered_topic_level": null,
+        "topic_scope": null
+      },
+      "collins": {
+        "url": "https://www.collinsdictionary.com/dictionary/english/report",
+        "selected_sense": "1",
+        "literal_rendered_selected_level": "B1"
+      },
+      "finding": "General giving information supports the event/result/problem definition. News topic A2, job reporting B1+, crime/accident reporting and arrival for duty are separately scoped."
+    },
+    {
+      "term": "notify",
+      "oxford": {
+        "url": "https://www.oxfordlearnersdictionaries.com/definition/english/notify",
+        "http_status": 200,
+        "raw_body_bytes": 79832,
+        "raw_body_sha256": "7e04e0e512d8c1cf656545fb68a46703814c5cce399895af0af0d0b2c9c94e22",
+        "retrieved_at": "2026-10-16T18:02:38.446Z",
+        "selected_sense_element": "notify_sng_1",
+        "selected_html_attribute": "fkcefr",
+        "literal_html_level": "c1",
+        "selected_rendered_topic_level": null,
+        "topic_scope": null
+      },
+      "collins": {
+        "url": "https://www.collinsdictionary.com/dictionary/english/notify",
+        "selected_sense": "single verb",
+        "literal_rendered_selected_level": null
+      },
+      "finding": "Formal informing matches the meaning, but selected Oxford C1 remains contrary to current A2; Collins shows formal register with no selected CEFR label. Keep difficulty held."
+    },
+    {
+      "term": "contact",
+      "oxford": {
+        "url": "https://www.oxfordlearnersdictionaries.com/definition/english/contact_2",
+        "http_status": 200,
+        "raw_body_bytes": 84522,
+        "raw_body_sha256": "1997c0a749d27068318e0aea7bfe3dee6908287150a79804b8e315774c8de0dc",
+        "retrieved_at": "2026-10-16T18:02:38.736Z",
+        "selected_sense_element": "contact_sng_9",
+        "selected_html_attribute": "fkcefr",
+        "literal_html_level": "b1",
+        "selected_rendered_topic_level": "B1",
+        "topic_scope": "Phones, email and the internet"
+      },
+      "collins": {
+        "url": "https://www.collinsdictionary.com/dictionary/english/contact",
+        "selected_sense": "3",
+        "literal_rendered_selected_level": "A2"
+      },
+      "finding": "Communication verb and its direct object match the candidate. Noun contact, details, physical contact and specialist compounds are excluded."
+    }
+  ],
+  "common_exclusions": "The Oxford footer B2 belongs to reasonably. No footer, separate noun, adjective, neighboring sense or source lesson label is transferred to the selected verb. No source page content, source example, audio or artwork is integrated."
+}

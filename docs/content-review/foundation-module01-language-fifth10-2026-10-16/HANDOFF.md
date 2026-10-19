@@ -1,0 +1,15 @@
+# Foundation01 fifth ten: original pending language candidates
+
+Frozen author proposals cover feedback, permission, responsibility, task, role, priority, location, address, signature and time zone. All ten retain pending language and their original review fields; root must independently review exact candidate hashes in language-ledger.json. This package has no baseline binding, delivery scripts or shared-test previews.
+
+Four definition proposals include response information as well as feedback comments, a person or group in an organizational role, activity locations as well as objects, and postal address details without requiring them to be written. Responsibility uses a clearer countable-duty example. Proposed levels are feedback/responsibility/role/priority/time zone B2 and location/signature B1; permission/task/address retain A2.
+
+Twenty real Oxford/Collins pages were directly inspected. Permission A2/B1 and task A2/B2 disagreements stay literal. Location B1+ is not rounded; its B1 proposal uses Oxford selected B1 and explicit editorial scope. Priority has no selected-source CEFR: its B2 proposal is editorial, and the countable-item B2 and road-right-of-way C2 observations remain other-sense evidence. Actor-role and computing-address labels are likewise excluded from the selected senses. No dictionary entry, audio, image or license was acquired.
+
+The context review gives individual observations for 111 matching expressions (206 memberships), all five other local expressions and 65 related senses. It captures all expressions in all twenty selected containing modules. Three holds remain: Foundation01.06 postal/electronic address, Customer Support03.08 tool permissions, and Office Admin09.01 upload permission. All nine historical expression holds remain unchanged. Signature marks, electronic signing data and stamps are kept distinct; so are physical/logical locations, person/group work roles and biological/software functions, and ordinary work tasks versus task-manager processes.
+
+Preservation guards cover 164 unique lexemes, 123 expressions, 97 modules, 145 existing sources, ten Growth files and ten prior artifacts. Supervisor and attendance remain their entire unchanged pending A2 entries, with their prior held meanings/levels unaccepted. Forms, regions, existing reference prefixes, morphology, media, approved Ava Sweet settings, domain and release gates stay exact.
+
+R26 is recorded as a successful root-owned checkpoint for information only. Candidate schema and current/proposed in-memory content audits have zero errors; every summary gate is unchanged. All 3381 scope guards passed. No production/shared-test writes, test suites, native runtime/probes, baseline binding or independent acceptance occurred. Preparation is write-once: never rerun or edit frozen outputs.
+
+Ledger JSON SHA-256: bbc8b3feab69e52fec9559d34fcc13a9424e4a2182356ef37fd3f0785c7124c8. Preimages JSON SHA-256: 6b417dabf9d24b88ad94bfac650d6a837ff85b0b600a171cc22ac36e80c50a16. Actual raw/JSON hashes are in inventory.json.

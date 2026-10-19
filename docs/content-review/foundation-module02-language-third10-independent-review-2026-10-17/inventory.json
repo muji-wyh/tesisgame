@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "status": "frozen_independent_AI_language_review_no_production_promotion",
+  "review_sha256": "2aaac3d8672600001faa104594a221ed1d079caf9723cc5495d1172de7fb0c4d",
+  "artifacts": [
+    {
+      "path": "review.json",
+      "bytes": 43281,
+      "sha256": "2aaac3d8672600001faa104594a221ed1d079caf9723cc5495d1172de7fb0c4d"
+    },
+    {
+      "path": "REVIEW.md",
+      "bytes": 3894,
+      "sha256": "9b4600fe4affc0a75df108abe7d57484d07358f7ba7fefc65b03443d2335ce6f"
+    },
+    {
+      "path": "static-bindings.json",
+      "bytes": 132368,
+      "sha256": "62f41b3f8a66ce54270086cb25a3b6d3272fe8d7846fec39993f5dfd85dcc349"
+    },
+    {
+      "path": "static-hashes.cjs",
+      "bytes": 5538,
+      "sha256": "7b6a8e332229ce6916e4a16041e10cdea9849ee1666da1eb90778f32757fb6fa"
+    },
+    {
+      "path": "static-hashes.json",
+      "bytes": 19293,
+      "sha256": "b7ce3d5e689e6b979f57262abb68d47f66c7f09fc4a65592ec4ca94c740f6aad"
+    }
+  ]
+}

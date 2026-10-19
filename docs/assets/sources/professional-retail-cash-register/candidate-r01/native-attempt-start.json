@@ -1,0 +1,16 @@
+{
+  "started_at": "2026-10-16T11:42:42.688Z",
+  "frozen_inputs_raw_sha256": "776de6c40196f895ff85907aca0d711f827805f4232a1996fa93ac7436088998",
+  "root_native_slot": "cash-register-r04-candidate-r01",
+  "native_args": [
+    "--path",
+    ".",
+    "--rendering-method",
+    "gl_compatibility",
+    "--audio-driver",
+    "Dummy",
+    "--script",
+    "res://build/professional-english/retail-term-art-review/cash-register-r04/candidate-r01/render-and-check.gd"
+  ],
+  "scope": "One scratch-only native candidate attempt. Preserve this marker even if interrupted."
+}

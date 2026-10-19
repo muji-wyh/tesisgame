@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "status": "secondary_source_acquired_uninspected_not_integrated",
+  "recorded_at": "2026-10-16T10:44:33.602Z",
+  "sense_id": "barcode.product-code.n",
+  "creator": "netalloy",
+  "title": "Barcode",
+  "original_source": "https://openclipart.org/detail/38797/netalloy-barcode",
+  "acquired_from": "https://www.clipsafari.com/clips/o38797-barcode",
+  "original_source_downloaded": false,
+  "license": "CC0 1.0 Universal",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "license_evidence": "ClipSafari explicitly attributes netalloy and labels this exact downloadable SVG CC0. The Openclipart original timed out and is not claimed acquired.",
+  "files": [
+    {
+      "path": "source-page.html",
+      "requested_url": "https://www.clipsafari.com/clips/o38797-barcode",
+      "final_url": "https://www.clipsafari.com/clips/o38797-barcode",
+      "bytes": 18772,
+      "sha256": "9420d428b25cda51497073fc921ad030eb695ec920f683e842b49f6771945e55"
+    },
+    {
+      "path": "cc0-deed.html",
+      "requested_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "final_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "bytes": 30248,
+      "sha256": "abb4d48fc8b85de52b377dd105532c6c549f515d492a8e1712bc99e7316a1f12"
+    },
+    {
+      "path": "barcode.svg",
+      "requested_url": "https://images.clipsafari.com/m4x37i5o8zhx4cgzznyaeqcutovn?filename=barcode.svg",
+      "final_url": "https://images.clipsafari.com/m4x37i5o8zhx4cgzznyaeqcutovn?filename=barcode.svg",
+      "bytes": 2291,
+      "sha256": "0dc559c59bd63c4e812e7f3e31562a533cf59603d93c299218fe07eece297303"
+    }
+  ],
+  "available_animations": [],
+  "adaptation": "none",
+  "visual_review": "pending",
+  "production_changed": false
+}

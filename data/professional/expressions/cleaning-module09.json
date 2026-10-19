@@ -1,0 +1,1824 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.cleaning_facilities.module09.01",
+      "text": "The stock count shows that the quantity of this consumable in inventory differs from the recorded stock level; please review its reorder point.",
+      "meaning": "Compare physical stock with recorded information.",
+      "context": "Reviewing a supply discrepancy.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "stock",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "count",
+          "start": 10,
+          "end": 15
+        },
+        {
+          "index": 3,
+          "text": "shows",
+          "start": 16,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "that",
+          "start": 22,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "quantity",
+          "start": 31,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "of",
+          "start": 40,
+          "end": 42
+        },
+        {
+          "index": 8,
+          "text": "this",
+          "start": 43,
+          "end": 47
+        },
+        {
+          "index": 9,
+          "text": "consumable",
+          "start": 48,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "in",
+          "start": 59,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": "inventory",
+          "start": 62,
+          "end": 71
+        },
+        {
+          "index": 12,
+          "text": "differs",
+          "start": 72,
+          "end": 79
+        },
+        {
+          "index": 13,
+          "text": "from",
+          "start": 80,
+          "end": 84
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 85,
+          "end": 88
+        },
+        {
+          "index": 15,
+          "text": "recorded",
+          "start": 89,
+          "end": 97
+        },
+        {
+          "index": 16,
+          "text": "stock",
+          "start": 98,
+          "end": 103
+        },
+        {
+          "index": 17,
+          "text": "level",
+          "start": 104,
+          "end": 109
+        },
+        {
+          "index": 18,
+          "text": ";",
+          "start": 109,
+          "end": 110
+        },
+        {
+          "index": 19,
+          "text": "please",
+          "start": 111,
+          "end": 117
+        },
+        {
+          "index": 20,
+          "text": "review",
+          "start": 118,
+          "end": 124
+        },
+        {
+          "index": 21,
+          "text": "its",
+          "start": 125,
+          "end": 128
+        },
+        {
+          "index": 22,
+          "text": "reorder",
+          "start": 129,
+          "end": 136
+        },
+        {
+          "index": 23,
+          "text": "point",
+          "start": 137,
+          "end": 142
+        },
+        {
+          "index": 24,
+          "text": ".",
+          "start": 142,
+          "end": 143
+        }
+      ],
+      "focus_lexeme_ids": [
+        "inventory.recorded-goods.n",
+        "stock-count.physical-quantity-check.n",
+        "stock-level.quantity-held.n",
+        "consumable.item-used-up-or-replaced-during-routine-work.n",
+        "reorder-point.replenishment-trigger-level.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module09.02",
+      "text": "The purchase order, delivery note, and packing list refer to the same lot number and expiration date.",
+      "meaning": "Link supply documents to product identifiers.",
+      "context": "Checking a fictional delivery record.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "purchase",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "order",
+          "start": 13,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 18,
+          "end": 19
+        },
+        {
+          "index": 4,
+          "text": "delivery",
+          "start": 20,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "note",
+          "start": 29,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 33,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 35,
+          "end": 38
+        },
+        {
+          "index": 8,
+          "text": "packing",
+          "start": 39,
+          "end": 46
+        },
+        {
+          "index": 9,
+          "text": "list",
+          "start": 47,
+          "end": 51
+        },
+        {
+          "index": 10,
+          "text": "refer",
+          "start": 52,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": "to",
+          "start": 58,
+          "end": 60
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 61,
+          "end": 64
+        },
+        {
+          "index": 13,
+          "text": "same",
+          "start": 65,
+          "end": 69
+        },
+        {
+          "index": 14,
+          "text": "lot",
+          "start": 70,
+          "end": 73
+        },
+        {
+          "index": 15,
+          "text": "number",
+          "start": 74,
+          "end": 80
+        },
+        {
+          "index": 16,
+          "text": "and",
+          "start": 81,
+          "end": 84
+        },
+        {
+          "index": 17,
+          "text": "expiration",
+          "start": 85,
+          "end": 95
+        },
+        {
+          "index": 18,
+          "text": "date",
+          "start": 96,
+          "end": 100
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 100,
+          "end": 101
+        }
+      ],
+      "focus_lexeme_ids": [
+        "purchase-order.buyer-order-document.n",
+        "delivery-note.delivered-goods-document.n",
+        "packing-list.package-contents-list.n",
+        "lot-number.batch-identifier.n",
+        "expiration-date.stated-validity-end.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module09.03",
+      "text": "The work order and maintenance log need the inspection report, service record, and completion note attached.",
+      "meaning": "Identify records associated with work.",
+      "context": "Reviewing documentation completeness.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "work",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "order",
+          "start": 9,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "maintenance",
+          "start": 19,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": "log",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 6,
+          "text": "need",
+          "start": 35,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "inspection",
+          "start": 44,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "report",
+          "start": 55,
+          "end": 61
+        },
+        {
+          "index": 10,
+          "text": ",",
+          "start": 61,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "service",
+          "start": 63,
+          "end": 70
+        },
+        {
+          "index": 12,
+          "text": "record",
+          "start": 71,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 77,
+          "end": 78
+        },
+        {
+          "index": 14,
+          "text": "and",
+          "start": 79,
+          "end": 82
+        },
+        {
+          "index": 15,
+          "text": "completion",
+          "start": 83,
+          "end": 93
+        },
+        {
+          "index": 16,
+          "text": "note",
+          "start": 94,
+          "end": 98
+        },
+        {
+          "index": 17,
+          "text": "attached",
+          "start": 99,
+          "end": 107
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 107,
+          "end": 108
+        }
+      ],
+      "focus_lexeme_ids": [
+        "work-order.record-authorizing-or-assigning-defined-work.n",
+        "maintenance-log.chronological-record-of-maintenance-work-and-findings.n",
+        "inspection-report.record-of-inspection-findings.n",
+        "service-record.record-of-service-work-performed.n",
+        "completion-note.recorded-note-about-finished-work-and-result.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module09.04",
+      "text": "Please confirm the asset number and location code before linking the photograph to the cleaning record.",
+      "meaning": "Connect a non-personal image to the correct record.",
+      "context": "Recording an observed surface condition.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "confirm",
+          "start": 7,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "asset",
+          "start": 19,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "number",
+          "start": 25,
+          "end": 31
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 32,
+          "end": 35
+        },
+        {
+          "index": 6,
+          "text": "location",
+          "start": 36,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "code",
+          "start": 45,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "before",
+          "start": 50,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "linking",
+          "start": 57,
+          "end": 64
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 11,
+          "text": "photograph",
+          "start": 69,
+          "end": 79
+        },
+        {
+          "index": 12,
+          "text": "to",
+          "start": 80,
+          "end": 82
+        },
+        {
+          "index": 13,
+          "text": "the",
+          "start": 83,
+          "end": 86
+        },
+        {
+          "index": 14,
+          "text": "cleaning",
+          "start": 87,
+          "end": 95
+        },
+        {
+          "index": 15,
+          "text": "record",
+          "start": 96,
+          "end": 102
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 102,
+          "end": 103
+        }
+      ],
+      "focus_lexeme_ids": [
+        "asset-number.identifier-assigned-to-managed-asset.n",
+        "location-code.identifier-for-storage-or-work-position.n",
+        "photograph.image-recorded-using-camera.n",
+        "cleaning-record.record-of-cleaning-carried-out-and-relevant-details.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module09.05",
+      "text": "The application on the mobile device requires an authorized user account; please never send its password in a message.",
+      "meaning": "Discuss approved access without requesting credentials.",
+      "context": "Responding to a login problem.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "application",
+          "start": 4,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "on",
+          "start": 16,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 19,
+          "end": 22
+        },
+        {
+          "index": 4,
+          "text": "mobile",
+          "start": 23,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "device",
+          "start": 30,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "requires",
+          "start": 37,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "an",
+          "start": 46,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "authorized",
+          "start": 49,
+          "end": 59
+        },
+        {
+          "index": 9,
+          "text": "user",
+          "start": 60,
+          "end": 64
+        },
+        {
+          "index": 10,
+          "text": "account",
+          "start": 65,
+          "end": 72
+        },
+        {
+          "index": 11,
+          "text": ";",
+          "start": 72,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": "please",
+          "start": 74,
+          "end": 80
+        },
+        {
+          "index": 13,
+          "text": "never",
+          "start": 81,
+          "end": 86
+        },
+        {
+          "index": 14,
+          "text": "send",
+          "start": 87,
+          "end": 91
+        },
+        {
+          "index": 15,
+          "text": "its",
+          "start": 92,
+          "end": 95
+        },
+        {
+          "index": 16,
+          "text": "password",
+          "start": 96,
+          "end": 104
+        },
+        {
+          "index": 17,
+          "text": "in",
+          "start": 105,
+          "end": 107
+        },
+        {
+          "index": 18,
+          "text": "a",
+          "start": 108,
+          "end": 109
+        },
+        {
+          "index": 19,
+          "text": "message",
+          "start": 110,
+          "end": 117
+        },
+        {
+          "index": 20,
+          "text": ".",
+          "start": 117,
+          "end": 118
+        }
+      ],
+      "focus_lexeme_ids": [
+        "application.task-oriented-software.n",
+        "mobile-device.portable-electronic-device-used-for-digital-tasks.n",
+        "user-account.personal-system-profile.n",
+        "password.secret-access-string.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module09.06",
+      "text": "The notification refers to an attachment and file upload in the shared folder, but receipt still needs confirmation.",
+      "meaning": "Distinguish a notice from confirmed file delivery.",
+      "context": "Checking a record transfer.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "notification",
+          "start": 4,
+          "end": 16
+        },
+        {
+          "index": 2,
+          "text": "refers",
+          "start": 17,
+          "end": 23
+        },
+        {
+          "index": 3,
+          "text": "to",
+          "start": 24,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "an",
+          "start": 27,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "attachment",
+          "start": 30,
+          "end": 40
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 41,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "file",
+          "start": 45,
+          "end": 49
+        },
+        {
+          "index": 8,
+          "text": "upload",
+          "start": 50,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "in",
+          "start": 57,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 60,
+          "end": 63
+        },
+        {
+          "index": 11,
+          "text": "shared",
+          "start": 64,
+          "end": 70
+        },
+        {
+          "index": 12,
+          "text": "folder",
+          "start": 71,
+          "end": 77
+        },
+        {
+          "index": 13,
+          "text": ",",
+          "start": 77,
+          "end": 78
+        },
+        {
+          "index": 14,
+          "text": "but",
+          "start": 79,
+          "end": 82
+        },
+        {
+          "index": 15,
+          "text": "receipt",
+          "start": 83,
+          "end": 90
+        },
+        {
+          "index": 16,
+          "text": "still",
+          "start": 91,
+          "end": 96
+        },
+        {
+          "index": 17,
+          "text": "needs",
+          "start": 97,
+          "end": 102
+        },
+        {
+          "index": 18,
+          "text": "confirmation",
+          "start": 103,
+          "end": 115
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 115,
+          "end": 116
+        }
+      ],
+      "focus_lexeme_ids": [
+        "notification.system-alert-message.n",
+        "attachment.linked-file.n",
+        "file-upload.transfer-of-file-to-another-system.n",
+        "shared-folder.folder-available-to-authorized-users.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module09.07",
+      "text": "The search field and filter help locate the work order status; the sync status shows that the newest entry is pending.",
+      "meaning": "Identify interface controls and synchronization state.",
+      "context": "Reviewing a digital work order.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "search",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "field",
+          "start": 11,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 17,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "filter",
+          "start": 21,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": "help",
+          "start": 28,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "locate",
+          "start": 33,
+          "end": 39
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "work",
+          "start": 44,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "order",
+          "start": 49,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "status",
+          "start": 55,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": ";",
+          "start": 61,
+          "end": 62
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 13,
+          "text": "sync",
+          "start": 67,
+          "end": 71
+        },
+        {
+          "index": 14,
+          "text": "status",
+          "start": 72,
+          "end": 78
+        },
+        {
+          "index": 15,
+          "text": "shows",
+          "start": 79,
+          "end": 84
+        },
+        {
+          "index": 16,
+          "text": "that",
+          "start": 85,
+          "end": 89
+        },
+        {
+          "index": 17,
+          "text": "the",
+          "start": 90,
+          "end": 93
+        },
+        {
+          "index": 18,
+          "text": "newest",
+          "start": 94,
+          "end": 100
+        },
+        {
+          "index": 19,
+          "text": "entry",
+          "start": 101,
+          "end": 106
+        },
+        {
+          "index": 20,
+          "text": "is",
+          "start": 107,
+          "end": 109
+        },
+        {
+          "index": 21,
+          "text": "pending",
+          "start": 110,
+          "end": 117
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 117,
+          "end": 118
+        }
+      ],
+      "focus_lexeme_ids": [
+        "search-field.input-area-for-search-query.n",
+        "filter.result-limiting-control.n",
+        "work-order-status.recorded-current-stage-of-work-order.n",
+        "sync-status.recorded-state-of-data-synchronization.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module09.08",
+      "text": "The digital checklist supports data entry in offline mode, but the saved details still need verification after synchronization.",
+      "meaning": "Clarify offline records without assuming server receipt.",
+      "context": "Discussing an approved application's behavior.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "digital",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "checklist",
+          "start": 12,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "supports",
+          "start": 22,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": "data",
+          "start": 31,
+          "end": 35
+        },
+        {
+          "index": 5,
+          "text": "entry",
+          "start": 36,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "in",
+          "start": 42,
+          "end": 44
+        },
+        {
+          "index": 7,
+          "text": "offline",
+          "start": 45,
+          "end": 52
+        },
+        {
+          "index": 8,
+          "text": "mode",
+          "start": 53,
+          "end": 57
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 57,
+          "end": 58
+        },
+        {
+          "index": 10,
+          "text": "but",
+          "start": 59,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "saved",
+          "start": 67,
+          "end": 72
+        },
+        {
+          "index": 13,
+          "text": "details",
+          "start": 73,
+          "end": 80
+        },
+        {
+          "index": 14,
+          "text": "still",
+          "start": 81,
+          "end": 86
+        },
+        {
+          "index": 15,
+          "text": "need",
+          "start": 87,
+          "end": 91
+        },
+        {
+          "index": 16,
+          "text": "verification",
+          "start": 92,
+          "end": 104
+        },
+        {
+          "index": 17,
+          "text": "after",
+          "start": 105,
+          "end": 110
+        },
+        {
+          "index": 18,
+          "text": "synchronization",
+          "start": 111,
+          "end": 126
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 126,
+          "end": 127
+        }
+      ],
+      "focus_lexeme_ids": [
+        "digital-checklist.electronic-list-for-checking-required-items.n",
+        "data-entry.act-of-inputting-information-into-system.n",
+        "offline-mode.application-operation-without-live-network-connection.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module09.09",
+      "text": "The duplicate record affects data accuracy, so the audit trail and sign-off need an authorized review.",
+      "meaning": "Raise a record-quality concern without deleting evidence.",
+      "context": "Reviewing a suspected duplicate.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "duplicate",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "record",
+          "start": 14,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "affects",
+          "start": 21,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "data",
+          "start": 29,
+          "end": 33
+        },
+        {
+          "index": 5,
+          "text": "accuracy",
+          "start": 34,
+          "end": 42
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 42,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "so",
+          "start": 44,
+          "end": 46
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 47,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "audit",
+          "start": 51,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "trail",
+          "start": 57,
+          "end": 62
+        },
+        {
+          "index": 11,
+          "text": "and",
+          "start": 63,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "sign-off",
+          "start": 67,
+          "end": 75
+        },
+        {
+          "index": 13,
+          "text": "need",
+          "start": 76,
+          "end": 80
+        },
+        {
+          "index": 14,
+          "text": "an",
+          "start": 81,
+          "end": 83
+        },
+        {
+          "index": 15,
+          "text": "authorized",
+          "start": 84,
+          "end": 94
+        },
+        {
+          "index": 16,
+          "text": "review",
+          "start": 95,
+          "end": 101
+        },
+        {
+          "index": 17,
+          "text": ".",
+          "start": 101,
+          "end": 102
+        }
+      ],
+      "focus_lexeme_ids": [
+        "duplicate-record.additional-record-representing-same-item-or-event.n",
+        "data-accuracy.extent-to-which-recorded-data-correctly-represents-facts.n",
+        "audit-trail.recorded-change-history.n",
+        "sign-off.recorded-acceptance-or-authorization-with-stated-scope.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.cleaning_facilities.module09.10",
+      "text": "The daily report, timesheet, and progress report refer to different information; the quality check follows the stated inspection checklist.",
+      "meaning": "Distinguish reporting and inspection records.",
+      "context": "Preparing a handover.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "daily",
+          "start": 4,
+          "end": 9
+        },
+        {
+          "index": 2,
+          "text": "report",
+          "start": 10,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 16,
+          "end": 17
+        },
+        {
+          "index": 4,
+          "text": "timesheet",
+          "start": 18,
+          "end": 27
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 27,
+          "end": 28
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 7,
+          "text": "progress",
+          "start": 33,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": "report",
+          "start": 42,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "refer",
+          "start": 49,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "to",
+          "start": 55,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": "different",
+          "start": 58,
+          "end": 67
+        },
+        {
+          "index": 12,
+          "text": "information",
+          "start": 68,
+          "end": 79
+        },
+        {
+          "index": 13,
+          "text": ";",
+          "start": 79,
+          "end": 80
+        },
+        {
+          "index": 14,
+          "text": "the",
+          "start": 81,
+          "end": 84
+        },
+        {
+          "index": 15,
+          "text": "quality",
+          "start": 85,
+          "end": 92
+        },
+        {
+          "index": 16,
+          "text": "check",
+          "start": 93,
+          "end": 98
+        },
+        {
+          "index": 17,
+          "text": "follows",
+          "start": 99,
+          "end": 106
+        },
+        {
+          "index": 18,
+          "text": "the",
+          "start": 107,
+          "end": 110
+        },
+        {
+          "index": 19,
+          "text": "stated",
+          "start": 111,
+          "end": 117
+        },
+        {
+          "index": 20,
+          "text": "inspection",
+          "start": 118,
+          "end": 128
+        },
+        {
+          "index": 21,
+          "text": "checklist",
+          "start": 129,
+          "end": 138
+        },
+        {
+          "index": 22,
+          "text": ".",
+          "start": 138,
+          "end": 139
+        }
+      ],
+      "focus_lexeme_ids": [
+        "daily-report.summary-of-events-during-day.n",
+        "timesheet.work-time-record.n",
+        "progress-report.record-describing-progress-against-planned-work.n",
+        "quality-check.standard-conformity-check.n",
+        "inspection-checklist.list-of-items-to-examine-during-inspection.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "cleaning-bls-cleaners",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "cleaning-bls-facilities",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, facilities, household cleaning terminology, risk-category, hazard-label, and waste context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

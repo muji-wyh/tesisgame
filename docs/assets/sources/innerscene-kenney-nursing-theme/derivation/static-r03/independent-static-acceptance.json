@@ -1,0 +1,27 @@
+{
+  "status": "static_composition_accepted_for_motion_authoring",
+  "date": "2026-10-15T22:42:05.152Z",
+  "reviewer": "Codex root, independent visual review",
+  "receipt_sha256": "45c4c43f01ce554fe8df09631f870c118c07754299e52254034dc88842adc445",
+  "evidence_files_verified": 32,
+  "viewed": [
+    "nursing-full.png",
+    "nursing-phone-square.png",
+    "nursing-covered-320x568.png",
+    "nursing-covered-390x844.png",
+    "nursing-covered-844x390.png",
+    "nursing-covered-1280x800.png",
+    "static-review-contact.png"
+  ],
+  "findings": [
+    "Bed remains the central recognizable shape at all reviewed source crop sizes.",
+    "Corrected textile normals preserve continuous vertical pleats without the original angular dark bands.",
+    "Station working surface and monitors are visible; original curtain hardware reads as supported by the ceiling cutaway.",
+    "The 390 portrait intentionally crops the left wheelchair and station edge; narrow landscape loses upper rail. These peripheral crops do not remove the bed identity."
+  ],
+  "limits": [
+    "Source-rendered stills only; no live UI presentation or clinical-layout claim.",
+    "No production or full-theme readiness promotion.",
+    "A small pinned-top textile motion needs rest, extremes, timed playback, scoped budget, and actual runtime review. Original hardware must remain fixed."
+  ]
+}

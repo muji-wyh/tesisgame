@@ -1,0 +1,90 @@
+{
+  "schema": 1,
+  "status": "independent_exact_source_review_no_static_blocker",
+  "reviewer": "Codex recover_delivery",
+  "authors": [
+    "Codex runtime_recovery"
+  ],
+  "dispatcher_excluded": "Codex root",
+  "reviewed_at": "2026-10-16T21:40:23.773Z",
+  "proposal_inventory": {
+    "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/author-inventory.json",
+    "sha256": "f0043bfeada59d497be43cde8e3d753c0322cfa982c632fa40eae36cd62838d7",
+    "bytes": 1810
+  },
+  "prepared_binding": {
+    "path": "build/professional-english/foundation02-fourth10-prepared-output-review-r02/binding.json",
+    "sha256": "dbacf79ca796410664a1a6af9a577172c93234109b3c33c326ba669a5394dc21"
+  },
+  "native_receipt": {
+    "path": "build/professional-english/foundation02-fourth10-native-candidate-r02/attempt-001/receipt.json",
+    "sha256": "1dbb1e3a9d34226b77381502edd6a9d745605f0e05d320297519e45106c5bc0c"
+  },
+  "baseline_dependency_transfer": {
+    "accepted": true,
+    "scope": "unchanged_prior_baseline_only",
+    "receipt": {
+      "path": "build/professional-english/foundation02-third10-persisted-validation-r01/attempt-001/receipt.json",
+      "sha256": "509d64c10012756c7d44d0cdf6fb9b204a3c1cbfe1c4e0e76434ea2af36a33f8"
+    }
+  },
+  "reviewed_files": [
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/commit.cjs",
+      "sha256": "d9df7689e7e958036e6f328d91db9a090527fcfea0e00055ba50546b0caf7b61",
+      "bytes": 7978
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/evidence-contract.cjs",
+      "sha256": "85dbf8515a67b479fb6b904ac65b8c6ca1a6477983fa14b17beb06e34b8b2efd",
+      "bytes": 29420
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/committed-evidence.test.cjs",
+      "sha256": "85a70750e79b4c0fe1511a5289cb6b232c4a8511f7478368c7a3c41df26acc9f",
+      "bytes": 508
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/INPUTS.md",
+      "sha256": "dd11e83f7996cac0b339121a6cd1fe57a9b56b26d46e5e321f664228770072b9",
+      "bytes": 7842
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/root-commit-input.example.json",
+      "sha256": "f6ce26aa9d18382c70791eb21706a59eb2a6eaa9df18773047f84386da2736c5",
+      "bytes": 1632
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/evidence-inputs.json",
+      "sha256": "391c9292b5b9cd1cb30a0a47c968565a41750d4c49e2b30556d61d6bdff83654",
+      "bytes": 4073
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-commit-proposal-r01/author-inventory.json",
+      "sha256": "f0043bfeada59d497be43cde8e3d753c0322cfa982c632fa40eae36cd62838d7",
+      "bytes": 1810
+    }
+  ],
+  "static_findings": [
+    "All six inventory members and the inventory itself match the frozen author hashes. The commit entrypoint is import-safe and invokes exactly one guarded transaction after recomputation and rechecking.",
+    "The exact ten-entry projection and all three transformations must reproduce the five independently reviewed prepared byte afterimages. All 864 current inputs and every evidence ref are checked before commit and during transaction verification.",
+    "All 13 preparation sources and 17 prepared artifacts match their root source/start/end witnesses, with 230 projected callbacks retained as evidence rather than replayed by this reviewer.",
+    "Actual native candidate evidence binds 434 copies, four prepared overlays, 429 measured sources and one exact configuration; both command logs are pinned.",
+    "The historical 686-input baseline is an exact unchanged subset of the current 864 measured map. The manifest and independent review must explicitly approve only this baseline dependency transfer.",
+    "Every generated destination must be canonical, unique and nonoverlapping. New provenance, durable evidence and transaction destinations require absence; existing replacements require exact preimages.",
+    "The commit source has seven ordered witnesses. Persisted verification compares each array to the full retained source list, not merely to each other.",
+    "The postcommit inventory must equal the committed intent plan hash, and persisted verification checks backups, staged bytes, before/after hashes, exact targets and hash-linked committed journal states.",
+    "All 48 build-prefixed measured inputs are retained; persisted reconstruction checks those copies plus 816 non-build current files (including five exact afterimages).",
+    "The fresh memory probe contains 21 named cases and a positive retained-scratch reconstruction subcheck. Its synthetic approval fixtures exist only in memory and never constitute real approval."
+  ],
+  "static_blockers": [],
+  "approval_status": "Await root-only fresh probe execution and independent assessment of actual results.",
+  "reviewer_executed_project_modules_or_tests": false,
+  "reviewer_mutated_production": false,
+  "limitations": [
+    "The memory adapter is a focused simulation, not a security boundary for arbitrary hostile sources, native Windows filesystem validation or power-loss validation.",
+    "The unchanged historic helper accepts absent ancestor/descendant overlap during planning, then rejects execution with recovery-required evidence. The new scoped exactPaths guard rejects overlaps before helper planning.",
+    "Normalized reviewer-name exclusion enforces caller identity fields, not real-world identity authentication.",
+    "No human, specialist, expression, morphology, media, whole-module, browser or release approval is conveyed."
+  ]
+}

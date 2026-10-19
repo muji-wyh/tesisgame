@@ -52,7 +52,7 @@ func settle() -> void:
 		await process_frame
 
 
-func make_app(earned_age_three: bool = false):
+func make_app(earned_age_three: bool = false, begin_growth: bool = true):
 	var directory := "user://vocabulary-flow-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	check(DirAccess.make_dir_recursive_absolute(directory) == OK, "Vocabulary flow uses isolated saves")
 	directories.append(directory)
@@ -74,6 +74,8 @@ func make_app(earned_age_three: bool = false):
 	root.add_child(app)
 	await settle()
 	app.audio.set_muted(true)
+	if begin_growth:
+		app.choose_mode("match")
 	return app
 
 
@@ -100,9 +102,12 @@ func press_retry(app) -> void:
 
 
 func startup_and_prefetch() -> void:
-	var app = await make_app()
+	var app = await make_app(false, false)
 	var host = app.vocabulary_loader.downloads
-	check(host.requests == [3], "Baby Pip requests only the current age-three learning pack on startup")
+	check(host.requests.is_empty() and app._mode_menu_open() and not app._vocabulary_booting,
+		"First use reaches the learning path chooser without downloading Growth media")
+	app.choose_mode("match")
+	check(host.requests == [3], "Choosing Growth requests only the current age-three learning pack")
 	check(app.growth.age == 0 and app.growth.level == 0 and app.growth.learning_age() == 3,
 		"Loading uses learning age independently of Baby Pip and Lv0")
 	check(app.model.cards.is_empty() and app._vocabulary_prompt.is_visible_in_tree(),
@@ -112,6 +117,11 @@ func startup_and_prefetch() -> void:
 		"The required age download exposes real progress")
 	host.reply(3, "failed")
 	check(app.model.cards.is_empty(), "Download failure leaves the initial board unstarted")
+	check(app._vocabulary_back.is_visible_in_tree(), "Even a first-use download has an available Back action")
+	app._cancel_vocabulary_round()
+	check(app._mode_menu_open() and not app._vocabulary_prompt.visible and not app._can_continue_round(),
+		"A failed first download returns to Home without advertising a nonexistent round")
+	app.choose_mode("match")
 	press_retry(app)
 	check(host.requests == [3, 3], "Retry requests the same required age without fetching future ages")
 	host.reply(3, "ready", 1.0)

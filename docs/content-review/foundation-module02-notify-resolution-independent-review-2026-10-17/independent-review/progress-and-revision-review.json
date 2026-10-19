@@ -1,0 +1,162 @@
+{
+  "schema": 1,
+  "status": "independent_static_review_not_migration_execution",
+  "supporting_reviewer": "Codex runtime_recovery/notify_progress_audit; read-only source audit",
+  "findings": [
+    {
+      "id": "sense-identity",
+      "accepted": true,
+      "evidence": [
+        {
+          "path": "web/professional-progress.js",
+          "line": 120
+        },
+        {
+          "path": "scripts/professional_progress.gd",
+          "line": 220
+        }
+      ],
+      "finding": "Skills key directly by sense_id; curriculum revision is absent. Distinct inform ID avoids automatic reuse of notify evidence only if no future alias/copy/merge migration is introduced."
+    },
+    {
+      "id": "requirements-and-fingerprint",
+      "accepted": true,
+      "evidence": [
+        {
+          "path": "web/professional-progress.js",
+          "line": 16
+        },
+        {
+          "path": "scripts/professional_progress.gd",
+          "line": 51
+        }
+      ],
+      "finding": "Context keys include curriculum revision, requirements keys include requirements revision, and fingerprints include term/skill requirements plus expression IDs but no expression wording. Changing a sense under an already-pinned requirements revision is rejected; a text-only edit is invisible. A fresh namespace is necessary."
+    },
+    {
+      "id": "revision-scope",
+      "accepted": "conditional_with_material_qualification",
+      "evidence": [
+        {
+          "path": "tools/validate-professional-content.cjs",
+          "line": 208
+        },
+        {
+          "path": "tools/validate-professional-content.cjs",
+          "line": 220
+        }
+      ],
+      "finding": "The current validator couples every course curriculum revision to the catalog, and every module requirements revision to its course. A new global namespace therefore updates all twenty course and all two hundred module revision values. Keeping other modules on mixed revisions requires a separately accepted contract change. Do not confuse twenty content substitutions with the complete migration scope."
+    },
+    {
+      "id": "historical-data",
+      "accepted": true,
+      "evidence": [
+        {
+          "path": "web/professional-progress.js",
+          "line": 86
+        },
+        {
+          "path": "scripts/professional_progress.gd",
+          "line": 172
+        },
+        {
+          "path": "web/professional-progress.js",
+          "line": 69
+        }
+      ],
+      "finding": "Saved skills are validated structurally without requiring current membership. Old requirement fingerprints, expression dictionaries and completions can remain historical. New events must match selected requirements; retired notify is rejected in the new inform module, not necessarily in previously registered old contexts."
+    },
+    {
+      "id": "event-outbox-wallet",
+      "accepted": true,
+      "evidence": [
+        {
+          "path": "scripts/professional_store.gd",
+          "line": 204
+        },
+        {
+          "path": "scripts/professional_session.gd",
+          "line": 202
+        },
+        {
+          "path": "scripts/coin_wallet.gd",
+          "line": 100
+        }
+      ],
+      "finding": "Event receipts retain payload fingerprints and reject modified reuse of an event ID. Outbox recovery credits the saved professional:<event-id> wallet receipt before acknowledgement without a new membership check. Preserve receipts and pending outbox entries unchanged; never replay or translate them as inform."
+    },
+    {
+      "id": "historical-ui",
+      "accepted": true,
+      "evidence": [
+        {
+          "path": "scripts/learning_path_selector.gd",
+          "line": 351
+        },
+        {
+          "path": "scripts/learning_path_selector.gd",
+          "line": 361
+        }
+      ],
+      "finding": "Course totals and module badges count historical course/module completions across revisions; detail reads current requirements. Historical completion and newly required work can coexist. Do not erase earned receipts to force visual alignment."
+    },
+    {
+      "id": "orphan-retirement",
+      "accepted": true,
+      "evidence": [
+        {
+          "path": "tools/validate-professional-content.cjs",
+          "line": 324
+        }
+      ],
+      "finding": "A loaded lexeme with no memberships causes membership.orphan. Retire notify from loaded envelopes during the coordinated swap and retain the exact original entry/source/hold outside catalog-loaded data; no dummy membership."
+    },
+    {
+      "id": "canonical-family",
+      "accepted": "pending_linguistic_decision",
+      "evidence": [
+        {
+          "path": "scripts/morphology_analysis.gd",
+          "line": 87
+        }
+      ],
+      "finding": "Runtime signatures omit contextual atomic/stem type when canonical identity/form match. A new proposed canonical ID isolates identity but does not settle family classification or approve the pending clinical morph.inform stem."
+    },
+    {
+      "id": "revision-dependencies",
+      "accepted": "must_enumerate_at_final_delivery",
+      "evidence": [
+        {
+          "path": "scripts/professional_media_manifest.gd",
+          "line": 54
+        },
+        {
+          "path": "tools/professional-domain/compiler.cjs",
+          "line": 42
+        },
+        {
+          "path": "scripts/professional_domain_owner.gd",
+          "line": 499
+        },
+        {
+          "path": "scripts/professional_domain_owner.gd",
+          "line": 550
+        }
+      ],
+      "finding": "Media manifests bind curriculum context, generated domain payloads include course content and release inventories, and the domain owner checks course/media revision. Final source/supporting/contract and media dependencies must be rebound on the accepted integrated state."
+    }
+  ],
+  "required_future_root_owned_verification": [
+    "Actual integrated source, registry and revision binding",
+    "All twenty content substitutions and all revision dependencies",
+    "No old-to-new skill copy or alias",
+    "Exact survival of populated old profile skills, requirements, expression dictionaries, module receipts and event records",
+    "No copied old expression completion in the new namespace",
+    "Retired-event rejection in the selected new requirements",
+    "Preserved pending outbox and idempotent wallet recovery",
+    "Current phrase token/focus integrity",
+    "Separate pending morphology, clinical-family, image/audio and ready gates"
+  ],
+  "limits": "Source inspection only. No project module imports, validation execution, migration, profile loading, tests, native runs, browser scenarios or final live binding."
+}

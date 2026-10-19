@@ -1,0 +1,304 @@
+{
+	"accepted_image_sha256": "b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1",
+	"captures": [
+		{
+			"badge_visible": false,
+			"picture_alpha": 1.0,
+			"pixels_equal_accepted": true,
+			"size": [
+				126.0,
+				72.0
+			],
+			"state": "match-unmatched"
+		},
+		{
+			"badge_visible": true,
+			"picture_alpha": 0.680000007152557,
+			"pixels_equal_accepted": true,
+			"size": [
+				126.0,
+				72.0
+			],
+			"state": "match-matched"
+		},
+		{
+			"badge_visible": false,
+			"picture_alpha": 1.0,
+			"pixels_equal_accepted": true,
+			"size": [
+				144.0,
+				74.0
+			],
+			"state": "memory-unmatched"
+		},
+		{
+			"badge_visible": true,
+			"picture_alpha": 0.680000007152557,
+			"pixels_equal_accepted": true,
+			"size": [
+				144.0,
+				74.0
+			],
+			"state": "memory-matched"
+		}
+	],
+	"checks": [
+		{
+			"check": "Production lexeme file matches serialized accepted image checkpoint",
+			"passed": true
+		},
+		{
+			"check": "Actual persisted shopping-cart entry exists",
+			"passed": true
+		},
+		{
+			"check": "Actual image descriptor equals exact independently accepted descriptor",
+			"passed": true
+		},
+		{
+			"check": "Actual entry retains the exact approved image/audio note",
+			"passed": true
+		},
+		{
+			"check": "Only persisted image has integrated scoped review and suitability",
+			"passed": true
+		},
+		{
+			"check": "Actual word audio remains pending",
+			"passed": true
+		},
+		{
+			"check": "Actual word morphology remains pending",
+			"passed": true
+		},
+		{
+			"check": "Separate persisted language review is preserved",
+			"passed": true
+		},
+		{
+			"check": "Permanent immutable resource descriptor obeys delivery schema",
+			"passed": true
+		},
+		{
+			"check": "Persisted image and immutable resource identities agree",
+			"passed": true
+		},
+		{
+			"check": "Exact accepted bytes exist at production raw sidecar path",
+			"passed": true
+		},
+		{
+			"check": "Real production catalog loads",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module01",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module02",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module03",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module04",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module05",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module06",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module07",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module08",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module09",
+			"passed": true
+		},
+		{
+			"check": "Actual module remains draft: module10",
+			"passed": true
+		},
+		{
+			"check": "Real catalog rejects incomplete module03 for match",
+			"passed": true
+		},
+		{
+			"check": "Real catalog rejects incomplete module03 for memory",
+			"passed": true
+		},
+		{
+			"check": "Real catalog rejects incomplete module03 for pop",
+			"passed": true
+		},
+		{
+			"check": "Real catalog rejects incomplete module03 for jelly",
+			"passed": true
+		},
+		{
+			"check": "Real catalog rejects incomplete module03 for word_jelly",
+			"passed": true
+		},
+		{
+			"check": "Real catalog rejects incomplete module03 for phrase",
+			"passed": true
+		},
+		{
+			"check": "Image-only inspection inventory meets immutable budget/schema",
+			"passed": true
+		},
+		{
+			"check": "Production raw loader has no injected fetch override",
+			"passed": true
+		},
+		{
+			"check": "Real native loader reads and decodes production raw sidecar",
+			"passed": true
+		},
+		{
+			"check": "Actual decoded image acquires a scoped cache lease",
+			"passed": true
+		},
+		{
+			"check": "Real scoped image has exact accepted dimensions",
+			"passed": true
+		},
+		{
+			"check": "Production WordArt resolves the actual scoped cache resource",
+			"passed": true
+		},
+		{
+			"check": "Real cache accounts for one image, exact decoded budget and one lease",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard setup receives cache resource via WordArt: 0",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard setup receives cache resource via WordArt: 1",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard setup receives cache resource via WordArt: 2",
+			"passed": true
+		},
+		{
+			"check": "Actual WordCard setup receives cache resource via WordArt: 3",
+			"passed": true
+		},
+		{
+			"check": "Production card contact saved",
+			"passed": true
+		},
+		{
+			"check": "Production crop saved: match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Real production card pixels equal accepted native candidate: match-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Production crop saved: match-matched",
+			"passed": true
+		},
+		{
+			"check": "Real production card pixels equal accepted native candidate: match-matched",
+			"passed": true
+		},
+		{
+			"check": "Production crop saved: memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Real production card pixels equal accepted native candidate: memory-unmatched",
+			"passed": true
+		},
+		{
+			"check": "Production crop saved: memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Real production card pixels equal accepted native candidate: memory-matched",
+			"passed": true
+		},
+		{
+			"check": "Production cache teardown releases all resources, bytes and leases",
+			"passed": true
+		},
+		{
+			"check": "Released media URL cannot revive the accepted image",
+			"passed": true
+		},
+		{
+			"check": "Production metadata remains unchanged by verifier: res://data/professional/lexemes/retail-pilot.json",
+			"passed": true
+		},
+		{
+			"check": "Production metadata remains unchanged by verifier: res://data/professional/courses/retail.json",
+			"passed": true
+		},
+		{
+			"check": "Production metadata remains unchanged by verifier: res://data/professional/themes.json",
+			"passed": true
+		}
+	],
+	"failed": 0,
+	"lexemes_sha256": "12c40ed580248dcdecbfa7504ef57e33c792c8ba8a4a250bebf2c722b5cb1f3b",
+	"loaded_cache": {
+		"active_ids": [
+			"sha256:b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1"
+		],
+		"leases": 1,
+		"limit_bytes": 134217728,
+		"pinned_bytes": 1699840,
+		"reserved_bytes": 0,
+		"resident_bytes": 1699840,
+		"resources": 1
+	},
+	"production_data_hashes": {
+		"res://data/professional/courses/retail.json": "7124ef1d09da0c47f1d5fb2945bfebbe49e5f180f5fbdcd66fe73991ea7d4c61",
+		"res://data/professional/lexemes/retail-pilot.json": "12c40ed580248dcdecbfa7504ef57e33c792c8ba8a4a250bebf2c722b5cb1f3b",
+		"res://data/professional/themes.json": "718bae2956226505281d5e8f62406d0b225b12834b00977f401cb517f068f9fd"
+	},
+	"production_scripts": {
+		"access": "ad4350579562aec2d49c72c0ccfd72c54df162992fe8e30604504b52aef30025",
+		"loader": "d9d348d665b443300009f7490dbcb613a73eff58f9e91d6e70e364c9c76e7390",
+		"word_art": "edcb6c1cd41375df4d91d195bddd8bebf31d9a7e10116c10bdd7c8797ad11845",
+		"word_card": "ddb3f7ef5b1910086e0418e476ceee4f551aa2e048bed6993005bdbd0402a3bf"
+	},
+	"released_cache": {
+		"active_ids": [],
+		"leases": 0,
+		"limit_bytes": 134217728,
+		"pinned_bytes": 0,
+		"reserved_bytes": 0,
+		"resident_bytes": 0,
+		"resources": 0
+	},
+	"resource": {
+		"compressed_bytes": 93422.0,
+		"decoded_bytes": 1699840.0,
+		"format": "png",
+		"height": 415.0,
+		"id": "sha256:b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1",
+		"kind": "image",
+		"path": "professional-media/b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1.png",
+		"sha256": "b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1",
+		"width": 512.0
+	},
+	"scope": "Actual persisted shopping-cart image descriptor and production raw sidecar through native Loader, cache, scoped Access and actual WordCard/WordArt. No fetch override, no image substitution, no audio fabrication, no status/review overrides. This isolated image verification is not a playable round or production module manifest."
+}

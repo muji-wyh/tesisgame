@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "status": "source_only_accepted_pending_actual_commit_bound_input_review",
+  "source": {
+    "path": "build/professional-english/shopping-bag-persisted-validation-r01/invoke.cjs",
+    "raw_sha256": "c25cafb5332e391eeb76d59a51e5f317199504a2c112b7fdfca2e7a52435221f"
+  },
+  "project_execution": false,
+  "findings": [
+    "Single fresh attempt guard and exclusive writes preserve failed attempts.",
+    "Only actual content audit and three affected Node suites are dispatched; no native probe, browser, asset processing or approval replay.",
+    "Before, between and after commands, exact input/evidence hashes, actual committed journal target bytes and hashes, actual commit receipt, and latest journal state are checked.",
+    "Persisted expected test count and summary fields must be taken from successful candidate receipt in the later reviewed input.",
+    "Final check runs even after command failure; command logs and receipt are written into the fresh attempt only."
+  ],
+  "remaining_conditions": [
+    "Successful candidate validation, exact guarded commit review, actual committed journal and receipt are prerequisites.",
+    "Review fresh input including actual target afterimages, expected test count, audit summary and complete dependency pins before dispatch."
+  ],
+  "dispatch_approval": false
+}

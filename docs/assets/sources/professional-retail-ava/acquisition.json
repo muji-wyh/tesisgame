@@ -1,0 +1,98 @@
+{
+  "status": "acquired_source_candidates_awaiting_listening_review",
+  "date": "2026-10-16",
+  "provider": "Microsoft Edge online TTS",
+  "creator": "Microsoft Ava Neural; original project texts",
+  "client": {
+    "name": "edge-tts",
+    "version": "7.3.1"
+  },
+  "profile": {
+    "voice": "en-US-AvaNeural",
+    "rate": "-15%",
+    "pitch": "+8Hz",
+    "volume": "+0%"
+  },
+  "upstream": {
+    "issue": "https://github.com/rany2/edge-tts/issues/490",
+    "fix_release": "https://github.com/rany2/edge-tts/releases/tag/7.3.0",
+    "selected_release": "https://github.com/rany2/edge-tts/releases/tag/7.3.1",
+    "source_archive": "https://github.com/rany2/edge-tts/archive/refs/tags/7.3.1.zip",
+    "source_archive_sha256": "edb0421d935dc68b60d446afcf842130960832bcb21cb929dd20eb1265b1639a"
+  },
+  "acquisition_notes": "Direct official PyPI index showed 7.3.1; Python and PowerShell downloads from files.pythonhosted.org failed TLS handshake. The official GitHub tag archive was acquired with normal TLS and installed only in the scratch virtual environment. No proxy, client token copying, disabled certificate validation, or alternate voice was used. The global 7.2.8 installation and existing game audio were not changed.",
+  "processing": "Only original MP3 decoding/resampling to PCM16 mono22050Hz by the existing convertVoice helper; no effects or trimming.",
+  "rights": "Microsoft Services Agreement applies to synthesized output; the client LGPL license does not confer separate rights to speech. No additional license claim.",
+  "production_integrated": false,
+  "pronunciation_and_listening_approval": false,
+  "outputs": [
+    {
+      "id": "aisle",
+      "submitted_text": "aisle.",
+      "source_mp3": {
+        "path": "docs\\assets\\sources\\professional-retail-ava\\aisle.mp3",
+        "sha256": "260382813015cc9331c9315f536b47ff6d83cb77c42b6d6690f6fad4256060ed",
+        "bytes": 11232
+      },
+      "wav": {
+        "path": "docs\\assets\\sources\\professional-retail-ava\\aisle.wav",
+        "sha256": "3674da249cd440ce5804ffe3a1dac6892d7b6a7c642d721a8e4fa2ef1da639c3",
+        "bytes": 82598,
+        "channels": 1,
+        "sample_rate": 22050,
+        "frames": 41277,
+        "decoded_bytes": 82554,
+        "duration_seconds": 1.8719727891156464,
+        "peak": 16235,
+        "clipped_samples": 0,
+        "rms": 1701.3675080537585
+      },
+      "acquisition_status": "acquired_scratch_only",
+      "sensory_review": "pending"
+    },
+    {
+      "id": "cash-register",
+      "submitted_text": "cash register.",
+      "source_mp3": {
+        "path": "docs\\assets\\sources\\professional-retail-ava\\cash-register.mp3",
+        "sha256": "ac5bb50014c661a23a40921337d8845f7a9a83104850901eb7f01f8289de8542",
+        "bytes": 11232
+      },
+      "wav": {
+        "path": "docs\\assets\\sources\\professional-retail-ava\\cash-register.wav",
+        "sha256": "0f883c09be9a86be9f30e444953d001d3a385ba71034e60ceb4181fc0b9aa763",
+        "bytes": 82598,
+        "channels": 1,
+        "sample_rate": 22050,
+        "frames": 41277,
+        "decoded_bytes": 82554,
+        "duration_seconds": 1.8719727891156464,
+        "peak": 21211,
+        "clipped_samples": 0,
+        "rms": 2211.2272764574277
+      },
+      "acquisition_status": "acquired_scratch_only",
+      "sensory_review": "pending"
+    }
+  ],
+  "review_limitation": "The session audio tool explicitly reported unsupported audio input. No agent listening or pronunciation claim is made. Two user-playable samples were presented and feedback is pending.",
+  "existing_catalog_preserved": {
+    "status": "historical_catalog_verified_without_regeneration",
+    "recordings": 1888,
+    "all_wav_hashes_match_manifest": true,
+    "manifest_sha256": "e86e5fd3d4dd29c419fac4a17481e91573563064fa11dab4e7934eaa8fe82541",
+    "manifest_unchanged": true,
+    "original_client": {
+      "name": "edge-tts",
+      "version": "7.2.8"
+    },
+    "current_client": "7.3.1",
+    "requests": 0,
+    "conversions": 0,
+    "technical_tests": {
+      "passed": 17,
+      "failed": 0
+    },
+    "sensory_review": false
+  }
+}

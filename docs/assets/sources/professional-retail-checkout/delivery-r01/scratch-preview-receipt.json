@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "status": "scratch_test_previews_syntax_checked_not_executed",
+  "transforms": {
+    "tests/professional-content.test.cjs": {
+      "before_raw_sha256": "87f5abad51135382d4545fe45126c11e19414aa4be08a2065fae5ebb45ccf2de",
+      "after_raw_sha256": "7478a2600173704ad6f294e5494716c454f0dbb14f4e0711d11ac9520a40132d",
+      "preview": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/preview/tests/professional-content.test.cjs"
+    },
+    "tests/professional-retail-morphology.test.cjs": {
+      "before_raw_sha256": "b42c9a6476fff4fc5cbe2667b9ec7aa57c418349c22b7863edb48d71395eb269",
+      "after_raw_sha256": "424f9172c45385a1e7ab7769f2c03ed330707317bf285094da8857df1c3a9811",
+      "preview": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/preview/tests/professional-retail-morphology.test.cjs"
+    },
+    "tests/professional-retail-media.test.cjs": {
+      "before_raw_sha256": "09e9e6489876a10b6bb5ba48880516f98b59fe49fd1b6eccf17afabf02b21614",
+      "after_raw_sha256": "d1efb69ec5aa075dc150fb2883507ca652f5243276ab50c955cca289e68ec26f",
+      "preview": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/preview/tests/professional-retail-media.test.cjs"
+    }
+  },
+  "syntax": [
+    {
+      "path": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/delivery-lib.cjs",
+      "raw_sha256": "afc4a1d25e12b7ef799498540a68825cdadc3d99a545dadd93249f6006d8d00b",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/bind-current-baseline.cjs",
+      "raw_sha256": "9bb5dc68269578d2bb58b5c1efca824ad255a2a5afbc82fbf0e1f3ee4b3aab39",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/integrate-reviewed.cjs",
+      "raw_sha256": "120d2dcaba24442b13a98800f49ae252171ccb4467997451faca1bf93f08b0fa",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/transaction-plan.cjs",
+      "raw_sha256": "dca101335d6c1f9bdc379f566c1d048e094638371e720f7afde2398ca1ab1ea2",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/guarded-transaction.cjs",
+      "raw_sha256": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/persisted-test-transforms.cjs",
+      "raw_sha256": "6abdabffaababa931b7b9e2784fc30776a53b7b012f7cd0cbff7e1d5cb6e32c0",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/update-persisted-tests.cjs",
+      "raw_sha256": "5ba12c270b706421a76cbcee8124a072abeaaa5415d7aff47adcb1918ccc4d89",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/prepare-delivery.cjs",
+      "raw_sha256": "dbdf6aa09ad1d0996425cb2f7c4a6f57bc9a8646e07fb649c92dcf204286d196",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/preview/tests/professional-content.test.cjs",
+      "raw_sha256": "7478a2600173704ad6f294e5494716c454f0dbb14f4e0711d11ac9520a40132d",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/preview/tests/professional-retail-morphology.test.cjs",
+      "raw_sha256": "424f9172c45385a1e7ab7769f2c03ed330707317bf285094da8857df1c3a9811",
+      "status": 0
+    },
+    {
+      "path": "build/professional-english/retail-term-art-review/checkout-r01/delivery-r01/preview/tests/professional-retail-media.test.cjs",
+      "raw_sha256": "d1efb69ec5aa075dc150fb2883507ca652f5243276ab50c955cca289e68ec26f",
+      "status": 0
+    }
+  ],
+  "production_files_written": false,
+  "tests_executed": false,
+  "native_executed": false
+}

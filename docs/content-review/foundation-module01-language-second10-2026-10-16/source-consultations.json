@@ -1,0 +1,352 @@
+{
+  "schema": 1,
+  "status": "frozen_source_consultation_evidence_not_acceptance",
+  "date": "2026-10-16",
+  "production_mutated": false,
+  "preimages_json_sha256": "374e9b75aa44fca2b1b6f5f2d64ecb523f49c36d1b345c8576548e435507a324",
+  "supporting_direct_pages": 13,
+  "consultations": [
+    {
+      "id": "foundation01-language-second10-oxford-contractor",
+      "title": "Oxford Advanced Learner's Dictionary: contractor",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/contractor",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex retail_content",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "Contracted person/company noun; building and independent contractor examples",
+      "finding": "A contracted provider may be a person or a company and may undertake work or provide goods/services. The office repair example fits the selected contracted-work sense. No selected headword CEFR label was observed; the footer level belongs to enhance.",
+      "observed_selected_sense_level": null,
+      "limits": "AI consultation of selected passages only. No full entries, source examples, exercises, images or audio acquired. Consultation is not independent language acceptance, employment/legal classification, specialist approval or a media license. Unrelated footer levels and frequency bands are excluded."
+    },
+    {
+      "id": "foundation01-language-second10-oxford-trainee",
+      "title": "Oxford Advanced Learner's Dictionary: trainee",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/trainee",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex retail_content",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "Person receiving job training; Education/Jobs label",
+      "finding": "The role is a person receiving training for a particular job, rather than any worker who happens to be learning. Teacher and management training are examples of role context, not added accepted answers. The selected topic label is B2.",
+      "observed_selected_sense_level": "B2",
+      "limits": "AI consultation of selected passages only. No full entries, source examples, exercises, images or audio acquired. Consultation is not independent language acceptance, employment/legal classification, specialist approval or a media license. Unrelated footer levels and frequency bands are excluded."
+    },
+    {
+      "id": "foundation01-language-second10-oxford-receptionist",
+      "title": "Oxford Advanced Learner's Dictionary: receptionist",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/receptionist",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex retail_content",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "Front-desk worker noun; Holidays/Jobs label",
+      "finding": "The role deals with people arriving at or phoning an office, hotel or similar place. Welcoming visitors and handling inquiries are compatible illustrative duties. The selected label is A2; an unrelated reasonably footer label is excluded.",
+      "observed_selected_sense_level": "A2",
+      "limits": "AI consultation of selected passages only. No full entries, source examples, exercises, images or audio acquired. Consultation is not independent language acceptance, employment/legal classification, specialist approval or a media license. Unrelated footer levels and frequency bands are excluded."
+    },
+    {
+      "id": "foundation01-language-second10-oxford-coordinator",
+      "title": "Oxford Advanced Learner's Dictionary: coordinator",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/coordinator",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex retail_content",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "Activity-organizing person noun and British spelling note",
+      "finding": "The person arranges the parts of an activity and the people participating. British co-ordinator is explicitly listed as an alternative spelling. No selected CEFR label was observed; the component footer label is unrelated.",
+      "observed_selected_sense_level": null,
+      "limits": "AI consultation of selected passages only. No full entries, source examples, exercises, images or audio acquired. Consultation is not independent language acceptance, employment/legal classification, specialist approval or a media license. Unrelated footer levels and frequency bands are excluded."
+    },
+    {
+      "id": "foundation01-language-second10-oxford-contact",
+      "title": "Oxford Advanced Learner's Dictionary: contact",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/contact_1",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex retail_content",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "Countable person sense 4; point of contact idiom; contrasting noun senses",
+      "finding": "The selected person is known as a useful source of help or information, especially through work. Point of contact can instead identify a person or place approached in organizational dealings. Communication, physical touching, electrical connection and medical exposure senses are separate. No selected person-sense CEFR label was observed.",
+      "observed_selected_sense_level": null,
+      "limits": "AI consultation of selected passages only. No full entries, source examples, exercises, images or audio acquired. Consultation is not independent language acceptance, employment/legal classification, specialist approval or a media license. Unrelated footer levels and frequency bands are excluded."
+    },
+    {
+      "id": "foundation01-language-second10-oxford-supplier",
+      "title": "Oxford Advanced Learner's Dictionary: supplier",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/supplier",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex retail_content",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "Person/company supplying goods noun",
+      "finding": "The goods-provider meaning includes a person or company. The selected passage does not require the recipient to be another organization, so the current business-to-business restriction is unnecessary. No selected CEFR label was observed; reasonably in the footer is unrelated.",
+      "observed_selected_sense_level": null,
+      "limits": "AI consultation of selected passages only. No full entries, source examples, exercises, images or audio acquired. Consultation is not independent language acceptance, employment/legal classification, specialist approval or a media license. Unrelated footer levels and frequency bands are excluded."
+    },
+    {
+      "id": "foundation01-language-second10-oxford-schedule",
+      "title": "Oxford Advanced Learner's Dictionary: schedule",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/schedule_1",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex retail_content",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "Work time-plan sense 1; Working life label; separate timetable/list senses",
+      "finding": "The selected sense plans when work or activities happen and carries A2. School, transport and broadcast timetables and written lists of rates or conditions are separately distinguished. Regional labels attached to timetable senses do not restrict the general workplace time-plan noun.",
+      "observed_selected_sense_level": "A2",
+      "limits": "AI consultation of selected passages only. No full entries, source examples, exercises, images or audio acquired. Consultation is not independent language acceptance, employment/legal classification, specialist approval or a media license. Unrelated footer levels and frequency bands are excluded."
+    },
+    {
+      "id": "foundation01-language-second10-oxford-shift",
+      "title": "Oxford Advanced Learner's Dictionary: shift",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/shift_1",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex retail_content",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "Work-period noun sense 1; Business label; other noun senses",
+      "finding": "The work-period sense is illustrated through successive worker groups and individual shifts and carries B1. A worker group, a change, the keyboard key and a garment are different uses. The selected period does not establish a rule excluding breaks.",
+      "observed_selected_sense_level": "B1",
+      "limits": "AI consultation of selected passages only. No full entries, source examples, exercises, images or audio acquired. Consultation is not independent language acceptance, employment/legal classification, specialist approval or a media license. Unrelated footer levels and frequency bands are excluded."
+    },
+    {
+      "id": "foundation01-language-second10-oxford-appointment",
+      "title": "Oxford Advanced Learner's Dictionary: appointment",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/appointment",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex retail_content",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "Arranged meeting/visit sense 1; Healthcare/Working life label",
+      "finding": "The selected arrangement is to meet or visit at a stated time, including work or service appointments, and carries B1. Appointment to a job or position is separate. No particular appointment duration or outcome is implied.",
+      "observed_selected_sense_level": "B1",
+      "limits": "AI consultation of selected passages only. No full entries, source examples, exercises, images or audio acquired. Consultation is not independent language acceptance, employment/legal classification, specialist approval or a media license. Unrelated footer levels and frequency bands are excluded."
+    },
+    {
+      "id": "foundation01-language-second10-oxford-meeting",
+      "title": "Oxford Advanced Learner's Dictionary: meeting",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/meeting",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex retail_content",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "Discussion/decision gathering sense 1; Working life/Business label",
+      "finding": "The selected event brings people together to discuss matters or decide and carries A1. Video and virtual meetings are compatible, so physical co-location is unnecessary. Chance encounters and meeting-point rendezvous wording should not be automatically bound to this work-discussion sense.",
+      "observed_selected_sense_level": "A1",
+      "limits": "AI consultation of selected passages only. No full entries, source examples, exercises, images or audio acquired. Consultation is not independent language acceptance, employment/legal classification, specialist approval or a media license. Unrelated footer levels and frequency bands are excluded."
+    },
+    {
+      "id": "foundation01-language-second10-collins-contact",
+      "title": "Collins COBUILD Advanced Learner's Dictionary: contact",
+      "publisher": "Collins COBUILD Advanced Learner's Dictionary",
+      "url": "https://www.collinsdictionary.com/dictionary/english/contact",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex retail_content",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "Countable helpful-person sense 10; communication verb and contact-details contrasts",
+      "finding": "The useful-person sense identifies someone known in an organization or profession who can help or provide information. Its displayed label is B1+, which is retained literally rather than converted to a schema value. The separate communication verb is A2 and communication noun is B1; neither level transfers to this person sense.",
+      "observed_selected_sense_level": "B1+",
+      "limits": "AI consultation of selected passages only. No full entries, source examples, exercises, images or audio acquired. Consultation is not independent language acceptance, employment/legal classification, specialist approval or a media license. Unrelated footer levels and frequency bands are excluded."
+    },
+    {
+      "id": "foundation01-language-second10-merriam-shift",
+      "title": "Merriam-Webster.com Dictionary: shift",
+      "publisher": "Merriam-Webster.com Dictionary",
+      "url": "https://www.merriam-webster.com/dictionary/shift",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex retail_content",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "Noun sense 4b(2), contrasted with group and rotation-system senses",
+      "finding": "The selected sub-sense is a scheduled work or duty period. This supports the individual-person wording without requiring the definition to name a whole alternating group. The neighboring worker-group and rotation-system senses remain separate. No CEFR label was observed.",
+      "observed_selected_sense_level": null,
+      "limits": "AI consultation of selected passages only. No full entries, source examples, exercises, images or audio acquired. Consultation is not independent language acceptance, employment/legal classification, specialist approval or a media license. Unrelated footer levels and frequency bands are excluded."
+    },
+    {
+      "id": "foundation01-language-second10-collins-shift",
+      "title": "Collins COBUILD Advanced Learner's Dictionary: shift",
+      "publisher": "Collins COBUILD Advanced Learner's Dictionary",
+      "url": "https://www.collinsdictionary.com/dictionary/english/shift",
+      "consulted_on": "2026-10-16",
+      "consulted_by": "Codex retail_content",
+      "access": "direct_page_selected_passages_via_web_open",
+      "section": "Countable work-period/group sense 6",
+      "finding": "The passage covers successive work periods and also the workers in a period, with a displayed B2 label. This differs from Oxford B1 for the selected work-period meaning; the author records the disagreement rather than silently choosing or averaging levels. Movement, policy change and gear-change senses are excluded.",
+      "observed_selected_sense_level": "B2",
+      "limits": "AI consultation of selected passages only. No full entries, source examples, exercises, images or audio acquired. Consultation is not independent language acceptance, employment/legal classification, specialist approval or a media license. Unrelated footer levels and frequency bands are excluded."
+    }
+  ],
+  "failed_accesses": [
+    {
+      "url": "https://dictionary.cambridge.org/dictionary/english/contractor",
+      "attempted_on": "2026-10-16",
+      "result": "web_open_internal_error_no_entry_evidence",
+      "evidence_used": false
+    },
+    {
+      "url": "https://dictionary.cambridge.org/dictionary/english/contact",
+      "attempted_on": "2026-10-16",
+      "result": "web_open_internal_error_no_entry_evidence",
+      "evidence_used": false
+    },
+    {
+      "url": "https://dictionary.cambridge.org/dictionary/english/shift",
+      "attempted_on": "2026-10-16",
+      "result": "web_open_internal_error_no_entry_evidence",
+      "evidence_used": false
+    },
+    {
+      "url": "https://dictionary.cambridge.org/dictionary/english/supplier",
+      "attempted_on": "2026-10-16",
+      "result": "web_open_internal_error_no_entry_evidence",
+      "evidence_used": false
+    }
+  ],
+  "proposed_additive_source_records": [
+    {
+      "id": "foundation01-language-second10-oxford-contractor",
+      "title": "Oxford Advanced Learner's Dictionary: contractor",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/contractor",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary lexical sense, explicitly observed difficulty labels and spelling evidence. AI consultation only; exact language acceptance and all specialist/media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-second10-oxford-trainee",
+      "title": "Oxford Advanced Learner's Dictionary: trainee",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/trainee",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary lexical sense, explicitly observed difficulty labels and spelling evidence. AI consultation only; exact language acceptance and all specialist/media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-second10-oxford-receptionist",
+      "title": "Oxford Advanced Learner's Dictionary: receptionist",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/receptionist",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary lexical sense, explicitly observed difficulty labels and spelling evidence. AI consultation only; exact language acceptance and all specialist/media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-second10-oxford-coordinator",
+      "title": "Oxford Advanced Learner's Dictionary: coordinator",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/coordinator",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary lexical sense, explicitly observed difficulty labels and spelling evidence. AI consultation only; exact language acceptance and all specialist/media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-second10-oxford-contact",
+      "title": "Oxford Advanced Learner's Dictionary: contact",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/contact_1",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary lexical sense, explicitly observed difficulty labels and spelling evidence. AI consultation only; exact language acceptance and all specialist/media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-second10-oxford-supplier",
+      "title": "Oxford Advanced Learner's Dictionary: supplier",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/supplier",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary lexical sense, explicitly observed difficulty labels and spelling evidence. AI consultation only; exact language acceptance and all specialist/media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-second10-oxford-schedule",
+      "title": "Oxford Advanced Learner's Dictionary: schedule",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/schedule_1",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary lexical sense, explicitly observed difficulty labels and spelling evidence. AI consultation only; exact language acceptance and all specialist/media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-second10-oxford-shift",
+      "title": "Oxford Advanced Learner's Dictionary: shift",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/shift_1",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary lexical sense, explicitly observed difficulty labels and spelling evidence. AI consultation only; exact language acceptance and all specialist/media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-second10-oxford-appointment",
+      "title": "Oxford Advanced Learner's Dictionary: appointment",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/appointment",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary lexical sense, explicitly observed difficulty labels and spelling evidence. AI consultation only; exact language acceptance and all specialist/media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-second10-oxford-meeting",
+      "title": "Oxford Advanced Learner's Dictionary: meeting",
+      "publisher": "Oxford University Press",
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/meeting",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary lexical sense, explicitly observed difficulty labels and spelling evidence. AI consultation only; exact language acceptance and all specialist/media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-second10-collins-contact",
+      "title": "Collins COBUILD Advanced Learner's Dictionary: contact",
+      "publisher": "Collins COBUILD Advanced Learner's Dictionary",
+      "url": "https://www.collinsdictionary.com/dictionary/english/contact",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary lexical sense, explicitly observed difficulty labels and spelling evidence. AI consultation only; exact language acceptance and all specialist/media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-second10-merriam-shift",
+      "title": "Merriam-Webster.com Dictionary: shift",
+      "publisher": "Merriam-Webster.com Dictionary",
+      "url": "https://www.merriam-webster.com/dictionary/shift",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary lexical sense, explicitly observed difficulty labels and spelling evidence. AI consultation only; exact language acceptance and all specialist/media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    },
+    {
+      "id": "foundation01-language-second10-collins-shift",
+      "title": "Collins COBUILD Advanced Learner's Dictionary: shift",
+      "publisher": "Collins COBUILD Advanced Learner's Dictionary",
+      "url": "https://www.collinsdictionary.com/dictionary/english/shift",
+      "status": "consulted",
+      "consulted_on": "2026-10-16",
+      "scope": "Selected ordinary lexical sense, explicitly observed difficulty labels and spelling evidence. AI consultation only; exact language acceptance and all specialist/media gates remain pending. No source text or media acquired.",
+      "asset_license": null,
+      "assets_acquired": false
+    }
+  ],
+  "rights_boundary": "Only original short observations are retained. Dictionary consultation supplies no license to redistribute entries, examples, exercises, pictures or audio.",
+  "level_boundary": "Labels must belong to the selected headword/sense. Unrelated footers, other senses and frequency bands are excluded. B1+ remains literal and is not converted; the shift B1/B2 disagreement is explicit."
+}

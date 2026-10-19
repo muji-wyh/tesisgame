@@ -330,9 +330,92 @@ func _run() -> void:
 				words.append(word.duplicate(true))
 	check(words.size() == 2, "Both speech fixtures have production entries")
 	_check_merge_events()
+	_check_foundation01_speech_boundary()
 	_check_audio_queue()
 	_check_pending_audio()
 	await _check_app_routes()
 	await settle()
 	print("Jelly Words merge speech: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _check_foundation01_speech_boundary() -> void:
+	var document: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/professional/lexemes/foundation-module01.json"))
+	var entry: Dictionary = document.lexemes.filter(func(row: Dictionary) -> bool: return row.id == "signature.written-name.n")[0]
+	# The actual graph is bound to existing fixture media only to inspect events.
+	# This does not synthesize, play or approve a Foundation01 recording.
+	var word: Dictionary = words[0].duplicate(true)
+	word.id = entry.id
+	word.text = entry.text
+	word.track = "professional"
+	word.practice_modes = entry.practice_modes.duplicate()
+	word.morphology = entry.morphology.duplicate(true)
+	word.erase("min_age")
+	var view := Jelly.new()
+	root.add_child(view)
+	view.size = Vector2(1000, 720)
+	var requests: Array = []
+	var taps: Array = []
+	var attempts: Array = []
+	view.word_merged.connect(func(payload: Dictionary): requests.append(payload.duplicate(true)))
+	view.word_requested.connect(func(payload: Dictionary): taps.append(payload.duplicate(true)))
+	view.word_attempted.connect(func(event_id: String, ids: Array[String], correct: bool): attempts.append([event_id, ids, correct]))
+	for reduced: bool in [false, true]:
+		check(view.configure([word], 3, Data.theme("spring"), data.chests, reduced, 42), "Actual signature graph configures with explicitly synthetic fixture media")
+		view.set_process(false)
+		view.game.spawn_interval = 10000.0
+		view.game.cells.clear()
+		var pieces: Array[Dictionary] = []
+		for state: Dictionary in view.game._morphology.source_tiles(entry.morphology.id):
+			var tile: Dictionary = view.game._new_composition_tile(state)
+			var position: Vector2i = view.game._free_position(view.game._occupied(), int(tile.width), int(tile.height))
+			tile.column = position.x
+			tile.row = position.y
+			view.game.cells.append(tile)
+			pieces.append(tile)
+		view._sync_tiles()
+		view._layout()
+		_advance(view, 1.0)
+		requests.clear()
+		taps.clear()
+		check(view.game.try_merge(int(pieces[0].id), int(pieces[1].id)) == "merged", "Signature accepts its authored first join")
+		var partial_id: int = int(view.game.fusions[0].result.id)
+		check(requests.is_empty(), "Accepting bound signate never requests whole-word speech")
+		_advance(view, 2.0)
+		check(requests.is_empty() and taps.is_empty() and view.game.cell(partial_id).text == "signate", "Partial animation and settlement remain silent in either motion preference")
+		check(not view.game.collect(partial_id) and requests.is_empty() and taps.is_empty(), "Partial collection refusal cannot leak a pronunciation event")
+		check(view.game.try_merge(partial_id, int(pieces[2].id)) == "merged", "Signature accepts final-e loss into the completed word")
+		check(requests.size() == 1 and requests[0].id == entry.id and requests[0].audio == word.audio, "Only accepted final fusion requests the exact completed-word fixture payload")
+		_advance(view, 2.0)
+		check(requests.size() == 1 and taps.is_empty(), "Final settlement never repeats pronunciation or collects automatically")
+	var atomic_count: int = 0
+	for atomic_entry: Dictionary in document.lexemes:
+		if atomic_entry.morphology.kind != "atomic":
+			continue
+		atomic_count += 1
+		word.id = atomic_entry.id
+		word.text = atomic_entry.text
+		word.morphology = atomic_entry.morphology.duplicate(true)
+		word.practice_modes = atomic_entry.practice_modes.duplicate()
+		check(view.configure([word], 3, Data.theme("spring"), data.chests, false, 42), "Actual atomic graph configures with explicitly synthetic fixture media: " + word.text)
+		view.set_process(false)
+		view.game.spawn_interval = 10000.0
+		view.game.cells.clear()
+		var whole: Dictionary = view.game._new_composition_tile(view.game._morphology.source_tiles(atomic_entry.morphology.id)[0])
+		whole.column = 0
+		whole.row = view.game.ROWS - int(whole.height)
+		view.game.cells.append(whole)
+		view._sync_tiles()
+		view._layout()
+		_advance(view, 1.0)
+		requests.clear()
+		taps.clear()
+		attempts.clear()
+		view.credit_collection = func(_id: String, _coins: int) -> Dictionary: return {"ok": true}
+		check(view.game.collect(int(whole.id)), "Atomic Foundation01 whole collects through the actual view: " + word.text)
+		check(requests.is_empty() and taps.size() == 1 and taps[0].id == word.id and taps[0].audio == word.audio, "Atomic collection requests one exact whole-word fixture payload without merge speech: " + word.text)
+		_advance(view, 1.0)
+		check(taps.size() == 1 and attempts.is_empty(), "Atomic pronunciation never repeats or emits spelling mastery: " + word.text)
+	check(atomic_count == 16, "All sixteen intact units retain the real view's pronunciation/exposure boundary")
+	view.credit_collection = Callable()
+	view.queue_free()

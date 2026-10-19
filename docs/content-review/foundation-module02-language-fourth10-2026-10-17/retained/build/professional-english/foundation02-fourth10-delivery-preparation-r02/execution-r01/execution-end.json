@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "status": "prepared_pending_independent_technical_review",
+  "recorded_at": "2026-10-16T21:21:22.597Z",
+  "source_files_after": [
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/input-pins.json",
+      "raw_sha256": "54982d9d4421d9cb0629167fa8b9644e7b825094882372aeaa34c2381e8ff750"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/input-freeze-receipt.json",
+      "raw_sha256": "8b619da5373a9125cfb5338c801294210ea73b3af1f2d3fbb05f1d8133d74828"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/projection.cjs",
+      "raw_sha256": "c07b67580921610e94425d3f2c01b620203163d7a6ef40be2a4ebe07edf12da9"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/test-transforms.cjs",
+      "raw_sha256": "7886b3c0d03766f2f0a3f460e6e2cbf391384338fe747f8defa2ce308d1d4dc9"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/prepare.cjs",
+      "raw_sha256": "612d9b98fd62b62492f7140a034ccb29a8c75fb07fc2937fa6b7787e35c98621"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/HANDOFF.md",
+      "raw_sha256": "620c9ddd91788662d7227ca7ab79fdf5083735daece06d042f75c95789646e39"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/TRANSACTION.md",
+      "raw_sha256": "ceddf90d4066c4a2c6ed806c46e9a6ecc10de5025d37a21c054fc35b7746b052"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/author-r02.cjs",
+      "raw_sha256": "5bf19ff7a5ab8628f24a4222c07aa7202d9898e795bfe3ffc396fd66105deb8b"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/revision-derivation.json",
+      "raw_sha256": "317d94037e9ccd27a6c38feb34bb199fec697d61f0f22ddbb1a4b6b2b181164c"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/author-coverage-r02.cjs",
+      "raw_sha256": "ca74606235ce905a2d566d62dc84de3c5525dfd9d70f9acd76413eaec9430c6e"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/coverage-supplement.json",
+      "raw_sha256": "e54a9bcc19f2b34c0d8d875213e3e692d8a7ca643973141b27f9459a0a8625f0"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/freeze-inputs.cjs",
+      "raw_sha256": "a762a1256495cec9a270e289ffa2d487267359e4a92d7b57fefeb819e498cf42"
+    },
+    {
+      "path": "build/professional-english/foundation02-fourth10-delivery-preparation-r02/author-inventory.json",
+      "raw_sha256": "aece2564d2a9f0d6261ba57f8613fc862b5541f5fba01e80bb3f8c8651384ff6"
+    }
+  ],
+  "production_mutated": false
+}

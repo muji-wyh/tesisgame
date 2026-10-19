@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "status": "approved_by_user",
+  "approved_on": "2026-10-16",
+  "evidence": {
+    "source": "Direct human reply in the current root conversation",
+    "question_item_id": [
+      "request_user_input_async",
+      "call_fBfAoFlUyKmhWveN2mNUORiZ",
+      0
+    ],
+    "question_english": "After listening to counter and checkout, are both pronunciations, speaking rates and voice qualities suitable for the game?",
+    "answer_english": "Both are acceptable",
+    "translation_note": "Question and response are recorded as English translations to comply with the repository language preference.",
+    "human_record": "docs/assets/sources/professional-retail-ava/counter-checkout/human-approval-r01.json",
+    "human_record_raw_sha256": "d9487d9a2a2a93805fa597f87dcf775f1cebae88c89fc97c13de90acbece2e82"
+  },
+  "profile": {
+    "voice": "en-US-AvaNeural",
+    "rate": "-15%",
+    "pitch": "+8Hz",
+    "volume": "+0%",
+    "postprocessing": false
+  },
+  "technical_qa": {
+    "path": "docs/assets/sources/professional-retail-ava/counter-checkout/technical-qa-r01.json",
+    "raw_sha256": "5300530a5630b15ca27921f488f123ef228fab38d89cc9ad982e3f71460b608b"
+  },
+  "listening_request": {
+    "path": "docs/assets/sources/professional-retail-ava/counter-checkout/listening-request.json",
+    "raw_sha256": "10cdbe11ca4e9a0ae1122dc5ae2acffc69228db3d68bc7245988186667359bab"
+  },
+  "scope": "Only the exact presented counter and checkout WAVs are approved. Acquisition, technical QA and listening-request records retain their original pre-approval states. Future recordings and the game mix are outside this approval.",
+  "outputs": [
+    {
+      "sense_id": "counter.service-surface.n",
+      "text": "counter",
+      "synthesis_identity_key": "4c701842d60462591932967761355564f80740a2d5182b0ce9be92ab03541f82",
+      "submitted_text": "counter.",
+      "presented_path": "build/professional-english/retail-audio-review/counter-checkout-acquired-r01/4c701842d60462591932967761355564f80740a2d5182b0ce9be92ab03541f82.wav",
+      "retained_wav": "docs/assets/sources/professional-retail-ava/counter-checkout/4c701842d60462591932967761355564f80740a2d5182b0ce9be92ab03541f82.wav",
+      "wav_sha256": "685b544dbb353f3a1f3fb999fbe3f541cb94874d0e4543ad0cba774c39fd4bc3",
+      "retained_mp3": "docs/assets/sources/professional-retail-ava/counter-checkout/source-mp3/4c701842d60462591932967761355564f80740a2d5182b0ce9be92ab03541f82.mp3",
+      "source_mp3_sha256": "903cf518d5e9afddc450af45ca6f5936325755f30f0d024a7b9942857e02fec2",
+      "acquisition_receipt": "docs/assets/sources/professional-retail-ava/counter-checkout/4c701842d60462591932967761355564f80740a2d5182b0ce9be92ab03541f82.json",
+      "acquisition_receipt_raw_sha256": "486ae4a26787bf0d99d7324bdd0870a8b4a5938ced6d6ba04b825d6891fcc588"
+    },
+    {
+      "sense_id": "checkout.payment-area.n",
+      "text": "checkout",
+      "synthesis_identity_key": "3682f63f49bf3f7ca690577fa8cfd247bb5f808bc0ae900def56d729d528912c",
+      "submitted_text": "checkout.",
+      "presented_path": "build/professional-english/retail-audio-review/counter-checkout-acquired-r01/3682f63f49bf3f7ca690577fa8cfd247bb5f808bc0ae900def56d729d528912c.wav",
+      "retained_wav": "docs/assets/sources/professional-retail-ava/counter-checkout/3682f63f49bf3f7ca690577fa8cfd247bb5f808bc0ae900def56d729d528912c.wav",
+      "wav_sha256": "39df6ba3406a891283f99379ca8526d93fc8f3279b571134c0213dd824282224",
+      "retained_mp3": "docs/assets/sources/professional-retail-ava/counter-checkout/source-mp3/3682f63f49bf3f7ca690577fa8cfd247bb5f808bc0ae900def56d729d528912c.mp3",
+      "source_mp3_sha256": "11ab781d7f2f2b931e93038248ea1c453baeb845539144666b36472586cf2a4a",
+      "acquisition_receipt": "docs/assets/sources/professional-retail-ava/counter-checkout/3682f63f49bf3f7ca690577fa8cfd247bb5f808bc0ae900def56d729d528912c.json",
+      "acquisition_receipt_raw_sha256": "486799fa43df4103b53d236c11e47ad7029ab00570a1b9cd048a7fb73f1fb5d3"
+    }
+  ]
+}

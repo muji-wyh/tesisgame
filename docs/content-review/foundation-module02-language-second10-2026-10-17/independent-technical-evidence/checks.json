@@ -1,0 +1,626 @@
+{
+  "schema": 1,
+  "ok": true,
+  "review_kind": "technical_only",
+  "package": "build/professional-english/foundation-module02-language-review/second10-delivery-r02",
+  "production_mutated": false,
+  "native_dispatched": false,
+  "full_combined_validation": false,
+  "baseline_input_count": 679,
+  "registry_before_sha256": "8574160412f2cdbb0e3891421f995ded387f108fd2727d66eb13fd83d2959a67",
+  "registry_after_sha256": "f470936fc3bff7ff619b3af057a20cf5e05034013bbf08948e380847228dc4c5",
+  "reviewed_files": [
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/delivery-lib.cjs",
+      "raw_sha256": "a094e1b7f81f8259f1a00b2e37b3b5daae589ba7a7c6ac1970040ab7d6e54fbb"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/test-transforms.cjs",
+      "raw_sha256": "65e236565b29148ab220a4ce7ac7ff3894f06e2f8ef20c64c8855713a593450b"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/prepare.cjs",
+      "raw_sha256": "b81f3f19fae42219cac0e5e00aade2bb1af56e37ddb5d0edf4b2800307f9218f"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/deliver.cjs",
+      "raw_sha256": "4f6a713d84c65650e17fa82161a718e238ef1cf001903e7f43f9deaf7f24f483"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/baseline-config.json",
+      "raw_sha256": "d3eb180e31c07370640cc1ac3b60f7fe5d7a71aa17b66219bb3637d9efb8d665"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/HANDOFF.md",
+      "raw_sha256": "f18ef9ef4e3a5ce106c34cecc625327a2e985933b8a6c21d3ac7bd9c7647888f"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/execution-start.json",
+      "raw_sha256": "19da19b632871145fc09609bacb5b0339b6aad0bc51d4a4172b5eef44e490b0e"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/accepted-language.json",
+      "raw_sha256": "56e569369ac8b9f3b7f3c7e789c61302e62777b774950f89f5b971f277ea145b"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/professional-content.test.cjs.before",
+      "raw_sha256": "471f1eee4c01ffd0a0f9a43db0692311774afd5996ba29f5865d4674ec38ab19"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/professional-content.test.cjs.after",
+      "raw_sha256": "64d754533e5b7aa329ab4c044bce454e7c641fa6afe0257e7f76134586c67fa7"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/professional-retail-morphology.test.cjs.before",
+      "raw_sha256": "47474805af1db61c9a2bc944395f5790a5853c73420b02f29563559b2b1a4459"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/professional-retail-morphology.test.cjs.after",
+      "raw_sha256": "c7bc3e1448ee006c6441c9cf1eb0fb3be875efc9c762f1a78d9c0c478a62135f"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/professional_retail_morphology_tests.gd.before",
+      "raw_sha256": "f0bd041c0c50413b9f0b399df1abb89aea7d66062c5f4ad5fcbc30290e4208f1"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/professional_retail_morphology_tests.gd.after",
+      "raw_sha256": "7cd10db267b373fea44ac287924ef67de0d47fa13d4a5c4e2c299afaeea6008c"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/test-patches.json",
+      "raw_sha256": "ee5fb84bdecfec9ed39d74e58261a86f6267ae3c4f6b6ddd032b73a7b769ec58"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/scratch-validation.json",
+      "raw_sha256": "68de87e2247416021574954de26a32ce7f42d1fe336eeadb7b816bbf7ba768e6"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/binding.json",
+      "raw_sha256": "2710e773bf4744b782a3801a687726c4a14c547084e8217311e886189b31f15c"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/preparation-receipt.json",
+      "raw_sha256": "9523482f6e7c511ba093fb52ba19f17de4e32d37306e6cd503b96951456557ef"
+    },
+    {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/preparation-attempt-001.json",
+      "raw_sha256": "98c87b5b983f88c6c51db921feda73069ceb4b147212aaabd22cea7421e8351c"
+    }
+  ],
+  "accepted_decisions": [
+    {
+      "id": "complete.finish.v",
+      "accepted_fields_exact": true,
+      "protected_fields_exact": true,
+      "history_prefix_exact": true,
+      "added_references": 2,
+      "literal_levels": {
+        "oxford_html": {
+          "sense_element": "complete_sng_6",
+          "attribute": "cefr",
+          "literal": "a1"
+        },
+        "oxford_rendered_topic": null,
+        "collins_rendered": "A2"
+      }
+    },
+    {
+      "id": "prepare.make-ready.v",
+      "accepted_fields_exact": true,
+      "protected_fields_exact": true,
+      "history_prefix_exact": true,
+      "added_references": 2,
+      "literal_levels": {
+        "oxford_html": {
+          "sense_element": "prepare_sng_1",
+          "attribute": "cefr",
+          "literal": "a1"
+        },
+        "oxford_rendered_topic": null,
+        "collins_rendered": "A2"
+      }
+    },
+    {
+      "id": "arrange.organize.v",
+      "accepted_fields_exact": true,
+      "protected_fields_exact": true,
+      "history_prefix_exact": true,
+      "added_references": 2,
+      "literal_levels": {
+        "oxford_html": {
+          "sense_element": "arrange_sng_1",
+          "attribute": "cefr",
+          "literal": "a2"
+        },
+        "oxford_rendered_topic": null,
+        "collins_rendered": "B1"
+      }
+    },
+    {
+      "id": "deliver.take-to-recipient.v",
+      "accepted_fields_exact": true,
+      "protected_fields_exact": true,
+      "history_prefix_exact": true,
+      "added_references": 2,
+      "literal_levels": {
+        "oxford_html": {
+          "sense_element": "deliver_sng_1",
+          "attribute": "cefr",
+          "literal": "b1"
+        },
+        "oxford_rendered_topic": "B1",
+        "collins_rendered": "B1"
+      }
+    },
+    {
+      "id": "replace.put-instead.v",
+      "accepted_fields_exact": true,
+      "protected_fields_exact": true,
+      "history_prefix_exact": true,
+      "added_references": 2,
+      "literal_levels": {
+        "oxford_html": {
+          "sense_element": "replace_sng_3",
+          "attribute": "cefr",
+          "literal": "a2"
+        },
+        "oxford_rendered_topic": null,
+        "collins_rendered": "B1"
+      }
+    },
+    {
+      "id": "return.send-back.v",
+      "accepted_fields_exact": true,
+      "protected_fields_exact": true,
+      "history_prefix_exact": true,
+      "added_references": 2,
+      "literal_levels": {
+        "oxford_html": {
+          "sense_element": "return_sng_2",
+          "attribute": "cefr",
+          "literal": "b1"
+        },
+        "oxford_rendered_topic": "B1",
+        "collins_rendered": "A2"
+      }
+    },
+    {
+      "id": "report.give-information.v",
+      "accepted_fields_exact": true,
+      "protected_fields_exact": true,
+      "history_prefix_exact": true,
+      "added_references": 2,
+      "literal_levels": {
+        "oxford_html": {
+          "sense_element": "report_sng_1",
+          "attribute": "cefr",
+          "literal": "a2"
+        },
+        "oxford_rendered_topic": null,
+        "collins_rendered": "B1"
+      }
+    },
+    {
+      "id": "contact.communicate-with.v",
+      "accepted_fields_exact": true,
+      "protected_fields_exact": true,
+      "history_prefix_exact": true,
+      "added_references": 2,
+      "literal_levels": {
+        "oxford_html": {
+          "sense_element": "contact_sng_9",
+          "attribute": "fkcefr",
+          "literal": "b1"
+        },
+        "oxford_rendered_topic": "B1",
+        "collins_rendered": "A2"
+      }
+    }
+  ],
+  "held_exact": [
+    "collect.gather.v",
+    "notify.inform.v"
+  ],
+  "source_count": 16,
+  "context": {
+    "memberships": 200,
+    "modules": 20,
+    "expressions": 245,
+    "focus": 6,
+    "related": 66,
+    "inherited_holds": 17
+  },
+  "candidate_audit": {
+    "summary": {
+      "courses": 20,
+      "modules": 200,
+      "themes": 21,
+      "unique_lexemes": 4939,
+      "vocabulary_memberships": 10000,
+      "vocabulary_memberships_target": 10000,
+      "vocabulary_memberships_remaining": 0,
+      "expressions": 1620,
+      "expression_memberships": 2000,
+      "expression_memberships_target": 2000,
+      "expression_memberships_remaining": 0,
+      "ready_modules": 0,
+      "reviewed_lexemes": 130,
+      "morphology_authored": 4045,
+      "morphology_reviewed": 89,
+      "integrated_word_images": 8,
+      "integrated_word_audio": 12,
+      "release_ready": false
+    },
+    "errors": 0
+  },
+  "transforms": [
+    {
+      "file": "tests/professional-content.test.cjs",
+      "exact_before": true,
+      "exact_after": true,
+      "anchor_edits": 7,
+      "registered_callbacks": 182,
+      "independent_callbacks": 35
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "exact_before": true,
+      "exact_after": true,
+      "anchor_edits": 1,
+      "registered_callbacks": 36,
+      "independent_callbacks": 6
+    },
+    {
+      "file": "tests/godot/professional_retail_morphology_tests.gd",
+      "exact_before": true,
+      "exact_after": true,
+      "anchor_edits": 2,
+      "attendance_correction_preserved": true,
+      "native_execution": false
+    }
+  ],
+  "projected_callbacks": [
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "draft audit preserves the complete scope and reports actual authored coverage",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation assesses every sense and keeps contextual focus identities and token offsets",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation missing analyses have sourced pending decisions without claiming expert review",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation allomorphs and classical roots remain explicit instead of syllable cuts",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation editorial distinctions and reviewed-media gates survive the route repair",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation nine accepted language records retain exact candidates, sources and separate gates",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation historical supervisor hold and editorial difficulty distinctions remain explicit",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation language acceptance preserves all context and creates no expression or scoring approval",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation second ten language decisions retain exact root accepted candidates and thirteen sources",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation second ten preserve literal source levels and the separately reviewed British spelling",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation second ten preserve every context and all unresolved sense bindings",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation historical reversal refuses unexpected later field drift",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation third ten install nine exact language candidates and sixteen scoped sources",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation third ten retain the historical attendance hold and literal source difficulty evidence",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation third ten preserve context, five ambiguity holds and every nonlanguage gate",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation fourth ten install ten exact language candidates and twenty scoped sources",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation fourth ten preserve literal levels and contrast-only voicemail evidence",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation fourth ten preserve prior entry holds and all current and prior expression holds",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation fifth ten install ten exact language candidates and twenty scoped sources",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation fifth ten keep source levels separate from editorial difficulty and other senses",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation fifth ten preserve prior entry holds and twelve expression ambiguities",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation module02 first ten install exact accepted candidates with bounded integration metadata",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation module02 keeps corrected confirm levels, editorial placements and sense limits exact",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation module02 preserves every context hold, membership and separate release gate",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Module02 chronological reversal rejects every unrecognized field drift before older Foundation history",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Attendance delivery installs exact independently accepted presence content and bounded metadata",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Attendance editorial B2 retains Oxford C1 and distinct headword and whole-lesson evidence",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Attendance chronology rejects unrecognized field drift and preserves historical hold snapshots",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Attendance delivery preserves every other entry, expression, source prefix, membership and readiness gate",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Attendance delivery requires the exact successful baseline and committed guarded journal",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation02 second-ten delivery installs eight exact accepted proposals and scoped metadata",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation02 second-ten preserves literal levels, corrected deliver and complete image mismatch",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation02 second-ten retains whole-entry holds, all expressions and inherited exclusions",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation02 second-ten chronological reversal rejects partial fields and protects independent clone states",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "title": "Foundation02 second-ten preserves registry isolation and separate readiness gates",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Retail04 changes morphology only and preserves complete family, course and source scope",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Third-ten Foundation language reversal preserves pending Retail legacy morphology donors",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Fourth-ten Foundation reversal preserves exact historical Retail donor snapshots",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Fifth-ten Foundation language acceptance preserves all ten pending morphology graphs",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Attendance language reversal preserves pending morphology and rejects graph or identity drift",
+      "passed": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "title": "Foundation02 second-ten language leaves every morphology graph pending and preserves historical donors",
+      "passed": true
+    }
+  ],
+  "reversals": [
+    {
+      "file": "tests/professional-content.test.cjs",
+      "id": "complete.finish.v",
+      "accepted_exact_states": 16,
+      "rejected_mutations": 224,
+      "deep_clone_verified": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "id": "prepare.make-ready.v",
+      "accepted_exact_states": 16,
+      "rejected_mutations": 224,
+      "deep_clone_verified": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "id": "arrange.organize.v",
+      "accepted_exact_states": 16,
+      "rejected_mutations": 224,
+      "deep_clone_verified": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "id": "deliver.take-to-recipient.v",
+      "accepted_exact_states": 16,
+      "rejected_mutations": 224,
+      "deep_clone_verified": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "id": "replace.put-instead.v",
+      "accepted_exact_states": 16,
+      "rejected_mutations": 224,
+      "deep_clone_verified": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "id": "return.send-back.v",
+      "accepted_exact_states": 16,
+      "rejected_mutations": 224,
+      "deep_clone_verified": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "id": "report.give-information.v",
+      "accepted_exact_states": 16,
+      "rejected_mutations": 224,
+      "deep_clone_verified": true
+    },
+    {
+      "file": "tests/professional-content.test.cjs",
+      "id": "contact.communicate-with.v",
+      "accepted_exact_states": 16,
+      "rejected_mutations": 224,
+      "deep_clone_verified": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "id": "complete.finish.v",
+      "accepted_exact_states": 18,
+      "rejected_mutations": 252,
+      "deep_clone_verified": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "id": "prepare.make-ready.v",
+      "accepted_exact_states": 18,
+      "rejected_mutations": 252,
+      "deep_clone_verified": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "id": "arrange.organize.v",
+      "accepted_exact_states": 18,
+      "rejected_mutations": 252,
+      "deep_clone_verified": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "id": "deliver.take-to-recipient.v",
+      "accepted_exact_states": 18,
+      "rejected_mutations": 252,
+      "deep_clone_verified": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "id": "replace.put-instead.v",
+      "accepted_exact_states": 18,
+      "rejected_mutations": 252,
+      "deep_clone_verified": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "id": "return.send-back.v",
+      "accepted_exact_states": 18,
+      "rejected_mutations": 252,
+      "deep_clone_verified": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "id": "report.give-information.v",
+      "accepted_exact_states": 18,
+      "rejected_mutations": 252,
+      "deep_clone_verified": true
+    },
+    {
+      "file": "tests/professional-retail-morphology.test.cjs",
+      "id": "contact.communicate-with.v",
+      "accepted_exact_states": 18,
+      "rejected_mutations": 252,
+      "deep_clone_verified": true
+    }
+  ],
+  "deferred": [
+    "Foundation02 second-ten delivery binds explicit composite evidence and committed guarded journal",
+    "Persisted combined Node/native/audio validation after root delivery."
+  ],
+  "all679_inputs_unchanged": true,
+  "executed_reviewer_source": {
+    "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02-independent-technical-r01/inspect.cjs",
+    "raw_sha256_before": "93e0fce61f2ae924eb5414a8d0441082dfaad72eb1ca701d152f9562dbbc049a",
+    "raw_sha256_after": "93e0fce61f2ae924eb5414a8d0441082dfaad72eb1ca701d152f9562dbbc049a",
+    "unchanged": true
+  },
+  "author_executed_source_equality": {
+    "verified": true,
+    "manifest": {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/execution-start.json",
+      "raw_sha256": "19da19b632871145fc09609bacb5b0339b6aad0bc51d4a4172b5eef44e490b0e"
+    },
+    "attempt": {
+      "path": "build/professional-english/foundation-module02-language-review/second10-delivery-r02/preparation-attempt-001.json",
+      "raw_sha256": "98c87b5b983f88c6c51db921feda73069ceb4b147212aaabd22cea7421e8351c"
+    },
+    "source_count": 6
+  }
+}

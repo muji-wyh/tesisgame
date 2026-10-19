@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "status": "completed_once",
+  "started_at": "2026-10-16T20:24:40.964Z",
+  "completed_at": "2026-10-16T20:24:42.580Z",
+  "attempt": 1,
+  "script_sha256_at_start": "8ca8d1dd88f9833272d66d4d69879a4ba54ca85903baaff3309ec96a477e4ae1",
+  "script_sha256_at_end": "8ca8d1dd88f9833272d66d4d69879a4ba54ca85903baaff3309ec96a477e4ae1",
+  "executed_source_equality_verified": true,
+  "counts": {
+    "reviewed_entries": 10,
+    "author_proposals": 9,
+    "author_holds": 1,
+    "accepted_exact_projections": 8,
+    "held_whole_entries": 2,
+    "accepted_field_decisions": 24,
+    "accepted_entries_with_content_edits": 6,
+    "unchanged_accepted_projections": 2,
+    "accepted_content_edits": 10,
+    "content_edits_by_field": {
+      "definition": 4,
+      "example": 1,
+      "difficulty": 5
+    }
+  },
+  "author_artifacts_verified": 16,
+  "bound_source_files_verified": 350,
+  "bound_source_file_drift": 0,
+  "candidate_preimages_verified": 10,
+  "candidate_projections_verified": 10,
+  "context_preimage_pins_verified": 287,
+  "production_mutated": false,
+  "production_validator_or_test_dispatched": false,
+  "native_godot_dispatched": false,
+  "build_export_or_browser_dispatched": false
+}

@@ -1,0 +1,1799 @@
+{
+  "schema": 1,
+  "purpose": "Read-only consistency check supporting selected entry language review, not a production test or runtime validation",
+  "author_context_sha256": "ae77d3ec5e9c4a40af8877d718e3dae001ed15bc9d82d7c283f7560f8254a1cd",
+  "full_entries": [
+    {
+      "id": "collect.gather.v",
+      "before_entry_sha256": "177f9fc35b0d348ddcc3cdf60c43dd5119d145acfe781d17c2b988e1b6d77981",
+      "current_entry_sha256": "177f9fc35b0d348ddcc3cdf60c43dd5119d145acfe781d17c2b988e1b6d77981",
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      }
+    },
+    {
+      "id": "notify.inform.v",
+      "before_entry_sha256": "7aaf8490d372bb3c8490c2824955a59e92c3d3dfe4416cb73d772cc6413a0cdc",
+      "current_entry_sha256": "7aaf8490d372bb3c8490c2824955a59e92c3d3dfe4416cb73d772cc6413a0cdc",
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      }
+    },
+    {
+      "id": "postpone.delay-until-later.v",
+      "before_entry_sha256": "ba004741e07d1dddcc8e1f69ebea15717ad97d90ea87f483e72559846a17cded",
+      "current_entry_sha256": "ba004741e07d1dddcc8e1f69ebea15717ad97d90ea87f483e72559846a17cded",
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      }
+    },
+    {
+      "id": "verify.establish-accuracy.v",
+      "before_entry_sha256": "d900dc371a4f37e536e5b252470b50fc85e988fc799ab279f2ef836e9ea43e9a",
+      "current_entry_sha256": "d900dc371a4f37e536e5b252470b50fc85e988fc799ab279f2ef836e9ea43e9a",
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      }
+    },
+    {
+      "id": "unsafe.presenting-danger.adj",
+      "before_entry_sha256": "b03ac8acf04932b9dfc3d44775939399ad37f73a1149faf72b708f244fc23286",
+      "current_entry_sha256": "b03ac8acf04932b9dfc3d44775939399ad37f73a1149faf72b708f244fc23286",
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      }
+    },
+    {
+      "id": "hazard.possible-harm.n",
+      "before_entry_sha256": "e513da37995090db5f5ef68c255e5beffde131c10afe12478e644651361c1045",
+      "current_entry_sha256": "e513da37995090db5f5ef68c255e5beffde131c10afe12478e644651361c1045",
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      }
+    }
+  ],
+  "expressions": [
+    {
+      "id": "expr.caregiving.module08.04",
+      "file": "data/professional/expressions/caregiving-module08.json",
+      "object_sha256": "70e7d3af88771f0b314f7e0167caf7e39680249796cd5a83920b4ec15e4c25cf",
+      "focus_ids": [],
+      "text": "The spill on the wet floor and the trip hazard were reported after a fall; a clean floor can still present risks.",
+      "meaning": "Report an event and distinguish visible cleanliness from safety.",
+      "context": "A worker records environmental concerns after a fall.",
+      "focus_lexeme_ids": [
+        "wet-floor.damp-walking-surface.n",
+        "spill.escaped-liquid-or-material.n",
+        "trip-hazard.obstacle-likely-to-cause-tripping.n",
+        "fall.unintended-descent-to-lower-level.n",
+        "clean.free-of-visible-soiling.a"
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_consistency_only_no_expression_acceptance"
+    },
+    {
+      "id": "expr.cleaning_facilities.module08.02",
+      "file": "data/professional/expressions/cleaning-module08.json",
+      "object_sha256": "bf254b9d1cc3b10894078ade0288cba5b84d32cffeb3ed8c48205170c1202e91",
+      "focus_ids": [],
+      "text": "The spill and obstruction are reported separately from the trip hazard and possible slip hazard.",
+      "meaning": "Describe observed conditions accurately.",
+      "context": "Reporting a workplace concern.",
+      "focus_lexeme_ids": [
+        "spill.escaped-liquid-or-material.n",
+        "obstruction.blocked-route-object.n",
+        "trip-hazard.obstacle-likely-to-cause-tripping.n",
+        "slip-hazard.condition-increasing-likelihood-of-slipping.n"
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_consistency_only_no_expression_acceptance"
+    },
+    {
+      "id": "expr.cleaning_facilities.module08.03",
+      "file": "data/professional/expressions/cleaning-module08.json",
+      "object_sha256": "231d0e2df95d44733215c03175bf4fae13b1536ac69f0466b961951fa3e65abe",
+      "focus_ids": [],
+      "text": "The safety data sheet, chemical label, hazard pictogram, and signal word must be read in their proper context.",
+      "meaning": "Identify sources of hazard information.",
+      "context": "Discussing a damaged label.",
+      "focus_lexeme_ids": [
+        "safety-data-sheet.chemical-hazard-document.n",
+        "chemical-label.label-providing-identification-and-hazard-information-for-chemical.n",
+        "hazard-pictogram.standardized-graphic-identifying-hazard-category.n",
+        "signal-word.word-indicating-hazard-severity-on-label.n"
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_consistency_only_no_expression_acceptance"
+    },
+    {
+      "id": "expr.cleaning_facilities.module08.08",
+      "file": "data/professional/expressions/cleaning-module08.json",
+      "object_sha256": "9661356ed32ada65bb7189ea33de5a0e2877293beafae425a574876b1142a860",
+      "focus_ids": [],
+      "text": "The noise, vibration, and suspected asbestos require specialist attention alongside the working at height and electrical hazard concerns.",
+      "meaning": "Identify issues needing qualified assessment.",
+      "context": "Passing on a task review.",
+      "focus_lexeme_ids": [
+        "noise.unwanted-or-potentially-harmful-sound.n",
+        "vibration.repeated-oscillating-movement.n",
+        "asbestos.group-of-fibrous-minerals-used-in-some-older-products.n",
+        "working-at-height.work-where-fall-could-cause-injury.n",
+        "electrical-hazard.condition-presenting-risk-from-electrical-energy.n"
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_consistency_only_no_expression_acceptance"
+    },
+    {
+      "id": "expr.construction_trades.module08.09",
+      "file": "data/professional/expressions/construction-module08.json",
+      "object_sha256": "f3ee872bca3307359dc9361fec11f3ae1569386d7cb15ee57dddf78a55a9fb83",
+      "focus_ids": [],
+      "text": "The hot work record names the fire watch responsibility, and the electrical hazard has been referred to qualified personnel.",
+      "meaning": "Report responsibilities and a referred hazard.",
+      "context": "Reading actual controlled-work arrangements without operating instructions.",
+      "focus_lexeme_ids": [
+        "hot-work.work-producing-heat-sparks-or-flame-that-may-ignite-material.n",
+        "fire-watch.designated-monitoring-for-fire-related-risks.n",
+        "electrical-hazard.condition-presenting-risk-from-electrical-energy.n"
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_consistency_only_no_expression_acceptance"
+    },
+    {
+      "id": "expr.customer_support.module04.10",
+      "file": "data/professional/expressions/customer-support-module04.json",
+      "object_sha256": "3c9fcafbc1e1ed40a51a804010d89567d055592c2c3368a6b9309de7ca2b9ee4",
+      "focus_ids": [],
+      "text": "Please verify the declined payment and payment status before suggesting another payment attempt.",
+      "meaning": "Check existing payment information before further action.",
+      "context": "An agent refers a billing concern for authorized review.",
+      "focus_lexeme_ids": [
+        "declined-payment.unapproved-payment.n",
+        "payment-status.payment-progress-state.n"
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_consistency_only_no_expression_acceptance"
+    },
+    {
+      "id": "expr.customer_support.module07.08",
+      "file": "data/professional/expressions/customer-support-module07.json",
+      "object_sha256": "0a38463bfd52d25680849405bf15a98fb53ab40029e6b89f20115da28d5240a3",
+      "focus_ids": [],
+      "text": "The verified status page describes the service outage and the time of its latest update.",
+      "meaning": "Refer to current published service information.",
+      "context": "An agent checks a reported interruption.",
+      "focus_lexeme_ids": [
+        "status-page.page-reporting-service-condition.n",
+        "service-outage.period-of-service-unavailability.n"
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_consistency_only_no_expression_acceptance"
+    },
+    {
+      "id": "expr.customer_support.module08.04",
+      "file": "data/professional/expressions/customer-support-module08.json",
+      "object_sha256": "86263c4a7ed17b4a1d0432fdda55af3b9ff57c497b4c9cea3e8d35497f2c37ae",
+      "focus_ids": [],
+      "text": "Please verify the redaction before sending the document through the approved secure channel.",
+      "meaning": "Check protected information before sharing.",
+      "context": "A worker prepares a fictional document.",
+      "focus_lexeme_ids": [
+        "redaction.removal-or-obscuring-of-sensitive-information.n",
+        "secure-channel.communication-route-with-appropriate-protection.n"
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_consistency_only_no_expression_acceptance"
+    },
+    {
+      "id": "expr.customer_support.module09.04",
+      "file": "data/professional/expressions/customer-support-module09.json",
+      "object_sha256": "c4269c7d546f1418254431f4cb0021d34317714d8ab44c2705a4149699b07377",
+      "focus_ids": [],
+      "text": "Please adapt the saved reply template to the actual request and verify the knowledge article's review date.",
+      "meaning": "Use a reusable reply while checking its relevance and source.",
+      "context": "An agent prepares a response to a specific request.",
+      "focus_lexeme_ids": [
+        "saved-reply.reusable-prepared-response-text.n",
+        "knowledge-article.single-reference-information-entry.n",
+        "template.reusable-document-pattern.n"
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_consistency_only_no_expression_acceptance"
+    },
+    {
+      "id": "expr.education_childcare.module08.09",
+      "file": "data/professional/expressions/education-module08.json",
+      "object_sha256": "c4e2d29b124f6702a6e2c1182461c58c251958e2c753186a68d2f4485526a27c",
+      "focus_ids": [],
+      "text": "The accident form records the injury and the reported choking hazard; the qualified first aider has been informed through the applicable process.",
+      "meaning": "Separate an observed injury from a reported hazard and identify the relevant role.",
+      "context": "Reviewing an incident record.",
+      "focus_lexeme_ids": [
+        "accident-form.form-recording-accident-information.n",
+        "injury.physical-harm.n",
+        "choking-hazard.item-or-situation-that-can-obstruct-breathing.n",
+        "qualified-first-aider.person-with-relevant-first-aid-qualification.n"
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_consistency_only_no_expression_acceptance"
+    },
+    {
+      "id": "expr.foundation.module02.02",
+      "file": "data/professional/expressions/foundation-module02.json",
+      "object_sha256": "575a776da9babf5dcc2aea9ae62b3d5066345c9fb6ed1ac58dde304860ff2c43",
+      "focus_ids": [
+        "notify.inform.v"
+      ],
+      "text": "Please contact the supplier to confirm the delivery time, and notify us of any delay.",
+      "meaning": "Ask someone to communicate with the provider and pass on timing changes.",
+      "context": "A team coordinates an expected delivery.",
+      "focus_lexeme_ids": [
+        "contact.communicate-with.v",
+        "confirm.verify-arrangement.v",
+        "notify.inform.v",
+        "delay.late-occurrence.n"
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_consistency_only_no_expression_acceptance"
+    },
+    {
+      "id": "expr.foundation.module02.04",
+      "file": "data/professional/expressions/foundation-module02.json",
+      "object_sha256": "ccd764a43dd2503bf77bb1b654e73a0ab742e439df7cb3ef623b9e0af7d366c4",
+      "focus_ids": [
+        "verify.establish-accuracy.v"
+      ],
+      "text": "Please verify the reference number, correct any error, and check the form before you submit it.",
+      "meaning": "Request an evidence-based check and correction before sending a document.",
+      "context": "A worker prepares a form for processing.",
+      "focus_lexeme_ids": [
+        "verify.establish-accuracy.v",
+        "correct.put-right.v",
+        "error.mistake.n",
+        "check.examine.v",
+        "submit.send-for-consideration.v"
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_consistency_only_no_expression_acceptance"
+    },
+    {
+      "id": "expr.foundation.module02.07",
+      "file": "data/professional/expressions/foundation-module02.json",
+      "object_sha256": "38d227c600008c8eb1c840e8768fb672caf3fd3b920c3c308096b16c03638aaf",
+      "focus_ids": [
+        "postpone.delay-until-later.v"
+      ],
+      "text": "We can adjust the start time or arrange to postpone the meeting; cancel only the duplicate booking.",
+      "meaning": "Distinguish changing a time from stopping a duplicate arrangement.",
+      "context": "Colleagues review conflicting meeting bookings.",
+      "focus_lexeme_ids": [
+        "adjust.change-slightly.v",
+        "arrange.organize.v",
+        "postpone.delay-until-later.v",
+        "cancel.stop-arrangement.v"
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_consistency_only_no_expression_acceptance"
+    },
+    {
+      "id": "expr.foundation.module02.08",
+      "file": "data/professional/expressions/foundation-module02.json",
+      "object_sha256": "f3cc73cccd14dbbe07ccf7c14632119e81107907529721fb626c8c914eb5e6d3",
+      "focus_ids": [
+        "collect.gather.v"
+      ],
+      "text": "Could you assist me while I collect the documents from reception and return the key?",
+      "meaning": "Ask for help with picking up documents and giving a key back.",
+      "context": "A worker coordinates routine errands with a colleague.",
+      "focus_lexeme_ids": [
+        "assist.help.v",
+        "collect.gather.v",
+        "return.send-back.v"
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_consistency_only_no_expression_acceptance"
+    },
+    {
+      "id": "expr.foundation.module02.09",
+      "file": "data/professional/expressions/foundation-module02.json",
+      "object_sha256": "44958213897b4660f6afdb2fca5df3c7d04edc4f4d7c1f25fb0ec60bf9ec20bf",
+      "focus_ids": [
+        "unsafe.presenting-danger.adj"
+      ],
+      "text": "Please follow the procedure to report the unsafe area and ask for a safe route.",
+      "meaning": "Request reporting and use of established arrangements for a concern.",
+      "context": "A worker notices a possible workplace risk without giving a technical response.",
+      "focus_lexeme_ids": [
+        "report.give-information.v",
+        "unsafe.presenting-danger.adj",
+        "follow.act-on.v",
+        "procedure.agreed-method.n",
+        "safe.free-from-unacceptable-danger.adj"
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_consistency_only_no_expression_acceptance"
+    },
+    {
+      "id": "expr.foundation.module02.10",
+      "file": "data/professional/expressions/foundation-module02.json",
+      "object_sha256": "81304fbc0ef1d9870d4b19e0241a744fd9e38e6183b626454b4ff77476bdc9c6",
+      "focus_ids": [
+        "hazard.possible-harm.n"
+      ],
+      "text": "Please report the hazard and record the incident for review by the responsible team.",
+      "meaning": "Ask someone to communicate an observed danger and the related workplace event.",
+      "context": "A team raises a concern through the workplace's applicable arrangements.",
+      "focus_lexeme_ids": [
+        "report.give-information.v",
+        "hazard.possible-harm.n",
+        "incident.workplace-event.n"
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_consistency_only_no_expression_acceptance"
+    },
+    {
+      "id": "expr.it_support.module09.03",
+      "file": "data/professional/expressions/it-support-module09.json",
+      "object_sha256": "573c8bc9aa2a8e49230399130fefb0f64a14822e198f2b38d5a061fe82ea7c28",
+      "focus_ids": [],
+      "text": "The URL uses HTTPS rather than HTTP, but that alone does not verify the site's identity or purpose.",
+      "meaning": "The address and transport protocol do not establish that the destination is trustworthy.",
+      "context": "Reading a resource address",
+      "focus_lexeme_ids": [
+        "url.resource-address.n",
+        "https.tls-protected-http.n",
+        "http.web-message-protocol.n"
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_consistency_only_no_expression_acceptance"
+    },
+    {
+      "id": "expr.it_support.module10.10",
+      "file": "data/professional/expressions/it-support-module10.json",
+      "object_sha256": "5eaf8b5598cd587ef095ea8d282019ae47551c6c8ef14409dd2894da00c8ee21",
+      "focus_ids": [],
+      "text": "The outage notice will be updated when service restoration has been verified.",
+      "meaning": "The service communication will reflect a confirmed return to the defined working condition.",
+      "context": "Communicating service progress",
+      "focus_lexeme_ids": [
+        "outage-notice.message-informing-users-of-service-unavailability.n",
+        "service-restoration.return-of-service-to-defined-working-condition.n"
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_consistency_only_no_expression_acceptance"
+    },
+    {
+      "id": "expr.legal_paralegal.module07.07",
+      "file": "data/professional/expressions/legal-module07.json",
+      "object_sha256": "62b810e72abc956243e7cb6afd13b3b27969bb741312ed5948d387bd50512b4a",
+      "focus_ids": [],
+      "text": "The property record mentions title and a covenant, but neither has been verified by this team.",
+      "meaning": "Keep recorded ownership and obligation information distinct from verification.",
+      "context": "Reviewing fictional property information with legal questions unresolved.",
+      "focus_lexeme_ids": [
+        "property.thing-or-right-capable-of-legal-ownership.n",
+        "title.legal-basis-or-right-of-ownership-in-property.n",
+        "covenant.formal-promise-or-obligation-in-legal-instrument.n"
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_consistency_only_no_expression_acceptance"
+    },
+    {
+      "id": "expr.legal_paralegal.module09.09",
+      "file": "data/professional/expressions/legal-module09.json",
+      "object_sha256": "1cb1be7bbd5e7e8c90f06abe9ac32b7438975a605f28ed172ba3336f9522bdd9",
+      "focus_ids": [],
+      "text": "The notice describes a remote hearing; please verify the meeting link and the interpreter request through the authorized arrangements.",
+      "meaning": "Check hearing logistics and communication support.",
+      "context": "Preparing for a fictional hearing without sharing real access credentials or treating a request as confirmation.",
+      "focus_lexeme_ids": [
+        "remote-hearing.hearing-conducted-with-participants-connected-remotely.n",
+        "meeting-link.address-for-joining-online-meeting.n",
+        "interpreter-request.language-support-request.n"
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_consistency_only_no_expression_acceptance"
+    },
+    {
+      "id": "expr.office_admin.module08.05",
+      "file": "data/professional/expressions/office-admin-module08.json",
+      "object_sha256": "465d0f1a3c024822db36e7d22d835efd17539eaa6cd1a8b787d62fc95ffb3f11",
+      "focus_ids": [],
+      "text": "Verify the destination, authorized purpose, and any required consent before sharing personal data, and apply the relevant data minimization requirements.",
+      "meaning": "Clarify the basis and scope for sharing personal information.",
+      "context": "An administrator checks the applicable information-handling requirements.",
+      "focus_lexeme_ids": [
+        "personal-data.identifiable-person-information.n",
+        "data-minimization.limiting-data-to-what-purpose-requires.n",
+        "consent.informed-agreement.n"
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_consistency_only_no_expression_acceptance"
+    },
+    {
+      "id": "expr.office_admin.module08.08",
+      "file": "data/professional/expressions/office-admin-module08.json",
+      "object_sha256": "dc8a6ededced0290b12ecfe7c66f95e1e0936e4efe28f4680eaa5da024ba8810",
+      "focus_ids": [],
+      "text": "Complete the identity check and verify authority separately when an authorized representative requests access.",
+      "meaning": "Distinguish identity from authority to act.",
+      "context": "An administrator handles a representative's access request.",
+      "focus_lexeme_ids": [
+        "authorized-representative.person-permitted-to-act-for-another.n",
+        "identity-check.identity-verification.n"
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_consistency_only_no_expression_acceptance"
+    },
+    {
+      "id": "expr.office_admin.module08.09",
+      "file": "data/professional/expressions/office-admin-module08.json",
+      "object_sha256": "2623a21aac5943e437f1321a7068dba7e503e2d437e91bb74c41378bf73b74d6",
+      "focus_ids": [],
+      "text": "Use the incident form to report the trip hazard and obstruction near the assembly point through the workplace's approved safety process.",
+      "meaning": "Report an environmental safety concern.",
+      "context": "A worker records a hazard near an emergency gathering location.",
+      "focus_lexeme_ids": [
+        "trip-hazard.obstacle-likely-to-cause-tripping.n",
+        "obstruction.blocked-route-object.n",
+        "incident-form.event-report-document.n",
+        "assembly-point.designated-meeting-place.n"
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_consistency_only_no_expression_acceptance"
+    },
+    {
+      "id": "expr.sales_marketing.module08.10",
+      "file": "data/professional/expressions/sales-module08.json",
+      "object_sha256": "d42881ce9bf7958d746678483f2f72dd9dae02087e7ac0bc937295b3a198d1de",
+      "focus_ids": [],
+      "text": "Please verify the duplicate lead before merging records, and record the current approval status.",
+      "meaning": "Request an identity check before a data change.",
+      "context": "Maintaining an authorized contact list.",
+      "focus_lexeme_ids": [
+        "duplicate-lead.repeated-record-of-same-potential-sales-contact.n",
+        "approval-status.current-state-of-required-approval.n"
+      ],
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_consistency_only_no_expression_acceptance"
+    }
+  ],
+  "memberships": [
+    {
+      "file": "data/professional/courses/accounting_finance.json",
+      "course": "accounting_finance",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/accounting_finance.json",
+      "course": "accounting_finance",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/accounting_finance.json",
+      "course": "accounting_finance",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/accounting_finance.json",
+      "course": "accounting_finance",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/accounting_finance.json",
+      "course": "accounting_finance",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/accounting_finance.json",
+      "course": "accounting_finance",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/caregiving.json",
+      "course": "caregiving",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/caregiving.json",
+      "course": "caregiving",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/caregiving.json",
+      "course": "caregiving",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/caregiving.json",
+      "course": "caregiving",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/caregiving.json",
+      "course": "caregiving",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/caregiving.json",
+      "course": "caregiving",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/cleaning_facilities.json",
+      "course": "cleaning_facilities",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/cleaning_facilities.json",
+      "course": "cleaning_facilities",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/cleaning_facilities.json",
+      "course": "cleaning_facilities",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/cleaning_facilities.json",
+      "course": "cleaning_facilities",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/cleaning_facilities.json",
+      "course": "cleaning_facilities",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/cleaning_facilities.json",
+      "course": "cleaning_facilities",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/clinical_medicine.json",
+      "course": "clinical_medicine",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/clinical_medicine.json",
+      "course": "clinical_medicine",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/clinical_medicine.json",
+      "course": "clinical_medicine",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/clinical_medicine.json",
+      "course": "clinical_medicine",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/clinical_medicine.json",
+      "course": "clinical_medicine",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/clinical_medicine.json",
+      "course": "clinical_medicine",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/construction_trades.json",
+      "course": "construction_trades",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/construction_trades.json",
+      "course": "construction_trades",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/construction_trades.json",
+      "course": "construction_trades",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/construction_trades.json",
+      "course": "construction_trades",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/construction_trades.json",
+      "course": "construction_trades",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/construction_trades.json",
+      "course": "construction_trades",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/customer_support.json",
+      "course": "customer_support",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/customer_support.json",
+      "course": "customer_support",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/customer_support.json",
+      "course": "customer_support",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/customer_support.json",
+      "course": "customer_support",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/customer_support.json",
+      "course": "customer_support",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/customer_support.json",
+      "course": "customer_support",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/education_childcare.json",
+      "course": "education_childcare",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/education_childcare.json",
+      "course": "education_childcare",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/education_childcare.json",
+      "course": "education_childcare",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/education_childcare.json",
+      "course": "education_childcare",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/education_childcare.json",
+      "course": "education_childcare",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/education_childcare.json",
+      "course": "education_childcare",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/food_service.json",
+      "course": "food_service",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/food_service.json",
+      "course": "food_service",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/food_service.json",
+      "course": "food_service",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/food_service.json",
+      "course": "food_service",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/food_service.json",
+      "course": "food_service",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/food_service.json",
+      "course": "food_service",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/hospitality_tourism.json",
+      "course": "hospitality_tourism",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/hospitality_tourism.json",
+      "course": "hospitality_tourism",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/hospitality_tourism.json",
+      "course": "hospitality_tourism",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/hospitality_tourism.json",
+      "course": "hospitality_tourism",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/hospitality_tourism.json",
+      "course": "hospitality_tourism",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/hospitality_tourism.json",
+      "course": "hospitality_tourism",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/hr_recruitment.json",
+      "course": "hr_recruitment",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/hr_recruitment.json",
+      "course": "hr_recruitment",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/hr_recruitment.json",
+      "course": "hr_recruitment",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/hr_recruitment.json",
+      "course": "hr_recruitment",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/hr_recruitment.json",
+      "course": "hr_recruitment",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/hr_recruitment.json",
+      "course": "hr_recruitment",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/it_support.json",
+      "course": "it_support",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/it_support.json",
+      "course": "it_support",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/it_support.json",
+      "course": "it_support",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/it_support.json",
+      "course": "it_support",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/it_support.json",
+      "course": "it_support",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/it_support.json",
+      "course": "it_support",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/legal_paralegal.json",
+      "course": "legal_paralegal",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/legal_paralegal.json",
+      "course": "legal_paralegal",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/legal_paralegal.json",
+      "course": "legal_paralegal",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/legal_paralegal.json",
+      "course": "legal_paralegal",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/legal_paralegal.json",
+      "course": "legal_paralegal",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/legal_paralegal.json",
+      "course": "legal_paralegal",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/manufacturing_maintenance.json",
+      "course": "manufacturing_maintenance",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/manufacturing_maintenance.json",
+      "course": "manufacturing_maintenance",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/manufacturing_maintenance.json",
+      "course": "manufacturing_maintenance",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/manufacturing_maintenance.json",
+      "course": "manufacturing_maintenance",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/manufacturing_maintenance.json",
+      "course": "manufacturing_maintenance",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/manufacturing_maintenance.json",
+      "course": "manufacturing_maintenance",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/nursing.json",
+      "course": "nursing",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/nursing.json",
+      "course": "nursing",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/nursing.json",
+      "course": "nursing",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/nursing.json",
+      "course": "nursing",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/nursing.json",
+      "course": "nursing",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/nursing.json",
+      "course": "nursing",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/office_admin.json",
+      "course": "office_admin",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/office_admin.json",
+      "course": "office_admin",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/office_admin.json",
+      "course": "office_admin",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/office_admin.json",
+      "course": "office_admin",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/office_admin.json",
+      "course": "office_admin",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/office_admin.json",
+      "course": "office_admin",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/retail.json",
+      "course": "retail",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/retail.json",
+      "course": "retail",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/retail.json",
+      "course": "retail",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/retail.json",
+      "course": "retail",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/retail.json",
+      "course": "retail",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/retail.json",
+      "course": "retail",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/sales_marketing.json",
+      "course": "sales_marketing",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/sales_marketing.json",
+      "course": "sales_marketing",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/sales_marketing.json",
+      "course": "sales_marketing",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/sales_marketing.json",
+      "course": "sales_marketing",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/sales_marketing.json",
+      "course": "sales_marketing",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/sales_marketing.json",
+      "course": "sales_marketing",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/software_data.json",
+      "course": "software_data",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/software_data.json",
+      "course": "software_data",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/software_data.json",
+      "course": "software_data",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/software_data.json",
+      "course": "software_data",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/software_data.json",
+      "course": "software_data",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/software_data.json",
+      "course": "software_data",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/transport_delivery.json",
+      "course": "transport_delivery",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/transport_delivery.json",
+      "course": "transport_delivery",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/transport_delivery.json",
+      "course": "transport_delivery",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/transport_delivery.json",
+      "course": "transport_delivery",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/transport_delivery.json",
+      "course": "transport_delivery",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/transport_delivery.json",
+      "course": "transport_delivery",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/warehouse_logistics.json",
+      "course": "warehouse_logistics",
+      "module": "module02",
+      "lexeme_id": "collect.gather.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/warehouse_logistics.json",
+      "course": "warehouse_logistics",
+      "module": "module02",
+      "lexeme_id": "notify.inform.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/warehouse_logistics.json",
+      "course": "warehouse_logistics",
+      "module": "module02",
+      "lexeme_id": "postpone.delay-until-later.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/warehouse_logistics.json",
+      "course": "warehouse_logistics",
+      "module": "module02",
+      "lexeme_id": "verify.establish-accuracy.v",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/warehouse_logistics.json",
+      "course": "warehouse_logistics",
+      "module": "module02",
+      "lexeme_id": "unsafe.presenting-danger.adj",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    },
+    {
+      "file": "data/professional/courses/warehouse_logistics.json",
+      "course": "warehouse_logistics",
+      "module": "module02",
+      "lexeme_id": "hazard.possible-harm.n",
+      "requirements_revision": "professional-v1",
+      "status": "draft"
+    }
+  ],
+  "alternatives": [
+    {
+      "file": "data/professional/lexemes/accounting-module06.json",
+      "id": "check.written-order-directing-bank-to-pay-specified-amount.n",
+      "object_sha256": "ee501124d4e5bf406503e2b7e7a988a741884581be1cb7d2654144936109b6b4",
+      "definition": "A written order directing a bank to pay a specified amount from an account, subject to the applicable arrangements.",
+      "example": "The check number appears on the payment record.",
+      "difficulty": "B2",
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_only_no_new_acceptance_or_identity_reservation"
+    },
+    {
+      "file": "data/professional/lexemes/foundation-module02.json",
+      "id": "check.examine.v",
+      "object_sha256": "122fd00272a5a183226db9c9c07f0b2ab13cef997aec6ce8670bfcbb10b8be3e",
+      "definition": "To examine something to find out whether it is correct or in good condition.",
+      "example": "I will check the delivery details.",
+      "difficulty": "A2",
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex root independent AI language review; not human or subject-matter approval",
+        "reviewed_at": "2026-10-16"
+      },
+      "decision": "context_only_no_new_acceptance_or_identity_reservation"
+    },
+    {
+      "file": "data/professional/lexemes/foundation-module02.json",
+      "id": "delay.late-occurrence.n",
+      "object_sha256": "af2c19270729a0b41440613703e70f772bfcfc5777f5d1c22d60c78fa86b497f",
+      "definition": "A period of waiting caused by something happening later than expected.",
+      "example": "There is a short delay with the delivery.",
+      "difficulty": "A2",
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "not_required",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_only_no_new_acceptance_or_identity_reservation"
+    },
+    {
+      "file": "data/professional/lexemes/transport-module05.json",
+      "id": "delay.make-action-happen-later.v",
+      "object_sha256": "bed64c6d0d308759bc54ac4acf5883529d2c834433f221cf63f63a7e4f45c24a",
+      "definition": "To make an action or event happen later than planned.",
+      "example": "The road closure may delay the collection.",
+      "difficulty": "B1",
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_only_no_new_acceptance_or_identity_reservation"
+    }
+  ],
+  "neighbors": [
+    {
+      "id": "follow.act-on.v",
+      "object_sha256": "f63837e5f6eb085eb414d563eeb3594f78aa7df616cf95604666ed53c51d4c25",
+      "definition": "To act according to instructions, guidance, or a plan.",
+      "example": "Please follow the instructions on the form.",
+      "difficulty": "A2",
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex root independent AI language review; not human or subject-matter approval",
+        "reviewed_at": "2026-10-16"
+      },
+      "decision": "context_only_no_transferred_approval"
+    },
+    {
+      "id": "arrange.organize.v",
+      "object_sha256": "d78a92622e0e057e1ef1adaeb8b1044cbf2fa670c1a20815e815a2dece348e68",
+      "definition": "To organize the details needed for something to happen.",
+      "example": "I will arrange a meeting with the supplier.",
+      "difficulty": "A2",
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex recover_delivery independent AI language reviewer; not human or subject-matter approval",
+        "reviewed_at": "2026-10-17"
+      },
+      "decision": "context_only_no_transferred_approval"
+    },
+    {
+      "id": "report.give-information.v",
+      "object_sha256": "113649f2fe7c82f75c8d89f33dbd2fc97e166902271a130583a38a885f9c7f1a",
+      "definition": "To tell someone about an event, result, or problem.",
+      "example": "Please report the equipment problem to the supervisor.",
+      "difficulty": "A2",
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex recover_delivery independent AI language reviewer; not human or subject-matter approval",
+        "reviewed_at": "2026-10-17"
+      },
+      "decision": "context_only_no_transferred_approval"
+    },
+    {
+      "id": "adjust.change-slightly.v",
+      "object_sha256": "53eb3caf3c15c10a4ce2bf0a0ac41bdd2f2e0209fbb088ee925c15468e68425e",
+      "definition": "To make a small change so that something fits or works better.",
+      "example": "We can adjust the meeting time by ten minutes.",
+      "difficulty": "B2",
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex recover_delivery, separate from the attendance_review research author",
+        "reviewed_at": "2026-10-17"
+      },
+      "decision": "context_only_no_transferred_approval"
+    },
+    {
+      "id": "reschedule.change-time.v",
+      "object_sha256": "c2ba187730faaef8d745a1f099efddc83ff132fbdc09041d700f146db9aa26f1",
+      "definition": "To arrange a new time or date for a planned activity.",
+      "example": "We need to reschedule the training session.",
+      "difficulty": "B2",
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex recover_delivery, separate from the attendance_review research author",
+        "reviewed_at": "2026-10-17"
+      },
+      "decision": "context_only_no_transferred_approval"
+    },
+    {
+      "id": "cancel.stop-arrangement.v",
+      "object_sha256": "c73efdeb4a29440d693288d2fe26d2899db472ea7ababf8776b665ea7605b13c",
+      "definition": "To decide that a planned activity or arrangement will not happen.",
+      "example": "Please cancel the duplicate booking.",
+      "difficulty": "B2",
+      "review": {
+        "status": "reviewed",
+        "language": "reviewed",
+        "domain": "not_required",
+        "reviewer": "Codex recover_delivery, separate from the attendance_review research author",
+        "reviewed_at": "2026-10-17"
+      },
+      "decision": "context_only_no_transferred_approval"
+    },
+    {
+      "id": "safe.free-from-unacceptable-danger.adj",
+      "object_sha256": "d08c7c55e002c8245b036bf41865244ae72db6a68b1812d3b4f3ecdb8a414ea3",
+      "definition": "Protected from danger or not presenting an unacceptable risk in the situation.",
+      "example": "The team asked whether the route was safe to use.",
+      "difficulty": "A2",
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_only_no_transferred_approval"
+    },
+    {
+      "id": "incident.workplace-event.n",
+      "object_sha256": "6c63b7770526030dc8c2ae8035edbd1a9c5768647dd5d312fa399eaa1e116949",
+      "definition": "An event at work that needs attention or recording, often because something went wrong.",
+      "example": "The supervisor recorded the incident after speaking with the team.",
+      "difficulty": "A2",
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_only_no_transferred_approval"
+    },
+    {
+      "id": "procedure.agreed-method.n",
+      "object_sha256": "3a0b38b04fb19c2a554c3725a3775719b656d9dacaa4bcc1f9114d0f6806e48f",
+      "definition": "An established way of carrying out an activity.",
+      "example": "The procedure explains how to request replacement equipment.",
+      "difficulty": "B1",
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "decision": "context_only_no_transferred_approval"
+    }
+  ],
+  "context_subagent": "held_context_check read-only parallel review found no local semantic conflict; no full-entry or placement acceptance delegated",
+  "scan_limit": "Specified surface inflections plus literal IDs; not an exhaustive semantic or derivative scan",
+  "all_expressions_remain_pending": true,
+  "all_memberships_unchanged": true,
+  "no_new_identity_reserved": true
+}

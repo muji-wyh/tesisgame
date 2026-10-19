@@ -1,0 +1,1710 @@
+{
+  "schema": 1,
+  "status": "proposed_retired_content_archive_not_activated",
+  "final_post_fifth10_baseline": "UNBOUND",
+  "catalog_loaded": false,
+  "retired_entries": [
+    {
+      "id": "collect.gather.v",
+      "entry": {
+        "id": "collect.gather.v",
+        "text": "collect",
+        "display_text": "collect",
+        "pos": "verb",
+        "definition": "To gather items together or pick them up from a place.",
+        "example": "Please collect the documents from reception.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "collect"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A friendly worker picking up an agreed set of fictional documents from reception; show the pickup context clearly, with no money collection or private information.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "collect.gather.v.analysis.v1",
+          "lexeme_id": "collect.gather.v",
+          "text": "collect",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "collect",
+              "surface": "collect",
+              "canonical_id": "morph.collect"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. The assessment explicitly uses picking up items from a place. The general gathering identity is retained; collection of money is outside this example."
+      },
+      "entry_json_sha256": "177f9fc35b0d348ddcc3cdf60c43dd5119d145acfe781d17c2b988e1b6d77981",
+      "anticipated_lexical_source": {
+        "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r04/execution-r01/foundation-module02.json.after",
+        "bytes": 460847,
+        "raw_sha256": "7ae3603a41436cd58c65f5809e1a51938a027fb49d6fcd24c2b790237af4fcab"
+      },
+      "historical_holds": [
+        {
+          "source": {
+            "path": "data/professional/provenance/foundation-module02-language-second10-2026-10-17.json",
+            "bytes": 866140,
+            "raw_sha256": "7b2c674a5249ef8c59afc2ab9e620cd2ed8d4e6a55704a231ca53f00005cd4fc"
+          },
+          "pointer": "/held/0",
+          "whole_row": {
+            "id": "collect.gather.v",
+            "value": {
+              "id": "collect.gather.v",
+              "text": "collect",
+              "display_text": "collect",
+              "pos": "verb",
+              "definition": "To gather items together or pick them up from a place.",
+              "example": "Please collect the documents from reception.",
+              "difficulty": "A2",
+              "accepted_forms": [
+                "collect"
+              ],
+              "regions": [
+                "general"
+              ],
+              "practice_modes": [
+                "match",
+                "memory",
+                "pop",
+                "jelly",
+                "word_jelly",
+                "phrase"
+              ],
+              "media": {
+                "image": {
+                  "status": "pending",
+                  "path": null,
+                  "sha256": null,
+                  "source": null,
+                  "creator": null,
+                  "license": null,
+                  "acquisition_status": "not_started",
+                  "review": {
+                    "status": "pending"
+                  },
+                  "brief": "A friendly worker picking up an agreed set of fictional documents from reception; show the pickup context clearly, with no money collection or private information.",
+                  "picture_suitable": true,
+                  "available_animations": [],
+                  "adaptations": []
+                },
+                "audio": {
+                  "status": "pending",
+                  "path": null,
+                  "sha256": null,
+                  "source": null,
+                  "creator": null,
+                  "license": null,
+                  "acquisition_status": "not_started",
+                  "review": {
+                    "status": "pending"
+                  },
+                  "voice": "ava-sweet",
+                  "voice_settings": {
+                    "voice": "en-US-AvaNeural",
+                    "rate": "-15%",
+                    "pitch": "+8Hz",
+                    "volume": "+0%",
+                    "postprocessing": false
+                  }
+                }
+              },
+              "morphology": {
+                "schema": 1,
+                "id": "collect.gather.v.analysis.v1",
+                "lexeme_id": "collect.gather.v",
+                "text": "collect",
+                "kind": "atomic",
+                "review": {
+                  "status": "pending",
+                  "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+                  "references": []
+                },
+                "parts": [
+                  {
+                    "id": "p1",
+                    "type": "atomic",
+                    "canonical": "collect",
+                    "surface": "collect",
+                    "canonical_id": "morph.collect"
+                  }
+                ],
+                "nodes": [],
+                "roots": [
+                  "p1"
+                ]
+              },
+              "review": {
+                "status": "pending",
+                "language": "pending",
+                "domain": "not_required",
+                "reviewer": null,
+                "reviewed_at": null
+              },
+              "references": [
+                {
+                  "source_id": "british-council-requests",
+                  "status": "pending_term_check",
+                  "scope": "Workplace communication context only; this original definition and example await term-level review."
+                }
+              ],
+              "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. The assessment explicitly uses picking up items from a place. The general gathering identity is retained; collection of money is outside this example."
+            },
+            "whole_entry_json_sha256": "177f9fc35b0d348ddcc3cdf60c43dd5119d145acfe781d17c2b988e1b6d77981",
+            "decision": "Preserve the whole draft. Gathering and pickup are separate in both sources. The pickup-focused example/image/expression does not resolve the stable gather ID, and Collins British pickup marking is broader than Oxford person-example marking. No independently supported scope/region decision has resolved the hold.",
+            "reference_or_note_additions": 0,
+            "review_gate_changes": 0
+          },
+          "whole_row_json_sha256": "0316625fbde53039a9d26d3bb10591ccf209c422650064734901b926963e0918",
+          "immutable": true
+        }
+      ],
+      "fifth10_whole_entry_hold": {
+        "id": "collect.gather.v",
+        "before_entry": {
+          "id": "collect.gather.v",
+          "text": "collect",
+          "display_text": "collect",
+          "pos": "verb",
+          "definition": "To gather items together or pick them up from a place.",
+          "example": "Please collect the documents from reception.",
+          "difficulty": "A2",
+          "accepted_forms": [
+            "collect"
+          ],
+          "regions": [
+            "general"
+          ],
+          "practice_modes": [
+            "match",
+            "memory",
+            "pop",
+            "jelly",
+            "word_jelly",
+            "phrase"
+          ],
+          "media": {
+            "image": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "brief": "A friendly worker picking up an agreed set of fictional documents from reception; show the pickup context clearly, with no money collection or private information.",
+              "picture_suitable": true,
+              "available_animations": [],
+              "adaptations": []
+            },
+            "audio": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "voice": "ava-sweet",
+              "voice_settings": {
+                "voice": "en-US-AvaNeural",
+                "rate": "-15%",
+                "pitch": "+8Hz",
+                "volume": "+0%",
+                "postprocessing": false
+              }
+            }
+          },
+          "morphology": {
+            "schema": 1,
+            "id": "collect.gather.v.analysis.v1",
+            "lexeme_id": "collect.gather.v",
+            "text": "collect",
+            "kind": "atomic",
+            "review": {
+              "status": "pending",
+              "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+              "references": []
+            },
+            "parts": [
+              {
+                "id": "p1",
+                "type": "atomic",
+                "canonical": "collect",
+                "surface": "collect",
+                "canonical_id": "morph.collect"
+              }
+            ],
+            "nodes": [],
+            "roots": [
+              "p1"
+            ]
+          },
+          "review": {
+            "status": "pending",
+            "language": "pending",
+            "domain": "not_required",
+            "reviewer": null,
+            "reviewed_at": null
+          },
+          "references": [
+            {
+              "source_id": "british-council-requests",
+              "status": "pending_term_check",
+              "scope": "Workplace communication context only; this original definition and example await term-level review."
+            }
+          ],
+          "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. The assessment explicitly uses picking up items from a place. The general gathering identity is retained; collection of money is outside this example."
+        },
+        "entry_json_sha256": "177f9fc35b0d348ddcc3cdf60c43dd5119d145acfe781d17c2b988e1b6d77981"
+      },
+      "original_source_rows": [
+        {
+          "id": "british-council-requests",
+          "title": "A request from your boss",
+          "publisher": "British Council LearnEnglish",
+          "url": "https://learnenglish.britishcouncil.org/free-resources/listening/a1/request-your-boss",
+          "status": "consulted",
+          "consulted_on": "2026-10-15",
+          "scope": "Context for workplace requests and arranging tasks. All curriculum definitions, examples, and expressions are original drafts.",
+          "asset_license": null,
+          "assets_acquired": false
+        }
+      ]
+    },
+    {
+      "id": "notify.inform.v",
+      "entry": {
+        "id": "notify.inform.v",
+        "text": "notify",
+        "display_text": "notify",
+        "pos": "verb",
+        "definition": "To formally tell someone information they need to know.",
+        "example": "Please notify the team if the meeting time changes.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "notify"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A meeting change notification reaching all affected colleagues.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "notify.inform.v.analysis.v1",
+          "lexeme_id": "notify.inform.v",
+          "text": "notify",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "Proposed intact modern teaching unit, not a claim that the word lacks historical morphology. The history concerns making known from Latin notus. Splitting modern not + ify without a carefully explained Latin root would misleadingly present the English negative not. Keep the headword intact pending that decision. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/notify"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.notify",
+              "type": "atomic",
+              "canonical": "notify",
+              "surface": "notify"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-notify",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "entry_json_sha256": "7aaf8490d372bb3c8490c2824955a59e92c3d3dfe4416cb73d772cc6413a0cdc",
+      "anticipated_lexical_source": {
+        "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r04/execution-r01/foundation-module02.json.after",
+        "bytes": 460847,
+        "raw_sha256": "7ae3603a41436cd58c65f5809e1a51938a027fb49d6fcd24c2b790237af4fcab"
+      },
+      "historical_holds": [
+        {
+          "source": {
+            "path": "data/professional/provenance/foundation-module02-language-second10-2026-10-17.json",
+            "bytes": 866140,
+            "raw_sha256": "7b2c674a5249ef8c59afc2ab9e620cd2ed8d4e6a55704a231ca53f00005cd4fc"
+          },
+          "pointer": "/held/1",
+          "whole_row": {
+            "id": "notify.inform.v",
+            "value": {
+              "id": "notify.inform.v",
+              "text": "notify",
+              "display_text": "notify",
+              "pos": "verb",
+              "definition": "To formally tell someone information they need to know.",
+              "example": "Please notify the team if the meeting time changes.",
+              "difficulty": "A2",
+              "accepted_forms": [
+                "notify"
+              ],
+              "regions": [
+                "general"
+              ],
+              "practice_modes": [
+                "word_jelly",
+                "phrase"
+              ],
+              "media": {
+                "image": {
+                  "status": "pending",
+                  "path": null,
+                  "sha256": null,
+                  "source": null,
+                  "creator": null,
+                  "license": null,
+                  "acquisition_status": "not_started",
+                  "review": {
+                    "status": "pending"
+                  },
+                  "brief": "A meeting change notification reaching all affected colleagues.",
+                  "picture_suitable": false,
+                  "available_animations": [],
+                  "adaptations": []
+                },
+                "audio": {
+                  "status": "pending",
+                  "path": null,
+                  "sha256": null,
+                  "source": null,
+                  "creator": null,
+                  "license": null,
+                  "acquisition_status": "not_started",
+                  "review": {
+                    "status": "pending"
+                  },
+                  "voice": "ava-sweet",
+                  "voice_settings": {
+                    "voice": "en-US-AvaNeural",
+                    "rate": "-15%",
+                    "pitch": "+8Hz",
+                    "volume": "+0%",
+                    "postprocessing": false
+                  }
+                }
+              },
+              "morphology": {
+                "schema": 1,
+                "id": "notify.inform.v.analysis.v1",
+                "lexeme_id": "notify.inform.v",
+                "text": "notify",
+                "kind": "atomic",
+                "review": {
+                  "status": "pending",
+                  "reviewer": null,
+                  "reviewed_at": null,
+                  "notes": "Proposed intact modern teaching unit, not a claim that the word lacks historical morphology. The history concerns making known from Latin notus. Splitting modern not + ify without a carefully explained Latin root would misleadingly present the English negative not. Keep the headword intact pending that decision. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+                  "references": [
+                    "https://www.merriam-webster.com/dictionary/notify"
+                  ]
+                },
+                "parts": [
+                  {
+                    "id": "p1",
+                    "canonical_id": "morph.notify",
+                    "type": "atomic",
+                    "canonical": "notify",
+                    "surface": "notify"
+                  }
+                ],
+                "nodes": [],
+                "roots": [
+                  "p1"
+                ]
+              },
+              "review": {
+                "status": "pending",
+                "language": "pending",
+                "domain": "not_required",
+                "reviewer": null,
+                "reviewed_at": null
+              },
+              "references": [
+                {
+                  "source_id": "british-council-requests",
+                  "status": "pending_term_check",
+                  "scope": "Workplace communication context only; this original definition and example await term-level review."
+                },
+                {
+                  "source_id": "foundation-mw-notify",
+                  "status": "pending_term_check",
+                  "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+                }
+              ],
+              "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+            },
+            "whole_entry_json_sha256": "7aaf8490d372bb3c8490c2824955a59e92c3d3dfe4416cb73d772cc6413a0cdc",
+            "decision": "Preserve the whole draft. Oxford selected formal-informing fkcefr=c1 is independently confirmed. Collins gives formal register but no selected level; no direct lower-level evidence resolves the current A2 difficulty. Do not clamp C1 to B2.",
+            "reference_or_note_additions": 0,
+            "review_gate_changes": 0
+          },
+          "whole_row_json_sha256": "80fb08d3efa0e2d042bf244626ac010a0a56a7e16715215d726e031bf71ded0c",
+          "immutable": true
+        }
+      ],
+      "fifth10_whole_entry_hold": {
+        "id": "notify.inform.v",
+        "before_entry": {
+          "id": "notify.inform.v",
+          "text": "notify",
+          "display_text": "notify",
+          "pos": "verb",
+          "definition": "To formally tell someone information they need to know.",
+          "example": "Please notify the team if the meeting time changes.",
+          "difficulty": "A2",
+          "accepted_forms": [
+            "notify"
+          ],
+          "regions": [
+            "general"
+          ],
+          "practice_modes": [
+            "word_jelly",
+            "phrase"
+          ],
+          "media": {
+            "image": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "brief": "A meeting change notification reaching all affected colleagues.",
+              "picture_suitable": false,
+              "available_animations": [],
+              "adaptations": []
+            },
+            "audio": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "voice": "ava-sweet",
+              "voice_settings": {
+                "voice": "en-US-AvaNeural",
+                "rate": "-15%",
+                "pitch": "+8Hz",
+                "volume": "+0%",
+                "postprocessing": false
+              }
+            }
+          },
+          "morphology": {
+            "schema": 1,
+            "id": "notify.inform.v.analysis.v1",
+            "lexeme_id": "notify.inform.v",
+            "text": "notify",
+            "kind": "atomic",
+            "review": {
+              "status": "pending",
+              "reviewer": null,
+              "reviewed_at": null,
+              "notes": "Proposed intact modern teaching unit, not a claim that the word lacks historical morphology. The history concerns making known from Latin notus. Splitting modern not + ify without a carefully explained Latin root would misleadingly present the English negative not. Keep the headword intact pending that decision. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+              "references": [
+                "https://www.merriam-webster.com/dictionary/notify"
+              ]
+            },
+            "parts": [
+              {
+                "id": "p1",
+                "canonical_id": "morph.notify",
+                "type": "atomic",
+                "canonical": "notify",
+                "surface": "notify"
+              }
+            ],
+            "nodes": [],
+            "roots": [
+              "p1"
+            ]
+          },
+          "review": {
+            "status": "pending",
+            "language": "pending",
+            "domain": "not_required",
+            "reviewer": null,
+            "reviewed_at": null
+          },
+          "references": [
+            {
+              "source_id": "british-council-requests",
+              "status": "pending_term_check",
+              "scope": "Workplace communication context only; this original definition and example await term-level review."
+            },
+            {
+              "source_id": "foundation-mw-notify",
+              "status": "pending_term_check",
+              "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+            }
+          ],
+          "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+        },
+        "entry_json_sha256": "7aaf8490d372bb3c8490c2824955a59e92c3d3dfe4416cb73d772cc6413a0cdc"
+      },
+      "original_source_rows": [
+        {
+          "id": "british-council-requests",
+          "title": "A request from your boss",
+          "publisher": "British Council LearnEnglish",
+          "url": "https://learnenglish.britishcouncil.org/free-resources/listening/a1/request-your-boss",
+          "status": "consulted",
+          "consulted_on": "2026-10-15",
+          "scope": "Context for workplace requests and arranging tasks. All curriculum definitions, examples, and expressions are original drafts.",
+          "asset_license": null,
+          "assets_acquired": false
+        },
+        {
+          "id": "foundation-mw-notify",
+          "title": "Lexicographic reference: notify",
+          "publisher": "Merriam-Webster",
+          "url": "https://www.merriam-webster.com/dictionary/notify",
+          "status": "consulted",
+          "consulted_on": "2026-10-16",
+          "scope": "Selected headword, meaning, related-form, or word-history passages consulted for an explicit foundation morphology candidate. Historical derivation is distinguished from a modern teaching analysis; syllable dots are not morphology boundaries. This is source consultation, not expert approval. Definitions and examples remain original; no text, image, pronunciation recording, or other asset was acquired for redistribution.",
+          "asset_license": null,
+          "assets_acquired": false
+        }
+      ]
+    },
+    {
+      "id": "verify.establish-accuracy.v",
+      "entry": {
+        "id": "verify.establish-accuracy.v",
+        "text": "verify",
+        "display_text": "verify",
+        "pos": "verb",
+        "definition": "To establish that information is accurate by checking suitable evidence.",
+        "example": "Please verify the reference number against the order record.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "verify"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A reference number compared with an authoritative order record.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "verify.establish-accuracy.v.analysis.v1",
+          "lexeme_id": "verify.establish-accuracy.v",
+          "text": "verify",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "The source explicitly gives the true-related veri- combining form and -fy family. Preserve those constituents rather than syllable cuts, and review their relationship to checking accuracy. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/verify",
+              "https://www.dictionary.com/browse/verify"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.veri",
+              "type": "combining_form",
+              "canonical": "veri",
+              "surface": "veri"
+            },
+            {
+              "id": "p2",
+              "canonical_id": "affix.fy.suffix",
+              "type": "suffix",
+              "canonical": "fy",
+              "surface": "fy"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "verify",
+              "rule": "latinate_combining_form_suffix"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-verify",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          },
+          {
+            "source_id": "foundation-dictionary-verify",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "entry_json_sha256": "d900dc371a4f37e536e5b252470b50fc85e988fc799ab279f2ef836e9ea43e9a",
+      "anticipated_lexical_source": {
+        "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r04/execution-r01/foundation-module02.json.after",
+        "bytes": 460847,
+        "raw_sha256": "7ae3603a41436cd58c65f5809e1a51938a027fb49d6fcd24c2b790237af4fcab"
+      },
+      "historical_holds": [
+        {
+          "source": {
+            "path": "data/professional/provenance/foundation-module02-language-third10-2026-10-17.json",
+            "bytes": 1059797,
+            "raw_sha256": "f264f845f89647880ea280aff7fcbadc66b6c28bb4c52f7aba5a950b7518213d"
+          },
+          "pointer": "/held/1",
+          "whole_row": {
+            "id": "verify.establish-accuracy.v",
+            "value": {
+              "id": "verify.establish-accuracy.v",
+              "text": "verify",
+              "display_text": "verify",
+              "pos": "verb",
+              "definition": "To establish that information is accurate by checking suitable evidence.",
+              "example": "Please verify the reference number against the order record.",
+              "difficulty": "A2",
+              "accepted_forms": [
+                "verify"
+              ],
+              "regions": [
+                "general"
+              ],
+              "practice_modes": [
+                "word_jelly",
+                "phrase"
+              ],
+              "media": {
+                "image": {
+                  "status": "pending",
+                  "path": null,
+                  "sha256": null,
+                  "source": null,
+                  "creator": null,
+                  "license": null,
+                  "acquisition_status": "not_started",
+                  "review": {
+                    "status": "pending"
+                  },
+                  "brief": "A reference number compared with an authoritative order record.",
+                  "picture_suitable": false,
+                  "available_animations": [],
+                  "adaptations": []
+                },
+                "audio": {
+                  "status": "pending",
+                  "path": null,
+                  "sha256": null,
+                  "source": null,
+                  "creator": null,
+                  "license": null,
+                  "acquisition_status": "not_started",
+                  "review": {
+                    "status": "pending"
+                  },
+                  "voice": "ava-sweet",
+                  "voice_settings": {
+                    "voice": "en-US-AvaNeural",
+                    "rate": "-15%",
+                    "pitch": "+8Hz",
+                    "volume": "+0%",
+                    "postprocessing": false
+                  }
+                }
+              },
+              "morphology": {
+                "schema": 1,
+                "id": "verify.establish-accuracy.v.analysis.v1",
+                "lexeme_id": "verify.establish-accuracy.v",
+                "text": "verify",
+                "kind": "morphological",
+                "review": {
+                  "status": "pending",
+                  "reviewer": null,
+                  "reviewed_at": null,
+                  "notes": "The source explicitly gives the true-related veri- combining form and -fy family. Preserve those constituents rather than syllable cuts, and review their relationship to checking accuracy. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+                  "references": [
+                    "https://www.merriam-webster.com/dictionary/verify",
+                    "https://www.dictionary.com/browse/verify"
+                  ]
+                },
+                "parts": [
+                  {
+                    "id": "p1",
+                    "canonical_id": "morph.veri",
+                    "type": "combining_form",
+                    "canonical": "veri",
+                    "surface": "veri"
+                  },
+                  {
+                    "id": "p2",
+                    "canonical_id": "affix.fy.suffix",
+                    "type": "suffix",
+                    "canonical": "fy",
+                    "surface": "fy"
+                  }
+                ],
+                "nodes": [
+                  {
+                    "id": "n1",
+                    "left": "p1",
+                    "right": "p2",
+                    "surface": "verify",
+                    "rule": "latinate_combining_form_suffix"
+                  }
+                ],
+                "roots": [
+                  "n1"
+                ]
+              },
+              "review": {
+                "status": "pending",
+                "language": "pending",
+                "domain": "not_required",
+                "reviewer": null,
+                "reviewed_at": null
+              },
+              "references": [
+                {
+                  "source_id": "british-council-requests",
+                  "status": "pending_term_check",
+                  "scope": "Workplace communication context only; this original definition and example await term-level review."
+                },
+                {
+                  "source_id": "foundation-mw-verify",
+                  "status": "pending_term_check",
+                  "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+                },
+                {
+                  "source_id": "foundation-dictionary-verify",
+                  "status": "pending_term_check",
+                  "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+                }
+              ],
+              "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+            },
+            "whole_entry_json_sha256": "d900dc371a4f37e536e5b252470b50fc85e988fc799ab279f2ef836e9ea43e9a",
+            "decision": "Hold the complete entry unchanged. Its current evidence-checking definition and comparison against the order record are plausible and already distinguish checking from unsupported assertion. Oxford checking and confirming senses both record C1; Collins has no observed selected level. That does not justify the existing A2 or a B2 clamp. Any later selected-sense acceptance must explicitly preserve the checking activity and separately resolve placement; no rewrite or synonym substitution is accepted here.",
+            "reference_or_note_additions": 0,
+            "review_gate_changes": 0
+          },
+          "whole_row_json_sha256": "2742e3e1b95478809d093e88cd6c0be2f1977569b894576ea86fdf76ab8e0ffe",
+          "immutable": true
+        }
+      ],
+      "fifth10_whole_entry_hold": {
+        "id": "verify.establish-accuracy.v",
+        "before_entry": {
+          "id": "verify.establish-accuracy.v",
+          "text": "verify",
+          "display_text": "verify",
+          "pos": "verb",
+          "definition": "To establish that information is accurate by checking suitable evidence.",
+          "example": "Please verify the reference number against the order record.",
+          "difficulty": "A2",
+          "accepted_forms": [
+            "verify"
+          ],
+          "regions": [
+            "general"
+          ],
+          "practice_modes": [
+            "word_jelly",
+            "phrase"
+          ],
+          "media": {
+            "image": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "brief": "A reference number compared with an authoritative order record.",
+              "picture_suitable": false,
+              "available_animations": [],
+              "adaptations": []
+            },
+            "audio": {
+              "status": "pending",
+              "path": null,
+              "sha256": null,
+              "source": null,
+              "creator": null,
+              "license": null,
+              "acquisition_status": "not_started",
+              "review": {
+                "status": "pending"
+              },
+              "voice": "ava-sweet",
+              "voice_settings": {
+                "voice": "en-US-AvaNeural",
+                "rate": "-15%",
+                "pitch": "+8Hz",
+                "volume": "+0%",
+                "postprocessing": false
+              }
+            }
+          },
+          "morphology": {
+            "schema": 1,
+            "id": "verify.establish-accuracy.v.analysis.v1",
+            "lexeme_id": "verify.establish-accuracy.v",
+            "text": "verify",
+            "kind": "morphological",
+            "review": {
+              "status": "pending",
+              "reviewer": null,
+              "reviewed_at": null,
+              "notes": "The source explicitly gives the true-related veri- combining form and -fy family. Preserve those constituents rather than syllable cuts, and review their relationship to checking accuracy. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+              "references": [
+                "https://www.merriam-webster.com/dictionary/verify",
+                "https://www.dictionary.com/browse/verify"
+              ]
+            },
+            "parts": [
+              {
+                "id": "p1",
+                "canonical_id": "morph.veri",
+                "type": "combining_form",
+                "canonical": "veri",
+                "surface": "veri"
+              },
+              {
+                "id": "p2",
+                "canonical_id": "affix.fy.suffix",
+                "type": "suffix",
+                "canonical": "fy",
+                "surface": "fy"
+              }
+            ],
+            "nodes": [
+              {
+                "id": "n1",
+                "left": "p1",
+                "right": "p2",
+                "surface": "verify",
+                "rule": "latinate_combining_form_suffix"
+              }
+            ],
+            "roots": [
+              "n1"
+            ]
+          },
+          "review": {
+            "status": "pending",
+            "language": "pending",
+            "domain": "not_required",
+            "reviewer": null,
+            "reviewed_at": null
+          },
+          "references": [
+            {
+              "source_id": "british-council-requests",
+              "status": "pending_term_check",
+              "scope": "Workplace communication context only; this original definition and example await term-level review."
+            },
+            {
+              "source_id": "foundation-mw-verify",
+              "status": "pending_term_check",
+              "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+            },
+            {
+              "source_id": "foundation-dictionary-verify",
+              "status": "pending_term_check",
+              "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+            }
+          ],
+          "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+        },
+        "entry_json_sha256": "d900dc371a4f37e536e5b252470b50fc85e988fc799ab279f2ef836e9ea43e9a"
+      },
+      "original_source_rows": [
+        {
+          "id": "british-council-requests",
+          "title": "A request from your boss",
+          "publisher": "British Council LearnEnglish",
+          "url": "https://learnenglish.britishcouncil.org/free-resources/listening/a1/request-your-boss",
+          "status": "consulted",
+          "consulted_on": "2026-10-15",
+          "scope": "Context for workplace requests and arranging tasks. All curriculum definitions, examples, and expressions are original drafts.",
+          "asset_license": null,
+          "assets_acquired": false
+        },
+        {
+          "id": "foundation-mw-verify",
+          "title": "Lexicographic reference: verify",
+          "publisher": "Merriam-Webster",
+          "url": "https://www.merriam-webster.com/dictionary/verify",
+          "status": "consulted",
+          "consulted_on": "2026-10-16",
+          "scope": "Selected headword, meaning, related-form, or word-history passages consulted for an explicit foundation morphology candidate. Historical derivation is distinguished from a modern teaching analysis; syllable dots are not morphology boundaries. This is source consultation, not expert approval. Definitions and examples remain original; no text, image, pronunciation recording, or other asset was acquired for redistribution.",
+          "asset_license": null,
+          "assets_acquired": false
+        },
+        {
+          "id": "foundation-dictionary-verify",
+          "title": "Lexicographic reference: verify",
+          "publisher": "Dictionary.com",
+          "url": "https://www.dictionary.com/browse/verify",
+          "status": "consulted",
+          "consulted_on": "2026-10-16",
+          "scope": "Selected headword, meaning, related-form, or word-history passages consulted for an explicit foundation morphology candidate. Historical derivation is distinguished from a modern teaching analysis; syllable dots are not morphology boundaries. This is source consultation, not expert approval. Definitions and examples remain original; no text, image, pronunciation recording, or other asset was acquired for redistribution.",
+          "asset_license": null,
+          "assets_acquired": false
+        }
+      ]
+    }
+  ],
+  "expression_beforeimages": [
+    {
+      "id": "expr.foundation.module02.08",
+      "index": 7,
+      "entry": {
+        "id": "expr.foundation.module02.08",
+        "text": "Could you assist me while I collect the documents from reception and return the key?",
+        "meaning": "Ask for help with picking up documents and giving a key back.",
+        "context": "A worker coordinates routine errands with a colleague.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "Could",
+            "start": 0,
+            "end": 5
+          },
+          {
+            "index": 1,
+            "text": "you",
+            "start": 6,
+            "end": 9
+          },
+          {
+            "index": 2,
+            "text": "assist",
+            "start": 10,
+            "end": 16
+          },
+          {
+            "index": 3,
+            "text": "me",
+            "start": 17,
+            "end": 19
+          },
+          {
+            "index": 4,
+            "text": "while",
+            "start": 20,
+            "end": 25
+          },
+          {
+            "index": 5,
+            "text": "I",
+            "start": 26,
+            "end": 27
+          },
+          {
+            "index": 6,
+            "text": "collect",
+            "start": 28,
+            "end": 35
+          },
+          {
+            "index": 7,
+            "text": "the",
+            "start": 36,
+            "end": 39
+          },
+          {
+            "index": 8,
+            "text": "documents",
+            "start": 40,
+            "end": 49
+          },
+          {
+            "index": 9,
+            "text": "from",
+            "start": 50,
+            "end": 54
+          },
+          {
+            "index": 10,
+            "text": "reception",
+            "start": 55,
+            "end": 64
+          },
+          {
+            "index": 11,
+            "text": "and",
+            "start": 65,
+            "end": 68
+          },
+          {
+            "index": 12,
+            "text": "return",
+            "start": 69,
+            "end": 75
+          },
+          {
+            "index": 13,
+            "text": "the",
+            "start": 76,
+            "end": 79
+          },
+          {
+            "index": 14,
+            "text": "key",
+            "start": 80,
+            "end": 83
+          },
+          {
+            "index": 15,
+            "text": "?",
+            "start": 83,
+            "end": 84
+          }
+        ],
+        "focus_lexeme_ids": [
+          "assist.help.v",
+          "collect.gather.v",
+          "return.send-back.v"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+          }
+        ]
+      },
+      "entry_json_sha256": "f3cc73cccd14dbbe07ccf7c14632119e81107907529721fb626c8c914eb5e6d3",
+      "observed_source": {
+        "path": "data/professional/expressions/foundation-module02.json",
+        "bytes": 33602,
+        "raw_sha256": "62468cc44a6fc0c1226d0533351d2c3bd8f414a530a350b436464dce5eb00bc9"
+      }
+    },
+    {
+      "id": "expr.foundation.module02.02",
+      "index": 1,
+      "entry": {
+        "id": "expr.foundation.module02.02",
+        "text": "Please contact the supplier to confirm the delivery time, and notify us of any delay.",
+        "meaning": "Ask someone to communicate with the provider and pass on timing changes.",
+        "context": "A team coordinates an expected delivery.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "Please",
+            "start": 0,
+            "end": 6
+          },
+          {
+            "index": 1,
+            "text": "contact",
+            "start": 7,
+            "end": 14
+          },
+          {
+            "index": 2,
+            "text": "the",
+            "start": 15,
+            "end": 18
+          },
+          {
+            "index": 3,
+            "text": "supplier",
+            "start": 19,
+            "end": 27
+          },
+          {
+            "index": 4,
+            "text": "to",
+            "start": 28,
+            "end": 30
+          },
+          {
+            "index": 5,
+            "text": "confirm",
+            "start": 31,
+            "end": 38
+          },
+          {
+            "index": 6,
+            "text": "the",
+            "start": 39,
+            "end": 42
+          },
+          {
+            "index": 7,
+            "text": "delivery",
+            "start": 43,
+            "end": 51
+          },
+          {
+            "index": 8,
+            "text": "time",
+            "start": 52,
+            "end": 56
+          },
+          {
+            "index": 9,
+            "text": ",",
+            "start": 56,
+            "end": 57
+          },
+          {
+            "index": 10,
+            "text": "and",
+            "start": 58,
+            "end": 61
+          },
+          {
+            "index": 11,
+            "text": "notify",
+            "start": 62,
+            "end": 68
+          },
+          {
+            "index": 12,
+            "text": "us",
+            "start": 69,
+            "end": 71
+          },
+          {
+            "index": 13,
+            "text": "of",
+            "start": 72,
+            "end": 74
+          },
+          {
+            "index": 14,
+            "text": "any",
+            "start": 75,
+            "end": 78
+          },
+          {
+            "index": 15,
+            "text": "delay",
+            "start": 79,
+            "end": 84
+          },
+          {
+            "index": 16,
+            "text": ".",
+            "start": 84,
+            "end": 85
+          }
+        ],
+        "focus_lexeme_ids": [
+          "contact.communicate-with.v",
+          "confirm.verify-arrangement.v",
+          "notify.inform.v",
+          "delay.late-occurrence.n"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+          }
+        ]
+      },
+      "entry_json_sha256": "575a776da9babf5dcc2aea9ae62b3d5066345c9fb6ed1ac58dde304860ff2c43",
+      "observed_source": {
+        "path": "data/professional/expressions/foundation-module02.json",
+        "bytes": 33602,
+        "raw_sha256": "62468cc44a6fc0c1226d0533351d2c3bd8f414a530a350b436464dce5eb00bc9"
+      }
+    },
+    {
+      "id": "expr.foundation.module02.04",
+      "index": 3,
+      "entry": {
+        "id": "expr.foundation.module02.04",
+        "text": "Please verify the reference number, correct any error, and check the form before you submit it.",
+        "meaning": "Request an evidence-based check and correction before sending a document.",
+        "context": "A worker prepares a form for processing.",
+        "tokens": [
+          {
+            "index": 0,
+            "text": "Please",
+            "start": 0,
+            "end": 6
+          },
+          {
+            "index": 1,
+            "text": "verify",
+            "start": 7,
+            "end": 13
+          },
+          {
+            "index": 2,
+            "text": "the",
+            "start": 14,
+            "end": 17
+          },
+          {
+            "index": 3,
+            "text": "reference",
+            "start": 18,
+            "end": 27
+          },
+          {
+            "index": 4,
+            "text": "number",
+            "start": 28,
+            "end": 34
+          },
+          {
+            "index": 5,
+            "text": ",",
+            "start": 34,
+            "end": 35
+          },
+          {
+            "index": 6,
+            "text": "correct",
+            "start": 36,
+            "end": 43
+          },
+          {
+            "index": 7,
+            "text": "any",
+            "start": 44,
+            "end": 47
+          },
+          {
+            "index": 8,
+            "text": "error",
+            "start": 48,
+            "end": 53
+          },
+          {
+            "index": 9,
+            "text": ",",
+            "start": 53,
+            "end": 54
+          },
+          {
+            "index": 10,
+            "text": "and",
+            "start": 55,
+            "end": 58
+          },
+          {
+            "index": 11,
+            "text": "check",
+            "start": 59,
+            "end": 64
+          },
+          {
+            "index": 12,
+            "text": "the",
+            "start": 65,
+            "end": 68
+          },
+          {
+            "index": 13,
+            "text": "form",
+            "start": 69,
+            "end": 73
+          },
+          {
+            "index": 14,
+            "text": "before",
+            "start": 74,
+            "end": 80
+          },
+          {
+            "index": 15,
+            "text": "you",
+            "start": 81,
+            "end": 84
+          },
+          {
+            "index": 16,
+            "text": "submit",
+            "start": 85,
+            "end": 91
+          },
+          {
+            "index": 17,
+            "text": "it",
+            "start": 92,
+            "end": 94
+          },
+          {
+            "index": 18,
+            "text": ".",
+            "start": 94,
+            "end": 95
+          }
+        ],
+        "focus_lexeme_ids": [
+          "verify.establish-accuracy.v",
+          "correct.put-right.v",
+          "error.mistake.n",
+          "check.examine.v",
+          "submit.send-for-consideration.v"
+        ],
+        "practice_modes": [
+          "phrase"
+        ],
+        "media": {
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Original workplace expression; wording, assessed senses, and usage await review."
+          }
+        ]
+      },
+      "entry_json_sha256": "ccd764a43dd2503bf77bb1b654e73a0ab742e439df7cb3ef623b9e0af7d366c4",
+      "observed_source": {
+        "path": "data/professional/expressions/foundation-module02.json",
+        "bytes": 33602,
+        "raw_sha256": "62468cc44a6fc0c1226d0533351d2c3bd8f414a530a350b436464dce5eb00bc9"
+      }
+    }
+  ],
+  "immutable_historical_sources": [
+    {
+      "path": "data/professional/provenance/foundation-module02-language-second10-2026-10-17.json",
+      "bytes": 866140,
+      "raw_sha256": "7b2c674a5249ef8c59afc2ab9e620cd2ed8d4e6a55704a231ca53f00005cd4fc"
+    },
+    {
+      "path": "data/professional/provenance/foundation-module02-language-third10-2026-10-17.json",
+      "bytes": 1059797,
+      "raw_sha256": "f264f845f89647880ea280aff7fcbadc66b6c28bb4c52f7aba5a950b7518213d"
+    }
+  ],
+  "anticipated_fifth10_hold_source": {
+    "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r04/execution-r01/production-provenance.prepared.json",
+    "bytes": 2954512,
+    "raw_sha256": "262310dbe488d24a120a4fe8ea4371e5611d8861f0b3399cdd0cd85c4a8f8679"
+  },
+  "original_registered_sources": {
+    "path": "build/professional-english/foundation02-fifth10-delivery-preparation-r04/execution-r01/sources.json.after",
+    "bytes": 943093,
+    "raw_sha256": "541b32c28f4ad5ebb5216c147fdb367d524f1f4d925d2f9968b01cf74664b799"
+  },
+  "preservation": {
+    "old_saved_keys_renamed": false,
+    "skills_events_exposures_fingerprints_requirements_expressions_completion_outbox_wallet_modified": false,
+    "evidence_transfer": false,
+    "saved_profiles_inspected": false,
+    "migration_or_aliases": false
+  }
+}

@@ -1,0 +1,153 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-10-16T21:22:48.7933244Z",
+  "status": "exact_copy_of_frozen_research_and_independent_review",
+  "files": [
+    {
+      "source": "build/professional-english/foundation02-collect-gather-repair-r01/README.md",
+      "destination": "research/README.md",
+      "bytes": 6425,
+      "sha256": "3dc27a613a73114c59e80f59ac3fca67bd7b448b1b1ab0767ea1cdc201a74871"
+    },
+    {
+      "source": "build/professional-english/foundation02-collect-gather-repair-r01/REVIEW-HANDOFF.md",
+      "destination": "research/REVIEW-HANDOFF.md",
+      "bytes": 6365,
+      "sha256": "515f5bcc7ab2c6400fdc907e8f373be3cd83554378d86989f555bf2a911cecea"
+    },
+    {
+      "source": "build/professional-english/foundation02-collect-gather-repair-r01/SOURCE-LEDGER.md",
+      "destination": "research/SOURCE-LEDGER.md",
+      "bytes": 3458,
+      "sha256": "93548b662fe09275693d0825ccc6414d644d7d6c53b347d48732fd53b49884c8"
+    },
+    {
+      "source": "build/professional-english/foundation02-collect-gather-repair-r01/assembly-observation.json",
+      "destination": "research/assembly-observation.json",
+      "bytes": 859,
+      "sha256": "fc1c395d251e5b1da02767ce8214d63168eddd7955d1aff2960f81b8f096c4dd"
+    },
+    {
+      "source": "build/professional-english/foundation02-collect-gather-repair-r01/author-proposal.cjs",
+      "destination": "research/author-proposal.cjs",
+      "bytes": 19075,
+      "sha256": "6c9f09393f08d7f8a96bce81c3db70bc119376a9afc34fd3a69037a2ed454088"
+    },
+    {
+      "source": "build/professional-english/foundation02-collect-gather-repair-r01/capture-context.cjs",
+      "destination": "research/capture-context.cjs",
+      "bytes": 5568,
+      "sha256": "8e551e25cb425487d95b717edcad79960afc2872f8e8f6c3dba1bad07e66a048"
+    },
+    {
+      "source": "build/professional-english/foundation02-collect-gather-repair-r01/context.json",
+      "destination": "research/context.json",
+      "bytes": 388224,
+      "sha256": "67618c11bf076210f31194d884ffb8c2664909b8d14a04767045be18714054e4"
+    },
+    {
+      "source": "build/professional-english/foundation02-collect-gather-repair-r01/expression-after.proposed.json",
+      "destination": "research/expression-after.proposed.json",
+      "bytes": 4468,
+      "sha256": "e0880637e159e02128f3541b149fd061372c580b1a688c0c0ad5da77fc9059e0"
+    },
+    {
+      "source": "build/professional-english/foundation02-collect-gather-repair-r01/expression-before.json",
+      "destination": "research/expression-before.json",
+      "bytes": 2705,
+      "sha256": "eb870ab112dfd07b181b008ba9bffeff622458832032a48852201e24b1df0c30"
+    },
+    {
+      "source": "build/professional-english/foundation02-collect-gather-repair-r01/fresh-http-metadata.json",
+      "destination": "research/fresh-http-metadata.json",
+      "bytes": 2637,
+      "sha256": "88a2e1c31b5640cba03fb2dcc0f78c5a16f4a22007732b1b03b97645d3ae3235"
+    },
+    {
+      "source": "build/professional-english/foundation02-collect-gather-repair-r01/history-pins.json",
+      "destination": "research/history-pins.json",
+      "bytes": 2297,
+      "sha256": "74a3a19cbe5164057776d3d32adf1df6c07d294440935bf3b8d650a38ca0486f"
+    },
+    {
+      "source": "build/professional-english/foundation02-collect-gather-repair-r01/impact-decisions.json",
+      "destination": "research/impact-decisions.json",
+      "bytes": 39293,
+      "sha256": "38bd0ffac86b71a96b0994666702076a5f0558fbf19362a11e9c79d6237fa748"
+    },
+    {
+      "source": "build/professional-english/foundation02-collect-gather-repair-r01/lexeme-after.proposed.json",
+      "destination": "research/lexeme-after.proposed.json",
+      "bytes": 4700,
+      "sha256": "4a1c1c5f254c771a7ec21028eb1381f1d725ee8b905c912019d6d8be991fb68f"
+    },
+    {
+      "source": "build/professional-english/foundation02-collect-gather-repair-r01/lexeme-before.json",
+      "destination": "research/lexeme-before.json",
+      "bytes": 2726,
+      "sha256": "eac926f163d407fc4782267457ffe3632fa999c0e0704cbb76d85475b95f9d9e"
+    },
+    {
+      "source": "build/professional-english/foundation02-collect-gather-repair-r01/patches.proposed.json",
+      "destination": "research/patches.proposed.json",
+      "bytes": 18127,
+      "sha256": "291569ecf8f87a67b11e00e0061974f061a953d34fbf8fd18019fc5e267715e9"
+    },
+    {
+      "source": "build/professional-english/foundation02-collect-gather-repair-r01/progress-revision-decision.proposed.json",
+      "destination": "research/progress-revision-decision.proposed.json",
+      "bytes": 6204,
+      "sha256": "08038f664edf70434891d49ba2c0a3ff5dc53513daf10c2637c2d25670bd9f54"
+    },
+    {
+      "source": "build/professional-english/foundation02-collect-gather-repair-r01/retrieve-source-metadata.cjs",
+      "destination": "research/retrieve-source-metadata.cjs",
+      "bytes": 3352,
+      "sha256": "bf311af3d7094e47fbda1894ccf6c3e137e21d861fb55aa1a44295990966fdce"
+    },
+    {
+      "source": "build/professional-english/foundation02-collect-gather-repair-r01/source-additions.proposed.json",
+      "destination": "research/source-additions.proposed.json",
+      "bytes": 1976,
+      "sha256": "9ffa967f28b144ff599b933023a9e178e91d1a0b2d598f10749823749b4499b4"
+    },
+    {
+      "source": "build/professional-english/foundation02-collect-gather-repair-r01/token-and-binding-review.json",
+      "destination": "research/token-and-binding-review.json",
+      "bytes": 5013,
+      "sha256": "9148e2b52c160181a4da9917dbae6f03a1d1eeb63e094f5ad4d3e23596bdc592"
+    },
+    {
+      "source": "build/professional-english/foundation02-collect-gather-repair-r01/inventory.json",
+      "destination": "research/inventory.json",
+      "bytes": 3206,
+      "sha256": "c298c66e6fdf8f1708bbe3f0ab04abe978cc0f74b35f1b0b3890a79a531946bc"
+    },
+    {
+      "source": "build/professional-english/foundation02-collect-gather-independent-review-r01/capture-review.cjs",
+      "destination": "review/capture-review.cjs",
+      "bytes": 11864,
+      "sha256": "2b2351d421defe473be820009febac16fd77049638f1a5948e01bdb41bf09f6d"
+    },
+    {
+      "source": "build/professional-english/foundation02-collect-gather-independent-review-r01/review.json",
+      "destination": "review/review.json",
+      "bytes": 8150,
+      "sha256": "19b19830a1c4f02153892f5f95fc1caa604af4474219876b7712beec80ac7747"
+    },
+    {
+      "source": "build/professional-english/foundation02-collect-gather-independent-review-r01/input-measurement.json",
+      "destination": "review/input-measurement.json",
+      "bytes": 69837,
+      "sha256": "50267200587257102428d32e124e8d911488a05a199794ed331b2b087c48c7e7"
+    },
+    {
+      "source": "build/professional-english/foundation02-collect-gather-independent-review-r01/inventory.json",
+      "destination": "review/inventory.json",
+      "bytes": 611,
+      "sha256": "e6e092f2c4a96855f843fdc737674634928e9b5f34dd42943464201eed707840"
+    }
+  ],
+  "production_mutated": false,
+  "scope": "Language/context acceptance only; revision, integration, media, morphology and release remain pending."
+}

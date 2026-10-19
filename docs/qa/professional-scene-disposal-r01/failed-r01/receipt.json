@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "started_at": "2026-10-16T19:46:12.224Z",
+  "finished_at": "2026-10-16T19:46:38.322Z",
+  "results": [
+    {
+      "label": "syntax",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.exe",
+        "tools/run-godot.cjs",
+        "--headless",
+        "--path",
+        ".",
+        "--check-only",
+        "--script",
+        "res://tests/godot/professional_scene_disposal_tests.gd"
+      ],
+      "started_at": "2026-10-16T19:46:12.227Z",
+      "finished_at": "2026-10-16T19:46:14.947Z",
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "log_sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d",
+      "ok": true
+    },
+    {
+      "label": "runtime",
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.exe",
+        "tools/run-godot.cjs",
+        "--headless",
+        "--path",
+        ".",
+        "--script",
+        "res://tests/godot/professional_scene_disposal_tests.gd"
+      ],
+      "started_at": "2026-10-16T19:46:14.962Z",
+      "finished_at": "2026-10-16T19:46:37.952Z",
+      "exit_code": 1,
+      "signal": null,
+      "error": null,
+      "log_sha256": "7dd451e10460ab09938987ed6e9217048c79e8bdfc0130b1641fa330c9c182bb",
+      "ok": false
+    }
+  ],
+  "planned_executions": 2,
+  "inputs_unchanged": true,
+  "input_count": 271,
+  "ok": false,
+  "scope": "Actual scene disposal with synthetic owner/media and held host response; no compiled Web, human media, curriculum or device acceptance."
+}

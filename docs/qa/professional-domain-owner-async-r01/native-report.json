@@ -1,0 +1,1025 @@
+{
+	"authority": "none",
+	"cancellation_boundaries": [
+		{
+			"encoded_bytes_before_cancel": 0,
+			"hit": true,
+			"phase": "descriptor_open",
+			"read_turns": 1,
+			"state_after": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 0,
+				"epoch": 1,
+				"installed": false,
+				"largest_read_chunk": 0,
+				"largest_steps_per_turn": 1,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 0,
+				"process_turns": 1,
+				"publications": 0,
+				"selection": 3,
+				"steps": 1
+			}
+		},
+		{
+			"encoded_bytes_before_cancel": 0,
+			"hit": true,
+			"phase": "descriptor_read",
+			"read_turns": 1,
+			"state_after": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 0,
+				"epoch": 1,
+				"installed": false,
+				"largest_read_chunk": 0,
+				"largest_steps_per_turn": 2,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 1,
+				"process_turns": 1,
+				"publications": 0,
+				"selection": 3,
+				"steps": 2
+			}
+		},
+		{
+			"encoded_bytes_before_cancel": 707,
+			"hit": true,
+			"phase": "descriptor_decode",
+			"read_turns": 1,
+			"state_after": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 707,
+				"epoch": 1,
+				"installed": false,
+				"largest_read_chunk": 707,
+				"largest_steps_per_turn": 3,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 1,
+				"process_turns": 1,
+				"publications": 0,
+				"selection": 3,
+				"steps": 3
+			}
+		},
+		{
+			"encoded_bytes_before_cancel": 707,
+			"hit": true,
+			"phase": "descriptor_validate",
+			"read_turns": 1,
+			"state_after": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 707,
+				"epoch": 1,
+				"installed": false,
+				"largest_read_chunk": 707,
+				"largest_steps_per_turn": 4,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 1,
+				"process_turns": 1,
+				"publications": 0,
+				"selection": 3,
+				"steps": 4
+			}
+		},
+		{
+			"encoded_bytes_before_cancel": 707,
+			"hit": true,
+			"phase": "index_open",
+			"read_turns": 1,
+			"state_after": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 707,
+				"epoch": 1,
+				"installed": false,
+				"largest_read_chunk": 707,
+				"largest_steps_per_turn": 4,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 1,
+				"process_turns": 2,
+				"publications": 0,
+				"selection": 3,
+				"steps": 5
+			}
+		},
+		{
+			"encoded_bytes_before_cancel": 707,
+			"hit": true,
+			"phase": "index_read",
+			"read_turns": 1,
+			"state_after": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 707,
+				"epoch": 1,
+				"installed": false,
+				"largest_read_chunk": 707,
+				"largest_steps_per_turn": 5,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 2,
+				"process_turns": 2,
+				"publications": 0,
+				"selection": 3,
+				"steps": 6
+			}
+		},
+		{
+			"encoded_bytes_before_cancel": 21595,
+			"hit": true,
+			"phase": "index_decode",
+			"read_turns": 1,
+			"state_after": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 21595,
+				"epoch": 1,
+				"installed": false,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 7,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 2,
+				"process_turns": 2,
+				"publications": 0,
+				"selection": 3,
+				"steps": 8
+			}
+		},
+		{
+			"encoded_bytes_before_cancel": 21595,
+			"hit": true,
+			"phase": "index_validate",
+			"read_turns": 1,
+			"state_after": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 21595,
+				"epoch": 1,
+				"installed": false,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 5,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 2,
+				"process_turns": 2,
+				"publications": 0,
+				"selection": 3,
+				"steps": 9
+			}
+		},
+		{
+			"encoded_bytes_before_cancel": 21595,
+			"hit": true,
+			"phase": "themes_open",
+			"read_turns": 1,
+			"state_after": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 21595,
+				"epoch": 1,
+				"installed": false,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 9,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 2,
+				"process_turns": 2,
+				"publications": 0,
+				"selection": 3,
+				"steps": 10
+			}
+		},
+		{
+			"encoded_bytes_before_cancel": 21595,
+			"hit": true,
+			"phase": "themes_read",
+			"read_turns": 1,
+			"state_after": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 21595,
+				"epoch": 1,
+				"installed": false,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 8,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 3,
+				"process_turns": 2,
+				"publications": 0,
+				"selection": 3,
+				"steps": 11
+			}
+		},
+		{
+			"encoded_bytes_before_cancel": 112796,
+			"hit": true,
+			"phase": "themes_decode",
+			"read_turns": 1,
+			"state_after": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 112796,
+				"epoch": 1,
+				"installed": false,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 9,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 3,
+				"process_turns": 2,
+				"publications": 0,
+				"selection": 3,
+				"steps": 17
+			}
+		},
+		{
+			"encoded_bytes_before_cancel": 112796,
+			"hit": true,
+			"phase": "themes_validate",
+			"read_turns": 1,
+			"state_after": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 112796,
+				"epoch": 1,
+				"installed": false,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 9,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 3,
+				"process_turns": 3,
+				"publications": 0,
+				"selection": 3,
+				"steps": 18
+			}
+		},
+		{
+			"encoded_bytes_before_cancel": 112796,
+			"hit": true,
+			"phase": "select",
+			"read_turns": 1,
+			"state_after": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 112796,
+				"epoch": 1,
+				"installed": true,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 9,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 3,
+				"process_turns": 3,
+				"publications": 0,
+				"selection": 3,
+				"steps": 19
+			}
+		},
+		{
+			"encoded_bytes_before_cancel": 112796,
+			"hit": true,
+			"phase": "payload_open",
+			"read_turns": 1,
+			"state_after": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 112796,
+				"epoch": 1,
+				"installed": true,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 9,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 3,
+				"process_turns": 3,
+				"publications": 0,
+				"selection": 3,
+				"steps": 20
+			}
+		},
+		{
+			"encoded_bytes_before_cancel": 129180,
+			"hit": true,
+			"phase": "payload_read",
+			"read_turns": 2,
+			"state_after": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 129180,
+				"epoch": 1,
+				"installed": true,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 9,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 4,
+				"process_turns": 4,
+				"publications": 0,
+				"selection": 3,
+				"steps": 22
+			}
+		},
+		{
+			"encoded_bytes_before_cancel": 396374,
+			"hit": true,
+			"phase": "payload_decode",
+			"read_turns": 1,
+			"state_after": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 396374,
+				"epoch": 1,
+				"installed": true,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 18,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 4,
+				"process_turns": 5,
+				"publications": 0,
+				"selection": 3,
+				"steps": 39
+			}
+		},
+		{
+			"encoded_bytes_before_cancel": 396374,
+			"hit": true,
+			"phase": "payload_validate",
+			"read_turns": 1,
+			"state_after": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 396374,
+				"epoch": 1,
+				"installed": true,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 22,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 4,
+				"process_turns": 4,
+				"publications": 0,
+				"selection": 3,
+				"steps": 40
+			}
+		},
+		{
+			"encoded_bytes_before_cancel": 396374,
+			"hit": true,
+			"phase": "resolve",
+			"read_turns": 1,
+			"state_after": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 396374,
+				"epoch": 1,
+				"installed": true,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 22,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 4,
+				"process_turns": 6,
+				"publications": 0,
+				"selection": 3,
+				"steps": 41
+			}
+		},
+		{
+			"encoded_bytes_before_cancel": 396374,
+			"hit": true,
+			"phase": "publish",
+			"read_turns": 1,
+			"state_after": {
+				"active_jobs": 0,
+				"active_tokens": 0,
+				"cache_insertions": 0,
+				"cached_modules": 0,
+				"configured": true,
+				"encoded_bytes_read": 396374,
+				"epoch": 1,
+				"installed": true,
+				"largest_read_chunk": 16384,
+				"largest_steps_per_turn": 20,
+				"open_files": 0,
+				"phase": "idle",
+				"policy_file_reads": 4,
+				"process_turns": 6,
+				"publications": 0,
+				"selection": 3,
+				"steps": 42
+			}
+		}
+	],
+	"checks": [
+		{
+			"check": "Configure performs no synchronous policy I/O",
+			"passed": true
+		},
+		{
+			"check": "Configure grants no request authority",
+			"passed": true
+		},
+		{
+			"check": "Request returns before its first policy read",
+			"passed": true
+		},
+		{
+			"check": "Cold request publishes a verified synthetic ready token",
+			"passed": true
+		},
+		{
+			"check": "Current production resolver preserves exact 50/10 selected inventory",
+			"passed": true
+		},
+		{
+			"check": "Captured context ignores injected authority and caller mutation",
+			"passed": true
+		},
+		{
+			"check": "Actual catalog retains media manifest and dependency checks",
+			"passed": true
+		},
+		{
+			"check": "Gameplay copy contains no token or authority rows",
+			"passed": true
+		},
+		{
+			"check": "Returned word and expression mutation cannot alter owned content",
+			"passed": true
+		},
+		{
+			"check": "Returned theme and requirement mutation cannot alter owned content",
+			"passed": true
+		},
+		{
+			"check": "Token wrapper cannot replace source records or add authority",
+			"passed": true
+		},
+		{
+			"check": "Forged and null tokens are rejected",
+			"passed": true
+		},
+		{
+			"check": "Another owner cannot use a valid foreign token",
+			"passed": true
+		},
+		{
+			"check": "Warm selection resolves through a new current token",
+			"passed": true
+		},
+		{
+			"check": "Warm selection performs zero owner policy reads and bytes",
+			"passed": true
+		},
+		{
+			"check": "Warm selection keeps only one immutable module cache",
+			"passed": true
+		},
+		{
+			"check": "Warm reselection invalidates previous token",
+			"passed": true
+		},
+		{
+			"check": "All owner read/hash chunks obey the 16 KiB bound",
+			"passed": true
+		},
+		{
+			"check": "Owner process turns obey the maximum bounded-step count",
+			"passed": true
+		},
+		{
+			"check": "Publication retains no open policy file",
+			"passed": true
+		},
+		{
+			"check": "Cancel removes completed request authority",
+			"passed": true
+		},
+		{
+			"check": "Cancel retains completed verified data without authority",
+			"passed": true
+		},
+		{
+			"check": "Draft selection remains unavailable",
+			"passed": true
+		},
+		{
+			"check": "Installed draft refusal reads no payload",
+			"passed": true
+		},
+		{
+			"check": "Authority-shaped malformed context cannot create a token",
+			"passed": true
+		},
+		{
+			"check": "Cancellation checkpoint reached: descriptor_open",
+			"passed": true
+		},
+		{
+			"check": "Cancelled work has no token or new module cache: descriptor_open",
+			"passed": true
+		},
+		{
+			"check": "Cancelled job drains without open files or publication: descriptor_open",
+			"passed": true
+		},
+		{
+			"check": "Cancelled completion never escapes: descriptor_open",
+			"passed": true
+		},
+		{
+			"check": "Cancellation checkpoint reached: descriptor_read",
+			"passed": true
+		},
+		{
+			"check": "Cancelled work has no token or new module cache: descriptor_read",
+			"passed": true
+		},
+		{
+			"check": "Cancelled job drains without open files or publication: descriptor_read",
+			"passed": true
+		},
+		{
+			"check": "Cancelled completion never escapes: descriptor_read",
+			"passed": true
+		},
+		{
+			"check": "Cancellation checkpoint reached: descriptor_decode",
+			"passed": true
+		},
+		{
+			"check": "Cancelled work has no token or new module cache: descriptor_decode",
+			"passed": true
+		},
+		{
+			"check": "Cancelled job drains without open files or publication: descriptor_decode",
+			"passed": true
+		},
+		{
+			"check": "Cancelled completion never escapes: descriptor_decode",
+			"passed": true
+		},
+		{
+			"check": "Cancellation checkpoint reached: descriptor_validate",
+			"passed": true
+		},
+		{
+			"check": "Cancelled work has no token or new module cache: descriptor_validate",
+			"passed": true
+		},
+		{
+			"check": "Cancelled job drains without open files or publication: descriptor_validate",
+			"passed": true
+		},
+		{
+			"check": "Cancelled completion never escapes: descriptor_validate",
+			"passed": true
+		},
+		{
+			"check": "Cancellation checkpoint reached: index_open",
+			"passed": true
+		},
+		{
+			"check": "Cancelled work has no token or new module cache: index_open",
+			"passed": true
+		},
+		{
+			"check": "Cancelled job drains without open files or publication: index_open",
+			"passed": true
+		},
+		{
+			"check": "Cancelled completion never escapes: index_open",
+			"passed": true
+		},
+		{
+			"check": "Cancellation checkpoint reached: index_read",
+			"passed": true
+		},
+		{
+			"check": "Cancelled work has no token or new module cache: index_read",
+			"passed": true
+		},
+		{
+			"check": "Cancelled job drains without open files or publication: index_read",
+			"passed": true
+		},
+		{
+			"check": "Cancelled completion never escapes: index_read",
+			"passed": true
+		},
+		{
+			"check": "Cancellation checkpoint reached: index_decode",
+			"passed": true
+		},
+		{
+			"check": "Cancelled work has no token or new module cache: index_decode",
+			"passed": true
+		},
+		{
+			"check": "Cancelled job drains without open files or publication: index_decode",
+			"passed": true
+		},
+		{
+			"check": "Cancelled completion never escapes: index_decode",
+			"passed": true
+		},
+		{
+			"check": "Cancellation checkpoint reached: index_validate",
+			"passed": true
+		},
+		{
+			"check": "Cancelled work has no token or new module cache: index_validate",
+			"passed": true
+		},
+		{
+			"check": "Cancelled job drains without open files or publication: index_validate",
+			"passed": true
+		},
+		{
+			"check": "Cancelled completion never escapes: index_validate",
+			"passed": true
+		},
+		{
+			"check": "Cancellation checkpoint reached: themes_open",
+			"passed": true
+		},
+		{
+			"check": "Cancelled work has no token or new module cache: themes_open",
+			"passed": true
+		},
+		{
+			"check": "Cancelled job drains without open files or publication: themes_open",
+			"passed": true
+		},
+		{
+			"check": "Cancelled completion never escapes: themes_open",
+			"passed": true
+		},
+		{
+			"check": "Cancellation checkpoint reached: themes_read",
+			"passed": true
+		},
+		{
+			"check": "Cancelled work has no token or new module cache: themes_read",
+			"passed": true
+		},
+		{
+			"check": "Cancelled job drains without open files or publication: themes_read",
+			"passed": true
+		},
+		{
+			"check": "Cancelled completion never escapes: themes_read",
+			"passed": true
+		},
+		{
+			"check": "Cancellation checkpoint reached: themes_decode",
+			"passed": true
+		},
+		{
+			"check": "Cancelled work has no token or new module cache: themes_decode",
+			"passed": true
+		},
+		{
+			"check": "Cancelled job drains without open files or publication: themes_decode",
+			"passed": true
+		},
+		{
+			"check": "Cancelled completion never escapes: themes_decode",
+			"passed": true
+		},
+		{
+			"check": "Cancellation checkpoint reached: themes_validate",
+			"passed": true
+		},
+		{
+			"check": "Cancelled work has no token or new module cache: themes_validate",
+			"passed": true
+		},
+		{
+			"check": "Cancelled job drains without open files or publication: themes_validate",
+			"passed": true
+		},
+		{
+			"check": "Cancelled completion never escapes: themes_validate",
+			"passed": true
+		},
+		{
+			"check": "Cancellation checkpoint reached: select",
+			"passed": true
+		},
+		{
+			"check": "Cancelled work has no token or new module cache: select",
+			"passed": true
+		},
+		{
+			"check": "Cancelled job drains without open files or publication: select",
+			"passed": true
+		},
+		{
+			"check": "Cancelled completion never escapes: select",
+			"passed": true
+		},
+		{
+			"check": "Cancellation checkpoint reached: payload_open",
+			"passed": true
+		},
+		{
+			"check": "Cancelled work has no token or new module cache: payload_open",
+			"passed": true
+		},
+		{
+			"check": "Cancelled job drains without open files or publication: payload_open",
+			"passed": true
+		},
+		{
+			"check": "Cancelled completion never escapes: payload_open",
+			"passed": true
+		},
+		{
+			"check": "Cancellation checkpoint reached: payload_read",
+			"passed": true
+		},
+		{
+			"check": "Cancelled work has no token or new module cache: payload_read",
+			"passed": true
+		},
+		{
+			"check": "Cancelled job drains without open files or publication: payload_read",
+			"passed": true
+		},
+		{
+			"check": "Cancelled completion never escapes: payload_read",
+			"passed": true
+		},
+		{
+			"check": "Cancellation checkpoint reached: payload_decode",
+			"passed": true
+		},
+		{
+			"check": "Cancelled work has no token or new module cache: payload_decode",
+			"passed": true
+		},
+		{
+			"check": "Cancelled job drains without open files or publication: payload_decode",
+			"passed": true
+		},
+		{
+			"check": "Cancelled completion never escapes: payload_decode",
+			"passed": true
+		},
+		{
+			"check": "Cancellation checkpoint reached: payload_validate",
+			"passed": true
+		},
+		{
+			"check": "Cancelled work has no token or new module cache: payload_validate",
+			"passed": true
+		},
+		{
+			"check": "Cancelled job drains without open files or publication: payload_validate",
+			"passed": true
+		},
+		{
+			"check": "Cancelled completion never escapes: payload_validate",
+			"passed": true
+		},
+		{
+			"check": "Cancellation checkpoint reached: resolve",
+			"passed": true
+		},
+		{
+			"check": "Cancelled work has no token or new module cache: resolve",
+			"passed": true
+		},
+		{
+			"check": "Cancelled job drains without open files or publication: resolve",
+			"passed": true
+		},
+		{
+			"check": "Cancelled completion never escapes: resolve",
+			"passed": true
+		},
+		{
+			"check": "Cancellation checkpoint reached: publish",
+			"passed": true
+		},
+		{
+			"check": "Cancelled work has no token or new module cache: publish",
+			"passed": true
+		},
+		{
+			"check": "Cancelled job drains without open files or publication: publish",
+			"passed": true
+		},
+		{
+			"check": "Cancelled completion never escapes: publish",
+			"passed": true
+		},
+		{
+			"check": "Rapid ready/draft/ready reselects during actual decode boundary",
+			"passed": true
+		},
+		{
+			"check": "Only latest rapid selection publishes usable content",
+			"passed": true
+		},
+		{
+			"check": "Superseded ready and pending draft selections never complete",
+			"passed": true
+		},
+		{
+			"check": "Superseded decode cannot insert cache or publish",
+			"passed": true
+		},
+		{
+			"check": "Completed result observed after reselection has no stale authority",
+			"passed": true
+		},
+		{
+			"check": "Completion observer may synchronously select again",
+			"passed": true
+		},
+		{
+			"check": "Completion reentrancy preserves new job and invalidates old token",
+			"passed": true
+		},
+		{
+			"check": "Retirement fixture begins with a current successful token",
+			"passed": true
+		},
+		{
+			"check": "Reconfigure invalidates old owner metadata/cache/token before new reads",
+			"passed": true
+		},
+		{
+			"check": "Retire during an open read is immediate and repeatable",
+			"passed": true
+		},
+		{
+			"check": "Repeated retirement releases all in-flight owner resources",
+			"passed": true
+		},
+		{
+			"check": "Retired read cannot complete late",
+			"passed": true
+		},
+		{
+			"check": "Retired owner refuses future requests until configured",
+			"passed": true
+		},
+		{
+			"check": "Unchanged production mode gate stays closed: match",
+			"passed": true
+		},
+		{
+			"check": "Failed resolution grants no token/cache: match",
+			"passed": true
+		},
+		{
+			"check": "Unchanged production mode gate stays closed: memory",
+			"passed": true
+		},
+		{
+			"check": "Failed resolution grants no token/cache: memory",
+			"passed": true
+		},
+		{
+			"check": "Unchanged production mode gate stays closed: pop",
+			"passed": true
+		},
+		{
+			"check": "Failed resolution grants no token/cache: pop",
+			"passed": true
+		},
+		{
+			"check": "Unchanged production mode gate stays closed: jelly",
+			"passed": true
+		},
+		{
+			"check": "Failed resolution grants no token/cache: jelly",
+			"passed": true
+		},
+		{
+			"check": "Unchanged production mode gate stays closed: word_jelly",
+			"passed": true
+		},
+		{
+			"check": "Failed resolution grants no token/cache: word_jelly",
+			"passed": true
+		},
+		{
+			"check": "Wrong curriculum revision cannot publish a token",
+			"passed": true
+		}
+	],
+	"cold_diagnostics": {
+		"active_jobs": 0,
+		"active_tokens": 1,
+		"cache_insertions": 1,
+		"cached_modules": 1,
+		"configured": true,
+		"encoded_bytes_read": 396374,
+		"epoch": 1,
+		"installed": true,
+		"largest_read_chunk": 16384,
+		"largest_steps_per_turn": 20,
+		"open_files": 0,
+		"phase": "idle",
+		"policy_file_reads": 4,
+		"process_turns": 8,
+		"publications": 1,
+		"selection": 2,
+		"steps": 42
+	},
+	"count": 125,
+	"failures": 0,
+	"payload_bytes": 283578,
+	"schema": 1,
+	"scope": "Phased fixed-fixture owner, actual catalog/resolver, immutable token/cache API, deterministic cancellation. No media fetch, application integration, Web/export, or timing acceptance.",
+	"warm_diagnostics": {
+		"active_jobs": 0,
+		"active_tokens": 1,
+		"cache_insertions": 1,
+		"cached_modules": 1,
+		"configured": true,
+		"encoded_bytes_read": 396374,
+		"epoch": 1,
+		"installed": true,
+		"largest_read_chunk": 16384,
+		"largest_steps_per_turn": 20,
+		"open_files": 0,
+		"phase": "idle",
+		"policy_file_reads": 4,
+		"process_turns": 10,
+		"publications": 2,
+		"selection": 3,
+		"steps": 45
+	}
+}

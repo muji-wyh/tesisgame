@@ -1,0 +1,83 @@
+{
+  "folder": "innerscene-cordless-drill",
+  "source_url": "https://www.innerscene.com/tools/library/3d-parts/drill-compact-cordless-drill-90e6de1c",
+  "download_url": "https://www.innerscene.com/api/library/drill-compact-cordless-drill-90e6de1c/download",
+  "filename": "cordless-drill-driver.glb",
+  "bytes": 214012,
+  "sha256": "ac77b56ad604ea49b7d1cea58cfb0b32041813e2483d7579bf0e7ce6bc0390f8",
+  "creator": "Innerscene",
+  "acquired_on": "2026-10-16",
+  "license": "CC0-1.0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "terms_url": "https://www.innerscene.com/tools/library/terms",
+  "acquisition_status": "downloaded_from_original_source_for_review",
+  "conversion_status": "original_GLB_loaded_without_geometry_or_material_substitution",
+  "integration_status": "source_used_in_integrated_static_home_preview",
+  "review_status": "actual_source_and_composition_renders_inspected_at_phone_size",
+  "mesh_count": 14,
+  "node_count": 15,
+  "triangle_count": 5304,
+  "vertex_count": 3604,
+  "material_count": 5,
+  "image_count": 6,
+  "external_dependencies": [],
+  "available_animations": [],
+  "skin_count": 0,
+  "asset_metadata": {
+    "generator": "Khronos glTF Blender I/O v5.2.40",
+    "version": "2.0"
+  },
+  "extras": {},
+  "node_names": [
+    "Angled rubber grip",
+    "Battery release tab",
+    "Chuck opening",
+    "Drill motor housing",
+    "Grip colored spine",
+    "Metal chuck",
+    "Motor rear cap",
+    "Motor ventilation",
+    "Motor ventilation.001",
+    "Motor ventilation.002",
+    "Removable battery pack",
+    "Speed selector",
+    "Torque selector collar",
+    "Trigger switch",
+    "Drill Compact"
+  ],
+  "material_names": [
+    "Black felt floor glides",
+    "Muted teal molded polymer",
+    "Fastener socket recess",
+    "Satin galvanized steel",
+    "Charcoal fine-textured powdercoat"
+  ],
+  "source_sha256_verified": true,
+  "license_sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+  "review": {
+    "original_model_views": [
+      "drill-source-front-phone.png",
+      "drill-source-rear-phone.png"
+    ],
+    "derived_composition": [
+      "construction-trades-full.png",
+      "construction-trades-preview.png",
+      "construction-trades-phone.png"
+    ],
+    "source_resolution": [
+      1280,
+      800
+    ],
+    "preview_resolution": [
+      512,
+      320
+    ],
+    "phone_resolution": [
+      296,
+      185
+    ],
+    "visual_observation": "The teal motor housing, chuck, black grip and battery give a distinct drill silhouette.",
+    "limitations": "Static illustration source; no rig or animation clips. Full course and theme readiness is not implied."
+  },
+  "integration_scope": "Original GLB retained outside Web export; the reviewed static Home PNG derivative is integrated. Full theme and course readiness remain separate."
+}

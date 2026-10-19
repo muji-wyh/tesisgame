@@ -1,0 +1,1436 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.it_support.module08.01",
+      "text": "Authentication checks identity, while authorization determines permitted actions using the relevant account and credential information.",
+      "meaning": "Identity checking and access decisions have different purposes.",
+      "context": "Explaining access terms",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Authentication",
+          "start": 0,
+          "end": 14
+        },
+        {
+          "index": 1,
+          "text": "checks",
+          "start": 15,
+          "end": 21
+        },
+        {
+          "index": 2,
+          "text": "identity",
+          "start": 22,
+          "end": 30
+        },
+        {
+          "index": 3,
+          "text": ",",
+          "start": 30,
+          "end": 31
+        },
+        {
+          "index": 4,
+          "text": "while",
+          "start": 32,
+          "end": 37
+        },
+        {
+          "index": 5,
+          "text": "authorization",
+          "start": 38,
+          "end": 51
+        },
+        {
+          "index": 6,
+          "text": "determines",
+          "start": 52,
+          "end": 62
+        },
+        {
+          "index": 7,
+          "text": "permitted",
+          "start": 63,
+          "end": 72
+        },
+        {
+          "index": 8,
+          "text": "actions",
+          "start": 73,
+          "end": 80
+        },
+        {
+          "index": 9,
+          "text": "using",
+          "start": 81,
+          "end": 86
+        },
+        {
+          "index": 10,
+          "text": "the",
+          "start": 87,
+          "end": 90
+        },
+        {
+          "index": 11,
+          "text": "relevant",
+          "start": 91,
+          "end": 99
+        },
+        {
+          "index": 12,
+          "text": "account",
+          "start": 100,
+          "end": 107
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 108,
+          "end": 111
+        },
+        {
+          "index": 14,
+          "text": "credential",
+          "start": 112,
+          "end": 122
+        },
+        {
+          "index": 15,
+          "text": "information",
+          "start": 123,
+          "end": 134
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 134,
+          "end": 135
+        }
+      ],
+      "focus_lexeme_ids": [
+        "authentication.identity-verification-process.n",
+        "authorization.access-decision-process.n",
+        "credential.identity-evidence-item.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-ncsc-phishing",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.it_support.module08.02",
+      "text": "The certificate details require review by the responsible team.",
+      "meaning": "The digitally signed identity statement has not yet been assessed.",
+      "context": "Referring security information",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "certificate",
+          "start": 4,
+          "end": 15
+        },
+        {
+          "index": 2,
+          "text": "details",
+          "start": 16,
+          "end": 23
+        },
+        {
+          "index": 3,
+          "text": "require",
+          "start": 24,
+          "end": 31
+        },
+        {
+          "index": 4,
+          "text": "review",
+          "start": 32,
+          "end": 38
+        },
+        {
+          "index": 5,
+          "text": "by",
+          "start": 39,
+          "end": 41
+        },
+        {
+          "index": 6,
+          "text": "the",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "responsible",
+          "start": 46,
+          "end": 57
+        },
+        {
+          "index": 8,
+          "text": "team",
+          "start": 58,
+          "end": 62
+        },
+        {
+          "index": 9,
+          "text": ".",
+          "start": 62,
+          "end": 63
+        }
+      ],
+      "focus_lexeme_ids": [
+        "certificate.digitally-signed-identity-binding.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-ncsc-phishing",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.it_support.module08.03",
+      "text": "The report distinguishes a vulnerability from a threat; the actual impact is still being assessed.",
+      "meaning": "A weakness and potential harm do not establish a completed incident.",
+      "context": "Describing a security concern",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "report",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "distinguishes",
+          "start": 11,
+          "end": 24
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 25,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "vulnerability",
+          "start": 27,
+          "end": 40
+        },
+        {
+          "index": 5,
+          "text": "from",
+          "start": 41,
+          "end": 45
+        },
+        {
+          "index": 6,
+          "text": "a",
+          "start": 46,
+          "end": 47
+        },
+        {
+          "index": 7,
+          "text": "threat",
+          "start": 48,
+          "end": 54
+        },
+        {
+          "index": 8,
+          "text": ";",
+          "start": 54,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 56,
+          "end": 59
+        },
+        {
+          "index": 10,
+          "text": "actual",
+          "start": 60,
+          "end": 66
+        },
+        {
+          "index": 11,
+          "text": "impact",
+          "start": 67,
+          "end": 73
+        },
+        {
+          "index": 12,
+          "text": "is",
+          "start": 74,
+          "end": 76
+        },
+        {
+          "index": 13,
+          "text": "still",
+          "start": 77,
+          "end": 82
+        },
+        {
+          "index": 14,
+          "text": "being",
+          "start": 83,
+          "end": 88
+        },
+        {
+          "index": 15,
+          "text": "assessed",
+          "start": 89,
+          "end": 97
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 97,
+          "end": 98
+        }
+      ],
+      "focus_lexeme_ids": [
+        "vulnerability.exploitable-system-weakness.n",
+        "threat.potential-security-harm.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-ncsc-phishing",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-nist-vulnerability",
+          "status": "pending_term_check",
+          "scope": "Independent reviewer consulted the glossary to distinguish vulnerability from threat in this original expression; professional language and domain release review remain pending."
+        }
+      ]
+    },
+    {
+      "id": "expr.it_support.module08.04",
+      "text": "The security briefing distinguishes malware, ransomware, and phishing without using live examples.",
+      "meaning": "Harmful software and deceptive interactions require distinct descriptions.",
+      "context": "Discussing security awareness",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "security",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "briefing",
+          "start": 13,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "distinguishes",
+          "start": 22,
+          "end": 35
+        },
+        {
+          "index": 4,
+          "text": "malware",
+          "start": 36,
+          "end": 43
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 43,
+          "end": 44
+        },
+        {
+          "index": 6,
+          "text": "ransomware",
+          "start": 45,
+          "end": 55
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 55,
+          "end": 56
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 57,
+          "end": 60
+        },
+        {
+          "index": 9,
+          "text": "phishing",
+          "start": 61,
+          "end": 69
+        },
+        {
+          "index": 10,
+          "text": "without",
+          "start": 70,
+          "end": 77
+        },
+        {
+          "index": 11,
+          "text": "using",
+          "start": 78,
+          "end": 83
+        },
+        {
+          "index": 12,
+          "text": "live",
+          "start": 84,
+          "end": 88
+        },
+        {
+          "index": 13,
+          "text": "examples",
+          "start": 89,
+          "end": 97
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 97,
+          "end": 98
+        }
+      ],
+      "focus_lexeme_ids": [
+        "malware.malicious-software.n",
+        "ransomware.malicious-software-used-for-extortion.n",
+        "phishing.deceptive-information-request.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-ncsc-phishing",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.it_support.module08.05",
+      "text": "The review considers confidentiality and integrity as separate information-protection requirements.",
+      "meaning": "Unauthorized disclosure and improper alteration are different concerns.",
+      "context": "Discussing information protection",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "review",
+          "start": 4,
+          "end": 10
+        },
+        {
+          "index": 2,
+          "text": "considers",
+          "start": 11,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "confidentiality",
+          "start": 21,
+          "end": 36
+        },
+        {
+          "index": 4,
+          "text": "and",
+          "start": 37,
+          "end": 40
+        },
+        {
+          "index": 5,
+          "text": "integrity",
+          "start": 41,
+          "end": 50
+        },
+        {
+          "index": 6,
+          "text": "as",
+          "start": 51,
+          "end": 53
+        },
+        {
+          "index": 7,
+          "text": "separate",
+          "start": 54,
+          "end": 62
+        },
+        {
+          "index": 8,
+          "text": "information-protection",
+          "start": 63,
+          "end": 85
+        },
+        {
+          "index": 9,
+          "text": "requirements",
+          "start": 86,
+          "end": 98
+        },
+        {
+          "index": 10,
+          "text": ".",
+          "start": 98,
+          "end": 99
+        }
+      ],
+      "focus_lexeme_ids": [
+        "confidentiality.authorized-information-disclosure.n",
+        "integrity.information-correctness-protection.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-ncsc-phishing",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.it_support.module08.06",
+      "text": "Authorized access for ordinary use does not include privileged access unless the applicable arrangements permit it.",
+      "meaning": "Ordinary permission does not automatically confer sensitive administrative capabilities.",
+      "context": "Clarifying access scope",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Authorized",
+          "start": 0,
+          "end": 10
+        },
+        {
+          "index": 1,
+          "text": "access",
+          "start": 11,
+          "end": 17
+        },
+        {
+          "index": 2,
+          "text": "for",
+          "start": 18,
+          "end": 21
+        },
+        {
+          "index": 3,
+          "text": "ordinary",
+          "start": 22,
+          "end": 30
+        },
+        {
+          "index": 4,
+          "text": "use",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 5,
+          "text": "does",
+          "start": 35,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "not",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "include",
+          "start": 44,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "privileged",
+          "start": 52,
+          "end": 62
+        },
+        {
+          "index": 9,
+          "text": "access",
+          "start": 63,
+          "end": 69
+        },
+        {
+          "index": 10,
+          "text": "unless",
+          "start": 70,
+          "end": 76
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 77,
+          "end": 80
+        },
+        {
+          "index": 12,
+          "text": "applicable",
+          "start": 81,
+          "end": 91
+        },
+        {
+          "index": 13,
+          "text": "arrangements",
+          "start": 92,
+          "end": 104
+        },
+        {
+          "index": 14,
+          "text": "permit",
+          "start": 105,
+          "end": 111
+        },
+        {
+          "index": 15,
+          "text": "it",
+          "start": 112,
+          "end": 114
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 114,
+          "end": 115
+        }
+      ],
+      "focus_lexeme_ids": [
+        "authorized-access.access-permitted-under-applicable-arrangements.n",
+        "privileged-access.access-with-elevated-administrative-permissions.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-ncsc-phishing",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.it_support.module08.07",
+      "text": "The suspicious attachment remains in quarantine while the security team reviews the report.",
+      "meaning": "The suspected file stays in a controlled isolation state during assessment.",
+      "context": "Reporting a security status",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "suspicious",
+          "start": 4,
+          "end": 14
+        },
+        {
+          "index": 2,
+          "text": "attachment",
+          "start": 15,
+          "end": 25
+        },
+        {
+          "index": 3,
+          "text": "remains",
+          "start": 26,
+          "end": 33
+        },
+        {
+          "index": 4,
+          "text": "in",
+          "start": 34,
+          "end": 36
+        },
+        {
+          "index": 5,
+          "text": "quarantine",
+          "start": 37,
+          "end": 47
+        },
+        {
+          "index": 6,
+          "text": "while",
+          "start": 48,
+          "end": 53
+        },
+        {
+          "index": 7,
+          "text": "the",
+          "start": 54,
+          "end": 57
+        },
+        {
+          "index": 8,
+          "text": "security",
+          "start": 58,
+          "end": 66
+        },
+        {
+          "index": 9,
+          "text": "team",
+          "start": 67,
+          "end": 71
+        },
+        {
+          "index": 10,
+          "text": "reviews",
+          "start": 72,
+          "end": 79
+        },
+        {
+          "index": 11,
+          "text": "the",
+          "start": 80,
+          "end": 83
+        },
+        {
+          "index": 12,
+          "text": "report",
+          "start": 84,
+          "end": 90
+        },
+        {
+          "index": 13,
+          "text": ".",
+          "start": 90,
+          "end": 91
+        }
+      ],
+      "focus_lexeme_ids": [
+        "suspicious-attachment.attached-file-raising-security-concern.n",
+        "quarantine.security-isolation-state.n",
+        "security-team.group-responsible-for-defined-security-work.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-ncsc-phishing",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.it_support.module08.08",
+      "text": "The consent record describes the agreed remote access consent and its limits.",
+      "meaning": "The record states the agreement and scope without proving legal sufficiency.",
+      "context": "Confirming a support-session scope",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "consent",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "record",
+          "start": 12,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "describes",
+          "start": 19,
+          "end": 28
+        },
+        {
+          "index": 4,
+          "text": "the",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 5,
+          "text": "agreed",
+          "start": 33,
+          "end": 39
+        },
+        {
+          "index": 6,
+          "text": "remote",
+          "start": 40,
+          "end": 46
+        },
+        {
+          "index": 7,
+          "text": "access",
+          "start": 47,
+          "end": 53
+        },
+        {
+          "index": 8,
+          "text": "consent",
+          "start": 54,
+          "end": 61
+        },
+        {
+          "index": 9,
+          "text": "and",
+          "start": 62,
+          "end": 65
+        },
+        {
+          "index": 10,
+          "text": "its",
+          "start": 66,
+          "end": 69
+        },
+        {
+          "index": 11,
+          "text": "limits",
+          "start": 70,
+          "end": 76
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 76,
+          "end": 77
+        }
+      ],
+      "focus_lexeme_ids": [
+        "consent-record.documentation-of-consent-arrangements.n",
+        "remote-access-consent.agreement-to-specified-remote-access-activity.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-ncsc-phishing",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.it_support.module08.09",
+      "text": "The restore point is recorded, but recovery from the possible data loss is not guaranteed.",
+      "meaning": "A recorded system state does not establish that all missing data can be recovered.",
+      "context": "Discussing recovery limits",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "restore",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "point",
+          "start": 12,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "is",
+          "start": 18,
+          "end": 20
+        },
+        {
+          "index": 4,
+          "text": "recorded",
+          "start": 21,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 29,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "but",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "recovery",
+          "start": 35,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "from",
+          "start": 44,
+          "end": 48
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 10,
+          "text": "possible",
+          "start": 53,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": "data",
+          "start": 62,
+          "end": 66
+        },
+        {
+          "index": 12,
+          "text": "loss",
+          "start": 67,
+          "end": 71
+        },
+        {
+          "index": 13,
+          "text": "is",
+          "start": 72,
+          "end": 74
+        },
+        {
+          "index": 14,
+          "text": "not",
+          "start": 75,
+          "end": 78
+        },
+        {
+          "index": 15,
+          "text": "guaranteed",
+          "start": 79,
+          "end": 89
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 89,
+          "end": 90
+        }
+      ],
+      "focus_lexeme_ids": [
+        "restore-point.recorded-system-state-available-for-restoration.n",
+        "data-loss.loss-of-accessible-or-recoverable-data.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-ncsc-phishing",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    },
+    {
+      "id": "expr.it_support.module08.10",
+      "text": "The end of support date and device disposal arrangements require separate review.",
+      "meaning": "Product-support timing and removing equipment from use involve different decisions.",
+      "context": "Planning equipment lifecycle work",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "end",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "of",
+          "start": 8,
+          "end": 10
+        },
+        {
+          "index": 3,
+          "text": "support",
+          "start": 11,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "date",
+          "start": 19,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "and",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 6,
+          "text": "device",
+          "start": 28,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "disposal",
+          "start": 35,
+          "end": 43
+        },
+        {
+          "index": 8,
+          "text": "arrangements",
+          "start": 44,
+          "end": 56
+        },
+        {
+          "index": 9,
+          "text": "require",
+          "start": 57,
+          "end": 64
+        },
+        {
+          "index": 10,
+          "text": "separate",
+          "start": 65,
+          "end": 73
+        },
+        {
+          "index": 11,
+          "text": "review",
+          "start": 74,
+          "end": 80
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 80,
+          "end": 81
+        }
+      ],
+      "focus_lexeme_ids": [
+        "end-of-support.point-when-stated-product-support-ceases.n",
+        "device-disposal.approved-removal-of-device-from-organizational-use.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "it-support-ncsc-phishing",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "it-support-microsoft-troubleshooting",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, troubleshooting-category, phishing-reporting, or accessibility context only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "status": "reviewer_local_hash_transcription_error_corrected",
+  "reviewer": "Codex runtime_recovery",
+  "inspection_session_id": 98905,
+  "exit_code": 1,
+  "failed_check": "Exact copy-receipt hash in reviewer-authored raw byte inspection",
+  "incorrect_local_expected_sha256": "dc2b5949d6d003ac7d13f6c6488f1cb308ce06856b03bd4a93de6b686645a71a",
+  "actual_and_exact_input_sha256": "dc2b594970981808a9960cdfa4d30d2ad25cb631da936d30f64e0587793f7996",
+  "path": "docs/assets/sources/shopping-bag-delivery-review-2026-10-17/commit/copy-receipt.json",
+  "reason": "The reviewer incorrectly expanded an abbreviated hash into a local check. The exact persisted input and root evidence already contained the correct full hash. This is a reviewer inspection authoring error, not product or commit drift.",
+  "first_inspection_wrote_result": false,
+  "root_guard_or_commit_replayed": false,
+  "persisted_runner_executed": false,
+  "production_mutated": false,
+  "corrected_complete_inspection_session_id": 35980,
+  "corrected_exit_code": 0,
+  "corrected_complete_inspection": {
+    "path": "build/professional-english/shopping-bag-commit-independent-review-r01/persisted-input-inspection.json",
+    "bytes": 5124,
+    "sha256": "6c5eb8791d18f9c2523d3ec7db324463237bfd13c458ba89066781d284cd7042"
+  },
+  "history": "The first inspection was stopped by its assertion before writing any review result. The corrected independent inspection rechecked the entire input map, evidence and journal from raw bytes using Node built-ins only."
+}

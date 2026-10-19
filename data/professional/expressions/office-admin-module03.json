@@ -1,0 +1,1497 @@
+{
+  "schema_version": 1,
+  "expressions": [
+    {
+      "id": "expr.office_admin.module03.01",
+      "text": "The reception desk needs a spare chair, and this desk needs a lamp.",
+      "meaning": "Describe separate equipment needs at two work areas.",
+      "context": "Reporting office setup needs.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "reception",
+          "start": 4,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "desk",
+          "start": 14,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "needs",
+          "start": 19,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "a",
+          "start": 25,
+          "end": 26
+        },
+        {
+          "index": 5,
+          "text": "spare",
+          "start": 27,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "chair",
+          "start": 33,
+          "end": 38
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 38,
+          "end": 39
+        },
+        {
+          "index": 8,
+          "text": "and",
+          "start": 40,
+          "end": 43
+        },
+        {
+          "index": 9,
+          "text": "this",
+          "start": 44,
+          "end": 48
+        },
+        {
+          "index": 10,
+          "text": "desk",
+          "start": 49,
+          "end": 53
+        },
+        {
+          "index": 11,
+          "text": "needs",
+          "start": 54,
+          "end": 59
+        },
+        {
+          "index": 12,
+          "text": "a",
+          "start": 60,
+          "end": 61
+        },
+        {
+          "index": 13,
+          "text": "lamp",
+          "start": 62,
+          "end": 66
+        },
+        {
+          "index": 14,
+          "text": ".",
+          "start": 66,
+          "end": 67
+        }
+      ],
+      "focus_lexeme_ids": [
+        "reception-desk.visitor-welcome-workstation.n",
+        "chair.single-person-seat-with-back.n",
+        "desk.work-table-with-writing-surface.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-general-office-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module03.02",
+      "text": "The desk lamp is beside the clock and the conference phone.",
+      "meaning": "Identify the location of ordinary meeting-room equipment.",
+      "context": "Preparing a room inventory.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "desk",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "lamp",
+          "start": 9,
+          "end": 13
+        },
+        {
+          "index": 3,
+          "text": "is",
+          "start": 14,
+          "end": 16
+        },
+        {
+          "index": 4,
+          "text": "beside",
+          "start": 17,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 6,
+          "text": "clock",
+          "start": 28,
+          "end": 33
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 34,
+          "end": 37
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 38,
+          "end": 41
+        },
+        {
+          "index": 9,
+          "text": "conference",
+          "start": 42,
+          "end": 52
+        },
+        {
+          "index": 10,
+          "text": "phone",
+          "start": 53,
+          "end": 58
+        },
+        {
+          "index": 11,
+          "text": ".",
+          "start": 58,
+          "end": 59
+        }
+      ],
+      "focus_lexeme_ids": [
+        "desk-lamp.light-for-work-surface.n",
+        "clock.device-showing-time.n",
+        "conference-phone.telephone-for-group-meetings.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-general-office-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module03.03",
+      "text": "Please check the copier model before ordering toner or a printer cartridge.",
+      "meaning": "Request compatibility checking before a supply order.",
+      "context": "Asking the equipment contact for guidance.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "check",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 13,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "copier",
+          "start": 17,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "model",
+          "start": 24,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "before",
+          "start": 30,
+          "end": 36
+        },
+        {
+          "index": 6,
+          "text": "ordering",
+          "start": 37,
+          "end": 45
+        },
+        {
+          "index": 7,
+          "text": "toner",
+          "start": 46,
+          "end": 51
+        },
+        {
+          "index": 8,
+          "text": "or",
+          "start": 52,
+          "end": 54
+        },
+        {
+          "index": 9,
+          "text": "a",
+          "start": 55,
+          "end": 56
+        },
+        {
+          "index": 10,
+          "text": "printer",
+          "start": 57,
+          "end": 64
+        },
+        {
+          "index": 11,
+          "text": "cartridge",
+          "start": 65,
+          "end": 74
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 74,
+          "end": 75
+        }
+      ],
+      "focus_lexeme_ids": [
+        "copier.machine-for-duplicating-documents.n",
+        "toner.powder-used-in-some-printers.n",
+        "printer-cartridge.replaceable-printer-supply-unit.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-general-office-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module03.04",
+      "text": "Please report the fault with the shredder and keep the letter opener in its assigned place.",
+      "meaning": "Report a machine fault and refer to the agreed storage arrangement.",
+      "context": "Discussing office equipment with the responsible team.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "report",
+          "start": 7,
+          "end": 13
+        },
+        {
+          "index": 2,
+          "text": "the",
+          "start": 14,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "fault",
+          "start": 18,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "with",
+          "start": 24,
+          "end": 28
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 29,
+          "end": 32
+        },
+        {
+          "index": 6,
+          "text": "shredder",
+          "start": 33,
+          "end": 41
+        },
+        {
+          "index": 7,
+          "text": "and",
+          "start": 42,
+          "end": 45
+        },
+        {
+          "index": 8,
+          "text": "keep",
+          "start": 46,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "the",
+          "start": 51,
+          "end": 54
+        },
+        {
+          "index": 10,
+          "text": "letter",
+          "start": 55,
+          "end": 61
+        },
+        {
+          "index": 11,
+          "text": "opener",
+          "start": 62,
+          "end": 68
+        },
+        {
+          "index": 12,
+          "text": "in",
+          "start": 69,
+          "end": 71
+        },
+        {
+          "index": 13,
+          "text": "its",
+          "start": 72,
+          "end": 75
+        },
+        {
+          "index": 14,
+          "text": "assigned",
+          "start": 76,
+          "end": 84
+        },
+        {
+          "index": 15,
+          "text": "place",
+          "start": 85,
+          "end": 90
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 90,
+          "end": 91
+        }
+      ],
+      "focus_lexeme_ids": [
+        "shredder.machine-for-cutting-documents.n",
+        "letter-opener.tool-for-opening-envelopes.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-general-office-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module03.05",
+      "text": "The stapler uses a staple, but a paper clip or binder clip holds pages without piercing them.",
+      "meaning": "Distinguish common paper fasteners.",
+      "context": "Explaining stationery terms.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "stapler",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "uses",
+          "start": 12,
+          "end": 16
+        },
+        {
+          "index": 3,
+          "text": "a",
+          "start": 17,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "staple",
+          "start": 19,
+          "end": 25
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 25,
+          "end": 26
+        },
+        {
+          "index": 6,
+          "text": "but",
+          "start": 27,
+          "end": 30
+        },
+        {
+          "index": 7,
+          "text": "a",
+          "start": 31,
+          "end": 32
+        },
+        {
+          "index": 8,
+          "text": "paper",
+          "start": 33,
+          "end": 38
+        },
+        {
+          "index": 9,
+          "text": "clip",
+          "start": 39,
+          "end": 43
+        },
+        {
+          "index": 10,
+          "text": "or",
+          "start": 44,
+          "end": 46
+        },
+        {
+          "index": 11,
+          "text": "binder",
+          "start": 47,
+          "end": 53
+        },
+        {
+          "index": 12,
+          "text": "clip",
+          "start": 54,
+          "end": 58
+        },
+        {
+          "index": 13,
+          "text": "holds",
+          "start": 59,
+          "end": 64
+        },
+        {
+          "index": 14,
+          "text": "pages",
+          "start": 65,
+          "end": 70
+        },
+        {
+          "index": 15,
+          "text": "without",
+          "start": 71,
+          "end": 78
+        },
+        {
+          "index": 16,
+          "text": "piercing",
+          "start": 79,
+          "end": 87
+        },
+        {
+          "index": 17,
+          "text": "them",
+          "start": 88,
+          "end": 92
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 92,
+          "end": 93
+        }
+      ],
+      "focus_lexeme_ids": [
+        "stapler.tool-for-fastening-pages.n",
+        "staple.bent-wire-paper-fastener.n",
+        "paper-clip.removable-wire-paper-fastener.n",
+        "binder-clip.spring-clip-for-document-stack.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-general-office-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module03.06",
+      "text": "The hole punch and ring binder are in the supply cupboard beside the storage cabinet.",
+      "meaning": "Locate filing supplies without teaching equipment operation.",
+      "context": "Helping a colleague find stationery.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "hole",
+          "start": 4,
+          "end": 8
+        },
+        {
+          "index": 2,
+          "text": "punch",
+          "start": 9,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "and",
+          "start": 15,
+          "end": 18
+        },
+        {
+          "index": 4,
+          "text": "ring",
+          "start": 19,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "binder",
+          "start": 24,
+          "end": 30
+        },
+        {
+          "index": 6,
+          "text": "are",
+          "start": 31,
+          "end": 34
+        },
+        {
+          "index": 7,
+          "text": "in",
+          "start": 35,
+          "end": 37
+        },
+        {
+          "index": 8,
+          "text": "the",
+          "start": 38,
+          "end": 41
+        },
+        {
+          "index": 9,
+          "text": "supply",
+          "start": 42,
+          "end": 48
+        },
+        {
+          "index": 10,
+          "text": "cupboard",
+          "start": 49,
+          "end": 57
+        },
+        {
+          "index": 11,
+          "text": "beside",
+          "start": 58,
+          "end": 64
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 65,
+          "end": 68
+        },
+        {
+          "index": 13,
+          "text": "storage",
+          "start": 69,
+          "end": 76
+        },
+        {
+          "index": 14,
+          "text": "cabinet",
+          "start": 77,
+          "end": 84
+        },
+        {
+          "index": 15,
+          "text": ".",
+          "start": 84,
+          "end": 85
+        }
+      ],
+      "focus_lexeme_ids": [
+        "hole-punch.tool-for-making-filing-holes.n",
+        "ring-binder.cover-with-opening-rings-for-pages.n",
+        "supply-cupboard.cupboard-for-workplace-consumables.n",
+        "storage-cabinet.enclosed-storage-furniture.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-general-office-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module03.07",
+      "text": "The document tray contains an envelope and a sheet of paper; the postage stamp is in the drawer.",
+      "meaning": "Identify items and their storage locations.",
+      "context": "Checking desk supplies.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "document",
+          "start": 4,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "tray",
+          "start": 13,
+          "end": 17
+        },
+        {
+          "index": 3,
+          "text": "contains",
+          "start": 18,
+          "end": 26
+        },
+        {
+          "index": 4,
+          "text": "an",
+          "start": 27,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "envelope",
+          "start": 30,
+          "end": 38
+        },
+        {
+          "index": 6,
+          "text": "and",
+          "start": 39,
+          "end": 42
+        },
+        {
+          "index": 7,
+          "text": "a",
+          "start": 43,
+          "end": 44
+        },
+        {
+          "index": 8,
+          "text": "sheet",
+          "start": 45,
+          "end": 50
+        },
+        {
+          "index": 9,
+          "text": "of",
+          "start": 51,
+          "end": 53
+        },
+        {
+          "index": 10,
+          "text": "paper",
+          "start": 54,
+          "end": 59
+        },
+        {
+          "index": 11,
+          "text": ";",
+          "start": 59,
+          "end": 60
+        },
+        {
+          "index": 12,
+          "text": "the",
+          "start": 61,
+          "end": 64
+        },
+        {
+          "index": 13,
+          "text": "postage",
+          "start": 65,
+          "end": 72
+        },
+        {
+          "index": 14,
+          "text": "stamp",
+          "start": 73,
+          "end": 78
+        },
+        {
+          "index": 15,
+          "text": "is",
+          "start": 79,
+          "end": 81
+        },
+        {
+          "index": 16,
+          "text": "in",
+          "start": 82,
+          "end": 84
+        },
+        {
+          "index": 17,
+          "text": "the",
+          "start": 85,
+          "end": 88
+        },
+        {
+          "index": 18,
+          "text": "drawer",
+          "start": 89,
+          "end": 95
+        },
+        {
+          "index": 19,
+          "text": ".",
+          "start": 95,
+          "end": 96
+        }
+      ],
+      "focus_lexeme_ids": [
+        "document-tray.shallow-container-for-paperwork.n",
+        "envelope.paper-cover-for-mailed-document.n",
+        "paper.thin-writing-or-printing-material.n",
+        "postage-stamp.postal-payment-label.n",
+        "drawer.sliding-storage-compartment.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-general-office-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module03.08",
+      "text": "The notepad is beside a pen, a pencil, a marker, and an eraser.",
+      "meaning": "Describe the location of writing materials.",
+      "context": "Restocking a shared stationery area.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "The",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "notepad",
+          "start": 4,
+          "end": 11
+        },
+        {
+          "index": 2,
+          "text": "is",
+          "start": 12,
+          "end": 14
+        },
+        {
+          "index": 3,
+          "text": "beside",
+          "start": 15,
+          "end": 21
+        },
+        {
+          "index": 4,
+          "text": "a",
+          "start": 22,
+          "end": 23
+        },
+        {
+          "index": 5,
+          "text": "pen",
+          "start": 24,
+          "end": 27
+        },
+        {
+          "index": 6,
+          "text": ",",
+          "start": 27,
+          "end": 28
+        },
+        {
+          "index": 7,
+          "text": "a",
+          "start": 29,
+          "end": 30
+        },
+        {
+          "index": 8,
+          "text": "pencil",
+          "start": 31,
+          "end": 37
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 37,
+          "end": 38
+        },
+        {
+          "index": 10,
+          "text": "a",
+          "start": 39,
+          "end": 40
+        },
+        {
+          "index": 11,
+          "text": "marker",
+          "start": 41,
+          "end": 47
+        },
+        {
+          "index": 12,
+          "text": ",",
+          "start": 47,
+          "end": 48
+        },
+        {
+          "index": 13,
+          "text": "and",
+          "start": 49,
+          "end": 52
+        },
+        {
+          "index": 14,
+          "text": "an",
+          "start": 53,
+          "end": 55
+        },
+        {
+          "index": 15,
+          "text": "eraser",
+          "start": 56,
+          "end": 62
+        },
+        {
+          "index": 16,
+          "text": ".",
+          "start": 62,
+          "end": 63
+        }
+      ],
+      "focus_lexeme_ids": [
+        "notepad.pad-of-writing-paper.n",
+        "pen.ink-writing-instrument.n",
+        "pencil.erasable-core-writing-instrument.n",
+        "marker.broad-tip-writing-instrument.n",
+        "eraser.tool-for-removing-pencil-marks.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-general-office-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module03.09",
+      "text": "Please check whether the ruler, scissors, clipboard, and adhesive tape are in the supply cupboard.",
+      "meaning": "Ask someone to check the available materials.",
+      "context": "Preparing approved meeting supplies.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Please",
+          "start": 0,
+          "end": 6
+        },
+        {
+          "index": 1,
+          "text": "check",
+          "start": 7,
+          "end": 12
+        },
+        {
+          "index": 2,
+          "text": "whether",
+          "start": 13,
+          "end": 20
+        },
+        {
+          "index": 3,
+          "text": "the",
+          "start": 21,
+          "end": 24
+        },
+        {
+          "index": 4,
+          "text": "ruler",
+          "start": 25,
+          "end": 30
+        },
+        {
+          "index": 5,
+          "text": ",",
+          "start": 30,
+          "end": 31
+        },
+        {
+          "index": 6,
+          "text": "scissors",
+          "start": 32,
+          "end": 40
+        },
+        {
+          "index": 7,
+          "text": ",",
+          "start": 40,
+          "end": 41
+        },
+        {
+          "index": 8,
+          "text": "clipboard",
+          "start": 42,
+          "end": 51
+        },
+        {
+          "index": 9,
+          "text": ",",
+          "start": 51,
+          "end": 52
+        },
+        {
+          "index": 10,
+          "text": "and",
+          "start": 53,
+          "end": 56
+        },
+        {
+          "index": 11,
+          "text": "adhesive",
+          "start": 57,
+          "end": 65
+        },
+        {
+          "index": 12,
+          "text": "tape",
+          "start": 66,
+          "end": 70
+        },
+        {
+          "index": 13,
+          "text": "are",
+          "start": 71,
+          "end": 74
+        },
+        {
+          "index": 14,
+          "text": "in",
+          "start": 75,
+          "end": 77
+        },
+        {
+          "index": 15,
+          "text": "the",
+          "start": 78,
+          "end": 81
+        },
+        {
+          "index": 16,
+          "text": "supply",
+          "start": 82,
+          "end": 88
+        },
+        {
+          "index": 17,
+          "text": "cupboard",
+          "start": 89,
+          "end": 97
+        },
+        {
+          "index": 18,
+          "text": ".",
+          "start": 97,
+          "end": 98
+        }
+      ],
+      "focus_lexeme_ids": [
+        "ruler.straight-marked-measuring-tool.n",
+        "scissors.paired-pivoting-cutting-blades.n",
+        "clipboard.board-with-paper-holding-clip.n",
+        "adhesive-tape.fixing-material.n",
+        "supply-cupboard.cupboard-for-workplace-consumables.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-general-office-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    },
+    {
+      "id": "expr.office_admin.module03.10",
+      "text": "Ask the facilities team about the extension lead before changing this workstation.",
+      "meaning": "Refer an electrical-connection question to the responsible team.",
+      "context": "Discussing a workspace change.",
+      "tokens": [
+        {
+          "index": 0,
+          "text": "Ask",
+          "start": 0,
+          "end": 3
+        },
+        {
+          "index": 1,
+          "text": "the",
+          "start": 4,
+          "end": 7
+        },
+        {
+          "index": 2,
+          "text": "facilities",
+          "start": 8,
+          "end": 18
+        },
+        {
+          "index": 3,
+          "text": "team",
+          "start": 19,
+          "end": 23
+        },
+        {
+          "index": 4,
+          "text": "about",
+          "start": 24,
+          "end": 29
+        },
+        {
+          "index": 5,
+          "text": "the",
+          "start": 30,
+          "end": 33
+        },
+        {
+          "index": 6,
+          "text": "extension",
+          "start": 34,
+          "end": 43
+        },
+        {
+          "index": 7,
+          "text": "lead",
+          "start": 44,
+          "end": 48
+        },
+        {
+          "index": 8,
+          "text": "before",
+          "start": 49,
+          "end": 55
+        },
+        {
+          "index": 9,
+          "text": "changing",
+          "start": 56,
+          "end": 64
+        },
+        {
+          "index": 10,
+          "text": "this",
+          "start": 65,
+          "end": 69
+        },
+        {
+          "index": 11,
+          "text": "workstation",
+          "start": 70,
+          "end": 81
+        },
+        {
+          "index": 12,
+          "text": ".",
+          "start": 81,
+          "end": 82
+        }
+      ],
+      "focus_lexeme_ids": [
+        "extension-lead.electrical-cable-extending-reach.n",
+        "workstation.computer-setup.n"
+      ],
+      "practice_modes": [
+        "phrase"
+      ],
+      "media": {
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "bls-general-office-clerks",
+          "status": "pending_term_check",
+          "scope": "Occupational, records, accessibility, or workstation context consulted; this original draft still requires term-level language, domain, regional, and morphology review."
+        }
+      ]
+    }
+  ]
+}

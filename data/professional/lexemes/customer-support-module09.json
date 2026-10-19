@@ -1,0 +1,1240 @@
+{
+  "schema_version": 1,
+  "lexemes": [
+    {
+      "id": "customer-profile.organized-customer-service-information.n",
+      "text": "customer profile",
+      "display_text": "customer profile",
+      "pos": "noun",
+      "definition": "An organized set of relevant information about a customer used to provide service.",
+      "example": "The agent checked only the necessary fields in the customer profile.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "customer profile"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional customer profile containing limited invented data.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "customer-profile.organized-customer-service-information.n.analysis.v1",
+        "lexeme_id": "customer-profile.organized-customer-service-information.n",
+        "text": "customer profile",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.custom",
+            "type": "stem",
+            "canonical": "custom",
+            "surface": "custom"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.er.suffix",
+            "type": "suffix",
+            "canonical": "er",
+            "surface": "er"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.profile",
+            "type": "stem",
+            "canonical": "profile",
+            "surface": "profile"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "customer",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "customer profile",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "interaction-history.record-of-prior-customer-communications.n",
+      "text": "interaction history",
+      "display_text": "interaction history",
+      "pos": "noun",
+      "definition": "A record of earlier communications with a customer across relevant contacts.",
+      "example": "The agent reviewed the interaction history to avoid asking the same question again.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "interaction history"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional sequence of customer contacts without real messages.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "interaction-history.record-of-prior-customer-communications.n.analysis.v1",
+        "lexeme_id": "interaction-history.record-of-prior-customer-communications.n",
+        "text": "interaction history",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.interaction",
+            "type": "stem",
+            "canonical": "interaction",
+            "surface": "interaction"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.history",
+            "type": "stem",
+            "canonical": "history",
+            "surface": "history"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "interaction history",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "internal-note.record-entry-for-authorized-internal-readers.n",
+      "text": "internal note",
+      "display_text": "internal note",
+      "pos": "noun",
+      "definition": "A record entry intended for authorized internal readers rather than the customer-facing conversation.",
+      "example": "The agent checked the audience before adding an internal note.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "internal note"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional note editor with a prominent internal-audience label.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "internal-note.record-entry-for-authorized-internal-readers.n.analysis.v1",
+        "lexeme_id": "internal-note.record-entry-for-authorized-internal-readers.n",
+        "text": "internal note",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.internal",
+            "type": "stem",
+            "canonical": "internal",
+            "surface": "internal"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.note",
+            "type": "stem",
+            "canonical": "note",
+            "surface": "note"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "internal note",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "public-reply.customer-visible-support-response.n",
+      "text": "public reply",
+      "display_text": "public reply",
+      "pos": "noun",
+      "definition": "A support response visible to the requester or other permitted participants in the customer-facing conversation.",
+      "example": "The agent checked the public reply before sending it.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "public reply"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional reply editor clearly identifying customer-visible recipients.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "public-reply.customer-visible-support-response.n.analysis.v1",
+        "lexeme_id": "public-reply.customer-visible-support-response.n",
+        "text": "public reply",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.public",
+            "type": "stem",
+            "canonical": "public",
+            "surface": "public"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.reply",
+            "type": "stem",
+            "canonical": "reply",
+            "surface": "reply"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "public reply",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "saved-reply.reusable-prepared-response-text.n",
+      "text": "saved reply",
+      "display_text": "saved reply",
+      "pos": "noun",
+      "definition": "Prepared response text that can be reused and adapted to a particular request.",
+      "example": "The agent checked the saved reply against the customer's actual question.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "saved reply"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional reusable response being edited for a specific case.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "saved-reply.reusable-prepared-response-text.n.analysis.v1",
+        "lexeme_id": "saved-reply.reusable-prepared-response-text.n",
+        "text": "saved reply",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.save",
+            "type": "stem",
+            "canonical": "save",
+            "surface": "sav"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.ed.suffix",
+            "type": "suffix",
+            "canonical": "ed",
+            "surface": "ed"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.reply",
+            "type": "stem",
+            "canonical": "reply",
+            "surface": "reply"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "saved",
+            "rule": "drop_final_e_before_suffix"
+          },
+          {
+            "id": "n2",
+            "left": "n1",
+            "right": "p3",
+            "surface": "saved reply",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n2"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "ticket-tag.label-attached-to-support-record.n",
+      "text": "ticket tag",
+      "display_text": "ticket tag",
+      "pos": "noun",
+      "definition": "A label attached to a support record to help describe, organize, or find it.",
+      "example": "The agent checked whether the ticket tag matched the issue.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "ticket tag"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional ticket with a relevant short classification label.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "ticket-tag.label-attached-to-support-record.n.analysis.v1",
+        "lexeme_id": "ticket-tag.label-attached-to-support-record.n",
+        "text": "ticket tag",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.ticket",
+            "type": "stem",
+            "canonical": "ticket",
+            "surface": "ticket"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.tag",
+            "type": "stem",
+            "canonical": "tag",
+            "surface": "tag"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "ticket tag",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "custom-field.configured-additional-information-field.n",
+      "text": "custom field",
+      "display_text": "custom field",
+      "pos": "noun",
+      "definition": "An information field added or configured for a particular system or workflow.",
+      "example": "The administrator explained the purpose of the custom field.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "custom field"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional case form with a clearly labeled additional field.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "custom-field.configured-additional-information-field.n.analysis.v1",
+        "lexeme_id": "custom-field.configured-additional-information-field.n",
+        "text": "custom field",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.custom",
+            "type": "stem",
+            "canonical": "custom",
+            "surface": "custom"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.field",
+            "type": "stem",
+            "canonical": "field",
+            "surface": "field"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "custom field",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "contact-record.stored-contact-identification-and-reachability-details.n",
+      "text": "contact record",
+      "display_text": "contact record",
+      "pos": "noun",
+      "definition": "A record identifying a contact and the relevant ways to reach them.",
+      "example": "The agent checked the contact record through the approved process.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "contact record"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional contact card with a chosen communication method.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "contact-record.stored-contact-identification-and-reachability-details.n.analysis.v1",
+        "lexeme_id": "contact-record.stored-contact-identification-and-reachability-details.n",
+        "text": "contact record",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.contact",
+            "type": "stem",
+            "canonical": "contact",
+            "surface": "contact"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.record",
+            "type": "stem",
+            "canonical": "record",
+            "surface": "record"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "contact record",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "sales-bls-market-research",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-onet-market-research",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-google-impressions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "knowledge-article.single-reference-information-entry.n",
+      "text": "knowledge article",
+      "display_text": "knowledge article",
+      "pos": "noun",
+      "definition": "An individual reference entry explaining a topic or answering a question.",
+      "example": "The agent checked the review date on the knowledge article.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "knowledge article"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "A fictional support article with an owner and review date.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "knowledge-article.single-reference-information-entry.n.analysis.v1",
+        "lexeme_id": "knowledge-article.single-reference-information-entry.n",
+        "text": "knowledge article",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.knowledge",
+            "type": "stem",
+            "canonical": "knowledge",
+            "surface": "knowledge"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.article",
+            "type": "stem",
+            "canonical": "article",
+            "surface": "article"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "knowledge article",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    },
+    {
+      "id": "customer-relationship-management.management-of-customer-relationship-information.n",
+      "text": "customer relationship management",
+      "display_text": "customer relationship management",
+      "pos": "noun",
+      "definition": "The organized management of customer relationships and related information, often supported by software.",
+      "example": "The trainer explained what customer relationship management means in this service.",
+      "difficulty": "B1",
+      "accepted_forms": [
+        "customer relationship management",
+        "CRM"
+      ],
+      "regions": [
+        "general"
+      ],
+      "practice_modes": [
+        "word_jelly",
+        "phrase"
+      ],
+      "media": {
+        "image": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "brief": "An unbranded fictional customer-information system with limited data.",
+          "picture_suitable": false,
+          "available_animations": [],
+          "adaptations": []
+        },
+        "audio": {
+          "status": "pending",
+          "path": null,
+          "sha256": null,
+          "source": null,
+          "creator": null,
+          "license": null,
+          "acquisition_status": "not_started",
+          "review": {
+            "status": "pending"
+          },
+          "voice": "ava-sweet",
+          "voice_settings": {
+            "voice": "en-US-AvaNeural",
+            "rate": "-15%",
+            "pitch": "+8Hz",
+            "volume": "+0%",
+            "postprocessing": false
+          }
+        }
+      },
+      "morphology": {
+        "schema": 1,
+        "id": "customer-relationship-management.management-of-customer-relationship-information.n.analysis.v1",
+        "lexeme_id": "customer-relationship-management.management-of-customer-relationship-information.n",
+        "text": "customer relationship management",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicit draft of modern lexical constituents, word boundaries, selected classical combining forms, and spelling alternations. A qualified language reviewer must verify allomorphs, semantic transparency, lexicalization, and the depth of analysis of intact stems. Historical or uncertain single-word analyses remain unauthored. No syllable or character-length cuts are inferred.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.custom",
+            "type": "stem",
+            "canonical": "custom",
+            "surface": "custom"
+          },
+          {
+            "id": "p2",
+            "canonical_id": "affix.er.suffix",
+            "type": "suffix",
+            "canonical": "er",
+            "surface": "er"
+          },
+          {
+            "id": "p3",
+            "canonical_id": "morph.relation",
+            "type": "stem",
+            "canonical": "relation",
+            "surface": "relation"
+          },
+          {
+            "id": "p4",
+            "canonical_id": "affix.ship.suffix",
+            "type": "suffix",
+            "canonical": "ship",
+            "surface": "ship"
+          },
+          {
+            "id": "p5",
+            "canonical_id": "morph.manage",
+            "type": "stem",
+            "canonical": "manage",
+            "surface": "manage"
+          },
+          {
+            "id": "p6",
+            "canonical_id": "affix.ment.suffix",
+            "type": "suffix",
+            "canonical": "ment",
+            "surface": "ment"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "customer",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n2",
+            "left": "p3",
+            "right": "p4",
+            "surface": "relationship",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n3",
+            "left": "n1",
+            "right": "n2",
+            "surface": "customer relationship",
+            "rule": "word_boundary"
+          },
+          {
+            "id": "n4",
+            "left": "p5",
+            "right": "p6",
+            "surface": "management",
+            "rule": "suffix_attachment"
+          },
+          {
+            "id": "n5",
+            "left": "n3",
+            "right": "n4",
+            "surface": "customer relationship management",
+            "rule": "word_boundary"
+          }
+        ],
+        "roots": [
+          "n5"
+        ]
+      },
+      "review": {
+        "status": "pending",
+        "language": "pending",
+        "domain": "pending",
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      "references": [
+        {
+          "source_id": "onet-customer-service",
+          "status": "pending_term_check",
+          "scope": "Authoritative occupational, service-system, privacy, accessibility, or safety context consulted; this original draft requires term-level language, domain, regional, and morphology review."
+        },
+        {
+          "source_id": "sales-bls-market-research",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-onet-market-research",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        },
+        {
+          "source_id": "sales-google-impressions",
+          "status": "pending_term_check",
+          "scope": "Consulted occupational, advertising-review context, or narrowly scoped platform definition only. This original draft still requires term-level language, domain, regional, picture-suitability, and morphology review; source scope does not certify this term or procedure."
+        }
+      ],
+      "editorial_notes": "Original communication-focused draft. Service workflow, privacy, security, role boundaries, local requirements, regional language, and morphology require qualified review. No financial or legal entitlement, credential-disclosure request, system-repair procedure, access bypass, or emergency technique is taught. Image brief only; no artwork has been acquired."
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "schema": 1,
+  "reviewer": "Codex runtime_recovery independent AI language reviewer; not human or subject-matter approval",
+  "independence": "The reviewer did not author the held-six research packet and consulted selected source sections independently. A separate read-only context check by held_context_check found no local semantic conflict; it did not decide source placement or accept complete entries.",
+  "reviewed_on_local": "2026-10-17",
+  "accepted_scope": ["definition", "example", "difficulty"],
+  "production_status": "All six current whole-entry holds remain unchanged pending separate explicit delivery. These are reviewer-side projections only.",
+  "automatic_application_permitted": false,
+  "decisions": [
+    {
+      "id": "postpone.delay-until-later.v",
+      "decision": "accept_exact_three_field_projection_for_separate_delivery",
+      "accepted_fields": {
+        "definition": "To arrange for a planned activity to happen later.",
+        "example": "The team decided to postpone the review until next week.",
+        "difficulty": "B2"
+      },
+      "field_rationale": {
+        "definition": "The planned-activity/later-time wording selects the scheduled-event sense consistently supported by Oxford and Collins.",
+        "example": "Postpone the review until next week is a natural scheduling pattern and explicitly moves the planned event later.",
+        "difficulty": "Accept an explicit editorial B2 placement using the CEFR-J v1.5 verb row and the bounded ordinary scheduling use, with Collins's selected B1+ evidence as independent lower-range support. Oxford's selected C1 remains contrary evidence. This judgment neither rounds B1+ nor clamps C1."
+      },
+      "change_from_previous_hold": "The earlier hold found coherent meaning and example but unresolved placement. Freshly checked CEFR-J v1.5 B2 evidence adds support for this explicit new editorial decision; the earlier hold record remains untouched.",
+      "source_ids": ["O-postpone", "C-postpone", "P-CSV", "P-TERMS", "P-METHOD"],
+      "context_check": "Expression expr.foundation.module02.07 distinguishes adjusting a start time, arranging to postpone a meeting, and cancelling a duplicate booking. The postpone reading remains later-only; reschedule can move in either direction. Arrange, adjust, reschedule and cancel retain their own decisions. The expression remains pending.",
+      "excluded_scope": ["cancellation", "earlier rescheduling", "priority or financial arrangements", "post/pone morphological analysis", "all expression acceptance", "media"],
+      "domain_preserved": "not_required",
+      "editorial_notes_decision": "The author's proposed editorial_notes are outside the accepted three fields. Retain the original notes exactly in the reviewer projection. Future delivery must review any note changes separately."
+    },
+    {
+      "id": "unsafe.presenting-danger.adj",
+      "decision": "accept_exact_three_field_projection_for_separate_delivery",
+      "accepted_fields": {
+        "definition": "Presenting a risk of harm in the situation.",
+        "example": "The worker reported an unsafe storage area.",
+        "difficulty": "B2"
+      },
+      "field_rationale": {
+        "definition": "The risk-of-harm wording expresses the selected ordinary dangerous-place/thing/activity sense without asserting a specialist threshold or legal conclusion.",
+        "example": "Unsafe storage area selects the dominant dangerous-place sense and a report of concern, with no operating procedure or technical remedy.",
+        "difficulty": "The freshly checked CEFR-J v1.5 adjective row directly supplies B2 headword/POS evidence. Independent Oxford and Collins sense checks support applying that evidence to this ordinary dangerous-area use. Neither dictionary supplies an observed selected level. Transparent un- structure and sentence simplicity are not placement evidence."
+      },
+      "change_from_previous_hold": "The old proposal was B1 and lacked adequate placement support. This is a separately judged B2 proposal supported by new profile evidence; the old B1 hold is not rewritten or retrospectively accepted.",
+      "source_ids": ["O-unsafe", "C-unsafe", "P-CSV", "P-TERMS", "P-METHOD"],
+      "context_check": "Expression expr.foundation.module02.09 uses unsafe area consistently and requests reporting through an existing procedure. Follow and report have separate prior decisions; safe and procedure remain pending. No operational safety or whole-expression acceptance is inferred.",
+      "excluded_scope": ["personal vulnerability", "British legal-evidence/conviction sense", "safety-domain judgment", "un/safe morphological analysis", "picture suitability", "all expression acceptance", "media"],
+      "domain_preserved": "pending",
+      "editorial_notes_decision": "The author's proposed editorial_notes are outside the accepted three fields. Retain the original notes exactly in the reviewer projection. Future delivery must review any note changes separately."
+    },
+    {
+      "id": "hazard.possible-harm.n",
+      "decision": "accept_exact_three_field_projection_for_separate_delivery",
+      "accepted_fields": {
+        "definition": "Something with the potential to cause harm.",
+        "example": "The loose cable was reported as a trip hazard.",
+        "difficulty": "B2"
+      },
+      "field_rationale": {
+        "definition": "Potential to cause harm selects the cause-of-danger noun, distinct from an incident or injury that has occurred.",
+        "example": "The loose cable exemplifies a possible cause of tripping and harm. The sentence reports a concern and does not prescribe a safety procedure. This noun example does not accept the separate trip-hazard identity.",
+        "difficulty": "Accept a conservative editorial B2 placement using the freshly checked CEFR-J v1.5 B1 noun row and the British Council B2 lesson's explicit teaching of the broad potential-accident noun. Oxford C1 remains contrary source evidence, and Collins has no observed selected level. A lesson level is not per-word certification; the decision is not a C1 clamp or a universal B2 label for compounds."
+      },
+      "change_from_previous_hold": "The earlier hold had Oxford C1 and no established lower-level support. Fresh profile and explicit B2 lesson evidence supply a new basis for this bounded editorial judgment while preserving the original hold record.",
+      "source_ids": ["O-hazard", "C-hazard", "P-CSV", "P-TERMS", "P-METHOD", "L-HAZARD"],
+      "context_check": "Expression expr.foundation.module02.10 distinguishes reporting a hazard from recording an incident for review. Report has a separate prior decision; incident remains pending. Surface mentions in specialist expressions include independent compound identities and do not inherit this noun decision.",
+      "excluded_scope": ["guessing or jeopardizing verb senses", "golf or gambling senses", "specialized hazard compounds", "incident acceptance", "occupational safety judgment", "morphology", "picture suitability", "all expression acceptance", "media"],
+      "domain_preserved": "pending",
+      "editorial_notes_decision": "The author's proposed editorial_notes are outside the accepted three fields. Retain the original notes exactly in the reviewer projection. Future delivery must review any note changes separately."
+    }
+  ],
+  "remaining_holds": [
+    {
+      "id": "collect.gather.v",
+      "decision": "retain_whole_entry_hold_unchanged_no_partial_acceptance",
+      "reason": "The gathering identity still conflicts with the pickup-focused example, image brief and expr.foundation.module02.08. A consistent gathering repair or a new pickup identity requires coordinated review and explicit course, expression, morphology/media and saved-progress decisions. Neither migration option is accepted here."
+    },
+    {
+      "id": "notify.inform.v",
+      "decision": "retain_whole_entry_hold_unchanged_no_partial_acceptance",
+      "reason": "No lower-level selected-sense decision for the current notify entry is accepted. Inform is an unreserved new-identity option requiring its own entry and source review, coverage, 20 memberships, expression tokens, morphology/media and progress decisions. No synonym alias or mastery transfer is approved."
+    },
+    {
+      "id": "verify.establish-accuracy.v",
+      "decision": "retain_whole_entry_hold_unchanged_no_partial_acceptance",
+      "reason": "The packet still establishes no adequate lower-level placement for the current selected sense. Check is already a reviewed A2 entry in the same focus expression; replacing verify with it would collapse unique coverage. Double-check adds repetition and lacks established placement evidence here."
+    }
+  ],
+  "context_limits": [
+    "All six full entries, six historical hold rows, 120 memberships across 20 draft module02 courses, 24 surface-or-ID expression contexts, four alternative lexical entries and nine relevant Foundation02 neighbors were inspected.",
+    "The expression search uses specified inflections and literal IDs; it is not an exhaustive semantic, compound or derivative inventory.",
+    "All 24 expression records retain their pending review gates. All six shared focus expressions and all 120 memberships remain unchanged.",
+    "No approval transfers from neighboring entries. Course status and requirements_revision remain draft and professional-v1.",
+    "Reference flags, overall/language/domain gates, editorial notes, accepted forms, regions, practice modes, morphology, media, source registry, historical reviews and holds remain exact in these language-only projections.",
+    "Production counts, Ready states and runtime validation are not advanced by this reviewer-side decision. The third10 persisted receipt is historical context only and does not validate these projections."
+  ]
+}

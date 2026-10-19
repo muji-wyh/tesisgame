@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "status": "transactional_audio_baseline_bound_no_production_writes",
+  "checks": 6289,
+  "preimages_raw_sha256": "16d34c6dab2491092ce8a64e9580c5bd7d45e465f7560eba552d631580ea01a5",
+  "preparation_receipt_raw_sha256": "25b3b8007f01f3056070829ddc6a0e2a175849342e677274d499fb0c4e5bdcd4",
+  "baseline_registry_sha256": "284918768ad2df30585d0efa3ab099a1bfa58ee22d9fc71afa00ae334f81042d",
+  "proposed_registry_sha256": "af2c950cf3c7d2d22e487817526d464e96956ac2c7df40bd890783bd3dd73bdf",
+  "validation_raw_sha256": "7f1b218b268be3b63773c44e1391402474d11793f6868ddb231e0c8527d03d91",
+  "counter_image_delivery_raw_sha256": "657e497c3e29c8b5f7a79b5c56c2d68c1f8317a214586fea9b87d599674a34f4",
+  "serializer_raw_sha256": "562e0afbd7c28903dfc269e10ad7fceb818ac77246cf3c9c5cf0fb94a5655bde",
+  "production_content_written": false
+}

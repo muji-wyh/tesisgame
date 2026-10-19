@@ -1,0 +1,1417 @@
+{
+  "schema": 1,
+  "status": "independently_accepted_three_field_projections_not_delivered",
+  "reviewer": "Codex runtime_recovery independent AI language reviewer; not human or subject-matter approval",
+  "accepted_scope": [
+    "definition",
+    "example",
+    "difficulty"
+  ],
+  "automatic_application_permitted": false,
+  "accepted_projection_count": 3,
+  "current_whole_entry_holds_preserved": 6,
+  "source_observations_sha256": "a2cf97e889a612c071063c0f6a8ecd89a97118689bd7e0dbb2372a52daa6a72f",
+  "reviewer_decisions_sha256": "80d07670034418d6a973d1a776d4e410903e6fa274ea1aa3daf3ef91c4a0da39",
+  "source_receipt_sha256": "ec0925018bc4a19645c6e1b7c1c0695acc6f05241d373d884f5815e322d1ba84",
+  "author_inventory_sha256": "68813f88a92eefba3ac1f03921ce2080c65cec6f989d8988f14e4a6958923d22",
+  "entries": [
+    {
+      "id": "postpone.delay-until-later.v",
+      "decision": "accept_exact_three_field_projection_for_separate_delivery",
+      "human_or_subject_matter_approval": false,
+      "production_integrated": false,
+      "automatic_application_permitted": false,
+      "before_entry_sha256": "ba004741e07d1dddcc8e1f69ebea15717ad97d90ea87f483e72559846a17cded",
+      "author_candidate_row_sha256": "fdc1dbfd08de692229d9142a8f675b39f012cf77d6c9836d358231562b60d2dc",
+      "author_candidate_with_proposed_notes_sha256": "5884ef0cb9e84b52339dc6052026c4968b088cebe24efec7085f825f6b55943a",
+      "accepted_fields": {
+        "definition": "To arrange for a planned activity to happen later.",
+        "example": "The team decided to postpone the review until next week.",
+        "difficulty": "B2"
+      },
+      "accepted_fields_sha256": "2bb8f90bef83e70a6219a2881724b595123cab9fe6733655587a2ca8cef9357f",
+      "accepted_language_projection_sha256": "7ca0ba1184eb54696312e001d6d04bf031999436c29c20c5f3cef29819c8b5a2",
+      "changed_fields_if_separately_delivered": [
+        "difficulty"
+      ],
+      "actual_current_production_changes": [],
+      "protected_fields_preserved": [
+        "id",
+        "text",
+        "display_text",
+        "pos",
+        "accepted_forms",
+        "regions",
+        "practice_modes",
+        "media",
+        "morphology",
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "original_editorial_notes_sha256": "0216ccdad42ca5fd7d37c3c83b0ea7de23e550a73bca3813a10a1f04ae13eb1d",
+      "proposed_editorial_notes_accepted": false,
+      "review_gates_changed": false,
+      "historical_hold": {
+        "id": "postpone.delay-until-later.v",
+        "original_path": "docs/content-review/foundation-module02-language-third10-independent-review-2026-10-17/review.json",
+        "retained_path": "build/professional-english/foundation02-held-six-research-r01/retained-reviews/2.json",
+        "hold_row_sha256": "2ab1d247a30a95b8aa110858ee03ea38d3f3f6aa66e2d8cde9d9b22d08062059",
+        "hold_row": {
+          "id": "postpone.delay-until-later.v",
+          "term": "postpone",
+          "decision": "hold_whole_entry_unchanged",
+          "review_type": "independent_AI_language_review",
+          "human_or_specialist_acceptance": false,
+          "before_entry_sha256": "ba004741e07d1dddcc8e1f69ebea15717ad97d90ea87f483e72559846a17cded",
+          "content_projection_sha256": "ba004741e07d1dddcc8e1f69ebea15717ad97d90ea87f483e72559846a17cded",
+          "accepted_fields": null,
+          "changed_fields": [],
+          "rationale": "Hold the complete entry unchanged. Its definition and next-week example coherently express movement to a later time, but the reviewed evidence records Oxford fkcefr=c1/C1 and literal Collins B1+. The existing A2 is not newly accepted. A later editorial placement or schema/scope decision must be explicit; do not clamp C1 or round B1+ into B2.",
+          "selected_source_observations": [
+            {
+              "id": "foundation02-language-third10-oxford-postpone",
+              "publisher": "Oxford University Press",
+              "url": "https://www.oxfordlearnersdictionaries.com/definition/english/postpone",
+              "selected_section": "Single event-delay sense, rendered lines 111-139",
+              "observed_rendered_selected_level": "C1",
+              "observed_html_selected_levels": [
+                {
+                  "element_id": "postpone_sng_1",
+                  "sense_number": null,
+                  "cefr": null,
+                  "fkcefr": "c1",
+                  "html_offset": 59518
+                }
+              ],
+              "regional_register": "No regional restriction is displayed for the ordinary delay sense.",
+              "other_sense_boundary": "The literal HTML attribute is fkcefr, not cefr. Etymological post/pone information does not grant morphology approval."
+            },
+            {
+              "id": "foundation02-language-third10-collins-postpone",
+              "publisher": "HarperCollins",
+              "url": "https://www.collinsdictionary.com/dictionary/english/postpone",
+              "selected_section": "COBUILD unnumbered verb sense, rendered lines 224-233",
+              "observed_rendered_selected_level": "B1+",
+              "observed_html_selected_levels": [],
+              "regional_register": "No regional restriction is shown for this selected sense.",
+              "other_sense_boundary": "B1+ is recorded exactly; no automatic conversion to B1 or B2. A priority-ranking sense occurs in another dictionary section."
+            }
+          ],
+          "context_action": "Foundation02.07 remains pending and contains this held focus ID. Language research does not approve its historically authored post/pone morphology.",
+          "excluded_scope": "Lower-priority ranking and specialist loan-repayment arrangements are outside the ordinary meeting/review example. Postponing requires later timing, unlike general rescheduling.",
+          "other_fields": "Retain exactly: identity, accepted forms, regions, practice modes, review gates, historical references, editorial notes, morphology, image/audio, memberships and all expressions. Proposed editorial notes remain review material."
+        }
+      },
+      "field_rationale": {
+        "definition": "The planned-activity/later-time wording selects the scheduled-event sense consistently supported by Oxford and Collins.",
+        "example": "Postpone the review until next week is a natural scheduling pattern and explicitly moves the planned event later.",
+        "difficulty": "Accept an explicit editorial B2 placement using the CEFR-J v1.5 verb row and the bounded ordinary scheduling use, with Collins's selected B1+ evidence as independent lower-range support. Oxford's selected C1 remains contrary evidence. This judgment neither rounds B1+ nor clamps C1."
+      },
+      "source_ids": [
+        "O-postpone",
+        "C-postpone",
+        "P-CSV",
+        "P-TERMS",
+        "P-METHOD"
+      ],
+      "context_check": "Expression expr.foundation.module02.07 distinguishes adjusting a start time, arranging to postpone a meeting, and cancelling a duplicate booking. The postpone reading remains later-only; reschedule can move in either direction. Arrange, adjust, reschedule and cancel retain their own decisions. The expression remains pending.",
+      "excluded_scope": [
+        "cancellation",
+        "earlier rescheduling",
+        "priority or financial arrangements",
+        "post/pone morphological analysis",
+        "all expression acceptance",
+        "media"
+      ],
+      "exact_language_projection": {
+        "id": "postpone.delay-until-later.v",
+        "text": "postpone",
+        "display_text": "postpone",
+        "pos": "verb",
+        "definition": "To arrange for a planned activity to happen later.",
+        "example": "The team decided to postpone the review until next week.",
+        "difficulty": "B2",
+        "accepted_forms": [
+          "postpone"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "An event moved from this week to a later date.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "postpone.delay-until-later.v.analysis.v1",
+          "lexeme_id": "postpone.delay-until-later.v",
+          "text": "postpone",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "The history documents post- and the Latin placing root from ponere. Pone here is a bound classical root, not an ordinary modern word. The after/later relation needs a learner-facing explanation before release. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/postpone",
+              "https://www.dictionary.com/browse/postpone"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "affix.post.prefix",
+              "type": "prefix",
+              "canonical": "post",
+              "surface": "post"
+            },
+            {
+              "id": "p2",
+              "canonical_id": "morph.pone",
+              "type": "root",
+              "canonical": "pone",
+              "surface": "pone"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "postpone",
+              "rule": "latinate_prefix_root_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-postpone",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          },
+          {
+            "source_id": "foundation-dictionary-postpone",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      }
+    },
+    {
+      "id": "unsafe.presenting-danger.adj",
+      "decision": "accept_exact_three_field_projection_for_separate_delivery",
+      "human_or_subject_matter_approval": false,
+      "production_integrated": false,
+      "automatic_application_permitted": false,
+      "before_entry_sha256": "b03ac8acf04932b9dfc3d44775939399ad37f73a1149faf72b708f244fc23286",
+      "author_candidate_row_sha256": "8600a11eb80a1a279785a259d954170dd22901b1a3058918c0153749c38c4cd0",
+      "author_candidate_with_proposed_notes_sha256": "8c5c1dd475185db6f0674880750d9deb79cae4a1c1969aaa9e2db5dc0394b9ca",
+      "accepted_fields": {
+        "definition": "Presenting a risk of harm in the situation.",
+        "example": "The worker reported an unsafe storage area.",
+        "difficulty": "B2"
+      },
+      "accepted_fields_sha256": "e15eed24b535d3571421da25262abec2a54911d11ce22815f932dde2c6f10e6c",
+      "accepted_language_projection_sha256": "f671a43a0c2eb96398186015ef4e496050c62a3c08901009021469744bb78559",
+      "changed_fields_if_separately_delivered": [
+        "difficulty"
+      ],
+      "actual_current_production_changes": [],
+      "protected_fields_preserved": [
+        "id",
+        "text",
+        "display_text",
+        "pos",
+        "accepted_forms",
+        "regions",
+        "practice_modes",
+        "media",
+        "morphology",
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "original_editorial_notes_sha256": "0216ccdad42ca5fd7d37c3c83b0ea7de23e550a73bca3813a10a1f04ae13eb1d",
+      "proposed_editorial_notes_accepted": false,
+      "review_gates_changed": false,
+      "historical_hold": {
+        "id": "unsafe.presenting-danger.adj",
+        "original_path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/review-ledger.json",
+        "retained_path": "build/professional-english/foundation02-held-six-research-r01/retained-reviews/3.json",
+        "hold_row_sha256": "32ffeca5603733d1470d49d18769b87fe17652d7f4d65dc9345954f0a4638f71",
+        "hold_row": {
+          "id": "unsafe.presenting-danger.adj",
+          "term": "unsafe",
+          "position": 45,
+          "independent_decision": "hold_entire_original_entry",
+          "author_disposition": "proposed",
+          "original_entry_sha256": "b03ac8acf04932b9dfc3d44775939399ad37f73a1149faf72b708f244fc23286",
+          "author_candidate_projection_sha256": "28409058fcacab87afe5a940d8b084427d441ebf7a8af8079aee2f1a8b9c44bc",
+          "accepted_projection_sha256": null,
+          "preserved_entry_sha256": "b03ac8acf04932b9dfc3d44775939399ad37f73a1149faf72b708f244fc23286",
+          "before_fields": {
+            "definition": "Presenting a risk of harm in the situation.",
+            "example": "The worker reported an unsafe storage area.",
+            "difficulty": "A2"
+          },
+          "author_proposed_fields": {
+            "definition": "Presenting a risk of harm in the situation.",
+            "example": "The worker reported an unsafe storage area.",
+            "difficulty": "B1"
+          },
+          "accepted_fields": null,
+          "actual_content_changes_if_integrated": [],
+          "field_decisions": {
+            "definition": {
+              "decision": "hold_no_partial_acceptance",
+              "value": "Presenting a risk of harm in the situation.",
+              "rationale": "Whole-entry hold. The ordinary dangerous-place/activity sense and storage-area example have lexical support, but neither fresh selected Oxford/Collins section nor frozen selected Oxford metadata supplies a level. This evidence does not adequately support the proposed A2-to-B1 change. Transparent un- morphology and example simplicity are not measured placement evidence. Missing labels do not establish that B1 is false. Keep every original field, including draft A2, exact and unapproved; no partial definition/example acceptance.",
+              "source_ids": [
+                "foundation02-language-fifth10-oxford-unsafe",
+                "foundation02-language-fifth10-collins-unsafe"
+              ]
+            },
+            "example": {
+              "decision": "hold_no_partial_acceptance",
+              "value": "The worker reported an unsafe storage area.",
+              "rationale": "Whole-entry hold. The ordinary dangerous-place/activity sense and storage-area example have lexical support, but neither fresh selected Oxford/Collins section nor frozen selected Oxford metadata supplies a level. This evidence does not adequately support the proposed A2-to-B1 change. Transparent un- morphology and example simplicity are not measured placement evidence. Missing labels do not establish that B1 is false. Keep every original field, including draft A2, exact and unapproved; no partial definition/example acceptance.",
+              "source_ids": [
+                "foundation02-language-fifth10-oxford-unsafe",
+                "foundation02-language-fifth10-collins-unsafe"
+              ]
+            },
+            "difficulty": {
+              "decision": "hold_no_partial_acceptance",
+              "value": "A2",
+              "rationale": "Whole-entry hold. The ordinary dangerous-place/activity sense and storage-area example have lexical support, but neither fresh selected Oxford/Collins section nor frozen selected Oxford metadata supplies a level. This evidence does not adequately support the proposed A2-to-B1 change. Transparent un- morphology and example simplicity are not measured placement evidence. Missing labels do not establish that B1 is false. Keep every original field, including draft A2, exact and unapproved; no partial definition/example acceptance.",
+              "source_ids": [
+                "foundation02-language-fifth10-oxford-unsafe",
+                "foundation02-language-fifth10-collins-unsafe"
+              ]
+            }
+          },
+          "hold_reason": "Whole-entry hold. The ordinary dangerous-place/activity sense and storage-area example have lexical support, but neither fresh selected Oxford/Collins section nor frozen selected Oxford metadata supplies a level. This evidence does not adequately support the proposed A2-to-B1 change. Transparent un- morphology and example simplicity are not measured placement evidence. Missing labels do not establish that B1 is false. Keep every original field, including draft A2, exact and unapproved; no partial definition/example acceptance.",
+          "accepted_projection": null,
+          "held_original_entry": {
+            "id": "unsafe.presenting-danger.adj",
+            "text": "unsafe",
+            "display_text": "unsafe",
+            "pos": "adjective",
+            "definition": "Presenting a risk of harm in the situation.",
+            "example": "The worker reported an unsafe storage area.",
+            "difficulty": "A2",
+            "accepted_forms": [
+              "unsafe"
+            ],
+            "regions": [
+              "general"
+            ],
+            "practice_modes": [
+              "word_jelly",
+              "phrase"
+            ],
+            "media": {
+              "image": {
+                "status": "pending",
+                "path": null,
+                "sha256": null,
+                "source": null,
+                "creator": null,
+                "license": null,
+                "acquisition_status": "not_started",
+                "review": {
+                  "status": "pending"
+                },
+                "brief": "An unstable stack behind a barrier while a worker reports the concern.",
+                "picture_suitable": false,
+                "available_animations": [],
+                "adaptations": []
+              },
+              "audio": {
+                "status": "pending",
+                "path": null,
+                "sha256": null,
+                "source": null,
+                "creator": null,
+                "license": null,
+                "acquisition_status": "not_started",
+                "review": {
+                  "status": "pending"
+                },
+                "voice": "ava-sweet",
+                "voice_settings": {
+                  "voice": "en-US-AvaNeural",
+                  "rate": "-15%",
+                  "pitch": "+8Hz",
+                  "volume": "+0%",
+                  "postprocessing": false
+                }
+              }
+            },
+            "morphology": {
+              "schema": 1,
+              "id": "unsafe.presenting-danger.adj.analysis.v1",
+              "lexeme_id": "unsafe.presenting-danger.adj",
+              "text": "unsafe",
+              "kind": "morphological",
+              "review": {
+                "status": "pending",
+                "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+                "references": []
+              },
+              "parts": [
+                {
+                  "id": "p1",
+                  "type": "prefix",
+                  "canonical": "un-",
+                  "surface": "un",
+                  "canonical_id": "affix.un.prefix"
+                },
+                {
+                  "id": "p2",
+                  "type": "stem",
+                  "canonical": "safe",
+                  "surface": "safe",
+                  "canonical_id": "morph.safe"
+                }
+              ],
+              "nodes": [
+                {
+                  "id": "n1",
+                  "left": "p1",
+                  "right": "p2",
+                  "surface": "unsafe",
+                  "rule": "prefix_attachment"
+                }
+              ],
+              "roots": [
+                "n1"
+              ]
+            },
+            "review": {
+              "status": "pending",
+              "language": "pending",
+              "domain": "pending",
+              "reviewer": null,
+              "reviewed_at": null
+            },
+            "references": [
+              {
+                "source_id": "british-council-requests",
+                "status": "pending_term_check",
+                "scope": "Workplace communication context only; this original definition and example await term-level review."
+              },
+              {
+                "source_id": "osha-worker-participation",
+                "status": "pending_term_check",
+                "scope": "Context for communicating workplace concerns; not procedural safety advice or a claim about local law."
+              }
+            ],
+            "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+          },
+          "source_ids": [
+            "foundation02-language-fifth10-oxford-unsafe",
+            "foundation02-language-fifth10-collins-unsafe"
+          ],
+          "scope": "Exact definition, original example and editorial difficulty only; independent AI language review, not human, subject-matter, morphology, media, domain, whole-expression, module or release approval.",
+          "excluded_scope": [
+            "canonical identity",
+            "accepted forms",
+            "regions",
+            "practice modes",
+            "morphology",
+            "image and audio",
+            "notes",
+            "references and source registry",
+            "domain and overall review gates",
+            "course membership",
+            "expressions and scored bindings"
+          ],
+          "production_integrated": false,
+          "review_gates_changed": false
+        }
+      },
+      "field_rationale": {
+        "definition": "The risk-of-harm wording expresses the selected ordinary dangerous-place/thing/activity sense without asserting a specialist threshold or legal conclusion.",
+        "example": "Unsafe storage area selects the dominant dangerous-place sense and a report of concern, with no operating procedure or technical remedy.",
+        "difficulty": "The freshly checked CEFR-J v1.5 adjective row directly supplies B2 headword/POS evidence. Independent Oxford and Collins sense checks support applying that evidence to this ordinary dangerous-area use. Neither dictionary supplies an observed selected level. Transparent un- structure and sentence simplicity are not placement evidence."
+      },
+      "source_ids": [
+        "O-unsafe",
+        "C-unsafe",
+        "P-CSV",
+        "P-TERMS",
+        "P-METHOD"
+      ],
+      "context_check": "Expression expr.foundation.module02.09 uses unsafe area consistently and requests reporting through an existing procedure. Follow and report have separate prior decisions; safe and procedure remain pending. No operational safety or whole-expression acceptance is inferred.",
+      "excluded_scope": [
+        "personal vulnerability",
+        "British legal-evidence/conviction sense",
+        "safety-domain judgment",
+        "un/safe morphological analysis",
+        "picture suitability",
+        "all expression acceptance",
+        "media"
+      ],
+      "exact_language_projection": {
+        "id": "unsafe.presenting-danger.adj",
+        "text": "unsafe",
+        "display_text": "unsafe",
+        "pos": "adjective",
+        "definition": "Presenting a risk of harm in the situation.",
+        "example": "The worker reported an unsafe storage area.",
+        "difficulty": "B2",
+        "accepted_forms": [
+          "unsafe"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "An unstable stack behind a barrier while a worker reports the concern.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "unsafe.presenting-danger.adj.analysis.v1",
+          "lexeme_id": "unsafe.presenting-danger.adj",
+          "text": "unsafe",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "prefix",
+              "canonical": "un-",
+              "surface": "un",
+              "canonical_id": "affix.un.prefix"
+            },
+            {
+              "id": "p2",
+              "type": "stem",
+              "canonical": "safe",
+              "surface": "safe",
+              "canonical_id": "morph.safe"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "unsafe",
+              "rule": "prefix_attachment"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "osha-worker-participation",
+            "status": "pending_term_check",
+            "scope": "Context for communicating workplace concerns; not procedural safety advice or a claim about local law."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      }
+    },
+    {
+      "id": "hazard.possible-harm.n",
+      "decision": "accept_exact_three_field_projection_for_separate_delivery",
+      "human_or_subject_matter_approval": false,
+      "production_integrated": false,
+      "automatic_application_permitted": false,
+      "before_entry_sha256": "e513da37995090db5f5ef68c255e5beffde131c10afe12478e644651361c1045",
+      "author_candidate_row_sha256": "51d0294e95d0a1f586dacd199ea631248f019047d93704695f569e8e8d20121c",
+      "author_candidate_with_proposed_notes_sha256": "1f3f18167370fca4fc70e5ba1609b6cbb057f107ffef2ee25f23cd39b237d498",
+      "accepted_fields": {
+        "definition": "Something with the potential to cause harm.",
+        "example": "The loose cable was reported as a trip hazard.",
+        "difficulty": "B2"
+      },
+      "accepted_fields_sha256": "a4a1cbc3fdd95f2e62a62cce006c30131c7e97ce02c84a994bd7e3b2cac800bf",
+      "accepted_language_projection_sha256": "cb6429ae5c91a7c3c0e68e32d30eca91ba41c61a6ceded6365aa8a5614be979e",
+      "changed_fields_if_separately_delivered": [
+        "difficulty"
+      ],
+      "actual_current_production_changes": [],
+      "protected_fields_preserved": [
+        "id",
+        "text",
+        "display_text",
+        "pos",
+        "accepted_forms",
+        "regions",
+        "practice_modes",
+        "media",
+        "morphology",
+        "review",
+        "references",
+        "editorial_notes"
+      ],
+      "original_editorial_notes_sha256": "0216ccdad42ca5fd7d37c3c83b0ea7de23e550a73bca3813a10a1f04ae13eb1d",
+      "proposed_editorial_notes_accepted": false,
+      "review_gates_changed": false,
+      "historical_hold": {
+        "id": "hazard.possible-harm.n",
+        "original_path": "docs/content-review/foundation-module02-language-fifth10-independent-review-2026-10-17/review-ledger.json",
+        "retained_path": "build/professional-english/foundation02-held-six-research-r01/retained-reviews/3.json",
+        "hold_row_sha256": "3494562fa034e53ffcafa7f22cdcf1468c761a7d04856cc4870325f6b878ae9a",
+        "hold_row": {
+          "id": "hazard.possible-harm.n",
+          "term": "hazard",
+          "position": 46,
+          "independent_decision": "hold_entire_original_entry",
+          "author_disposition": "hold",
+          "original_entry_sha256": "e513da37995090db5f5ef68c255e5beffde131c10afe12478e644651361c1045",
+          "author_candidate_projection_sha256": "e513da37995090db5f5ef68c255e5beffde131c10afe12478e644651361c1045",
+          "accepted_projection_sha256": null,
+          "preserved_entry_sha256": "e513da37995090db5f5ef68c255e5beffde131c10afe12478e644651361c1045",
+          "before_fields": {
+            "definition": "Something with the potential to cause harm.",
+            "example": "The loose cable was reported as a trip hazard.",
+            "difficulty": "A2"
+          },
+          "author_proposed_fields": null,
+          "accepted_fields": null,
+          "actual_content_changes_if_integrated": [],
+          "field_decisions": {
+            "definition": {
+              "decision": "hold_no_partial_acceptance",
+              "value": "Something with the potential to cause harm.",
+              "rationale": "Whole-entry hold retained. Oxford rendered Danger C1 and frozen hazard_sng_1 fkcefr c1 are explicit; cefr is null, and Collins supplies no selected level. Do not relabel fkcefr as cefr or clamp C1 to the course range. No lower-level projection is accepted. Keep every original field, including draft A2, exact and unapproved.",
+              "source_ids": [
+                "foundation02-language-fifth10-oxford-hazard",
+                "foundation02-language-fifth10-collins-hazard"
+              ]
+            },
+            "example": {
+              "decision": "hold_no_partial_acceptance",
+              "value": "The loose cable was reported as a trip hazard.",
+              "rationale": "Whole-entry hold retained. Oxford rendered Danger C1 and frozen hazard_sng_1 fkcefr c1 are explicit; cefr is null, and Collins supplies no selected level. Do not relabel fkcefr as cefr or clamp C1 to the course range. No lower-level projection is accepted. Keep every original field, including draft A2, exact and unapproved.",
+              "source_ids": [
+                "foundation02-language-fifth10-oxford-hazard",
+                "foundation02-language-fifth10-collins-hazard"
+              ]
+            },
+            "difficulty": {
+              "decision": "hold_no_partial_acceptance",
+              "value": "A2",
+              "rationale": "Whole-entry hold retained. Oxford rendered Danger C1 and frozen hazard_sng_1 fkcefr c1 are explicit; cefr is null, and Collins supplies no selected level. Do not relabel fkcefr as cefr or clamp C1 to the course range. No lower-level projection is accepted. Keep every original field, including draft A2, exact and unapproved.",
+              "source_ids": [
+                "foundation02-language-fifth10-oxford-hazard",
+                "foundation02-language-fifth10-collins-hazard"
+              ]
+            }
+          },
+          "hold_reason": "Whole-entry hold retained. Oxford rendered Danger C1 and frozen hazard_sng_1 fkcefr c1 are explicit; cefr is null, and Collins supplies no selected level. Do not relabel fkcefr as cefr or clamp C1 to the course range. No lower-level projection is accepted. Keep every original field, including draft A2, exact and unapproved.",
+          "accepted_projection": null,
+          "held_original_entry": {
+            "id": "hazard.possible-harm.n",
+            "text": "hazard",
+            "display_text": "hazard",
+            "pos": "noun",
+            "definition": "Something with the potential to cause harm.",
+            "example": "The loose cable was reported as a trip hazard.",
+            "difficulty": "A2",
+            "accepted_forms": [
+              "hazard"
+            ],
+            "regions": [
+              "general"
+            ],
+            "practice_modes": [
+              "word_jelly",
+              "phrase"
+            ],
+            "media": {
+              "image": {
+                "status": "pending",
+                "path": null,
+                "sha256": null,
+                "source": null,
+                "creator": null,
+                "license": null,
+                "acquisition_status": "not_started",
+                "review": {
+                  "status": "pending"
+                },
+                "brief": "A loose cable crossing a walkway, noticed and reported without anyone falling.",
+                "picture_suitable": false,
+                "available_animations": [],
+                "adaptations": []
+              },
+              "audio": {
+                "status": "pending",
+                "path": null,
+                "sha256": null,
+                "source": null,
+                "creator": null,
+                "license": null,
+                "acquisition_status": "not_started",
+                "review": {
+                  "status": "pending"
+                },
+                "voice": "ava-sweet",
+                "voice_settings": {
+                  "voice": "en-US-AvaNeural",
+                  "rate": "-15%",
+                  "pitch": "+8Hz",
+                  "volume": "+0%",
+                  "postprocessing": false
+                }
+              }
+            },
+            "morphology": {
+              "schema": 1,
+              "id": "hazard.possible-harm.n.analysis.v1",
+              "lexeme_id": "hazard.possible-harm.n",
+              "text": "hazard",
+              "kind": "atomic",
+              "review": {
+                "status": "pending",
+                "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+                "references": []
+              },
+              "parts": [
+                {
+                  "id": "p1",
+                  "type": "atomic",
+                  "canonical": "hazard",
+                  "surface": "hazard",
+                  "canonical_id": "morph.hazard"
+                }
+              ],
+              "nodes": [],
+              "roots": [
+                "p1"
+              ]
+            },
+            "review": {
+              "status": "pending",
+              "language": "pending",
+              "domain": "pending",
+              "reviewer": null,
+              "reviewed_at": null
+            },
+            "references": [
+              {
+                "source_id": "british-council-requests",
+                "status": "pending_term_check",
+                "scope": "Workplace communication context only; this original definition and example await term-level review."
+              },
+              {
+                "source_id": "osha-worker-participation",
+                "status": "pending_term_check",
+                "scope": "Context for communicating workplace concerns; not procedural safety advice or a claim about local law."
+              }
+            ],
+            "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+          },
+          "source_ids": [
+            "foundation02-language-fifth10-oxford-hazard",
+            "foundation02-language-fifth10-collins-hazard"
+          ],
+          "scope": "Exact definition, original example and editorial difficulty only; independent AI language review, not human, subject-matter, morphology, media, domain, whole-expression, module or release approval.",
+          "excluded_scope": [
+            "canonical identity",
+            "accepted forms",
+            "regions",
+            "practice modes",
+            "morphology",
+            "image and audio",
+            "notes",
+            "references and source registry",
+            "domain and overall review gates",
+            "course membership",
+            "expressions and scored bindings"
+          ],
+          "production_integrated": false,
+          "review_gates_changed": false
+        }
+      },
+      "field_rationale": {
+        "definition": "Potential to cause harm selects the cause-of-danger noun, distinct from an incident or injury that has occurred.",
+        "example": "The loose cable exemplifies a possible cause of tripping and harm. The sentence reports a concern and does not prescribe a safety procedure. This noun example does not accept the separate trip-hazard identity.",
+        "difficulty": "Accept a conservative editorial B2 placement using the freshly checked CEFR-J v1.5 B1 noun row and the British Council B2 lesson's explicit teaching of the broad potential-accident noun. Oxford C1 remains contrary source evidence, and Collins has no observed selected level. A lesson level is not per-word certification; the decision is not a C1 clamp or a universal B2 label for compounds."
+      },
+      "source_ids": [
+        "O-hazard",
+        "C-hazard",
+        "P-CSV",
+        "P-TERMS",
+        "P-METHOD",
+        "L-HAZARD"
+      ],
+      "context_check": "Expression expr.foundation.module02.10 distinguishes reporting a hazard from recording an incident for review. Report has a separate prior decision; incident remains pending. Surface mentions in specialist expressions include independent compound identities and do not inherit this noun decision.",
+      "excluded_scope": [
+        "guessing or jeopardizing verb senses",
+        "golf or gambling senses",
+        "specialized hazard compounds",
+        "incident acceptance",
+        "occupational safety judgment",
+        "morphology",
+        "picture suitability",
+        "all expression acceptance",
+        "media"
+      ],
+      "exact_language_projection": {
+        "id": "hazard.possible-harm.n",
+        "text": "hazard",
+        "display_text": "hazard",
+        "pos": "noun",
+        "definition": "Something with the potential to cause harm.",
+        "example": "The loose cable was reported as a trip hazard.",
+        "difficulty": "B2",
+        "accepted_forms": [
+          "hazard"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A loose cable crossing a walkway, noticed and reported without anyone falling.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "hazard.possible-harm.n.analysis.v1",
+          "lexeme_id": "hazard.possible-harm.n",
+          "text": "hazard",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "hazard",
+              "surface": "hazard",
+              "canonical_id": "morph.hazard"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "pending",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "osha-worker-participation",
+            "status": "pending_term_check",
+            "scope": "Context for communicating workplace concerns; not procedural safety advice or a claim about local law."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      }
+    }
+  ],
+  "unchanged_remaining_holds": [
+    {
+      "id": "collect.gather.v",
+      "decision": "retain_whole_entry_hold_unchanged_no_partial_acceptance",
+      "reason": "The gathering identity still conflicts with the pickup-focused example, image brief and expr.foundation.module02.08. A consistent gathering repair or a new pickup identity requires coordinated review and explicit course, expression, morphology/media and saved-progress decisions. Neither migration option is accepted here.",
+      "before_entry_sha256": "177f9fc35b0d348ddcc3cdf60c43dd5119d145acfe781d17c2b988e1b6d77981",
+      "current_entry_sha256": "177f9fc35b0d348ddcc3cdf60c43dd5119d145acfe781d17c2b988e1b6d77981",
+      "current_entry": {
+        "id": "collect.gather.v",
+        "text": "collect",
+        "display_text": "collect",
+        "pos": "verb",
+        "definition": "To gather items together or pick them up from a place.",
+        "example": "Please collect the documents from reception.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "collect"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A friendly worker picking up an agreed set of fictional documents from reception; show the pickup context clearly, with no money collection or private information.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "collect.gather.v.analysis.v1",
+          "lexeme_id": "collect.gather.v",
+          "text": "collect",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "notes": "Authored candidate only. Confirm the modern analysis, canonical equivalence, and surface spelling before release.",
+            "references": []
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "type": "atomic",
+              "canonical": "collect",
+              "surface": "collect",
+              "canonical_id": "morph.collect"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts. The assessment explicitly uses picking up items from a place. The general gathering identity is retained; collection of money is outside this example."
+      },
+      "historical_hold": {
+        "id": "collect.gather.v",
+        "original_path": "docs/content-review/foundation-module02-language-second10-proposals-2026-10-17/review.json",
+        "retained_path": "build/professional-english/foundation02-held-six-research-r01/retained-reviews/1.json",
+        "hold_row_sha256": "4b9b3aafe4933f5e48549d52d5ab894c015f55a8ed38d2400441fc42fa47d693",
+        "hold_row": {
+          "id": "collect.gather.v",
+          "status": "held_unchanged",
+          "whole_entry_json_sha256": "177f9fc35b0d348ddcc3cdf60c43dd5119d145acfe781d17c2b988e1b6d77981",
+          "decision": "Preserve the whole draft. Gathering and pickup are separate in both sources. The pickup-focused example/image/expression does not resolve the stable gather ID, and Collins British pickup marking is broader than Oxford person-example marking. No independently supported scope/region decision has resolved the hold.",
+          "reference_or_note_additions": 0,
+          "review_gate_changes": 0
+        }
+      }
+    },
+    {
+      "id": "notify.inform.v",
+      "decision": "retain_whole_entry_hold_unchanged_no_partial_acceptance",
+      "reason": "No lower-level selected-sense decision for the current notify entry is accepted. Inform is an unreserved new-identity option requiring its own entry and source review, coverage, 20 memberships, expression tokens, morphology/media and progress decisions. No synonym alias or mastery transfer is approved.",
+      "before_entry_sha256": "7aaf8490d372bb3c8490c2824955a59e92c3d3dfe4416cb73d772cc6413a0cdc",
+      "current_entry_sha256": "7aaf8490d372bb3c8490c2824955a59e92c3d3dfe4416cb73d772cc6413a0cdc",
+      "current_entry": {
+        "id": "notify.inform.v",
+        "text": "notify",
+        "display_text": "notify",
+        "pos": "verb",
+        "definition": "To formally tell someone information they need to know.",
+        "example": "Please notify the team if the meeting time changes.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "notify"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A meeting change notification reaching all affected colleagues.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "notify.inform.v.analysis.v1",
+          "lexeme_id": "notify.inform.v",
+          "text": "notify",
+          "kind": "atomic",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "Proposed intact modern teaching unit, not a claim that the word lacks historical morphology. The history concerns making known from Latin notus. Splitting modern not + ify without a carefully explained Latin root would misleadingly present the English negative not. Keep the headword intact pending that decision. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/notify"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.notify",
+              "type": "atomic",
+              "canonical": "notify",
+              "surface": "notify"
+            }
+          ],
+          "nodes": [],
+          "roots": [
+            "p1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-notify",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "historical_hold": {
+        "id": "notify.inform.v",
+        "original_path": "docs/content-review/foundation-module02-language-second10-proposals-2026-10-17/review.json",
+        "retained_path": "build/professional-english/foundation02-held-six-research-r01/retained-reviews/1.json",
+        "hold_row_sha256": "8d0db8e13d53e2dacdff78e426bcce0d73eabe90c9acd9e63417c7d3550e7106",
+        "hold_row": {
+          "id": "notify.inform.v",
+          "status": "held_unchanged",
+          "whole_entry_json_sha256": "7aaf8490d372bb3c8490c2824955a59e92c3d3dfe4416cb73d772cc6413a0cdc",
+          "decision": "Preserve the whole draft. Oxford selected formal-informing fkcefr=c1 is independently confirmed. Collins gives formal register but no selected level; no direct lower-level evidence resolves the current A2 difficulty. Do not clamp C1 to B2.",
+          "reference_or_note_additions": 0,
+          "review_gate_changes": 0
+        }
+      }
+    },
+    {
+      "id": "verify.establish-accuracy.v",
+      "decision": "retain_whole_entry_hold_unchanged_no_partial_acceptance",
+      "reason": "The packet still establishes no adequate lower-level placement for the current selected sense. Check is already a reviewed A2 entry in the same focus expression; replacing verify with it would collapse unique coverage. Double-check adds repetition and lacks established placement evidence here.",
+      "before_entry_sha256": "d900dc371a4f37e536e5b252470b50fc85e988fc799ab279f2ef836e9ea43e9a",
+      "current_entry_sha256": "d900dc371a4f37e536e5b252470b50fc85e988fc799ab279f2ef836e9ea43e9a",
+      "current_entry": {
+        "id": "verify.establish-accuracy.v",
+        "text": "verify",
+        "display_text": "verify",
+        "pos": "verb",
+        "definition": "To establish that information is accurate by checking suitable evidence.",
+        "example": "Please verify the reference number against the order record.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "verify"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "A reference number compared with an authoritative order record.",
+            "picture_suitable": false,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "verify.establish-accuracy.v.analysis.v1",
+          "lexeme_id": "verify.establish-accuracy.v",
+          "text": "verify",
+          "kind": "morphological",
+          "review": {
+            "status": "pending",
+            "reviewer": null,
+            "reviewed_at": null,
+            "notes": "The source explicitly gives the true-related veri- combining form and -fy family. Preserve those constituents rather than syllable cuts, and review their relationship to checking accuracy. Source consultation was performed by an AI author; a qualified linguistic reviewer must decide whether this candidate is suitable for teaching. All review gates remain pending.",
+            "references": [
+              "https://www.merriam-webster.com/dictionary/verify",
+              "https://www.dictionary.com/browse/verify"
+            ]
+          },
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.veri",
+              "type": "combining_form",
+              "canonical": "veri",
+              "surface": "veri"
+            },
+            {
+              "id": "p2",
+              "canonical_id": "affix.fy.suffix",
+              "type": "suffix",
+              "canonical": "fy",
+              "surface": "fy"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "n1",
+              "left": "p1",
+              "right": "p2",
+              "surface": "verify",
+              "rule": "latinate_combining_form_suffix"
+            }
+          ],
+          "roots": [
+            "n1"
+          ]
+        },
+        "review": {
+          "status": "pending",
+          "language": "pending",
+          "domain": "not_required",
+          "reviewer": null,
+          "reviewed_at": null
+        },
+        "references": [
+          {
+            "source_id": "british-council-requests",
+            "status": "pending_term_check",
+            "scope": "Workplace communication context only; this original definition and example await term-level review."
+          },
+          {
+            "source_id": "foundation-mw-verify",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          },
+          {
+            "source_id": "foundation-dictionary-verify",
+            "status": "pending_term_check",
+            "scope": "Selected lexicographic evidence consulted for the authored morphology decision. Term-level language and morphology sign-off remain pending."
+          }
+        ],
+        "editorial_notes": "Shared workplace foundation. Meaning, difficulty, imagery, and morphological classification remain editorial drafts."
+      },
+      "historical_hold": {
+        "id": "verify.establish-accuracy.v",
+        "original_path": "docs/content-review/foundation-module02-language-third10-independent-review-2026-10-17/review.json",
+        "retained_path": "build/professional-english/foundation02-held-six-research-r01/retained-reviews/2.json",
+        "hold_row_sha256": "457de9840c7628067992295acd1e168c11a98ed1c71dd82e4bfbbd387be328d3",
+        "hold_row": {
+          "id": "verify.establish-accuracy.v",
+          "term": "verify",
+          "decision": "hold_whole_entry_unchanged",
+          "review_type": "independent_AI_language_review",
+          "human_or_specialist_acceptance": false,
+          "before_entry_sha256": "d900dc371a4f37e536e5b252470b50fc85e988fc799ab279f2ef836e9ea43e9a",
+          "content_projection_sha256": "d900dc371a4f37e536e5b252470b50fc85e988fc799ab279f2ef836e9ea43e9a",
+          "accepted_fields": null,
+          "changed_fields": [],
+          "rationale": "Hold the complete entry unchanged. Its current evidence-checking definition and comparison against the order record are plausible and already distinguish checking from unsupported assertion. Oxford checking and confirming senses both record C1; Collins has no observed selected level. That does not justify the existing A2 or a B2 clamp. Any later selected-sense acceptance must explicitly preserve the checking activity and separately resolve placement; no rewrite or synonym substitution is accepted here.",
+          "selected_source_observations": [
+            {
+              "id": "foundation02-language-third10-oxford-verify",
+              "publisher": "Oxford University Press",
+              "url": "https://www.oxfordlearnersdictionaries.com/definition/english/verify",
+              "selected_section": "Checking sense 1 at lines 103-120; contrast confirming sense 2 at lines 123-127",
+              "observed_rendered_selected_level": "C1",
+              "observed_html_selected_levels": [
+                {
+                  "element_id": "verify_sng_1",
+                  "sense_number": "1",
+                  "cefr": "c1",
+                  "fkcefr": null,
+                  "html_offset": 59527
+                }
+              ],
+              "regional_register": "Formal verb with no selected regional restriction.",
+              "other_sense_boundary": "The B2 Word of the Day footer belongs to reasonably, not verify. Historical legal origin is not subject approval."
+            },
+            {
+              "id": "foundation02-language-third10-collins-verify",
+              "publisher": "HarperCollins",
+              "url": "https://www.collinsdictionary.com/dictionary/english/verify",
+              "selected_section": "COBUILD checking sense 1, rendered lines 224-231; contrast confirmation sense 2 at lines 241-248",
+              "observed_rendered_selected_level": null,
+              "observed_html_selected_levels": [],
+              "regional_register": "No selected regional label is displayed; Oxford separately marks the verb formal.",
+              "other_sense_boundary": "No selected CEFR label is displayed. The dictionary supports the distinction and ordinary checking use but not A2 placement."
+            }
+          ],
+          "context_action": "Preserve every verify surface context, including the inherited verified-status-page hold, privacy, legal, account and security contexts. Foundation02.04 and the authored veri/fy analysis remain pending.",
+          "excluded_scope": "Legal verification, scientific validation, authentication/security guarantees and confirming a statement without the selected checking activity are not approved.",
+          "other_fields": "Retain exactly: identity, accepted forms, regions, practice modes, review gates, historical references, editorial notes, morphology, image/audio, memberships and all expressions. Proposed editorial notes remain review material."
+        }
+      }
+    }
+  ],
+  "limits": [
+    "All six full entries, six historical hold rows, 120 memberships across 20 draft module02 courses, 24 surface-or-ID expression contexts, four alternative lexical entries and nine relevant Foundation02 neighbors were inspected.",
+    "The expression search uses specified inflections and literal IDs; it is not an exhaustive semantic, compound or derivative inventory.",
+    "All 24 expression records retain their pending review gates. All six shared focus expressions and all 120 memberships remain unchanged.",
+    "No approval transfers from neighboring entries. Course status and requirements_revision remain draft and professional-v1.",
+    "Reference flags, overall/language/domain gates, editorial notes, accepted forms, regions, practice modes, morphology, media, source registry, historical reviews and holds remain exact in these language-only projections.",
+    "Production counts, Ready states and runtime validation are not advanced by this reviewer-side decision. The third10 persisted receipt is historical context only and does not validate these projections."
+  ]
+}

@@ -1,0 +1,872 @@
+{
+  "schema": 1,
+  "created_at": "2026-10-17T00:52:51.087Z",
+  "status": "current_growth_content_audit_completion_confirmed",
+  "reviewer": "Codex subagent commit_review (AI evidence reconciliation; not human approval)",
+  "scope": "Read-only current raw JSON, source and SHA-256 reconciliation against preserved evidence. No project imports, validation execution, tests, compiler, renderer, browser or source edits.",
+  "counts": {
+    "total": 1550,
+    "reviewed": 1550,
+    "pending": 0,
+    "atomic": 1206,
+    "compound": 114,
+    "morphological": 230,
+    "phrase": 0,
+    "context_only": 265,
+    "named_sources": 209
+  },
+  "inventory_sha256": "5a255c8afb15e7592c656236d537a6c33dc048699a6f6b8451bc81b8d876b24b",
+  "current_overlay_json_sha256": "0fd492358e6a812c6923ca75ec8993272fbe0917fc4af13c9edde5b6792cb6f7",
+  "overlay_hash_algorithm": "SHA-256 of JSON.stringify({words, index, cohorts}), preserving JSON key order and age 03 through 12 cohort order as tools/validate-growth-morphology.cjs lines 8-12.",
+  "accepted_proposal_json_sha256": "0982c8562cb2d6bc70a314516dac4db5babb73f22306f487244a0cf2cbf91d56",
+  "accepted_independent_review": {
+    "proposal_json_sha256": "0982c8562cb2d6bc70a314516dac4db5babb73f22306f487244a0cf2cbf91d56",
+    "accepted": true,
+    "growth_candidate_sha256": "0fd492358e6a812c6923ca75ec8993272fbe0917fc4af13c9edde5b6792cb6f7",
+    "growth_reviews": 9,
+    "unrelated_growth_entries_unchanged": 1541,
+    "growth_total_reviewed": 1550,
+    "growth_pending": 0,
+    "professional_exact_graphs_checked": 9,
+    "source_records_checked": 22,
+    "root_source_crosschecks": [
+      "Michigan ELI Rule6-3 and its separate/estimate examples",
+      "Thoughtful Learning vestig entry",
+      "Etymonline explore competing historical accounts",
+      "Pearson publisher chapter, extracted Origin of Multiply text"
+    ],
+    "review_scope": "Independent AI morphology review of the nine exact selected verb senses, authored allomorphs and permitted composition graphs. Explore is a deliberately reviewed current whole stem, not a denial of its disputed history. Whole meanings, media, rewards and non-morphology gates remain unchanged. No qualified human or domain-review claim.",
+    "growth_release_errors": 0,
+    "professional_draft_errors": 0,
+    "production_mutated": false
+  },
+  "current_six_corrections": [
+    {
+      "id": "attract",
+      "accepted_after_sha256": "29073b6e534eb1846124b8efa8d7d7aa499cf6c7c1faf77d1670d7950bc9c6f9",
+      "current_sha256": "29073b6e534eb1846124b8efa8d7d7aa499cf6c7c1faf77d1670d7950bc9c6f9",
+      "exact": true
+    },
+    {
+      "id": "connect",
+      "accepted_after_sha256": "2063e25e990097e081a987cdb1e776563f9879636fddc31ac6e9224a1247bcd8",
+      "current_sha256": "2063e25e990097e081a987cdb1e776563f9879636fddc31ac6e9224a1247bcd8",
+      "exact": true
+    },
+    {
+      "id": "include",
+      "accepted_after_sha256": "cf7688b3c1bf9f10c58c3ce2a2ae7e464859f7e0a873afa07a6ee68eac0e2d87",
+      "current_sha256": "cf7688b3c1bf9f10c58c3ce2a2ae7e464859f7e0a873afa07a6ee68eac0e2d87",
+      "exact": true
+    },
+    {
+      "id": "receive",
+      "accepted_after_sha256": "15b0f52fc43a28bf93833bbad857df1ce5076f65afcd37d5ac092a6f2efd3f67",
+      "current_sha256": "15b0f52fc43a28bf93833bbad857df1ce5076f65afcd37d5ac092a6f2efd3f67",
+      "exact": true
+    },
+    {
+      "id": "reflect",
+      "accepted_after_sha256": "65d3f825be23a0e31ffa398bca6414523d1f79d230f592670fc13b22668aba27",
+      "current_sha256": "65d3f825be23a0e31ffa398bca6414523d1f79d230f592670fc13b22668aba27",
+      "exact": true
+    },
+    {
+      "id": "adapt",
+      "accepted_after_sha256": "ef0169ca94dfacafff96319fff8802afb33b6cf1d77506f1a8e847bf0f732fd2",
+      "current_sha256": "ef0169ca94dfacafff96319fff8802afb33b6cf1d77506f1a8e847bf0f732fd2",
+      "exact": true
+    }
+  ],
+  "current_nine_resolutions": [
+    {
+      "id": "compare",
+      "accepted_after_sha256": "3983171a720dfc89f3efb37c58f9be75e28903fdc41923c24e819699983068b4",
+      "current_sha256": "3983171a720dfc89f3efb37c58f9be75e28903fdc41923c24e819699983068b4",
+      "exact": true
+    },
+    {
+      "id": "investigate",
+      "accepted_after_sha256": "695e206ed64b517501e3da7985c82e356d42f5e8e7a45317d5cdd08a4a5e9483",
+      "current_sha256": "695e206ed64b517501e3da7985c82e356d42f5e8e7a45317d5cdd08a4a5e9483",
+      "exact": true
+    },
+    {
+      "id": "suggest",
+      "accepted_after_sha256": "987637520a6fa4388ed27cdc0e3f210078f4b9f09208b0d48cb4b373a89af3cf",
+      "current_sha256": "987637520a6fa4388ed27cdc0e3f210078f4b9f09208b0d48cb4b373a89af3cf",
+      "exact": true
+    },
+    {
+      "id": "explore",
+      "accepted_after_sha256": "5085567ef8288c8f979e3030c37f336ef0f8e0d0d559dd2d2259887c5cce2262",
+      "current_sha256": "5085567ef8288c8f979e3030c37f336ef0f8e0d0d559dd2d2259887c5cce2262",
+      "exact": true
+    },
+    {
+      "id": "separate",
+      "accepted_after_sha256": "3c2e41f1c43b905d3f1db1d1f9f14a5c5d7977d8591851ce6bab82e856a6a266",
+      "current_sha256": "3c2e41f1c43b905d3f1db1d1f9f14a5c5d7977d8591851ce6bab82e856a6a266",
+      "exact": true
+    },
+    {
+      "id": "multiply",
+      "accepted_after_sha256": "2cd5f6160ddece7f05c78e0f1cff2f99f359416385921d364a333bdff489a0aa",
+      "current_sha256": "2cd5f6160ddece7f05c78e0f1cff2f99f359416385921d364a333bdff489a0aa",
+      "exact": true
+    },
+    {
+      "id": "divide",
+      "accepted_after_sha256": "d371580e3bd442f280b8b57681610c598e57b6cc6e988dbe60451fd23f6d7a0a",
+      "current_sha256": "d371580e3bd442f280b8b57681610c598e57b6cc6e988dbe60451fd23f6d7a0a",
+      "exact": true
+    },
+    {
+      "id": "estimate",
+      "accepted_after_sha256": "c00b0eac6ea9f5995aa2f7f6c6190d1092689cea571bb5b08d06b4257b8c5810",
+      "current_sha256": "c00b0eac6ea9f5995aa2f7f6c6190d1092689cea571bb5b08d06b4257b8c5810",
+      "exact": true
+    },
+    {
+      "id": "retire",
+      "accepted_after_sha256": "03273d741011bf42d5026b3acbb1941185ee2bb9f6c99b8788c843d9edefd5ee",
+      "current_sha256": "03273d741011bf42d5026b3acbb1941185ee2bb9f6c99b8788c843d9edefd5ee",
+      "exact": true
+    }
+  ],
+  "final_source_registration": [
+    {
+      "id": "etym-compare-hold9",
+      "exact": true
+    },
+    {
+      "id": "etym-investigate-hold9",
+      "exact": true
+    },
+    {
+      "id": "etym-suggest-hold9",
+      "exact": true
+    },
+    {
+      "id": "etym-explore-hold9",
+      "exact": true
+    },
+    {
+      "id": "etym-separate-hold9",
+      "exact": true
+    },
+    {
+      "id": "etym-multiply-hold9",
+      "exact": true
+    },
+    {
+      "id": "etym-divide-hold9",
+      "exact": true
+    },
+    {
+      "id": "etym-estimate-hold9",
+      "exact": true
+    },
+    {
+      "id": "etym-retire-hold9",
+      "exact": true
+    },
+    {
+      "id": "etym-ate-hold9",
+      "exact": true
+    },
+    {
+      "id": "etym-sub-hold9",
+      "exact": true
+    },
+    {
+      "id": "etym-se-hold9",
+      "exact": true
+    },
+    {
+      "id": "etym-tire-hold9",
+      "exact": true
+    },
+    {
+      "id": "mw-par-hold9",
+      "exact": true
+    },
+    {
+      "id": "mw-prepare-hold9",
+      "exact": true
+    },
+    {
+      "id": "mw-ingest-hold9",
+      "exact": true
+    },
+    {
+      "id": "mw-dis-hold9",
+      "exact": true
+    },
+    {
+      "id": "mw-multi-hold9",
+      "exact": true
+    },
+    {
+      "id": "collins-sug-hold9",
+      "exact": true
+    },
+    {
+      "id": "pearson-ply-hold9",
+      "exact": true
+    },
+    {
+      "id": "michigan-ate-hold9",
+      "exact": true
+    },
+    {
+      "id": "thoughtful-vestig-hold9",
+      "exact": true
+    }
+  ],
+  "authoring_and_validator": [
+    {
+      "path": "tools/author-growth-morphology.cjs",
+      "current_sha256": "af597489164c496b0eec761fcd7a2ed0b1b6156bb00c0d610ca843aa04435136",
+      "candidate_sha256": "af597489164c496b0eec761fcd7a2ed0b1b6156bb00c0d610ca843aa04435136"
+    },
+    {
+      "path": "tools/validate-growth-morphology.cjs",
+      "current_sha256": "7303793ac9aab4e58d9d03d083645cb7f27cccd59a4c93b49e61b8eebabe43d3",
+      "candidate_sha256": "7303793ac9aab4e58d9d03d083645cb7f27cccd59a4c93b49e61b8eebabe43d3"
+    },
+    {
+      "path": "tools/growth-morphology/age-06.cjs",
+      "current_sha256": "f0e4a5a970a1dfa038d596c7edd55b320d886ccaf879a0dc6ee6a45960c4bb0f",
+      "candidate_sha256": "f0e4a5a970a1dfa038d596c7edd55b320d886ccaf879a0dc6ee6a45960c4bb0f"
+    },
+    {
+      "path": "tools/growth-morphology/age-07.cjs",
+      "current_sha256": "59f2663f7355e92135c5f11d79926f223905a907963d8f58d5ef21d422a4022d",
+      "candidate_sha256": "59f2663f7355e92135c5f11d79926f223905a907963d8f58d5ef21d422a4022d"
+    },
+    {
+      "path": "tools/growth-morphology/age-08.cjs",
+      "current_sha256": "d3f1d53445c7b6a8e74087dfa9e6459638252621075643d926cf6ec00a5785af",
+      "candidate_sha256": "d3f1d53445c7b6a8e74087dfa9e6459638252621075643d926cf6ec00a5785af"
+    },
+    {
+      "path": "tools/growth-morphology/age-09.cjs",
+      "current_sha256": "9638cc86ce9ed9a3dc78e26e6150a8fe45f80d30fdb324432956cd2e2cbea1bd",
+      "candidate_sha256": "9638cc86ce9ed9a3dc78e26e6150a8fe45f80d30fdb324432956cd2e2cbea1bd"
+    },
+    {
+      "path": "tools/growth-morphology/age-10.cjs",
+      "current_sha256": "8203c89531cc198b5d9887652d76df2f0dcba058f6a8877f21446ffb6be3c2e1",
+      "candidate_sha256": "8203c89531cc198b5d9887652d76df2f0dcba058f6a8877f21446ffb6be3c2e1"
+    },
+    {
+      "path": "tools/growth-morphology/age-11.cjs",
+      "current_sha256": "87815cd478e4fd475be1e5cf6961ec271a604df322a3f524b4d4fa113a23dec2",
+      "candidate_sha256": "87815cd478e4fd475be1e5cf6961ec271a604df322a3f524b4d4fa113a23dec2"
+    },
+    {
+      "path": "tools/growth-morphology/age-12.cjs",
+      "current_sha256": "b84ea3bce652adbbf102082540732642fd39834a9a9875aedb1dd6d1555ce28c",
+      "candidate_sha256": "b84ea3bce652adbbf102082540732642fd39834a9a9875aedb1dd6d1555ce28c"
+    }
+  ],
+  "preserved_final_runtime": {
+    "receipt_path": "build/professional-english/morphology-null-review/hold9-final-runtime-validation.json",
+    "receipt_raw_sha256": "733e5b5851c9f1f12e41dccc919baad965684a800a56b8b60a90ff77b239b2ab",
+    "strict_complete_migration_audit": {
+      "ok": true,
+      "errors": [],
+      "summary": {
+        "total": 1550,
+        "reviewed": 1550,
+        "pending": 0,
+        "context_only": 265,
+        "release_ready": true,
+        "ages": {
+          "3": {
+            "total": 80,
+            "reviewed": 80,
+            "pending": 0,
+            "atomic": 80,
+            "compound": 0,
+            "morphological": 0,
+            "phrase": 0,
+            "reviewed_pictured": 69,
+            "reviewed_context_only": 11
+          },
+          "4": {
+            "total": 99,
+            "reviewed": 99,
+            "pending": 0,
+            "atomic": 97,
+            "compound": 0,
+            "morphological": 2,
+            "phrase": 0,
+            "reviewed_pictured": 73,
+            "reviewed_context_only": 26
+          },
+          "5": {
+            "total": 188,
+            "reviewed": 188,
+            "pending": 0,
+            "atomic": 171,
+            "compound": 8,
+            "morphological": 9,
+            "phrase": 0,
+            "reviewed_pictured": 139,
+            "reviewed_context_only": 49
+          },
+          "6": {
+            "total": 272,
+            "reviewed": 272,
+            "pending": 0,
+            "atomic": 237,
+            "compound": 6,
+            "morphological": 29,
+            "phrase": 0,
+            "reviewed_pictured": 231,
+            "reviewed_context_only": 41
+          },
+          "7": {
+            "total": 284,
+            "reviewed": 284,
+            "pending": 0,
+            "atomic": 210,
+            "compound": 25,
+            "morphological": 49,
+            "phrase": 0,
+            "reviewed_pictured": 257,
+            "reviewed_context_only": 27
+          },
+          "8": {
+            "total": 184,
+            "reviewed": 184,
+            "pending": 0,
+            "atomic": 116,
+            "compound": 26,
+            "morphological": 42,
+            "phrase": 0,
+            "reviewed_pictured": 138,
+            "reviewed_context_only": 46
+          },
+          "9": {
+            "total": 177,
+            "reviewed": 177,
+            "pending": 0,
+            "atomic": 125,
+            "compound": 21,
+            "morphological": 31,
+            "phrase": 0,
+            "reviewed_pictured": 150,
+            "reviewed_context_only": 27
+          },
+          "10": {
+            "total": 101,
+            "reviewed": 101,
+            "pending": 0,
+            "atomic": 75,
+            "compound": 12,
+            "morphological": 14,
+            "phrase": 0,
+            "reviewed_pictured": 83,
+            "reviewed_context_only": 18
+          },
+          "11": {
+            "total": 76,
+            "reviewed": 76,
+            "pending": 0,
+            "atomic": 41,
+            "compound": 10,
+            "morphological": 25,
+            "phrase": 0,
+            "reviewed_pictured": 62,
+            "reviewed_context_only": 14
+          },
+          "12": {
+            "total": 89,
+            "reviewed": 89,
+            "pending": 0,
+            "atomic": 54,
+            "compound": 6,
+            "morphological": 29,
+            "phrase": 0,
+            "reviewed_pictured": 83,
+            "reviewed_context_only": 6
+          }
+        }
+      }
+    },
+    "node": {
+      "passed": 23,
+      "failed": 0,
+      "log": "build/professional-english/morphology-null-review/hold9-final-node.log",
+      "raw_sha256": "daa7fecebbdccd5c2c69f39e54d649dc4538e818fecd8f58e39060ecfe53b5de"
+    },
+    "native": {
+      "passed_assertions_or_checks": 21324,
+      "failures": 0,
+      "suites": [
+        {
+          "suite": "growth_morphology_tests",
+          "passed_assertions_or_checks": 20596,
+          "failures": 0,
+          "exit_code": 0,
+          "log": "build/professional-english/morphology-null-review/hold9-final-native-growth.log",
+          "raw_sha256": "758a3d34244b873648e6e08a9796c4ebefdbfdc163866ad0a296dd72ce84c492"
+        },
+        {
+          "suite": "morphology_tests",
+          "passed_assertions_or_checks": 77,
+          "failures": 0,
+          "exit_code": 0,
+          "log": "build/professional-english/morphology-null-review/hold9-final-morphology_tests.log",
+          "raw_sha256": "5cff538f7bb8d8e7134b99b296e26327efaac1afaa6072d7866d508c53105c99"
+        },
+        {
+          "suite": "word_jelly_morphology_tests",
+          "passed_assertions_or_checks": 476,
+          "failures": 0,
+          "exit_code": 0,
+          "log": "build/professional-english/morphology-null-review/hold9-final-word_jelly_morphology_tests.log",
+          "raw_sha256": "645d1bf133cbd474ec0121ede60a2fd3d0410aaa05b842832109a95095a4a400"
+        },
+        {
+          "suite": "word_jelly_morphology_view_tests",
+          "passed_assertions_or_checks": 117,
+          "failures": 0,
+          "exit_code": 0,
+          "log": "build/professional-english/morphology-null-review/hold9-final-word_jelly_morphology_view_tests.log",
+          "raw_sha256": "a5efbd15b444cadae063f8c573f92cf39b78e2bd72c4d971a13698e9cc2e7366"
+        },
+        {
+          "suite": "learning_content_tests",
+          "passed_assertions_or_checks": 42,
+          "failures": 0,
+          "exit_code": 0,
+          "log": "build/professional-english/morphology-null-review/hold9-final-learning_content_tests.log",
+          "raw_sha256": "af1e60297e632862f5a5beed8c59aff06ab8adfc9c0477a75f0e0d0032e154bd"
+        },
+        {
+          "suite": "learning_context_flow_tests",
+          "passed_assertions_or_checks": 16,
+          "failures": 0,
+          "exit_code": 0,
+          "log": "build/professional-english/morphology-null-review/hold9-final-learning_context_flow_tests.log",
+          "raw_sha256": "488b85f32210bc276c2b6387f911428e230b6cd223d8aaddac0feda5f3bad7ab"
+        }
+      ]
+    },
+    "author_replay": {
+      "before_overlay_json_sha256": "0fd492358e6a812c6923ca75ec8993272fbe0917fc4af13c9edde5b6792cb6f7",
+      "after_overlay_json_sha256": "0fd492358e6a812c6923ca75ec8993272fbe0917fc4af13c9edde5b6792cb6f7",
+      "exact_preservation": true,
+      "log": "build/professional-english/morphology-null-review/hold9-final-author-replay.log"
+    },
+    "test_pins": [
+      {
+        "path": "tests/growth-morphology.test.cjs",
+        "expected_sha256": "5fe1b5a5a01e591f7d4da6b601fd91f894ebda288fded91e4b5a9351d0c92767",
+        "current_sha256": "5fe1b5a5a01e591f7d4da6b601fd91f894ebda288fded91e4b5a9351d0c92767"
+      },
+      {
+        "path": "tests/growth-vocabulary.test.cjs",
+        "expected_sha256": "d69f299dd181a83dd3a55a2c76f2840f8ba2b765d7f1933f849b0c9d3c4940eb",
+        "current_sha256": "d69f299dd181a83dd3a55a2c76f2840f8ba2b765d7f1933f849b0c9d3c4940eb"
+      },
+      {
+        "path": "tests/growth-host.test.cjs",
+        "expected_sha256": "ab2b3997dbff798d7fccc2c931ed50d97cba05f2d609b8c419f9062402bb723c",
+        "current_sha256": "ab2b3997dbff798d7fccc2c931ed50d97cba05f2d609b8c419f9062402bb723c"
+      },
+      {
+        "path": "tests/godot/growth_morphology_tests.gd",
+        "expected_sha256": "aa6bab2e11099a8a10244a99b61beff7c9478802c8848cd6b9b5d846cdb9d2f7",
+        "current_sha256": "aa6bab2e11099a8a10244a99b61beff7c9478802c8848cd6b9b5d846cdb9d2f7"
+      },
+      {
+        "path": "tests/godot/morphology_tests.gd",
+        "expected_sha256": "4a1449384260dc1899a0e7bcc196750c1b37e2ae06c2e89acede5bc7d86f2579",
+        "current_sha256": "4a1449384260dc1899a0e7bcc196750c1b37e2ae06c2e89acede5bc7d86f2579"
+      },
+      {
+        "path": "tests/godot/word_jelly_morphology_tests.gd",
+        "expected_sha256": "3fe8fdaa8a5976c3bc5e35f70c6910fa5e9356e2268e5c7fa2dd1a1cadefa1d8",
+        "current_sha256": "3fe8fdaa8a5976c3bc5e35f70c6910fa5e9356e2268e5c7fa2dd1a1cadefa1d8"
+      },
+      {
+        "path": "tests/godot/word_jelly_morphology_view_tests.gd",
+        "expected_sha256": "be81122243f170b48cd19f44041840d8b923ce95dccaefe3e682783ea96e6351",
+        "current_sha256": "be81122243f170b48cd19f44041840d8b923ce95dccaefe3e682783ea96e6351"
+      },
+      {
+        "path": "tests/godot/learning_content_tests.gd",
+        "expected_sha256": "a1af5bc3b9b349de864884649310bf3da51e5ba4f8ab8fb6c28cb6e9596607ce",
+        "current_sha256": "a1af5bc3b9b349de864884649310bf3da51e5ba4f8ab8fb6c28cb6e9596607ce"
+      },
+      {
+        "path": "tests/godot/learning_context_flow_tests.gd",
+        "expected_sha256": "cbb70e752a9e7d17e57270cbcfbcdc167bdff42665884696121c5463102a5165",
+        "current_sha256": "cbb70e752a9e7d17e57270cbcfbcdc167bdff42665884696121c5463102a5165"
+      }
+    ],
+    "log_pins": [
+      {
+        "path": "build/professional-english/morphology-null-review/hold9-final-node.log",
+        "expected_sha256": "daa7fecebbdccd5c2c69f39e54d649dc4538e818fecd8f58e39060ecfe53b5de",
+        "current_sha256": "daa7fecebbdccd5c2c69f39e54d649dc4538e818fecd8f58e39060ecfe53b5de",
+        "tail": [
+          "ℹ tests 23",
+          "ℹ suites 0",
+          "ℹ pass 23",
+          "ℹ fail 0",
+          "ℹ cancelled 0",
+          "ℹ skipped 0",
+          "ℹ todo 0",
+          "ℹ duration_ms 3503.3428"
+        ]
+      },
+      {
+        "path": "build/professional-english/morphology-null-review/hold9-final-native-growth.log",
+        "expected_sha256": "758a3d34244b873648e6e08a9796c4ebefdbfdc163866ad0a296dd72ce84c492",
+        "current_sha256": "758a3d34244b873648e6e08a9796c4ebefdbfdc163866ad0a296dd72ce84c492",
+        "tail": [
+          "Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org",
+          "",
+          "Growth morphology: 20596 assertions, 0 failures"
+        ]
+      },
+      {
+        "path": "build/professional-english/morphology-null-review/hold9-final-morphology_tests.log",
+        "expected_sha256": "5cff538f7bb8d8e7134b99b296e26327efaac1afaa6072d7866d508c53105c99",
+        "current_sha256": "5cff538f7bb8d8e7134b99b296e26327efaac1afaa6072d7866d508c53105c99",
+        "tail": [
+          "Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org",
+          "",
+          "Morphology foundation: 77 assertions, 0 failures"
+        ]
+      },
+      {
+        "path": "build/professional-english/morphology-null-review/hold9-final-word_jelly_morphology_tests.log",
+        "expected_sha256": "645d1bf133cbd474ec0121ede60a2fd3d0410aaa05b842832109a95095a4a400",
+        "current_sha256": "645d1bf133cbd474ec0121ede60a2fd3d0410aaa05b842832109a95095a4a400",
+        "tail": [
+          "Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org",
+          "",
+          "Word Jelly morphology: 476 assertions, 0 failures"
+        ]
+      },
+      {
+        "path": "build/professional-english/morphology-null-review/hold9-final-word_jelly_morphology_view_tests.log",
+        "expected_sha256": "a5efbd15b444cadae063f8c573f92cf39b78e2bd72c4d971a13698e9cc2e7366",
+        "current_sha256": "a5efbd15b444cadae063f8c573f92cf39b78e2bd72c4d971a13698e9cc2e7366",
+        "tail": [
+          "Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org",
+          "",
+          "Word Jelly morphology view: 117 checks, 0 failures"
+        ]
+      },
+      {
+        "path": "build/professional-english/morphology-null-review/hold9-final-learning_content_tests.log",
+        "expected_sha256": "af1e60297e632862f5a5beed8c59aff06ab8adfc9c0477a75f0e0d0032e154bd",
+        "current_sha256": "af1e60297e632862f5a5beed8c59aff06ab8adfc9c0477a75f0e0d0032e154bd",
+        "tail": [
+          "Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org",
+          "",
+          "Learning content: 42 checks, 0 failures"
+        ]
+      },
+      {
+        "path": "build/professional-english/morphology-null-review/hold9-final-learning_context_flow_tests.log",
+        "expected_sha256": "488b85f32210bc276c2b6387f911428e230b6cd223d8aaddac0feda5f3bad7ab",
+        "current_sha256": "488b85f32210bc276c2b6387f911428e230b6cd223d8aaddac0feda5f3bad7ab",
+        "tail": [
+          "Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org",
+          "",
+          "Learning context flow: 16 checks, 0 failures"
+        ]
+      }
+    ]
+  },
+  "history": {
+    "initial_completion_summary": {
+      "total": 1550,
+      "reviewed": 1550,
+      "pending": 0,
+      "context_only": 265,
+      "release_ready": true,
+      "ages": {
+        "3": {
+          "total": 80,
+          "reviewed": 80,
+          "pending": 0,
+          "atomic": 80,
+          "compound": 0,
+          "morphological": 0,
+          "phrase": 0,
+          "reviewed_pictured": 69,
+          "reviewed_context_only": 11
+        },
+        "4": {
+          "total": 99,
+          "reviewed": 99,
+          "pending": 0,
+          "atomic": 97,
+          "compound": 0,
+          "morphological": 2,
+          "phrase": 0,
+          "reviewed_pictured": 73,
+          "reviewed_context_only": 26
+        },
+        "5": {
+          "total": 188,
+          "reviewed": 188,
+          "pending": 0,
+          "atomic": 171,
+          "compound": 8,
+          "morphological": 9,
+          "phrase": 0,
+          "reviewed_pictured": 139,
+          "reviewed_context_only": 49
+        },
+        "6": {
+          "total": 272,
+          "reviewed": 272,
+          "pending": 0,
+          "atomic": 237,
+          "compound": 6,
+          "morphological": 29,
+          "phrase": 0,
+          "reviewed_pictured": 231,
+          "reviewed_context_only": 41
+        },
+        "7": {
+          "total": 284,
+          "reviewed": 284,
+          "pending": 0,
+          "atomic": 212,
+          "compound": 25,
+          "morphological": 47,
+          "phrase": 0,
+          "reviewed_pictured": 257,
+          "reviewed_context_only": 27
+        },
+        "8": {
+          "total": 184,
+          "reviewed": 184,
+          "pending": 0,
+          "atomic": 120,
+          "compound": 26,
+          "morphological": 38,
+          "phrase": 0,
+          "reviewed_pictured": 138,
+          "reviewed_context_only": 46
+        },
+        "9": {
+          "total": 177,
+          "reviewed": 177,
+          "pending": 0,
+          "atomic": 129,
+          "compound": 21,
+          "morphological": 27,
+          "phrase": 0,
+          "reviewed_pictured": 150,
+          "reviewed_context_only": 27
+        },
+        "10": {
+          "total": 101,
+          "reviewed": 101,
+          "pending": 0,
+          "atomic": 77,
+          "compound": 12,
+          "morphological": 12,
+          "phrase": 0,
+          "reviewed_pictured": 83,
+          "reviewed_context_only": 18
+        },
+        "11": {
+          "total": 76,
+          "reviewed": 76,
+          "pending": 0,
+          "atomic": 43,
+          "compound": 10,
+          "morphological": 23,
+          "phrase": 0,
+          "reviewed_pictured": 62,
+          "reviewed_context_only": 14
+        },
+        "12": {
+          "total": 89,
+          "reviewed": 89,
+          "pending": 0,
+          "atomic": 54,
+          "compound": 6,
+          "morphological": 29,
+          "phrase": 0,
+          "reviewed_pictured": 83,
+          "reviewed_context_only": 6
+        }
+      }
+    },
+    "initial_document_scope": "The old completion table (1,220 atomic / 114 compound / 216 morphological; 159 sources; seven Node tests / 20,503 native assertions) is an earlier milestone. Its figures must not replace the later exact nine-resolution evidence.",
+    "pending_nine_scope": "The earlier six-correction stage correctly had 1,541 reviewed / nine pending. Its strict release failure and initial stale-host Node failure remain historical and immutable.",
+    "final_resolution_scope": "Eight inherited-family graphs and one explicitly reviewed explore whole stem resolved all nine; the six earlier corrections remain exact."
+  },
+  "browser": {
+    "receipt_created_at": "2026-10-15T18:03:07.157Z",
+    "statistics": {
+      "startTime": "2026-10-15T18:25:42.962Z",
+      "duration": 692417.434,
+      "expected": 5,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "sources": [
+      {
+        "path": "tests/browser/word-jelly.spec.cjs",
+        "historical_sha256": "08204ffb02801ea06910aad0058c98c7fa95397abe33d5f5115d1b656a33a6f4",
+        "historical_snapshot_sha256": "08204ffb02801ea06910aad0058c98c7fa95397abe33d5f5115d1b656a33a6f4",
+        "current_sha256": "08204ffb02801ea06910aad0058c98c7fa95397abe33d5f5115d1b656a33a6f4",
+        "before_after_exact": true
+      },
+      {
+        "path": "tests/browser/word-jelly-rewards.cjs",
+        "historical_sha256": "a0cd1b812c84d75adc60f77c1c9b0266d4ea73dcf59cdd7855f72fc5dacf60e0",
+        "historical_snapshot_sha256": "a0cd1b812c84d75adc60f77c1c9b0266d4ea73dcf59cdd7855f72fc5dacf60e0",
+        "current_sha256": "a0cd1b812c84d75adc60f77c1c9b0266d4ea73dcf59cdd7855f72fc5dacf60e0",
+        "before_after_exact": true
+      },
+      {
+        "path": "tests/browser/game-ui.cjs",
+        "historical_sha256": "a411d1755c77a673990a3d3edc28aaa9767399b88b56f83ea56c62a56639baba",
+        "historical_snapshot_sha256": "a411d1755c77a673990a3d3edc28aaa9767399b88b56f83ea56c62a56639baba",
+        "current_sha256": "a411d1755c77a673990a3d3edc28aaa9767399b88b56f83ea56c62a56639baba",
+        "before_after_exact": true
+      },
+      {
+        "path": "tests/browser/bundled-audio.cjs",
+        "historical_sha256": "6820b9202c24f5baed64b43952f0c137131d314db5bd78923c07d1719e058f14",
+        "historical_snapshot_sha256": "6820b9202c24f5baed64b43952f0c137131d314db5bd78923c07d1719e058f14",
+        "current_sha256": "6820b9202c24f5baed64b43952f0c137131d314db5bd78923c07d1719e058f14",
+        "before_after_exact": true
+      },
+      {
+        "path": "build/tests/jelly-r2/playwright.config.cjs",
+        "historical_sha256": "fb545b86582c2ab8de3e679bd01dd8ef16394e03634830403e4f6c6496d11448",
+        "historical_snapshot_sha256": "fb545b86582c2ab8de3e679bd01dd8ef16394e03634830403e4f6c6496d11448",
+        "current_sha256": "fb545b86582c2ab8de3e679bd01dd8ef16394e03634830403e4f6c6496d11448",
+        "before_after_exact": true
+      },
+      {
+        "path": "build/tests/jelly-r2/serve.cjs",
+        "historical_sha256": "369df70344ec0892416dfc18886ad12e5a60fe494b6c0a49b4e6535435cb1f3e",
+        "historical_snapshot_sha256": "369df70344ec0892416dfc18886ad12e5a60fe494b6c0a49b4e6535435cb1f3e",
+        "current_sha256": "369df70344ec0892416dfc18886ad12e5a60fe494b6c0a49b4e6535435cb1f3e",
+        "before_after_exact": true
+      },
+      {
+        "path": "words.json",
+        "historical_sha256": "81809bf9d2c810aaee4f5a5aabf9f0f1b48a4f822dc2325a1c6b714ec4e92be0",
+        "historical_snapshot_sha256": "81809bf9d2c810aaee4f5a5aabf9f0f1b48a4f822dc2325a1c6b714ec4e92be0",
+        "current_sha256": "81809bf9d2c810aaee4f5a5aabf9f0f1b48a4f822dc2325a1c6b714ec4e92be0",
+        "before_after_exact": true
+      },
+      {
+        "path": "data/vocabulary/morphology/age-03.json",
+        "historical_sha256": "0901f4f5845451a5195b0ba347052304dcec17cd8aad842225dd8f65c3257c1c",
+        "historical_snapshot_sha256": "0901f4f5845451a5195b0ba347052304dcec17cd8aad842225dd8f65c3257c1c",
+        "current_sha256": "0901f4f5845451a5195b0ba347052304dcec17cd8aad842225dd8f65c3257c1c",
+        "before_after_exact": true
+      },
+      {
+        "path": "data/vocabulary/morphology/age-04.json",
+        "historical_sha256": "0f0926f7f845372f9648cad790f311c4d4edf682442926a54031d69a46a59dcf",
+        "historical_snapshot_sha256": "0f0926f7f845372f9648cad790f311c4d4edf682442926a54031d69a46a59dcf",
+        "current_sha256": "0f0926f7f845372f9648cad790f311c4d4edf682442926a54031d69a46a59dcf",
+        "before_after_exact": true
+      },
+      {
+        "path": "data/vocabulary/morphology/age-05.json",
+        "historical_sha256": "cf29cf0c1d4a4fa1a528c2954d615d45c123073a335d949a29f5538fd905719a",
+        "historical_snapshot_sha256": "cf29cf0c1d4a4fa1a528c2954d615d45c123073a335d949a29f5538fd905719a",
+        "current_sha256": "cf29cf0c1d4a4fa1a528c2954d615d45c123073a335d949a29f5538fd905719a",
+        "before_after_exact": true
+      },
+      {
+        "path": "data/vocabulary/morphology/age-06.json",
+        "historical_sha256": "9286ccefd45751d02dfe48448d72019432b0f6ed1ac8b8593b59447fbc6cc50e",
+        "historical_snapshot_sha256": "9286ccefd45751d02dfe48448d72019432b0f6ed1ac8b8593b59447fbc6cc50e",
+        "current_sha256": "9286ccefd45751d02dfe48448d72019432b0f6ed1ac8b8593b59447fbc6cc50e",
+        "before_after_exact": true
+      },
+      {
+        "path": "data/vocabulary/morphology/age-07.json",
+        "historical_sha256": "be2191dfe66a8b6988156c206df49ac7eafccc8c79eaed1c7cad540ce8f0a87a",
+        "historical_snapshot_sha256": "be2191dfe66a8b6988156c206df49ac7eafccc8c79eaed1c7cad540ce8f0a87a",
+        "current_sha256": "0a5b68fb84a9b0fa7f9a8d5523699e1a02eb7ec9dfd34d9539289ec092601afc",
+        "before_after_exact": true
+      },
+      {
+        "path": "data/vocabulary/morphology/age-08.json",
+        "historical_sha256": "b55bad32c9f7b371d8de82906dc9ce9588889bd86d2f32ce64c5aa14b3f7c69c",
+        "historical_snapshot_sha256": "b55bad32c9f7b371d8de82906dc9ce9588889bd86d2f32ce64c5aa14b3f7c69c",
+        "current_sha256": "f7da5e85f339bebd472d42ca7060e766013b8658d4fd5850680c946363e37ce6",
+        "before_after_exact": true
+      },
+      {
+        "path": "data/vocabulary/morphology/age-09.json",
+        "historical_sha256": "2d818529af1ddb01326c2f95d784d3f37f5e63c3334817e53310748c78da2aad",
+        "historical_snapshot_sha256": "2d818529af1ddb01326c2f95d784d3f37f5e63c3334817e53310748c78da2aad",
+        "current_sha256": "0042f4ef43a0c932360f8a1c0998b6a9d164984cbbf7fd960b4d9168e3e0dbba",
+        "before_after_exact": true
+      },
+      {
+        "path": "data/vocabulary/morphology/age-10.json",
+        "historical_sha256": "fd3ef343dc817c02f5d98c0dbabc83fbbf8a9e97cdee09d7ffbbd42fe1cf36c8",
+        "historical_snapshot_sha256": "fd3ef343dc817c02f5d98c0dbabc83fbbf8a9e97cdee09d7ffbbd42fe1cf36c8",
+        "current_sha256": "b02c37bc5f1a84e55d8aa50dc3a08e9dc02f8fd9009e3312bfc0369ce497b0a3",
+        "before_after_exact": true
+      },
+      {
+        "path": "data/vocabulary/morphology/age-11.json",
+        "historical_sha256": "bda96423ca993d91b66d98aa1347cd37eb77eae668d886b4d5971fccc5a4ca2d",
+        "historical_snapshot_sha256": "bda96423ca993d91b66d98aa1347cd37eb77eae668d886b4d5971fccc5a4ca2d",
+        "current_sha256": "2118745f6884b7ac8fcf0aa52d71b440f7283202e6d71c8a98b95fe9a45497ec",
+        "before_after_exact": true
+      },
+      {
+        "path": "data/vocabulary/morphology/age-12.json",
+        "historical_sha256": "6bb848a51bfd21f8d85646a06372de2b50085ebd55d56f98b915be0977cd2ced",
+        "historical_snapshot_sha256": "6bb848a51bfd21f8d85646a06372de2b50085ebd55d56f98b915be0977cd2ced",
+        "current_sha256": "6bb848a51bfd21f8d85646a06372de2b50085ebd55d56f98b915be0977cd2ced",
+        "before_after_exact": true
+      }
+    ],
+    "current_different_paths": [
+      "data/vocabulary/morphology/age-07.json",
+      "data/vocabulary/morphology/age-08.json",
+      "data/vocabulary/morphology/age-09.json",
+      "data/vocabulary/morphology/age-10.json",
+      "data/vocabulary/morphology/age-11.json"
+    ],
+    "scope": "Five selected desktop Chromium cases on immutable r2 only. All 17 historical source pins remain exact, but five current cohorts (ages 07 through 11) differ. No current export, iPhone WebKit, complete game or physical-device acceptance transfers."
+  },
+  "limitations": [
+    "The preserved final receipt pins data, test source files and log files; it does not pin a complete transitive runtime-source closure. Current runtime files are recorded as observations only. No claim that all historical runtime test outcomes have been replayed against later production changes.",
+    "Current Growth content completion does not complete Professional morphology, language, specialist, images, audio, themes or modules.",
+    "The agreed live acceptance still includes atomic and 2/3/4+ part behavior, spelling changes, manual/hint/highlight/Auto agreement, readable wide pieces and full-span admission, independent/shared progress rules, rewards, durable storage and bounded loading, accessibility, and required layouts at 320x568, 390x844, 844x390, 1280x800 and undersized pause. Existing scoped acceptance can be retained; this reconciliation grants none of those checks new acceptance.",
+    "No new human linguistic, participant, device, visual or audio acceptance was performed."
+  ],
+  "inspection_attempts": [
+    {
+      "tool_chunk": "395b0e",
+      "exit_code": 1,
+      "scope": "Built-in-only read/hash probe",
+      "reason": "An assumed age-03.cjs source did not exist; no files were written and no project code ran. Corrected read enumerated actual age-06 through age-12 sources and central author source.",
+      "superseded_by_tool_chunk": "2edcb1"
+    }
+  ],
+  "recommended_checkpoint_text": "Growth morphology content audit is complete for all 1,550 unchanged Growth identities: 1,206 atomic, 114 compound and 230 morphological analyses, zero pending, 265 preserved context-only image gaps and 209 named sources. The current overlay exactly matches the accepted nine-family resolution fingerprint 0fd492358e6a812c6923ca75ec8993272fbe0917fc4af13c9edde5b6792cb6f7. Preserved final evidence records a strict complete-migration audit with zero errors, Node 23/23 and six native suites with 21,324 checks/assertions and zero failures; this evidence and all nine pinned test sources still match. The review is AI editorial work, not human linguistic approval. Later-build runtime, complete game and device acceptance remain separately required; the historical five-case Chromium r2 run is not acceptance for the current build.",
+  "recommended_pending_text": "Retain required later-build runtime, complete game, device, storage/loading and accessibility/layout acceptance; remove the unqualified Growth morphology audit item from unfinished content work."
+}

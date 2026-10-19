@@ -1,0 +1,810 @@
+{
+  "schema": 1,
+  "status": "research_dispositions_not_acceptance",
+  "target_memberships": [
+    {
+      "file": "data/professional/courses/accounting_finance.json",
+      "course_id": "accounting_finance",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "lexeme_ids",
+      "index": 13,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/caregiving.json",
+      "course_id": "caregiving",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "lexeme_ids",
+      "index": 13,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/cleaning_facilities.json",
+      "course_id": "cleaning_facilities",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "lexeme_ids",
+      "index": 13,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/clinical_medicine.json",
+      "course_id": "clinical_medicine",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "lexeme_ids",
+      "index": 13,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/construction_trades.json",
+      "course_id": "construction_trades",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "lexeme_ids",
+      "index": 13,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/customer_support.json",
+      "course_id": "customer_support",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "lexeme_ids",
+      "index": 13,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/education_childcare.json",
+      "course_id": "education_childcare",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "lexeme_ids",
+      "index": 13,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/food_service.json",
+      "course_id": "food_service",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "lexeme_ids",
+      "index": 13,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/hospitality_tourism.json",
+      "course_id": "hospitality_tourism",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "lexeme_ids",
+      "index": 13,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/hr_recruitment.json",
+      "course_id": "hr_recruitment",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "lexeme_ids",
+      "index": 13,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/it_support.json",
+      "course_id": "it_support",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "lexeme_ids",
+      "index": 13,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/legal_paralegal.json",
+      "course_id": "legal_paralegal",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "lexeme_ids",
+      "index": 13,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/manufacturing_maintenance.json",
+      "course_id": "manufacturing_maintenance",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "lexeme_ids",
+      "index": 13,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/nursing.json",
+      "course_id": "nursing",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "lexeme_ids",
+      "index": 13,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/office_admin.json",
+      "course_id": "office_admin",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "lexeme_ids",
+      "index": 13,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/retail.json",
+      "course_id": "retail",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "lexeme_ids",
+      "index": 13,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/sales_marketing.json",
+      "course_id": "sales_marketing",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "lexeme_ids",
+      "index": 13,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/software_data.json",
+      "course_id": "software_data",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "lexeme_ids",
+      "index": 13,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/transport_delivery.json",
+      "course_id": "transport_delivery",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "lexeme_ids",
+      "index": 13,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/warehouse_logistics.json",
+      "course_id": "warehouse_logistics",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "lexeme_ids",
+      "index": 13,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    }
+  ],
+  "affected_expression_memberships": [
+    {
+      "file": "data/professional/courses/accounting_finance.json",
+      "course_id": "accounting_finance",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "expression_ids",
+      "index": 7,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/caregiving.json",
+      "course_id": "caregiving",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "expression_ids",
+      "index": 7,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/cleaning_facilities.json",
+      "course_id": "cleaning_facilities",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "expression_ids",
+      "index": 7,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/clinical_medicine.json",
+      "course_id": "clinical_medicine",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "expression_ids",
+      "index": 7,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/construction_trades.json",
+      "course_id": "construction_trades",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "expression_ids",
+      "index": 7,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/customer_support.json",
+      "course_id": "customer_support",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "expression_ids",
+      "index": 7,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/education_childcare.json",
+      "course_id": "education_childcare",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "expression_ids",
+      "index": 7,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/food_service.json",
+      "course_id": "food_service",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "expression_ids",
+      "index": 7,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/hospitality_tourism.json",
+      "course_id": "hospitality_tourism",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "expression_ids",
+      "index": 7,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/hr_recruitment.json",
+      "course_id": "hr_recruitment",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "expression_ids",
+      "index": 7,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/it_support.json",
+      "course_id": "it_support",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "expression_ids",
+      "index": 7,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/legal_paralegal.json",
+      "course_id": "legal_paralegal",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "expression_ids",
+      "index": 7,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/manufacturing_maintenance.json",
+      "course_id": "manufacturing_maintenance",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "expression_ids",
+      "index": 7,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/nursing.json",
+      "course_id": "nursing",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "expression_ids",
+      "index": 7,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/office_admin.json",
+      "course_id": "office_admin",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "expression_ids",
+      "index": 7,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/retail.json",
+      "course_id": "retail",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "expression_ids",
+      "index": 7,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/sales_marketing.json",
+      "course_id": "sales_marketing",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "expression_ids",
+      "index": 7,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/software_data.json",
+      "course_id": "software_data",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "expression_ids",
+      "index": 7,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/transport_delivery.json",
+      "course_id": "transport_delivery",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "expression_ids",
+      "index": 7,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    },
+    {
+      "file": "data/professional/courses/warehouse_logistics.json",
+      "course_id": "warehouse_logistics",
+      "module_id": "module02",
+      "status": "draft",
+      "curriculum_revision": "professional-v1",
+      "membership_kind": "expression_ids",
+      "index": 7,
+      "module_json_sha256": "8619e60a21e59e616af5036170bf1e4805227060d64254bc914bc85f19d5b16f"
+    }
+  ],
+  "affected_assessed_expression_ids": [
+    "expr.foundation.module02.08"
+  ],
+  "other_literal_inflected_expression_uses": [
+    {
+      "id": "expr.customer_support.module03.10",
+      "matched_fields": [
+        "context"
+      ],
+      "text": "Please use the approved web form instead of posting account details on public social media.",
+      "meaning": "Offer an appropriate information route.",
+      "context": "An agent responds to a public request without collecting private details there.",
+      "disposition": "Preserve exactly. The surface use is explanatory meaning/context, not a scored focus of collect.gather.v; it does not acquire acceptance from this repair."
+    },
+    {
+      "id": "expr.it_support.module06.01",
+      "matched_fields": [
+        "meaning"
+      ],
+      "text": "The passphrase requirements are in the policy; please keep all account secrets out of this ticket.",
+      "meaning": "The support record should refer to the requirements without collecting a secret.",
+      "context": "Discussing credential requirements",
+      "disposition": "Preserve exactly. The surface use is explanatory meaning/context, not a scored focus of collect.gather.v; it does not acquire acceptance from this repair."
+    },
+    {
+      "id": "expr.it_support.module07.04",
+      "matched_fields": [
+        "meaning"
+      ],
+      "text": "The account lockout and access denial are recorded without including the user's password.",
+      "meaning": "The record describes the access outcomes without collecting a secret.",
+      "context": "Documenting access problems",
+      "disposition": "Preserve exactly. The surface use is explanatory meaning/context, not a scored focus of collect.gather.v; it does not acquire acceptance from this repair."
+    },
+    {
+      "id": "expr.it_support.module10.03",
+      "matched_fields": [
+        "meaning"
+      ],
+      "text": "The feedback survey asks about customer satisfaction with the support experience.",
+      "meaning": "The questionnaire collects the user's assessment of the service.",
+      "context": "Requesting support feedback",
+      "disposition": "Preserve exactly. The surface use is explanatory meaning/context, not a scored focus of collect.gather.v; it does not acquire acceptance from this repair."
+    }
+  ],
+  "related_identity_count": 51,
+  "related_identities": [
+    {
+      "id": "direct-debit.authorized-collection-from-bank-account.n",
+      "text": "direct debit",
+      "definition": "An arrangement allowing a payee to collect payments from a bank account under an authorization; rules vary by system.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "collection-activity.work-to-follow-up-on-amounts-due.n",
+      "text": "collection activity",
+      "definition": "Work to follow up on amounts due under the applicable arrangements.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "laundry-basket.clothes-collection-container.n",
+      "text": "laundry basket",
+      "definition": "A basket used to hold clothes or household fabrics for washing.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "cutlery.eating-utensil-collection.n",
+      "text": "cutlery",
+      "definition": "Knives, forks, and spoons used for eating or serving food.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "dustpan.shallow-pan-for-collecting-swept-material.n",
+      "text": "dustpan",
+      "definition": "A shallow pan used to collect material gathered by a broom or brush.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "dust-mop.mop-designed-for-gathering-dry-dust.n",
+      "text": "dust mop",
+      "definition": "A mop designed to gather dry dust and loose particles.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "recycling-bin.container-for-materials-collected-for-recycling.n",
+      "text": "recycling bin",
+      "definition": "A container designated for materials collected for recycling under local arrangements.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "general-waste.waste-collected-in-residual-local-category.n",
+      "text": "general waste",
+      "definition": "Waste collected in the residual general category under the local system.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "waste-collection.organized-pickup-of-waste-for-transport.n",
+      "text": "waste collection",
+      "definition": "The organized pickup of waste for transport to further handling.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "waste-storage-area.designated-place-for-holding-waste-before-collection.n",
+      "text": "waste storage area",
+      "definition": "A designated place for holding waste before collection.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "waste-collection-point.designated-place-where-waste-is-picked-up.n",
+      "text": "waste collection point",
+      "definition": "A designated place where waste is picked up for transport.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "gutter.channel-collecting-water-from-roof.n",
+      "text": "gutter",
+      "definition": "A channel that collects water running from a roof.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "knowledge-base.organized-reference-information-collection.n",
+      "text": "knowledge base",
+      "definition": "An organized collection of information used to answer questions or support work.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "support-inbox.incoming-support-message-collection.n",
+      "text": "support inbox",
+      "definition": "An inbox used to receive and organize messages seeking assistance.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "story-mat.mat-used-as-gathering-place-for-stories.n",
+      "text": "story mat",
+      "definition": "A mat used as a gathering place for shared storytelling or reading.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "construction-set.collection-of-pieces-for-building-models.n",
+      "text": "construction set",
+      "definition": "A collection of pieces designed to connect into models or structures.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "circle-time.group-gathering-for-shared-activities.n",
+      "text": "circle time",
+      "definition": "A group gathering for activities such as discussion, songs, or stories, often arranged in a circle.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "portfolio.selected-collection-showing-learning-or-work.n",
+      "text": "portfolio",
+      "definition": "A selected collection of work or evidence showing learning or development.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "pickup.collection-of-child-from-setting.n",
+      "text": "pickup",
+      "definition": "The collection of a child from a setting under its arrangements.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "authorized-collector.person-authorized-to-collect-child.n",
+      "text": "authorized collector",
+      "definition": "A person recorded as authorized to collect a child under the applicable arrangements.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "digital-portfolio.electronic-collection-of-selected-learning-evidence.n",
+      "text": "digital portfolio",
+      "definition": "An electronic collection of selected work or evidence of learning.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "collect.gather.v",
+      "text": "collect",
+      "definition": "To gather items together or pick them up from a place.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "shuttle-stop.designated-pickup-point-for-shuttle-service.n",
+      "text": "shuttle stop",
+      "definition": "A designated place where a shuttle service picks up or drops off passengers.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "museum.place-preserving-and-displaying-collections.n",
+      "text": "museum",
+      "definition": "A place that preserves and displays collections for public interest, learning, or research.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "bus-stop.designated-place-for-bus-passenger-pickup.n",
+      "text": "bus stop",
+      "definition": "A designated place where a bus picks up or drops off passengers.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "guest-feedback-form.form-collecting-guest-comments-about-experience.n",
+      "text": "guest feedback form",
+      "definition": "A form used to collect a guest's comments about their experience for a stated purpose.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "welcome-pack.collection-of-information-for-person-joining-organization.n",
+      "text": "welcome pack",
+      "definition": "A collection of information or materials for someone joining an organization.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "personnel-file.collection-of-records-about-persons-employment.n",
+      "text": "personnel file",
+      "definition": "A collection of records about a person's employment.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "toolkit.collection-of-tools-for-related-work.n",
+      "text": "toolkit",
+      "definition": "A collection of tools kept together for related tasks.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "configuration-profile.collection-of-settings-applied-to-device-or-user.n",
+      "text": "configuration profile",
+      "definition": "A collection of settings applied to a device or user under a management arrangement.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "diagnostic-report.record-of-information-collected-to-investigate-problem.n",
+      "text": "diagnostic report",
+      "definition": "A record of information gathered to help investigate a problem.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "feedback-survey.questionnaire-collecting-comments-on-experience.n",
+      "text": "feedback survey",
+      "definition": "A questionnaire used to collect comments or ratings about an experience.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "law-library.collection-or-place-for-legal-reference-resources.n",
+      "text": "law library",
+      "definition": "A collection of legal reference resources or the place where they are provided.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "case-file.organized-collection-of-records-for-legal-matter.n",
+      "text": "case file",
+      "definition": "An organized collection of records relating to a legal matter.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "signage.collection-of-signs.n",
+      "text": "signage",
+      "definition": "Signs used to guide people or give information in a place.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "pickup-counter.collection-point.n",
+      "text": "pickup counter",
+      "definition": "A counter where customers collect orders they have already placed.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "survey.collect-responses-from-people-through-questions.v",
+      "text": "survey",
+      "definition": "To collect information from people through a planned set of questions.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "press-kit.collection-of-material-for-news-media.n",
+      "text": "press kit",
+      "definition": "A collection of information and media material prepared for news media.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "market-research.systematic-collection-and-analysis-of-market-information.n",
+      "text": "market research",
+      "definition": "The systematic collection and analysis of information about a market.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "questionnaire.set-of-questions-for-collecting-information.n",
+      "text": "questionnaire",
+      "definition": "A set of questions used to collect information.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "asset-library.organized-collection-of-reusable-media-or-other-assets.n",
+      "text": "asset library",
+      "definition": "An organized collection of media or other assets available for permitted reuse.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "array.indexed-value-collection.n",
+      "text": "array",
+      "definition": "An ordered collection whose elements can be accessed by index.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "list.ordered-collection.n",
+      "text": "list",
+      "definition": "An ordered collection of items whose supported operations depend on its implementation.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "library.reusable-code-collection.n",
+      "text": "library",
+      "definition": "A collection of reusable code that other programs can call.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "test-suite.test-collection.n",
+      "text": "test suite",
+      "definition": "A collection of tests used to check software behavior.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "dataset.data-collection.n",
+      "text": "dataset",
+      "definition": "A collection of data prepared or grouped for a particular purpose.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "collection-point.agreed-place-for-goods-to-be-picked-up.n",
+      "text": "collection point",
+      "definition": "An agreed place where goods are picked up for transport.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "parcel-locker.secure-compartment-for-parcel-collection-or-delivery.n",
+      "text": "parcel locker",
+      "definition": "A lockable compartment used for leaving or collecting parcels under a service's arrangements.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "collection-receipt.record-acknowledging-goods-pickup.n",
+      "text": "collection receipt",
+      "definition": "A record acknowledging that goods were picked up for transport.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "missed-collection.scheduled-pickup-that-did-not-take-place.n",
+      "text": "missed collection",
+      "definition": "A scheduled pickup that did not take place.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    },
+    {
+      "id": "collection-window.agreed-period-for-goods-pickup.n",
+      "text": "collection window",
+      "definition": "A period during which goods are expected or agreed to be collected.",
+      "disposition": "Separate canonical entry; preserve all fields and gates. A collection/pickup/gather derivative or definition use is not an alias or automatically scored gather verb."
+    }
+  ],
+  "shared_morph_collect_parts": [
+    {
+      "file": "data/professional/lexemes/cleaning-module06.json",
+      "sense_id": "waste-collection.organized-pickup-of-waste-for-transport.n",
+      "morphology_review": "pending",
+      "parts": [
+        {
+          "id": "p2",
+          "canonical_id": "morph.collect",
+          "type": "stem",
+          "canonical": "collect",
+          "surface": "collect"
+        }
+      ]
+    },
+    {
+      "file": "data/professional/lexemes/cleaning-module06.json",
+      "sense_id": "waste-collection-point.designated-place-where-waste-is-picked-up.n",
+      "morphology_review": "pending",
+      "parts": [
+        {
+          "id": "p2",
+          "canonical_id": "morph.collect",
+          "type": "stem",
+          "canonical": "collect",
+          "surface": "collect"
+        }
+      ]
+    },
+    {
+      "file": "data/professional/lexemes/foundation-module02.json",
+      "sense_id": "collect.gather.v",
+      "morphology_review": "pending",
+      "parts": [
+        {
+          "id": "p1",
+          "type": "atomic",
+          "canonical": "collect",
+          "surface": "collect",
+          "canonical_id": "morph.collect"
+        }
+      ]
+    }
+  ],
+  "morphology_limit": "Shared morph.collect spelling/family parts do not merge canonical lexical sense progress. This repair approves no graph or family and does not alter existing pending atomic/multipart analyses.",
+  "existing_pickup_collect_verb_identity": null,
+  "identity_inventory_observation": "The scanned live lexemes contain one exact collect headword: collect.gather.v. No exact gather or pick up headword was found. Existing pickup and collection compounds retain their distinct identities.",
+  "no_production_changes": true
+}

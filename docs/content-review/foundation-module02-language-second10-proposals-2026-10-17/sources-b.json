@@ -1,0 +1,608 @@
+{
+  "schema_version": 1,
+  "status": "source_consultation_only",
+  "consultation_date_local": "2026-10-17",
+  "timezone": "Asia/Shanghai",
+  "author_role": "AI source researcher and wording author; no independent acceptance or specialist review claimed",
+  "production_writes": false,
+  "inspected_current_file": "data/professional/lexemes/foundation-module02.json",
+  "inspected_current_file_sha256": "25d9847a7156f3c654d4592b8393660b7032f4e3f20eec63801e73369696be69",
+  "acquisition": {
+    "lexical_pages": "Original Oxford and Collins lexical URLs were opened with the web tool; findings do not depend on search snippets.",
+    "raw_oxford_supplement": "Original Oxford URLs were also fetched directly with PowerShell Invoke-WebRequest -UseBasicParsing. Sense opening tags were extracted from response.Content; SHA256 was computed over response.RawContentStream.ToArray().",
+    "raw_response_bodies_saved": false,
+    "raw_hash_scope": "Hashes identify the independently fetched response body bytes at the recorded retrieval time, not the web-rendered line snapshot and not this JSON artifact.",
+    "visible_vs_metadata": "The Oxford text renderer leaves its headword/sense level icons blank. Rendered selected-sense CEFR labels therefore remain null. Observed HTML cefr/fkcefr attributes are recorded separately without silently replacing rendered labels.",
+    "access_failures": [],
+    "corrected_url_selection": "Oxford report_1 opened successfully but is the noun page; it was excluded and report_2 was opened for the verb."
+  },
+  "oxford_raw_snapshots": [
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/replace",
+      "retrieved_at_utc": "2026-10-16T17:57:25.3971737Z",
+      "http_status": 200,
+      "byte_length": 86668,
+      "sha256": "db86ebf5280294959aa4763aeb394f96f8f17857e54159a302ee3d3b0c25ed92",
+      "hash_basis": "Invoke-WebRequest RawContentStream.ToArray() response body bytes",
+      "sense_open_tags": [
+        "<li class=\"sense\" htag=\"li\" ox3000=\"y\" hclass=\"sense\" cefr=\"a2\" id=\"replace_sng_1\" sensenum=\"1\">",
+        "<li class=\"sense\" ox3000=\"y\" htag=\"li\" cefr=\"a2\" id=\"replace_sng_2\" sensenum=\"2\" hclass=\"sense\">",
+        "<li class=\"sense\" htag=\"li\" ox3000=\"y\" hclass=\"sense\" sensenum=\"3\" id=\"replace_sng_3\" cefr=\"a2\">",
+        "<li class=\"sense\" id=\"replace_sng_4\" sensenum=\"4\" hclass=\"sense\" htag=\"li\">"
+      ],
+      "headword_symbol": [
+        "<span class=\"ox3ksym_a2\">"
+      ],
+      "headword_symbol_note": "The field contains distinct level-icon spans found across the entry, not necessarily only the headword icon."
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/return_1",
+      "retrieved_at_utc": "2026-10-16T17:57:24.9815973Z",
+      "http_status": 200,
+      "byte_length": 112595,
+      "sha256": "b8fdaff774bb3709dcc6841f35c05f5856bcab14fe12523a23383cf0de6d7d95",
+      "hash_basis": "Invoke-WebRequest RawContentStream.ToArray() response body bytes",
+      "sense_open_tags": [
+        "<li class=\"sense\" htag=\"li\" ox3000=\"y\" hclass=\"sense\" id=\"return_sng_1\" sensenum=\"1\" cefr=\"a1\">",
+        "<li class=\"sense\" ox3000=\"y\" htag=\"li\" cefr=\"b1\" sensenum=\"2\" id=\"return_sng_2\" hclass=\"sense\">",
+        "<li class=\"sense\" ox3000=\"y\" htag=\"li\" sensenum=\"3\" cefr=\"b1\" id=\"return_sng_3\" hclass=\"sense\">",
+        "<li class=\"sense\" id=\"return_sng_4\" sensenum=\"4\" cefr=\"b1\" hclass=\"sense\" ox3000=\"y\" htag=\"li\">",
+        "<li class=\"sense\" id=\"return_sng_5\" cefr=\"b1\" sensenum=\"5\" hclass=\"sense\" ox3000=\"y\" htag=\"li\">",
+        "<li class=\"sense\" hclass=\"sense\" sensenum=\"6\" id=\"return_sng_6\" htag=\"li\">",
+        "<li class=\"sense\" hclass=\"sense\" id=\"return_sng_7\" sensenum=\"7\" cefr=\"c2\" htag=\"li\">",
+        "<li class=\"sense\" id=\"return_sng_8\" sensenum=\"8\" cefr=\"c2\" hclass=\"sense\" htag=\"li\">",
+        "<li class=\"sense\" htag=\"li\" hclass=\"sense\" sensenum=\"9\" id=\"return_sng_9\">",
+        "<li class=\"sense\" hclass=\"sense\" id=\"return_sng_10\" sensenum=\"10\" htag=\"li\">"
+      ],
+      "headword_symbol": [
+        "<span class=\"ox3ksym_a1\">",
+        "<span class=\"ox3ksym_b1\">"
+      ],
+      "headword_symbol_note": "The field contains distinct level-icon spans found across the entry, not necessarily only the headword icon."
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/report_2",
+      "retrieved_at_utc": "2026-10-16T17:57:25.0150161Z",
+      "http_status": 200,
+      "byte_length": 110673,
+      "sha256": "30bedeaf5680fe197a414b7e98a68cf045a142237381ed6351f5235827014590",
+      "hash_basis": "Invoke-WebRequest RawContentStream.ToArray() response body bytes",
+      "sense_open_tags": [
+        "<li class=\"sense\" htag=\"li\" ox3000=\"y\" hclass=\"sense\" cefr=\"a2\" sensenum=\"1\" id=\"report_sng_1\">",
+        "<li class=\"sense\" ox3000=\"y\" htag=\"li\" cefr=\"a2\" sensenum=\"2\" id=\"report_sng_2\" hclass=\"sense\">",
+        "<li class=\"sense\" htag=\"li\" ox3000=\"y\" hclass=\"sense\" cefr=\"b1\" sensenum=\"3\" id=\"report_sng_3\">",
+        "<li class=\"sense\" htag=\"li\" ox3000=\"y\" hclass=\"sense\" cefr=\"a2\" sensenum=\"4\" id=\"report_sng_4\">",
+        "<li class=\"sense\" sensenum=\"5\" cefr=\"b2\" id=\"report_sng_5\" hclass=\"sense\" ox3000=\"y\" htag=\"li\">"
+      ],
+      "headword_symbol": [
+        "<span class=\"ox3ksym_a2\">",
+        "<span class=\"ox3ksym_b1\">",
+        "<span class=\"ox3ksym_b2\">"
+      ],
+      "headword_symbol_note": "The field contains distinct level-icon spans found across the entry, not necessarily only the headword icon."
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/notify",
+      "retrieved_at_utc": "2026-10-16T17:57:24.6933746Z",
+      "http_status": 200,
+      "byte_length": 79832,
+      "sha256": "ef63a9c8127914ddf7343ef13927695795a71d0f50aba2dbdbd99609cc7cf2ae",
+      "hash_basis": "Invoke-WebRequest RawContentStream.ToArray() response body bytes",
+      "sense_open_tags": [
+        "<li class=\"sense\" htag=\"li\" id=\"notify_sng_1\" fkox5000=\"y\" hclass=\"sense\" fkcefr=\"c1\">"
+      ],
+      "headword_symbol": [
+        "<span class=\"ox5ksym_c1\">"
+      ],
+      "headword_symbol_note": "The field contains distinct level-icon spans found across the entry, not necessarily only the headword icon."
+    },
+    {
+      "url": "https://www.oxfordlearnersdictionaries.com/definition/english/contact_2",
+      "retrieved_at_utc": "2026-10-16T17:57:24.5408804Z",
+      "http_status": 200,
+      "byte_length": 85067,
+      "sha256": "2e6fa6884dceb057a6f1490f66f99d1ab4bcc40c668e430956816fef7c2fe03b",
+      "hash_basis": "Invoke-WebRequest RawContentStream.ToArray() response body bytes",
+      "sense_open_tags": [
+        "<li class=\"sense\" id=\"contact_sng_9\" fkox3000=\"y\" fkcefr=\"b1\" hclass=\"sense\" htag=\"li\">"
+      ],
+      "headword_symbol": [
+        "<span class=\"ox3ksym_b1\">"
+      ],
+      "headword_symbol_note": "The field contains distinct level-icon spans found across the entry, not necessarily only the headword icon."
+    }
+  ],
+  "entries": [
+    {
+      "id": "replace.put-instead.v",
+      "current": {
+        "definition": "To put a new or different item in the place of another.",
+        "example": "We need to replace the damaged folder.",
+        "difficulty": "A2"
+      },
+      "selected_sense": "Replacing an existing item with another; the damaged-folder example specifically instantiates replacement of a damaged item.",
+      "sources": [
+        {
+          "publisher": "Oxford",
+          "url": "https://www.oxfordlearnersdictionaries.com/definition/english/replace",
+          "access": "opened_original_page_and_direct_HTTP_200",
+          "selected_sections": [
+            {
+              "sense": 2,
+              "id": "replace_sng_2",
+              "rendered_lines": "145-150",
+              "role": "primary general substitution"
+            },
+            {
+              "sense": 3,
+              "id": "replace_sng_3",
+              "rendered_lines": "168-180",
+              "role": "damaged-item example"
+            }
+          ],
+          "rendered_selected_cefr": null,
+          "rendered_selected_topic": null,
+          "html_selected_levels": [
+            {
+              "id": "replace_sng_2",
+              "attribute": "cefr",
+              "literal_value": "a2"
+            },
+            {
+              "id": "replace_sng_3",
+              "attribute": "cefr",
+              "literal_value": "a2"
+            }
+          ],
+          "other_senses": {
+            "sense_1": {
+              "html_attribute": "cefr",
+              "literal_value": "a2",
+              "scope": "one entity serves instead of another"
+            },
+            "sense_4": {
+              "rendered_lines": "199-205",
+              "scope": "put the same object back",
+              "selected": false
+            }
+          },
+          "footer": {
+            "rendered_lines": "225-239",
+            "headword": "reasonably",
+            "literal_label": "B2",
+            "belongs_to_selected_entry": false
+          }
+        },
+        {
+          "publisher": "Collins COBUILD",
+          "url": "https://www.collinsdictionary.com/dictionary/english/replace",
+          "access": "opened_original_page",
+          "selected_sections": [
+            {
+              "sense": 2,
+              "rendered_lines": "233-238",
+              "literal_cefr": "B1+",
+              "role": "general substitution"
+            },
+            {
+              "sense": 3,
+              "rendered_lines": "240-244",
+              "literal_cefr": "B1",
+              "role": "damaged-item example"
+            }
+          ],
+          "other_senses": [
+            {
+              "sense": 1,
+              "rendered_lines": "224-231",
+              "literal_cefr": "B2",
+              "scope": "one entity serves instead of another"
+            },
+            {
+              "sense": 4,
+              "rendered_lines": "246-248",
+              "literal_cefr": null,
+              "scope": "put the same object back"
+            }
+          ]
+        }
+      ],
+      "wording_suggestion": {
+        "definition": "To put a new or different item in the place of another.",
+        "example": "We need to replace the damaged folder with a new one.",
+        "change_note": "Retain the natural current definition; the revised original example makes the replacement frame explicit."
+      },
+      "ambiguity_or_difficulty_blockers": [
+        "General definition and damaged-item example span related senses 2 and 3; identify both rather than applying Collins B1+ to every use.",
+        "Current A2 has Oxford HTML support, while Collins prints B1+ for general substitution and B1 for damaged-item replacement. Preserve the disagreement for an editorial difficulty decision.",
+        "Exclude the put-back sense; it overlaps with return but is not this target."
+      ],
+      "acceptance_status": "pending"
+    },
+    {
+      "id": "return.send-back.v",
+      "current": {
+        "definition": "To take or send something back to an earlier place or person.",
+        "example": "Please return the key to reception.",
+        "difficulty": "A2"
+      },
+      "selected_sense": "Transitive giving or sending an object back, with a borrowed key as the contextual instance.",
+      "sources": [
+        {
+          "publisher": "Oxford",
+          "url": "https://www.oxfordlearnersdictionaries.com/definition/english/return_1",
+          "access": "opened_original_page_and_direct_HTTP_200",
+          "selected_sections": [
+            {
+              "sense": 2,
+              "id": "return_sng_2",
+              "heading": "bring/give back",
+              "rendered_lines": "169-186"
+            }
+          ],
+          "rendered_selected_cefr": null,
+          "rendered_selected_topic": {
+            "literal_text": "Shoppingb1",
+            "topic": "Shopping",
+            "literal_level": "b1",
+            "rendered_line": 186
+          },
+          "html_selected_levels": [
+            {
+              "id": "return_sng_2",
+              "attribute": "cefr",
+              "literal_value": "b1"
+            }
+          ],
+          "other_senses": [
+            {
+              "sense": 1,
+              "id": "return_sng_1",
+              "html_attribute": "cefr",
+              "literal_value": "a1",
+              "scope": "intransitive travel back"
+            },
+            {
+              "sense": 7,
+              "rendered_line": 316,
+              "literal_topic_level": "c2",
+              "scope": "tennis"
+            },
+            {
+              "sense": 8,
+              "rendered_line": 323,
+              "literal_topic_level": "c2",
+              "scope": "verdict"
+            }
+          ],
+          "footer": {
+            "rendered_lines": "376-390",
+            "headword": "reasonably",
+            "literal_label": "B2",
+            "belongs_to_selected_entry": false
+          }
+        },
+        {
+          "publisher": "Collins COBUILD",
+          "url": "https://www.collinsdictionary.com/dictionary/english/return",
+          "access": "opened_original_page",
+          "selected_sections": [
+            {
+              "sense": 3,
+              "rendered_lines": "243-250",
+              "literal_cefr": "A2",
+              "scope": "borrowed or taken object given or put back"
+            }
+          ],
+          "related_section": {
+            "sense": 4,
+            "rendered_lines": "257-261",
+            "literal_cefr": null,
+            "scope": "purchased item taken or sent back to seller"
+          },
+          "other_senses": [
+            {
+              "sense": 1,
+              "rendered_line": 224,
+              "literal_cefr": "A2",
+              "scope": "intransitive travel back"
+            },
+            {
+              "sense": 2,
+              "rendered_line": 237,
+              "literal_cefr": "B1",
+              "scope": "noun arrival back"
+            },
+            {
+              "sense": 9,
+              "rendered_line": 310,
+              "literal_cefr": "B2",
+              "scope": "resuming a topic"
+            }
+          ]
+        }
+      ],
+      "wording_suggestion": {
+        "definition": "To give or send something back to its owner or the place it came from.",
+        "example": "Please return the borrowed key to reception.",
+        "change_note": "Replace the awkward 'earlier place or person' with an explicit object-return relation; borrowed makes the Collins selected sense unambiguous."
+      },
+      "ambiguity_or_difficulty_blockers": [
+        "Do not use Oxford A1 for the intransitive travel sense to label this transitive object sense.",
+        "Current A2 is printed for Collins borrowed-object sense; Oxford selected HTML and Shopping topic are b1. Record both.",
+        "Do not transfer the Collins A2 borrowed-object label to every purchased-goods return without noting its separate unlabeled sense."
+      ],
+      "acceptance_status": "pending"
+    },
+    {
+      "id": "report.give-information.v",
+      "current": {
+        "definition": "To give information about an event, result, or problem to someone responsible.",
+        "example": "Please report the equipment problem to the supervisor.",
+        "difficulty": "A2"
+      },
+      "selected_sense": "Communicating observed information, including a workplace problem; the current authority-oriented recipient partly overlaps the separate official-reporting sense.",
+      "sources": [
+        {
+          "publisher": "Oxford",
+          "url": "https://www.oxfordlearnersdictionaries.com/definition/english/report_2",
+          "access": "opened_original_page_and_direct_HTTP_200",
+          "selected_sections": [
+            {
+              "sense": 1,
+              "id": "report_sng_1",
+              "heading": "give information",
+              "rendered_lines": "113-131"
+            }
+          ],
+          "rendered_selected_cefr": null,
+          "rendered_selected_topic": null,
+          "html_selected_levels": [
+            {
+              "id": "report_sng_1",
+              "attribute": "cefr",
+              "literal_value": "a2"
+            }
+          ],
+          "related_section": {
+            "sense": 4,
+            "id": "report_sng_4",
+            "heading": "crime/accident, etc.",
+            "rendered_lines": "249-278",
+            "html_attribute": "cefr",
+            "literal_value": "a2",
+            "rendered_topic": "Crime and punishmenta2",
+            "scope": "authority-facing disclosure; related but not primary selected sense"
+          },
+          "other_senses": [
+            {
+              "sense": 2,
+              "rendered_line": 209,
+              "literal_topic": "TV, radio and newsa2",
+              "selected": false
+            },
+            {
+              "sense": 3,
+              "id": "report_sng_3",
+              "html_attribute": "cefr",
+              "literal_value": "b1",
+              "scope": "attributed statements"
+            },
+            {
+              "sense": 5,
+              "id": "report_sng_5",
+              "html_attribute": "cefr",
+              "literal_value": "b2",
+              "scope": "arriving for work or duty"
+            }
+          ],
+          "footer": {
+            "rendered_lines": "381-395",
+            "headword": "reasonably",
+            "literal_label": "B2",
+            "belongs_to_selected_entry": false
+          }
+        },
+        {
+          "publisher": "Collins COBUILD",
+          "url": "https://www.collinsdictionary.com/dictionary/english/report",
+          "access": "opened_original_page",
+          "selected_sections": [
+            {
+              "sense": 1,
+              "rendered_lines": "224-242",
+              "literal_cefr": "B1",
+              "scope": "tell people about an occurrence, including reporting an incident to police"
+            }
+          ],
+          "other_senses": [
+            {
+              "sense": 2,
+              "rendered_lines": "244-249",
+              "literal_cefr": "B1+",
+              "scope": "report on a subject as job or duty"
+            },
+            {
+              "sense": 7,
+              "rendered_lines": "286-293",
+              "literal_cefr": null,
+              "scope": "report someone's wrongdoing to authority"
+            },
+            {
+              "sense": 8,
+              "rendered_lines": "295-299",
+              "literal_cefr": null,
+              "scope": "arrive and make presence known"
+            }
+          ]
+        }
+      ],
+      "wording_suggestion": {
+        "definition": "To tell someone about an event, result, or problem.",
+        "example": "Please report the equipment problem to the supervisor.",
+        "change_note": "The original shortened definition fits general give-information scope; the existing example supplies the workplace recipient."
+      },
+      "ambiguity_or_difficulty_blockers": [
+        "The current 'someone responsible' restriction blends general information reporting with authority-facing reporting. Either document the narrower workplace scope or use the suggested general definition.",
+        "Oxford primary-sense HTML is a2 while Collins primary-sense visible label is B1; neither independently validates the lesson difficulty.",
+        "The noun page report_1 and arrival-for-duty sense are excluded."
+      ],
+      "acceptance_status": "pending"
+    },
+    {
+      "id": "notify.inform.v",
+      "current": {
+        "definition": "To formally tell someone information they need to know.",
+        "example": "Please notify the team if the meeting time changes.",
+        "difficulty": "A2"
+      },
+      "selected_sense": "Formal or official communication of information to someone.",
+      "sources": [
+        {
+          "publisher": "Oxford",
+          "url": "https://www.oxfordlearnersdictionaries.com/definition/english/notify",
+          "access": "opened_original_page_and_direct_HTTP_200",
+          "selected_sections": [
+            {
+              "sense": 1,
+              "id": "notify_sng_1",
+              "rendered_lines": "103-122",
+              "register": "formal",
+              "grammar_note": "often passive"
+            }
+          ],
+          "rendered_selected_cefr": null,
+          "rendered_selected_topic": null,
+          "html_selected_levels": [
+            {
+              "id": "notify_sng_1",
+              "attribute": "fkcefr",
+              "literal_value": "c1",
+              "additional_attribute": "fkox5000=\"y\""
+            }
+          ],
+          "headword_icon_metadata": {
+            "class": "ox5ksym_c1",
+            "wordlist_query": "dataset=english&list=ox5000&level=c1"
+          },
+          "footer": {
+            "rendered_lines": "153-167",
+            "headword": "reasonably",
+            "literal_label": "B2",
+            "belongs_to_selected_entry": false
+          }
+        },
+        {
+          "publisher": "Collins COBUILD",
+          "url": "https://www.collinsdictionary.com/dictionary/english/notify",
+          "access": "opened_original_page",
+          "selected_sections": [
+            {
+              "sense": "single verb",
+              "rendered_lines": "224-239",
+              "literal_cefr": null,
+              "literal_register": "[formal]",
+              "patterns": "notify someone of/about something; notify someone that; notify someone"
+            }
+          ],
+          "visible_cefr_status": "No CEFR label was printed in the selected verb section."
+        }
+      ],
+      "wording_suggestion": {
+        "definition": "To tell someone about something in a formal or official way.",
+        "example": "Please notify the team of the new meeting time.",
+        "change_note": "Original wording clarifies formality and demonstrates the frequent notify someone of something construction."
+      },
+      "ambiguity_or_difficulty_blockers": [
+        "Current A2 is unsupported by these selected-source levels: Oxford explicitly records c1 in HTML and Collins prints no selected CEFR label.",
+        "Keep difficulty held unless a directly supported editorial rationale justifies a different lesson level; do not clamp C1 to B2 merely to fit an allowed range.",
+        "The visible B2 footer belongs to reasonably and cannot justify a B2 notify decision."
+      ],
+      "acceptance_status": "pending",
+      "difficulty_disposition": "held"
+    },
+    {
+      "id": "contact.communicate-with.v",
+      "current": {
+        "definition": "To communicate with a person or organization.",
+        "example": "I will contact the supplier about the missing box.",
+        "difficulty": "A2"
+      },
+      "selected_sense": "Getting in touch with a person or organization to exchange information.",
+      "sources": [
+        {
+          "publisher": "Oxford",
+          "url": "https://www.oxfordlearnersdictionaries.com/definition/english/contact_2",
+          "access": "opened_original_page_and_direct_HTTP_200",
+          "selected_sections": [
+            {
+              "sense": "single displayed verb sense",
+              "id": "contact_sng_9",
+              "rendered_lines": "111-123"
+            }
+          ],
+          "rendered_selected_cefr": null,
+          "rendered_selected_topic": {
+            "literal_text": "Phones, email and the internetb1",
+            "topic": "Phones, email and the internet",
+            "literal_level": "b1",
+            "rendered_line": 123
+          },
+          "html_selected_levels": [
+            {
+              "id": "contact_sng_9",
+              "attribute": "fkcefr",
+              "literal_value": "b1",
+              "additional_attribute": "fkox3000=\"y\""
+            }
+          ],
+          "footer": {
+            "rendered_lines": "171-185",
+            "headword": "reasonably",
+            "literal_label": "B2",
+            "belongs_to_selected_entry": false
+          }
+        },
+        {
+          "publisher": "Collins COBUILD",
+          "url": "https://www.collinsdictionary.com/dictionary/english/contact",
+          "access": "opened_original_page",
+          "selected_sections": [
+            {
+              "sense": 3,
+              "rendered_lines": "237-244",
+              "literal_cefr": "A2",
+              "scope": "phone, write, or visit to tell or ask something"
+            }
+          ],
+          "other_senses": [
+            {
+              "sense": 1,
+              "rendered_lines": "224-231",
+              "literal_cefr": "B1",
+              "scope": "noun communication"
+            },
+            {
+              "sense": 4,
+              "rendered_lines": "246-250",
+              "literal_cefr": null,
+              "scope": "adjectival contact details"
+            }
+          ]
+        }
+      ],
+      "wording_suggestion": {
+        "definition": "To communicate with a person or organization.",
+        "example": "I will contact the supplier about the missing box.",
+        "change_note": "The existing definition and example are natural and directly match the selected communication sense; no wording change is necessary."
+      },
+      "ambiguity_or_difficulty_blockers": [
+        "Current A2 matches the Collins selected verb label, while Oxford selected HTML and topic label are b1. Preserve both.",
+        "Do not use the Collins B1 noun label or Oxford footer B2 as the verb's selected label.",
+        "Contact takes a direct object in the target example; do not introduce an unnecessary 'with' after the verb."
+      ],
+      "acceptance_status": "pending"
+    }
+  ],
+  "handoff_scope": "Wording suggestions are authored proposals only. Parent owns candidate construction, context screening, difficulty policy decisions, independent review, and integration."
+}

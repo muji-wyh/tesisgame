@@ -1,0 +1,47 @@
+{
+  "status": "exact_image_only_integration_proposal_pending_descriptor_acceptance",
+  "sense_id": "shopping-cart.store-trolley.n",
+  "file": "data/professional/lexemes/retail-pilot.json",
+  "protected_scope": "Only this entry media.image and the exact one-sentence editorial_notes replacement may change. All other entry fields, note content, other entries, course/module statuses, audio, morphology and theme metadata remain outside this delta.",
+  "preimage_hash_method": "SHA-256 over UTF-8 JSON.stringify(value), with native property order and no trailing newline",
+  "current_full_file_sha256": "5cd62af3a22cdec038afb58391a1ce496669bd5e1e163093417ed9d83a4561fb",
+  "current_entry_sha256": "3c731cf0d0f87d8425d6fea164ba90309d32f2840eb388176c779b8fb7e9c257",
+  "image_preimage_sha256": "041b1e2740f080c842aaf835a0a82ac76f77cd281a5025f868adc95d50e4e98e",
+  "image_after_sha256": "bdebd007958c4b8472c5a792d4313131205ee023a2827450afb4dc2e1d046ec7",
+  "editorial_notes_preimage_sha256": "a22ce6b4942c493e4c188c4f9a0f43f6296be42c68a01f505306eaaa5221c805",
+  "editorial_notes_after_sha256": "6e45cc8fc228a18ed374c81965cdb81f9347c220aa5a51cf68c9dfd004a0d1fe",
+  "original_candidate_receipt_sha256": "8184775b0fa33ba022f697aaf9ba78720f5a8ba60520154dc439bb2740f2ef2f",
+  "candidate": {
+    "path": "build/professional-english/retail-term-art-review/shopping-cart/candidate/shopping-cart.png",
+    "sha256": "b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1",
+    "bytes": 93422
+  },
+  "target_image": "professional-media/b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1.png",
+  "resource": {
+    "id": "sha256:b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1",
+    "sha256": "b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1",
+    "kind": "image",
+    "format": "png",
+    "path": "professional-media/b24c30c83f5b1a73cbee18b746ab96801bd01f91d3e7da5b40eb8bc9e260a5d1.png",
+    "compressed_bytes": 93422,
+    "decoded_bytes": 1699840,
+    "width": 512,
+    "height": 415
+  },
+  "exact_image_delta": "entry-image.after.json",
+  "exact_note_delta": "editorial-note.delta.json",
+  "suitability_proposal": "asset-provenance.json",
+  "validation": {
+    "schema_errors": [],
+    "entry_fields_outside_image_and_exact_note_identical": true,
+    "source_hashes_verified": 3
+  },
+  "plan": [
+    "Root reviews this exact immutable resource and image metadata delta before production mutation.",
+    "The art owner copies only the accepted bytes to the content-addressed raw media path and retains permanent source/review evidence; no regeneration.",
+    "The content owner applies the image and exact note delta after checking their preimage hashes, so concurrent authorized language review is preserved.",
+    "Using the serialized native slot, verify the persisted image descriptor, real native raw loader, cache lease, actual WordCard lookup through scoped media URLs and cache teardown.",
+    "The content owner runs the final content suite after all serialized deltas. Every incomplete course/module and unrelated gate remains pending."
+  ],
+  "verification_manifest_scope": "The image-only inspection inventory is not a production module manifest. It cannot make a pending module playable."
+}

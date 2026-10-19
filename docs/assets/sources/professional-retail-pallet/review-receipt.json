@@ -1,0 +1,423 @@
+{
+  "date": "2026-10-16",
+  "status": "scratch_candidate_pending_independent_root_review",
+  "sense_id": "pallet.goods-platform.n",
+  "approved_brief": "Show a clean wooden goods pallet in a low three-quarter view so top slats, spacer blocks, and fork-entry gaps are visible. One small carton may show scale without obscuring the platform. Reject a pile of boards, a bed, or a loaded pallet hidden entirely by boxes. A weathered source asset is not automatically compatible with the clean Retail art direction.",
+  "production_media_status": "pending",
+  "source": {
+    "source": "https://kenney.nl/assets/mini-skate",
+    "creator": "Kenney",
+    "license": "CC0 1.0",
+    "version": "Mini Skate 1.2, source license creation 2024-02-29; public current page advertises 2.0, not used here.",
+    "acquisition_status": "Previously acquired local source; exact originals copied to scratch only. New still rendered for review, not integrated.",
+    "animations": [],
+    "files_verified_against_originals_after_render": 4,
+    "record": {
+      "path": "source-record.json",
+      "bytes": 3991,
+      "sha256": "aa04c55602226900429ecf75d95ee6b3abcdaa449898e912559da043cc4fba51"
+    }
+  },
+  "candidate": {
+    "file": {
+      "path": "candidate/pallet.png",
+      "bytes": 86689,
+      "sha256": "7487ee641b0cea58e5de43f619f03dead5d382444928d408c71d3811b60761b8"
+    },
+    "size": [
+      512,
+      278
+    ],
+    "conservative_decoded_cpu_gpu_bytes": 1138688,
+    "camera": {
+      "lighting": {
+        "ambient_energy": 0.35,
+        "directional_energy": 0.65,
+        "directional_rotation": [
+          -50,
+          -35,
+          0
+        ]
+      },
+      "orthographic_size": 0.62,
+      "position": [
+        2.7,
+        1.6,
+        4
+      ],
+      "target": [
+        0,
+        0.067,
+        0
+      ]
+    },
+    "raw_size": [
+      768,
+      768
+    ],
+    "alpha_bounds": [
+      20,
+      194,
+      728,
+      380
+    ],
+    "crop": [
+      4,
+      178,
+      760,
+      412
+    ],
+    "transforms": "Root-node recenter only; original per-node transforms and source geometry, materials, textures and supports preserved.",
+    "approval": null,
+    "production_integration": false
+  },
+  "view_decisions": [
+    {
+      "view": "front-three-quarter",
+      "status": "not_selected",
+      "reason": "Upper surface visible, but selected lower angle emphasizes the side fork gap with the same three top slats."
+    },
+    {
+      "view": "front-other-side",
+      "status": "not_selected",
+      "reason": "Near side support obscures the side fork opening and flattens lower structure."
+    },
+    {
+      "view": "rear-three-quarter",
+      "status": "not_selected",
+      "reason": "Lower support geometry less open and faces away from the warmer lit presentation."
+    },
+    {
+      "view": "front-low",
+      "status": "camera_selected_for_scratch_candidate",
+      "reason": "Keeps three top slats, front spacer/support shapes and right fork-entry opening simultaneously visible."
+    },
+    {
+      "view": "front-center-high",
+      "status": "not_selected",
+      "reason": "Near-frontal high view weakens the required three-quarter depth and fork-gap cue."
+    },
+    {
+      "view": "front-left-low",
+      "status": "not_selected",
+      "reason": "Near side support obscures side opening; no advantage over selected view."
+    },
+    {
+      "view": "front-eye-level",
+      "status": "not_selected",
+      "reason": "Fork opening remains strong but top slats compress to narrow edges."
+    },
+    {
+      "view": "underside",
+      "status": "structural_evidence_only",
+      "reason": "Verifies source lower supports and openings, not the approved presentation."
+    }
+  ],
+  "native_validation": {
+    "checks": 21,
+    "failures": 0,
+    "report": {
+      "path": "candidate/report.json",
+      "bytes": 4361,
+      "sha256": "9ca4c7dbaeb5c93572488282751db1b83d40e62d31e980f3f03a95aeec291192"
+    },
+    "log": {
+      "path": "candidate/render.log",
+      "bytes": 376,
+      "sha256": "c7903cc6e4f3c43c805f08fc918d44506ee362b394cdec3b96d78513d7e2d045"
+    },
+    "measurements": [
+      {
+        "badge_visible": false,
+        "card_script": "res://scripts/word_card.gd",
+        "card_size": [
+          126,
+          72
+        ],
+        "image_render_size": [
+          95.7697841726619,
+          52
+        ],
+        "picture_alpha": 1,
+        "picture_size": [
+          102,
+          52
+        ],
+        "state": "match-unmatched",
+        "texture_delivery": "Direct scratch ImageTexture assignment after real WordCard setup; not the production media loader."
+      },
+      {
+        "badge_visible": true,
+        "card_script": "res://scripts/word_card.gd",
+        "card_size": [
+          126,
+          72
+        ],
+        "image_render_size": [
+          95.7697841726619,
+          52
+        ],
+        "picture_alpha": 0.680000007152557,
+        "picture_size": [
+          102,
+          52
+        ],
+        "state": "match-matched",
+        "texture_delivery": "Direct scratch ImageTexture assignment after real WordCard setup; not the production media loader."
+      },
+      {
+        "badge_visible": false,
+        "card_script": "res://scripts/word_card.gd",
+        "card_size": [
+          144,
+          74
+        ],
+        "image_render_size": [
+          99.4532374100719,
+          54
+        ],
+        "picture_alpha": 1,
+        "picture_size": [
+          120,
+          54
+        ],
+        "state": "memory-unmatched",
+        "texture_delivery": "Direct scratch ImageTexture assignment after real WordCard setup; not the production media loader."
+      },
+      {
+        "badge_visible": true,
+        "card_script": "res://scripts/word_card.gd",
+        "card_size": [
+          144,
+          74
+        ],
+        "image_render_size": [
+          99.4532374100719,
+          54
+        ],
+        "picture_alpha": 0.680000007152557,
+        "picture_size": [
+          120,
+          54
+        ],
+        "state": "memory-matched",
+        "texture_delivery": "Direct scratch ImageTexture assignment after real WordCard setup; not the production media loader."
+      }
+    ],
+    "scope": "Actual native WordCard with direct scratch texture, not production loading or module readiness."
+  },
+  "author_visual_findings": {
+    "full_size": "Three distinct top slats, clean orange wood-colored surfaces, chunky spacer/support blocks and open lower gaps are visible.",
+    "minimum_size": "The top gaps and right-side fork opening remain visible in Match126x72 and Memory144x74. Matched badge overlaps a small upper-right area; the lower opening and most slat edges remain readable with real 0.68 alpha.",
+    "style": "Clean simple Kenney coloring and lighting are coherent with the accepted cart and basket; no weathering or surface repaint is introduced.",
+    "recommendation": "Viable candidate for independent root review; do not integrate from this author recommendation alone.",
+    "limits": [
+      "Stylized compact source uses thick slats and supports and has no workplace or human scale cue.",
+      "No carton is present; the exact brief makes it optional.",
+      "No claim of compliance with a real pallet dimension/load standard.",
+      "No participant vocabulary-recognition study.",
+      "Picture acceptance does not approve morphology, language, audio, unrelated assets or module readiness."
+    ]
+  },
+  "preservation": {
+    "original_and_retained_bundle_hashes_unchanged": true,
+    "source_geometry_modified": false,
+    "source_materials_modified": false,
+    "source_textures_modified": false,
+    "source_leaf_node_transforms_modified": false,
+    "production_content_written": false,
+    "production_assets_written": false,
+    "production_tests_written": false,
+    "production_gates_written": false,
+    "production_provenance_written": false
+  },
+  "render_dependencies": [
+    {
+      "path": "scripts/word_card.gd",
+      "sha256": "ddb3f7ef5b1910086e0418e476ceee4f551aa2e048bed6993005bdbd0402a3bf"
+    },
+    {
+      "path": "scripts/game_data.gd",
+      "sha256": "7dc8a8e151e2e0af27ea1733d3d7835cc9611002c9b88da6915983a6b5f3df9a"
+    },
+    {
+      "path": "scripts/ui_style.gd",
+      "sha256": "5991ec95ba399174d3f207f6a16d3fdd4e614938093c1cb42a6a7768b5de9221"
+    },
+    {
+      "path": "scripts/professional_catalog.gd",
+      "sha256": "89865c3e86d2140d6b495461632a4a16ecf6eb1bd03e0d2ce4902cce33eeb15e"
+    },
+    {
+      "path": "tools/run-godot.cjs",
+      "sha256": "a411f937acd304761e0ac9f6513f45e0f2a6aa886856e3b32a537a04ff5189be"
+    }
+  ],
+  "evidence_files": [
+    {
+      "path": "README.md",
+      "bytes": 3705,
+      "sha256": "16aec59efd59756fad55be7f9574396559f1b9b233d72bf61ebfb10ccdcc956f"
+    },
+    {
+      "path": "candidate/actual-word-card-contact-3x.png",
+      "bytes": 77860,
+      "sha256": "5b8462e3533cb77f4f85fe636ca77e0b9bb7eeb088f0cd7d5e23914cfc4524d1"
+    },
+    {
+      "path": "candidate/actual-word-card-contact.png",
+      "bytes": 55973,
+      "sha256": "010d0dbfd720e45a718895558a98dc7a5d1ac58236306b7f77f3e343239bda41"
+    },
+    {
+      "path": "candidate/match-matched.png",
+      "bytes": 6643,
+      "sha256": "1f44a96fd1a284eaa96049f826a0c7912cc179b3d2e7309556692ea74a8042aa"
+    },
+    {
+      "path": "candidate/match-unmatched.png",
+      "bytes": 6479,
+      "sha256": "2847af308dea8aa80ddb9d54243a7e853a68002988603d8e689bdf7d6913167f"
+    },
+    {
+      "path": "candidate/memory-matched.png",
+      "bytes": 6670,
+      "sha256": "845fdf4c9cdf8451d70937c4f46322111aaa7059d1a05e47e5312766616c0926"
+    },
+    {
+      "path": "candidate/memory-unmatched.png",
+      "bytes": 6564,
+      "sha256": "a4d5f60b90a55a441acce945504805dbf935a249200e5281b20fcbdb9132334e"
+    },
+    {
+      "path": "candidate/pallet.png",
+      "bytes": 86689,
+      "sha256": "7487ee641b0cea58e5de43f619f03dead5d382444928d408c71d3811b60761b8"
+    },
+    {
+      "path": "candidate/render-raw.png",
+      "bytes": 46328,
+      "sha256": "dfda82bad2302ec47d651aae1e556e0013435f6e4667448419c03fbeb2ea6f44"
+    },
+    {
+      "path": "candidate/render.log",
+      "bytes": 376,
+      "sha256": "c7903cc6e4f3c43c805f08fc918d44506ee362b394cdec3b96d78513d7e2d045"
+    },
+    {
+      "path": "candidate/report.json",
+      "bytes": 4361,
+      "sha256": "9ca4c7dbaeb5c93572488282751db1b83d40e62d31e980f3f03a95aeec291192"
+    },
+    {
+      "path": "candidate/style-comparison-native-crops-2x.png",
+      "bytes": 102676,
+      "sha256": "b4542183a2163e66657e0ba46c92ca196fc819b336e94cfa374616b9f8560a90"
+    },
+    {
+      "path": "candidate/style-comparison-native-crops.png",
+      "bytes": 78310,
+      "sha256": "e90dcf1a7d9a74dc4e104e12de3ce2fc418ffbabb1e523626b9a8d9be3de245a"
+    },
+    {
+      "path": "inspect-source.gd",
+      "bytes": 3433,
+      "sha256": "b1bb7ae7fd90009201e4f2ea2a45ff49bf588a593605e632104529ff17293f72"
+    },
+    {
+      "path": "make-contacts.py",
+      "bytes": 2003,
+      "sha256": "483e91a46e021a86535201587709198040d764a1494ecaa7fcc5b40cc0abbb7f"
+    },
+    {
+      "path": "package-review.cjs",
+      "bytes": 6415,
+      "sha256": "476543eae9c6f71de6aa999d4002508b9e3fa47a5d80649916766e7595da1174"
+    },
+    {
+      "path": "render-candidate.gd",
+      "bytes": 8727,
+      "sha256": "fc4176fc677b3b52a98b39c7020c152e9e72c49499db1843a59ce002c2406d04"
+    },
+    {
+      "path": "source-inspection/contact.png",
+      "bytes": 215346,
+      "sha256": "d2aaa9efe0363eeceb4bc5998e84a9348c55fd38e934429d8d0d5f95779cc8f7"
+    },
+    {
+      "path": "source-inspection/front-center-high.png",
+      "bytes": 21283,
+      "sha256": "5f0236781c10293fab628dd484009a07642e145af28c44f57f45b12b7ff6de71"
+    },
+    {
+      "path": "source-inspection/front-eye-level.png",
+      "bytes": 20927,
+      "sha256": "53e2ed4d4948a71059c7d606941ed7033f2896f8b7a6a4609cdca93566620773"
+    },
+    {
+      "path": "source-inspection/front-left-low.png",
+      "bytes": 36578,
+      "sha256": "b457e2ac0f09312be5f5b8c28440d47617c0eae1e3e3d994f26b1365874f1838"
+    },
+    {
+      "path": "source-inspection/front-low.png",
+      "bytes": 28099,
+      "sha256": "f4296197e10c7803c460d28055abe811c10337bdc080530f436e00085b30e86e"
+    },
+    {
+      "path": "source-inspection/front-other-side.png",
+      "bytes": 38713,
+      "sha256": "2eec6884f9f88fef6fc77276d5cf92202658e85b44e49ef9a847a64adbdd85c5"
+    },
+    {
+      "path": "source-inspection/front-three-quarter.png",
+      "bytes": 34920,
+      "sha256": "519dbc32a628100bad8a4130c90d7c120e86867db09b4200ffa28d4b4075874b"
+    },
+    {
+      "path": "source-inspection/rear-three-quarter.png",
+      "bytes": 39221,
+      "sha256": "e9d32b2e58750a31c1dc0c677338a0b699d5419f5d4bc2321d0b2c3ca4f5780a"
+    },
+    {
+      "path": "source-inspection/render.log",
+      "bytes": 371,
+      "sha256": "9e3faba845d942ce1d7ddd3cb824b502e3fde09583387886e604fdf8c752f1d1"
+    },
+    {
+      "path": "source-inspection/report.json",
+      "bytes": 1215,
+      "sha256": "6f28711ef2859fb82d853c1b4e48d4d4f25cd0bd2d0357faf3a255afa60119e0"
+    },
+    {
+      "path": "source-inspection/underside.png",
+      "bytes": 26143,
+      "sha256": "99dcec43507052ca5dae1a4266e339a471ad4b9444add8bb20e34f47ce5e06a8"
+    },
+    {
+      "path": "source-record.json",
+      "bytes": 3991,
+      "sha256": "aa04c55602226900429ecf75d95ee6b3abcdaa449898e912559da043cc4fba51"
+    },
+    {
+      "path": "source/License.txt",
+      "bytes": 713,
+      "sha256": "6a075a1edb319f16d86cb6b9065436ce89dd851c234704ad160b4255b85e1b67"
+    },
+    {
+      "path": "source/original/Textures/colormap.png",
+      "bytes": 7529,
+      "sha256": "66fd49be148f32e88f6c8cace67120250d1943a7856601158ad0ff24651db0b0"
+    },
+    {
+      "path": "source/original/pallet.glb",
+      "bytes": 11704,
+      "sha256": "90312cbba080e0852f4ab92a50744fa0349ddf4683f48ce92f24f29a2bcb2e75"
+    },
+    {
+      "path": "source/source-preview.png",
+      "bytes": 1969,
+      "sha256": "83549cff5da9d9806a07e288c9aabf31e11acb5d0ddbb52d774ff41fea8f7313"
+    }
+  ]
+}

@@ -1,0 +1,387 @@
+{
+  "schema": 1,
+  "status": "technical_accepted_pending_root_guarded_integration",
+  "accepted": true,
+  "review_kind": "technical_only",
+  "reviewer": "Codex recover_delivery independent continuation technical reviewer",
+  "recorded_at": "2026-10-16T17:57:10.220Z",
+  "scope": "Exact recovered attendance acceptance, proposed integration metadata, six consultation-source bindings, R31 baseline, chronological shared-test afterimages and guarded serializer. No new language or specialist decision.",
+  "findings": [],
+  "reviewed_files": [
+    {
+      "path": "build/professional-english/foundation-module01-language-review/attendance-continuation-review-r01/delivery-lib.cjs",
+      "raw_sha256": "f1b0d51212725ee22f4ac8ceaa16c0488262773e3bf986b03695a585fe7ec576"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/attendance-continuation-review-r01/test-transforms.cjs",
+      "raw_sha256": "b39074f78f83c69d433562f95fe7c41e5d1139a1bef66da3d69331faa9c9218b"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/attendance-continuation-review-r01/prepare.cjs",
+      "raw_sha256": "bda7ff59f06a0e47ec0d22e3c5dabbbd95302d2ef80171438aea13d62a5b5422"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/attendance-continuation-review-r01/deliver.cjs",
+      "raw_sha256": "9c2365efc8de342d6bbd1ac0d15be49d4f091827b219aec8deb37b2bfb93cc38"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/attendance-continuation-review-r01/HANDOFF.md",
+      "raw_sha256": "352d4fea670ad06c087e848ac5087a3752f7131fe5a32f7c866036a77a55acc2"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/attendance-continuation-review-r01/accepted-language.json",
+      "raw_sha256": "a9bf1381c51d01784bff7f6fdd62e7cc050be038d3143f43ada8ed38f163dace"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/attendance-continuation-review-r01/professional-content.test.cjs.before",
+      "raw_sha256": "6cc20ad953645ecf4961dfff2fd22f9cdd2ed5c4d6e3c9d100e938902fd3e9f0"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/attendance-continuation-review-r01/professional-content.test.cjs.after",
+      "raw_sha256": "471f1eee4c01ffd0a0f9a43db0692311774afd5996ba29f5865d4674ec38ab19"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/attendance-continuation-review-r01/professional-retail-morphology.test.cjs.before",
+      "raw_sha256": "5344e7ab7c62e62640f3c9047f602f0434be6d584430c08e65ae50dbeb9c210c"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/attendance-continuation-review-r01/professional-retail-morphology.test.cjs.after",
+      "raw_sha256": "47474805af1db61c9a2bc944395f5790a5853c73420b02f29563559b2b1a4459"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/attendance-continuation-review-r01/test-patches.json",
+      "raw_sha256": "3a22bc5357b48c352c5e4fcb9ea8d678416cdc530d99e88d0f07c639fd8a1a31"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/attendance-continuation-review-r01/scratch-validation.json",
+      "raw_sha256": "adb1bd4c1f21250f67eff8f61118d7df9c79abffd979730257b135ffc691ebb5"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/attendance-continuation-review-r01/binding.json",
+      "raw_sha256": "92c1567cc080001f6f549342fdca6a49d43ec4bfd6657b6d101d2f2ace0511bd"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/attendance-continuation-review-r01/preparation-receipt.json",
+      "raw_sha256": "f7bd62c1af44632798823362f87fe2c07d4f32d680fb88428a2dff7670a6ff15"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/attendance-research-r02-independent-review-r01/independent-review.json",
+      "raw_sha256": "979297a9ea44542fff7ec7082346edae11fa66587787190f2a81730bc77a35b4"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/attendance-research-r02/research.json",
+      "raw_sha256": "ce942440d12226494de805eedfefb9e09b4c23e517b5f643c2e2ad0421049a4b"
+    },
+    {
+      "path": "build/professional-english/foundation-module01-language-review/fifth10/delivery-r01/guarded-transaction.cjs",
+      "raw_sha256": "1a86c7a664a8477a5eab08d3af13dc91169799bbb433498ebb279d541962eaa6"
+    },
+    {
+      "path": "build/professional-english/retail-module03-morphology-review/fifth10/serializer-review-r01/validation-attempt-XE9O6l/receipt.json",
+      "raw_sha256": "abd19b9952fe3085ef8cab5b87e430ef442780ed05f3a9a2105f909f968a9bae"
+    },
+    {
+      "path": "build/professional-english/continuation-validation-r31.json",
+      "raw_sha256": "6423f1c2b456262aab81b4977b0a2e1cef7848f62226b9d56b747d514b21be8a"
+    },
+    {
+      "path": "build/professional-english/continuation-node-r31.log",
+      "raw_sha256": "f3e6299a96d20a5e61d7f29290f7445e019199923212733214089344fb066af8"
+    },
+    {
+      "path": "build/professional-english/continuation-native-r31.log",
+      "raw_sha256": "69bf1ae733fef788449f325eedc74990c01555b86eac8e0229212b34e0c2ef4d"
+    },
+    {
+      "path": "build/professional-english/continuation-native-audio-r31.log",
+      "raw_sha256": "334e8ab10b0870d68f4df789af320c1402efb89517f2666ad72f730c7c3c49a6"
+    }
+  ],
+  "checks": {
+    "frozen_preparation_files": 13,
+    "baseline_inputs": 678,
+    "baseline_registry_sha256": "14e65b3155e22372c6756e2b994bc443348f9c7bb6a2a9b906344a09928273df",
+    "baseline_node_pass": 243,
+    "baseline_native_morphology_checks": 2837,
+    "baseline_native_audio_checks": 141,
+    "baseline_log_hashes_verified": true,
+    "original_independent_language_acceptance_preserved": true,
+    "accepted_content_json_sha256": "b7c42d9ce09b8ad3c2a322cd7f6272eb1432a6ef935fc1abf83c0fea333813d1",
+    "candidate_entry_json_sha256": "66fedbf3ee3565e1e3bddf2df322ccd0bb3e18bf7228e392e10384445c544b81",
+    "registry_after_sha256": "8574160412f2cdbb0e3891421f995ded387f108fd2727d66eb13fd83d2959a67",
+    "only_changed_lexeme": "attendance.presence-record.n",
+    "source_records": 6,
+    "source_scope_and_existing_reference_prefix_exact": true,
+    "memberships": 20,
+    "all_expressions_courses_themes_nonselected_lexemes_and_previous_sources_preserved": true,
+    "test_afterimages_reconstructed_from_exact_edits": true,
+    "existing_tests_removed": 0,
+    "appended_tests": 6,
+    "projected_callbacks_passed": 42,
+    "deferred_persisted_callbacks": [
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Attendance delivery requires the exact successful baseline and committed guarded journal"
+      }
+    ],
+    "additional_reversal_and_clone_checks": 392,
+    "projected_callbacks": [
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Foundation assesses every sense and keeps contextual focus identities and token offsets",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Foundation missing analyses have sourced pending decisions without claiming expert review",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Foundation allomorphs and classical roots remain explicit instead of syllable cuts",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Foundation editorial distinctions and reviewed-media gates survive the route repair",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Foundation nine accepted language records retain exact candidates, sources and separate gates",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Foundation historical supervisor hold and editorial difficulty distinctions remain explicit",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Foundation language acceptance preserves all context and creates no expression or scoring approval",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Foundation second ten language decisions retain exact root accepted candidates and thirteen sources",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Foundation second ten preserve literal source levels and the separately reviewed British spelling",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Foundation second ten preserve every context and all unresolved sense bindings",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Foundation historical reversal refuses unexpected later field drift",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Foundation third ten install nine exact language candidates and sixteen scoped sources",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Foundation third ten retain the historical attendance hold and literal source difficulty evidence",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Foundation third ten preserve context, five ambiguity holds and every nonlanguage gate",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Third-ten historical reversal rejects every unexpected later field change",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Foundation fourth ten install ten exact language candidates and twenty scoped sources",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Foundation fourth ten preserve literal levels and contrast-only voicemail evidence",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Foundation fourth ten preserve prior entry holds and all current and prior expression holds",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Fourth-ten historical reversal refuses arbitrary field changes and requires committed R25 lineage",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Foundation fifth ten install ten exact language candidates and twenty scoped sources",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Foundation fifth ten keep source levels separate from editorial difficulty and other senses",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Foundation fifth ten preserve prior entry holds and twelve expression ambiguities",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Fifth-ten reversal rejects unrelated drift and requires the committed validated baseline",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Supervisor reconsideration accepts exact ordinary language while retaining C1 and graded-context limits",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Supervisor language reversal accepts only exact current or historical full entries",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Supervisor language preserves attendance, context expressions, twenty memberships and readiness",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Foundation module02 first ten install exact accepted candidates with bounded integration metadata",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Foundation module02 keeps corrected confirm levels, editorial placements and sense limits exact",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Foundation module02 preserves every context hold, membership and separate release gate",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Module02 chronological reversal rejects every unrecognized field drift before older Foundation history",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Module02 language delivery requires the actual composite baseline and committed guarded journal",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Attendance delivery installs exact independently accepted presence content and bounded metadata",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Attendance editorial B2 retains Oxford C1 and distinct headword and whole-lesson evidence",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Attendance chronology rejects unrecognized field drift and preserves historical hold snapshots",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-content.test.cjs",
+        "title": "Attendance delivery preserves every other entry, expression, source prefix, membership and readiness gate",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-retail-morphology.test.cjs",
+        "title": "Third-ten Foundation language reversal preserves pending Retail legacy morphology donors",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-retail-morphology.test.cjs",
+        "title": "Retail04 third ten historical reversal rejects any unrelated entry drift",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-retail-morphology.test.cjs",
+        "title": "Fourth-ten Foundation reversal preserves exact historical Retail donor snapshots",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-retail-morphology.test.cjs",
+        "title": "Fifth-ten Foundation language acceptance preserves all ten pending morphology graphs",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-retail-morphology.test.cjs",
+        "title": "Supervisor language reversal retains exact pending morphology and rejects graph or identity drift",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-retail-morphology.test.cjs",
+        "title": "Module02 language reversal preserves exact pending morphology and rejects identity or graph drift",
+        "passed": true
+      },
+      {
+        "file": "tests/professional-retail-morphology.test.cjs",
+        "title": "Attendance language reversal preserves pending morphology and rejects graph or identity drift",
+        "passed": true
+      }
+    ],
+    "all_review_and_baseline_inputs_unchanged": true,
+    "candidate_audit": {
+      "errors": 0,
+      "warnings": 29448,
+      "summary": {
+        "courses": 20,
+        "modules": 200,
+        "themes": 21,
+        "unique_lexemes": 4939,
+        "vocabulary_memberships": 10000,
+        "vocabulary_memberships_target": 10000,
+        "vocabulary_memberships_remaining": 0,
+        "expressions": 1620,
+        "expression_memberships": 2000,
+        "expression_memberships_target": 2000,
+        "expression_memberships_remaining": 0,
+        "ready_modules": 0,
+        "reviewed_lexemes": 122,
+        "morphology_authored": 4045,
+        "morphology_reviewed": 89,
+        "integrated_word_images": 8,
+        "integrated_word_audio": 12,
+        "release_ready": false
+      }
+    },
+    "production_mutated": false,
+    "guarded_transaction_executed": false
+  },
+  "static_guards": {
+    "fixed_q_worktree": true,
+    "exact_before_bytes_and_output_allowlist": true,
+    "immutable_helper_and_validation_pinned": true,
+    "technical_review_hashes_required": true,
+    "transaction_docs_provenance_must_be_absent": true,
+    "real_committed_journal_required": true,
+    "unrelated_baseline_inputs_verified_after_write": true
+  },
+  "reviewer_harness_history": {
+    "initial_attempt": "Stopped before callbacks or writes because a broad test-call counter also counted a RegExp.test call.",
+    "correction": "Count top-level test declarations with an anchored expression; no delivery-package change.",
+    "final_attempt_passed": true
+  },
+  "limits": [
+    "Reuses previous independent AI language acceptance; grants no new language, human, specialist, morphology, audio, picture, expression, module or release acceptance.",
+    "Projected callbacks use an in-memory candidate with a read-only filesystem adapter; the actual new committed-journal callback is deferred to root persisted validation.",
+    "No production or shared-test file was written by this review."
+  ]
+}
