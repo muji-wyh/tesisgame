@@ -13,6 +13,7 @@ const COMPOSITION_AGE = 8;
 const jelly = page => page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
 const previewReady = state => state.upcoming.every((body, index) => !body.id || state.preview.slots[index].visible);
 const wallet = page => page.locator('#coin-status').evaluate(node => JSON.parse(node.dataset.snapshot || '{}'));
+const growth = page => page.locator('#growth-status').evaluate(node => JSON.parse(node.dataset.snapshot || '{}'));
 const normalize = text => text.trim().toLowerCase().replace(/\s+/g, ' ');
 const jellyWordsForAge = age => vocabulary.filter(word => word.min_age === age &&
   ['id', 'text', 'image', 'audio'].every(key => typeof word[key] === 'string' && word[key].trim()) &&
@@ -1424,6 +1425,34 @@ for (const { layout, viewport, reducedMotion } of [
     expect(errors).toEqual([]);
   });
 }
+
+test('merged word mastery is recorded only on collection and survives reload', async ({ page }) => {
+  test.setTimeout(180000);
+  const streaks = Object.fromEntries(jellyWordsForAge(COMPOSITION_AGE).map(word => [word.id, 2]));
+  await page.addInitScript(({ age, streaks }) => {
+    const key = 'growWithPip.growth.v1';
+    if (!localStorage.getItem(key)) localStorage.setItem(key,
+      `[growth]\nversion=3\nlevel=0\nage=${age - 1}\nstreaks=${JSON.stringify(streaks)}\nmastered_words=[]\nreceipts=[]\n`);
+  }, { age: COMPOSITION_AGE, streaks });
+  const errors = await startWordJelly(page, { reducedMotion: 'reduce', preseededGrowth: true });
+  const { roots, word } = await availableWord(page, COMPOSITION_AGE, 2);
+  expect((await growth(page)).streaks[word.id], 'The word needs one more correct attempt for mastery').toBe(2);
+  const merged = await merge(page, roots[0].id, roots[1].id);
+  expect((await growth(page)).streaks[word.id], 'Merging alone grants no mastery attempt').toBe(2);
+  const before = await jelly(page);
+  await pressRect(page, merged.rect);
+  await pressRect(page, merged.rect);
+  await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(before.cleared_pairs + 1);
+  await expect.poll(async () => (await growth(page)).streaks[word.id],
+    { message: 'Collecting the manual merged word grants its third attempt regardless of its coin roll' }).toBe(3);
+  await openModeMenu(page);
+  await chooseMode(page, 'match');
+  await page.reload();
+  await enterGame(page, { home: true });
+  await expect.poll(async () => (await growth(page)).streaks[word.id],
+    { message: 'Mastery survives leaving the mode and reloading saved progress' }).toBe(3);
+  expect(errors).toEqual([]);
+});
 
 test('six columns build a pictured word and a deliberate tap rolls its rare coins once', async ({ page }, info) => {
   const errors = await startWordJelly(page), opening = await jelly(page), bounds = await metrics(page);

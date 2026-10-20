@@ -2326,6 +2326,7 @@ func _test_gravity_lifecycle() -> void:
 
 func _test_wallet_retry() -> void:
 	var model = _model([_word("cat")])
+	var events: Dictionary = _observe(model)
 	_board(model, ["ca", "t"])
 	var merged: Dictionary = _merge(model, 1000, 1001)
 	model.step(Model.SETTLE_SECONDS)
@@ -2336,14 +2337,21 @@ func _test_wallet_retry() -> void:
 	model.collect(int(merged.id))
 	model.step(Model.COLLECT_SECONDS)
 	check(model.cells.size() == 1 and model.collected_coins == 0 and model.fusions.is_empty(), "failed wallet save preserves retryable word and grants nothing")
+	check(events.attempts.is_empty(), "an uncommitted collection cannot grant mastery before its wallet retry")
 	check(not model.error.is_empty(), "failed save exposes a recoverable error")
 	check(model.collect(int(merged.id)), "failed wallet transaction can retry")
 	model.step(Model.COLLECT_SECONDS)
 	check(calls.size() == 2 and calls[0].id == calls[1].id, "retry uses the same stable wallet event ID")
 	check(calls[0].present and calls[1].present and calls[1].amount == 50, "wallet receives exact amount before irreversible removal")
 	check(model.cells.is_empty() and model.collected_coins == 50 and model.error.is_empty(), "successful retry completes exactly once")
+	check(events.attempts == [{"id": calls[0].id, "words": ["cat"], "correct": true}],
+		"a successful retry grants one mastery attempt under the original collection receipt")
+	check(not model.collect(int(merged.id)), "an already-collected word cannot retry its mastery award")
+	model.step(Model.COLLECT_SECONDS)
+	check(events.attempts.size() == 1, "later steps cannot repeat mastery for a completed collection")
 	model.credit_collection = Callable()
 	model = _model([_word("cat")])
+	events = _observe(model)
 	_board(model, ["ca", "t"])
 	merged = _merge(model, 1000, 1001)
 	model.step(Model.SETTLE_SECONDS)
@@ -2357,9 +2365,11 @@ func _test_wallet_retry() -> void:
 	check(model.cells.size() == 1 and model.paused, "pause in wallet callback defers removal safely")
 	model.set_paused(false)
 	model.step(0.01)
-	check(pause_calls.size() == 1 and model.collected_coins == 50, "resuming a credited collection does not pay again")
+	check(pause_calls.size() == 1 and model.collected_coins == 50 and events.attempts.size() == 1,
+		"resuming a credited collection pays and grants mastery exactly once")
 	model.credit_collection = Callable()
 	model = _model([_word("cat")])
+	events = _observe(model)
 	_board(model, ["ca", "t"])
 	merged = _merge(model, 1000, 1001)
 	model.step(Model.SETTLE_SECONDS)
@@ -2367,9 +2377,16 @@ func _test_wallet_retry() -> void:
 		model.set_paused(true)
 		return {"ok": true}
 	model.collect(int(merged.id))
+	var receipt: String = str(model.fusions[0].attempt_id)
 	model.step(Model.COLLECT_SECONDS)
+	check(events.attempts.is_empty(), "a credited collection waiting for paused settlement has not granted mastery yet")
 	var finished: Dictionary = model.finish_round()
 	check(finished.coins == 50 and finished.words.size() == 1, "exit while a credited collection is paused includes the accepted transaction")
+	check(events.attempts == [{"id": receipt, "words": ["cat"], "correct": true}],
+		"finishing a credited collection while paused retains its one mastery attempt")
+	model.finish_round()
+	model.step(Model.COLLECT_SECONDS)
+	check(events.attempts.size() == 1, "repeated paused finish and later steps do not duplicate settled mastery")
 	model.credit_collection = Callable()
 
 
@@ -3245,6 +3262,7 @@ func _test_lifecycle_reentry() -> void:
 	check(model.phase == "finished" and model.fusions.is_empty() and events.cues.is_empty(), "ending during merge start suppresses stale cue and work")
 	check(model.finish_round().coins == 0, "interrupted merge grants no reward")
 	model = _model([_word("cat")])
+	events = _observe(model)
 	_board(model, ["ca", "t"])
 	var merged: Dictionary = _merge(model, 1000, 1001)
 	model.step(Model.SETTLE_SECONDS)
@@ -3252,8 +3270,10 @@ func _test_lifecycle_reentry() -> void:
 	model.step(Model.POP_SECONDS)
 	var interrupted: Dictionary = model.finish_round()
 	model.step(100.0)
-	check(interrupted.coins == 0 and model.collected_coins == 0 and model.cells.size() == 1, "ending before collection credit grants nothing")
+	check(interrupted.coins == 0 and model.collected_coins == 0 and model.cells.size() == 1 and events.attempts.is_empty(),
+		"ending before collection credit grants neither rewards nor mastery")
 	model = _model([_word("cat")])
+	events = _observe(model)
 	_board(model, ["ca", "t"])
 	merged = _merge(model, 1000, 1001)
 	model.step(Model.SETTLE_SECONDS)
@@ -3263,15 +3283,49 @@ func _test_lifecycle_reentry() -> void:
 	model.collect(int(merged.id))
 	model.step(Model.COLLECT_SECONDS)
 	check(model.cells.size() == Model.INITIAL_SETTLED_TILES and model.collected_coins == 0 and model.fusions.is_empty(), "wallet callback cannot mutate a replaced round")
+	check(events.attempts.is_empty(), "replacing a round before collection commit grants no old-word mastery")
 	model.credit_collection = Callable()
+	for action: String in ["pause", "finish", "reconfigure"]:
+		model = _model([_word("cat")])
+		events = _observe(model)
+		_board(model, ["ca", "t"])
+		merged = _merge(model, 1000, 1001)
+		model.step(Model.SETTLE_SECONDS)
+		var on_collected: Callable = func(id: String, _word_data: Dictionary, _coins: int, _fragments: int) -> void:
+			check(events.attempts == [{"id": id, "words": ["cat"], "correct": true}],
+				"mastery is committed before the collection presentation can " + action)
+			match action:
+				"pause": model.set_paused(true)
+				"finish": model.finish_round()
+				"reconfigure": model.configure([_word("sunflower")], 3, 11)
+		model.collected.connect(on_collected, CONNECT_ONE_SHOT)
+		model.collect(int(merged.id))
+		model.step(Model.COLLECT_SECONDS)
+		if action == "finish":
+			check(model.phase == "finished" and model.finish_round().coins == 50 and model.finish_round().words.size() == 1,
+				"ending inside reward callback sees an atomically committed result")
+		elif action == "pause":
+			check(model.paused and model.collected_coins == 50, "presentation pause follows the committed collection")
+			model.set_paused(false)
+		else:
+			check(model.collected_coins == 0 and model.cells.size() == Model.INITIAL_SETTLED_TILES,
+				"presentation reconfiguration starts a clean round after old-word mastery is retained")
+		model.step(Model.COLLECT_SECONDS)
+		check(events.attempts.size() == 1, "collection mastery survives presentation " + action + " without replay")
 	model = _model([_word("cat")])
-	_board(model, ["ca", "t"])
+	events = _observe(model)
+	_board(model, ["ca", "t"], [2, 2])
 	merged = _merge(model, 1000, 1001)
 	model.step(Model.SETTLE_SECONDS)
-	model.collected.connect(func(_id: String, _word: Dictionary, _coins: int, _fragments: int) -> void: model.finish_round(), CONNECT_ONE_SHOT)
+	model.word_attempted.connect(func(_id: String, _words: Array[String], _correct: bool) -> void:
+		model.configure([_word("sunflower")], 3, 11), CONNECT_ONE_SHOT)
 	model.collect(int(merged.id))
 	model.step(Model.COLLECT_SECONDS)
-	check(model.phase == "finished" and model.finish_round().coins == 50 and model.finish_round().words.size() == 1, "ending inside reward callback sees an atomically committed result")
+	check(events.attempts.size() == 1 and events.collections.is_empty() and events.milestones.is_empty(),
+		"reconfiguration from mastery suppresses the old collection presentation and chest milestone")
+	check(model.collected_coins == 0 and model.fragment_count == 0 and model.fusions.is_empty()
+		and model.cells.size() == Model.INITIAL_SETTLED_TILES,
+		"a mastery callback cannot apply the old collection to its replacement round")
 
 
 func _test_supply_and_determinism() -> void:

@@ -1924,13 +1924,14 @@ func _complete_collection(completed: Dictionary) -> void:
 			_collection_batch_next_in = 0.0
 	full_elapsed = -1.0
 	var generation: int = _generation
-	# Commit all rewards before callbacks. A callback may end or replace a round.
-	collected.emit(str(completed.attempt_id), completed.word.duplicate(true), coins, awarded)
-	if not _can_continue(generation):
-		return
+	# A committed pickup owns its learning evidence, including paused settlement.
+	# Record it before presentation callbacks can pause, end, or replace the round.
 	var word_ids: Array[String] = [str(completed.word.id)]
 	if not completed.a.has("composition") or bool(completed.a.composition.get("mastery_eligible", false)):
 		word_attempted.emit(str(completed.attempt_id), word_ids, true)
+	if generation != _generation:
+		return
+	collected.emit(str(completed.attempt_id), completed.word.duplicate(true), coins, awarded)
 	if not _can_continue(generation):
 		return
 	if awarded > 0:

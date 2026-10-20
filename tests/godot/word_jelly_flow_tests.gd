@@ -543,6 +543,69 @@ func check_finish_visibility_stable(view, expected_visible: bool, context: Strin
 		"Repeated refreshes preserve Finish visibility without triggering header reflow " + context)
 
 
+func check_collection_mastery(app, view, word: Dictionary) -> void:
+	var game = view.game
+	var word_ids: Array[String] = [str(word.id)]
+	check(app.growth.streak(word.id) == 0, "The collection mastery fixture starts with an unlearned word")
+	for attempt in range(3):
+		game.spawn_interval = 10000.0
+		var merged: Dictionary = merged_word(view, word)
+		game._coin_rng.seed = 0
+		check(app.growth.streak(word.id) == attempt and not app.growth.is_mastered(word.id),
+			"Merging alone does not advance the word's saved mastery")
+		var open_home: Callable = func(_id: String, _word: Dictionary, _coins: int, _fragments: int, _origin: Vector2) -> void:
+			app._show_mode_menu()
+		view.collected.connect(open_home, CONNECT_ONE_SHOT)
+		check(game.collect(merged.id), "The merged word starts a zero-coin collection")
+		var event_id: String = str(game.fusions.back().attempt_id)
+		game.step(game.COLLECT_SECONDS)
+		check(game.cell(merged.id).is_empty() and app._mode_menu_open(),
+			"Collection completes even when its presentation callback opens Home")
+		check(app.growth.streak(word.id) == attempt + 1 and app.growth.is_mastered(word.id) == (attempt == 2),
+			"Each committed collection is saved before Home pauses the board; the third grants mastery")
+		app._hide_mode_menu()
+		view.word_attempted.emit(event_id, word_ids, true)
+		check(app.growth.streak(word.id) == attempt + 1,
+			"Replaying the collection receipt cannot count the word twice")
+	var reloaded = preload("res://scripts/growth_state.gd").new(app.growth._path)
+	check(reloaded.configure(app.data.words) and reloaded.load_state() and reloaded.is_mastered(word.id),
+		"Collection mastery survives reopening saved progress")
+	app.growth.record_attempt("collection-mastery-reset", word_ids, false)
+	check(app.new_round(407, false, "", "word_jelly"), "Paused settlement starts in its own round namespace")
+	check(view.configure([word], app.growth.learning_age(), Data.theme(app.model.theme_id), app.data.chests, true, 405),
+		"Paused settlement uses a current-age word")
+	app._sync_jelly()
+	view.set_process(false)
+	app.growth.record_attempt("collection-mastery-seed-1", word_ids, true)
+	app.growth.record_attempt("collection-mastery-seed-2", word_ids, true)
+	var merged: Dictionary = merged_word(view, word)
+	var credit: Callable = game.credit_collection
+	game.credit_collection = func(event_id: String, amount: int) -> Dictionary:
+		var result: Dictionary = credit.call(event_id, amount)
+		app._show_mode_menu()
+		return result
+	check(game.collect(merged.id), "The paid collection starts before Home interrupts its completion")
+	var old_receipt: String = app._round_id + ":" + str(game.fusions.back().attempt_id)
+	game.step(game.COLLECT_SECONDS)
+	check(game.paused and game.fusions.size() == 1 and game.fusions[0].credited and app.growth.streak(word.id) == 2,
+		"A saved coin reward leaves its paused word awaiting collection, without early mastery")
+	game.credit_collection = credit
+	app.choose_mode("match")
+	check(app._mode_id == "match" and app.growth.is_mastered(word.id),
+		"Switching modes settles the accepted collection and records mastery for the old round")
+	var duplicate: Dictionary = app.growth.record_attempt(old_receipt, word_ids, true)
+	check(duplicate.duplicate and app.growth.streak(word.id) == 3,
+		"Paused settlement keeps the original collection receipt for deduplication")
+	# Restore the learning and wallet baseline expected by the following reward fixtures.
+	app.growth.record_attempt("collection-mastery-fixture-reset", word_ids, false)
+	check(app.coin_wallet.spend("collection-mastery-fixture-coins", 50).ok, "Restore the isolated fixture's wallet")
+	check(app.new_round(408, false, "", "word_jelly"), "Reward fixtures resume in a fresh Jelly Words round")
+	check(view.configure([word], app.growth.learning_age(), Data.theme(app.model.theme_id), app.data.chests, true, 405),
+		"Reward fixtures restore their current-age word")
+	app._sync_jelly()
+	view.set_process(false)
+
+
 func check_ordinary_collection(app, view, word: Dictionary) -> void:
 	var game = view.game
 	game.spawn_interval = 10000.0
@@ -619,6 +682,7 @@ func _run() -> void:
 	check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + str(word.audio)), "The new mode routes a complete word to its exact pronunciation")
 	app.audio.halt()
 	check_rejected_drop_flow(app, view, word)
+	check_collection_mastery(app, view, word)
 	check_ordinary_collection(app, view, word)
 	app.audio.set_muted(true)
 	var game = view.game

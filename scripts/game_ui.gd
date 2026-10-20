@@ -1992,7 +1992,10 @@ func _purchase_word_jelly_powerup(event_id: String, kind: String, price: int) ->
 
 
 func _jelly_growth_answer(id: String, words: Array[String], correct: bool, source_mode: String = "") -> void:
-	if (source_mode.is_empty() or source_mode == _mode_id) and _jelly_interaction_allowed():
+	# Leaving Home can settle an already-paid Word Jelly pickup while input is blocked.
+	# Its receipt still belongs to the current round until settlement returns.
+	var settling_collection: bool = source_mode == "word_jelly" and correct and _jelly_settling
+	if (source_mode.is_empty() or source_mode == _mode_id) and (_jelly_interaction_allowed() or settling_collection):
 		_record_growth(id, words, correct)
 
 
