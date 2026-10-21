@@ -42,7 +42,7 @@ The shared policy is [coin_economy.gd](../scripts/coin_economy.gd):
 | Ordinary / tier-one chest | 50 | 50, unchanged |
 | Levelled chest | 50 x level | 50 x level, unchanged |
 | Match Hint | 200 each | 100, 150, then 200; no per-round use limit |
-| Memory peek | 0, 100, 200, 300, then 300 | Prices unchanged. First reveal lasts 10 seconds; later reveals last 5 seconds. Repeated clicks during the countdown do not charge or extend it. |
+| Memory observation | 0, 100, 200, 300, then 300 | Start game begins a free 10-second observation. Later optional reveals last 5 seconds. Start matching skips either countdown; repeated clicks cannot charge or extend it. |
 | Auto Merge | 2000 each | 600, 900, 1200, then 1200 |
 | Treasure | 500 each | 200, 300, 400, then 400 |
 | Treasure fragments | Random 2-8 | Random 2-8, unchanged |
@@ -70,14 +70,18 @@ Below four fragments the payout is zero; otherwise it is
 
 | Mode | Source rule | Useful source-count budget |
 | --- | --- | --- |
-| Match / Memory | 50% chest chance, guaranteed after two dry completed rounds | 28.57 coins per completed five-pair round on average; 3.5 rounds to save the first 100-coin Hint |
+| Match | 50% chest chance, guaranteed after two dry completed rounds | 28.57 coins per completed five-pair round on average; 3.5 rounds to save the first 100-coin Hint |
+| Memory | Starts at the highest available chest level, currently Level 6; each mismatch removes one level, down to no chest | Completing all five pairs earns 50 coins per remaining level: 300 for a perfect round, down to 0 after six mistakes |
 | Phrase | One ordinary chest after three phrases | 50 coins per completed round |
 | Jelly Match | One fragment per three supplied word/picture pairs | About 3.33 chest coins per successfully collected pair in long runs |
 | Jelly Words | One fragment per two supplied words | About 5 chest coins plus 0.5 lucky coins per successfully collected ordinary word in long runs |
 | Voice Pop | Each target has a 35% chest marker chance | Expected chest coins for 10 / 20 / 30 hits: 24.34 / 59.74 / 95.06 |
 
-The Match/Memory expectation includes the three-round guarantee:
-`50 / (1 + 0.5 + 0.25) = 28.57`. Their saved guarantees remain separate.
+The Match expectation includes the three-round guarantee:
+`50 / (1 + 0.5 + 0.25) = 28.57`. Memory has no random draw or dry-round
+guarantee. Its fixed header chest is a potential reward until the whole round
+is complete; leaving an unfinished round earns nothing. Previously earned
+Memory chests remain recoverable with their original tier-one payout.
 Jelly Words' approximate long-run saving targets are 36 successfully collected
 ordinary words for the first Treasure and 110 for the first Auto Merge. Without
 relying on any lucky coin, those purchases require 38 and 118 source words

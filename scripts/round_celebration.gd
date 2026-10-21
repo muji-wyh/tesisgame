@@ -12,9 +12,14 @@ const Data = preload("res://scripts/game_data.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const Mascot = preload("res://scripts/duck_mascot.gd")
 const ChestView = preload("res://scripts/chest_view.gd")
-const JellyRewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const DURATION: float = Mascot.CELEBRATION_SECONDS
+const MOVE_START: float = 1.46
+const MOVE_END: float = 1.78
+const CHEST_START: float = 1.8
+const CHEST_LAND: float = 2.08
+const CHEST_SETTLED: float = 2.42
+const INVITATION_END: float = 2.72
 const CUE_TIMES := [0.25, 0.9, 1.8]
 const CUE_NAMES := ["step", "step-detail", "reward"]
 
@@ -24,6 +29,7 @@ var action_button: Button
 var home_button: Button
 var _heading: Label
 var _caption: Label
+var _summary: Label
 var _count: Label
 var _glow: TextureRect
 var _round_id: String = ""
@@ -48,6 +54,7 @@ var _score: int = -1
 var _theme_id: String = "spring"
 var _palette: Dictionary = {}
 var _pip_rect := Rect2()
+var _pip_center_rect := Rect2()
 var _chest_rect := Rect2()
 var _glow_rect := Rect2()
 
@@ -78,6 +85,7 @@ func _init() -> void:
 	_heading = _label("You did it!", "CelebrationTitle")
 	_heading.add_theme_font_override("font", Style.HEADING_FONT)
 	_caption = _label("You earned a treasure chest!", "CelebrationCaption")
+	_summary = _label("", "CelebrationSummary")
 	_count = _label("", "CelebrationChestCount")
 	_count.add_theme_font_override("font", Style.HEADING_FONT)
 	action_button = Button.new()
@@ -89,7 +97,7 @@ func _init() -> void:
 	home_button.name = "CelebrationHome"
 	home_button.text = "Home"
 	home_button.pressed.connect(func() -> void:
-		if _active and _ready_to_open and not _paused:
+		if _active and not _paused and not _open_emitted and home_button.is_visible_in_tree():
 			home_requested.emit())
 	add_child(home_button)
 	resized.connect(_layout)
@@ -108,7 +116,7 @@ func _label(text: String, node_name: String) -> Label:
 
 
 func begin(round_id: String, theme_id: String, chest_manifest: Dictionary,
-		chest_count: int, reduce: bool, automatic: bool = false, score: int = -1, chest_tier: int = 0, chest_announced: bool = false) -> void:
+		chest_count: int, reduce: bool, automatic: bool = false, score: int = -1, chest_tier: int = 0, chest_announced: bool = false, summary: String = "") -> void:
 	if round_id.is_empty() or (_active and round_id == _round_id):
 		return
 	stop()
@@ -122,12 +130,9 @@ func begin(round_id: String, theme_id: String, chest_manifest: Dictionary,
 	_active = true
 	_paused = false
 	_origin_frame = Engine.get_process_frames()
-	_heading.text = "Round results" if _score >= 0 else "You did it!"
-	_caption.text = "Score: %d · Chests: %d" % [_score, _chest_count] if _score >= 0 else \
-		"Every word matched!" if _chest_count == 0 else \
-		"You earned a treasure chest!" if _chest_count == 1 else "You earned %d treasure chests!" % _chest_count
-	if _chest_tier > 0:
-		_caption.text = "Score: %d · %s" % [_score, JellyRewardProgress.title_for_tier(_chest_tier)]
+	_caption.text = "Hold the chest to open" if _chest_count > 0 else "Every word matched!"
+	_summary.text = summary if not summary.is_empty() else "Score: %d · Chests: %d" % [_score, _chest_count] if _score >= 0 else ""
+	_summary.visible = _score >= 0
 	_count.text = "" if _chest_count <= 1 else "x%d" % _chest_count
 	action_button.text = "Play again"
 	chest.visible = _chest_count > 0
@@ -226,17 +231,20 @@ func current_round_id() -> String:
 
 func controls() -> Array[Control]:
 	var result: Array[Control] = []
-	if _active and _ready_to_open and not _paused and not _automatic and _chest_count == 0 and not _open_emitted and is_visible_in_tree():
+	if not _active or _paused or _open_emitted or not is_visible_in_tree():
+		return result
+	result.append(home_button)
+	if _ready_to_open and not _automatic and _chest_count == 0:
 		result.append(action_button)
 	return result
 
 
 func default_focus() -> Control:
-	return action_button if not controls().is_empty() else null
+	return action_button if _ready_to_open and controls().has(action_button) else null
 
 
 func _request_open() -> void:
-	if controls().is_empty():
+	if not controls().has(action_button):
 		return
 	_open_emitted = true
 	_refresh_action()
@@ -314,8 +322,8 @@ func _visibility_changed() -> void:
 func _refresh_action() -> void:
 	action_button.visible = _active and _ready_to_open and not _automatic and _chest_count == 0
 	action_button.disabled = not _active or not _ready_to_open or _paused or _open_emitted or _chest_count > 0
-	home_button.visible = action_button.visible
-	home_button.disabled = action_button.disabled
+	home_button.visible = _active
+	home_button.disabled = not _active or _paused or _open_emitted
 
 
 func _sample() -> void:
@@ -323,21 +331,35 @@ func _sample() -> void:
 		return
 	pip.set_celebration_progress(_elapsed / DURATION, _rest_elapsed)
 	pip.set_process(false)
+	# Pip owns the center for the dance, then clears the chest's stage in one step.
+	var s: float = maxf(0.25, Style.ui_scale(self))
+	var move: float = 1.0 if _reduced_motion or _chest_count == 0 else smoothstep(MOVE_START, MOVE_END, _elapsed)
+	pip.size = _pip_center_rect.size.lerp(_pip_rect.size, move)
+	pip.position = _pip_center_rect.position.lerp(_pip_rect.position, move)
+	if not _reduced_motion and _chest_count > 0:
+		pip.position.y -= sin(move * PI) * 8.0 / s
+	pip.modulate.a = 1.0 if _reduced_motion else smoothstep(0.0, 0.16, _elapsed)
 	# ChestView renders its authored closed pose once; its mechanical clock stays off.
 	chest.set_process(false)
-	var reveal: float = 1.0 if _reduced_motion else smoothstep(1.8, 2.05, _elapsed)
-	var settle: float = 1.0 if _reduced_motion else smoothstep(1.8, 2.45, _elapsed)
-	var pop: float = 0.0 if _reduced_motion else sin(clampf((_elapsed - 1.8) / 0.58, 0.0, 1.0) * PI)
+	var reveal: float = (1.0 if _elapsed >= CHEST_START else 0.0) if _reduced_motion else smoothstep(CHEST_START, CHEST_START + 0.14, _elapsed)
+	var settle: float = smoothstep(CHEST_START, CHEST_SETTLED, _elapsed)
 	chest.modulate = Color(1, 1, 1, reveal)
-	chest.pivot_offset = chest.size * Vector2(0.5, 0.75)
-	chest.scale = Vector2.ONE * (1.0 if _reduced_motion else lerpf(0.80, 1.0, reveal) + pop * 0.055)
-	chest.position = _chest_rect.position + Vector2(0, 14.0 * (1.0 - reveal) / maxf(0.25, Style.ui_scale(self)))
-	var glow_amount: float = 0.0 if _reduced_motion else reveal * (0.40 + pop * 0.16) * (1.0 - smoothstep(2.05, 2.5, _elapsed))
+	chest.scale = Vector2.ONE
+	var drop: float = 1.0 - pow(1.0 - clampf((_elapsed - CHEST_START) / (CHEST_LAND - CHEST_START), 0.0, 1.0), 3.0)
+	var rebound: float = clampf((_elapsed - CHEST_LAND) / (CHEST_SETTLED - CHEST_LAND), 0.0, 1.0)
+	var lift: float = 0.0 if _reduced_motion else -32.0 * (1.0 - drop) - sin(rebound * PI) * (1.0 - rebound) * 7.0
+	chest.position = _chest_rect.position + Vector2(0, lift / s)
+	var glow_amount: float = 0.0 if _reduced_motion else reveal * 0.44 * (1.0 - smoothstep(CHEST_SETTLED, INVITATION_END, _elapsed))
 	_glow.modulate = Color(_palette.get("spark", Color("#f8d574")), glow_amount)
-	_glow.pivot_offset = _glow.size * 0.5
-	_glow.scale = Vector2.ONE * (1.0 if _reduced_motion else 0.94 + pop * 0.09)
-	_heading.modulate.a = 1.0 if _reduced_motion or _score >= 0 else smoothstep(0.0, 0.25, _elapsed)
-	_caption.modulate.a = 1.0 if _reduced_motion or _score >= 0 else smoothstep(1.8, 2.18, _elapsed)
+	var invitation: bool = _chest_count > 0 and _elapsed >= CHEST_SETTLED
+	_heading.text = ("You earned a chest!" if _chest_count == 1 else "You earned %d chests!" % _chest_count) if invitation else "Round complete" if _score >= 0 else "You did it!"
+	_heading.modulate.a = 1.0 if _reduced_motion else smoothstep(0.0, 0.20, _elapsed)
+	if not _reduced_motion and _chest_count > 0:
+		_heading.modulate.a *= smoothstep(CHEST_SETTLED, CHEST_SETTLED + 0.16, _elapsed) if invitation else 1.0 - smoothstep(CHEST_SETTLED - 0.12, CHEST_SETTLED, _elapsed)
+	var caption_start: float = CHEST_SETTLED + 0.12 if _chest_count > 0 else CHEST_START
+	_caption.modulate.a = (1.0 if _elapsed >= caption_start else 0.0) if _reduced_motion else smoothstep(caption_start, INVITATION_END, _elapsed)
+	if _chest_count > 0 and _narration_playing:
+		_caption.modulate.a = 0.0
 	_count.modulate.a = reveal * settle
 	_refresh_action()
 
@@ -346,8 +368,8 @@ func _layout() -> void:
 	if size.x <= 0.0 or size.y <= 0.0:
 		return
 	var scale_factor: float = maxf(0.25, Style.ui_scale(self))
-	var layout: Dictionary = RewardLayout.measure(size, scale_factor, _chest_count > 0)
-	for item: Array in [[_heading, "heading"], [_caption, "caption"], [pip, "pip"], [chest, "chest"],
+	var layout: Dictionary = RewardLayout.measure(size, scale_factor, _chest_count > 0, false, _score >= 0)
+	for item: Array in [[_heading, "heading"], [_summary, "summary"], [_caption, "caption"], [pip, "pip"], [chest, "chest"],
 		[home_button, "home"], [action_button, "replay"]]:
 		var control: Control = item[0]
 		var rect: Rect2 = layout[item[1]]
@@ -355,13 +377,15 @@ func _layout() -> void:
 		control.position = rect.position
 		control.size = rect.size
 	_pip_rect = layout.pip
+	_pip_center_rect = layout.pip_center
 	_chest_rect = layout.chest
 	_glow_rect = Rect2(_chest_rect.get_center() - _chest_rect.size * 0.60, _chest_rect.size * 1.20)
 	_glow.position = _glow_rect.position
 	_glow.size = _glow_rect.size
 	_heading.add_theme_font_size_override("font_size", layout.heading_size)
 	_caption.add_theme_font_size_override("font_size", layout.caption_size)
-	_caption.add_theme_color_override("font_color", _palette.get("accent", Style.GOOD))
+	_summary.add_theme_font_size_override("font_size", layout.summary_size)
+	_caption.add_theme_color_override("font_color", Style.MUTED)
 	_count.position = _chest_rect.end - Vector2(54, 30) / scale_factor
 	_count.size = Vector2(50, 26) / scale_factor
 	_count.add_theme_font_size_override("font_size", ceili(22.0 / scale_factor))
@@ -381,7 +405,9 @@ func snapshot() -> Dictionary:
 		"chest_count": _chest_count, "chest_tier": _chest_tier, "chest_visible": chest.is_visible_in_tree(), "chest_announced": _chest_announced,
 		"reward_revealed": _reward_revealed,
 		"cue_log": _cue_log.duplicate(),
-		"title": _heading.text, "caption": _caption.text, "score": _score,
+		"title": _heading.text, "caption": _caption.text, "summary": _summary.text, "score": _score,
+		"stage": "ready" if _ready_to_open else "invitation" if _elapsed >= CHEST_SETTLED else "chest_arrival" if _elapsed >= CHEST_START and _chest_count > 0 else "move_aside" if _elapsed >= MOVE_START and _chest_count > 0 else "celebrating",
+		"chest_opacity": chest.modulate.a, "caption_opacity": _caption.modulate.a,
 		"performance_emitted": _performance_emitted, "open_emitted": _open_emitted,
 		"action": {"rect": _rect(action_button.get_global_rect()), "visible": action_button.is_visible_in_tree(),
 			"disabled": action_button.disabled, "text": action_button.text},

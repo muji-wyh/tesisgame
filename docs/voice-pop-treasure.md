@@ -58,16 +58,19 @@ Continue. A new microphone gesture is required before listening starts.
 Storage failures retain the earned final level, block leaving, and offer Retry save. Round
 receipts prevent duplicate batches. Pop surprises do not modify medal progress.
 
-Match and Memory independently roll a 50% chance of one chest per completed
-round. The outcome is fixed when the round starts and cannot be rerolled by
-reopening menus, resuming, or clicking again. A round without treasure still
-celebrates all matched words and offers Play again. Phrase Builder retains its
-existing guaranteed chest.
+Match rolls a 50% base chance of one chest per completed round, with a
+guarantee after two completed dry rounds. The outcome is fixed when the round
+starts and cannot be rerolled by reopening menus or clicking again. Memory
+starts with the highest available chest, currently Level 6, and loses one level per mismatch; six
+mistakes leave a grey marker and no chest. Completing all five Memory pairs
+earns the surviving tier. A round without treasure still celebrates all matched
+words and offers Play again. Phrase Builder retains its guaranteed chest.
 
 ## Shared chest catalog
 
-The eight worlds now use eight different chest types in Match, Memory, and the
-Voice Pop treasure room.
+The shared catalog contains eight chest types. Memory uses the six-level reward
+sequence and chooses the design for its remaining reward level; the selected
+learning world continues to determine its medal contents.
 
 | World | Chest type | Source |
 | --- | --- | --- |

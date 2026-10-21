@@ -11,6 +11,8 @@ const { preparePackVerification, finishPackVerification } = require('./professio
 
 const root = path.resolve(__dirname, '..');
 invalidateBuildReceipt(root);
+const webTemplates = require('./check-web-templates.cjs').checkWebTemplates({ rootDir: root });
+console.log(`Verified Web export templates for Godot ${webTemplates.version}.`);
 const professionalAudit = require('./validate-professional-content.cjs').auditProfessionalContent({ rootDir: root });
 if (!professionalAudit.ok) throw new Error('Professional content audit failed: ' + professionalAudit.errors.map(issue => issue.message).join('; '));
 const growthMorphologyAudit = require('./validate-growth-morphology.cjs').auditGrowthMorphology({ rootDir: root });

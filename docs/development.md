@@ -7,6 +7,22 @@ repository root. See the [project README](../README.md) for the short setup path
 
 Development prerequisites: **Godot 4.7**, its matching **Web export templates**, and **Node.js 24**. The `godot` executable must be on PATH; alternatively, set `GODOT_BIN` to its executable path.
 
+The template version must match the engine's exact patch version: Godot 4.7.2
+needs `4.7.2.stable` templates, even if `4.7.stable` is already installed.
+Install the matching official export templates with **Manage Export Templates**
+in Godot. The current Web preset requires `web_nothreads_debug.zip` and
+`web_nothreads_release.zip`; do not rename an older template directory to satisfy
+a newer engine. On a standard Windows installation the version directory is
+under `%APPDATA%/Godot/export_templates/`.
+
+`npm run build:web` checks these prerequisites before content preparation or
+game import. To check them separately, run `node tools/check-web-templates.cjs`.
+The check opens a disposable empty editor project to ask the selected engine
+for its actual template directory, so portable installations are supported.
+It honors the Web preset's custom debug/release template paths and thread/extension
+options. It does not download templates or import the game project; a successful
+preflight confirms file availability, while the export validates their contents.
+
 Restore the licensed [animated chest inputs](voice-pop-treasure.md#shared-chest-catalog)
 before importing or building a fresh checkout. These models remain local and
 are bundled into the compiled game; they are not stored in Git. The retired

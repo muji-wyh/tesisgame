@@ -620,10 +620,13 @@ func _draw_growth_action(origin: Vector2, edge: float) -> void:
 	draw_circle(Vector2.ZERO, 1.0, Color(0.396, 0.439, 0.541, 0.14 - lift * 0.05))
 	var outfit: Texture2D = _outfit_dance_sheet if _outfit_dance_sheet != null else DANCE_SHEET
 	var source_edge: float = outfit.get_height()
-	for index in [4, 5, 0, 1, 2, 3]:
+	var authored: Array[Transform2D] = []
+	for index in range(parts.size()):
 		var part: Vector3 = parts[index]
-		var transform: Transform2D = _gameplay_part_transform(index, Vector2(part.x, part.y), deg_to_rad(part.z))
-		draw_set_transform_matrix(base * _growth_part_transform(index, transform))
+		authored.append(_gameplay_part_transform(index, Vector2(part.x, part.y), deg_to_rad(part.z)))
+	var transforms: Array[Transform2D] = _growth_transforms(authored)
+	for index in [4, 5, 0, 1, 2, 3]:
+		draw_set_transform_matrix(base * transforms[index])
 		_draw_articulated_part(outfit, index, Rect2(Vector2.ZERO, Vector2(120, 120)), source_edge)
 	draw_set_transform(Vector2.ZERO)
 
@@ -698,6 +701,21 @@ func _growth_part_transform(index: int, transform: Transform2D) -> Transform2D:
 	return transform
 
 
+func _growth_transforms(authored: Array[Transform2D]) -> Array[Transform2D]:
+	var result: Array[Transform2D] = []
+	for index in range(authored.size()):
+		result.append(_growth_part_transform(index, authored[index]))
+	var joints: Array = _growth_stage.get("motionPivots", [])
+	for index in [2, 3]:
+		var shoulder: Vector2 = GAMEPLAY_PIVOTS[index]
+		if joints.size() == GAMEPLAY_PIVOTS.size():
+			shoulder = Vector2(float(joints[index][0]), float(joints[index][1]))
+		# The shoulder follows torso rotation, squash and translation together.
+		# Keep the feather's authored rotation and scale for soft follow-through.
+		result[index].origin = result[0] * shoulder - result[index].basis_xform(shoulder)
+	return result
+
+
 static func _celebration_transforms(progress: float, reduced: bool = false, rest_seconds: float = 0.0) -> Array[Transform2D]:
 	var seconds: float = CELEBRATION_SECONDS if reduced else clampf(progress, 0.0, 1.0) * CELEBRATION_SECONDS
 	var first: String = "present"
@@ -738,8 +756,9 @@ func _draw_celebration(origin: Vector2, edge: float) -> void:
 	draw_circle(Vector2.ZERO, 1.0, Color(0.396, 0.439, 0.541, 0.15 - lift * 0.06))
 	var outfit: Texture2D = _outfit_dance_sheet if _outfit_dance_sheet != null else DANCE_SHEET
 	var source_edge: float = outfit.get_height()
+	transforms = _growth_transforms(transforms)
 	for index in [4, 5, 0, 1, 2, 3]:
-		draw_set_transform_matrix(base * _growth_part_transform(index, transforms[index]))
+		draw_set_transform_matrix(base * transforms[index])
 		_draw_articulated_part(outfit, index, Rect2(Vector2.ZERO, Vector2(120, 120)), source_edge)
 	draw_set_transform(Vector2.ZERO)
 
@@ -761,8 +780,9 @@ func _draw_gameplay_reaction(origin: Vector2, edge: float) -> void:
 	draw_circle(Vector2.ZERO, 1.0, Color(0.396, 0.439, 0.541, 0.19 - airborne * 0.09))
 	var outfit: Texture2D = _outfit_dance_sheet if _outfit_dance_sheet != null else DANCE_SHEET
 	var source_edge: float = outfit.get_height()
+	transforms = _growth_transforms(transforms)
 	for index in [4, 5, 0, 1, 2, 3]:
-		draw_set_transform_matrix(base * _growth_part_transform(index, transforms[index]))
+		draw_set_transform_matrix(base * transforms[index])
 		_draw_articulated_part(outfit, index, Rect2(Vector2.ZERO, Vector2(120, 120)), source_edge)
 	draw_set_transform_matrix(base)
 	if correct:

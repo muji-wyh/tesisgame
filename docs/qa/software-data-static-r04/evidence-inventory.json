@@ -1,0 +1,366 @@
+{
+  "schema": 1,
+  "notice": "Exact retained candidate evidence. Original pending labels and historical production hashes are preserved; component review is a separate receipt.",
+  "files": [
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/main-r01/report.json",
+      "to": "main/report.json",
+      "bytes": 612812,
+      "sha256": "99d0482419a398c8b682541a4a7830707af027065ac638e05eea005108fa27b6"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/main-r01/match-320x568-rest.png",
+      "to": "main/match-320x568-rest.png",
+      "bytes": 81950,
+      "sha256": "45ebdf14c2893766d430458995bff2e9d15be1fced40bf176509592786bd7369"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/main-r01/match-320x568-negative.png",
+      "to": "main/match-320x568-negative.png",
+      "bytes": 81961,
+      "sha256": "7a5c27a19bb2c51ccb85b1887df063da059b694ebcc81626088e7290cb7a03d1"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/main-r01/match-320x568-positive.png",
+      "to": "main/match-320x568-positive.png",
+      "bytes": 81962,
+      "sha256": "e55fcd61a2288f008a8dfcd9c0669de47a5102d102a01e565b57582bdbd85f0a"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/main-r01/match-390x844-rest.png",
+      "to": "main/match-390x844-rest.png",
+      "bytes": 122391,
+      "sha256": "3287d78855cf3d76d0745d4d7471ee3bdfa96dbdbe8795d15c30d0b5c1710535"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/main-r01/match-390x844-negative.png",
+      "to": "main/match-390x844-negative.png",
+      "bytes": 122388,
+      "sha256": "430326ea392e9b09f003402772e14714767d4a40ae056a526e2846bf89059a38"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/main-r01/match-390x844-positive.png",
+      "to": "main/match-390x844-positive.png",
+      "bytes": 122393,
+      "sha256": "baeae7ddf78997a6b8758b168b6d8c585f03f3754d5d380af89f33805e24f61f"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/main-r01/match-844x390-rest.png",
+      "to": "main/match-844x390-rest.png",
+      "bytes": 120398,
+      "sha256": "f6277bdcb9f11311fc9475af1111108b7e2ff6b95ab1d6bc21e610a49720fadd"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/main-r01/match-844x390-negative.png",
+      "to": "main/match-844x390-negative.png",
+      "bytes": 120397,
+      "sha256": "a1c9149157e545ba076381ca6b52da194a0926267b0b88b6367c6b872c4941ef"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/main-r01/match-844x390-positive.png",
+      "to": "main/match-844x390-positive.png",
+      "bytes": 120402,
+      "sha256": "e119e153e5d21cb1637b2ef872f7a225cbac96073305c356cc46bb76e3b26edc"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/main-r01/match-1280x800-rest.png",
+      "to": "main/match-1280x800-rest.png",
+      "bytes": 187860,
+      "sha256": "2c27df2f14b103dd2fde63830b7ca1e0377a93edaffdde8ad01fdf6d8a230bbe"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/main-r01/match-1280x800-negative.png",
+      "to": "main/match-1280x800-negative.png",
+      "bytes": 187863,
+      "sha256": "4289894d67a1f5fd24804235d9cdbd317d992ffd361d8321a74ec7fbade48a90"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/main-r01/match-1280x800-positive.png",
+      "to": "main/match-1280x800-positive.png",
+      "bytes": 187860,
+      "sha256": "2c27df2f14b103dd2fde63830b7ca1e0377a93edaffdde8ad01fdf6d8a230bbe"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/main-r01/word_jelly-320x568-rest.png",
+      "to": "main/word_jelly-320x568-rest.png",
+      "bytes": 61700,
+      "sha256": "886cec61548625468dae8ed504e2b2194ca9469728836c11520df785257259b4"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/main-r01/word_jelly-320x568-negative.png",
+      "to": "main/word_jelly-320x568-negative.png",
+      "bytes": 61706,
+      "sha256": "5499aac33123f3838012380b7860b3426b8ac5e15c7e533a9f06fcf0426bedf5"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/main-r01/word_jelly-320x568-positive.png",
+      "to": "main/word_jelly-320x568-positive.png",
+      "bytes": 61725,
+      "sha256": "08c9cf27a376840fe7fa45070eee4c7504d1f3174d243f6729e0f2c429b519c6"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/main-r01/word_jelly-390x844-rest.png",
+      "to": "main/word_jelly-390x844-rest.png",
+      "bytes": 175960,
+      "sha256": "6af2335d8ee6c3cdc892a8e62745ae62c84806cc7f5ef6213ea399a76965a1f4"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/main-r01/word_jelly-390x844-negative.png",
+      "to": "main/word_jelly-390x844-negative.png",
+      "bytes": 175959,
+      "sha256": "5d5f8108aec6f594bf484876690f9237658549ed1e2279e191cb084e19211c2f"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/main-r01/word_jelly-390x844-positive.png",
+      "to": "main/word_jelly-390x844-positive.png",
+      "bytes": 175914,
+      "sha256": "ff7b193d0415d1de461a6266967b1a49bc45db3360423a5d8a8c31cc1952182a"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/main-r01/word_jelly-844x390-rest.png",
+      "to": "main/word_jelly-844x390-rest.png",
+      "bytes": 197012,
+      "sha256": "535ca2db1d51b39a82c14c89987d8012d8924c884c01247fa8465c799a2cefe8"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/main-r01/word_jelly-844x390-negative.png",
+      "to": "main/word_jelly-844x390-negative.png",
+      "bytes": 197019,
+      "sha256": "1c927d6057907ab230989e195bad0738166f97c477a9391c2945a5a766421870"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/main-r01/word_jelly-844x390-positive.png",
+      "to": "main/word_jelly-844x390-positive.png",
+      "bytes": 196971,
+      "sha256": "0e7467a21f5010b26ed23ef9307abfffa2f7dd071639e9ff1f64e41506ed99d5"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/main-r01/word_jelly-1280x800-rest.png",
+      "to": "main/word_jelly-1280x800-rest.png",
+      "bytes": 393318,
+      "sha256": "8d4275bf33cbf2e2665e0ee476b85064cd83850f057eb056e72d6b68d5d85790"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/main-r01/word_jelly-1280x800-negative.png",
+      "to": "main/word_jelly-1280x800-negative.png",
+      "bytes": 393340,
+      "sha256": "964c5d5f46241b24d15fc5220e0a353d5caa409f614c4faa34019a18208f4a85"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/main-r01/word_jelly-1280x800-positive.png",
+      "to": "main/word_jelly-1280x800-positive.png",
+      "bytes": 393176,
+      "sha256": "76041ad52ebf4f6556ae6668e29e27f7f93425d0c838079aeb538fe689f5f04b"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-r04/rest-r01/render-report.json",
+      "to": "source-rest/render-report.json",
+      "bytes": 47078,
+      "sha256": "30f43cae22b107276d7873f60bb1e4c44c8e38b353531885106a474d9c73f894"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-r04/rest-r01/composition-rest.png",
+      "to": "source-rest/composition-rest.png",
+      "bytes": 114741,
+      "sha256": "b16a84a685b05471097ffe6c455219193cc864c485c6028b30f1ca24b77148b3"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-r04/rest-r01/extreme-00.png",
+      "to": "source-rest/extreme-00.png",
+      "bytes": 114745,
+      "sha256": "bbaceba0ab9a1696a2e51287fdc1bc7abd1bd442a9e737867971f0265ae8c743"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-r04/rest-r01/extreme-01.png",
+      "to": "source-rest/extreme-01.png",
+      "bytes": 114715,
+      "sha256": "f733ba32b2e1e04d8d3f7640c63dc4a58469d52183083f198f6af7b0a06590d6"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-r04/motion-r01/render-report.json",
+      "to": "source-motion/render-report.json",
+      "bytes": 46301,
+      "sha256": "abe2382105e801fc46182597bdbf78d13b025e2cbe45b9fcf5b0848a66fa2f65"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-r04/motion-r01/environment-rest.png",
+      "to": "source-motion/environment-rest.png",
+      "bytes": 79663,
+      "sha256": "3ec922413d2e20174c2c6f87fe9a6b3506167022ebb5ce8fbede136f8d9d51a2"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-r04/motion-r01/composition-rest.png",
+      "to": "source-motion/composition-rest.png",
+      "bytes": 114741,
+      "sha256": "b16a84a685b05471097ffe6c455219193cc864c485c6028b30f1ca24b77148b3"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-r04/motion-r01/loop-end.png",
+      "to": "source-motion/loop-end.png",
+      "bytes": 114741,
+      "sha256": "b16a84a685b05471097ffe6c455219193cc864c485c6028b30f1ca24b77148b3"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-r04/motion-r01/composite-00.png",
+      "to": "source-motion/composite-00.png",
+      "bytes": 114741,
+      "sha256": "b16a84a685b05471097ffe6c455219193cc864c485c6028b30f1ca24b77148b3"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-r04/motion-r01/composite-01.png",
+      "to": "source-motion/composite-01.png",
+      "bytes": 114687,
+      "sha256": "a9be9ff46ba154c3b561d26402d30bfc31910c48491ad8b8c0bdee3e204e64ca"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-r04/motion-r01/composite-02.png",
+      "to": "source-motion/composite-02.png",
+      "bytes": 114745,
+      "sha256": "34cd3702f6220f1a8c5d6cd4c1d2e2e4a6023c2d783bccdec1020c97d8431e4b"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-r04/motion-r01/composite-03.png",
+      "to": "source-motion/composite-03.png",
+      "bytes": 114705,
+      "sha256": "8b9db76db01aac8e24b2d3bd1835b454a3af3b355c8b4f3efbf6dc76ac830a8b"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-r04/motion-r01/composite-04.png",
+      "to": "source-motion/composite-04.png",
+      "bytes": 114715,
+      "sha256": "f733ba32b2e1e04d8d3f7640c63dc4a58469d52183083f198f6af7b0a06590d6"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-r04/motion-r01/composite-05.png",
+      "to": "source-motion/composite-05.png",
+      "bytes": 114705,
+      "sha256": "8b9db76db01aac8e24b2d3bd1835b454a3af3b355c8b4f3efbf6dc76ac830a8b"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-r04/motion-r01/composite-06.png",
+      "to": "source-motion/composite-06.png",
+      "bytes": 114745,
+      "sha256": "34cd3702f6220f1a8c5d6cd4c1d2e2e4a6023c2d783bccdec1020c97d8431e4b"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-r04/motion-r01/composite-07.png",
+      "to": "source-motion/composite-07.png",
+      "bytes": 114687,
+      "sha256": "a9be9ff46ba154c3b561d26402d30bfc31910c48491ad8b8c0bdee3e204e64ca"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-r04/motion-r01/composite-08.png",
+      "to": "source-motion/composite-08.png",
+      "bytes": 114741,
+      "sha256": "b16a84a685b05471097ffe6c455219193cc864c485c6028b30f1ca24b77148b3"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-r04/motion-r01/composite-09.png",
+      "to": "source-motion/composite-09.png",
+      "bytes": 114736,
+      "sha256": "24582f63a650fa4448abbca55bf109d4aa6a16adfcc47b8bfb63910d1439f36c"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-r04/motion-r01/composite-10.png",
+      "to": "source-motion/composite-10.png",
+      "bytes": 114714,
+      "sha256": "41f59b190ca84d4dba57c84ffe7e92e46905a916c54030d0ae8784f002874932"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-r04/motion-r01/composite-11.png",
+      "to": "source-motion/composite-11.png",
+      "bytes": 114710,
+      "sha256": "836ac7adf912d41c1b48d49dc22eadde1a2b91d1a691af347aa2c9bb2d8813d0"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-r04/motion-r01/composite-12.png",
+      "to": "source-motion/composite-12.png",
+      "bytes": 114745,
+      "sha256": "bbaceba0ab9a1696a2e51287fdc1bc7abd1bd442a9e737867971f0265ae8c743"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-r04/motion-r01/composite-13.png",
+      "to": "source-motion/composite-13.png",
+      "bytes": 114710,
+      "sha256": "836ac7adf912d41c1b48d49dc22eadde1a2b91d1a691af347aa2c9bb2d8813d0"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-r04/motion-r01/composite-14.png",
+      "to": "source-motion/composite-14.png",
+      "bytes": 114714,
+      "sha256": "41f59b190ca84d4dba57c84ffe7e92e46905a916c54030d0ae8784f002874932"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-r04/motion-r01/composite-15.png",
+      "to": "source-motion/composite-15.png",
+      "bytes": 114736,
+      "sha256": "24582f63a650fa4448abbca55bf109d4aa6a16adfcc47b8bfb63910d1439f36c"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-r04/layers-r01/layer-report.json",
+      "to": "candidate-layers/layer-report.json",
+      "bytes": 5229,
+      "sha256": "0715e07f7b17e6fd856d229e5ad80a83f706853825d1bf06d9ce6e54beb0d8ac"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-r04/layers-r01/motion-sheet.png",
+      "to": "candidate-layers/motion-sheet.png",
+      "bytes": 50025,
+      "sha256": "90938fc426893b9944501192fa5fb9feae0cc93a0806080aee83898d36bdfb03"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-r04/layers-r01/motion-review.gif",
+      "to": "candidate-layers/motion-review.gif",
+      "bytes": 80122,
+      "sha256": "df3dcb95737b7d66b828d1b42e4b5b9ecb2192d90716cf978a3fbeac3f9e9487"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-r04/visual-review-r01/full-frame-contact.png",
+      "to": "visual-review/full-frame-contact.png",
+      "bytes": 307204,
+      "sha256": "1e48e7091d9c9d0a1362d2d250cc9a8931332a0e4b841aa2ec336d7caa8a6050"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-r04/visual-review-r01/motion-crop-contact.png",
+      "to": "visual-review/motion-crop-contact.png",
+      "bytes": 90743,
+      "sha256": "cdcd051e89500a45c012f1feb8a675784e4e7f4bf28bd3fc74e63d8854f424e4"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/components-r01/report.json",
+      "to": "components/report.json",
+      "bytes": 25931,
+      "sha256": "d625eb7336ee714c4fc3dad9df9aef2f67347b68e326862e926995dfadce0373"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/components-r01/static-768x768.png",
+      "to": "components/static-768x768.png",
+      "bytes": 114741,
+      "sha256": "b16a84a685b05471097ffe6c455219193cc864c485c6028b30f1ca24b77148b3"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/components-r01/static-320x568.png",
+      "to": "components/static-320x568.png",
+      "bytes": 73206,
+      "sha256": "091236449f56ae8ed8761ce9f3ae8564f870fdda8076ce0a48022599d06debc4"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/components-r01/static-390x844.png",
+      "to": "components/static-390x844.png",
+      "bytes": 112969,
+      "sha256": "cc4016f29ac916b9ef5e5771b8cf2492bc349d61e52704b289409fb3bb86431f"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/components-r01/static-844x390.png",
+      "to": "components/static-844x390.png",
+      "bytes": 163913,
+      "sha256": "ac9e5d2b1fcb3e0c5c0ffda7e9f21ee922204bec4b504b47a6b05a3a48e589db"
+    },
+    {
+      "from": "build/professional-english/software-data-theme-review-r04/components-r01/static-1280x800.png",
+      "to": "components/static-1280x800.png",
+      "bytes": 317979,
+      "sha256": "ac80d85d6ef26b5c695a1b2038913cbca0a65e3a006d941dd66f557a41c83338"
+    }
+  ]
+}

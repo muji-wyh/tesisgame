@@ -1,0 +1,36 @@
+extends "res://build/professional-english/software-data-theme-render-proposal-r01/render-digital-studio.gd"
+## Fresh source placement candidate. Historical renderers and attempts stay frozen.
+
+
+func _compose() -> void:
+	if not _require(FileAccess.get_sha256("res://build/professional-english/software-data-theme-render-proposal-r01/render-digital-studio.gd")
+		== "a3919fa893a531ed3ccf851b5389a7c0b5ac68b427e65f224932aed7a62d3123", "Frozen base renderer changed"):
+		return
+	super._compose()
+	if failed:
+		return
+	var plant: Node3D = placed["studio-plant"]
+	var authored: Vector3 = plant.position
+	plant.position = Vector3(-1.45, 0.05, -0.20)
+	var bounds: AABB = _world_bounds(plant)
+	var intersections: Array[String] = []
+	for id: String in placed:
+		if id != "studio-plant" and bounds.intersects(_world_bounds(placed[id])):
+			intersections.append(id)
+	if not _require(intersections.is_empty(), "Plant must not intersect another furniture AABB: " + str(intersections)):
+		return
+	var details: Dictionary = report.objects["studio-plant"]
+	details.position = _array3(plant.position)
+	details.world_bounds_position_size = _array_bounds(bounds)
+	report.placement_revision = {
+		"id": "software-data-plant-placement-r03",
+		"object": "studio-plant",
+		"authored_recipe_position": _array3(authored),
+		"previous_r02_position": [1.50, 0.05, 0.35],
+		"position": _array3(plant.position),
+		"base_renderer_sha256": "a3919fa893a531ed3ccf851b5389a7c0b5ac68b427e65f224932aed7a62d3123",
+		"furniture_aabb_intersections": intersections,
+		"scope": "Only plant world position changes. Acquired source geometry/materials, camera, scale, yaw, floor height, lighting and all sixteen motion angles remain unchanged.",
+		"review_required": "Inspect grounded attached pot, workstation depth and shadows in the complete source composition, then actual Word Jelly action/supply controls. AABB and projection calculations do not establish acceptance.",
+		"projection_is_not_render_acceptance": true
+	}

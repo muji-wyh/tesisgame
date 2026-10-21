@@ -88,7 +88,7 @@ func _run() -> void:
 				check_catalog_labels(card, pictured_words, "Match", dimensions)
 			Fixture.enter_mode(app, "memory")
 			check(app._mode_id == "memory" and not app._mode_menu_open(), "Memory label checks enter through Home")
-			app._memory.begin_peek()
+			app._memory.start_button.pressed.emit()
 			await settle()
 			if dimensions == Vector2i(480, 480):
 				check(app._memory.card_buttons[0].position.y == app._memory.card_buttons[1].position.y

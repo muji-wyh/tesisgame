@@ -140,8 +140,44 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
   assert.equal(addedImports.size, 15, 'Scenery, Home previews, mastery and powerup artwork have separate imports');
   assert.deepEqual(textureImports.filter(filename => addedImports.has(filename)).sort(), [...addedImports].sort());
   for (const filename of addedArtwork) assert.ok(fs.existsSync(path.join(root, filename)), filename);
+  const professionalPreviews = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/professional-themes.json'), 'utf8')).previews;
+  assert.equal(professionalPreviews.length, 20, 'Every career has one reviewed Home preview');
+  for (const preview of professionalPreviews) {
+    assert.equal(preview.destination, `assets/images/professional-previews/${preview.id}.png`);
+    assert.equal(preview.review.status, 'reviewed', preview.destination);
+    assert.equal(sha256(fs.readFileSync(path.join(root, preview.destination))), preview.reviewed_sha256,
+      `${preview.destination} matches its inspected source record`);
+  }
+  const wellArtwork = 'assets/images/jelly-match/well/clouds.png';
+  const wellRecord = fs.readFileSync(path.join(root, 'docs/assets/jelly-well.md'), 'utf8');
+  const wellHash = wellRecord.match(/Source and integrated SHA-256: `([a-f0-9]{64})`/);
+  assert.ok(wellRecord.includes(`\`${wellArtwork}\``), 'The well provenance identifies the integrated cloud artwork');
+  assert.ok(wellHash, 'The well provenance records the unchanged source SHA-256');
+  assert.equal(sha256(fs.readFileSync(path.join(root, wellArtwork))), wellHash[1],
+    `${wellArtwork} matches its inspected source record`);
+  const reviewedImports = new Set([...professionalPreviews.map(preview => preview.destination), wellArtwork]
+    .map(filename => path.join(root, filename + '.import')));
+  assert.equal(reviewedImports.size, 21, 'Twenty career previews and the well cloud artwork have distinct imports');
+  const reviewedDirectories = ['assets/images/professional-previews', 'assets/images/jelly-match/well']
+    .map(directory => path.join(root, directory) + path.sep);
+  assert.deepEqual(textureImports.filter(filename => reviewedDirectories.some(directory => filename.startsWith(directory))).sort(),
+    [...reviewedImports].sort(), 'Imported career previews and well artwork match their reviewed provenance exactly');
+  const controls = JSON.parse(fs.readFileSync(path.join(root, 'assets/images/ui/controls/sources.json'), 'utf8'));
+  assert.equal(controls.license, 'MIT');
+  assert.ok(fs.existsSync(path.join(root, controls.license_file)));
+  assert.deepEqual(controls.assets.map(asset => asset.id).sort(),
+    ['menu', 'microphone', 'microphone-active', 'bulb', 'eye', 'eye-closed', 'chevron-left', 'chevron-right', 'home'].sort());
+  for (const asset of controls.assets) {
+    assert.equal(asset.file, `assets/images/ui/controls/${asset.id}.svg`);
+    assert.equal(sha256(fs.readFileSync(path.join(root, asset.file))), asset.integrated_sha256, asset.file);
+    assert.match(asset.source, /^https:\/\/raw\.githubusercontent\.com\/tabler\/tabler-icons\/v3\.35\.0\/icons\//);
+  }
+  const controlImports = new Set(controls.assets.map(asset => path.join(root, asset.file + '.import')));
+  assert.deepEqual(textureImports.filter(filename => filename.startsWith(path.join(root, 'assets/images/ui/controls') + path.sep)).sort(),
+    [...controlImports].sort(), 'Functional icons match the acquired and reviewed family exactly');
   // Preserved imports, vocabulary motion atlases, Baby Pip sheets and acquired reward textures.
-  assert.equal(textureImports.filter(filename => !addedImports.has(filename)).length, 2862 + 1277 + 5 + 3);
+  assert.equal(textureImports.filter(filename => !addedImports.has(filename) && !reviewedImports.has(filename) && !controlImports.has(filename)).length,
+    2862 + 1277 + 5 + 3);
   const jellyMaterials = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/jelly-material.json'), 'utf8'));
   const materialImports = new Set(jellyMaterials.images.map(file => path.join(root, file.import)));
   assert.equal(materialImports.size, 4);

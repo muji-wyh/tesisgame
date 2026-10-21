@@ -1,0 +1,111 @@
+{
+  "schema": 1,
+  "status": "postintegration_node_validation_passed",
+  "recorded_at": "2026-10-20T10:10:45.745Z",
+  "command": "node --test tests/professional-card-reader-image.test.cjs tests/professional-content.test.cjs tests/professional-retail-media.test.cjs tests/professional-retail-morphology.test.cjs tests/professional-foundation02-morphology.test.cjs",
+  "result": {
+    "tests": 235,
+    "passed": 235,
+    "failed": 0,
+    "duration_ms": 293433.9336,
+    "exit_code": 0
+  },
+  "retained_files": [
+    {
+      "source": "build/professional-english/card-reader-image-node-history-20261020.log",
+      "path": "docs/qa/professional-card-reader-r04/postintegration-node/history-r01.log",
+      "bytes": 163303,
+      "sha256": "0906db908285ec33612f76e6ee78eb459548d177d83d93693b122a200e5ea826"
+    },
+    {
+      "source": "build/professional-english/card-reader-image-node-history-20261020-r02.log",
+      "path": "docs/qa/professional-card-reader-r04/postintegration-node/history-r02.log",
+      "bytes": 25627,
+      "sha256": "6183ba5356a0f47477191c485855afc547aa3304d856bfe14f6e2ffacbd00ab2"
+    },
+    {
+      "source": "build/professional-english/card-reader-image-node-inputs-r02.json",
+      "path": "docs/qa/professional-card-reader-r04/postintegration-node/inputs-r02.json",
+      "bytes": 1929,
+      "sha256": "c4b91b12684886fc0d90692ee3cee92003e25328c67f5c824464a109eb950aa1"
+    }
+  ],
+  "focused_inputs_unchanged_at_completion": true,
+  "focused_input_scope": "Source and test identities sampled after r02 invocation; rechecked when the process finishes. No concurrent native execution or full-repository freeze is claimed.",
+  "focused_inputs": [
+    {
+      "path": "data/professional/lexemes/retail-pilot.json",
+      "bytes": 363043,
+      "sha256": "9256f09aa2d99252f409a45381b845ba94d58e4ab9321a294f89562d031b82b7"
+    },
+    {
+      "path": "data/professional/provenance/retail-card-reader-image-2026-10-20.json",
+      "bytes": 32597,
+      "sha256": "b34b4f49620d04a3d684f34b14b377a274b17b22f5bae0537533498bdced8a92"
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-card-reader/source-record.json",
+      "bytes": 6114,
+      "sha256": "75a8bf28213a33046bc1451efce4bc16ea2516f8bae90602103af4b6d8101df6"
+    },
+    {
+      "path": "tests/professional-card-reader-image.test.cjs",
+      "bytes": 14285,
+      "sha256": "ebcedc9b31831a8fc03efb4415070eceb4e6e0ddc5eff897479b378e2c5528d0"
+    },
+    {
+      "path": "tests/helpers/professional-card-reader-history.cjs",
+      "bytes": 1922,
+      "sha256": "cb2fa5a95b498aa5d790ae46b5e8b57479f57a74e314268f019e342ac4d85c90"
+    },
+    {
+      "path": "tests/professional-content.test.cjs",
+      "bytes": 278936,
+      "sha256": "516c163270b3c6b73e0005693b623b21344ff29a28036eb0e4697fe03e000e17"
+    },
+    {
+      "path": "tests/professional-retail-media.test.cjs",
+      "bytes": 65231,
+      "sha256": "bd8f633e1bcaa3cdb22e8b92c03f43c480b4e3245db6e3beab9406e2a1853f94"
+    },
+    {
+      "path": "tests/professional-retail-morphology.test.cjs",
+      "bytes": 93907,
+      "sha256": "b51066f50d3385b0875e3ea7637a1bc13f8f25a0c1af5f5717b101a7818ea9a7"
+    },
+    {
+      "path": "tests/professional-foundation02-morphology.test.cjs",
+      "bytes": 10566,
+      "sha256": "aa08a00b390afabf3d22cf40a6a4a7ffb285298cdec67678178de77c7eb20d75"
+    }
+  ],
+  "earlier_attempt": {
+    "status": "failed_preserved",
+    "tests": 225,
+    "passed": 221,
+    "failed": 4,
+    "causes": [
+      "Three live aggregate image counts still expected ten instead of eleven.",
+      "The old gift-wrap whole-file after-image check did not reverse the later card-reader image."
+    ],
+    "resolution": "Updated live counts and introduced a strict complete-file hash check plus exact serialized card-reader-object reversal. Original historical bytes and gift-wrap SHA remain asserted; byte-drift negative coverage was added."
+  },
+  "peer_record_review": {
+    "path": "docs/qa/professional-card-reader-r04/peer-record-review-r01.json",
+    "bytes": 1316,
+    "sha256": "84fcb5ad8491219bc2fc8f644055efc9fab8a1e1fdde906bcadc3da949e64b75"
+  },
+  "source_visual_review": {
+    "path": "docs/qa/professional-card-reader-r04/independent-visual-review-r04.json",
+    "bytes": 15534,
+    "sha256": "4f32f6103a42ff7ad5b654eb912bfea6a2bb34e94f10f4912baf8a1e8ee93bb3"
+  },
+  "limitations": {
+    "native_execution_in_this_validation": false,
+    "postintegration_native_acceptance": false,
+    "human_picture_approval": false,
+    "new_listening_approval": false,
+    "module_or_release_ready": false
+  },
+  "scope": "Current card-reader integration, precise historical image/audio/morphology reversal and Foundation02 aggregate gates. The earlier native report remains preintegration synthetic-caller evidence. This receipt does not freeze unrelated concurrent repository work."
+}

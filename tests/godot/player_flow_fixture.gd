@@ -22,6 +22,10 @@ static func enter_mode(app, id: String) -> void:
 
 
 static func reserve_pair_chest(app) -> void:
+	if app._mode_id == "memory":
+		# Memory earns the remaining tier on completion, with no lottery reservation.
+		assert(app._sync_pair_reward(), app.medal_progress.error)
+		return
 	if app._mode_id not in ["match", "memory"]:
 		app.model.chest_earned = true
 		return
@@ -43,12 +47,25 @@ static func earn_pair_chest(app) -> void:
 	reserve_pair_chest(app)
 	if app._mode_id not in ["match", "memory"]:
 		return
+	if app._mode_id == "memory":
+		assert(app.medal_progress.finish_memory_round(app._round_id, app._memory.memory.reward_tier(), app.model.theme_id),
+			app.medal_progress.error)
+		assert(app._sync_pair_reward(), app.medal_progress.error)
+		return
 	assert(app.medal_progress.record_pair_reward(app._mode_id, app._round_id, app.model.theme_id),
 		app.medal_progress.error)
 	var pair: Dictionary = app.medal_progress.pair_round(app._mode_id)
 	app.model.chest_earned = true
 	app.model.reward_theme = str(pair.theme)
 	assert(app._sync_pair_reward(), app.medal_progress.error)
+
+
+static func start_memory(app) -> void:
+	# Cross both real player gates when a fixture needs an active Memory board.
+	if not app._memory.memory.started:
+		app._memory.start_button.pressed.emit()
+	if app._memory.memory.studying:
+		app._memory_peek_countdown.action_button.pressed.emit()
 
 
 static func finish_celebration(app) -> void:
@@ -63,5 +80,5 @@ static func finish_celebration(app) -> void:
 	app._round_celebration.set_narration_playing(false)
 	app._round_celebration.advance(3.01)
 	if app._round_celebration.is_active():
-		assert(app._round_celebration.is_ready() and not app.model.chest_earned)
+		assert(app._mode_id in ["match", "memory"] and app._round_celebration.is_ready() and not app.model.chest_earned)
 		app._round_celebration.action_button.pressed.emit()

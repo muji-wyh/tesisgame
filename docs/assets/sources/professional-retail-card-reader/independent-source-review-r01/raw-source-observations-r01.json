@@ -1,0 +1,737 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-10-17T06:14:53.6688114Z",
+  "scope": "Raw filesystem, text, JSON and SHA256 checks only. No project, helper, renderer, test or native code executed.",
+  "acquisition_membership": [
+    "141617-source.html",
+    "141617.svg",
+    "206301-browser.svg",
+    "206301-cropped-512.png",
+    "206301-render.png",
+    "206301-size-review-r02.png",
+    "206301-size-review.png",
+    "206301-source.html",
+    "206301.svg",
+    "acquisition.json",
+    "candidate-record.json",
+    "cc0-source.html",
+    "preparation-receipt.json",
+    "prepare-preview.cjs",
+    "prepare-size-sheet-r02.cjs",
+    "review-correction-r02.md",
+    "size-review-r02-receipt.json",
+    "visual-observations.md"
+  ],
+  "input_count": 22,
+  "inputs": [
+    {
+      "path": "build/professional-english/card-reader-freesvg-acquisition-r01/141617-source.html",
+      "bytes": 69826,
+      "sha256": "36f095a821b753a32516cd1a547354e9fef75426e4700d0ddb3e5c22ac6b524c"
+    },
+    {
+      "path": "build/professional-english/card-reader-freesvg-acquisition-r01/141617.svg",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "build/professional-english/card-reader-freesvg-acquisition-r01/206301-browser.svg",
+      "bytes": 38428,
+      "sha256": "116dca8283535b13345dbd785e846f162bd3701d91816f35603d4aead648a044"
+    },
+    {
+      "path": "build/professional-english/card-reader-freesvg-acquisition-r01/206301-cropped-512.png",
+      "bytes": 77565,
+      "sha256": "67cb3e6f8e0be881b51a7d18ecc28fd1a02fab6b650197a8d60ef9d550b07c59"
+    },
+    {
+      "path": "build/professional-english/card-reader-freesvg-acquisition-r01/206301-render.png",
+      "bytes": 278605,
+      "sha256": "7857238a51e9f17c7259f310e5a0bddf922a01cdc0b65c77db5ffdd93bab36d4"
+    },
+    {
+      "path": "build/professional-english/card-reader-freesvg-acquisition-r01/206301-size-review-r02.png",
+      "bytes": 142632,
+      "sha256": "a2e7ff6239d3ce641da017f0c259ef8ade5f421422fee796c5d98e45ff127da1"
+    },
+    {
+      "path": "build/professional-english/card-reader-freesvg-acquisition-r01/206301-size-review.png",
+      "bytes": 139216,
+      "sha256": "2b42f2929b195000f110f1bc237ca2c0c57c6710cd31ba704b121e64f74f8f40"
+    },
+    {
+      "path": "build/professional-english/card-reader-freesvg-acquisition-r01/206301-source.html",
+      "bytes": 70179,
+      "sha256": "fab25e54beca6ca2224fef0d7bdb39db10a62d1f8d1878dfb3db781ca0cb6fdf"
+    },
+    {
+      "path": "build/professional-english/card-reader-freesvg-acquisition-r01/206301.svg",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "build/professional-english/card-reader-freesvg-acquisition-r01/acquisition.json",
+      "bytes": 1645,
+      "sha256": "169a42fa375db5193c16b2d5e05454bcf4d1a6045ac5b620d43b6c5296d866d9"
+    },
+    {
+      "path": "build/professional-english/card-reader-freesvg-acquisition-r01/candidate-record.json",
+      "bytes": 3200,
+      "sha256": "123d5e614f85522b2a2e86e6dc7c545ad0006d249585893f7716b4a669efe38f"
+    },
+    {
+      "path": "build/professional-english/card-reader-freesvg-acquisition-r01/cc0-source.html",
+      "bytes": 30248,
+      "sha256": "abb4d48fc8b85de52b377dd105532c6c549f515d492a8e1712bc99e7316a1f12"
+    },
+    {
+      "path": "build/professional-english/card-reader-freesvg-acquisition-r01/preparation-receipt.json",
+      "bytes": 2136,
+      "sha256": "42562de5ab32c34a42914c1b7ba4dfc8dab3d30d255994b3245f422e15d0df93"
+    },
+    {
+      "path": "build/professional-english/card-reader-freesvg-acquisition-r01/prepare-preview.cjs",
+      "bytes": 2543,
+      "sha256": "e7658994b826023c10f6de260577eeba26bfbe354eac13d008cf1e5de044c81b"
+    },
+    {
+      "path": "build/professional-english/card-reader-freesvg-acquisition-r01/prepare-size-sheet-r02.cjs",
+      "bytes": 1694,
+      "sha256": "cd6449be3cfaf4da0303a15f7f800ff069d8176250dcbe00f74187c4d152e1df"
+    },
+    {
+      "path": "build/professional-english/card-reader-freesvg-acquisition-r01/review-correction-r02.md",
+      "bytes": 1574,
+      "sha256": "6efdc1d6af0f51930929b8f72e3678e6262bf5de16c6b644dcd2a8c2860eb3aa"
+    },
+    {
+      "path": "build/professional-english/card-reader-freesvg-acquisition-r01/size-review-r02-receipt.json",
+      "bytes": 891,
+      "sha256": "67d028544ffc6009ca4f8557d692357f9d6fef7fe2da4b0eaa11eb16adce497c"
+    },
+    {
+      "path": "build/professional-english/card-reader-freesvg-acquisition-r01/visual-observations.md",
+      "bytes": 3396,
+      "sha256": "9d1eb868815985947c8dcc65340d600a4352b914c94684c62786cc077abc66c9"
+    },
+    {
+      "path": "data/professional/lexemes/retail-pilot.json",
+      "bytes": 361863,
+      "sha256": "dee9e024d357c343aaa89b75b19cb5edbccdfe9d7d9595ead8613d7b847402c0"
+    },
+    {
+      "path": "docs/assets/art-direction.md",
+      "bytes": 2299,
+      "sha256": "4a09177defe0841c01308590c5e6990e919a76b50bbaaa05fa6ca6fd5f476109"
+    },
+    {
+      "path": "professional-media/a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c.png",
+      "bytes": 27650,
+      "sha256": "a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c"
+    },
+    {
+      "path": "professional-media/f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png",
+      "bytes": 172442,
+      "sha256": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262"
+    }
+  ],
+  "png_headers": [
+    {
+      "path": "build/professional-english/card-reader-freesvg-acquisition-r01/206301-cropped-512.png",
+      "signature": "89-50-4E-47-0D-0A-1A-0A",
+      "ihdr": "IHDR",
+      "width": 512,
+      "height": 433,
+      "bit_depth": 8,
+      "color_type": 6
+    },
+    {
+      "path": "build/professional-english/card-reader-freesvg-acquisition-r01/206301-render.png",
+      "signature": "89-50-4E-47-0D-0A-1A-0A",
+      "ihdr": "IHDR",
+      "width": 2640,
+      "height": 2640,
+      "bit_depth": 8,
+      "color_type": 6
+    },
+    {
+      "path": "build/professional-english/card-reader-freesvg-acquisition-r01/206301-size-review-r02.png",
+      "signature": "89-50-4E-47-0D-0A-1A-0A",
+      "ihdr": "IHDR",
+      "width": 840,
+      "height": 630,
+      "bit_depth": 8,
+      "color_type": 6
+    },
+    {
+      "path": "build/professional-english/card-reader-freesvg-acquisition-r01/206301-size-review.png",
+      "signature": "89-50-4E-47-0D-0A-1A-0A",
+      "ihdr": "IHDR",
+      "width": 840,
+      "height": 560,
+      "bit_depth": 8,
+      "color_type": 6
+    },
+    {
+      "path": "professional-media/a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c.png",
+      "signature": "89-50-4E-47-0D-0A-1A-0A",
+      "ihdr": "IHDR",
+      "width": 512,
+      "height": 293,
+      "bit_depth": 8,
+      "color_type": 6
+    },
+    {
+      "path": "professional-media/f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png",
+      "signature": "89-50-4E-47-0D-0A-1A-0A",
+      "ihdr": "IHDR",
+      "width": 512,
+      "height": 615,
+      "bit_depth": 8,
+      "color_type": 6
+    }
+  ],
+  "svg_counts": {
+    "path_elements": 25,
+    "creator_metadata": 0,
+    "external_references": 0,
+    "group_elements": 0,
+    "active_or_embedded_elements": 0
+  },
+  "check_count": 95,
+  "failures": [],
+  "checks": [
+    {
+      "id": "input_count",
+      "pass": true,
+      "observed": 22
+    },
+    {
+      "id": "acquisition_membership_count",
+      "pass": true,
+      "observed": 18
+    },
+    {
+      "id": "acquisition_receipt_bytes:141617.svg",
+      "pass": true,
+      "observed": 0
+    },
+    {
+      "id": "acquisition_receipt_sha256:141617.svg",
+      "pass": true,
+      "observed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "id": "acquisition_receipt_bytes:206301.svg",
+      "pass": true,
+      "observed": 0
+    },
+    {
+      "id": "acquisition_receipt_sha256:206301.svg",
+      "pass": true,
+      "observed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "id": "acquisition_receipt_bytes:141617-source.html",
+      "pass": true,
+      "observed": 69826
+    },
+    {
+      "id": "acquisition_receipt_sha256:141617-source.html",
+      "pass": true,
+      "observed": "36f095a821b753a32516cd1a547354e9fef75426e4700d0ddb3e5c22ac6b524c"
+    },
+    {
+      "id": "acquisition_receipt_bytes:206301-source.html",
+      "pass": true,
+      "observed": 70179
+    },
+    {
+      "id": "acquisition_receipt_sha256:206301-source.html",
+      "pass": true,
+      "observed": "fab25e54beca6ca2224fef0d7bdb39db10a62d1f8d1878dfb3db781ca0cb6fdf"
+    },
+    {
+      "id": "acquisition_receipt_bytes:cc0-source.html",
+      "pass": true,
+      "observed": 30248
+    },
+    {
+      "id": "acquisition_receipt_sha256:cc0-source.html",
+      "pass": true,
+      "observed": "abb4d48fc8b85de52b377dd105532c6c549f515d492a8e1712bc99e7316a1f12"
+    },
+    {
+      "id": "preparation_bytes:206301-browser.svg",
+      "pass": true,
+      "observed": 38428
+    },
+    {
+      "id": "preparation_sha256:206301-browser.svg",
+      "pass": true,
+      "observed": "116dca8283535b13345dbd785e846f162bd3701d91816f35603d4aead648a044"
+    },
+    {
+      "id": "preparation_bytes:206301-render.png",
+      "pass": true,
+      "observed": 278605
+    },
+    {
+      "id": "preparation_sha256:206301-render.png",
+      "pass": true,
+      "observed": "7857238a51e9f17c7259f310e5a0bddf922a01cdc0b65c77db5ffdd93bab36d4"
+    },
+    {
+      "id": "preparation_bytes:206301-cropped-512.png",
+      "pass": true,
+      "observed": 77565
+    },
+    {
+      "id": "preparation_sha256:206301-cropped-512.png",
+      "pass": true,
+      "observed": "67cb3e6f8e0be881b51a7d18ecc28fd1a02fab6b650197a8d60ef9d550b07c59"
+    },
+    {
+      "id": "preparation_bytes:206301-size-review.png",
+      "pass": true,
+      "observed": 139216
+    },
+    {
+      "id": "preparation_sha256:206301-size-review.png",
+      "pass": true,
+      "observed": "2b42f2929b195000f110f1bc237ca2c0c57c6710cd31ba704b121e64f74f8f40"
+    },
+    {
+      "id": "record_pin:206301-browser.svg:20",
+      "pass": true,
+      "observed": "116dca8283535b13345dbd785e846f162bd3701d91816f35603d4aead648a044"
+    },
+    {
+      "id": "record_pin:206301-cropped-512.png:21",
+      "pass": true,
+      "observed": "67cb3e6f8e0be881b51a7d18ecc28fd1a02fab6b650197a8d60ef9d550b07c59"
+    },
+    {
+      "id": "record_pin:206301-browser.svg:22",
+      "pass": true,
+      "observed": "116dca8283535b13345dbd785e846f162bd3701d91816f35603d4aead648a044"
+    },
+    {
+      "id": "record_pin:206301-cropped-512.png:23",
+      "pass": true,
+      "observed": "67cb3e6f8e0be881b51a7d18ecc28fd1a02fab6b650197a8d60ef9d550b07c59"
+    },
+    {
+      "id": "record_pin:206301-size-review-r02.png:24",
+      "pass": true,
+      "observed": "a2e7ff6239d3ce641da017f0c259ef8ade5f421422fee796c5d98e45ff127da1"
+    },
+    {
+      "id": "r02_receipt_pin",
+      "pass": true,
+      "observed": "a2e7ff6239d3ce641da017f0c259ef8ade5f421422fee796c5d98e45ff127da1"
+    },
+    {
+      "id": "failed_download:141617.svg",
+      "pass": true,
+      "observed": "Preserved zero-byte file; status 200 and text/html in acquisition record"
+    },
+    {
+      "id": "failed_download:206301.svg",
+      "pass": true,
+      "observed": "Preserved zero-byte file; status 200 and text/html in acquisition record"
+    },
+    {
+      "id": "png_signature:build/professional-english/card-reader-freesvg-acquisition-r01/206301-cropped-512.png",
+      "pass": true,
+      "observed": "89-50-4E-47-0D-0A-1A-0A/IHDR"
+    },
+    {
+      "id": "png_signature:build/professional-english/card-reader-freesvg-acquisition-r01/206301-render.png",
+      "pass": true,
+      "observed": "89-50-4E-47-0D-0A-1A-0A/IHDR"
+    },
+    {
+      "id": "png_signature:build/professional-english/card-reader-freesvg-acquisition-r01/206301-size-review-r02.png",
+      "pass": true,
+      "observed": "89-50-4E-47-0D-0A-1A-0A/IHDR"
+    },
+    {
+      "id": "png_signature:build/professional-english/card-reader-freesvg-acquisition-r01/206301-size-review.png",
+      "pass": true,
+      "observed": "89-50-4E-47-0D-0A-1A-0A/IHDR"
+    },
+    {
+      "id": "png_signature:professional-media/a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c.png",
+      "pass": true,
+      "observed": "89-50-4E-47-0D-0A-1A-0A/IHDR"
+    },
+    {
+      "id": "png_signature:professional-media/f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png",
+      "pass": true,
+      "observed": "89-50-4E-47-0D-0A-1A-0A/IHDR"
+    },
+    {
+      "id": "png_dimensions:206301-size-review-r02.png",
+      "pass": true,
+      "observed": [
+        840,
+        630
+      ]
+    },
+    {
+      "id": "png_dimensions:206301-render.png",
+      "pass": true,
+      "observed": [
+        2640,
+        2640
+      ]
+    },
+    {
+      "id": "png_dimensions:206301-cropped-512.png",
+      "pass": true,
+      "observed": [
+        512,
+        433
+      ]
+    },
+    {
+      "id": "png_dimensions:206301-size-review.png",
+      "pass": true,
+      "observed": [
+        840,
+        560
+      ]
+    },
+    {
+      "id": "comparison_pin:professional-media/f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png",
+      "pass": true,
+      "observed": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262"
+    },
+    {
+      "id": "comparison_pin:professional-media/a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c.png",
+      "pass": true,
+      "observed": "a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c"
+    },
+    {
+      "id": "svg_pattern:path_elements",
+      "pass": true,
+      "observed": 25
+    },
+    {
+      "id": "svg_pattern:creator_metadata",
+      "pass": true,
+      "observed": 0
+    },
+    {
+      "id": "svg_pattern:external_references",
+      "pass": true,
+      "observed": 0
+    },
+    {
+      "id": "svg_pattern:group_elements",
+      "pass": true,
+      "observed": 0
+    },
+    {
+      "id": "svg_pattern:active_or_embedded_elements",
+      "pass": true,
+      "observed": 0
+    },
+    {
+      "id": "svg_viewbox",
+      "pass": true,
+      "observed": "0 0 660 660"
+    },
+    {
+      "id": "svg_dimensions",
+      "pass": true,
+      "observed": "660pt by 660pt"
+    },
+    {
+      "id": "source_page_title",
+      "pass": true,
+      "observed": "POS termina credit card payment"
+    },
+    {
+      "id": "source_page_author",
+      "pass": true,
+      "observed": "Page-level author: Vedran"
+    },
+    {
+      "id": "source_page_imageobject",
+      "pass": true,
+      "observed": "ImageObject scope present"
+    },
+    {
+      "id": "source_page_organization_creator",
+      "pass": true,
+      "observed": "Artwork-specific organization: publicdomainvectors.org"
+    },
+    {
+      "id": "source_page_published_by",
+      "pass": true,
+      "observed": "Visible SVG published by: publicdomainvectors.org"
+    },
+    {
+      "id": "source_page_license",
+      "pass": true,
+      "observed": "Public Domain"
+    },
+    {
+      "id": "source_page_cc0_link",
+      "pass": true,
+      "observed": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
+      "id": "source_page_download_link",
+      "pass": true,
+      "observed": "/download/206301"
+    },
+    {
+      "id": "cc0_reuse_permission",
+      "pass": true,
+      "observed": "Commercial reuse permission stated"
+    },
+    {
+      "id": "cc0_summary_limit",
+      "pass": true,
+      "observed": "Human-readable summary"
+    },
+    {
+      "id": "cc0_other_rights_limit",
+      "pass": true,
+      "observed": "Patent, trademark, privacy and publicity limits stated"
+    },
+    {
+      "id": "r01_192_tile_clipped",
+      "pass": true,
+      "observed": {
+        "canvas_height": 560,
+        "bottom": 602
+      }
+    },
+    {
+      "id": "r02_rectangle_count",
+      "pass": true,
+      "observed": 5
+    },
+    {
+      "id": "r02_rectangle_contained:512",
+      "pass": true,
+      "observed": {
+        "canvas_width": 840,
+        "bottom": 453,
+        "right": 532,
+        "canvas_height": 630
+      }
+    },
+    {
+      "id": "r02_rectangle_contained:64",
+      "pass": true,
+      "observed": {
+        "canvas_width": 840,
+        "bottom": 114,
+        "right": 664,
+        "canvas_height": 630
+      }
+    },
+    {
+      "id": "r02_rectangle_contained:96",
+      "pass": true,
+      "observed": {
+        "canvas_width": 840,
+        "bottom": 266,
+        "right": 696,
+        "canvas_height": 630
+      }
+    },
+    {
+      "id": "r02_rectangle_contained:128",
+      "pass": true,
+      "observed": {
+        "canvas_width": 840,
+        "bottom": 418,
+        "right": 728,
+        "canvas_height": 630
+      }
+    },
+    {
+      "id": "r02_rectangle_contained:192",
+      "pass": true,
+      "observed": {
+        "canvas_width": 840,
+        "bottom": 602,
+        "right": 792,
+        "canvas_height": 630
+      }
+    },
+    {
+      "id": "r02_source_fixed_canvas",
+      "pass": true,
+      "observed": "Raw source literal only; code not executed"
+    },
+    {
+      "id": "r02_source_derivative_pin",
+      "pass": true,
+      "observed": "Raw source pins exact reviewed derivative"
+    },
+    {
+      "id": "r02_source_contains_resize_mode",
+      "pass": true,
+      "observed": "Raw source describes proportional contain conversion"
+    },
+    {
+      "id": "r02_creator_correction",
+      "pass": true,
+      "observed": "Precise creator limitation present"
+    },
+    {
+      "id": "r02_original_preservation_statement",
+      "pass": true,
+      "observed": "Original evidence preserved statement present"
+    },
+    {
+      "id": "lexeme_single_match",
+      "pass": true,
+      "observed": 1
+    },
+    {
+      "id": "definition_consistent",
+      "pass": true,
+      "observed": "A device that reads payment information from a bank card."
+    },
+    {
+      "id": "example_consistent",
+      "pass": true,
+      "observed": "The customer held a card near the card reader."
+    },
+    {
+      "id": "original_brief_consistent",
+      "pass": true,
+      "observed": "Production brief matches preserved original"
+    },
+    {
+      "id": "proposed_brief_consistent",
+      "pass": true,
+      "observed": "Review accepts the exact candidate proposal for next comparison"
+    },
+    {
+      "id": "production_image_pending",
+      "pass": true,
+      "observed": "Pending; null image path; not_started"
+    },
+    {
+      "id": "approved_audio_retained_in_observed_json",
+      "pass": true,
+      "observed": "Integrated approved Ava settings observed; no audio mutation performed"
+    },
+    {
+      "id": "initial_findings_preserved",
+      "pass": true,
+      "observed": [
+        "CR-F01",
+        "CR-F02"
+      ]
+    },
+    {
+      "id": "findings_resolved_in_review",
+      "pass": true,
+      "observed": [
+        "CR-F01",
+        "CR-F02"
+      ]
+    },
+    {
+      "id": "five_sizes_reviewed",
+      "pass": true,
+      "observed": [
+        64,
+        96,
+        128,
+        192,
+        512
+      ]
+    },
+    {
+      "id": "acceptance_scope:scoped_ai_art_review",
+      "pass": true,
+      "observed": true
+    },
+    {
+      "id": "acceptance_scope:scoped_ai_picture_brief_review",
+      "pass": true,
+      "observed": true
+    },
+    {
+      "id": "acceptance_scope:human_recognition_test",
+      "pass": true,
+      "observed": false
+    },
+    {
+      "id": "acceptance_scope:human_visual_acceptance",
+      "pass": true,
+      "observed": false
+    },
+    {
+      "id": "acceptance_scope:native_caller_review",
+      "pass": true,
+      "observed": false
+    },
+    {
+      "id": "acceptance_scope:final_exercise_suitability",
+      "pass": true,
+      "observed": false
+    },
+    {
+      "id": "acceptance_scope:final_media_acceptance",
+      "pass": true,
+      "observed": false
+    },
+    {
+      "id": "acceptance_scope:production_integration",
+      "pass": true,
+      "observed": false
+    },
+    {
+      "id": "acceptance_scope:production_afterimages_created",
+      "pass": true,
+      "observed": false
+    },
+    {
+      "id": "acceptance_scope:audio_or_listening_approval_changed",
+      "pass": true,
+      "observed": false
+    },
+    {
+      "id": "acceptance_scope:module_or_release_readiness_changed",
+      "pass": true,
+      "observed": false
+    },
+    {
+      "id": "acceptance_scope:project_native_tests_or_renderer_executed_by_reviewer",
+      "pass": true,
+      "observed": false
+    },
+    {
+      "id": "review_no_cjk_text:README.md",
+      "pass": true,
+      "observed": "No CJK ideographs in authored report"
+    },
+    {
+      "id": "review_no_cjk_text:review.json",
+      "pass": true,
+      "observed": "No CJK ideographs in authored report"
+    },
+    {
+      "id": "review_no_cjk_text:initial-findings.json",
+      "pass": true,
+      "observed": "No CJK ideographs in authored report"
+    }
+  ],
+  "tool_observation": {
+    "chunk_id": "c31551",
+    "exit_code": 0,
+    "wall_time_seconds": 2.5180645
+  }
+}

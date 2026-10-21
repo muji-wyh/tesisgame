@@ -1,0 +1,216 @@
+{
+  "schema": 1,
+  "notice": "Exact acquired source and frozen derivation copies. Original snapshot labels and build paths are retained as historical evidence, not replay instructions.",
+  "files": [
+    {
+      "from": "build\\professional-english\\software-data-theme-proposal-r01\\sources\\innerscene-whiteboard\\library-terms.html",
+      "to": "sources/innerscene-whiteboard/library-terms.html",
+      "sha256": "da87451034fbaaf678c3aea9ec900a106ced7ad2222269afd6e9c174647b6d23",
+      "bytes": 35154
+    },
+    {
+      "from": "build\\professional-english\\software-data-theme-proposal-r01\\sources\\innerscene-whiteboard\\mobile-whiteboard-education-furniture.glb",
+      "to": "sources/innerscene-whiteboard/mobile-whiteboard-education-furniture.glb",
+      "sha256": "bfa7cee0ff63a8439b489d8f84146348f6424bb35784c090eb557b9288d931a9",
+      "bytes": 349108
+    },
+    {
+      "from": "build\\professional-english\\software-data-theme-proposal-r01\\sources\\innerscene-whiteboard\\model-retrievals.json",
+      "to": "sources/innerscene-whiteboard/model-retrievals.json",
+      "sha256": "4462f78ac3c65dacad6019bf78895de3b653cbc7173a9443f1dbb8b9098a39bc",
+      "bytes": 1000
+    },
+    {
+      "from": "build\\professional-english\\software-data-theme-proposal-r01\\sources\\innerscene-whiteboard\\page-link-observation.json",
+      "to": "sources/innerscene-whiteboard/page-link-observation.json",
+      "sha256": "1c13dc28dd0f7bf4c5f1f1a062b9f8792c598adf27d0cc52799d2f1624464915",
+      "bytes": 1260
+    },
+    {
+      "from": "build\\professional-english\\software-data-theme-proposal-r01\\sources\\innerscene-whiteboard\\retrievals.json",
+      "to": "sources/innerscene-whiteboard/retrievals.json",
+      "sha256": "a9517e07b42307f4e0299ac9f3435a2e1f6a4a6bb44d7d9018cab634e8279d4b",
+      "bytes": 972
+    },
+    {
+      "from": "build\\professional-english\\software-data-theme-proposal-r01\\sources\\innerscene-whiteboard\\source-page.html",
+      "to": "sources/innerscene-whiteboard/source-page.html",
+      "sha256": "97b5c500f368ae6462cf954ab58d4b503ffad6be4bdb04ac194b1a279347a831",
+      "bytes": 48252
+    },
+    {
+      "from": "build\\professional-english\\software-data-theme-proposal-r01\\sources\\innerscene-whiteboard\\source-preview.png",
+      "to": "sources/innerscene-whiteboard/source-preview.png",
+      "sha256": "6235bb52d243f6e41d18dcbb7f711960d7e9c3175dd5bdb83035424f45a81215",
+      "bytes": 13580
+    },
+    {
+      "from": "build\\professional-english\\software-data-theme-proposal-r01\\sources\\kenney-furniture\\inspection-previews\\cabinetTelevision_SW.png",
+      "to": "sources/kenney-furniture/inspection-previews/cabinetTelevision_SW.png",
+      "sha256": "4c126819457d086941434c059409ed08fee79f266879363eea7dcc44cb31b14f",
+      "bytes": 8835
+    },
+    {
+      "from": "build\\professional-english\\software-data-theme-proposal-r01\\sources\\kenney-furniture\\inspection-previews\\desk_SW.png",
+      "to": "sources/kenney-furniture/inspection-previews/desk_SW.png",
+      "sha256": "486dd067d12a76cae5c643c3dd6639c44ef0f4293ae64608afab62c9565f2706",
+      "bytes": 6952
+    },
+    {
+      "from": "build\\professional-english\\software-data-theme-proposal-r01\\sources\\kenney-furniture\\inspection-previews\\laptop_NE.png",
+      "to": "sources/kenney-furniture/inspection-previews/laptop_NE.png",
+      "sha256": "8bacb9c23a837c450fada7c0595018f2edcce376f6bf08cd9b37acac7d8035cc",
+      "bytes": 2534
+    },
+    {
+      "from": "build\\professional-english\\software-data-theme-proposal-r01\\sources\\kenney-furniture\\inspection-previews\\laptop_SW.png",
+      "to": "sources/kenney-furniture/inspection-previews/laptop_SW.png",
+      "sha256": "d63ddc4f18eb9a1e5ca3142257a9bc14a6075aea65a0d690824a3d3133c2aa10",
+      "bytes": 4137
+    },
+    {
+      "from": "build\\professional-english\\software-data-theme-proposal-r01\\sources\\kenney-furniture\\inspection-previews\\pottedPlant_NE.png",
+      "to": "sources/kenney-furniture/inspection-previews/pottedPlant_NE.png",
+      "sha256": "a7d235e2f04adb325a901a5d1960f4fed79b39fadf8e83adec0d74ed4226dad1",
+      "bytes": 3987
+    },
+    {
+      "from": "build\\professional-english\\software-data-theme-proposal-r01\\sources\\kenney-furniture\\inspection-previews\\televisionModern_NE.png",
+      "to": "sources/kenney-furniture/inspection-previews/televisionModern_NE.png",
+      "sha256": "5231ca7fe8b165a6c9767694d119f2370c2ad3044eb45b30bf9de108c4660eba",
+      "bytes": 5413
+    },
+    {
+      "from": "build\\professional-english\\software-data-theme-proposal-r01\\sources\\kenney-furniture\\inspection-previews\\televisionModern_SW.png",
+      "to": "sources/kenney-furniture/inspection-previews/televisionModern_SW.png",
+      "sha256": "a7274034956edff2057b19bdaf2f26c66c689c5b276e14650db4d5f41a4f7640",
+      "bytes": 5587
+    },
+    {
+      "from": "build\\professional-english\\software-data-theme-proposal-r01\\sources\\kenney-furniture\\LICENSE.txt",
+      "to": "sources/kenney-furniture/LICENSE.txt",
+      "sha256": "0ef3667d547d93dea1e3e47aa1c323eaef4913f25c0f2c2cfe31899f2ee134b7",
+      "bytes": 614
+    },
+    {
+      "from": "build\\professional-english\\software-data-theme-proposal-r01\\sources\\kenney-furniture\\models\\cabinetTelevision.glb",
+      "to": "sources/kenney-furniture/models/cabinetTelevision.glb",
+      "sha256": "811719593d676ff76f7b5904d52c845ce0396af2bc9a6a2636c4818ead320b99",
+      "bytes": 10524
+    },
+    {
+      "from": "build\\professional-english\\software-data-theme-proposal-r01\\sources\\kenney-furniture\\models\\chairDesk.glb",
+      "to": "sources/kenney-furniture/models/chairDesk.glb",
+      "sha256": "46406619186034cbe92b19b79a5f1a8e3f442a17a70a7524ef2c0ad0f35095c6",
+      "bytes": 39016
+    },
+    {
+      "from": "build\\professional-english\\software-data-theme-proposal-r01\\sources\\kenney-furniture\\models\\computerKeyboard.glb",
+      "to": "sources/kenney-furniture/models/computerKeyboard.glb",
+      "sha256": "9d9135789de2120e9f41ce3f0a56dd1b15f40adcc7888739bb842a2d820da322",
+      "bytes": 3476
+    },
+    {
+      "from": "build\\professional-english\\software-data-theme-proposal-r01\\sources\\kenney-furniture\\models\\computerMouse.glb",
+      "to": "sources/kenney-furniture/models/computerMouse.glb",
+      "sha256": "d3ad1a923f0f7707ef367bb969eb94c9076e211c98c830ba52e133fadc5cdfc0",
+      "bytes": 5868
+    },
+    {
+      "from": "build\\professional-english\\software-data-theme-proposal-r01\\sources\\kenney-furniture\\models\\computerScreen.glb",
+      "to": "sources/kenney-furniture/models/computerScreen.glb",
+      "sha256": "5942cbad29a2d2b956619569926e81d50a4174403d592fece6556e57632dc643",
+      "bytes": 6404
+    },
+    {
+      "from": "build\\professional-english\\software-data-theme-proposal-r01\\sources\\kenney-furniture\\models\\desk.glb",
+      "to": "sources/kenney-furniture/models/desk.glb",
+      "sha256": "0164fe828f028b321730fb8c74502e353583f751be74da1682d42fff7d3c5a42",
+      "bytes": 15048
+    },
+    {
+      "from": "build\\professional-english\\software-data-theme-proposal-r01\\sources\\kenney-furniture\\models\\floorFull.glb",
+      "to": "sources/kenney-furniture/models/floorFull.glb",
+      "sha256": "99fc5df646d8dc605d6fe35001fe5b15bb7b269cc5c65f4f7793fbc76ff3d822",
+      "bytes": 2260
+    },
+    {
+      "from": "build\\professional-english\\software-data-theme-proposal-r01\\sources\\kenney-furniture\\models\\lampRoundFloor.glb",
+      "to": "sources/kenney-furniture/models/lampRoundFloor.glb",
+      "sha256": "50fe1b5b588edf15bfa9cc880f71a02a4fda6036350b24733d0ef4de5cc5e908",
+      "bytes": 6600
+    },
+    {
+      "from": "build\\professional-english\\software-data-theme-proposal-r01\\sources\\kenney-furniture\\models\\laptop.glb",
+      "to": "sources/kenney-furniture/models/laptop.glb",
+      "sha256": "5fa8a1f4a71ab8d82ef64da77a6973ffd350c6d4557516069a4ffd4bb8d808af",
+      "bytes": 5540
+    },
+    {
+      "from": "build\\professional-english\\software-data-theme-proposal-r01\\sources\\kenney-furniture\\models\\pottedPlant.glb",
+      "to": "sources/kenney-furniture/models/pottedPlant.glb",
+      "sha256": "5b760eda2766f75fda36b2c5df652a1662f82981ef64cd8fa7fe7bcd386b3a15",
+      "bytes": 7576
+    },
+    {
+      "from": "build\\professional-english\\software-data-theme-proposal-r01\\sources\\kenney-furniture\\models\\televisionModern.glb",
+      "to": "sources/kenney-furniture/models/televisionModern.glb",
+      "sha256": "d89519ad0a5f28b5b0dccb0d83209dccf610cda959578238dd21bbf9e219cfc6",
+      "bytes": 6368
+    },
+    {
+      "from": "build\\professional-english\\software-data-theme-proposal-r01\\sources\\kenney-furniture\\models\\wall.glb",
+      "to": "sources/kenney-furniture/models/wall.glb",
+      "sha256": "69273d5d623bddfce41d12d4e5eeb5621ea04f1edcbd8f35c00a60c2fd3258b7",
+      "bytes": 3340
+    },
+    {
+      "from": "build\\professional-english\\software-data-theme-proposal-r01\\sources\\kenney-furniture\\models\\wallWindow.glb",
+      "to": "sources/kenney-furniture/models/wallWindow.glb",
+      "sha256": "166a10fddb8a78d942bc2791186913f7015dfee8501d20efd7a7b8f196fc5c3e",
+      "bytes": 10744
+    },
+    {
+      "from": "build/professional-english/software-data-theme-proposal-r01/source-inventory.json",
+      "to": "source-inventory.json",
+      "sha256": "99ce837da0ba0d3d6094a44ae137385a9c0f920bb6327082026cec7167ab6b69",
+      "bytes": 49532
+    },
+    {
+      "from": "build/professional-english/software-data-theme-proposal-r01/scene-recipe.json",
+      "to": "scene-recipe.json",
+      "sha256": "a10c956fbecf8f9c87af4064fe6923d2e1c4c6856a26f69083ae9326390e50e1",
+      "bytes": 8871
+    },
+    {
+      "from": "build/professional-english/software-data-theme-render-proposal-r01/render-digital-studio.gd",
+      "to": "derivation/render-digital-studio.base-r01.gd.txt",
+      "sha256": "a3919fa893a531ed3ccf851b5389a7c0b5ac68b427e65f224932aed7a62d3123",
+      "bytes": 18929
+    },
+    {
+      "from": "build/professional-english/software-data-theme-placement-proposal-r02/render-digital-studio-placement-r02.gd",
+      "to": "derivation/render-digital-studio-placement-r02.gd.txt",
+      "sha256": "4d5a3c420f7133c9e8fdd0b9317938849e092e52b74211fe99296ce658772ef6",
+      "bytes": 1160
+    },
+    {
+      "from": "build/professional-english/software-data-theme-placement-proposal-r03/render-digital-studio-placement-r03.gd",
+      "to": "derivation/render-digital-studio-placement-r03.gd.txt",
+      "sha256": "cf79e3c0c8a71c60deee941fa469510cf2a4781455da98e6ee20338c03cdbfa5",
+      "bytes": 1980
+    },
+    {
+      "from": "build/professional-english/software-data-theme-placement-proposal-r04/render-digital-studio-placement-r04.gd",
+      "to": "derivation/render-digital-studio-placement-r04.gd.txt",
+      "sha256": "f9e5802b52e18642d1eeae955425f51d5f419b16bbd40dbe00b309944deb5d1b",
+      "bytes": 1981
+    },
+    {
+      "from": "tools/prepare-professional-theme-layers.py",
+      "to": "derivation/prepare-professional-theme-layers.py.txt",
+      "sha256": "00913b7b522d46bb9c39d9d96313b8c02e45dd1397d46c63a291291b1ee3df77",
+      "bytes": 6287
+    }
+  ]
+}

@@ -56,14 +56,36 @@ func _run() -> void:
 	view.start_round(words, Data.theme("spring"), 71)
 	await _settle()
 	check(view.memory.cards.size() == 10 and view.card_buttons.size() == 10, "A round contains ten fixed card buttons")
-	check(view.status_label.text == "Find a pair." and not view.status_label.visible and progress == [[0, 0]],
+	check(view.status_label.text == "Start game" and not view.status_label.visible and progress == [[0, 0]],
 		"A round keeps its status available to Root without visible prompt text")
-	check(view.controls().size() == 11 and view.controls().has(view.study_button), "Keyboard navigation includes ten cards and the eye")
+	check(view.controls() == [view.start_button] and view.start_button.visible and not view.study_button.visible,
+		"Start game is the only initial keyboard target")
+	check(view.snapshot().awaiting_start and not view.snapshot().started and view.snapshot().reward_tier == 6,
+		"The view exposes the explicit initial gate and available reward tier")
+	check(view.snapshot().cards.all(func(card: Dictionary) -> bool: return not card.has("word_id") and not card.has("text")),
+		"Prepared snapshot cards cannot leak their hidden answers")
+	view.card_buttons[0].pressed.emit()
+	view.begin_peek()
+	check(not view.memory.started and view.memory.selected_indices.is_empty() and revealed.is_empty(),
+		"Card and eye callbacks cannot bypass Start game")
+	view.start_button.pressed.emit()
+	check(view.memory.started and view.memory.studying and view.memory.peek_remaining == 10.0 and view.memory.peeks == 1,
+		"Start game begins exactly one free ten-second observation")
+	check(view.snapshot().cards.all(func(card: Dictionary) -> bool: return card.has("word_id") and card.has("text") and card.face_up),
+		"Observation snapshots identify only the visibly revealed fronts")
+	view.start_button.pressed.emit()
+	for card in view.card_buttons:
+		card.pressed.emit()
+	check(view.memory.peeks == 1 and view.memory.attempts == 0 and revealed.is_empty(),
+		"Repeated Start and observation taps cannot reveal, score or restart")
+	view.end_peek()
+	check(view.controls().size() == 11 and view.controls().has(view.study_button) and not view.start_button.visible,
+		"Start matching restores ten concealed card targets and the paid eye")
 	check(view.study_button.text.is_empty() and view.study_button.symbol == view.study_button.Symbol.EYE,
 		"The sole reveal control is a drawn eye without toggle text")
 	check(view.study_button.tooltip_text.is_empty()
 		and view.study_button.accessibility_name.to_lower().contains("reveal")
-		and view.study_button.accessibility_name.contains("10")
+		and view.study_button.accessibility_name.contains("5")
 		and not view.study_button.accessibility_name.contains("Hold"),
 		"The eye explains its timed reveal accessibly without a hover popup")
 	check(view.find_child("MemoryFeedback", true, false) == null and view.find_child("MemoryReviewHint", true, false) == null,
@@ -77,24 +99,23 @@ func _run() -> void:
 	_check_resting_faces(view)
 	_check_layout(view)
 	var first := _index(view, words[0].id, "word")
-	var other := _index(view, words[1].id, "word")
 	var partner := _index(view, words[0].id, "image")
 	var wrong := _index(view, words[1].id, "image")
 	view.card_buttons[first].pressed.emit()
-	check(view.memory.selected_indices == [first] and view.memory.attempts == 0, "A first reveal is free")
-	check(revealed == [[view.memory.cards[first].word, "word", first]], "Only the selected card is announced")
-	check(view.status_label.text == "Word: " + words[0].text, "The selected word is named in status")
-	view.card_buttons[other].pressed.emit()
-	check(view.memory.selected_indices == [other] and not view.card_buttons[first].word_label.visible,
-		"Same-kind reselection hides the previous front")
-	view.card_buttons[other].pressed.emit()
-	check(view.memory.selected_indices.is_empty() and view.memory.attempts == 0 and revealed.size() == 2,
+	check(view.memory.selected_indices == [first] and view.memory.attempts == 0 and not view.card_buttons[first].face_up,
+		"A first selection keeps the answer concealed without counting an attempt")
+	check(revealed.is_empty() and view.card_buttons[first].word_label.text.is_empty(), "The first selection emits no pronunciation or answer text")
+	check(view.status_label.text == "Choose one more card", "Selection status gives the next action without disclosing a word")
+	check(view.card_buttons[first].get_theme_stylebox("normal").border_color == Data.theme("spring").accent,
+		"The first concealed card acknowledges selection with a border")
+	view.card_buttons[first].pressed.emit()
+	check(view.memory.selected_indices.is_empty() and view.memory.attempts == 0 and revealed.is_empty(),
 		"Repeated selection cancels without scoring or a false reveal")
 	view.card_buttons[first].pressed.emit()
 	view.study_button.pressed.emit()
 	check(view.memory.studying and view.memory.selected_indices.is_empty(), "Clicking the eye clears an unfinished selection")
 	check(view.study_button.engaged and view.controls() == [view.study_button], "The active eye is open and remains the only playable control")
-	check(not view.status_label.visible and view.status_label.text.contains("10"), "Countdown status stays available to the host without a redundant board instruction")
+	check(not view.status_label.visible and view.status_label.text.contains("5"), "Later observation keeps its five-second clock available to the host")
 	for index in range(10):
 		check(view.memory.is_revealed(index) and (view.card_buttons[index].picture.visible or view.card_buttons[index].word_label.visible),
 			"Every revealed card exposes its original front")
@@ -115,7 +136,11 @@ func _run() -> void:
 	view.card_buttons[wrong].pressed.emit()
 	check(view.memory.phase == "feedback" and view.memory.attempts == 1, "A mismatch submits exactly one attempt")
 	check(answers == [[[words[0], words[1]], false]], "Mismatch reports both real word associations in selection order")
-	check(view.study_button.visible and not view.study_button.disabled and not view.status_label.visible, "Only the eye remains visible above standalone nonfinal feedback")
+	check(view.study_button.visible and view.study_button.disabled and view.controls().is_empty() and not view.status_label.visible,
+		"Feedback blocks all card and eye targets until the result is resolved")
+	check(view.status_label.text == "Not a pair." and revealed.size() == 1
+		and view.card_buttons[first].face_up and view.card_buttons[wrong].face_up,
+		"Second-card commitment reveals both faces together and emits one attempt pronunciation")
 	check(_positions(view) == positions and view.study_button.get_rect() == eye_bounds,
 		"Wrong feedback preserves all board and header geometry")
 	for index in [first, wrong]:
@@ -212,10 +237,12 @@ func _run() -> void:
 	stale.pressed.emit()
 	check(view.memory.selected_indices.is_empty() and revealed.size() == reveal_count, "An old queued-for-free button cannot reveal the restarted round")
 	check(view.memory.cards == order and view.memory.attempts == 0 and view.memory.matched_word_ids.is_empty(), "Restart clears progress and preserves seeded reproducibility")
+	_start_matching(view)
 	view.card_buttons[first].pressed.emit()
 	view.card_buttons[wrong].pressed.emit()
 	await create_timer(0.35).timeout
 	view.start_round(words, Data.theme("spring"), 71)
+	_start_matching(view)
 	view.card_buttons[first].pressed.emit()
 	await create_timer(0.8).timeout
 	check(view.memory.phase == "matching" and view.memory.selected_indices == [first] and view.memory.attempts == 0,
@@ -226,6 +253,7 @@ func _run() -> void:
 	view.continue_feedback()
 	check(view.memory.phase == "stopped" and endings.size() == 1, "Stop cancels a pending timer without a stale result")
 	view.start_round(words, Data.theme("spring"), 71)
+	_start_matching(view)
 	view.card_buttons[0].pressed.emit()
 	var stopped_button: Button = view.card_buttons[1]
 	view.stop()
@@ -235,7 +263,7 @@ func _run() -> void:
 	check(view.memory.phase == "stopped" and view.memory.selected_indices.is_empty() and view.controls().is_empty(), "Stop cancels transient selections and rejects every input")
 	view.start_round([], Data.theme("spring"), 3)
 	check(view.card_buttons.is_empty() and view.controls().is_empty() and not view.status_label.text.is_empty(), "Invalid content explains the error and leaves no stale playable board")
-	await _check_feedback_shortcuts(view, words)
+	await _check_feedback_lock(view, words)
 	await _check_matched_fronts(view, words)
 	await _check_catalog_text(view)
 	view.queue_free()
@@ -254,59 +282,57 @@ func _positions(view) -> Array:
 	return view.card_buttons.map(func(card: Button) -> Rect2: return card.get_global_rect())
 
 
-func _check_feedback_shortcuts(view, words: Array) -> void:
+func _start_matching(view) -> void:
+	view.start_game()
+	view.end_peek()
+
+
+func _check_feedback_lock(view, words: Array) -> void:
 	view.size = Vector2(456, 200)
-	for action in ["wrong-word", "wrong-image", "wrong-third", "correct-third", "wrong-peek", "correct-peek"]:
+	for outcome in ["wrong", "same-kind", "correct"]:
 		view.start_round(words, Data.theme("spring"), 71)
+		_start_matching(view)
 		await _settle()
 		var first := _index(view, words[0].id, "word")
-		var second := _index(view, words[0 if action.begins_with("correct") else 1].id, "image")
-		var target := first if action == "wrong-word" else second if action == "wrong-image" else _index(view, words[2].id, "word")
+		var second := _index(view, words[0 if outcome == "correct" else 1].id, "word" if outcome == "same-kind" else "image")
+		var target := _index(view, words[2].id, "word")
+		var before_reveals := revealed.size()
 		view.card_buttons[first].pressed.emit()
+		check(not view.card_buttons[first].face_up and revealed.size() == before_reveals,
+			outcome + ": selecting a first card cannot expose or pronounce its answer")
 		view.card_buttons[second].pressed.emit()
+		check(view.card_buttons[first].face_up and view.card_buttons[second].face_up and revealed.size() == before_reveals + 1,
+			outcome + ": committing a second distinct card reveals both in one attempt")
+		check(view.memory.last_correct == (outcome == "correct") and view.memory.mistakes == (0 if outcome == "correct" else 1),
+			outcome + ": correctness includes the word-picture kind requirement")
 		var score: Array = [view.memory.attempts, view.memory.mistakes, view.memory.matched_word_ids.duplicate(), answers.size(), progress.size(), endings.size()]
 		var order: Array = view.memory.cards.duplicate(true)
 		var positions := _positions(view)
 		var reveal_count := revealed.size()
-		view._choose(-1)
-		view._choose(10)
-		if action.begins_with("correct"):
-			view.card_buttons[first].pressed.emit()
-			view.card_buttons[second].pressed.emit()
-		check(view.memory.phase == "feedback" and revealed.size() == reveal_count, action + ": invalid and planted targets cannot dismiss feedback")
-		for blocked in ["paused", "hidden"]:
-			if blocked == "paused": view.pause(true)
-			else: view.hide()
-			view.card_buttons[target].pressed.emit()
-			view.begin_peek()
-			check(view.memory.phase == "feedback" and not view.memory.studying and revealed.size() == reveal_count, action + ": blocked feedback rejects all shortcuts")
-			if blocked == "paused": view.pause(false)
-			else: view.show()
-		if action.ends_with("peek"):
-			await _mouse(view.study_button, true)
-			await _mouse(view.study_button, false)
-			check(view.memory.studying and view.memory.phase == "waiting" and view.memory.selected_indices.is_empty(), action + ": the completed click begins a timed peek")
-			check(root.gui_get_focus_owner() == view.study_button and view.controls() == [view.study_button], action + ": revealing focus stays on the eye")
-			view.card_buttons[target].pressed.emit()
-			check(revealed.size() == reveal_count, action + ": a peek never falsely pronounces a selected card")
-			view._advance_peek(view.memory.peek_remaining)
-			check(not view.memory.studying and view.memory.phase == "waiting", action + ": countdown expiry returns directly to play")
-		else:
-			await _mouse(view.card_buttons[target], true)
-			await _mouse(view.card_buttons[target], false)
-			check(view.memory.phase == "matching" and view.memory.selected_indices == [target], action + ": one tap resolves feedback and selects the tapped card")
-			check(revealed.size() == reveal_count + 1 and revealed.back()[2] == target and root.gui_get_focus_owner() == view.card_buttons[target],
-				action + ": the actual tapped card retains focus and emits exactly one reveal")
+		for index in [-1, first, second, target, 10]:
+			view._choose(index)
+		view.study_button.pressed.emit()
+		view.begin_peek()
+		await _mouse(view.card_buttons[target], true)
+		await _mouse(view.card_buttons[target], false)
+		check(view.memory.phase == "feedback" and view.controls().is_empty() and not view.memory.studying
+			and revealed.size() == reveal_count, outcome + ": repeated, extra, native and eye input cannot skip feedback")
 		check([view.memory.attempts, view.memory.mistakes, view.memory.matched_word_ids, answers.size(), progress.size(), endings.size()] == score,
-			action + ": the shortcut never double-scores an answer")
-		check(view.memory.cards == order and _positions(view) == positions, action + ": every target remains stationary")
+			outcome + ": blocked input cannot double-score or purchase an observation")
+		check(view.memory.cards == order and _positions(view) == positions, outcome + ": every target remains stationary")
 		await create_timer(0.8).timeout
-		check(view.memory.phase == ("waiting" if action.ends_with("peek") else "matching"), action + ": the cancelled timer cannot affect the next selection")
+		check(view.memory.phase == "waiting" and view.memory.selected_indices.is_empty(), outcome + ": bounded feedback restores matching automatically")
+		for index in [first, second]:
+			check(view.card_buttons[index].face_up == (outcome == "correct"), outcome + ": only a correct pair remains face up")
+		view.card_buttons[target].pressed.emit()
+		check(view.memory.selected_indices == [target] and not view.card_buttons[target].face_up and revealed.size() == reveal_count,
+			outcome + ": the next first selection stays concealed after feedback")
 
 
 func _check_matched_fronts(view, words: Array) -> void:
 	view.set_reduced_motion(false)
 	view.start_round(words, Data.theme("spring"), 83)
+	_start_matching(view)
 	await _settle()
 	var positions := _positions(view)
 	var order: Array = view.memory.cards.duplicate(true)
@@ -357,7 +383,13 @@ func _check_resting_faces(view) -> void:
 		check(view.memory.is_revealed(index) == planted and card.face_up == planted,
 			"A resting board keeps exactly its planted cards face up")
 		if planted:
-			label += ": " + view.memory.cards[index].word.text + ". Planted."
+			label += ": " + view.memory.cards[index].word.text + ". Pair %d." % (view.memory.matched_word_ids.find(view.memory.cards[index].word.id) + 1)
+			var pair_number: int = view.memory.matched_word_ids.find(view.memory.cards[index].word.id) + 1
+			check(card.match_mark.pair_number == pair_number, "Both matched card kinds share a numbered badge readable without color")
+			for partner in view.card_buttons:
+				if partner.card_data.word.id == card.card_data.word.id:
+					check(partner.match_mark.pair_number == pair_number and partner.match_mark.tint == card.match_mark.tint,
+						"The pair retains one stable number and color on both cards")
 			check(card.picture.visible == (kind == "Picture") and card.word_label.visible == (kind == "Word")
 				and card.word_label.text == view.memory.cards[index].word.text,
 				"Each planted card displays its original picture or word front")
@@ -424,7 +456,7 @@ func _check_catalog_text(view) -> void:
 		view.start_round(lesson, Data.theme("spring"), 71)
 		await _settle()
 		var positions := _positions(view)
-		view.begin_peek()
+		view.start_game()
 		for card in view.card_buttons:
 			check(card.size.x >= 44 and card.size.y >= 44, "Catalog cards keep usable targets")
 			if card.card_data.kind != "word":

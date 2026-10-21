@@ -1,0 +1,230 @@
+{
+  "production_preview_atlas_pairs": 55,
+  "unchanged_expression_head_atlases": 11,
+  "voice_catalog_unchanged": true,
+  "opaque_alpha_threshold": 230,
+  "shoulder_overlap": [
+    {
+      "age": 0,
+      "wing": 2,
+      "joint": [
+        44,
+        84
+      ],
+      "opaque_body_radius_units": 8.36,
+      "opaque_wing_radius_units": 6.0
+    },
+    {
+      "age": 0,
+      "wing": 3,
+      "joint": [
+        76,
+        84
+      ],
+      "opaque_body_radius_units": 8.055,
+      "opaque_wing_radius_units": 6.333
+    },
+    {
+      "age": 3,
+      "wing": 2,
+      "joint": [
+        45,
+        79
+      ],
+      "opaque_body_radius_units": 8.055,
+      "opaque_wing_radius_units": 6.0
+    },
+    {
+      "age": 3,
+      "wing": 3,
+      "joint": [
+        75,
+        79
+      ],
+      "opaque_body_radius_units": 7.753,
+      "opaque_wing_radius_units": 6.333
+    },
+    {
+      "age": 4,
+      "wing": 2,
+      "joint": [
+        45,
+        76
+      ],
+      "opaque_body_radius_units": 8.014,
+      "opaque_wing_radius_units": 6.0
+    },
+    {
+      "age": 4,
+      "wing": 3,
+      "joint": [
+        75,
+        76
+      ],
+      "opaque_body_radius_units": 7.696,
+      "opaque_wing_radius_units": 6.333
+    },
+    {
+      "age": 5,
+      "wing": 2,
+      "joint": [
+        44,
+        75
+      ],
+      "opaque_body_radius_units": 8.014,
+      "opaque_wing_radius_units": 6.0
+    },
+    {
+      "age": 5,
+      "wing": 3,
+      "joint": [
+        76,
+        75
+      ],
+      "opaque_body_radius_units": 7.696,
+      "opaque_wing_radius_units": 6.333
+    },
+    {
+      "age": 6,
+      "wing": 2,
+      "joint": [
+        45,
+        73
+      ],
+      "opaque_body_radius_units": 9.262,
+      "opaque_wing_radius_units": 6.0
+    },
+    {
+      "age": 6,
+      "wing": 3,
+      "joint": [
+        75,
+        73
+      ],
+      "opaque_body_radius_units": 10.672,
+      "opaque_wing_radius_units": 6.333
+    },
+    {
+      "age": 7,
+      "wing": 2,
+      "joint": [
+        45,
+        71
+      ],
+      "opaque_body_radius_units": 7.696,
+      "opaque_wing_radius_units": 6.0
+    },
+    {
+      "age": 7,
+      "wing": 3,
+      "joint": [
+        75,
+        71
+      ],
+      "opaque_body_radius_units": 7.454,
+      "opaque_wing_radius_units": 6.333
+    },
+    {
+      "age": 8,
+      "wing": 2,
+      "joint": [
+        44,
+        70
+      ],
+      "opaque_body_radius_units": 7.601,
+      "opaque_wing_radius_units": 6.0
+    },
+    {
+      "age": 8,
+      "wing": 3,
+      "joint": [
+        76,
+        70
+      ],
+      "opaque_body_radius_units": 7.28,
+      "opaque_wing_radius_units": 6.333
+    },
+    {
+      "age": 9,
+      "wing": 2,
+      "joint": [
+        45,
+        70
+      ],
+      "opaque_body_radius_units": 7.696,
+      "opaque_wing_radius_units": 6.0
+    },
+    {
+      "age": 9,
+      "wing": 3,
+      "joint": [
+        75,
+        70
+      ],
+      "opaque_body_radius_units": 7.379,
+      "opaque_wing_radius_units": 6.333
+    },
+    {
+      "age": 10,
+      "wing": 2,
+      "joint": [
+        46,
+        69
+      ],
+      "opaque_body_radius_units": 7.601,
+      "opaque_wing_radius_units": 6.0
+    },
+    {
+      "age": 10,
+      "wing": 3,
+      "joint": [
+        74,
+        69
+      ],
+      "opaque_body_radius_units": 7.28,
+      "opaque_wing_radius_units": 6.333
+    },
+    {
+      "age": 11,
+      "wing": 2,
+      "joint": [
+        45,
+        68
+      ],
+      "opaque_body_radius_units": 7.491,
+      "opaque_wing_radius_units": 6.0
+    },
+    {
+      "age": 11,
+      "wing": 3,
+      "joint": [
+        75,
+        68
+      ],
+      "opaque_body_radius_units": 7.18,
+      "opaque_wing_radius_units": 6.333
+    },
+    {
+      "age": 12,
+      "wing": 2,
+      "joint": [
+        45,
+        67
+      ],
+      "opaque_body_radius_units": 7.491,
+      "opaque_wing_radius_units": 6.0
+    },
+    {
+      "age": 12,
+      "wing": 3,
+      "joint": [
+        75,
+        67
+      ],
+      "opaque_body_radius_units": 7.18,
+      "opaque_wing_radius_units": 6.333
+    }
+  ],
+  "current_catalog_sha256": "e2851c08246341ea1a79e94aa7424f69845e4f829c2b734a2187fa6c5c0882b8",
+  "preserved_catalog_sha256": "80a91913a9552b1711d7f68f88f00a0b4b318fbdfff9efa80212b6c06510b5f2"
+}

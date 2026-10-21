@@ -1,0 +1,30 @@
+Q:\uwok\tesisgame\tools\run-godot.cjs:20
+    throw new Error(`Godot failed (exit ${result.status}):\n${output}`);
+    ^
+
+Error: Godot failed (exit 1):
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+OpenGL API OpenGL ES 3.0 (ANGLE 2.1.1 git hash: aaebda1c5a40) - Compatibility - Using Device: Google Inc. (Microsoft) - ANGLE (Microsoft, Microsoft Basic Render Driver (0x0000008C) Direct3D11 vs_5_0 ps_5_0, D3D11-10.0.26100.9711)
+
+
+
+Card-reader native comparison: 989 checks, 2 failures; 4 PNGs
+
+FAIL: Raw-loader RGBA equals the exact PNG: professional://round1/a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c
+
+FAIL: Raw-loader RGBA equals the exact PNG: professional://round1/fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3
+
+
+    at runGodot (Q:\uwok\tesisgame\tools\run-godot.cjs:20:11)
+    at Object.<anonymous> (Q:\uwok\tesisgame\tools\run-godot.cjs:29:18)
+    at Module._compile (node:internal/modules/cjs/loader:1804:14)
+    at Object..js (node:internal/modules/cjs/loader:1936:10)
+    at Module.load (node:internal/modules/cjs/loader:1525:32)
+    at Module._load (node:internal/modules/cjs/loader:1327:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47
+
+Node.js v24.13.1

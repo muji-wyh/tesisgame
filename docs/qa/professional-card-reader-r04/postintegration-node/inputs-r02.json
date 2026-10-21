@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "scope": "Source and test identities sampled after r02 invocation; rechecked when the process finishes. No concurrent native execution or full-repository freeze is claimed.",
+  "recorded_at": "2026-10-20T10:05:39.445Z",
+  "files": [
+    {
+      "path": "data/professional/lexemes/retail-pilot.json",
+      "bytes": 363043,
+      "sha256": "9256f09aa2d99252f409a45381b845ba94d58e4ab9321a294f89562d031b82b7"
+    },
+    {
+      "path": "data/professional/provenance/retail-card-reader-image-2026-10-20.json",
+      "bytes": 32597,
+      "sha256": "b34b4f49620d04a3d684f34b14b377a274b17b22f5bae0537533498bdced8a92"
+    },
+    {
+      "path": "docs/assets/sources/professional-retail-card-reader/source-record.json",
+      "bytes": 6114,
+      "sha256": "75a8bf28213a33046bc1451efce4bc16ea2516f8bae90602103af4b6d8101df6"
+    },
+    {
+      "path": "tests/professional-card-reader-image.test.cjs",
+      "bytes": 14285,
+      "sha256": "ebcedc9b31831a8fc03efb4415070eceb4e6e0ddc5eff897479b378e2c5528d0"
+    },
+    {
+      "path": "tests/helpers/professional-card-reader-history.cjs",
+      "bytes": 1922,
+      "sha256": "cb2fa5a95b498aa5d790ae46b5e8b57479f57a74e314268f019e342ac4d85c90"
+    },
+    {
+      "path": "tests/professional-content.test.cjs",
+      "bytes": 278936,
+      "sha256": "516c163270b3c6b73e0005693b623b21344ff29a28036eb0e4697fe03e000e17"
+    },
+    {
+      "path": "tests/professional-retail-media.test.cjs",
+      "bytes": 65231,
+      "sha256": "bd8f633e1bcaa3cdb22e8b92c03f43c480b4e3245db6e3beab9406e2a1853f94"
+    },
+    {
+      "path": "tests/professional-retail-morphology.test.cjs",
+      "bytes": 93907,
+      "sha256": "b51066f50d3385b0875e3ea7637a1bc13f8f25a0c1af5f5717b101a7818ea9a7"
+    },
+    {
+      "path": "tests/professional-foundation02-morphology.test.cjs",
+      "bytes": 10566,
+      "sha256": "aa08a00b390afabf3d22cf40a6a4a7ffb285298cdec67678178de77c7eb20d75"
+    }
+  ]
+}

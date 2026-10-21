@@ -288,8 +288,7 @@ test(`Voice starts immediately with an 80px buddy in the 112px panel at ${viewpo
   expect(layout.privacyBottom).toBeLessThanOrEqual(layout.panelBottom + 1);
   expect(layout.transcriptFont).toBeGreaterThanOrEqual(15);
   expect(layout.transcriptFont).toBeLessThanOrEqual(20);
-  expect(layout.privacyFont).toBeGreaterThanOrEqual(10);
-  expect(layout.privacyFont).toBeLessThanOrEqual(11);
+  expect(layout.privacyFont).toBe(12);
   expect(layout.privacyLines).toBeLessThanOrEqual(3.2);
   expect(layout.privacyFits, 'The complete privacy notice stays visible beside the larger buddy.').toBe(true);
   await page.screenshot({ path: testInfo.outputPath(`voice-panel-${viewport.width}.png`), scale: 'css' });

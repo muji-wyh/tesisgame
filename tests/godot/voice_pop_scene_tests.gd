@@ -629,6 +629,9 @@ func _run() -> void:
 		for mode in modes:
 			PlayerFixture.enter_mode(app, mode)
 			if mode == "pop":
+				check(app.new_round(17), "A fresh Voice Pop round can be prepared before requesting the microphone")
+				check(app._pop.retry_button.text == "Start listening",
+					"A fresh Voice Pop round invites microphone input before the first permission attempt")
 				preload("res://tests/godot/player_flow_fixture.gd").choose_pop_player(app)
 			await settle()
 			var current_positions: Array[Vector2] = []

@@ -20,6 +20,14 @@ func _enter_mode(app, id: String) -> void:
 	PlayerFlow.enter_mode(app, id)
 	check(app._mode_id == id and not app._mode_menu_open(),
 		"The Home route enters " + id + " before exercising its gameplay controls")
+	if id == "memory":
+		_start_memory_matching(app)
+
+
+func _start_memory_matching(app) -> void:
+	if not app._memory.memory.started:
+		app._memory.start_button.pressed.emit()
+	app._memory.end_peek()
 
 
 func _run() -> void:
@@ -32,6 +40,7 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	app.set_reduced_motion(true)
+	check(app.coin_wallet.credit("fixture:audio-memory-observations", 20).ok, "Fund paid observations through the isolated wallet")
 	_enter_mode(app, "match")
 	_check_theme_audio(app)
 	_check_match_prompt_audio(app)
@@ -41,10 +50,10 @@ func _run() -> void:
 	await process_frame
 	var memory_card: Button = app._memory.card_buttons[0]
 	memory_card.pressed.emit()
-	check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + app._memory.memory.cards[0].word.audio),
-		"Revealing a Memory card pronounces its displayed word")
+	check(not app.audio.voice.playing and not memory_card.face_up and app._memory.memory.selected_indices == [0],
+		"Selecting a concealed Memory card cannot pronounce or expose its answer")
 	memory_card.pressed.emit()
-	check(not app.audio.voice.playing, "Concealing the selected Memory card stops its pronunciation")
+	check(not app.audio.voice.playing, "Cancelling the concealed Memory choice remains silent")
 	memory_card.pressed.emit()
 	memory_card.grab_focus()
 	app._show_collection()
@@ -137,14 +146,14 @@ func _run() -> void:
 			break
 	memory._choose(a)
 	memory._choose(b)
-	var visible_word: Dictionary = memory.memory.cards[b].word
-	check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + visible_word.audio)
-		and memory.memory.is_revealed(b),
-		"Memory pronounces the second revealed card instead of a removed correction panel")
+	check(not app.audio.voice.playing and app.audio.pair_feedback.playing
+		and app.audio.pair_feedback.stream == load("res://assets/imported-audio/pair-feedback/wrong.wav")
+		and memory.memory.is_revealed(a) and memory.memory.is_revealed(b),
+		"Memory reveals the attempt together with the supplied miss cue and no word pronunciation")
 	await create_timer(0.8).timeout
 	check(memory.memory.phase == "waiting" and not app.audio.voice.playing
 		and not memory.memory.is_revealed(a) and not memory.memory.is_revealed(b),
-		"Automatic Memory continuation stops speech as unmatched pictures turn back")
+		"Automatic Memory continuation hides the wrong pair without starting speech")
 	memory.card_buttons[a].pressed.emit()
 	memory.card_buttons[b].pressed.emit()
 	var next_card := -1
@@ -153,13 +162,16 @@ func _run() -> void:
 			next_card = index
 			break
 	var attempts: int = memory.memory.attempts
-	check(app.audio.voice.playing, "The previous Memory card's speech is active before the shortcut")
+	var cue_request: int = app.audio._playback_requests[app.audio.pair_feedback]
 	memory.card_buttons[next_card].pressed.emit()
-	check(memory.memory.phase == "matching" and memory.memory.selected_indices == [next_card]
-		and memory.memory.attempts == attempts and memory.memory.feedback_words.is_empty(),
-		"Memory first-tap shortcut selects exactly the new card without another attempt")
-	check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + memory.memory.cards[next_card].word.audio),
-		"Memory first-tap shortcut replaces old feedback speech with the tapped card's actual word")
+	check(memory.memory.phase == "feedback" and memory.memory.selected_indices == [a, b]
+		and memory.memory.attempts == attempts and not app.audio.voice.playing
+		and app.audio._playback_requests[app.audio.pair_feedback] == cue_request,
+		"Extra Memory taps cannot skip feedback, pronounce a hidden answer or replay its cue")
+	memory.continue_feedback()
+	memory.card_buttons[next_card].pressed.emit()
+	check(memory.memory.phase == "matching" and not memory.card_buttons[next_card].face_up and not app.audio.voice.playing,
+		"The first choice after feedback acknowledges selection while concealing its answer")
 	_enter_mode(app, "match")
 	_enter_mode(app, "memory")
 	memory = app._memory
@@ -170,13 +182,18 @@ func _run() -> void:
 			break
 	memory.card_buttons[a].pressed.emit()
 	memory.card_buttons[b].pressed.emit()
-	check(app.audio.voice.playing, "The revealed Memory card's speech is active before a peek")
+	var coins: int = app.coin_wallet.balance
 	memory.study_button.pressed.emit()
-	check(memory.memory.studying and memory.memory.phase == "waiting" and not app.audio.voice.playing
-		and memory.memory.attempts == 1,
-		"Clicking the eye stops feedback speech and preserves the existing attempt")
+	check(not memory.memory.studying and memory.memory.phase == "feedback" and not app.audio.voice.playing
+		and memory.memory.attempts == 1 and app.coin_wallet.balance == coins,
+		"The eye cannot interrupt committed feedback or charge another observation")
+	memory.continue_feedback()
+	memory.study_button.pressed.emit()
+	check(memory.memory.studying and memory.memory.peek_duration == 5.0 and not app.audio.voice.playing
+		and app.coin_wallet.balance == coins - 100,
+		"A later paid observation starts five seconds without word narration")
 	memory.study_button.button_up.emit()
-	check(memory.memory.studying and not app.audio.voice.playing, "Button release leaves the active countdown silent")
+	check(memory.memory.studying and not app.audio.voice.playing, "Button release leaves the active countdown free of narration")
 	memory._advance_peek(memory.memory.peek_remaining)
 	check(not memory.memory.studying and memory.memory.phase == "waiting" and not app.audio.voice.playing and memory.memory.attempts == 1,
 		"Countdown expiry stays silent and preserves progress")
@@ -345,6 +362,7 @@ func _check_match_prompt_audio(app) -> void:
 
 func _check_memory_prompt_audio(app) -> void:
 	app.new_round(73, true, "", "memory")
+	_start_memory_matching(app)
 	var view = app._memory
 	var first: int = -1
 	var other: int = -1
@@ -356,15 +374,16 @@ func _check_memory_prompt_audio(app) -> void:
 				other = index
 				break
 	var partner: int = -1
-	var wrong: int = -1
+	var other_partner: int = -1
 	for index in range(view.memory.cards.size()):
 		if view.memory.cards[index].kind == "image":
 			if view.memory.cards[index].word.id == view.memory.cards[first].word.id:
 				partner = index
 			elif view.memory.cards[index].word.id == view.memory.cards[other].word.id:
-				wrong = index
-	var first_audio: String = "res://" + view.memory.cards[first].word.audio
-	var other_audio: String = "res://" + view.memory.cards[other].word.audio
+				other_partner = index
+	app.audio.stop_voice()
+	app.audio.stop_pair_feedback()
+	app.audio._stop(app.audio.effect)
 	var events: Array[Dictionary] = []
 	var reveal_observer := func(_word: Dictionary, _kind: String, index: int) -> void:
 		events.append(_memory_audio_snapshot(app, "reveal", index))
@@ -379,76 +398,79 @@ func _check_memory_prompt_audio(app) -> void:
 	view.progress_changed.connect(progress_observer)
 	view.prompt_ready.connect(prompt_observer)
 	view.card_buttons[first].pressed.emit()
-	check(events.size() == 2 and events[0].event == "reveal" and not events[0].face_up
-		and events[0].effect == "res://assets/audio/sfx/select.wav" and events[0].voice == first_audio
-		and view.card_buttons[first].face_up,
-		"Memory starts its first cue and word before refreshing the accepted card's face")
-	events.clear()
-	view.card_buttons[other].pressed.emit()
-	check(events.size() == 2 and not events[0].face_up and events[0].voice == other_audio
-		and not view.card_buttons[first].face_up and view.card_buttons[other].face_up,
-		"Same-kind Memory reselection pronounces the new word before swapping the visible fronts")
-	events.clear()
-	view.card_buttons[other].pressed.emit()
 	check(events.size() == 1 and events[0].event == "prompt" and events[0].voice.is_empty()
-		and view.memory.phase == "waiting" and not view.card_buttons[other].face_up,
-		"Cancelling Memory emits no new reveal or answer and stops the previous pronunciation")
+		and events[0].effect.is_empty() and not view.card_buttons[first].face_up,
+		"A first Memory choice publishes only the concealed selection prompt without per-card audio")
+	events.clear()
+	view.card_buttons[first].pressed.emit()
+	check(events.size() == 1 and events[0].event == "prompt" and events[0].voice.is_empty()
+		and view.memory.phase == "waiting" and not view.card_buttons[first].face_up,
+		"Cancelling a concealed choice neither reveals nor pronounces its answer")
 	events.clear()
 	view._choose(-1)
 	view._choose(view.memory.cards.size())
-	check(events.is_empty(), "Invalid Memory indices never request an early sound or publish a prompt")
+	check(events.is_empty(), "Invalid Memory indices request no sound or prompt")
 	view.card_buttons[first].pressed.emit()
 	events.clear()
-	view.card_buttons[wrong].pressed.emit()
+	view.card_buttons[other].pressed.emit()
 	check(events.map(func(event: Dictionary) -> String: return event.event) == ["reveal", "answer", "progress", "prompt"]
-		and not events[0].face_up and not events[1].face_up and events[2].face_up
-		and events[0].voice == other_audio and events[1].voice == other_audio
+		and events[0].face_up and events[1].face_up and view.card_buttons[first].face_up
+		and events.all(func(event: Dictionary) -> bool: return event.voice.is_empty())
 		and events[1].pair == "res://assets/imported-audio/pair-feedback/wrong.wav"
-		and view.memory.attempts == 1 and not view._feedback_timer.is_stopped(),
-		"A mismatch pronounces the second Memory word and starts its answer cue before rendering or publishing progress")
+		and view.memory.attempts == 1 and view.memory.mistakes == 1 and not view._feedback_timer.is_stopped(),
+		"Two distinct words reveal together and issue one gentle miss cue without pronunciation")
 	events.clear()
 	view.card_buttons[first].pressed.emit()
-	check(events.size() == 3 and events[0].event == "prompt" and events[0].phase == "waiting"
-		and events[0].voice.is_empty() and events[1].event == "reveal" and not events[1].face_up
-		and events[1].voice == first_audio and view.memory.selected_indices == [first]
-		and view.memory.attempts == 1 and view._feedback_timer.is_stopped(),
-		"The Memory feedback shortcut stops old speech and promptly reveals only the new selected card")
+	view.card_buttons[partner].pressed.emit()
+	view.study_button.pressed.emit()
+	check(events.is_empty() and view.memory.phase == "feedback" and view.memory.attempts == 1,
+		"Committed Memory feedback rejects card and eye shortcuts without further audio")
+	view.continue_feedback()
+	view.card_buttons[first].pressed.emit()
 	events.clear()
 	view.card_buttons[partner].pressed.emit()
-	check(events.size() == 4 and events[1].event == "answer" and not events[1].face_up
-		and events[1].pair == "res://assets/imported-audio/pair-feedback/right.wav" and events[1].voice == first_audio
-		and events[2].face_up and view.memory.matched_word_ids.size() == 1 and view.memory.attempts == 2,
-		"A correct Memory answer starts before the planted face refresh while progress still publishes once")
+	check(events.size() == 4 and events[1].event == "answer" and events[1].face_up
+		and events[1].pair == "res://assets/imported-audio/pair-feedback/right.wav"
+		and events.all(func(event: Dictionary) -> bool: return event.voice.is_empty())
+		and view.memory.matched_word_ids.size() == 1 and view.memory.attempts == 2,
+		"A correct Memory pair reveals both fronts and publishes one success cue without word narration")
 	events.clear()
 	view.card_buttons[first].pressed.emit()
 	check(events.is_empty() and view.memory.attempts == 2,
-		"A planted Memory card cannot replay early audio or change the completed answer")
+		"A matched Memory card cannot replay audio or score again")
 	view.continue_feedback()
-	check(not app.audio.voice.playing and view.memory.phase == "waiting",
-		"Continuing Memory feedback still stops the finished card's pronunciation")
 	app.audio.set_muted(true)
 	events.clear()
 	view.card_buttons[other].pressed.emit()
-	check(events.size() == 2 and events[0].effect.is_empty() and events[0].voice.is_empty()
-		and view.card_buttons[other].face_up,
-		"Muted Memory taps reveal cards without starting early cue or voice playback")
-	view.card_buttons[other].pressed.emit()
+	check(events.size() == 1 and events[0].effect.is_empty() and events[0].voice.is_empty()
+		and not view.card_buttons[other].face_up, "Muted first choices remain concealed and silent")
+	events.clear()
+	view.card_buttons[other_partner].pressed.emit()
+	check(events.size() == 4 and events.all(func(event: Dictionary) -> bool: return event.voice.is_empty() and event.pair.is_empty()),
+		"Muted Memory commits the same pair without outcome sound or narration")
+	view.continue_feedback()
 	app.audio.set_muted(false)
 	view.begin_peek()
+	check(view.memory.studying and view.memory.peek_duration == 5.0, "Audio checks use the real paid observation after Start game")
 	events.clear()
-	view.card_buttons[other].pressed.emit()
-	check(events.is_empty() and not app.audio.voice.playing and view.memory.attempts == 2,
-		"Held Memory study prevents card audio and scoring")
+	var unpaired: int = -1
+	for index in range(view.memory.cards.size()):
+		if not view.memory.matched_word_ids.has(view.memory.cards[index].word.id):
+			unpaired = index
+			break
+	view.card_buttons[unpaired].pressed.emit()
+	check(events.is_empty() and not app.audio.voice.playing and view.memory.attempts == 3,
+		"Observation prevents card audio and scoring")
 	view.end_peek()
-	view.card_buttons[other].pressed.emit()
+	view.card_buttons[unpaired].pressed.emit()
 	app.on_page_hidden()
 	events.clear()
-	view.card_buttons[wrong].pressed.emit()
+	view.card_buttons[other_partner].pressed.emit()
 	check(events.is_empty() and view._paused and not app.audio.voice.playing and not app.audio.effect.playing,
-		"Background pause prevents early Memory playback and cancels the active pronunciation")
+		"Background pause prevents Memory playback and clears any active audio")
 	app.on_page_visible()
-	check(not view._paused and not app.audio.voice.playing and view.memory.selected_indices == [other],
-		"Foreground resume preserves Memory selection without replaying an interrupted word")
+	check(not view._paused and not app.audio.voice.playing and view.memory.selected_indices == [unpaired],
+		"Foreground resume preserves the concealed selection without pronouncing it")
 	view.card_revealed.disconnect(reveal_observer)
 	view.answer_chosen.disconnect(answer_observer)
 	view.progress_changed.disconnect(progress_observer)
@@ -748,18 +770,19 @@ func _check_pop_exit_audio(app) -> void:
 			check(app.audio.muted == (state == "muted") and app.audio.active == (state != "muted")
 				and app.audio.music.playing == (state != "muted"),
 				label + " restores background music immediately while preserving the mute choice")
-			var word: Dictionary
 			if destination == "match":
-				word = app.model.cards[0].word
+				var word: Dictionary = app.model.cards[0].word
 				app.cards[app.model.cards[0].id].pressed.emit()
+				check(app.audio.voice.playing == (state != "muted") and app.audio.effect.playing == (state != "muted"),
+					label + " permits the Match card's pronunciation and selection sound unless muted")
+				if state != "muted":
+					check(app.audio.voice.stream == load("res://" + word.audio),
+						label + " pronounces the destination Match card's exact word")
 			else:
-				word = app._memory.memory.cards[0].word
 				app._memory.card_buttons[0].pressed.emit()
-			check(app.audio.voice.playing == (state != "muted") and app.audio.effect.playing == (state != "muted"),
-				label + " permits the new card's pronunciation and selection sound unless muted")
-			if state != "muted":
-				check(app.audio.voice.stream == load("res://" + word.audio),
-					label + " pronounces the destination card's exact word")
+				check(not app.audio.voice.playing and not app.audio.effect.playing
+					and app._memory.memory.selected_indices == [0] and not app._memory.card_buttons[0].face_up,
+					label + " permits concealed Memory selection without reviving stale narration")
 			app.audio.set_muted(false)
 			app._pop.set_process(true)
 	_enter_mode(app, "pop")

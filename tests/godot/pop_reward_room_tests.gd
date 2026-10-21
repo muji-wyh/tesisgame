@@ -6,6 +6,7 @@ const Room = preload("res://scripts/pop_reward_room.gd")
 const Feel = preload("res://scripts/chest_feel.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const Wallet = preload("res://scripts/coin_wallet.gd")
+const RewardLayout = preload("res://scripts/round_reward_layout.gd")
 const PIXEL_TOLERANCE: float = 0.1
 
 class Storage extends RefCounted:
@@ -87,6 +88,7 @@ func _run() -> void:
 	await _jelly_accumulation_checks()
 	await _jelly_tier_room_checks()
 	await _result_context_checks()
+	await _result_companion_checks()
 	await _scaled_result_resize_checks()
 	await _collect_all_checks()
 	await _collect_failure_checks()
@@ -199,19 +201,21 @@ func _result_context_checks() -> void:
 	var room = _make_jelly_room(Storage.new())
 	check(room.configure("result-room", 1, "ocean", _manifest, false, 3), "Prepare a live tier-three result chest")
 	room.set_result_context({"score": 420, "chest_tier": 3, "chest_count": 1})
-	check(room._heading.text == "Round complete" and room._result_score.text == "420"
+	check(room._heading.text == "You earned a chest!" and room.snapshot().score_text == "420"
+		and room._result_score.text == "420 points · 0 words · Level 3 chest"
 		and room._progress.text == "0 words completed" and room._back.text == "Play again"
-		and room._cards[0].tier_label.text == "Chest Lv. 3" and room._cards[0].tier_label.visible
+		and room._cards[0].tier_label.text == "Chest Lv. 3" and not room._cards[0].tier_label.visible
 		and room._home.visible,
-		"Result context gives the earned tier to its chest and keeps score, completed words and replay distinct")
+		"Result context retains score, words and chest tier in one readable summary with the shared earned heading")
 	for sample: Dictionary in [{"score": 0, "completed": 0, "summary": "words completed"},
 		{"score": 1, "completed": 1, "summary": "word completed"},
 		{"score": 26, "completed": 26, "summary": "words completed"},
 		{"score": 420, "completed": 1, "summary": "1 word completed"},
 		{"score": 420, "completed": 26, "summary": "26 words completed"}]:
 		room.set_result_context({"score": sample.score, "cleared_pairs": sample.completed, "chest_tier": 3, "chest_count": 1})
-		check(room._result_score.text == str(sample.score) and room._progress.text == sample.summary,
-			"Result copy avoids repeating the large total while preserving a different completed-word count: %s" % sample)
+		check(room.snapshot().score_text == str(sample.score) and room._progress.text == sample.summary
+			and room._result_score.text == room.result_summary(),
+			"Result copy preserves the score and different completed-word total without duplicate visible labels: %s" % sample)
 	room.set_result_context({"score": 26, "cleared_pairs": 26, "chest_tier": 3, "chest_count": 1})
 	var actions: Array[String] = []
 	room.replay_requested.connect(func() -> void: actions.append("replay"))
@@ -233,20 +237,20 @@ func _result_context_checks() -> void:
 			and card.panel.get_global_rect().grow(1.0).encloses(card.hint.get_global_rect()),
 			"Result chest artwork and hold instruction remain inside their stage at %s" % dimensions)
 		_check_chest_instruction(room, card, "result modal at %s" % dimensions)
-		check(card.tier_label.visible and card.panel.get_global_rect().grow(1.0).encloses(card.tier_label.get_global_rect())
-			and card.tier_label.get_global_rect().end.y <= card.art.get_global_rect().position.y + PIXEL_TOLERANCE
-			and card.tier_label.get_visible_line_count() == 1,
-			"The earned level belongs to a readable row above the chest at %s" % dimensions)
-		check(not room._heading.get_global_rect().intersects(room._result_score.get_global_rect())
-			and not room._result_score.get_global_rect().intersects(room._progress.get_global_rect()),
-			"Result score and explanatory labels remain separate at %s" % dimensions)
+		check(not card.tier_label.visible and room._result_score.text.contains("Level 3 chest")
+			and room._result_score.get_visible_line_count() == 1,
+			"The earned level stays in the readable shared summary without covering the chest at %s" % dimensions)
+		check(room._heading.get_global_rect().end.y <= room._result_score.get_global_rect().position.y + PIXEL_TOLERANCE
+			and not room._progress.visible,
+			"Result heading and summary remain separate without a duplicate completed-word label at %s" % dimensions)
 	_hold(room, 0, Feel.HOLD_SECONDS)
 	room._cards[0].art._advance_animation(Feel.OPEN_SECONDS)
 	check(room.get_meta("coin_wallet").balance == 150 and room._cards[0].opened
 		and room.get_meta("coin_releases")[0].animate,
 		"The result chest retains the real hold-to-open performance and animated coin release")
 	room.set_result_context({})
-	check(room._heading.text == "Chest Lv. 3" and room._back.text == "Back" and not room._result_score.visible,
+	check(room._heading.text == "Chest Lv. 3" and room._back.text == "Back" and not room._result_score.visible
+		and not room.pip.visible,
 		"Clearing result context restores the existing treasure-room presentation")
 	room._back.pressed.emit()
 	check(actions == ["replay", "exit"] and room._paused, "Legacy Back still pauses and exits")
@@ -256,13 +260,114 @@ func _result_context_checks() -> void:
 	room = _make_jelly_room(storage)
 	check(room.configure_empty_result("empty-result-copy", _manifest, false), "Prepare a result with no earned chest")
 	room.set_result_context({"reason": "danger", "score": 1, "cleared_pairs": 1, "chest_tier": 0, "chest_count": 0})
-	check(room._heading.text == "Game over" and room._result_score.text == "1"
+	check(room._heading.text == "Game over" and room.snapshot().score_text == "1"
 		and room._progress.text == "word completed\nNo chest this round" and room._cards.is_empty(),
 		"An empty danger result keeps its reason and no-chest explanation without repeating the large total")
 	room.set_result_context({"score": 20, "cleared_pairs": 2, "chest_tier": 0, "chest_count": 0})
 	check(room._progress.text == "2 words completed\nNo chest this round" and storage.jelly_writes == 0
 		and storage.coin_writes == 0,
 		"An empty result retains a distinct completed-word count without inventing treasure or coins")
+	room.queue_free()
+	await process_frame
+
+
+func _result_companion_checks() -> void:
+	var storage := Storage.new()
+	var room = _make_jelly_room(storage)
+	check(room.configure("companion-result", 1, "ocean", _manifest, false, 2)
+		and not room.pip.visible, "Ordinary treasure inventory keeps its existing layout without a companion")
+	var reward_id: String = room._cards[0].reward_id
+	room.set_companion("winter", 11)
+	room.set_result_context({"score": 27, "cleared_pairs": 27, "chest_tier": 2, "chest_count": 1}, "companion-result")
+	check(room.pip.visible and room.pip.growth_age == 11 and room.pip.theme_id == "winter"
+		and room.pip.mouse_filter == Control.MOUSE_FILTER_IGNORE and room.pip.focus_mode == Control.FOCUS_NONE
+		and not room.pip._proactive_allowed and room.pip._celebration_progress == 1.0,
+		"The result retains the finale's Pip age, outfit and resting pose without intercepting chest input")
+	check(room.result_summary() == "27 words · Level 2 chest" and room._cards[0].reward_id == reward_id,
+		"The compact summary preserves this round's word total and level without changing the pending reward identity")
+	for dimensions: Vector2 in [Vector2(288, 436), Vector2(456, 436), Vector2(512, 264)]:
+		room.size = dimensions / Style.ui_scale(room)
+		room._layout()
+		for frame in range(4):
+			await process_frame
+		var layout: Dictionary = RewardLayout.measure(room.size, Style.ui_scale(room), true, false, true)
+		var card: Dictionary = room._cards[0]
+		check(room.pip.get_rect().is_equal_approx(layout.pip) and card.art.get_rect().is_equal_approx(layout.chest)
+			and room._heading.get_rect().is_equal_approx(layout.heading)
+			and room._result_score.get_rect().is_equal_approx(layout.summary)
+			and card.hint.get_rect().is_equal_approx(layout.caption),
+			"Pip, chest and text use the same final geometry as the shared celebration at %s" % dimensions)
+		check(not room.pip.get_global_rect().intersects(card.button.get_global_rect())
+			and not room.navigation_controls().has(room.pip) and room.snapshot().scroll_max == 0,
+			"The companion stays beside the real hold target and a single result fits without scrolling at %s" % dimensions)
+	room.set_reduced_motion(true)
+	room.pause()
+	check(room.pip.reduced_motion and room.pip._idle_paused and not room.pip.is_processing()
+		and room._cards[0].reward_id == reward_id and not room._cards[0].opened,
+		"Motion preference and pausing hold the final Pip still without consuming the reward")
+	room.resume()
+	room.set_result_context({})
+	check(not room.pip.visible and room._progress.visible and not room._result_caption.visible
+		and room._previous_page.get_parent() == room,
+		"Leaving the result restores ordinary inventory labels and pager ownership")
+	room.queue_free()
+	await process_frame
+	storage = Storage.new()
+	room = _make_jelly_room(storage)
+	check(room.configure("companion-older", 2, "ocean", _manifest, false)
+		and room.configure("companion-new", 1, "winter", _manifest, false, 2),
+		"Prepare older treasure beside the newly earned final chest")
+	room.set_result_context({"score": 27, "cleared_pairs": 27, "chest_tier": 2, "chest_count": 1}, "companion-new")
+	room.size = Vector2(344, 436) / Style.ui_scale(room)
+	room._layout()
+	for frame in range(4):
+		await process_frame
+	check(room._page_index == 2 and room._previous_page.get_parent() == room._content
+		and room.snapshot().scroll_max > 0 and room._cards[0].reward_id == "jelly:companion-new:0",
+		"The newest reward stays selected and the retained-treasure pager is reachable below the shared stage")
+	var saved_ids: Array = room.rewards.entries.map(func(entry: Dictionary) -> String: return str(entry.reward_id))
+	var saved_writes: int = storage.jelly_writes
+	room._scroll._set_offset(room._scroll._maximum())
+	await process_frame
+	var point: Vector2 = room._previous_page.get_global_transform_with_canvas() * (room._previous_page.size * 0.5)
+	room._scroll._begin(point, room._scroll.TOUCH_POINTER, 7)
+	room._scroll._finish(point)
+	check(room._page_index == 1 and not room._holding and not room._opening
+		and storage.jelly_writes == saved_writes,
+		"A pager touch activates on release without starting a chest hold or writing reward state")
+	for frame in range(3):
+		await process_frame
+	room._scroll._set_offset(room._scroll._maximum())
+	await process_frame
+	point = room._previous_page.get_global_transform_with_canvas() * (room._previous_page.size * 0.5)
+	room._scroll._begin(point, room._scroll.MOUSE_POINTER)
+	room._scroll._finish(point - Vector2(0, 24))
+	check(room._page_index == 1 and not room._holding and storage.jelly_writes == saved_writes
+		and saved_ids == room.rewards.entries.map(func(entry: Dictionary) -> String: return str(entry.reward_id)),
+		"Dragging from the pager scrolls without activating it or changing any retained reward identity")
+	room.queue_free()
+	await process_frame
+	storage = Storage.new()
+	storage.writable = false
+	room = _make_jelly_room(storage)
+	check(not room.configure("companion-save-retry", 1, "ocean", _manifest, false, 2),
+		"Prepare a failed initial result save for the shared retry layout")
+	room.set_result_context({"score": 27, "cleared_pairs": 27, "chest_tier": 2, "chest_count": 1}, "companion-save-retry")
+	for dimensions: Vector2 in [Vector2(288, 436), Vector2(456, 436), Vector2(512, 264)]:
+		room.size = dimensions / Style.ui_scale(room)
+		room._layout()
+		for frame in range(3):
+			await process_frame
+		check(room._result_caption.visible and room._result_caption.text == room.rewards.error
+			and not room._cards[0].hint.visible and room._retry.visible
+			and room.get_global_rect().grow(PIXEL_TOLERANCE).encloses(room._retry.get_global_rect())
+			and not room._result_caption.get_global_rect().intersects(room._retry.get_global_rect()),
+			"Save errors replace the instruction and leave Retry save reachable at %s" % dimensions)
+	storage.writable = true
+	room.retry_save()
+	check(not room._save_failed and not room._result_caption.visible and room._cards[0].hint.visible
+		and room._cards[0].reward_id == "jelly:companion-save-retry:0",
+		"Retry restores the hold instruction and original pending reward identity")
 	room.queue_free()
 	await process_frame
 
@@ -295,16 +400,15 @@ func _scaled_result_resize_checks() -> void:
 			await process_frame
 		var s: float = Style.ui_scale(room)
 		var card: Dictionary = room._cards[0]
-		var context: String = "same scaled result at %s (scale=%.4f, heading=%.2fpx, score=%.2fpx, summary=%.2fpx, chest=%.2fpx)" % [
-			dimensions, s, room._heading.size.y * s, room._result_score.size.y * s, room._progress.size.y * s, card.art.size.y * s]
-		check(room._heading.size.y * s <= 40.0 + PIXEL_TOLERANCE
-			and room._result_score.size.y * s <= 76.0 + PIXEL_TOLERANCE
-			and room._progress.size.y * s <= 30.0 + PIXEL_TOLERANCE,
+		var context: String = "same scaled result at %s (scale=%.4f, heading=%.2fpx, summary=%.2fpx, chest=%.2fpx)" % [
+			dimensions, s, room._heading.size.y * s, room._result_score.size.y * s, card.art.size.y * s]
+		check(room._heading.size.y * s <= 48.0 + PIXEL_TOLERANCE
+			and room._result_score.size.y * s <= 24.0 + PIXEL_TOLERANCE,
 			"Result text discards stale font minima instead of taking the chest's space: " + context)
 		if dimensions.y >= 700:
-			check(card.art.size.y * s >= 240.0 - PIXEL_TOLERANCE,
+			check(card.art.size.y * s >= 200.0 - PIXEL_TOLERANCE,
 				"A tall viewport gives the earned chest a substantial readable stage: " + context)
-		for label: Label in [room._heading, room._result_score, room._progress, card.tier_label, card.caption]:
+		for label: Label in [room._heading, room._result_score, card.caption]:
 			check(label.is_visible_in_tree() and label.get_line_count() == 1 and label.get_visible_line_count() == 1
 				and label.get_line_height() <= label.size.y + PIXEL_TOLERANCE,
 				"Result labels remain complete after scaled reflow (%s): %s" % [label.text, context])

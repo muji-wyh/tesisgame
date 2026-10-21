@@ -1,0 +1,107 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-10-17T06:15:57.6350364Z",
+  "phase": "pre-freeze raw integrity check",
+  "input_count": 22,
+  "input_drift_count": 0,
+  "input_drift": [],
+  "acquisition_membership_drift_count": 0,
+  "check_count": 13,
+  "failure_count": 0,
+  "checks": [
+    {
+      "id": "22_inputs_without_drift",
+      "pass": true
+    },
+    {
+      "id": "18_acquisition_members_unchanged",
+      "pass": true
+    },
+    {
+      "id": "audit_contains_95_passing_checks",
+      "pass": true
+    },
+    {
+      "id": "audit_and_ledger_pins_equal",
+      "pass": true
+    },
+    {
+      "id": "five_inspected_images_recorded",
+      "pass": true
+    },
+    {
+      "id": "inspected_image_pin:build/professional-english/card-reader-freesvg-acquisition-r01/206301-size-review.png",
+      "pass": true
+    },
+    {
+      "id": "inspected_image_pin:build/professional-english/card-reader-freesvg-acquisition-r01/206301-cropped-512.png",
+      "pass": true
+    },
+    {
+      "id": "inspected_image_pin:professional-media/f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png",
+      "pass": true
+    },
+    {
+      "id": "inspected_image_pin:professional-media/a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c.png",
+      "pass": true
+    },
+    {
+      "id": "inspected_image_pin:build/professional-english/card-reader-freesvg-acquisition-r01/206301-size-review-r02.png",
+      "pass": true
+    },
+    {
+      "id": "findings_resolved_without_removal",
+      "pass": true
+    },
+    {
+      "id": "scoped_decision_only",
+      "pass": true
+    },
+    {
+      "id": "six_review_files_before_freeze",
+      "pass": true
+    }
+  ],
+  "members": [
+    {
+      "path": "initial-findings.json",
+      "bytes": 2289,
+      "sha256": "a233576a327e10ce9daba3b3bf7233d3193a9cd108a65461105fddd4762d31e7"
+    },
+    {
+      "path": "input-pins.json",
+      "bytes": 5622,
+      "sha256": "67fe64fee215a5056f1ac678ab8757fbfd57063510cec2f979a05f1a3d944ff0"
+    },
+    {
+      "path": "observation-record.json",
+      "bytes": 4225,
+      "sha256": "173a66b7029bedfef764c1bce2039c7a93bc114fafb37538a6679fef1ead5491"
+    },
+    {
+      "path": "raw-source-observations-r01.json",
+      "bytes": 21028,
+      "sha256": "c36f2ffa1ec195e9922e08d49bf58b6cd9ad91ffd2cc21ba90c88f2876fa1004"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2591,
+      "sha256": "b504751d8d43c58166a004174a52ef4e608eb2a8f32039f332ee87b5deb35c3f"
+    },
+    {
+      "path": "review.json",
+      "bytes": 9342,
+      "sha256": "04161680ef3013f6b25f406a12aceb6ef6dae49a9f5f061703e5bfc36f4fa23f"
+    }
+  ],
+  "tool_observation": {
+    "chunk_id": "ba55ab",
+    "exit_code": 0,
+    "wall_time_seconds": 1.6506066000000001
+  },
+  "freeze_scope": "This independent source, static-art and picture-brief review packet only.",
+  "mutation_boundary": "Only the fresh card-reader-freesvg-independent-review-r01 directory was written.",
+  "freeze_protocol": "Create inventory.json over every other member, then raw-recheck every inventory member, all 22 input pins and acquisition membership. Report the final inventory pin and final check outside the frozen packet.",
+  "no_execution_claim": "This packet establishes no project, helper, renderer, test or native execution.",
+  "no_final_acceptance_claim": "Native caller review, human recognition, final exercise suitability, media acceptance and production integration remain pending."
+}

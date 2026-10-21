@@ -1,8 +1,9 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
-const { chooseMode, openModeMenu, metrics, tap, rendered, headerPoint, contentBounds, observeAudio, enterGame, boardPoint, memoryPoint } = require('./game-ui.cjs');
-const { watchAudioRequests, observeOutputAudio, expectOutputEnergy, recordingTiming } = require('./bundled-audio.cjs');
+const { chooseMode, openModeMenu, metrics, tap, rendered, headerPoint, contentBounds, observeAudio, enterGame, boardPoint } = require('./game-ui.cjs');
+const { watchAudioRequests, observeOutputAudio, expectOutputEnergy, recordingTiming, expectRecording } = require('./bundled-audio.cjs');
+const { startMemory, memoryState, memoryCardTap, memoryPairs } = require('./memory-flow.cjs');
 const { roomState } = require('./pop-treasure-ui.cjs');
 const { assets: sliceAssets } = require('../../docs/assets/voice-pop-random-slices.json');
 const { assets: referenceAssets } = require('../../docs/assets/voice-pop-reference-audio.json');
@@ -934,29 +935,47 @@ bundledAudioTest('leaving Voice Pop restores music immediately and card audio in
     expect(await page.evaluate(() => window.audioObservation.contexts.some(context => context.state === 'running'))).toBe(true);
     const musicOutput = await expectOutputEnergy(page);
 
-    const beforeCard = await page.evaluate(() => window.audioObservation.playbacks.length);
-    const bounds = await metrics(page);
-    const point = destination === 'match' ? boardPoint(bounds, 0) : memoryPoint(bounds, 0);
-    await tap(page, point.x, point.y);
-    const pattern = destination === 'match' ? /^(Word|Picture): (.+)$/ : /^Memory card 1\. (Word|Picture): (.+)\.$/;
-    await expect(page.locator('#selection-status')).toHaveText(pattern);
-    const word = (await page.locator('#selection-status').textContent()).match(pattern)[2];
-    const selectedWord = catalog.find(entry => entry.text === word);
-    expect(selectedWord, 'The selected label must belong to the real vocabulary').toBeTruthy();
-    const wordSeconds = waveDuration(selectedWord.audio);
-    await expect.poll(() => page.evaluate(({ from, seconds }) => window.audioObservation.playbacks.slice(from).some(sound =>
-      sound.contextState === 'running' && Math.abs(sound.duration - seconds) <= 1 / sound.sampleRate),
-    { from: beforeCard, seconds: wordSeconds }), { message: `${destination} must pronounce its selected word after Voice Pop` }).toBe(true);
+    let beforeCard, word, recording;
+    if (destination === 'memory') {
+      const board = await startMemory(page), pair = memoryPairs(board)[0];
+      beforeCard = await page.evaluate(() => window.audioObservation.playbacks.length);
+      await memoryCardTap(page, pair[0]);
+      expect((await memoryState(page)).cards[pair[0]]).toMatchObject({ selected: true, face_up: false, word_id: '' });
+      await rendered(page);
+      const firstSounds = await page.evaluate(from => window.audioObservation.playbacks.slice(from), beforeCard);
+      expect(firstSounds.filter(sound => Math.abs(sound.duration - musicTiming.seconds) > musicTiming.importAllowance + 1 / sound.sampleRate),
+        'A concealed Memory choice cannot pronounce its hidden answer').toEqual([]);
+      await memoryCardTap(page, pair[1]);
+      recording = 'assets/imported-audio/pair-feedback/right.wav';
+      const feedback = await expectRecording(page, beforeCard, recording);
+      expect(feedback.peak).toBeGreaterThan(0.01);
+      word = board.find(card => card.index === pair[0]).word;
+    } else {
+      beforeCard = await page.evaluate(() => window.audioObservation.playbacks.length);
+      const point = boardPoint(await metrics(page), 0);
+      await tap(page, point.x, point.y);
+      const pattern = /^(Word|Picture): (.+)$/;
+      await expect(page.locator('#selection-status')).toHaveText(pattern);
+      word = (await page.locator('#selection-status').textContent()).match(pattern)[2];
+      const selectedWord = catalog.find(entry => entry.text === word);
+      expect(selectedWord, 'The selected label must belong to the real vocabulary').toBeTruthy();
+      recording = selectedWord.audio;
+      const wordSeconds = waveDuration(recording);
+      await expect.poll(() => page.evaluate(({ from, seconds }) => window.audioObservation.playbacks.slice(from).some(sound =>
+        sound.contextState === 'running' && Math.abs(sound.duration - seconds) <= 1 / sound.sampleRate),
+      { from: beforeCard, seconds: wordSeconds }), { message: 'Match pronounces its selected word after Voice Pop' }).toBe(true);
+      const sounds = await page.evaluate(from => window.audioObservation.playbacks.slice(from), beforeCard);
+      const select = sounds.find(sound => Math.abs(sound.duration - selectSeconds) <= 1 / sound.sampleRate);
+      expect(select, 'The Match card also plays its bundled selection sound').toBeTruthy();
+      expect(select.contextState).toBe('running');
+      expect(select.fingerprint).toBeTruthy();
+      expect(select.peak, 'Selection feedback contains audible PCM').toBeGreaterThan(0.01);
+    }
     const sounds = await page.evaluate(from => window.audioObservation.playbacks.slice(from), beforeCard);
-    const select = sounds.find(sound => Math.abs(sound.duration - selectSeconds) <= 1 / sound.sampleRate);
-    expect(select, 'The destination card also plays its bundled selection sound').toBeTruthy();
-    expect(select.contextState).toBe('running');
-    expect(select.fingerprint).toBeTruthy();
-    expect(select.peak, 'Selection feedback contains audible PCM').toBeGreaterThan(0.01);
     const cardOutput = await expectOutputEnergy(page);
     await expect(page.locator('#audio-status')).toBeEmpty();
     expect(audioRequests, `Offline ${destination} music and card audio need no audio HTTP requests`).toEqual([]);
-    evidence.push({ destination, theme, word, recording: selectedWord.audio, music, cardSounds: sounds,
+    evidence.push({ destination, theme, word, recording, music, cardSounds: sounds,
       musicOutput, cardOutput });
   }
   await info.attach('voice-pop-exit-audio.json', {

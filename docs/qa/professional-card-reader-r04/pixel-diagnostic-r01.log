@@ -1,0 +1,151 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API OpenGL ES 3.0 (ANGLE 2.1.1 git hash: aaebda1c5a40) - Compatibility - Using Device: Google Inc. (Microsoft) - ANGLE (Microsoft, Microsoft Basic Render Driver (0x0000008C) Direct3D11 vs_5_0 ps_5_0, D3D11-10.0.26100.9711)
+
+[
+  {
+    "decoded_format": 5,
+    "decoded_mipmaps": false,
+    "decoded_rgba_bytes": 886784,
+    "decoded_rgba_sha256": "b1fd43a079c7486d4ccd155ce1c93b8a52ca9712495f43063eebf606d8fd807b",
+    "decoded_size": [
+      512,
+      433
+    ],
+    "different_bytes": 0,
+    "different_pixels": 0,
+    "different_visible_pixels": 0,
+    "first_differences": [],
+    "id": "card-reader.payment-device.n",
+    "max_channel_delta": 0,
+    "source": "res://build/professional-english/card-reader-freesvg-acquisition-r01/206301-cropped-512.png",
+    "source_format": 5,
+    "source_mipmaps": false,
+    "source_rgba_bytes": 886784,
+WARNING: Loaded resource as image file, this will not work on export: 'res://professional-media/f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png'. Instead, import the image file as an Image resource and load it normally as a resource.
+   at: load_from_file (core/io/image.cpp:2780)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://build/professional-english/card-reader-review-20261020/diagnose-pixels.gd:25)
+WARNING: Loaded resource as image file, this will not work on export: 'res://professional-media/a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c.png'. Instead, import the image file as an Image resource and load it normally as a resource.
+   at: load_from_file (core/io/image.cpp:2780)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://build/professional-english/card-reader-review-20261020/diagnose-pixels.gd:25)
+    "source_rgba_sha256": "b1fd43a079c7486d4ccd155ce1c93b8a52ca9712495f43063eebf606d8fd807b",
+    "source_sha256": "67cb3e6f8e0be881b51a7d18ecc28fd1a02fab6b650197a8d60ef9d550b07c59",
+    "source_size": [
+      512,
+      433
+    ]
+  },
+  {
+    "decoded_format": 5,
+    "decoded_mipmaps": false,
+    "decoded_rgba_bytes": 1259520,
+    "decoded_rgba_sha256": "9b4c0719804d15ae2a936830a22e89ccaea48ac5b860bb6ca508856d73959297",
+    "decoded_size": [
+      512,
+WARNING: Loaded resource as image file, this will not work on export: 'res://professional-media/fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3.png'. Instead, import the image file as an Image resource and load it normally as a resource.
+      615
+   at: load_from_file (core/io/image.cpp:2780)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://build/professional-english/card-reader-review-20261020/diagnose-pixels.gd:25)
+WARNING: Loaded resource as image file, this will not work on export: 'res://professional-media/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png'. Instead, import the image file as an Image resource and load it normally as a resource.
+   at: load_from_file (core/io/image.cpp:2780)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://build/professional-english/card-reader-review-20261020/diagnose-pixels.gd:25)
+    ],
+    "different_bytes": 0,
+    "different_pixels": 0,
+    "different_visible_pixels": 0,
+    "first_differences": [],
+    "id": "cash-register.sales-device.n",
+    "max_channel_delta": 0,
+    "source": "res://professional-media/f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png",
+    "source_format": 5,
+    "source_mipmaps": false,
+    "source_rgba_bytes": 1259520,
+    "source_rgba_sha256": "9b4c0719804d15ae2a936830a22e89ccaea48ac5b860bb6ca508856d73959297",
+    "source_sha256": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262",
+    "source_size": [
+      512,
+      615
+    ]
+  },
+  {
+    "decoded_format": 5,
+    "decoded_mipmaps": false,
+    "decoded_rgba_bytes": 600064,
+    "decoded_rgba_sha256": "c7f66774d8ea0ab8fa8123c4c15c8813e205eaa0fc71e26a082fd43b0bb9acec",
+    "decoded_size": [
+      512,
+      293
+    ],
+    "different_bytes": 0,
+    "different_pixels": 0,
+    "different_visible_pixels": 0,
+    "first_differences": [],
+    "id": "barcode.product-code.n",
+    "max_channel_delta": 0,
+    "source": "res://professional-media/a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c.png",
+    "source_format": 5,
+    "source_mipmaps": false,
+    "source_rgba_bytes": 600064,
+    "source_rgba_sha256": "c7f66774d8ea0ab8fa8123c4c15c8813e205eaa0fc71e26a082fd43b0bb9acec",
+    "source_sha256": "a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c",
+    "source_size": [
+      512,
+      293
+    ]
+  },
+  {
+    "decoded_format": 5,
+    "decoded_mipmaps": false,
+    "decoded_rgba_bytes": 929792,
+    "decoded_rgba_sha256": "4c741a0409e4306200a79e1143cf46dc93d71d2f12fb31ee2d5a117859f9bee4",
+    "decoded_size": [
+      512,
+      454
+    ],
+    "different_bytes": 0,
+    "different_pixels": 0,
+    "different_visible_pixels": 0,
+    "first_differences": [],
+    "id": "shopping-basket.store-container.n",
+    "max_channel_delta": 0,
+    "source": "res://professional-media/fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3.png",
+    "source_format": 5,
+    "source_mipmaps": false,
+    "source_rgba_bytes": 929792,
+    "source_rgba_sha256": "4c741a0409e4306200a79e1143cf46dc93d71d2f12fb31ee2d5a117859f9bee4",
+    "source_sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+    "source_size": [
+      512,
+      454
+    ]
+  },
+  {
+    "decoded_format": 5,
+    "decoded_mipmaps": false,
+    "decoded_rgba_bytes": 847872,
+    "decoded_rgba_sha256": "7f9ee4507e21c185c15b5f23ee55c3afa5fcd55b1193d5662553b7863767bae3",
+    "decoded_size": [
+      414,
+      512
+    ],
+    "different_bytes": 0,
+    "different_pixels": 0,
+    "different_visible_pixels": 0,
+    "first_differences": [],
+    "id": "shopping-bag.goods-carrier.n",
+    "max_channel_delta": 0,
+    "source": "res://professional-media/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png",
+    "source_format": 5,
+    "source_mipmaps": false,
+    "source_rgba_bytes": 847872,
+    "source_rgba_sha256": "7f9ee4507e21c185c15b5f23ee55c3afa5fcd55b1193d5662553b7863767bae3",
+    "source_sha256": "f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+    "source_size": [
+      414,
+      512
+    ]
+  }
+]

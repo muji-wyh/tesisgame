@@ -105,7 +105,11 @@ func _age_milestones(directory: String) -> void:
 	for mascot in [app.duck, app._phrase.pip, app._round_celebration.pip]:
 		check(mascot.growth_age == 3, "Every gameplay and celebration Pip follows earned age")
 	for mode: String in ["match", "memory", "phrase", "pop", "jelly"]:
-		check(app.new_round(813, false, "", mode), "%s uses the next age cohort independently of Lv19" % mode)
+		var opened: bool = app.new_round(813, false, "", mode)
+		if not opened and not app._pending_vocabulary_round.is_empty():
+			await settle()
+			opened = app._pending_vocabulary_round.is_empty() and app._mode_id == mode and app.model.age_band_id == "4"
+		check(opened, "%s uses the next age cohort independently of Lv19" % mode)
 		check(app.model.age_band_id == "4", "%s shares the age-four learning target" % mode)
 		check(app.duck.growth_age == 3, "Starting %s cannot promote Pip from Lv19" % mode)
 	app._show_collection()
@@ -291,7 +295,9 @@ func _load_failure(directory: String) -> void:
 		"The persistent entry shows unavailable progress while the saved level cannot be loaded")
 	check(app._pip_age_description.is_empty(), "An unreadable save does not invent a starting Pip age")
 	check(app._storage_retry_button.is_visible_in_tree() and app._message.visible,
-		"The initial load failure explains how to recover")
+		"The initial load failure explains how to recover (retry visible=%s, message visible=%s, home=%s, description=%s)" % [
+			app._storage_retry_button.is_visible_in_tree(), app._message.visible, app._mode_menu_open(),
+			app._storage_retry_button.get("accessibility_description")])
 	check(not app.new_round(101, false, "", "pop"), "Mode switching cannot bypass the growth load gate")
 	storage.readable = true
 	app._storage_retry_button.pressed.emit()
@@ -329,15 +335,16 @@ func _memory(app) -> void:
 	var view = app._memory
 	var word: Dictionary = view.memory.cards[0].word
 	var before: int = app.growth.streak(word.id)
-	view.begin_peek()
+	view.start_button.pressed.emit()
+	check(view.memory.studying and view.memory.peek_duration == 10.0, "Memory Start opens the initial observation")
 	view.end_peek()
-	check(app.growth.streak(word.id) == before, "Memory peek is neutral")
+	check(app.growth.streak(word.id) == before, "Memory observation is neutral")
 	var pair: Array[int] = []
 	for index in range(view.memory.cards.size()):
 		if view.memory.cards[index].word.id == word.id:
 			pair.append(index)
 	view.card_buttons[pair[0]].pressed.emit()
-	check(app.growth.streak(word.id) == before, "First Memory reveal is neutral")
+	check(app.growth.streak(word.id) == before, "The concealed first Memory choice is neutral")
 	view.card_buttons[pair[1]].pressed.emit()
 	check(app.growth.streak(word.id) == mini(Growth.MASTERY_STREAK, before + 1), "Memory pair credits one unique word")
 	view.continue_feedback()

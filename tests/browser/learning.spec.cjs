@@ -1,6 +1,8 @@
 const { test, expect } = require('@playwright/test');
-const { metrics, tap, chooseMode, rendered, openGame, boardPoint, memoryPoint,
+const { metrics, tap, chooseMode, rendered, openGame, boardPoint,
   headerIconRect, openRewards, observeAudio, visibleColorCount } = require('./game-ui.cjs');
+const { startMemory } = require('./memory-flow.cjs');
+const catalog = require('../../words.json');
 
 const READY = 'Find 5 word';
 
@@ -59,15 +61,7 @@ test('five words survive switching between Match and Memory', async ({ page }, t
   await page.screenshot({ path: testInfo.outputPath('same-lesson-match.png'), scale: 'css' });
   await chooseMode(page, 'memory');
   await expect(page.locator('#game-status')).toContainText('Memory.');
-  const remembered = [], bounds = await metrics(page);
-  for (let index = 0; index < 10; index++) {
-    const point = memoryPoint(bounds, index);
-    await tap(page, point.x, point.y);
-    await expect(page.locator('#selection-status')).toHaveText(/^Memory card \d+\. (Word|Picture): [a-z]+\.$/);
-    remembered.push((await page.locator('#selection-status').textContent()).match(/: ([a-z]+)\.$/)[1]);
-    await tap(page, point.x, point.y);
-    await expect(page.locator('#selection-status')).toBeEmpty();
-  }
+  const remembered = (await startMemory(page)).map(card => catalog.find(word => word.id === card.word).text);
   expect(remembered.sort()).toEqual(words.flatMap(word => [word, word]).sort());
   await chooseMode(page, 'match');
   await expect(page.locator('#game-status')).toContainText(READY);

@@ -137,13 +137,13 @@ func _test_timed_inputs(view) -> void:
 	var positions: Array = _rects(view)
 	var board: Array = view.memory.cards.duplicate(true)
 	var initial_purchases: int = purchases.size()
-	view.study_button.button_down.emit()
+	view.start_button.button_down.emit()
 	check(_all_hidden(view), "Pressing down alone does not purchase or reveal")
-	view.study_button.button_up.emit()
+	view.start_button.button_up.emit()
 	check(_all_hidden(view), "Release without a complete native click cannot reveal cards")
-	view.study_button.pressed.emit()
+	view.start_button.pressed.emit()
 	check(view.memory.studying and view.study_button.engaged and view.memory.peek_remaining == 10.0,
-		"A completed first click opens the eye for ten seconds")
+		"A completed Start game click opens the initial observation for ten seconds")
 	view._process(2.0)
 	check(view.memory.peek_remaining == 10.0, "The activation frame cannot charge time elapsed before the click")
 	view._advance_peek(2.0)
@@ -203,7 +203,7 @@ func _test_timed_inputs(view) -> void:
 
 func _test_denied_clicks(view) -> void:
 	view.start_round(words, Data.theme("spring"), 83)
-	view.begin_peek()
+	view.start_game()
 	view.end_peek()
 	var denied: Array = []
 	view.purchase_peek = func(ordinal: int, price: int) -> Dictionary:
@@ -306,7 +306,7 @@ func _test_cancel_and_reverse(view) -> void:
 	await process_frame
 	await process_frame
 	var positions: Array = _rects(view)
-	view.begin_peek()
+	view.start_game()
 	for card in view.card_buttons:
 		card._flip.pause()
 		card._flip.custom_step(0.04)
@@ -323,7 +323,7 @@ func _test_cancel_and_reverse(view) -> void:
 	check(_all_hidden(view) and _all_settled(view), "Rapid reveal/cancel/reveal settles all latest backs")
 	for cancellation in ["pause", "hide", "focus", "stop", "restart"]:
 		view.start_round(words, Data.theme("spring"), 91)
-		view.begin_peek()
+		view.start_game()
 		await create_timer(0.04).timeout
 		match cancellation:
 			"pause": view.pause(true)
@@ -338,7 +338,7 @@ func _test_cancel_and_reverse(view) -> void:
 		view.end_peek()
 		check(_all_hidden(view) and _all_settled(view) and view.memory.attempts == 0, cancellation + " cannot be undone by an old tween or late release")
 	view.start_round(words, Data.theme("spring"), 91)
-	view.begin_peek()
+	view.start_game()
 	view.size = Vector2(600, 360)
 	await process_frame
 	check(view.memory.studying and _all_settled(view), "Resizing an active countdown settles all requested fronts")
@@ -376,6 +376,8 @@ func _test_external_toolbar() -> void:
 	view.size = Vector2(456, 600)
 	view.set_reduced_motion(true)
 	view.start_round(words, Data.theme("spring"), 71)
+	view.start_game()
+	view.end_peek()
 	var toolbar := HBoxContainer.new()
 	toolbar.position = Vector2(12, 8)
 	toolbar.size = Vector2(740, 52)

@@ -52,7 +52,7 @@
           "torsoWidth": 48
         },
         "frameOffsetY": 3,
-        "render": "Authored Pip vector illustration; matte painted gradients and paper grain; transparent 360 px layers"
+        "render": "Authored Pip illustration; directional matte form shading, curved bill and layered feathers; transparent 360 px layers"
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-baby.png",
@@ -78,12 +78,12 @@
           75
         ],
         [
-          40,
-          81
+          44,
+          84
         ],
         [
-          80,
-          81
+          76,
+          84
         ],
         [
           48,
@@ -133,7 +133,7 @@
           "torsoWidth": 46
         },
         "frameOffsetY": 3,
-        "render": "Authored Pip vector illustration; matte painted gradients and paper grain; transparent 360 px layers"
+        "render": "Authored Pip illustration; directional matte form shading, curved bill and layered feathers; transparent 360 px layers"
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv3.png",
@@ -159,12 +159,12 @@
           69
         ],
         [
-          41,
-          76
+          45,
+          79
         ],
         [
-          79,
-          76
+          75,
+          79
         ],
         [
           48,
@@ -214,7 +214,7 @@
           "torsoWidth": 46
         },
         "frameOffsetY": 3,
-        "render": "Authored Pip vector illustration; matte painted gradients and paper grain; transparent 360 px layers"
+        "render": "Authored Pip illustration; directional matte form shading, curved bill and layered feathers; transparent 360 px layers"
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv4.png",
@@ -240,12 +240,12 @@
           66
         ],
         [
-          41,
-          73
+          45,
+          76
         ],
         [
-          79,
-          73
+          75,
+          76
         ],
         [
           47,
@@ -297,7 +297,7 @@
           "torsoWidth": 48
         },
         "frameOffsetY": 3,
-        "render": "Authored Pip vector illustration; matte painted gradients and paper grain; transparent 360 px layers"
+        "render": "Authored Pip illustration; directional matte form shading, curved bill and layered feathers; transparent 360 px layers"
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv5.png",
@@ -323,12 +323,12 @@
           64.5
         ],
         [
-          40,
-          72
+          44,
+          75
         ],
         [
-          80,
-          72
+          76,
+          75
         ],
         [
           47,
@@ -382,7 +382,7 @@
           "torsoWidth": 46
         },
         "frameOffsetY": 3,
-        "render": "Authored Pip vector illustration; matte painted gradients and paper grain; transparent 360 px layers"
+        "render": "Authored Pip illustration; directional matte form shading, curved bill and layered feathers; transparent 360 px layers"
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv6.png",
@@ -408,12 +408,12 @@
           63
         ],
         [
-          41,
-          70
+          45,
+          73
         ],
         [
-          79,
-          70
+          75,
+          73
         ],
         [
           47,
@@ -469,7 +469,7 @@
           "torsoWidth": 46
         },
         "frameOffsetY": 3,
-        "render": "Authored Pip vector illustration; matte painted gradients and paper grain; transparent 360 px layers"
+        "render": "Authored Pip illustration; directional matte form shading, curved bill and layered feathers; transparent 360 px layers"
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv7.png",
@@ -495,12 +495,12 @@
           61
         ],
         [
-          41,
-          68
+          45,
+          71
         ],
         [
-          79,
-          68
+          75,
+          71
         ],
         [
           47,
@@ -558,7 +558,7 @@
           "torsoWidth": 48
         },
         "frameOffsetY": 3,
-        "render": "Authored Pip vector illustration; matte painted gradients and paper grain; transparent 360 px layers"
+        "render": "Authored Pip illustration; directional matte form shading, curved bill and layered feathers; transparent 360 px layers"
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv8.png",
@@ -584,12 +584,12 @@
           60
         ],
         [
-          40,
-          67
+          44,
+          70
         ],
         [
-          80,
-          67
+          76,
+          70
         ],
         [
           47,
@@ -649,7 +649,7 @@
           "torsoWidth": 46
         },
         "frameOffsetY": 3,
-        "render": "Authored Pip vector illustration; matte painted gradients and paper grain; transparent 360 px layers"
+        "render": "Authored Pip illustration; directional matte form shading, curved bill and layered feathers; transparent 360 px layers"
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv9.png",
@@ -675,12 +675,12 @@
           59
         ],
         [
-          41,
-          67
+          45,
+          70
         ],
         [
-          79,
-          67
+          75,
+          70
         ],
         [
           47,
@@ -742,7 +742,7 @@
           "torsoWidth": 44
         },
         "frameOffsetY": 3,
-        "render": "Authored Pip vector illustration; matte painted gradients and paper grain; transparent 360 px layers"
+        "render": "Authored Pip illustration; directional matte form shading, curved bill and layered feathers; transparent 360 px layers"
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv10.png",
@@ -768,12 +768,12 @@
           58
         ],
         [
-          42,
-          66
+          46,
+          69
         ],
         [
-          78,
-          66
+          74,
+          69
         ],
         [
           47,
@@ -837,7 +837,7 @@
           "torsoWidth": 46
         },
         "frameOffsetY": 3,
-        "render": "Authored Pip vector illustration; matte painted gradients and paper grain; transparent 360 px layers"
+        "render": "Authored Pip illustration; directional matte form shading, curved bill and layered feathers; transparent 360 px layers"
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv11.png",
@@ -863,12 +863,12 @@
           57.5
         ],
         [
-          41,
-          65
+          45,
+          68
         ],
         [
-          79,
-          65
+          75,
+          68
         ],
         [
           47,
@@ -934,7 +934,7 @@
           "torsoWidth": 46
         },
         "frameOffsetY": 3,
-        "render": "Authored Pip vector illustration; matte painted gradients and paper grain; transparent 360 px layers"
+        "render": "Authored Pip illustration; directional matte form shading, curved bill and layered feathers; transparent 360 px layers"
       },
       "art": {
         "regular": "assets/images/mascots/growth/pip-lv12.png",
@@ -960,12 +960,12 @@
           56.5
         ],
         [
-          41,
-          64
+          45,
+          67
         ],
         [
-          79,
-          64
+          75,
+          67
         ],
         [
           47,

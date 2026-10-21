@@ -1,0 +1,97 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-10-17T06:14:53.6688114Z",
+  "reviewer": "Independent AI source and visual reviewer",
+  "decision": "Accepted scoped AI art and picture-brief review for next native caller comparison.",
+  "write_boundary": "Only this new independent review directory was written by this reviewer.",
+  "source_checks": {
+    "tool": "exec_command",
+    "chunk_id": "c31551",
+    "exit_code": 0,
+    "wall_time_seconds": 2.5180645,
+    "check_count": 95,
+    "failure_count": 0,
+    "methods": [
+      "Raw filesystem enumeration",
+      "SHA256 and byte length",
+      "JSON data reads",
+      "PNG signature and IHDR byte reads",
+      "Literal and regular-expression text checks"
+    ],
+    "execution_limit": "No project, proposal, helper, renderer, test or native code was imported, evaluated, syntax-checked, compiled or executed."
+  },
+  "actual_image_inspection": {
+    "method": "view_image on already-rendered local PNG files during this review",
+    "files": [
+      {
+        "path": "build/professional-english/card-reader-freesvg-acquisition-r01/206301-size-review.png",
+        "sha256": "2b42f2929b195000f110f1bc237ca2c0c57c6710cd31ba704b121e64f74f8f40",
+        "scope": "Complete 64, 96, 128 and 512 samples inspected; clipped 192 sample excluded as complete evidence."
+      },
+      {
+        "path": "build/professional-english/card-reader-freesvg-acquisition-r01/206301-cropped-512.png",
+        "sha256": "67cb3e6f8e0be881b51a7d18ecc28fd1a02fab6b650197a8d60ef9d550b07c59",
+        "scope": "Exact full 512 by 433 candidate derivative inspected."
+      },
+      {
+        "path": "professional-media/f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png",
+        "sha256": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262",
+        "scope": "Actual integrated cash-register artwork inspected as a static comparison."
+      },
+      {
+        "path": "professional-media/a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c.png",
+        "sha256": "a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c",
+        "scope": "Actual integrated barcode artwork inspected as a static comparison."
+      },
+      {
+        "path": "build/professional-english/card-reader-freesvg-acquisition-r01/206301-size-review-r02.png",
+        "sha256": "a2e7ff6239d3ce641da017f0c259ef8ade5f421422fee796c5d98e45ff127da1",
+        "scope": "Corrected sheet inspected directly; complete 192 sample and device base are visible."
+      }
+    ],
+    "limits": "AI visual inspection of static artifacts only. No learner recognition test, human approval, actual native caller inspection or final exercise acceptance."
+  },
+  "retained_findings": {
+    "initial_record": "initial-findings.json",
+    "ids": [
+      "CR-F01",
+      "CR-F02"
+    ],
+    "resolution_record": "review.json",
+    "correction_input": "build/professional-english/card-reader-freesvg-acquisition-r01/review-correction-r02.md",
+    "originals_preserved": true
+  },
+  "continuation_rechecks": [
+    {
+      "chunk_id": "f7483e",
+      "exit_code": 0,
+      "scope": "Existing review reports read before completion."
+    },
+    {
+      "chunk_id": "15fd1b",
+      "exit_code": 0,
+      "scope": "All 18 acquisition members enumerated; candidate and receipt JSON read."
+    },
+    {
+      "chunk_id": "e86865",
+      "exit_code": 0,
+      "scope": "Correction and r02 conversion source read as text; saved creator, license and CC0 excerpts checked."
+    },
+    {
+      "chunk_id": "22e806",
+      "exit_code": 0,
+      "scope": "Current card-reader JSON and asset art direction read."
+    }
+  ],
+  "next_step": "Root may schedule the exact unchanged candidate through actual Match and Memory callers after Foundation02 native work. Keep native, human recognition, exercise suitability and integration acceptance separate.",
+  "acceptance_limits": {
+    "source_and_scoped_ai_art_brief_review": true,
+    "native_caller_acceptance": false,
+    "human_recognition_acceptance": false,
+    "final_exercise_acceptance": false,
+    "final_media_acceptance": false,
+    "production_integration": false,
+    "audio_approval_changed": false,
+    "production_afterimages_created": false
+  }
+}

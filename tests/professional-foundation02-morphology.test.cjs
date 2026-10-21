@@ -144,9 +144,9 @@ test('Foundation02 morphology does not promote media, specialist, module or over
   }
   const audit = auditProfessionalContent({rootDir:root, data});
   assert.deepEqual(audit.errors, []);
-  assert.equal(audit.summary.morphology_reviewed, 189);
+  assert.equal(audit.summary.morphology_reviewed, 209);
   assert.equal(audit.summary.reviewed_lexemes, 156);
-  assert.equal(audit.summary.integrated_word_images, 10);
+  assert.equal(audit.summary.integrated_word_images, 11);
   assert.equal(audit.summary.integrated_word_audio, 12);
   assert.equal(audit.summary.ready_modules, 0);
   assert.equal(audit.summary.release_ready, false);

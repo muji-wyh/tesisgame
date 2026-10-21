@@ -194,8 +194,18 @@ function actionPose(name, p) {
 
 function applyPose(pose) {
   if (!rig) return;
+  const joints = catalog.stages[selectedIndex].motionPivots || JOINTS;
+  const [bodyX, bodyY, bodyAngle] = pose[0];
+  const [bodyPivotX, bodyPivotY] = joints[0];
+  const radians = bodyAngle * Math.PI / 180;
   pose.forEach(([x, y, angle], index) => {
-    const [px, py] = catalog.stages[selectedIndex].motionPivots?.[index] || JOINTS[index];
+    const [px, py] = joints[index];
+    if (index === 2 || index === 3) {
+      // Keep the shoulder on the moving torso without changing wing rotation.
+      const dx = px - bodyPivotX, dy = py - bodyPivotY;
+      x = bodyX + bodyPivotX + Math.cos(radians) * dx - Math.sin(radians) * dy - px;
+      y = bodyY + bodyPivotY + Math.sin(radians) * dx + Math.cos(radians) * dy - py;
+    }
     rig.layers[index].setAttribute('transform', `translate(${x} ${y}) rotate(${angle} ${px} ${py})`);
   });
   const lift = Math.max(0, -pose[0][1]) / 23;

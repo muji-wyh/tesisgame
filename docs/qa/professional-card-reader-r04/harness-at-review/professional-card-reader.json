@@ -1,0 +1,228 @@
+{
+  "schema": 1,
+  "purpose": "Current-source private native caller capture fixture; no production review or readiness change.",
+  "revision": "professional-card-reader-review-v1",
+  "lexemes_source": "res://data/professional/lexemes/retail-pilot.json",
+  "entries": [
+    {
+      "id": "card-reader.payment-device.n",
+      "label": "card reader",
+      "role": "candidate"
+    },
+    {
+      "id": "cash-register.sales-device.n",
+      "label": "cash register",
+      "role": "comparison"
+    },
+    {
+      "id": "barcode.product-code.n",
+      "label": "barcode",
+      "role": "comparison"
+    },
+    {
+      "id": "shopping-bag.goods-carrier.n",
+      "label": "shopping bag",
+      "role": "supporting_fixture"
+    },
+    {
+      "id": "shopping-basket.store-container.n",
+      "label": "shopping basket",
+      "role": "supporting_fixture"
+    }
+  ],
+  "resources": [
+    {
+      "lexeme_id": "card-reader.payment-device.n",
+      "source": "res://build/professional-english/card-reader-freesvg-acquisition-r01/206301-cropped-512.png",
+      "metadata": {
+        "id": "sha256:67cb3e6f8e0be881b51a7d18ecc28fd1a02fab6b650197a8d60ef9d550b07c59",
+        "sha256": "67cb3e6f8e0be881b51a7d18ecc28fd1a02fab6b650197a8d60ef9d550b07c59",
+        "path": "professional-media/67cb3e6f8e0be881b51a7d18ecc28fd1a02fab6b650197a8d60ef9d550b07c59.png",
+        "kind": "image",
+        "format": "png",
+        "compressed_bytes": 77565,
+        "width": 512,
+        "height": 433,
+        "decoded_bytes": 1773568
+      }
+    },
+    {
+      "lexeme_id": "cash-register.sales-device.n",
+      "source": "res://professional-media/f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png",
+      "metadata": {
+        "id": "sha256:f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262",
+        "sha256": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262",
+        "path": "professional-media/f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png",
+        "kind": "image",
+        "format": "png",
+        "compressed_bytes": 172442,
+        "width": 512,
+        "height": 615,
+        "decoded_bytes": 2519040
+      }
+    },
+    {
+      "lexeme_id": "cash-register.sales-device.n",
+      "source": "res://professional-media/0f883c09be9a86be9f30e444953d001d3a385ba71034e60ceb4181fc0b9aa763.wav",
+      "metadata": {
+        "id": "sha256:0f883c09be9a86be9f30e444953d001d3a385ba71034e60ceb4181fc0b9aa763",
+        "sha256": "0f883c09be9a86be9f30e444953d001d3a385ba71034e60ceb4181fc0b9aa763",
+        "path": "professional-media/0f883c09be9a86be9f30e444953d001d3a385ba71034e60ceb4181fc0b9aa763.wav",
+        "kind": "audio",
+        "format": "wav",
+        "compressed_bytes": 82598,
+        "channels": 1,
+        "sample_rate": 22050,
+        "frames": 41277,
+        "decoded_bytes": 82554
+      }
+    },
+    {
+      "lexeme_id": "card-reader.payment-device.n",
+      "source": "res://professional-media/acd48c920c631906e6ff0775cf3f373c247687fcb128b41e3ce0f3bdf668ba45.wav",
+      "metadata": {
+        "id": "sha256:acd48c920c631906e6ff0775cf3f373c247687fcb128b41e3ce0f3bdf668ba45",
+        "sha256": "acd48c920c631906e6ff0775cf3f373c247687fcb128b41e3ce0f3bdf668ba45",
+        "path": "professional-media/acd48c920c631906e6ff0775cf3f373c247687fcb128b41e3ce0f3bdf668ba45.wav",
+        "kind": "audio",
+        "format": "wav",
+        "compressed_bytes": 82598,
+        "channels": 1,
+        "sample_rate": 22050,
+        "frames": 41277,
+        "decoded_bytes": 82554
+      }
+    },
+    {
+      "lexeme_id": "barcode.product-code.n",
+      "source": "res://professional-media/a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c.png",
+      "metadata": {
+        "id": "sha256:a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c",
+        "sha256": "a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c",
+        "path": "professional-media/a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c.png",
+        "kind": "image",
+        "format": "png",
+        "compressed_bytes": 27650,
+        "width": 512,
+        "height": 293,
+        "decoded_bytes": 1200128
+      }
+    },
+    {
+      "lexeme_id": "barcode.product-code.n",
+      "source": "res://professional-media/01b2666324e5e373b75799535d8a78494a6afe8225c4b82147975d55405c96e5.wav",
+      "metadata": {
+        "id": "sha256:01b2666324e5e373b75799535d8a78494a6afe8225c4b82147975d55405c96e5",
+        "sha256": "01b2666324e5e373b75799535d8a78494a6afe8225c4b82147975d55405c96e5",
+        "path": "professional-media/01b2666324e5e373b75799535d8a78494a6afe8225c4b82147975d55405c96e5.wav",
+        "kind": "audio",
+        "format": "wav",
+        "compressed_bytes": 82598,
+        "channels": 1,
+        "sample_rate": 22050,
+        "frames": 41277,
+        "decoded_bytes": 82554
+      }
+    },
+    {
+      "lexeme_id": "shopping-basket.store-container.n",
+      "source": "res://professional-media/fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3.png",
+      "metadata": {
+        "id": "sha256:fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+        "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+        "path": "professional-media/fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3.png",
+        "kind": "image",
+        "format": "png",
+        "compressed_bytes": 105604,
+        "width": 512,
+        "height": 454,
+        "decoded_bytes": 1859584
+      }
+    },
+    {
+      "lexeme_id": "shopping-basket.store-container.n",
+      "source": "res://professional-media/aac69f3394f2acd4486e68e32213e328849c204f0ddced680f56011c65ce4e12.wav",
+      "metadata": {
+        "id": "sha256:aac69f3394f2acd4486e68e32213e328849c204f0ddced680f56011c65ce4e12",
+        "sha256": "aac69f3394f2acd4486e68e32213e328849c204f0ddced680f56011c65ce4e12",
+        "path": "professional-media/aac69f3394f2acd4486e68e32213e328849c204f0ddced680f56011c65ce4e12.wav",
+        "kind": "audio",
+        "format": "wav",
+        "compressed_bytes": 82598,
+        "channels": 1,
+        "sample_rate": 22050,
+        "frames": 41277,
+        "decoded_bytes": 82554
+      }
+    },
+    {
+      "lexeme_id": "shopping-bag.goods-carrier.n",
+      "source": "res://professional-media/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png",
+      "metadata": {
+        "id": "sha256:f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+        "sha256": "f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+        "path": "professional-media/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png",
+        "kind": "image",
+        "format": "png",
+        "compressed_bytes": 135843,
+        "width": 414,
+        "height": 512,
+        "decoded_bytes": 1695744
+      }
+    },
+    {
+      "lexeme_id": "shopping-bag.goods-carrier.n",
+      "source": "res://professional-media/6c7d2ac0e733214faf920a4a0781d0458b6b891a92aa07b7ab433b501d19de72.wav",
+      "metadata": {
+        "id": "sha256:6c7d2ac0e733214faf920a4a0781d0458b6b891a92aa07b7ab433b501d19de72",
+        "sha256": "6c7d2ac0e733214faf920a4a0781d0458b6b891a92aa07b7ab433b501d19de72",
+        "path": "professional-media/6c7d2ac0e733214faf920a4a0781d0458b6b891a92aa07b7ab433b501d19de72.wav",
+        "kind": "audio",
+        "format": "wav",
+        "compressed_bytes": 82598,
+        "channels": 1,
+        "sample_rate": 22050,
+        "frames": 41277,
+        "decoded_bytes": 82554
+      }
+    }
+  ],
+  "resource_count": 10,
+  "total_compressed_bytes": 932094,
+  "total_decoded_bytes": 9460834,
+  "candidate_provenance": {
+    "source_url": "https://freesvg.org/pos-termina-credit-card-payment",
+    "credited_organization": "publicdomainvectors.org",
+    "individual_artwork_creator": null,
+    "creator_limit": "Page-level author metadata names Vedran; it does not confirm this SVG's individual creator.",
+    "license": "Source page Public Domain designation and linked CC0 1.0 Universal deed",
+    "acquired_static_svg_sha256": "116dca8283535b13345dbd785e846f162bd3701d91816f35603d4aead648a044",
+    "available_animations": [],
+    "scoped_ai_review_inventory_sha256": "68490fd3f3bf57944e8e986f6a81b1f995958fa7a45d74e23ae6a6c9720fc762",
+    "original_picture_brief": "Show a compact payment reader and a plain bank card held near its contactless area. Keep the reader dominant, with the card close enough to explain its purpose. Distinguish it from a pistol-shaped barcode scanner, a full register, and a standalone keypad. Omit account numbers, merchant branding, PIN entry, and operating steps.",
+    "proposed_picture_brief": "Show a compact bank-card payment reader with a plain card close to the reader, a small screen, a keypad and a secondary receipt. Keep the compact device dominant. Exclude a full cash drawer, merchant branding, readable account numbers, PIN entry and operating instructions. The picture does not claim a particular card-reading method or a completed payment.",
+    "original": {
+      "path": "res://build/professional-english/card-reader-freesvg-acquisition-r01/206301-browser.svg",
+      "bytes": 38428,
+      "sha256": "116dca8283535b13345dbd785e846f162bd3701d91816f35603d4aead648a044"
+    }
+  },
+  "limits": {
+    "synthetic_readiness": true,
+    "synthetic_review_flags": true,
+    "production_image_integration": false,
+    "exercise_suitability_approval": false,
+    "participant_recognition": false,
+    "human_visual_acceptance": false,
+    "new_audio_approval": false
+  },
+  "provenance_files": [
+    "res://build/professional-english/card-reader-freesvg-acquisition-r01/206301-browser.svg",
+    "res://build/professional-english/card-reader-freesvg-acquisition-r01/206301-source.html",
+    "res://build/professional-english/card-reader-freesvg-acquisition-r01/cc0-source.html",
+    "res://build/professional-english/card-reader-freesvg-acquisition-r01/candidate-record.json",
+    "res://build/professional-english/card-reader-freesvg-acquisition-r01/review-correction-r02.md",
+    "res://build/professional-english/card-reader-freesvg-independent-review-r01/review.json",
+    "res://docs/assets/art-direction.md"
+  ]
+}

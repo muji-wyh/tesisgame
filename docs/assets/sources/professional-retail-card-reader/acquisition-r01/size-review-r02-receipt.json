@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-10-17T06:08:43.067Z",
+  "purpose": "Correct the clipped 192-pixel sample; original r01 sheet remains unchanged.",
+  "file": "206301-size-review-r02.png",
+  "bytes": 142632,
+  "sha256": "a2e7ff6239d3ce641da017f0c259ef8ade5f421422fee796c5d98e45ff127da1",
+  "width": 840,
+  "height": 630,
+  "rectangles": [
+    {
+      "size": 512,
+      "x": 20,
+      "y": 20,
+      "width": 512,
+      "height": 433
+    },
+    {
+      "size": 64,
+      "x": 600,
+      "y": 50,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "size": 96,
+      "x": 600,
+      "y": 170,
+      "width": 96,
+      "height": 96
+    },
+    {
+      "size": 128,
+      "x": 600,
+      "y": 290,
+      "width": 128,
+      "height": 128
+    },
+    {
+      "size": 192,
+      "x": 600,
+      "y": 410,
+      "width": 192,
+      "height": 192
+    }
+  ],
+  "production_changes": false
+}

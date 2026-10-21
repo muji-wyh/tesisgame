@@ -136,9 +136,9 @@ func check_modal(app, mode: String, chests: int, reason: String = "danger") -> v
 	check(app._jelly_rewards_shown and room.is_visible_in_tree() and modal.is_ancestor_of(room)
 		and view.is_visible_in_tree() and not view.snapshot().result.visible and view.snapshot().result.retired,
 		mode + ": settlement stays inside the overlay above the frozen board")
-	check(not app._round_celebration.is_active() and room._heading.text == title
+	check(not app._round_celebration.is_active() and room._heading.text == ("You earned a chest!" if chests > 0 else title)
 		and room.snapshot().result_context == app._round_result,
-		mode + ": settlement keeps its actual round totals without a victory intermission")
+		mode + ": interactive settlement keeps its actual round totals")
 	check(int(app._round_result.chest_count) == chests and room._cards.size() == chests,
 		mode + ": the dialog shows only the earned chest count")
 	check(not app._jelly_interaction_allowed() and not view.finish_button.is_visible_in_tree(),
@@ -280,7 +280,8 @@ func check_earned_result(mode: String, reason: String) -> void:
 	storage.reward_writable = true
 	room.retry_save()
 	await settle()
-	check(not room._save_failed and room.has_pending(), mode + ": Retry save preserves the earned chest")
+	check(not room._save_failed and room.has_pending() and not app._round_celebration.is_active(),
+		mode + ": Retry save preserves the earned chest without replaying an entrance")
 	check_modal(app, mode, 1, reason)
 	await check_keyboard(app, mode + " earned chest")
 	await check_layout(app, mode + " earned chest")

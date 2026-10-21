@@ -2,6 +2,7 @@ extends RefCounted
 
 const Data = preload("res://scripts/game_data.gd")
 const Economy = preload("res://scripts/coin_economy.gd")
+const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const SpeechWords = preload("res://scripts/speech_words.gd")
 const LearningWord = preload("res://scripts/learning_word.gd")
 const FIRST_PEEK_SECONDS: float = 10.0
@@ -16,6 +17,7 @@ var mistakes: int = 0
 var peeks: int = 0
 var last_correct: bool = false
 var phase: String = "waiting"
+var started: bool = false
 var studying: bool = false
 var peek_remaining: float = 0.0
 var peek_duration: float = 0.0
@@ -69,6 +71,7 @@ func reset(words: Array, seed_value: int = -1) -> bool:
 	mistakes = 0
 	peeks = 0
 	last_correct = false
+	started = false
 	studying = false
 	peek_remaining = 0.0
 	peek_duration = 0.0
@@ -76,8 +79,15 @@ func reset(words: Array, seed_value: int = -1) -> bool:
 	return true
 
 
+func start_game() -> bool:
+	if started or phase != "waiting" or cards.is_empty():
+		return false
+	started = true
+	return set_study(true)
+
+
 func select(index: int) -> String:
-	if studying or not phase in ["waiting", "matching"] or index < 0 or index >= cards.size():
+	if not started or studying or not phase in ["waiting", "matching"] or index < 0 or index >= cards.size():
 		return "ignored"
 	var card: Dictionary = cards[index]
 	if matched_word_ids.has(card.word.id):
@@ -91,12 +101,9 @@ func select(index: int) -> String:
 		phase = "matching"
 		return "selected"
 	var previous: Dictionary = cards[selected_indices[0]]
-	if previous.kind == card.kind:
-		selected_indices.assign([index])
-		return "reselected"
 	selected_indices.append(index)
 	attempts += 1
-	last_correct = previous.word.id == card.word.id
+	last_correct = previous.kind != card.kind and previous.word.id == card.word.id
 	feedback_words.assign([previous.word])
 	phase = "feedback"
 	if last_correct:
@@ -127,7 +134,7 @@ func set_study(value: bool) -> bool:
 		if phase in ["waiting", "matching"]:
 			phase = "waiting"
 		return true
-	if not phase in ["waiting", "matching"] or cards.is_empty() or studying:
+	if not started or not phase in ["waiting", "matching"] or cards.is_empty() or studying:
 		return false
 	peek_duration = FIRST_PEEK_SECONDS if peeks == 0 else REPEAT_PEEK_SECONDS
 	peek_remaining = peek_duration
@@ -151,14 +158,19 @@ func peek_price() -> int:
 	return Economy.memory_peek_price(peeks)
 
 
+func reward_tier() -> int:
+	return maxi(0, RewardProgress.THEMES.size() - mistakes)
+
+
 func is_revealed(index: int) -> bool:
 	if index < 0 or index >= cards.size():
 		return false
-	return studying or selected_indices.has(index) or matched_word_ids.has(cards[index].word.id)
+	return studying or (phase == "feedback" and selected_indices.has(index)) or matched_word_ids.has(cards[index].word.id)
 
 
 func stop() -> void:
 	phase = "stopped"
+	started = false
 	studying = false
 	peek_remaining = 0.0
 	peek_duration = 0.0

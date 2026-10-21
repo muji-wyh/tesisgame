@@ -1,0 +1,34 @@
+{
+  "native_sheets": 45,
+  "native_capture_checks": 1681,
+  "native_capture_failures": [],
+  "source_hashes": {
+    "data/pip-age-motions.json": "3dc1e9399e5c4a2d693363e1bc8c4f24516019d717b66ed956a88687d3c387e8",
+    "data/pip-growth-stages.json": "e2851c08246341ea1a79e94aa7424f69845e4f829c2b734a2187fa6c5c0882b8",
+    "scripts/duck_mascot.gd": "23514538c9a6ca72fc5bed7f3f40f4314f0dbd2dfacd061ded856864452e78a8",
+    "tools/pip-growth/storybook.cjs": "a6bbd6eaf4845a654b8a8070be5097b37cfae1a10bd079a6fb11bb1a6275f771"
+  },
+  "signature_action_sheets": 22,
+  "signature_action_cells": 160,
+  "feedback_cells": 132,
+  "expression_cells": 132,
+  "attachment_test_poses": 4709,
+  "attachment_test_checks": 117759,
+  "existing_pip_suite_checks": 9539,
+  "native_test_failures": 0,
+  "loader_browser": {
+    "projects_passed": ["desktop-chromium", "iphone-webkit"],
+    "samples_per_browser": 1972,
+    "max_interpolated_shoulder_error_art_units": 0.35894349545676185,
+    "interpolation_tolerance_art_units": 0.5,
+    "max_still_shoulder_error_art_units": 4.0194366942304644e-14,
+    "page_errors": [],
+    "scope": "Maintained loading shell and real SVG/browser animation matrices with mocked engine startup.",
+    "evidence": "build/pip-wing-20261020/loader-browser-stable/"
+  },
+  "comparison_method": "Current and preserved previous mascot scripts, stage joints and textures rendered natively in matching 280 px slots. Idle is reduced motion; crouch is 0.18 seconds; shared stretch is 50 percent. No pixel retouching.",
+  "limitations": [
+    "Frozen native poses and Chromium/WebKit checks; no physical-device testing or audio review",
+    "Full game build validation is recorded by the parent UI task"
+  ]
+}

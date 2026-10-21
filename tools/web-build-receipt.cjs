@@ -19,7 +19,7 @@ const INPUTS = [
   'tools/professional-domain', 'tools/professional-domain-web.cjs',
   'tools/package-professional-media.cjs', 'tools/validate-professional-content.cjs',
   'tools/validate-growth-morphology.cjs', 'tools/author-growth-morphology.cjs', 'tools/growth-morphology',
-  ...['build-web', 'package-web', 'serve-web', 'patch-web-engine', 'prepare-godot', 'run-godot', 'ui-click-audio', 'chest-reference-audio', 'chest-kenney-audio', 'prepare-jelly-reward-art', 'prepare-chest-milestone-art', 'prepare-coin-art', 'web-build-receipt', 'vocabulary-packs']
+  ...['build-web', 'check-web-templates', 'package-web', 'serve-web', 'patch-web-engine', 'prepare-godot', 'run-godot', 'ui-click-audio', 'chest-reference-audio', 'chest-kenney-audio', 'prepare-jelly-reward-art', 'prepare-chest-milestone-art', 'prepare-coin-art', 'web-build-receipt', 'vocabulary-packs']
     .map(name => `tools/${name}.cjs`)
 ];
 const receiptPath = root => path.join(root, 'build', 'web-build.json');

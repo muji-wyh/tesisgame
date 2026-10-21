@@ -143,7 +143,12 @@ const stages = [BABY_STAGE, ...STAGES].map(([age, id, name, action, actionLabel,
   for (const [kind, suffix] of [['regular', ''], ['idle', '-idle'], ['parts', '-parts'], ['expressions', '-expressions'], ['expressionHeads', '-expression-heads']]) {
     const filename = `${stem}${suffix}.png`;
     const bytes = fs.readFileSync(path.join(runtimeArt, filename));
-    fs.writeFileSync(path.join(art, filename), bytes);
+    const previewPath = path.join(art, filename);
+    // Assembly already writes these files. Avoid reopening identical atlases
+    // while a local preview or image inspector may still be reading them.
+    if (!fs.existsSync(previewPath) || !fs.readFileSync(previewPath).equals(bytes)) {
+      fs.copyFileSync(path.join(runtimeArt, filename), previewPath);
+    }
     const sourcePath = `res://assets/images/mascots/growth/${filename}`;
     const imported = `res://.godot/imported/${filename}-${crypto.createHash('md5').update(sourcePath).digest('hex')}.ctex`;
     if (!fs.existsSync(path.join(runtimeArt, filename + '.import'))) fs.writeFileSync(path.join(runtimeArt, filename + '.import'), `[remap]\n\nimporter="texture"\ntype="CompressedTexture2D"\npath="${imported}"\nmetadata={\n"vram_texture": false\n}\n\n[deps]\n\nsource_file="${sourcePath}"\ndest_files=["${imported}"]\n\n[params]\n\ncompress/mode=0\ncompress/high_quality=false\ncompress/lossy_quality=0.7\ncompress/hdr_compression=1\ncompress/normal_map=0\ncompress/channel_pack=0\nmipmaps/generate=false\nmipmaps/limit=-1\nroughness/mode=0\nroughness/src_normal=""\nprocess/fix_alpha_border=true\nprocess/premult_alpha=false\nprocess/normal_map_invert_y=false\nprocess/hdr_as_srgb=false\nprocess/hdr_clamp_exposure=false\nprocess/size_limit=0\ndetect_3d/compress_to=1\n`);

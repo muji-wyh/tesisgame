@@ -220,6 +220,16 @@ func _run() -> void:
 	await settle()
 	check(library.grid.visible and library._hero.visible and library.learning.snapshot().screen == "summary",
 		"Selecting Growth reveals the age journey and the six game choices")
+	check(library.learning._compact_path.visible and not library.learning._heading.visible
+		and not library.learning._detail.visible and not library.learning._continue.visible,
+		"Growth Home keeps one compact path row above the journey and game choices")
+	library.configure_learning(catalog, library.learning.snapshot().selection, {"phase": "idle"},
+		preload("res://scripts/learning_context.gd").growth(3, "memory"))
+	await settle()
+	check(library._continue_round.visible and library._continue_round.text.begins_with("Resume your round"),
+		"Compacting the path summary preserves the explicit saved-round resume action")
+	library.configure_learning(catalog, library.learning.snapshot().selection, {"phase": "idle"})
+	await settle()
 	var focused_tile: Button = library.buttons[0]
 	focused_tile.grab_focus()
 	check(focused_tile.focus_mode == Control.FOCUS_ALL and focused_tile.get_theme_stylebox("focus") is StyleBoxEmpty,
@@ -354,7 +364,9 @@ func _run() -> void:
 	await settle()
 	check(library.scroll.get_global_rect().grow(0.01).encloses(library.sound_button.get_global_rect()),
 		"Fractional browser scaling fully reveals the focused Sound button without clipping a CSS pixel")
-	for dimensions: Vector2i in [Vector2i(320, 320), Vector2i(844, 260)]:
+	# The refined card is 245 px tall at 320 px width. Keep this dedicated
+	# oversized-focus fixture shorter than the card; 320-square is covered above.
+	for dimensions: Vector2i in [Vector2i(320, 300), Vector2i(844, 260)]:
 		root.size = dimensions
 		library.fit(Vector2(dimensions), 1.0)
 		library.learning._show_courses()

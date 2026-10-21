@@ -1,0 +1,194 @@
+{
+  "schema": 1,
+  "status": "candidate_pending_gameplay_visual_review",
+  "source_directory": "Q:\\uwok\\tesisgame\\build\\professional-english\\software-data-theme-render-r04\\motion-r01",
+  "sources": [
+    {
+      "file": "environment-rest.png",
+      "sha256": "3ec922413d2e20174c2c6f87fe9a6b3506167022ebb5ce8fbede136f8d9d51a2"
+    },
+    {
+      "file": "composition-rest.png",
+      "sha256": "b16a84a685b05471097ffe6c455219193cc864c485c6028b30f1ca24b77148b3"
+    },
+    {
+      "file": "loop-end.png",
+      "sha256": "b16a84a685b05471097ffe6c455219193cc864c485c6028b30f1ca24b77148b3"
+    },
+    {
+      "file": "composite-00.png",
+      "sha256": "b16a84a685b05471097ffe6c455219193cc864c485c6028b30f1ca24b77148b3"
+    },
+    {
+      "file": "composite-01.png",
+      "sha256": "a9be9ff46ba154c3b561d26402d30bfc31910c48491ad8b8c0bdee3e204e64ca"
+    },
+    {
+      "file": "composite-02.png",
+      "sha256": "34cd3702f6220f1a8c5d6cd4c1d2e2e4a6023c2d783bccdec1020c97d8431e4b"
+    },
+    {
+      "file": "composite-03.png",
+      "sha256": "8b9db76db01aac8e24b2d3bd1835b454a3af3b355c8b4f3efbf6dc76ac830a8b"
+    },
+    {
+      "file": "composite-04.png",
+      "sha256": "f733ba32b2e1e04d8d3f7640c63dc4a58469d52183083f198f6af7b0a06590d6"
+    },
+    {
+      "file": "composite-05.png",
+      "sha256": "8b9db76db01aac8e24b2d3bd1835b454a3af3b355c8b4f3efbf6dc76ac830a8b"
+    },
+    {
+      "file": "composite-06.png",
+      "sha256": "34cd3702f6220f1a8c5d6cd4c1d2e2e4a6023c2d783bccdec1020c97d8431e4b"
+    },
+    {
+      "file": "composite-07.png",
+      "sha256": "a9be9ff46ba154c3b561d26402d30bfc31910c48491ad8b8c0bdee3e204e64ca"
+    },
+    {
+      "file": "composite-08.png",
+      "sha256": "b16a84a685b05471097ffe6c455219193cc864c485c6028b30f1ca24b77148b3"
+    },
+    {
+      "file": "composite-09.png",
+      "sha256": "24582f63a650fa4448abbca55bf109d4aa6a16adfcc47b8bfb63910d1439f36c"
+    },
+    {
+      "file": "composite-10.png",
+      "sha256": "41f59b190ca84d4dba57c84ffe7e92e46905a916c54030d0ae8784f002874932"
+    },
+    {
+      "file": "composite-11.png",
+      "sha256": "836ac7adf912d41c1b48d49dc22eadde1a2b91d1a691af347aa2c9bb2d8813d0"
+    },
+    {
+      "file": "composite-12.png",
+      "sha256": "bbaceba0ab9a1696a2e51287fdc1bc7abd1bd442a9e737867971f0265ae8c743"
+    },
+    {
+      "file": "composite-13.png",
+      "sha256": "836ac7adf912d41c1b48d49dc22eadde1a2b91d1a691af347aa2c9bb2d8813d0"
+    },
+    {
+      "file": "composite-14.png",
+      "sha256": "41f59b190ca84d4dba57c84ffe7e92e46905a916c54030d0ae8784f002874932"
+    },
+    {
+      "file": "composite-15.png",
+      "sha256": "24582f63a650fa4448abbca55bf109d4aa6a16adfcc47b8bfb63910d1439f36c"
+    }
+  ],
+  "static_reconstruction_exact": true,
+  "all_motion_reconstructions_exact": true,
+  "loop_endpoint_exact": true,
+  "motion_union_pixels": [
+    201,
+    288,
+    251,
+    406
+  ],
+  "crop_pixels": [
+    193,
+    280,
+    66,
+    134
+  ],
+  "assets": [
+    {
+      "file": "environment.png",
+      "sha256": "6a3e2fab06a3fb72c78a1414eb8919d7ba7e038fcc0abf73e16fd37203d45062",
+      "compressed_bytes": 78312,
+      "width": 768,
+      "height": 768,
+      "decoded_bytes": 4718592
+    },
+    {
+      "file": "props.png",
+      "sha256": "9bf8c55a9a4690f2c90f11ee62741ba49db0f271caa86ffb64195b28717f5b05",
+      "compressed_bytes": 112959,
+      "width": 768,
+      "height": 768,
+      "decoded_bytes": 4718592
+    },
+    {
+      "file": "motion-sheet.png",
+      "sha256": "90938fc426893b9944501192fa5fb9feae0cc93a0806080aee83898d36bdfb03",
+      "compressed_bytes": 50025,
+      "width": 264,
+      "height": 536,
+      "decoded_bytes": 1132032
+    }
+  ],
+  "decoded_bytes": 10569216,
+  "clip": {
+    "id": "software-data-plant-leaves",
+    "columns": 4,
+    "rows": 4,
+    "frame_count": 16,
+    "rest_frame": 0,
+    "frames_per_second": 2.0,
+    "rect": [
+      0.2513020833333333,
+      0.3645833333333333,
+      0.0859375,
+      0.17447916666666666
+    ]
+  },
+  "cover_checks": [
+    {
+      "viewport": [
+        320,
+        568
+      ],
+      "motion_rect": [
+        18.739583333333343,
+        207.08333333333334,
+        48.8125,
+        99.10416666666667
+      ],
+      "fully_inside": true
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "motion_rect": [
+        -14.901041666666686,
+        307.7083333333333,
+        72.53125,
+        147.26041666666666
+      ],
+      "fully_inside": false
+    },
+    {
+      "viewport": [
+        844,
+        390
+      ],
+      "motion_rect": [
+        212.09895833333331,
+        80.70833333333331,
+        72.53125,
+        147.26041666666666
+      ],
+      "fully_inside": true
+    },
+    {
+      "viewport": [
+        1280,
+        800
+      ],
+      "motion_rect": [
+        321.6666666666667,
+        226.66666666666669,
+        110.0,
+        223.33333333333334
+      ],
+      "fully_inside": true
+    }
+  ],
+  "limitations": "Source covers exclude game UI. The GIF is a review derivative. No production integration, human recognition, audio or device acceptance."
+}

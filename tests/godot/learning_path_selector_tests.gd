@@ -127,6 +127,8 @@ func _run() -> void:
 	check(selections.back().course_id == "retail" and selections.back().module_id == "module01", "Draft module selection keeps a stable course identity")
 	check(view.snapshot().active_text.contains("Retail") and view.snapshot().active_text.contains("People"), "The active course and module remain visible")
 	check(not view.snapshot().continue_enabled and view._detail.text.contains("Preparing"), "Unreviewed content is visibly pending and cannot continue")
+	check(not view._continue.visible and view._heading.text.contains("Retail") and view._active.text.contains("People"),
+		"An unavailable module has a clear course and module hierarchy without a dead primary action")
 	view._continue.pressed.emit()
 	check(continuations.size() == 1, "A forced pending Continue does not emit a start")
 	var module: Dictionary = view._selected_module()
@@ -151,6 +153,17 @@ func _run() -> void:
 		"The current count and earlier achievement are presented separately")
 	view.set_progress({"progress_loaded": true, "progress": saved, "blocked": true})
 	check(view._detail.text.contains("Progress unavailable") and view._course_progress("retail") == "Progress unavailable", "Blocked storage never fabricates fresh progress")
+	view.set_status("Loading your progress…", true)
+	check(view._status.text == "Loading your progress…" and not view._detail.text.contains("Progress unavailable"),
+		"An active load shows its real status without a premature storage failure caption")
+	check(not view._detail.text.contains("Preparing") and view._change_career.disabled and view._change_module.disabled,
+		"Busy selection does not recommend navigation that is temporarily disabled")
+	check(not view.snapshot().continue_enabled and view._cancel.visible and not view._cancel.disabled,
+		"Loading retains module readiness guards and a usable Cancel action")
+	view.set_status("Saved progress could not be read. Please retry.", false, true)
+	check(view._detail.text.contains("Progress unavailable") and view._detail.text.contains("Preparing")
+		and not view._change_career.disabled and not view._change_module.disabled,
+		"After loading fails, unavailable progress and usable alternative modules remain explicit")
 	view.set_progress({"progress_loaded": true, "progress": saved})
 	view.set_status("Loading recordings…", true)
 	check(view._cancel.visible and not view._cancel.disabled and view._change_path.disabled, "Pending work offers cancellation and blocks selection races")

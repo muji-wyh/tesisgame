@@ -11,6 +11,7 @@ var _finished: Array[String] = []
 var _opened: Array[String] = []
 var _cues: Array[String] = []
 var _reveals: Array[String] = []
+var _home_requests: int = 0
 
 
 func _initialize() -> void:
@@ -40,9 +41,12 @@ func _run() -> void:
 	view.open_requested.connect(func(id: String) -> void: _opened.append(id))
 	view.cue_requested.connect(func(id: String, cue: String) -> void: _cues.append(id + ":" + cue))
 	view.confetti_requested.connect(func(id: String) -> void: _reveals.append(id))
+	view.home_requested.connect(func() -> void: _home_requests += 1)
 	_check_motion(view)
 	_check_deadline_and_actions(view, data.chests)
+	_check_exit_during_performance(view, data.chests)
 	_check_reward_counts(view, data.chests)
+	_check_staged_arrival(view, data.chests)
 	_check_confetti(view, data.chests)
 	_check_no_chest(view, data.chests)
 	_check_score_summary(view, data.chests)
@@ -152,9 +156,9 @@ func _check_motion(view) -> void:
 func _check_deadline_and_actions(view, manifest: Dictionary) -> void:
 	_begin(view, manifest, "manual")
 	view.set_narration_playing(true)
-	check(view.is_active() and not view.is_ready() and view.controls().is_empty()
+	check(view.is_active() and not view.is_ready() and view.controls() == [view.home_button]
 		and not view.action_button.visible and view.chest.mode == "closed",
-		"A new finale hides actions and keeps its preview closed")
+		"A new finale keeps Home available while its preview and replay stay gated")
 	view.action_button.pressed.emit()
 	_step(view, 0.3)
 	var before: Dictionary = view.snapshot()
@@ -164,7 +168,8 @@ func _check_deadline_and_actions(view, manifest: Dictionary) -> void:
 	check(not view.is_ready() and _finished.is_empty() and _opened.is_empty(),
 		"Early actions and the instant before three seconds cannot bypass the finale")
 	_step(view, 0.03)
-	check(not view.is_ready() and _finished.is_empty(), "Long final pronunciation still owns its completion gate")
+	check(not view.is_ready() and _finished.is_empty() and is_zero_approx(view._caption.modulate.a),
+		"Long final pronunciation still owns its completion gate and withholds the opening instruction")
 	check(_cues == ["manual:step", "manual:step-detail", "manual:reward"],
 		"The owner's clock emits each synchronized sound once")
 	view.set_narration_playing(false)
@@ -183,19 +188,83 @@ func _check_deadline_and_actions(view, manifest: Dictionary) -> void:
 	view.stop()
 
 
+func _check_exit_during_performance(view, manifest: Dictionary) -> void:
+	_begin(view, manifest, "early-home")
+	_step(view, 0.7)
+	var requests_before: int = _home_requests
+	check(view.home_button.is_visible_in_tree() and not view.home_button.disabled
+		and view.controls() == [view.home_button] and view.default_focus() == null,
+		"Home stays reachable during the performance without turning held Accept into an exit")
+	view.home_button.pressed.emit()
+	check(_home_requests == requests_before + 1, "Home can request exit before the chest arrives")
+	view.pause()
+	view.home_button.pressed.emit()
+	view.stop()
+	view.home_button.pressed.emit()
+	check(_home_requests == requests_before + 1, "Paused and stopped presentations reject stale Home callbacks")
+
+
 func _check_reward_counts(view, manifest: Dictionary) -> void:
 	for count: int in [1, 2, 3, 4, 12]:
 		var identity: String = "reward-count-%d" % count
 		_begin(view, manifest, identity, false, true, count)
-		var caption: String = "You earned a treasure chest!" if count == 1 else "You earned %d treasure chests!" % count
+		var title: String = "You earned a chest!" if count == 1 else "You earned %d chests!" % count
 		var badge: String = "" if count == 1 else "x%d" % count
-		check(view.snapshot().chest_count == count and view._caption.text == caption and view._count.text == badge,
-			"The shared performance preserves all %d earned chests in its snapshot, caption, and badge" % count)
+		check(view.snapshot().chest_count == count and view._count.text == badge and is_zero_approx(view._caption.modulate.a),
+			"The shared performance preserves all %d earned chests while withholding the opening prompt" % count)
 		_step(view, 3.01)
 		check(view.is_ready() and _finished.back() == identity and view.snapshot().chest_count == count
-			and view._caption.text == caption and view._count.text == badge and not view.action_button.visible,
+			and view._heading.text == title and view._caption.text == "Hold the chest to open" and view._count.text == badge and not view.action_button.visible,
 			"Automatic completion retains the exact %d-chest reward without an extra action" % count)
 		view.stop()
+
+
+func _check_staged_arrival(view, manifest: Dictionary) -> void:
+	for dimensions: Vector2 in [Vector2(456, 436), Vector2(334, 436), Vector2(788, 196)]:
+		view.size = dimensions
+		_begin(view, manifest, "stages-" + str(dimensions))
+		_step(view, 0.52)
+		check(is_equal_approx(view.pip.get_rect().get_center().x, dimensions.x * 0.5)
+			and is_zero_approx(view.chest.modulate.a) and is_zero_approx(view._caption.modulate.a),
+			"Pip owns the center during the celebration, before chest or invitation: " + str(dimensions))
+		_step(view, 1.08)
+		check(view.snapshot().stage == "move_aside" and view.pip.position.x > view._pip_rect.position.x
+			and view.pip.position.x < view._pip_center_rect.position.x and is_zero_approx(view.chest.modulate.a),
+			"Pip moves aside before any chest is visible")
+		_step(view, 0.19)
+		check(view.pip.position.is_equal_approx(view._pip_rect.position) and is_zero_approx(view.chest.modulate.a),
+			"Pip reaches its final side position before the chest enters")
+		_step(view, 0.20)
+		check(view.snapshot().stage == "chest_arrival" and view.chest.modulate.a > 0.99
+			and view.chest.position.y < view._chest_rect.position.y and view.chest.scale == Vector2.ONE
+			and is_zero_approx(view._caption.modulate.a),
+			"The intact chest descends into place without scaling or an early opening prompt")
+		_step(view, 0.46)
+		check(view.chest.position.is_equal_approx(view._chest_rect.position)
+			and view._heading.text == "You earned a chest!" and is_zero_approx(view._caption.modulate.a),
+			"The chest settles before its earned message and opening invitation")
+		_step(view, 0.30)
+		check(is_equal_approx(view._caption.modulate.a, 1.0) and view._caption.text == "Hold the chest to open"
+			and not view.is_ready() and view.controls() == [view.home_button],
+			"The invitation is legible before the existing handoff deadline")
+		var elapsed: float = view.snapshot().elapsed
+		view.size = dimensions + Vector2(20, 20)
+		check(view.snapshot().elapsed == elapsed and view.pip.position.is_equal_approx(view._pip_rect.position)
+			and view.chest.position.is_equal_approx(view._chest_rect.position),
+			"Resizing preserves the timeline and recomputes both settled subjects")
+		view.stop()
+	view.size = Vector2(912, 572)
+	_begin(view, manifest, "stages-reduced", true)
+	var resting_pip: Vector2 = view.pip.position
+	var resting_chest: Vector2 = view.chest.position
+	_step(view, 1.79)
+	check(view.pip.position == resting_pip and view.chest.position == resting_chest and is_zero_approx(view.chest.modulate.a),
+		"Reduced motion preserves the order with still artwork")
+	_step(view, 1.22)
+	check(view.pip.position == resting_pip and view.chest.position == resting_chest and view.is_ready()
+		and view.chest.modulate.a == 1.0 and view._caption.modulate.a == 1.0,
+		"Reduced motion reveals the same reward and invitation without spatial animation")
+	view.stop()
 
 
 func _check_score_summary(view, manifest: Dictionary) -> void:
@@ -203,14 +272,13 @@ func _check_score_summary(view, manifest: Dictionary) -> void:
 	view.begin("scored", "spring", manifest, 4, false, true, 27)
 	view.set_process(false)
 	var summary: Dictionary = view.snapshot()
-	check(summary.title == "Round results" and summary.caption == "Score: 27 · Chests: 4" and summary.score == 27
-		and is_zero_approx(summary.elapsed) and is_equal_approx(view._heading.modulate.a, 1.0)
-		and is_equal_approx(view._caption.modulate.a, 1.0),
-		"A scored result shows its title and exact totals from the first animation frame")
+	check(summary.title == "Round complete" and summary.summary == "Score: 27 · Chests: 4" and summary.score == 27
+		and is_zero_approx(summary.elapsed) and view._summary.visible and is_zero_approx(view._caption.modulate.a),
+		"A scored result keeps its exact totals visible while the reward invitation waits")
 	var finished_before: int = _finished.size()
 	view.set_narration_playing(true)
 	_step(view, 3.01)
-	check(not view.is_ready() and _finished.size() == finished_before and view.controls().is_empty(),
+	check(not view.is_ready() and _finished.size() == finished_before and view.controls() == [view.home_button],
 		"Immediate result copy does not bypass the performance or narration gates")
 	view.set_narration_playing(false)
 	check(view.is_ready() and _finished.size() == finished_before + 1 and _finished.back() == "scored"
@@ -218,7 +286,7 @@ func _check_score_summary(view, manifest: Dictionary) -> void:
 		"A scored automatic finale completes once while preserving its result summary")
 	_begin(view, manifest, "after-scored")
 	check(view.snapshot().score == -1 and view.snapshot().title == "You did it!"
-		and view.snapshot().caption == "You earned a treasure chest!"
+		and view.snapshot().caption == "Hold the chest to open" and not view._summary.visible
 		and is_zero_approx(view._heading.modulate.a) and is_zero_approx(view._caption.modulate.a),
 		"The next ordinary celebration restores its default copy and reveal timing")
 	view.stop()
@@ -264,7 +332,7 @@ func _check_no_chest(view, manifest: Dictionary) -> void:
 		and view.snapshot().cue_log == ["step", "step-detail"] and not _reveals.has("no-chest"),
 		"No-chest completion still waits for narration and omits the treasure reveal sound")
 	view.set_narration_playing(false)
-	check(view.is_ready() and view.controls() == [view.action_button] and view.action_button.visible
+	check(view.is_ready() and view.controls() == [view.home_button, view.action_button] and view.action_button.visible
 		and _finished.size() == finished_before + 1,
 		"A play-again action appears after the same three-second and narration gates")
 	view.action_button.pressed.emit()
@@ -275,7 +343,7 @@ func _check_no_chest(view, manifest: Dictionary) -> void:
 	check(view.controls().is_empty(), "A stale retry cannot re-enable a different round's action")
 	var completed: Dictionary = view.snapshot()
 	view.retry_open("no-chest")
-	check(view.controls() == [view.action_button] and not view.action_button.disabled
+	check(view.controls() == [view.home_button, view.action_button] and not view.action_button.disabled
 		and view.snapshot().elapsed == completed.elapsed and view.snapshot().cue_log == completed.cue_log
 		and _finished.size() == finished_before + 1,
 		"A rejected replay can be retried without repeating the completed performance")
@@ -290,7 +358,7 @@ func _check_no_chest(view, manifest: Dictionary) -> void:
 	_begin(view, manifest, "after-no-chest")
 	check(view.chest.visible and view._glow.visible and view.action_button.text == "Play again"
 		and not view.action_button.visible and view.action_button.disabled
-		and view.snapshot().caption == "You earned a treasure chest!",
+		and view.snapshot().caption == "Hold the chest to open",
 		"A later earned chest restores its authored preview without an Open chest action")
 	view.stop()
 
@@ -360,7 +428,7 @@ func _check_reduced_and_stalls(view, manifest: Dictionary) -> void:
 	_begin(view, manifest, "automatic", false, true, 3)
 	_step(view, 3.01)
 	check(view.is_ready() and _finished.size() == prior_finished + 1 and _finished.back() == "automatic"
-		and not view.action_button.visible and view.controls().is_empty(),
+		and not view.action_button.visible and view.controls() == [view.home_button],
 		"Automatic completion signals its host without inserting another chest action")
 	view.stop()
 

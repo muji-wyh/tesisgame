@@ -33,7 +33,7 @@ test('Match, Memory and Voice Pop fit compact and desktop screens with Match sel
     await page.setViewportSize(viewport);
     await rendered(page);
     const bounds = await metrics(page);
-    const modes = [['match', 'Find 5 word'], ['memory', 'Find a pair.'], ['pop', 'Voice Pop.']];
+    const modes = [['match', 'Find 5 word'], ['memory', 'Start game'], ['pop', 'Voice Pop.']];
     const targets = [];
     for (const [index, [name, announcement]] of modes.entries()) {
       await openModeMenu(page);

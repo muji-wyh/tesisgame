@@ -7,17 +7,19 @@ const groups = {
   vocabulary: {
     godot: ['vocabulary_loader_tests', 'vocabulary_loading_flow_tests', 'learning_content_tests', 'professional_picture_exclusions_tests',
       'learning_context_flow_tests', 'learning_path_selector_tests', 'learning_theme_art_tests', 'professional_game_adapters_tests',
-      'professional_media_tests', 'professional_approved_audio_tests', 'professional_retail_morphology_tests', 'professional_media_bundles_tests',
+      'professional_media_tests', 'professional_approved_audio_tests', 'professional_retail_morphology_tests', 'professional_retail04_morphology_tests',
+      'professional_foundation02_morphology_tests', 'professional_media_bundles_tests',
       'professional_progress_tests', 'professional_domain_owner_tests', 'professional_round_loader_tests', 'professional_store_tests',
       'professional_session_tests', 'professional_play_tests', 'professional_application_flow_tests', 'professional_scene_disposal_tests',
       'professional_scene_modes_disposal_tests', 'professional_view_teardown_tests', 'professional_word_library_tests', 'professional_held_six_routes_tests'],
-    node: ['vocabulary-loader', 'vocabulary-packs', 'professional-content', 'professional-approved-audio', 'professional-retail-morphology',
-      'professional-retail-media', 'professional-voice-generation', 'professional-picture-exclusions', 'professional-media',
+    node: ['vocabulary-loader', 'vocabulary-packs', 'professional-content', 'professional-approved-audio', 'professional-retail-morphology', 'professional-retail04-morphology',
+      'professional-foundation02-morphology',
+      'professional-retail-media', 'professional-card-reader-image', 'professional-voice-generation', 'professional-picture-exclusions', 'professional-media',
       'professional-media-bundles', 'professional-media-package', 'professional-progress', 'professional-domain-release', 'professional-domain-web', 'professional-held-six-routes']
   },
-  jelly: { godot: ['jelly_match_model_tests', 'jelly_match_view_tests', 'jelly_loot_meter_tests', 'jelly_chest_celebration_tests', 'jelly_chest_tap_tests', 'jelly_header_layout_tests', 'jelly_match_flow_tests', 'jelly_finish_confirmation_tests', 'danger_game_over_tests', 'jelly_queued_upgrade_settlement_tests', 'jelly_finish_pull_tests', 'jelly_backdrop_tests', 'jelly_result_coin_tests', 'jelly_match_audio_tests', 'coin_audio_tests', 'pop_reward_room_tests'], node: ['jelly-host', 'jelly-reward-art', 'chest-milestone-art'] },
+  jelly: { godot: ['jelly_match_model_tests', 'jelly_tile_label_tests', 'jelly_match_view_tests', 'jelly_loot_meter_tests', 'jelly_chest_celebration_tests', 'jelly_chest_tap_tests', 'jelly_header_layout_tests', 'jelly_match_flow_tests', 'jelly_finish_confirmation_tests', 'danger_game_over_tests', 'jelly_queued_upgrade_settlement_tests', 'jelly_finish_pull_tests', 'jelly_backdrop_tests', 'jelly_result_coin_tests', 'jelly_match_audio_tests', 'coin_audio_tests', 'pop_reward_room_tests'], node: ['jelly-host', 'jelly-reward-art', 'chest-milestone-art'] },
   'word-jelly': { godot: ['growth_morphology_tests', 'morphology_tests', 'word_jelly_morphology_tests', 'word_jelly_authored_drag_tests', 'word_jelly_model_tests', 'word_jelly_word_reveal_tests', 'word_jelly_view_tests', 'word_jelly_morphology_view_tests', 'word_jelly_merge_speech_tests', 'jelly_chest_tap_tests', 'jelly_header_layout_tests', 'word_jelly_flow_tests', 'word_jelly_powerup_flow_tests', 'word_jelly_powerup_button_tests', 'jelly_finish_confirmation_tests', 'danger_game_over_tests', 'jelly_queued_upgrade_settlement_tests', 'jelly_finish_pull_tests', 'jelly_backdrop_tests', 'coin_wallet_tests', 'coin_audio_tests', 'game_library_tests', 'game_mode_preview_tests'] },
-  growth: { godot: ['growth_morphology_tests', 'growth_state_tests', 'growth_flow_tests', 'word_sampler_tests', 'pip_growth_tests', 'pip_age_motion_tests'], node: ['growth-host', 'growth-vocabulary', 'growth-morphology'] },
+  growth: { godot: ['growth_morphology_tests', 'growth_state_tests', 'growth_flow_tests', 'word_sampler_tests', 'pip_growth_tests', 'pip_age_motion_tests', 'pip_attachment_tests'], node: ['growth-host', 'growth-vocabulary', 'growth-morphology'] },
   core: {
     godot: [
       'run_tests', 'match_hint_payment_tests', 'adventure_model_tests', 'adventure_scene_tests', 'settlement_modal_tests', 'medal_progress_tests',
@@ -26,11 +28,11 @@ const groups = {
       'medal_scene_tests', 'voice_model_tests', 'match_voice_feedback_tests', 'mascot_tests', 'mascot_redraw_tests', 'playful_controls_tests',
       'expansion_scene_tests', 'lesson_scene_tests',
       'lesson_navigation_tests', 'memory_model_tests', 'memory_garden_tests',
-      'memory_peek_tests', 'memory_peek_payment_tests', 'memory_scene_tests', 'ui_audio_flow_tests', 'ui_click_tests', 'ui_recovery_tests', 'hover_tooltip_tests',
+      'memory_peek_tests', 'memory_peek_payment_tests', 'memory_reward_ui_tests', 'memory_scene_tests', 'ui_audio_flow_tests', 'ui_click_tests', 'ui_recovery_tests', 'hover_tooltip_tests',
       'phrase_model_tests', 'phrase_scene_tests'
     ],
     node: [
-      'assets', 'chest-assets', 'web-export', 'web-scrollbars', 'voice-generation', 'deployment', 'memory-input-host',
+      'assets', 'chest-assets', 'web-export', 'web-templates', 'web-scrollbars', 'voice-generation', 'deployment', 'memory-input-host',
       'unity-art', 'test-runner', 'web-package-cache', 'web-build-receipt', 'web-server', 'performance-benchmark', 'ui-click-assets', 'interface-click-host',
       'vocabulary-library-preparation', 'word-library-motion', 'coin-wallet-host'
     ]

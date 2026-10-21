@@ -1,0 +1,98 @@
+{
+  "schema": 1,
+  "status": "renderer_readback_difference_reproduced_and_strict_comparison_corrected",
+  "evidence": [
+    {
+      "path": "build/professional-english/card-reader-review-20261020/pixel-diagnostic-r01/report.json",
+      "bytes": 4853,
+      "sha256": "ae96f87fee1bdbfaed163b278b2ed98f18bcc1229749788cc728276c9d89501e"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/pixel-diagnostic-r02/report.json",
+      "bytes": 15080,
+      "sha256": "982b7e2668327430e3fc698e3a11445cbc11b107d7901a66bede2fc292b92cb8"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r01/report.json",
+      "bytes": 262756,
+      "sha256": "01147b1bf50106b0f55c2538f471b9bfa932bd189a74197a2b57df8821c10474"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r02/report.json",
+      "bytes": 264575,
+      "sha256": "ab0d29c2c21c50286503b8cfc8b90d7d49a55a196fd524afde5e265c9c62fd8c"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r03/report.json",
+      "bytes": 425551,
+      "sha256": "374cc4127b5706eb789761afdb5971aa316fa428afa595c77ab3c46da733b6c3"
+    }
+  ],
+  "observations": [
+    "All five original PNG files independently decode in Pillow to the same RGBA hashes as Godot source images.",
+    "With no app scene, all five exact files passed Manifest.decode and immediate texture readback byte equality; all were RGBA8 with no mipmaps.",
+    "After each same texture was drawn in a plain TextureRect, barcode and shopping basket reproduced the exact post-render hashes seen in the full app. No application texture mutation was needed to reproduce the difference.",
+    "Barcode differed at 18,605 pixels and shopping basket at 24,663 pixels, with maximum channel difference one. This was not an alpha-only or transparent-RGB-only difference.",
+    "The comparison harness now keeps raw-source and renderer-readback identities separate. It requires exact independent source texture upload bytes and exact rendered-reference versus real loaded-texture readback bytes. Neither tolerance nor alpha normalization is applied.",
+    "Both reference and real loaded textures are drawn in temporary diagnostic views to equalize rendering state, including Memory images whose card faces initially remain hidden. These views are removed before board captures and do not consume a peek or alter game state."
+  ],
+  "engine_scope": {
+    "build": "official",
+    "hash": "ed1daf0bf001b61586d9930840f2f1394092c079",
+    "hex": 263938,
+    "major": 4,
+    "minor": 7,
+    "patch": 2,
+    "status": "stable",
+    "string": "4.7.2-stable (official)",
+    "timestamp": 0
+  },
+  "renderer": "Godot Compatibility via opengl3_angle; Microsoft Basic Render Driver through ANGLE D3D11",
+  "source_versus_readback": [
+    {
+      "id": "card-reader.payment-device.n",
+      "source_rgba_sha256": "b1fd43a079c7486d4ccd155ce1c93b8a52ca9712495f43063eebf606d8fd807b",
+      "before_render_sha256": "b1fd43a079c7486d4ccd155ce1c93b8a52ca9712495f43063eebf606d8fd807b",
+      "rendered_rgba_sha256": "b1fd43a079c7486d4ccd155ce1c93b8a52ca9712495f43063eebf606d8fd807b",
+      "changed_pixels": 0,
+      "max_channel_delta": 0
+    },
+    {
+      "id": "cash-register.sales-device.n",
+      "source_rgba_sha256": "9b4c0719804d15ae2a936830a22e89ccaea48ac5b860bb6ca508856d73959297",
+      "before_render_sha256": "9b4c0719804d15ae2a936830a22e89ccaea48ac5b860bb6ca508856d73959297",
+      "rendered_rgba_sha256": "9b4c0719804d15ae2a936830a22e89ccaea48ac5b860bb6ca508856d73959297",
+      "changed_pixels": 0,
+      "max_channel_delta": 0
+    },
+    {
+      "id": "barcode.product-code.n",
+      "source_rgba_sha256": "c7f66774d8ea0ab8fa8123c4c15c8813e205eaa0fc71e26a082fd43b0bb9acec",
+      "before_render_sha256": "c7f66774d8ea0ab8fa8123c4c15c8813e205eaa0fc71e26a082fd43b0bb9acec",
+      "rendered_rgba_sha256": "67ef8210bfb3a8678247e7439e0d5ae9d1e754bd61aa99fae272446c065ee8aa",
+      "changed_pixels": 18605,
+      "max_channel_delta": 1
+    },
+    {
+      "id": "shopping-basket.store-container.n",
+      "source_rgba_sha256": "4c741a0409e4306200a79e1143cf46dc93d71d2f12fb31ee2d5a117859f9bee4",
+      "before_render_sha256": "4c741a0409e4306200a79e1143cf46dc93d71d2f12fb31ee2d5a117859f9bee4",
+      "rendered_rgba_sha256": "3a081562d517e0ba3232670681e2e5c8c219cc088cfc0205166948abe9bbefc9",
+      "changed_pixels": 24663,
+      "max_channel_delta": 1
+    },
+    {
+      "id": "shopping-bag.goods-carrier.n",
+      "source_rgba_sha256": "7f9ee4507e21c185c15b5f23ee55c3afa5fcd55b1193d5662553b7863767bae3",
+      "before_render_sha256": "7f9ee4507e21c185c15b5f23ee55c3afa5fcd55b1193d5662553b7863767bae3",
+      "rendered_rgba_sha256": "7f9ee4507e21c185c15b5f23ee55c3afa5fcd55b1193d5662553b7863767bae3",
+      "changed_pixels": 0,
+      "max_channel_delta": 0
+    }
+  ],
+  "limits": [
+    "This reproduces observed renderer readback behavior; it does not identify a specific upstream driver or engine implementation defect.",
+    "Failed native attempts r01, r02 and r03 remain preserved.",
+    "Full corrected capture has not yet completed; its actual result must be read separately."
+  ]
+}

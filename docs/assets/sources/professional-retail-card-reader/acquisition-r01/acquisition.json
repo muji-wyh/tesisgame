@@ -1,0 +1,57 @@
+{
+  "recorded_at": "2026-10-17T05:55:12.6660685Z",
+  "acquisition": [
+    {
+      "url": "https://freesvg.org/download/141617",
+      "file": "141617.svg",
+      "status": 200,
+      "content_type": [
+        "text/html; charset=UTF-8"
+      ],
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "url": "https://freesvg.org/download/206301",
+      "file": "206301.svg",
+      "status": 200,
+      "content_type": [
+        "text/html; charset=UTF-8"
+      ],
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "url": "https://freesvg.org/1544643693",
+      "file": "141617-source.html",
+      "status": 200,
+      "content_type": [
+        "text/html; charset=UTF-8"
+      ],
+      "bytes": 69826,
+      "sha256": "36f095a821b753a32516cd1a547354e9fef75426e4700d0ddb3e5c22ac6b524c"
+    },
+    {
+      "url": "https://freesvg.org/pos-termina-credit-card-payment",
+      "file": "206301-source.html",
+      "status": 200,
+      "content_type": [
+        "text/html; charset=UTF-8"
+      ],
+      "bytes": 70179,
+      "sha256": "fab25e54beca6ca2224fef0d7bdb39db10a62d1f8d1878dfb3db781ca0cb6fdf"
+    },
+    {
+      "url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "file": "cc0-source.html",
+      "status": 200,
+      "content_type": [
+        "text/html"
+      ],
+      "bytes": 30248,
+      "sha256": "abb4d48fc8b85de52b377dd105532c6c549f515d492a8e1712bc99e7316a1f12"
+    }
+  ],
+  "integrated": false,
+  "visually_inspected": false
+}

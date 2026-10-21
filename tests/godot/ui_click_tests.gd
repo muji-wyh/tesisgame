@@ -190,6 +190,7 @@ func _check_gameplay_exclusions_and_results(app) -> void:
 	app.hint_button.pressed.emit()
 	check(app.model.hints_used == 1 and app.audio.click_count == count, "Match cards, deselection and paid hints keep their gameplay sounds only")
 	PlayerFixture.enter_mode(app, "memory")
+	PlayerFixture.start_memory(app)
 	app._memory.card_buttons[0].pressed.emit()
 	app._memory.study_button.pressed.emit()
 	app._memory.end_peek()

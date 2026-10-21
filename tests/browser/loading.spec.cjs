@@ -222,6 +222,100 @@ async function progressShell(page, engineScript = `window.Engine = class {
   await page.goto('/loader-test');
 }
 
+test('loading Pip keeps wings attached to its torso throughout dance and reactions', async ({ page }, testInfo) => {
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.addInitScript(() => localStorage.setItem('pipAndWords.presentation.v1', JSON.stringify({ muted: true })));
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await progressShell(page);
+  await page.evaluate(() => {
+    window.loadingShoulderSample = () => {
+      const body = document.getElementById('loading-pip-body');
+      const art = body.ownerSVGElement;
+      const local = node => art.getCTM().inverse().multiply(node.getCTM());
+      const bodyMatrix = local(body);
+      return ['left-wing', 'right-wing'].map(name => {
+        const wing = document.getElementById('loading-pip-' + name);
+        const [x, y] = getComputedStyle(wing).transformOrigin.split(' ').map(parseFloat);
+        const expected = new DOMPoint(x, y).matrixTransform(bodyMatrix);
+        const actual = new DOMPoint(x, y).matrixTransform(local(wing));
+        return { name, error: Math.hypot(expected.x - actual.x, expected.y - actual.y),
+          expected: [expected.x, expected.y], actual: [actual.x, actual.y] };
+      });
+    };
+    window.sampleLoadingAnimation = subdivisions => {
+      const animations = document.getElementById('loading-duck').getAnimations({ subtree: true });
+      if (animations.length !== 6) throw new Error('Every Pip layer must own one animation.');
+      animations.forEach(animation => animation.pause());
+      const duration = Number(animations[0].effect.getTiming().duration);
+      const offsets = animations[0].effect.getKeyframes().map(frame => frame.computedOffset);
+      const points = [...new Set([...offsets, ...Array.from({ length: subdivisions + 1 }, (_, index) => index / subdivisions)])];
+      const samples = points.map(point => {
+        // Stay inside a finite reaction so its completion callback cannot replace the sampled rig.
+        animations.forEach(animation => { animation.currentTime = Math.min(point * duration, duration - 1); });
+        return { progress: point, shoulders: window.loadingShoulderSample() };
+      });
+      animations.forEach(animation => { animation.currentTime = 0.36 * duration; });
+      return { duration, keyframes: offsets.length, samples,
+        maxError: Math.max(...samples.flatMap(sample => sample.shoulders.map(shoulder => shoulder.error))) };
+    };
+  });
+  const evidence = { note: 'Maintained loading shell with a stub engine; actual SVG DOM matrices and browser animation interpolation.',
+    idle: await page.evaluate(() => window.loadingShoulderSample()), reactions: {}, reduced: {} };
+  await page.locator('#loading-duck').screenshot({ path: testInfo.outputPath('loading-pip-idle.png') });
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await expectAutomaticDance(page);
+  evidence.dance = await page.evaluate(() => window.sampleLoadingAnimation(768));
+  expect(evidence.dance.keyframes).toBe(97);
+  await page.locator('#loading-duck').screenshot({ path: testInfo.outputPath('loading-pip-dance.png') });
+  for (let index = 0; index < 3; index++) {
+    // Sample in the click handler's turn so a short reaction cannot finish
+    // between WebKit's automation acknowledgements. Gesture tests live above.
+    const sampled = await page.evaluate(() => {
+      document.getElementById('loading-toy').click();
+      return { pose: document.getElementById('loading-duck').dataset.pose,
+        motion: window.sampleLoadingAnimation(400) };
+    });
+    const pose = sampled.pose;
+    expect(PIP_REACTIONS).toContain(pose);
+    evidence.reactions[pose] = sampled.motion;
+    await page.locator('#loading-duck').screenshot({ path: testInfo.outputPath(`loading-pip-${pose}.png`) });
+    // End the manually sampled timeline through the public motion preference;
+    // WebKit does not reliably deliver finish events for a paused animation.
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await expect(page.locator('#loading-duck')).toHaveAttribute('data-activity', 'idle');
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await expectAutomaticDance(page);
+  }
+  expect(Object.keys(evidence.reactions).sort()).toEqual(PIP_REACTIONS);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  for (let index = 0; index < 3; index++) {
+    const sampled = await page.evaluate(() => {
+      document.getElementById('loading-toy').click();
+      return { pose: document.getElementById('loading-duck').dataset.pose,
+        shoulders: window.loadingShoulderSample() };
+    });
+    const pose = sampled.pose;
+    expect(PIP_REACTIONS).toContain(pose);
+    evidence.reduced[pose] = sampled.shoulders;
+    await page.locator('#loading-duck').screenshot({ path: testInfo.outputPath(`loading-pip-${pose}-reduced.png`) });
+    await expect(page.locator('#loading-duck')).toHaveAttribute('data-activity', 'idle');
+  }
+  const filename = testInfo.outputPath('loading-pip-shoulder-parity.json');
+  fs.writeFileSync(filename, JSON.stringify(evidence, null, 2));
+  await testInfo.attach('loading-pip-shoulder-parity', { path: filename, contentType: 'application/json' });
+  for (const [name, value] of Object.entries({ dance: evidence.dance, ...evidence.reactions })) {
+    // Sparse compositor interpolation may follow a short chord; the reviewed
+    // artwork retains more than 6 units of opaque overlap at each shoulder.
+    expect(value.maxError, `${name}: wing-to-torso interpolation drift in artwork units`).toBeLessThan(0.5);
+  }
+  for (const shoulders of [evidence.idle, ...Object.values(evidence.reduced)]) {
+    expect(Math.max(...shoulders.map(shoulder => shoulder.error)), 'Still-pose shoulder attachment').toBeLessThan(0.001);
+  }
+  expect(errors).toEqual([]);
+});
+
 async function observeLoadingAudio(page) {
   await page.addInitScript(() => {
     const Audio = window.AudioContext || window.webkitAudioContext;
@@ -777,7 +871,7 @@ test('an empty startup rejection still gives a clear failure and preserves its f
   await expect(page.locator('#status')).toBeVisible();
 });
 
-test('a stalled download offers retry without stealing focus or stopping the loading toy', async ({ page }, testInfo) => {
+test('a slow download keeps waiting without retry, stealing focus or stopping the loading toy', async ({ page }, testInfo) => {
   await page.clock.install();
   await page.clock.pauseAt(new Date());
   await progressShell(page, `window.Engine = class {
@@ -789,8 +883,8 @@ test('a stalled download offers retry without stealing focus or stopping the loa
   const toy = page.getByRole('button', { name: 'Tap or wiggle the treasure chest' });
   await toy.focus();
   await page.clock.runFor(17000);
-  await expect(page.locator('#retry')).toBeVisible({ timeout: 3000 });
-  await expect(page.locator('#loading-note')).toContainText('retry');
+  await expect(page.locator('#retry')).toBeHidden();
+  await expect(page.locator('#loading-note')).toHaveText('Still loading. Please wait...');
   await expect(toy).toBeFocused();
   await page.keyboard.press('Enter');
   await expect(page.locator('#loading-score')).toHaveText('1 sparkle');

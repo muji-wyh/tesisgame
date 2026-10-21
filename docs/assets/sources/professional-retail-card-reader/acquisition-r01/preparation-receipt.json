@@ -1,0 +1,75 @@
+{
+  "schema": 1,
+  "recorded_at": "2026-10-17T05:57:55.724Z",
+  "source": {
+    "filename": "206301-browser.svg",
+    "bytes": 38428,
+    "sha256": "116dca8283535b13345dbd785e846f162bd3701d91816f35603d4aead648a044"
+  },
+  "images": [
+    {
+      "filename": "206301-render.png",
+      "bytes": 278605,
+      "sha256": "7857238a51e9f17c7259f310e5a0bddf922a01cdc0b65c77db5ffdd93bab36d4",
+      "metadata": {
+        "format": "png",
+        "mediaType": "image/png",
+        "size": 278605,
+        "width": 2640,
+        "height": 2640,
+        "space": "srgb",
+        "channels": 4,
+        "depth": "uchar",
+        "density": 144,
+        "isProgressive": false,
+        "isPalette": false,
+        "bitsPerSample": 8,
+        "hasProfile": false,
+        "hasAlpha": true,
+        "autoOrient": {
+          "width": 2640,
+          "height": 2640
+        }
+      }
+    },
+    {
+      "filename": "206301-cropped-512.png",
+      "bytes": 77565,
+      "sha256": "67cb3e6f8e0be881b51a7d18ecc28fd1a02fab6b650197a8d60ef9d550b07c59",
+      "metadata": {
+        "format": "png",
+        "mediaType": "image/png",
+        "size": 77565,
+        "width": 512,
+        "height": 433,
+        "space": "srgb",
+        "channels": 4,
+        "depth": "uchar",
+        "density": 144,
+        "isProgressive": false,
+        "isPalette": false,
+        "bitsPerSample": 8,
+        "hasProfile": false,
+        "hasAlpha": true,
+        "autoOrient": {
+          "width": 512,
+          "height": 433
+        }
+      }
+    },
+    {
+      "filename": "206301-size-review.png",
+      "bytes": 139216,
+      "sha256": "2b42f2929b195000f110f1bc237ca2c0c57c6710cd31ba704b121e64f74f8f40"
+    }
+  ],
+  "source_page": "https://freesvg.org/pos-termina-credit-card-payment",
+  "publisher": "publicdomainvectors.org",
+  "individual_creator": "Not identified by page or SVG metadata",
+  "source_license": "Public domain; site links CC0 1.0",
+  "animations": 0,
+  "external_resources": 0,
+  "integrated": false,
+  "human_visual_acceptance": false,
+  "scope": "Source acquisition and raster inspection only; no production or candidate curriculum mutation."
+}

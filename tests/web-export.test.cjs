@@ -223,7 +223,11 @@ test('accessible help describes current paid items, Home navigation and Jelly se
   assert.match(help, /device.*reduced-motion/i);
   assert.match(help, /Keep trying until every pair is matched/);
   assert.match(help, /Match hints cost 100 coins for the first use, 150 for the second, and 200 for every later use in the round/);
-  assert.match(help, /first Memory peek in each round is free[\s\S]*second costs 100 coins, the third 200, and every later peek 300/);
+  assert.match(help, /Start game to begin a free 10-second observation/);
+  assert.match(help, /Start matching beside the countdown to hide the cards immediately/);
+  assert.match(help, /first selected card stays hidden and is not pronounced/);
+  assert.match(help, /first purchased observation costs 100 coins, the second 200, and every later one 300/);
+  assert.match(help, /Memory has no random chest drops[\s\S]*highest available level, currently Level 6[\s\S]*mistake at Level 1 turns the chest grey/);
   assert.match(help, /Themes follow your selected learning path and career automatically/);
   assert.match(help, /failed or cancelled course download preserves your previous round/);
   assert.match(help, /independently of Pip's growth/);

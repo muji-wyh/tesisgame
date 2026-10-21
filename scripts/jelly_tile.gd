@@ -230,9 +230,12 @@ func _layout() -> void:
 	_picture.size = size * (Vector2(0.48, 0.42) if combined else Vector2(0.64, 0.58))
 	_label.position = size * Vector2(0.13, 0.60 if combined else 0.35)
 	_label.size = size * Vector2(0.74, 0.20 if combined else 0.30)
-	var font_size: int = maxi(10, int(size.x * (0.15 if combined else 0.21)))
+	var scale_factor: float = Style.ui_scale(self)
+	var minimum_font_size: int = maxi(1, ceili(9.0 / scale_factor))
+	var font_size: int = maxi(ceili(10.0 / scale_factor), int(size.x * (0.15 if combined else 0.21)))
 	var available: float = _label.size.x - 2.0
-	while font_size > 9 and Style.HEADING_FONT.get_string_size(_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > available:
+	# The preview is measured in canvas units; its reading floor is in display pixels.
+	while font_size > minimum_font_size and Style.HEADING_FONT.get_string_size(_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > available:
 		font_size -= 1
 	_label.add_theme_font_size_override("font_size", font_size)
 	_badge.position = size * Vector2(0.69, 0.70)

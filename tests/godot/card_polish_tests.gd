@@ -90,11 +90,17 @@ func _run() -> void:
 	await settle()
 	check(app._mode_id == "memory" and app._memory.is_visible_in_tree() and not app._mode_menu_open(),
 		"Memory press checks start after choosing Memory from Home")
+	preload("res://tests/godot/player_flow_fixture.gd").start_memory(app)
+	app.set_reduced_motion(true)
+	app.set_reduced_motion(false)
 	var memory_card = app._memory.card_buttons[0]
 	var memory_rect: Rect2 = memory_card.get_global_rect()
 	memory_card.pressed.emit()
-	check(memory_card._press_motion._tween != null and memory_card._flip != null,
-		"Memory combines a bounded press with its existing reveal")
+	check(memory_card._press_motion._tween != null and memory_card._flip == null and not memory_card.face_up,
+		"Memory acknowledges its first selection without revealing it")
+	app._memory.card_buttons[1].pressed.emit()
+	check(memory_card._flip != null and app._memory.card_buttons[1]._flip != null,
+		"The second selection flips both Memory cards together")
 	app.set_reduced_motion(true)
 	check(memory_card.get_global_rect() == memory_rect and memory_card._press_motion._tween == null
 		and memory_card._face.scale == Vector2.ONE, "Reduced motion settles both press and flip without changing Memory positions")

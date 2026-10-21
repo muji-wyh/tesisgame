@@ -1,10 +1,12 @@
 extends RefCounted
 
 const Data = preload("res://scripts/game_data.gd")
+const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const SAVE_VERSION: int = 1
-const PAIR_SAVE_VERSION: int = 1
+const PAIR_SAVE_VERSION: int = 2
 const PAIR_MODES: Array[String] = ["match", "memory"]
 const PAIRS_PER_ROUND: int = 5
+const MEMORY_REWARD_POLICY: String = "memory-performance-v1"
 
 var counts: Dictionary = {}
 var legacy_rewards: Dictionary = {}
@@ -73,10 +75,10 @@ func load_progress() -> bool:
 		next_counts = saved_counts.duplicate()
 		if config.has_section("pair_chests"):
 			var pair_version: Variant = config.get_value("pair_chests", "version", -1)
-			if typeof(pair_version) != TYPE_INT or pair_version != PAIR_SAVE_VERSION:
+			if typeof(pair_version) != TYPE_INT or pair_version not in [1, PAIR_SAVE_VERSION]:
 				return _fail("The pair chest save version is missing, invalid, or unsupported.")
 			var saved_pairs: Variant = config.get_value("pair_chests", "state", false)
-			if not _validate_pair_state(saved_pairs):
+			if not _validate_pair_state(saved_pairs, pair_version == PAIR_SAVE_VERSION):
 				return false
 			next_pair_state = saved_pairs.duplicate(true)
 	var earned := _read_legacy()
@@ -202,6 +204,8 @@ func record_pair_reward(mode: String, id: String, theme: String) -> bool:
 	var current: Dictionary = pair_round(mode)
 	if current.is_empty() or str(current.id) != id:
 		return _fail("The chest belongs to a different or missing " + mode + " round.")
+	if current.get("policy", "") == MEMORY_REWARD_POLICY:
+		return _fail("Memory performance rewards are earned only by completing the round.")
 	if bool(current.awarded):
 		return true
 	if bool(current.completed) or int(current.pair) == 0:
@@ -226,12 +230,63 @@ func finish_pair_round(mode: String, id: String) -> bool:
 		return _fail("The completed round is not the active " + mode + " round.")
 	if bool(current.completed):
 		return true
+	if current.get("policy", "") == MEMORY_REWARD_POLICY:
+		return _fail("Complete Memory with its final performance tier before saving the round.")
 	if int(current.pair) > 0 and not bool(current.awarded):
 		return _fail("Save this round's earned chest before completing the round.")
 	var next_state: Dictionary = _pair_state.duplicate(true)
 	next_state[mode].round.completed = true
 	if not bool(current.awarded):
 		next_state[mode].dry_rounds = mini(2, pair_dry_rounds(mode) + 1)
+	return _commit_pair_state(next_state)
+
+
+func begin_memory_round(id: String) -> Dictionary:
+	error = ""
+	if not _pair_ready("memory", id):
+		return {}
+	var current: Dictionary = pair_round("memory")
+	if not current.is_empty() and str(current.id) == id:
+		return current
+	if not current.is_empty() and bool(current.awarded) and not bool(current.settled):
+		_fail("Save the earned chest before starting another memory round.")
+		return {}
+	var next_state: Dictionary = _pair_state.duplicate(true)
+	next_state.memory.dry_rounds = 0
+	# The board's highest-tier preview is not an owned reward. Only completion can
+	# turn this empty reservation into a chest with frozen contents.
+	next_state.memory.round = {"id": id, "pair": 0, "awarded": false, "settled": false,
+		"completed": false, "theme": "", "fragment": {}, "policy": MEMORY_REWARD_POLICY, "tier": 0}
+	if not _commit_pair_state(next_state):
+		return {}
+	return pair_round("memory")
+
+
+func finish_memory_round(id: String, tier: int, theme: String) -> bool:
+	error = ""
+	if not _pair_ready("memory", id):
+		return false
+	if tier < 0 or tier > RewardProgress.THEMES.size():
+		return _fail("A Memory performance chest tier must be an integer from zero to %d." % RewardProgress.THEMES.size())
+	if tier > 0 and not Data.THEMES.has(theme):
+		return _fail("Unknown medal season: " + theme + ".")
+	var current: Dictionary = pair_round("memory")
+	if current.is_empty() or str(current.id) != id or current.get("policy", "") != MEMORY_REWARD_POLICY:
+		return _fail("The completed round is not the active Memory performance round.")
+	if bool(current.completed):
+		return true
+	var fragment: Dictionary = next_fragment(theme) if tier > 0 else {}
+	if not error.is_empty():
+		return false
+	var next_state: Dictionary = _pair_state.duplicate(true)
+	next_state.memory.dry_rounds = 0
+	next_state.memory.round.completed = true
+	next_state.memory.round.tier = tier
+	next_state.memory.round.awarded = tier > 0
+	next_state.memory.round.pair = PAIRS_PER_ROUND if tier > 0 else 0
+	next_state.memory.round.theme = theme if tier > 0 else ""
+	next_state.memory.round.fragment = fragment
+	# Completion, ownership, tier, and captured contents are one atomic record.
 	return _commit_pair_state(next_state)
 
 
@@ -280,7 +335,7 @@ func _commit_pair_state(next_state: Dictionary) -> bool:
 	return true
 
 
-func _validate_pair_state(value: Variant) -> bool:
+func _validate_pair_state(value: Variant, allow_memory_performance: bool = true) -> bool:
 	if not value is Dictionary or value.size() != PAIR_MODES.size():
 		return _fail("Pair chest progress needs separate Match and Memory records.")
 	for mode in PAIR_MODES:
@@ -307,6 +362,20 @@ func _validate_pair_state(value: Variant) -> bool:
 		var fragment: Variant = round.get("fragment")
 		if typeof(theme) != TYPE_STRING or not fragment is Dictionary:
 			return _fail("The reserved chest theme or captured fragment is invalid.")
+		if round.has("policy") or round.has("tier"):
+			if not allow_memory_performance or mode != "memory" or round.size() != 9 \
+				or round.get("policy") != MEMORY_REWARD_POLICY or typeof(round.get("tier")) != TYPE_INT \
+				or int(round.tier) < 0 or int(round.tier) > RewardProgress.THEMES.size() or dry != 0:
+				return _fail("The Memory performance reward policy, tier, or dry streak is invalid.")
+			if not bool(round.completed) or int(round.tier) == 0:
+				if int(round.tier) != 0 or pair != 0 or bool(round.awarded) or bool(round.settled) \
+					or not theme.is_empty() or not fragment.is_empty():
+					return _fail("An unfinished or tier-zero Memory round cannot own a reward.")
+			elif not bool(round.awarded) or pair != PAIRS_PER_ROUND or not Data.THEMES.has(theme):
+				return _fail("A Memory chest requires a completed round, final tier, and medal theme.")
+			elif not fragment.is_empty() and (not _validate_fragment(fragment) or str(Data.medal(fragment.medal_id).theme) != theme):
+				return _fail("The Memory chest's captured fragment does not match its medal theme.")
+			continue
 		if bool(round.awarded):
 			if pair == 0 or dry != 0 or not Data.THEMES.has(theme):
 				return _fail("An earned chest needs a reserved pair, a theme, and a reset dry streak.")

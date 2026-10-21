@@ -318,9 +318,9 @@ func _build() -> void:
 	_gate_art.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_gate_body.add_child(_gate_art)
 	_gate_icon = _label("VOICE POP", 15, CYAN)
-	_gate_title = _label("Ready to pop?", 30)
+	_gate_title = _label("Ready to pop?", 28)
 	_gate_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_gate_copy = _label(_message, 17, WHITE)
+	_gate_copy = _label(_message, 16, WHITE)
 	_gate_copy.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_gate_note = _label("%d seconds. See it. Say it. Pop it!" % int(PopModel.DURATION), 14, SOFT)
 	_gate_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -335,9 +335,10 @@ func _build() -> void:
 	_gate_back.pressed.connect(_exit)
 	_gate_actions.add_child(retry_button)
 	_gate_actions.add_child(_gate_back)
+	_gate_body.move_child(_gate_actions, _gate_copy.get_index() + 1)
 	for action: Button in [retry_button, _gate_back]:
 		action.focus_entered.connect(func() -> void: _ensure_scroll_control(_gate, _gate_body, action))
-	_gate_privacy = _label("Browser speech may process audio remotely. Game stores no voice or transcripts.", 11, SOFT)
+	_gate_privacy = _label("Your browser may process speech online.\nPip saves no audio or transcripts.", 12, SOFT)
 	_gate_privacy.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_gate_body.add_child(_gate_privacy)
 	_gate.get_v_scroll_bar().value_changed.connect(func(_value: float) -> void: _queue_geometry_publish())
@@ -380,7 +381,7 @@ func configure(words: Array, motion_reduced: bool = false, seed_value: int = -1)
 	_message = "Allow microphone access to start." if not _words.is_empty() else "Choose a world with words to play."
 	_gate_title.text = "Ready to pop?"
 	_gate_copy.text = _message
-	_gate_note.text = "Pop chest-marked words to collect fragments. 4 unlock a chest; every 5 more upgrade it. Your %d seconds start when Pip can hear you." % int(PopModel.DURATION)
+	_gate_note.text = "Say the words to pop them.\nYour %d seconds start when Pip can hear you." % int(PopModel.DURATION)
 	retry_button.text = "Start listening"
 	retry_button.disabled = _words.is_empty()
 	_gate.show()
@@ -1260,23 +1261,25 @@ func _layout() -> void:
 	_slice_clip.size = _arena.size
 	_slice_canvas.queue_redraw()
 	var gate_width: float = minf(width - 8.0 / scale, 420.0 / scale)
+	var compact_gate: bool = size.y * scale < 320.0
 	_gate_art.visible = size.y * scale >= 540
-	_gate_art.custom_minimum_size.y = 88 / scale if _gate_art.visible else 0
-	var gate_top: float = maxf(18.0 / scale, (size.y - (420.0 if _gate_art.visible else 310.0) / scale) * 0.5)
+	_gate_art.custom_minimum_size.y = 72 / scale if _gate_art.visible else 0
+	_gate_icon.hide()
+	var gate_top: float = maxf(16.0 / scale, (size.y - (360.0 if _gate_art.visible else 276.0) / scale) * 0.5)
 	_gate.position = Vector2((size.x - gate_width) * 0.5, gate_top)
 	_gate.size = Vector2(gate_width, maxf(48.0 / scale, size.y - gate_top - 18.0 / scale))
-	_gate_body.add_theme_constant_override("separation", ceili(10.0 / scale))
+	_gate_body.add_theme_constant_override("separation", ceili((8.0 if compact_gate else 12.0) / scale))
 	_gate_icon.custom_minimum_size.y = 18.0 / scale
-	_gate_title.add_theme_font_size_override("font_size", ceili(30.0 / scale))
+	_gate_title.add_theme_font_size_override("font_size", ceili((24.0 if compact_gate else 28.0) / scale))
 	_gate_icon.add_theme_font_size_override("font_size", ceili(13.0 / scale))
-	_gate_copy.add_theme_font_size_override("font_size", ceili(17.0 / scale))
-	_gate_note.add_theme_font_size_override("font_size", ceili(13.0 / scale))
-	_gate_title.custom_minimum_size.y = 38.0 / scale
-	_gate_copy.custom_minimum_size.y = 44.0 / scale
-	_gate_note.custom_minimum_size.y = 32.0 / scale
-	_gate_privacy.add_theme_font_size_override("font_size", ceili(11.0 / scale))
+	_gate_copy.add_theme_font_size_override("font_size", ceili(16.0 / scale))
+	_gate_note.add_theme_font_size_override("font_size", ceili(14.0 / scale))
+	_gate_title.custom_minimum_size.y = (32.0 if compact_gate else 38.0) / scale
+	_gate_copy.custom_minimum_size.y = 24.0 / scale
+	_gate_note.custom_minimum_size.y = 40.0 / scale
+	_gate_privacy.add_theme_font_size_override("font_size", ceili(12.0 / scale))
 	_gate_privacy.custom_minimum_size.y = 36.0 / scale
-	_gate_actions.add_theme_constant_override("separation", ceili(10.0 / scale))
+	_gate_actions.add_theme_constant_override("separation", ceili(12.0 / scale))
 	_style_action(retry_button, true)
 	_style_action(_gate_back)
 	_apply_hud_feedback()
@@ -1740,7 +1743,7 @@ func _style_action(button: Button, primary: bool = false) -> void:
 		var fill: Color = CYAN if primary else SURFACE
 		if state != "normal":
 			fill = fill.lightened(0.12)
-		button.add_theme_stylebox_override(state, Style.box(fill, CYAN if primary else Color("#607e72"), ceili(13.0 / scale), 1))
-	button.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, PINK, ceili(13.0 / scale), maxi(2, ceili(2.0 / scale))))
+		button.add_theme_stylebox_override(state, Style.box(fill, CYAN if primary else Color("#607e72"), ceili(12.0 / scale), maxi(1, roundi(1.0 / scale))))
+	button.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, PINK, ceili(12.0 / scale), maxi(2, ceili(2.0 / scale))))
 	for key in ["font_color", "font_hover_color", "font_pressed_color", "font_focus_color", "font_hover_pressed_color"]:
 		button.add_theme_color_override(key, NAVY if primary else WHITE)

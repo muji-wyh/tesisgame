@@ -76,12 +76,14 @@ var match_mark: MatchMark
 var accent: Color = Style.GOOD
 var reduced_motion: bool = false
 var face_up: bool = true
+var _pair_badge_on_word: bool = false
 var _face: Control
 var _back: Control
 var _shown_face_up: bool = true
 var _flip: Tween
 var _feedback: FeedbackOverlay
 var _feedback_state: String = ""
+var _matched: bool = false
 var _feedback_kind: String = ""
 var _feedback_left: float = 0.0
 var _feedback_duration: float = 0.0
@@ -152,6 +154,7 @@ func refresh(palette: Dictionary, selected: bool, matched: bool, wrong: bool, lo
 	if accent != palette.accent:
 		stop_press()
 	accent = palette.accent
+	_matched = matched
 	_show_face(_shown_face_up)
 	var state: String = "matched" if matched else "wrong" if wrong else "selected" if selected and not locked else ""
 	if state != _feedback_state:
@@ -206,7 +209,7 @@ func refresh(palette: Dictionary, selected: bool, matched: bool, wrong: bool, lo
 	match_mark.pair_number = pair_index + 1 if matched else 0
 	match_mark.tint = pair_tint
 	match_mark.active = matched and pair_focused
-	match_mark.visible = matched and not _professional_word_face()
+	match_mark.visible = matched and _pair_badge_allowed()
 	match_mark.queue_redraw()
 	picture.modulate.a = 0.68 if matched else 1.0
 	word_label.modulate.a = 0.75 if matched else 1.0
@@ -218,6 +221,11 @@ func set_reduced_motion(value: bool) -> void:
 		stop_word_play()
 		_stop_feedback()
 		_settle_flip()
+
+
+func set_pair_badge_on_word(value: bool) -> void:
+	_pair_badge_on_word = value
+	_fit_text()
 
 
 func set_back(back: Control) -> void:
@@ -350,8 +358,9 @@ func _fit_text() -> void:
 	if card_data.get("word", {}).get("track") == "professional":
 		var display_scale: float = Style.ui_scale(self)
 		var inset: float = 6 / display_scale
+		var badge_header: float = (28 / display_scale) if _pair_badge_on_word and _matched else 0.0
 		available_width = maxf(1, size.x - inset * 2)
-		var available_height: float = maxf(1, size.y - inset * 2)
+		var available_height: float = maxf(1, size.y - inset * 2 - badge_header)
 		minimum_font = ceili(16 / display_scale)
 		font_size = maxi(font_size, minimum_font)
 		# Preserve full terms and wrap at spaces, never inside an arbitrary spelling chunk.
@@ -359,7 +368,7 @@ func _fit_text() -> void:
 		word_label.add_theme_constant_override("line_spacing", 0)
 		word_label.offset_left = inset
 		word_label.offset_right = -inset
-		word_label.offset_top = inset
+		word_label.offset_top = inset + badge_header
 		word_label.offset_bottom = -inset
 		while font_size > minimum_font:
 			var measured: Vector2 = font.get_multiline_string_size(word_label.text, HORIZONTAL_ALIGNMENT_CENTER, available_width, font_size)
@@ -382,14 +391,14 @@ func _fit_text() -> void:
 			# Compact phone cards retain the readable font and use the font's own leading.
 			var display_scale: float = Style.ui_scale(self)
 			var text_height: float = word_label.get_line_count() * word_label.get_line_height()
-			var vertical_inset: float = maxf(0, floorf((size.y - text_height) * display_scale * 0.5)) / display_scale
-			word_label.offset_top = vertical_inset
+			var badge_header: float = (28 / display_scale) if _pair_badge_on_word and _matched else 0.0
+			var vertical_inset: float = maxf(0, floorf((size.y - badge_header - text_height) * display_scale * 0.5)) / display_scale
+			word_label.offset_top = vertical_inset + badge_header
 			word_label.offset_bottom = -vertical_inset
 	# Short Memory cards need a smaller corner mark to leave the word readable.
 	if match_mark != null:
-		# Professional word faces retain their matched border, tint and face state.
-		# Keep the pair badge on the picture partner so it cannot cover any letters.
-		match_mark.visible = _feedback_state == "matched" and not _professional_word_face()
+		# Memory reserves a separate badge row on professional word fronts.
+		match_mark.visible = _matched and _pair_badge_allowed()
 		if _back != null:
 			var scale: float = Style.ui_scale(self)
 			var side: float = minf(22 / scale, minf(size.x, size.y) * 0.3)
@@ -407,3 +416,7 @@ func _fit_text() -> void:
 
 func _professional_word_face() -> bool:
 	return card_data.get("word", {}).get("track") == "professional" and card_data.get("kind") == "word"
+
+
+func _pair_badge_allowed() -> bool:
+	return not _professional_word_face() or _pair_badge_on_word

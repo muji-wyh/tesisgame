@@ -1,0 +1,102 @@
+{
+  "schema": 1,
+  "status": "integrated_after_scoped_ai_source_and_native_still_review",
+  "sense_id": "card-reader.payment-device.n",
+  "recorded_at": "2026-10-20",
+  "title": "POS termina credit card payment",
+  "source_url": "https://freesvg.org/pos-termina-credit-card-payment",
+  "credited_organization": "publicdomainvectors.org",
+  "individual_artwork_creator": null,
+  "creator_limitation": "The artwork credit identifies publicdomainvectors.org. The generic HTML meta author Vedran is page metadata, not confirmed individual artwork authorship. The original acquisition wording is retained unchanged with review-correction-r02.md.",
+  "license": "CC0 1.0 Universal / Public Domain",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "acquisition_status": "original_static_svg_and_derived_png_acquired_exact_reviewed_png_integrated",
+  "available_animations": [],
+  "original": {
+    "path": "docs/assets/sources/professional-retail-card-reader/acquisition-r01/206301-browser.svg",
+    "bytes": 38428,
+    "sha256": "116dca8283535b13345dbd785e846f162bd3701d91816f35603d4aead648a044"
+  },
+  "source_page": {
+    "path": "docs/assets/sources/professional-retail-card-reader/acquisition-r01/206301-source.html",
+    "bytes": 70179,
+    "sha256": "fab25e54beca6ca2224fef0d7bdb39db10a62d1f8d1878dfb3db781ca0cb6fdf"
+  },
+  "license_page": {
+    "path": "docs/assets/sources/professional-retail-card-reader/acquisition-r01/cc0-source.html",
+    "bytes": 30248,
+    "sha256": "abb4d48fc8b85de52b377dd105532c6c549f515d492a8e1712bc99e7316a1f12"
+  },
+  "preparation_receipt": {
+    "path": "docs/assets/sources/professional-retail-card-reader/acquisition-r01/preparation-receipt.json",
+    "bytes": 2136,
+    "sha256": "42562de5ab32c34a42914c1b7ba4dfc8dab3d30d255994b3245f422e15d0df93"
+  },
+  "candidate_record": {
+    "path": "docs/assets/sources/professional-retail-card-reader/acquisition-r01/candidate-record.json",
+    "bytes": 3200,
+    "sha256": "123d5e614f85522b2a2e86e6dc7c545ad0006d249585893f7716b4a669efe38f"
+  },
+  "creator_correction": {
+    "path": "docs/assets/sources/professional-retail-card-reader/acquisition-r01/review-correction-r02.md",
+    "bytes": 1574,
+    "sha256": "6efdc1d6af0f51930929b8f72e3678e6262bf5de16c6b644dcd2a8c2860eb3aa"
+  },
+  "native_visual_review": {
+    "path": "docs/qa/professional-card-reader-r04/independent-visual-review-r04.json",
+    "bytes": 15534,
+    "sha256": "4f32f6103a42ff7ad5b654eb912bfea6a2bb34e94f10f4912baf8a1e8ee93bb3"
+  },
+  "native_report": {
+    "path": "docs/qa/professional-card-reader-r04/captures-r04/report.json",
+    "bytes": 1441964,
+    "sha256": "a0af9f3222a499008dda07a9af5b2c765aaebef4b4046187df99af55a630f0a6"
+  },
+  "source_review": {
+    "path": "docs/assets/sources/professional-retail-card-reader/independent-source-review-r01/review.json",
+    "bytes": 9342,
+    "sha256": "04161680ef3013f6b25f406a12aceb6ef6dae49a9f5f061703e5bfc36f4fa23f"
+  },
+  "resource": {
+    "id": "sha256:67cb3e6f8e0be881b51a7d18ecc28fd1a02fab6b650197a8d60ef9d550b07c59",
+    "path": "professional-media/67cb3e6f8e0be881b51a7d18ecc28fd1a02fab6b650197a8d60ef9d550b07c59.png",
+    "sha256": "67cb3e6f8e0be881b51a7d18ecc28fd1a02fab6b650197a8d60ef9d550b07c59",
+    "kind": "image",
+    "format": "png",
+    "compressed_bytes": 77565,
+    "decoded_bytes": 1773568,
+    "width": 512,
+    "height": 433
+  },
+  "adaptations": [
+    "Rasterize the original static vector",
+    "Trim transparent margins",
+    "Scale proportionally to a 512-pixel maximum side",
+    "Copy the exact reviewed PNG into professional-media without re-encoding or further pixel changes"
+  ],
+  "brief": {
+    "before": "Show a compact payment reader and a plain bank card held near its contactless area. Keep the reader dominant, with the card close enough to explain its purpose. Distinguish it from a pistol-shaped barcode scanner, a full register, and a standalone keypad. Omit account numbers, merchant branding, PIN entry, and operating steps.",
+    "after": "Show a compact bank-card payment reader with a plain card close to the reader, a small screen, a keypad and a secondary receipt. Keep the compact device dominant. Exclude a full cash drawer, merchant branding, readable account numbers, PIN entry and operating instructions. The picture does not claim a particular card-reading method or a completed payment.",
+    "reason": "The acquired artwork shows card-payment context but no contactless symbol or hand; the new brief avoids unsupported depiction claims while retaining the broad reviewed device sense."
+  },
+  "retained_failure_limits": [
+    "The zero-byte 141617.svg and 206301.svg downloads are failed acquisition evidence, not usable vector assets. 206301-browser.svg is the acquired original.",
+    "The preferred 3D payment-reader lead remains login-gated and unacquired; no 3D model, rig or animation is claimed.",
+    "Failed native r01, r02 and r03 evidence is preserved. Source RGBA and post-render readback hashes are distinct; exact comparisons use equivalent rendering paths without numeric tolerance or alpha normalization.",
+    "In two Match layouts the numbered badge touches a small part of the secondary receipt tip. Bank-card, keypad and dominant device cues remain unobstructed. No claim of zero badge/art intersection is made."
+  ],
+  "review_scope": {
+    "scoped_ai_picture_suitability": true,
+    "scoped_ai_picture_brief_review": true,
+    "all_32_native_boards_inspected": true,
+    "original_source_and_license_retained": true,
+    "human_recognition": false,
+    "human_visual_acceptance": false,
+    "full_game_exercise_acceptance": false,
+    "physical_device_acceptance": false,
+    "full_animation_review": false,
+    "audio_or_listening_approval_changed": false,
+    "module_or_release_ready": false
+  },
+  "evidence_semantics": "The original acquisition, candidate, partial reviews and native reports retain their historical pending/preintegration claims. This later record accepts the exact candidate after the separate completed AI still review; it does not rewrite history or claim a post-install native run."
+}

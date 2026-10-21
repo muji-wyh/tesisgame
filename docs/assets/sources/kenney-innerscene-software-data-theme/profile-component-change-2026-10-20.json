@@ -1,0 +1,221 @@
+{
+  "schema": 1,
+  "scope": "Only software_data.art.environment and art.props",
+  "themes_preimage_sha256": "2bf6d483cae7b3d38c96945719612a5394a9aa6e2d94d63db9a12b4b55edc669",
+  "themes_afterimage_sha256": "e080818ba1302e940e3c73619073bceb2d3d813f3fc5ff6050e92b6d9821524b",
+  "before": {
+    "id": "professional_software_data",
+    "title": "Digital Studio",
+    "track": "professional",
+    "course_id": "software_data",
+    "status": "pending",
+    "palette": {
+      "background": "#F4F5EF",
+      "surface": "#FFFFFF",
+      "text": "#253B35",
+      "accent": "#625789",
+      "light": "#D9E7DB",
+      "spark": "#E7B56D"
+    },
+    "art": {
+      "environment": {
+        "status": "pending",
+        "path": null,
+        "sha256": null,
+        "source": null,
+        "creator": null,
+        "license": null,
+        "acquisition_status": "not_started",
+        "review": {
+          "status": "pending"
+        },
+        "brief": "A collaborative digital studio with paired workstations, a review screen, a whiteboard, and a quiet analysis nook.",
+        "available_animations": [],
+        "adaptations": []
+      },
+      "home": {
+        "status": "pending",
+        "path": null,
+        "sha256": null,
+        "source": null,
+        "creator": null,
+        "license": null,
+        "acquisition_status": "not_started",
+        "review": {
+          "status": "pending"
+        },
+        "brief": "A warm, readable course illustration derived from: A collaborative digital studio with paired workstations, a review screen, a whiteboard, and a quiet analysis nook.",
+        "available_animations": [],
+        "adaptations": []
+      },
+      "props": {
+        "status": "pending",
+        "path": null,
+        "sha256": null,
+        "source": null,
+        "creator": null,
+        "license": null,
+        "acquisition_status": "not_started",
+        "review": {
+          "status": "pending"
+        },
+        "brief": "Distinctive workplace props composed for the same illustrated scene. No geometric substitutes.",
+        "available_animations": [],
+        "adaptations": []
+      }
+    },
+    "ambient_motion": {
+      "status": "pending",
+      "brief": "Gentle environmental motion only; remain static when reduced motion is enabled.",
+      "clips": []
+    },
+    "audio": {
+      "music": "res://assets/audio/bgm/spring.wav",
+      "interaction_bank": "res://scripts/game_audio.gd",
+      "chest_sound_theme": "spring",
+      "policy": "Reuse the existing audio cues without changing their recordings or timing."
+    },
+    "rewards": {
+      "legacy_theme_id": "spring",
+      "chest_id": "royal",
+      "collection_namespace": "existing"
+    },
+    "transition_ms": 200,
+    "preview": {
+      "status": "integrated",
+      "path": "res://assets/images/professional-previews/software-data.png",
+      "sha256": "5c87d4a3045d91aa60a5fb4be951baa43834fb39fbf684a5ee7aa132daece5b2",
+      "source": "https://kenney.nl/assets/furniture-kit",
+      "creator": "Kenney",
+      "license": "CC0 1.0",
+      "acquisition_status": "integrated",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex visual review (source composition and final phone-scale images)",
+        "reviewed_at": "2026-10-16"
+      },
+      "brief": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending.",
+      "available_animations": [],
+      "adaptations": [
+        "Composed only from acquired source GLB meshes, preserving their geometry and materials.",
+        "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+        "Resized to 512 by 320 using Lanczos filtering; phone review at 296 by 185."
+      ]
+    }
+  },
+  "after": {
+    "id": "professional_software_data",
+    "title": "Digital Studio",
+    "track": "professional",
+    "course_id": "software_data",
+    "status": "pending",
+    "palette": {
+      "background": "#F4F5EF",
+      "surface": "#FFFFFF",
+      "text": "#253B35",
+      "accent": "#625789",
+      "light": "#D9E7DB",
+      "spark": "#E7B56D"
+    },
+    "art": {
+      "environment": {
+        "status": "integrated",
+        "path": "res://professional-media/6a3e2fab06a3fb72c78a1414eb8919d7ba7e038fcc0abf73e16fd37203d45062.png",
+        "sha256": "6a3e2fab06a3fb72c78a1414eb8919d7ba7e038fcc0abf73e16fd37203d45062",
+        "source": "https://kenney.nl/assets/furniture-kit; https://www.innerscene.com/tools/library/3d-parts/mobile-whiteboard-education-furniture-dee300ef",
+        "creator": "Kenney; Innerscene",
+        "license": "CC0 1.0; CC0 1.0 Universal",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex bounded static source, current Main and actual raw-media component review",
+          "reviewed_at": "2026-10-20"
+        },
+        "brief": "Reviewed Digital Studio static environment component. Full profile, art.home, motion and course readiness remain pending.",
+        "available_animations": [],
+        "adaptations": [
+          "Composed from fourteen exact acquired GLBs with original geometry and materials; provenance and scoped receipt in docs/assets/sources/kenney-innerscene-software-data-theme/.",
+          "Native 768 by 768 orthographic source render with fixed camera and lighting; r04 plant placement [-1.42, 0.05, 0.05], scale 1.4 and yaw 0.",
+          "Source environment plate retains room, review display, mobile whiteboard and static plant.",
+          "Static placement inspected in current Match and Word Jelly; 320 by 568 Word Jelly remains paused by its existing minimum-window policy. This is not full-theme or normal-speed animation acceptance."
+        ]
+      },
+      "home": {
+        "status": "pending",
+        "path": null,
+        "sha256": null,
+        "source": null,
+        "creator": null,
+        "license": null,
+        "acquisition_status": "not_started",
+        "review": {
+          "status": "pending"
+        },
+        "brief": "A warm, readable course illustration derived from: A collaborative digital studio with paired workstations, a review screen, a whiteboard, and a quiet analysis nook.",
+        "available_animations": [],
+        "adaptations": []
+      },
+      "props": {
+        "status": "integrated",
+        "path": "res://professional-media/9bf8c55a9a4690f2c90f11ee62741ba49db0f271caa86ffb64195b28717f5b05.png",
+        "sha256": "9bf8c55a9a4690f2c90f11ee62741ba49db0f271caa86ffb64195b28717f5b05",
+        "source": "https://kenney.nl/assets/furniture-kit; https://www.innerscene.com/tools/library/3d-parts/mobile-whiteboard-education-furniture-dee300ef",
+        "creator": "Kenney; Innerscene",
+        "license": "CC0 1.0; CC0 1.0 Universal",
+        "acquisition_status": "integrated",
+        "review": {
+          "status": "reviewed",
+          "reviewer": "Codex bounded static source, current Main and actual raw-media component review",
+          "reviewed_at": "2026-10-20"
+        },
+        "brief": "Reviewed Digital Studio static workstation and analysis-nook props component with source shadows and occlusion. Full theme readiness remains pending.",
+        "available_animations": [],
+        "adaptations": [
+          "Composed from fourteen exact acquired GLBs with original geometry and materials; provenance and scoped receipt in docs/assets/sources/kenney-innerscene-software-data-theme/.",
+          "Native 768 by 768 orthographic source render with fixed camera and lighting; r04 plant placement [-1.42, 0.05, 0.05], scale 1.4 and yaw 0.",
+          "Transparent props layer derived from exact environment/rest differences; source reconstruction includes changed shadows and natural foreground occlusion.",
+          "Static placement inspected in current Match and Word Jelly; 320 by 568 Word Jelly remains paused by its existing minimum-window policy. This is not full-theme or normal-speed animation acceptance."
+        ]
+      }
+    },
+    "ambient_motion": {
+      "status": "pending",
+      "brief": "Gentle environmental motion only; remain static when reduced motion is enabled.",
+      "clips": []
+    },
+    "audio": {
+      "music": "res://assets/audio/bgm/spring.wav",
+      "interaction_bank": "res://scripts/game_audio.gd",
+      "chest_sound_theme": "spring",
+      "policy": "Reuse the existing audio cues without changing their recordings or timing."
+    },
+    "rewards": {
+      "legacy_theme_id": "spring",
+      "chest_id": "royal",
+      "collection_namespace": "existing"
+    },
+    "transition_ms": 200,
+    "preview": {
+      "status": "integrated",
+      "path": "res://assets/images/professional-previews/software-data.png",
+      "sha256": "5c87d4a3045d91aa60a5fb4be951baa43834fb39fbf684a5ee7aa132daece5b2",
+      "source": "https://kenney.nl/assets/furniture-kit",
+      "creator": "Kenney",
+      "license": "CC0 1.0",
+      "acquisition_status": "integrated",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "Codex visual review (source composition and final phone-scale images)",
+        "reviewed_at": "2026-10-16"
+      },
+      "brief": "Small local Home career preview only. Full theme environment, props, motion and course readiness remain pending.",
+      "available_animations": [],
+      "adaptations": [
+        "Composed only from acquired source GLB meshes, preserving their geometry and materials.",
+        "Orthographic Godot render at 1280 by 800 with static studio lighting; no source preview artwork used.",
+        "Resized to 512 by 320 using Lanczos filtering; phone review at 296 by 185."
+      ]
+    }
+  },
+  "protected_fields_identical": true
+}

@@ -1,0 +1,84 @@
+{
+  "schema": 1,
+  "status": "accepted_scoped_ai_art_and_brief_review_for_next_native_caller_comparison",
+  "reviewer": "Independent AI source and visual reviewer",
+  "lexeme_id": "card-reader.payment-device.n",
+  "source_packet": "build/professional-english/card-reader-freesvg-acquisition-r01",
+  "original": {"path": "206301-browser.svg", "bytes": 38428, "sha256": "116dca8283535b13345dbd785e846f162bd3701d91816f35603d4aead648a044"},
+  "reviewed_derivative": {"path": "206301-cropped-512.png", "bytes": 77565, "sha256": "67cb3e6f8e0be881b51a7d18ecc28fd1a02fab6b650197a8d60ef9d550b07c59", "width": 512, "height": 433},
+  "complete_size_sheet": {"path": "206301-size-review-r02.png", "bytes": 142632, "sha256": "a2e7ff6239d3ce641da017f0c259ef8ade5f421422fee796c5d98e45ff127da1", "width": 840, "height": 630},
+  "source_and_license": {
+    "source_url": "https://freesvg.org/pos-termina-credit-card-payment",
+    "source_title": "POS termina credit card payment",
+    "source_id": 206301,
+    "credited_organization": "publicdomainvectors.org",
+    "credit_evidence": "Artwork-specific ImageObject creator and visible SVG published by fields",
+    "individual_artwork_creator": null,
+    "individual_creator_limit": "No confirmed individual artwork creator. The HTML page-level meta author names Vedran, but does not specifically associate that person with this SVG artwork. The SVG itself contains no creator metadata.",
+    "license_evidence": "Saved source HTML labels the asset Public Domain and its ImageObject license links CC0 1.0 Universal. The corresponding CC0 deed is saved.",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "permitted_use_in_saved_deed": "Copy, modify, distribute and perform, including commercially, without asking permission.",
+    "attribution": "The saved CC0 deed does not impose an attribution condition; preserve source, organization credit and derivative history in the project provenance record without implying endorsement.",
+    "evidence_limits": "This verifies the saved source designation and deed, not an independently traced copyright chain. The saved deed states it is a human-readable summary and does not affect trademark, patent, privacy or publicity rights. A separate CC0 legal-code file was not supplied.",
+    "decision": "Sufficient documented source/license evidence for the next scoped native comparison, with the precise creator limitation retained."
+  },
+  "acquisition_and_static_vector": {
+    "successful_local_acquisition": true,
+    "successful_asset": "206301-browser.svg",
+    "acquisition_route": "Root records the source page's visible Download SVG action; independent review confirms the exact retained SVG bytes and the corresponding source page link.",
+    "failed_downloads_preserved": ["141617.svg", "206301.svg"],
+    "failed_download_status": "Both direct HTTP attempts recorded status 200 with text/html and zero-byte files. They are failed acquisition evidence, not usable SVG assets.",
+    "view_box": "0 0 660 660",
+    "path_elements": 25,
+    "group_elements": 0,
+    "script_or_animation_or_embedded_image_elements_observed": 0,
+    "external_reference_entity_or_doctype_patterns_observed": 0,
+    "creator_metadata_patterns_observed": 0,
+    "available_animations": [],
+    "conversion": "Root's recorded conversion rasterizes the acquired SVG, trims transparent margins and scales proportionally to a maximum side of 512. The independent reviewer read that source and inspected the resulting files without executing it.",
+    "status": "Acquired static vector and converted candidate; not integrated."
+  },
+  "visual_observations": [
+    {"size": 64, "complete": true, "observation": "The blue card, yellow compact terminal, white key grid and projecting receipt remain separable in the complete sample. The green screen is a small secondary cue; the card overlaps part of the controls. This supports payment-device context to this reviewer, but does not establish learner recognition."},
+    {"size": 96, "complete": true, "observation": "Card stripe, compact sloped body, key grid and receipt silhouette are clear. No readable account number, instruction, merchant name or payment-result text is visible."},
+    {"size": 128, "complete": true, "observation": "The screen and rounded white keys are easier to distinguish. The body remains dominant even with the large separate card. The object has no pistol grip, cash drawer or tall detached display."},
+    {"size": 192, "complete": true, "evidence": "Corrected r02 sheet only", "observation": "The full lower gray base, dark side, receipt and card are visible after the sheet-height correction. The complete silhouette agrees with the 512-pixel derivative. The original r01 sheet remains excluded as complete 192-pixel evidence."},
+    {"size": 512, "complete": true, "observation": "The acquired illustration contains a generic decorated bank card, small green screen, white keypad, yellow payment terminal and receipt. Edges are clean on the review sheet's pale background. Shading is made from solid vector facets, with less soft material depth than the integrated cash-register artwork."}
+  ],
+  "comparison": {
+    "cash_register": {"path": "professional-media/f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png", "sha256": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262", "observed": "The integrated register has a tall detached display, large upright body, broad cash drawer and soft pale shading. The candidate is a low compact sloped terminal with an explicit separate bank card and no drawer. Both share keypad and receipt cues, so actual caller/distractor comparison remains necessary."},
+    "barcode": {"path": "professional-media/a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c.png", "sha256": "a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c", "observed": "The integrated barcode is a black code label on an orange carton. The candidate contains a compact payment device and bank card; it contains neither a barcode label nor a scanner silhouette."},
+    "style_limit": "The shared three-quarter view supports some coherence, while the saturated yellow/blue facets are visibly flatter and stronger in color than the soft pale register. Judge that difference within actual Retail callers before accepting integration."
+  },
+  "brief_review": {
+    "accepted_for_next_comparison": true,
+    "proposed_picture_brief": "Show a compact bank-card payment reader with a plain card close to the reader, a small screen, a keypad and a secondary receipt. Keep the compact device dominant. Exclude a full cash drawer, merchant branding, readable account numbers, PIN entry and operating instructions. The picture does not claim a particular card-reading method or a completed payment.",
+    "definition_unchanged": "A device that reads payment information from a bank card.",
+    "example_unchanged": "The customer held a card near the card reader.",
+    "reason": "The acquired artwork depicts card-payment context, with a nearby card, but no visible hand, contactless symbol, insertion/swiping action or completed-payment indicator. Removing the contactless-area and depicted-hand implications aligns the brief with visible cues while preserving the broad reviewed device sense.",
+    "limits": "The source image does not demonstrate the whole example sentence or a specific payment workflow. Broad sense alignment is separate from exercise recognition and final media acceptance."
+  },
+  "resolved_findings": [
+    {"id": "CR-F01", "resolution": "Corrected 840 by 630 r02 sheet viewed directly; the complete 192-pixel sample fits and its full device base is visible. Original clipped evidence retained."},
+    {"id": "CR-F02", "resolution": "review-correction-r02.md explicitly distinguishes page-level Vedran metadata from the artwork-specific organization credit and states no confirmed individual artwork creator. Original wording retained with this superseding clarification."}
+  ],
+  "next_step": {
+    "native_caller_comparison_merited": true,
+    "recommended_scope": "Use the exact unchanged candidate derivative in an isolated comparison through the actual Match and Memory callers, including their smallest supported image sizes and both integrated comparison assets. Inspect complete cards, crop/contain behavior, transparent edges, labels and distractor silhouettes in the actual layouts. Root schedules execution after the current Foundation02 native work.",
+    "conditions": ["Use the corrected provenance wording and r02 size-sheet evidence", "Keep definition, example, IDs and approved audio unchanged", "Do not infer recognition from this AI image review", "Retain native image and exercise acceptance as separate future gates"]
+  },
+  "acceptance_limits": {
+    "scoped_ai_art_review": true,
+    "scoped_ai_picture_brief_review": true,
+    "human_recognition_test": false,
+    "human_visual_acceptance": false,
+    "native_caller_review": false,
+    "final_exercise_suitability": false,
+    "final_media_acceptance": false,
+    "production_integration": false,
+    "production_afterimages_created": false,
+    "audio_or_listening_approval_changed": false,
+    "module_or_release_readiness_changed": false,
+    "project_native_tests_or_renderer_executed_by_reviewer": false
+  }
+}

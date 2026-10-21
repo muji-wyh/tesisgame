@@ -69,7 +69,8 @@ func _test_voice_style() -> void:
 	app.audio.set_muted(true)
 	var original: Array = app.model.cards.duplicate(true)
 	for theme_id in Data.THEMES:
-		app.choose_theme(theme_id)
+		# Exercise the shared control style directly; learning paths now own the active palette.
+		app._active_palette = Data.theme(theme_id)
 		var button: Button = app._voice_button
 		button.disabled = false
 		app._style_voice_button()

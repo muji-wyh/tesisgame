@@ -45,6 +45,8 @@ var _stage: Control
 var _top: Control
 var _brand: Label
 var _body: VBoxContainer
+var _games_heading: Label
+var _games_notice: Label
 var _hero: Control
 var _pip_caption: Label
 var _journey: Panel
@@ -141,6 +143,13 @@ func _init() -> void:
 	_hero.add_child(heading)
 	_build_growth_journey()
 	_hero.move_child(_journey, 0)
+	_games_heading = Style.label("Choose a game", 20)
+	_games_heading.add_theme_font_override("font", Style.HEADING_FONT)
+	_body.add_child(_games_heading)
+	_games_notice = Style.label("These games open with this module.", 14)
+	_games_notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_games_notice.add_theme_color_override("font_color", Style.MUTED)
+	_body.add_child(_games_notice)
 	grid = GridContainer.new()
 	grid.name = "ModeOptions"
 	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -512,6 +521,8 @@ func fit(available: Vector2, factor: float) -> void:
 	_continue_round.custom_minimum_size.y = 48.0 / _factor
 	_continue_round.add_theme_font_size_override("font_size", ceili(14.0 / _factor))
 	_continue_round.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_games_heading.add_theme_font_size_override("font_size", ceili(20.0 / _factor))
+	_games_notice.add_theme_font_size_override("font_size", ceili(14.0 / _factor))
 	grid.columns = 3 if wide else 2
 	grid.add_theme_constant_override("h_separation", ceili((14.0 if wide else 10.0) / _factor))
 	grid.add_theme_constant_override("v_separation", ceili((14.0 if wide else 10.0) / _factor))
@@ -546,14 +557,18 @@ func _style_footer() -> void:
 
 func _style_tile(tile: Dictionary) -> void:
 	var radius: int = ceili(20.0 / _factor)
-	for state: String in ["normal", "hover", "pressed", "hover_pressed"]:
+	for state: String in ["normal", "hover", "pressed", "hover_pressed", "disabled"]:
 		var pressed: bool = state in ["pressed", "hover_pressed"]
 		var tint: Color = tile.entry.tint
+		var disabled: bool = state == "disabled"
 		var surface := Style.box(tint.lightened(0.32 if state == "normal" else 0.08),
 			Style.GOOD if pressed else tint.darkened(0.13), radius, maxi(1, roundi(1.0 / _factor)))
-		surface.border_width_bottom = ceili((2.0 if pressed else 4.0) / _factor)
+		if disabled:
+			surface.bg_color = Style.PAPER.lerp(tint, 0.28)
+			surface.border_color = Style.EDGE
+		surface.border_width_bottom = ceili((1.0 if disabled else 2.0 if pressed else 3.0) / _factor)
 		surface.shadow_color = Color(tint.darkened(0.55), 0.06 if pressed else 0.11)
-		surface.shadow_size = ceili((1.0 if pressed else 3.0) / _factor)
+		surface.shadow_size = 0 if disabled else ceili((1.0 if pressed else 3.0) / _factor)
 		surface.shadow_offset = Vector2(0, (1.0 if pressed else 2.0) / _factor)
 		tile.button.add_theme_stylebox_override(state, surface)
 	# Programmatic focus restores navigation after Home. Show its outline only
@@ -702,7 +717,7 @@ func configure_learning(catalog: RefCounted, selection: Dictionary, state: Dicti
 			for module in course.get("modules", []):
 				if module.id == continuation.module_id:
 					module_title = str(module.title)
-		_continue_round.text = "Continue · %s\n%s" % [title, module_title]
+		_continue_round.text = "Resume your round · %s\n%s" % [title, module_title]
 	if not _learning_initialized or Context.identity(selection) != Context.identity(_learning_selection):
 		_learning_initialized = true
 		_learning_selection = selection.duplicate(true)
@@ -712,7 +727,7 @@ func configure_learning(catalog: RefCounted, selection: Dictionary, state: Dicti
 	var busy: bool = phase in ["media", "storage", "restoring"]
 	var message: String = str(state.get("error", ""))
 	if busy:
-		message = "Preparing your workplace pictures and sound..." if phase == "media" else "Loading your saved learning progress..."
+		message = "Loading pictures and sound…" if phase == "media" else "Loading your progress…"
 	learning.set_status(message, busy, phase == "failed" or phase == "ready")
 	_sync_learning_layout()
 
@@ -742,12 +757,16 @@ func _sync_learning_layout() -> void:
 	var needs_action: bool = state.busy or (state.retry and not str(state.status).is_empty())
 	var show_preview: bool = _learning_art.has_art() and not (css.y <= 600.0 and needs_action)
 	var growth_selected: bool = _learning_selection.get("track", "growth") == "growth"
+	var available_games: bool = growth_selected or learning._selected_ready()
 	layout_changed = layout_changed or _learning_art.visible != show_preview \
 		or _hero.visible != (summary and growth_selected) or grid.visible != summary \
 		or collection_button.visible != (growth_selected or _professional_library_available) or _theme_choices.visible
 	_learning_art.visible = show_preview
 	_hero.visible = summary and growth_selected
 	grid.visible = summary
+	_games_heading.visible = summary
+	_games_heading.text = "Choose a game" if available_games else "Games in this module"
+	_games_notice.visible = summary and not available_games
 	collection_button.visible = growth_selected or _professional_library_available
 	_theme_choices.hide()
 	if layout_changed:

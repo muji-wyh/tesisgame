@@ -56,6 +56,8 @@ func _pair_and_jelly_cases() -> void:
 	check(model.learning_context.course_id == "retail", "Repeating a mode cannot retain the previous career identity")
 	var memory := Memory.new()
 	check(memory.reset(model.lesson_words, 42) and memory.cards.size() == 10, "Memory accepts professional punctuation and multiword terms")
+	check(memory.start_game(), "Professional Memory starts its initial observation")
+	memory.set_study(false)
 	var ids: Dictionary = {}
 	for index in range(memory.cards.size()):
 		var word_id: String = memory.cards[index].word.id

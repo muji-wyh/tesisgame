@@ -4,13 +4,15 @@ signal hold_started(control: Button)
 signal hold_finished
 
 var _hold_target: Button
+var tap_controls: Array[Button] = []
 
 
 func _begin(point: Vector2, pointer: int, touch_id: int = -1) -> void:
 	super._begin(point, pointer, touch_id)
 	if is_instance_valid(_target):
-		_hold_target = _target
-		hold_started.emit(_hold_target)
+		if not tap_controls.has(_target):
+			_hold_target = _target
+			hold_started.emit(_hold_target)
 
 
 func _end_pointer_hold() -> void:
@@ -47,6 +49,8 @@ func _finish(point: Vector2, canceled: bool = false) -> void:
 		_motion.stop()
 	_clear_pointer()
 	set_process(_motion.is_active())
-	# Chests react to the held press, never to an extra synthetic click.
+	# Chests react to the held press. Explicit pager controls activate on release.
 	if tapped and is_instance_valid(target) and target == _button_at(point):
 		target.grab_focus()
+		if tap_controls.has(target):
+			target.pressed.emit()

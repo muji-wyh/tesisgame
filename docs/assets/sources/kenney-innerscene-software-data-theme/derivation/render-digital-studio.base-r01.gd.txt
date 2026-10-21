@@ -1,0 +1,440 @@
+extends SceneTree
+## Source-only renderer proposal. Root must inspect/check this before running it.
+## Only acquired source meshes are drawn; production profiles and media are untouched.
+
+const PACKET: String = "res://build/professional-english/software-data-theme-proposal-r01/"
+const INVENTORY_SHA: String = "99ce837da0ba0d3d6094a44ae137385a9c0f920bb6327082026cec7167ab6b69"
+const RECIPE_SHA: String = "a10c956fbecf8f9c87af4064fe6923d2e1c4c6856a26f69083ae9326390e50e1"
+const OUTPUT_PREFIX: String = "res://build/professional-english/software-data-theme-render-"
+const FULL_SIZE := Vector2i(768, 768)
+const GEOMETRY_EPSILON: float = 0.00001
+
+var output: String = ""
+var output_created: bool = false
+var stage: String = "rest"
+var failed: bool = false
+var recipe: Dictionary = {}
+var sources: Dictionary = {}
+var templates: Dictionary = {}
+var placed: Dictionary = {}
+var props: Array[Node3D] = []
+var scene: Node3D
+var camera: Camera3D
+var leaf: MeshInstance3D
+var pot: MeshInstance3D
+var leaf_rest: Transform3D
+var pot_rest: Transform3D
+var leaf_pivot := Vector3.ZERO
+var report: Dictionary = {
+	"schema": 1, "theme_id": "professional_software_data", "status": "not_started",
+	"source_records": {}, "objects": {}, "contacts": [], "captures": [], "failures": [],
+	"production_modified": false, "visual_acceptance": false, "motion_acceptance": false,
+	"audio_played": false, "theme_ready": false,
+	"notice": "Real source-model render candidates. No integrated theme, curriculum readiness, game-size visual or listening acceptance is implied."
+}
+
+
+func _initialize() -> void:
+	_run.call_deferred()
+
+
+func _save_report(status: String) -> void:
+	report.status = status
+	if not output_created or output.is_empty() or not DirAccess.dir_exists_absolute(output):
+		return
+	var file := FileAccess.open(output.path_join("render-report.json"), FileAccess.WRITE)
+	if file == null:
+		push_error("Cannot retain the render report: " + output)
+		failed = true
+		return
+	file.store_string(JSON.stringify(report, "\t") + "\n")
+	file.close()
+
+
+func _require(condition: bool, message: String) -> bool:
+	if condition:
+		return true
+	failed = true
+	report.failures.append(message)
+	_save_report("failed_partial_render_retained")
+	push_error(message)
+	quit(1)
+	return false
+
+
+func _array3(value: Vector3) -> Array:
+	return [value.x, value.y, value.z]
+
+
+func _array_bounds(value: AABB) -> Array:
+	return _array3(value.position) + _array3(value.size)
+
+
+func _vector(value: Array) -> Vector3:
+	return Vector3(float(value[0]), float(value[1]), float(value[2]))
+
+
+func _meshes(node: Node3D) -> Array[MeshInstance3D]:
+	var result: Array[MeshInstance3D] = []
+	if node is MeshInstance3D:
+		result.append(node as MeshInstance3D)
+	for child: Node in node.find_children("*", "MeshInstance3D", true, false):
+		result.append(child as MeshInstance3D)
+	return result
+
+
+func _bounds(node: Node3D) -> AABB:
+	var result := AABB()
+	var first: bool = true
+	for mesh: MeshInstance3D in _meshes(node):
+		var transform: Transform3D = node.global_transform.affine_inverse() * mesh.global_transform
+		var bounds: AABB = transform * mesh.get_aabb()
+		result = bounds if first else result.merge(bounds)
+		first = false
+	_require(not first, "Acquired model must contain mesh geometry: " + str(node.name))
+	return result
+
+
+func _world_bounds(node: Node3D) -> AABB:
+	return node.global_transform * _bounds(node)
+
+
+func _load_sources() -> void:
+	if not _require(FileAccess.get_sha256(PACKET + "source-inventory.json") == INVENTORY_SHA, "Frozen source inventory changed"):
+		return
+	if not _require(FileAccess.get_sha256(PACKET + "scene-recipe.json") == RECIPE_SHA, "Frozen scene recipe changed"):
+		return
+	var inventory: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(PACKET + "source-inventory.json"))
+	recipe = JSON.parse_string(FileAccess.get_file_as_string(PACKET + "scene-recipe.json"))
+	for item: Dictionary in inventory.sources:
+		var path: String = PACKET + str(item.local.path)
+		if not _require(FileAccess.file_exists(path), "Acquired model is absent: " + path):
+			return
+		var bytes: PackedByteArray = FileAccess.get_file_as_bytes(path)
+		if not _require(bytes.size() == int(item.local.bytes) and FileAccess.get_sha256(path) == str(item.local.sha256), "Acquired model bytes changed: " + path):
+			return
+		var key: String = str(item.local.path).get_file()
+		if not _require(not sources.has(key), "Duplicate acquired model basename: " + key):
+			return
+		sources[key] = item
+		var document := GLTFDocument.new()
+		var state := GLTFState.new()
+		if not _require(document.append_from_file(ProjectSettings.globalize_path(path), state) == OK, "GLB import failed: " + path):
+			return
+		var original: Node3D = document.generate_scene(state)
+		if not _require(original != null, "GLB scene generation failed: " + path):
+			return
+		if not _require(Array(state.get_animations()).is_empty(), "Unexpected acquired animation: " + path):
+			original.free()
+			return
+		# A neutral holder preserves every source root transform when measuring it.
+		var measure := Node3D.new()
+		root.add_child(measure)
+		measure.add_child(original)
+		var bounds: AABB = _bounds(measure)
+		var mesh_records: Array[Dictionary] = []
+		for mesh: MeshInstance3D in _meshes(original):
+			var materials: Array[String] = []
+			for index in range(mesh.mesh.get_surface_count()):
+				var material: Material = mesh.mesh.surface_get_material(index)
+				materials.append(str(material.resource_name) if material != null else "<none>")
+			mesh_records.append({"node": str(original.get_path_to(mesh)), "name": str(mesh.name),
+				"local_bounds_position_size": _array_bounds(mesh.get_aabb()), "source_materials": materials})
+		report.source_records[key] = {"source_path": path, "sha256": str(item.local.sha256), "bytes": bytes.size(),
+			"creator": item.creator, "license": item.license, "source_url": item.get("source_url", ""),
+			"native_bounds_position_size": _array_bounds(bounds), "source_animations": 0,
+			"mesh_nodes": mesh_records, "materials_and_geometry_modified": false}
+		measure.remove_child(original)
+		measure.free()
+		templates[key] = original
+		if failed:
+			return
+	_require(sources.size() == 14, "The frozen packet must provide all fourteen acquired models")
+
+
+func _instance(source: String, parent: Node3D, at: Vector3, yaw: float, factor: float) -> Node3D:
+	var key: String = source.get_file()
+	if not _require(templates.has(key), "No acquired source for " + key):
+		return null
+	var holder := Node3D.new()
+	parent.add_child(holder)
+	var copy: Node3D = templates[key].duplicate()
+	holder.add_child(copy)
+	var native_bounds: AABB = _bounds(holder)
+	copy.position += Vector3(-native_bounds.get_center().x, -native_bounds.position.y, -native_bounds.get_center().z)
+	holder.position = at
+	holder.rotation.y = deg_to_rad(yaw)
+	holder.scale = Vector3.ONE * factor
+	return holder
+
+
+func _room() -> void:
+	for x: float in recipe.room.floor_centres_x:
+		for z: float in recipe.room.floor_centres_z:
+			_instance("floorFull.glb", scene, Vector3(x, 0, z), 0, 1)
+	# These centers align the actual .05-thick structural slabs with floor edges.
+	# Window trim is retained and may project across the seam.
+	for index in range(recipe.room.rear_wall_centres_x.size()):
+		_instance(str(recipe.room.rear_wall_sources[index]), scene,
+			Vector3(float(recipe.room.rear_wall_centres_x[index]), 0.05, -2.025), 0, 1)
+	for z: float in recipe.room.left_wall_centres_z:
+		_instance("wall.glb", scene, Vector3(-2.525, 0.05, z), 90, 1)
+	report.room_adjustments = {
+		"rear_wall_z": {"authored_recipe": -2.05, "candidate": -2.025},
+		"left_wall_x": {"authored_recipe": -2.55, "candidate": -2.525},
+		"basis": "Independent decoded source geometry finds a .025 floor/slab gap after source centering. Actual rendered seam and window trim still require inspection."
+	}
+
+
+func _compose() -> void:
+	scene = Node3D.new()
+	root.add_child(scene)
+	_room()
+	if failed:
+		return
+	for item: Dictionary in recipe.objects:
+		var at := Vector3.ZERO
+		var support: Node3D = null
+		if item.has("contact"):
+			var support_id: String = str(item.contact).trim_suffix(".top")
+			if not _require(placed.has(support_id), "Contact support must precede its object: " + support_id):
+				return
+			support = placed[support_id]
+			at = Vector3(float(item.xz[0]), _world_bounds(support).end.y, float(item.xz[1]))
+		else:
+			at = _vector(item.position)
+		var object: Node3D = _instance(str(item.source), scene, at, float(item.yaw_degrees), float(item.uniform_scale))
+		if failed or object == null:
+			return
+		object.name = str(item.id)
+		placed[str(item.id)] = object
+		if str(item.layer) == "props":
+			props.append(object)
+		var bounds: AABB = _world_bounds(object)
+		report.objects[str(item.id)] = {"source": str(item.source).get_file(), "world_bounds_position_size": _array_bounds(bounds),
+			"position": _array3(at), "yaw_degrees": item.yaw_degrees, "uniform_scale": item.uniform_scale, "layer": item.layer}
+		if support != null:
+			var support_bounds: AABB = _world_bounds(support)
+			var gap: float = bounds.position.y - support_bounds.end.y
+			report.contacts.append({"object": str(item.id), "support": str(item.contact), "vertical_gap": gap,
+				"source_bounds_contact_only": true, "support_bounds_position_size": _array_bounds(support_bounds)})
+			if not _require(absf(gap) < GEOMETRY_EPSILON, "Contact gap after placement: " + str(item.id)):
+				return
+
+
+func _prepare_leaf() -> void:
+	var plant: Node3D = placed["studio-plant"]
+	for mesh: MeshInstance3D in _meshes(plant):
+		if str(mesh.name) == "plant":
+			leaf = mesh
+		elif "pottedPlant" in str(mesh.name):
+			pot = mesh
+	if not _require(leaf != null and pot != null, "The acquired plant must retain separate leaf and pot meshes"):
+		return
+	leaf_rest = leaf.transform
+	pot_rest = pot.global_transform
+	var vertices: Array[Vector3] = []
+	var lowest: float = INF
+	for surface in range(leaf.mesh.get_surface_count()):
+		var arrays: Array = leaf.mesh.surface_get_arrays(surface)
+		var positions: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+		for vertex: Vector3 in positions:
+			vertices.append(vertex)
+			lowest = minf(lowest, vertex.y)
+	if not _require(not vertices.is_empty(), "Leaf mesh has no inspectable source vertices"):
+		return
+	var unique_base: Dictionary = {}
+	for vertex: Vector3 in vertices:
+		if absf(vertex.y - lowest) <= GEOMETRY_EPSILON:
+			unique_base[vertex] = true
+	if not _require(not unique_base.is_empty(), "Could not derive the actual leaf rooted base"):
+		return
+	for vertex: Vector3 in unique_base:
+		leaf_pivot += vertex
+	leaf_pivot /= float(unique_base.size())
+	report.authored_motion = {"source_animations": 0, "source_node": str(plant.get_path_to(leaf)),
+		"axis": "leaf-local Z", "pivot_leaf_local": _array3(leaf_pivot), "lowest_unique_vertices": unique_base.size(),
+		"pivot_method": "Mean of unique actual vertices at minimum local Y within .00001; source node origin is a corner. Inspect this derived rooted point before accepting motion.",
+		"angles_degrees": recipe.ambient_motion.angles_degrees, "frames_per_second": 2, "rest_frame": 0,
+		"cycle_seconds": 8, "authored_motion_accepted": false,
+		"warning": "The original .6 degree proposal has an approximate one-pixel displacement bound. Pixel/shadow change and perceptibility must be assessed from rendered output. Amplitude is not increased here."}
+
+
+func _pose(angle: float) -> void:
+	var rotation := Basis(Vector3.BACK, deg_to_rad(angle))
+	leaf.transform = leaf_rest * Transform3D(rotation, leaf_pivot - rotation * leaf_pivot)
+	_require(pot.global_transform.is_equal_approx(pot_rest), "The fixed pot transform changed")
+
+
+func _capture(filename: String, details: Dictionary = {}) -> Image:
+	for frame in range(8):
+		await process_frame
+	await RenderingServer.frame_post_draw
+	var image: Image = root.get_texture().get_image()
+	image.convert(Image.FORMAT_RGBA8)
+	if not _require(image.get_size() == root.size, "Captured viewport dimensions differ from the requested native size"):
+		return null
+	var target: String = output.path_join(filename)
+	if not _require(not FileAccess.file_exists(target) and image.save_png(target) == OK, "Could not exclusively create render output: " + target):
+		return null
+	var row: Dictionary = {"path": filename, "width": image.get_width(), "height": image.get_height(),
+		"sha256": FileAccess.get_sha256(target), "bytes": FileAccess.get_file_as_bytes(target).size(), "visual_status": "pending_inspection"}
+	row.merge(details, true)
+	report.captures.append(row)
+	_save_report("rendering_pending_inspection")
+	return image
+
+
+func _review_size(image: Image, dimensions: Vector2i, filename: String) -> void:
+	var smaller: Image = image.duplicate()
+	smaller.resize(dimensions.x, dimensions.y, Image.INTERPOLATE_LANCZOS)
+	var target: String = output.path_join(filename)
+	if not _require(not FileAccess.file_exists(target) and smaller.save_png(target) == OK, "Could not save review-only resize"):
+		return
+	report.captures.append({"path": filename, "width": dimensions.x, "height": dimensions.y,
+		"sha256": FileAccess.get_sha256(target), "bytes": FileAccess.get_file_as_bytes(target).size(),
+		"scope": "Source-composition readability thumbnail; not actual game UI or device evidence", "visual_status": "pending_inspection"})
+
+
+func _source_views() -> void:
+	scene.visible = false
+	root.size = Vector2i(512, 512)
+	for key: String in ["mobile-whiteboard-education-furniture.glb", "televisionModern.glb", "laptop.glb", "pottedPlant.glb"]:
+		var isolation := Node3D.new()
+		root.add_child(isolation)
+		var object: Node3D = _instance(key, isolation, Vector3.ZERO, 0, 1)
+		if failed:
+			return
+		var bounds: AABB = _world_bounds(object)
+		var span: float = maxf(bounds.size.x, maxf(bounds.size.y, bounds.size.z))
+		camera.size = span * 1.7
+		camera.position = Vector3(0, bounds.get_center().y + span * 0.35, span * 3)
+		camera.look_at(bounds.get_center())
+		for yaw: float in [0.0, 90.0, 180.0]:
+			object.rotation_degrees.y = yaw
+			await _capture("source-" + key.get_basename() + "-yaw-" + str(int(yaw)) + ".png",
+				{"source_only": true, "source": key, "yaw_degrees": yaw, "orientation_front_back_unaccepted": true})
+			if failed:
+				return
+		isolation.free()
+	scene.visible = true
+
+
+func _configure_scene() -> void:
+	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
+	root.content_scale_size = Vector2i.ZERO
+	root.min_size = Vector2i.ZERO
+	root.size = FULL_SIZE
+	root.msaa_3d = Viewport.MSAA_4X
+	var world := WorldEnvironment.new()
+	world.environment = Environment.new()
+	world.environment.background_mode = Environment.BG_COLOR
+	world.environment.background_color = Color(str(recipe.lighting.background_color))
+	world.environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+	world.environment.ambient_light_color = Color.WHITE
+	world.environment.ambient_light_energy = float(recipe.lighting.ambient_energy_start)
+	world.environment.tonemap_mode = Environment.TONE_MAPPER_LINEAR
+	root.add_child(world)
+	var light := DirectionalLight3D.new()
+	light.light_color = Color(str(recipe.lighting.key_color))
+	light.light_energy = float(recipe.lighting.key_energy_start)
+	light.rotation_degrees = _vector(recipe.lighting.key_rotation_degrees)
+	light.shadow_enabled = true
+	root.add_child(light)
+	camera = Camera3D.new()
+	camera.projection = Camera3D.PROJECTION_ORTHOGONAL
+	camera.keep_aspect = Camera3D.KEEP_HEIGHT
+	camera.size = float(recipe.camera.starting_size)
+	root.add_child(camera)
+	camera.position = _vector(recipe.camera.starting_position)
+	camera.look_at(_vector(recipe.camera.look_at))
+	camera.current = true
+
+
+func _run() -> void:
+	for argument: String in OS.get_cmdline_user_args():
+		if argument.begins_with("--stage="):
+			stage = argument.trim_prefix("--stage=")
+		elif argument.begins_with("--output="):
+			output = argument.trim_prefix("--output=")
+		else:
+			_require(false, "Unknown renderer argument: " + argument)
+			return
+	if not _require(stage in ["rest", "motion"], "Use exactly --stage=rest or --stage=motion"):
+		return
+	if output.is_empty():
+		output = OUTPUT_PREFIX + "r01/" + stage + "-r01"
+	if not _require(output.begins_with(OUTPUT_PREFIX) and not ".." in output and not "\\" in output,
+		"Output must be a fresh Digital Studio review directory under build/professional-english"):
+		return
+	if not _require(not DirAccess.dir_exists_absolute(output) and not FileAccess.file_exists(output), "Keep existing attempts; choose a new output directory"):
+		return
+	if not _require(DisplayServer.get_name() != "headless", "Run with an actual rendering backend; omit --headless"):
+		return
+	if not _require(DirAccess.make_dir_recursive_absolute(output) == OK, "Cannot create review output directory"):
+		return
+	output_created = true
+	report.stage = stage
+	report.source_inventory_sha256 = INVENTORY_SHA
+	report.source_recipe_sha256 = RECIPE_SHA
+	report.renderer = RenderingServer.get_video_adapter_name()
+	_save_report("preparing_sources")
+	_load_sources()
+	if failed:
+		return
+	_configure_scene()
+	_compose()
+	if failed:
+		return
+	_prepare_leaf()
+	if failed:
+		return
+	_pose(0)
+	var rest: Image = await _capture("composition-rest.png", {"angle_degrees": 0, "source_composition": true})
+	if failed:
+		return
+	_review_size(rest, Vector2i(296, 296), "composition-phone-square-review.png")
+	if failed:
+		return
+	for object: Node3D in props:
+		object.visible = false
+	await _capture("environment-rest.png", {"foreground_props_hidden": true})
+	for object: Node3D in props:
+		object.visible = true
+	if failed:
+		return
+	var angles: Array = [-0.6, 0.6] if stage == "rest" else recipe.ambient_motion.angles_degrees
+	for index in range(angles.size()):
+		var angle: float = float(angles[index])
+		_pose(angle)
+		var filename: String = "extreme-%02d.png" % index if stage == "rest" else "composite-%02d.png" % index
+		await _capture(filename, {"frame_index": index, "angle_degrees": angle, "authored_leaf_motion": true})
+		if failed:
+			return
+	_pose(0)
+	var endpoint: Image = await _capture("loop-end.png", {"angle_degrees": 0, "rest_repeat_control": true})
+	if failed:
+		return
+	var rest_exact: bool = endpoint.get_data() == rest.get_data()
+	report.repeated_rest_pixels_equal = rest_exact
+	if not _require(rest_exact, "Repeated rest pixels differ; retain these frames and resolve temporal rendering noise before layer/atlas derivation"):
+		return
+	if stage == "rest":
+		root.size = Vector2i(1280, 800)
+		var overview: Image = await _capture("composition-wide-review.png", {"native_aspect": "16:10", "not_home_replacement": true})
+		if failed:
+			return
+		_review_size(overview, Vector2i(512, 320), "composition-overview-review.png")
+		if failed:
+			return
+		await _source_views()
+	if failed:
+		return
+	for original: Node3D in templates.values():
+		original.free()
+	_save_report("source_render_candidates_complete_pending_visual_inspection")
+	if failed:
+		quit(1)
+		return
+	print("Digital Studio source render: %s stage, %d captures, zero source animations; visual acceptance pending" % [stage, report.captures.size()])
+	quit(0)

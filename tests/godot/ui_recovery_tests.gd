@@ -69,9 +69,10 @@ func _tap_control(control: Control) -> void:
 		await process_frame
 
 func _win(app) -> void:
-	# Use a persisted chest reservation; chance outcomes have separate coverage.
+	# Match chance is fixed; Memory earns its tier through real completion.
 	PlayerFlow.reserve_pair_chest(app)
 	if app._mode_id == "memory":
+		PlayerFlow.start_memory(app)
 		for word in app.model.lesson_words:
 			for index in range(app._memory.memory.cards.size()):
 				if app._memory.memory.cards[index].word.id == word.id:
@@ -171,6 +172,7 @@ func _check_background_collection_close(app) -> void:
 			app.cards[first.id].pressed.emit()
 			app.cards[wrong.id].pressed.emit()
 		else:
+			PlayerFlow.start_memory(app)
 			var first: Dictionary = app._memory.memory.cards[0]
 			app._memory.card_buttons[0].pressed.emit()
 			for index in range(1, app._memory.memory.cards.size()):
@@ -268,6 +270,7 @@ func _run() -> void:
 	await process_frame
 	check(app._mode_id == "memory", "Other practice modes remain available before progress recovers")
 	if app._mode_id == "memory":
+		PlayerFlow.start_memory(app)
 		app._memory.card_buttons[0].pressed.emit()
 	var selection: Array = app._memory.memory.selected_indices.duplicate()
 	storage.fail_read = false
@@ -310,7 +313,9 @@ func _run() -> void:
 	storage.fail_write = true
 	app._single_result.replay_button.pressed.emit()
 	check(app._mode_id == "memory" and app.model.phase == "won", "A failed automatic chest settlement keeps the completed Memory game")
-	check(app._save_error and not app._pending_fragment.is_empty() and _total(app) == before, "A failed chest save retains one pending piece without inflating progress")
+	var pending_pair: Dictionary = app.medal_progress.pair_round("memory")
+	check(app._save_error and not pending_pair.fragment.is_empty() and not pending_pair.settled and _total(app) == before,
+		"A failed chest save retains one durable pending piece without inflating progress")
 	check(not app._message.is_visible_in_tree(), "A saving error does not add duplicate text below the result actions")
 	check(app._single_result.retry_button.is_visible_in_tree() and app._single_result.retry_button.text == "Retry save"
 		and app._single_result.replay_button.disabled and app._single_result.home_button.disabled

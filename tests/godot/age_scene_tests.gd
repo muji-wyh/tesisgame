@@ -229,6 +229,20 @@ func _run() -> void:
 		await settle()
 		var scale: float = app.Style.ui_scale(app)
 		check(app._age_buttons.keys() == ["3", "4", "5", "6", "7", "8", "9", "10", "11", "12"], "All ten cohorts remain available for review")
+		app._age_scroll.scroll_horizontal = 0
+		await settle()
+		if app._age_next.is_visible_in_tree():
+			var selected_age: int = app._catalog_age
+			check(app._age_previous.disabled and not app._age_next.disabled,
+				"An overflowing age rail advertises the available direction at its start")
+			app._age_next.pressed.emit()
+			await settle()
+			check(app._age_scroll.scroll_horizontal > 0 and app._catalog_age == selected_age,
+				"The next-age arrow reveals more choices without changing the selected cohort")
+			for arrow: Button in [app._age_previous, app._age_next]:
+				check(arrow.size.x * scale >= 44 and arrow.size.y * scale >= 44
+					and app.get_global_rect().encloses(arrow.get_global_rect()),
+					"Age rail arrows stay reachable with 44px touch targets")
 		for id in app._age_buttons:
 			var button: Button = app._age_buttons[id]
 			button.grab_focus()

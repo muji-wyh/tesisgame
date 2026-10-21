@@ -1,0 +1,97 @@
+{
+  "project": "Tabler Icons",
+  "version": "3.35.0",
+  "creator": "Paweł Kuna",
+  "license": "MIT",
+  "license_file": "assets/images/ui/LICENSE-Tabler.txt",
+  "acquired": "2026-10-20",
+  "status": "Acquired, source-scale inspected, integrated, and reviewed in native desktop, portrait, and landscape game captures.",
+  "transformation": "Only currentColor is replaced with #ffffff for theme tinting. Source vector paths, viewBox, and dimensions are unchanged.",
+  "animation": "Static source artwork; no animation clips.",
+  "assets": [
+    {
+      "id": "menu",
+      "file": "assets/images/ui/controls/menu.svg",
+      "source": "https://raw.githubusercontent.com/tabler/tabler-icons/v3.35.0/icons/outline/menu-2.svg",
+      "source_sha256": "73f96e4a42a45e666b5288cc65ace689e977c4080abf6af3249a0e015bb493f9",
+      "integrated_sha256": "a3b67152a7029dccf4d91e0293d5d71724965ffa848acd16957dbbcd004ded8d",
+      "variant": "outline"
+    },
+    {
+      "id": "microphone",
+      "file": "assets/images/ui/controls/microphone.svg",
+      "source": "https://raw.githubusercontent.com/tabler/tabler-icons/v3.35.0/icons/outline/microphone.svg",
+      "source_sha256": "312cf73632c144fa3c15186bc8ba5f64f171949baaca406d1695cd6d8df71125",
+      "integrated_sha256": "977b664e65de5a77501f2928b76956325d9f30deda11aef0aa2052575bbdb980",
+      "variant": "outline"
+    },
+    {
+      "id": "microphone-active",
+      "file": "assets/images/ui/controls/microphone-active.svg",
+      "source": "https://raw.githubusercontent.com/tabler/tabler-icons/v3.35.0/icons/filled/microphone.svg",
+      "source_sha256": "05dda71d27415c3b3d8bee103fb3e89339188a1a00b4aa9c7e8529e932bfc7e9",
+      "integrated_sha256": "f968a2d47877162feb0928a76f48c6be4679aa971b6fc3b1d6d18ecf5b2eaa03",
+      "variant": "filled"
+    },
+    {
+      "id": "bulb",
+      "file": "assets/images/ui/controls/bulb.svg",
+      "source": "https://raw.githubusercontent.com/tabler/tabler-icons/v3.35.0/icons/outline/bulb.svg",
+      "source_sha256": "780f14d801af94cfe5846c7d3535aed0fef5ac706fb716853657d62fd0ab84b0",
+      "integrated_sha256": "1dda3320d4526cec949d31b4b6e85fd9233b9a96ec1fe65877ab34bf4782df64",
+      "variant": "outline"
+    },
+    {
+      "id": "eye",
+      "file": "assets/images/ui/controls/eye.svg",
+      "source": "https://raw.githubusercontent.com/tabler/tabler-icons/v3.35.0/icons/outline/eye.svg",
+      "source_sha256": "c1d698e60f82d4c76f6640f866956c51c9249f2ca059b39aca194db936aac8ef",
+      "integrated_sha256": "2229959ca2bc2746e0f28fb48d455448197f26312743d8b22e8e19243fd56911",
+      "variant": "outline"
+    },
+    {
+      "id": "eye-closed",
+      "file": "assets/images/ui/controls/eye-closed.svg",
+      "source": "https://raw.githubusercontent.com/tabler/tabler-icons/v3.35.0/icons/outline/eye-closed.svg",
+      "source_sha256": "e4db09f90b0cfaf1eb7c0596bb76b7eaa9519480d20e745c97bb087a3a0c69fe",
+      "integrated_sha256": "b07e38dfd653046a051f071b72d3eeea82fdc4971781bfa3514e17df6fa95923",
+      "variant": "outline"
+    },
+    {
+      "id": "chevron-left",
+      "file": "assets/images/ui/controls/chevron-left.svg",
+      "source": "https://raw.githubusercontent.com/tabler/tabler-icons/v3.35.0/icons/outline/chevron-left.svg",
+      "source_sha256": "7f0a2256adbe41cc2618ebd68fd68f9a5e8c64d14955aa0c244228caf3a30c0c",
+      "integrated_sha256": "87260220a403a162b9a8a59055481001bbae25bae2276981cfeb519a461ec32a",
+      "variant": "outline"
+    },
+    {
+      "id": "chevron-right",
+      "file": "assets/images/ui/controls/chevron-right.svg",
+      "source": "https://raw.githubusercontent.com/tabler/tabler-icons/v3.35.0/icons/outline/chevron-right.svg",
+      "source_sha256": "00e81f3a02f69089a08d5021086bf9ac1464f4ba514773908f66f777dbf9adb0",
+      "integrated_sha256": "70551855e36a74bd5e0ffec1ba255e7281d6a606194fbc135d9d37e7de9fe62c",
+      "variant": "outline"
+    },
+    {
+      "id": "home",
+      "file": "assets/images/ui/controls/home.svg",
+      "source": "https://raw.githubusercontent.com/tabler/tabler-icons/v3.35.0/icons/outline/home.svg",
+      "source_sha256": "364f70af3c90a9ef4178610227bf68c0b43b897241f146a8e56faf9724cc9c42",
+      "integrated_sha256": "1cce711b9a875f8ae61142517ab745845864d697df6eeab2d77831ac7ed3642a",
+      "variant": "outline"
+    }
+  ],
+  "source_review": {
+    "date": "2026-10-20",
+    "display_size": 28,
+    "target_size": 44,
+    "evidence": "build/ui-polish-20261020/control-icons-44px.png",
+    "states": [
+      "dark icon on light control",
+      "white icon on dark control",
+      "open and closed eye",
+      "outline and active filled microphone"
+    ]
+  }
+}

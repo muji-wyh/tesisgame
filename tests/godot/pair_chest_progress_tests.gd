@@ -1,6 +1,7 @@
 extends SceneTree
 
 const Progress = preload("res://scripts/medal_progress.gd")
+const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 
 var checks: int = 0
 var failures: int = 0
@@ -64,6 +65,13 @@ func _run() -> void:
 	_test_empty_browser_migration()
 	_test_completed_season_and_claims()
 	_test_invalid_saved_state()
+	_test_memory_performance_tiers()
+	_test_memory_no_guarantee()
+	_test_memory_legacy_migration()
+	_test_memory_write_failures()
+	_test_memory_stale_tabs()
+	_test_memory_completed_season()
+	_test_memory_invalid_saved_state()
 	print("Pair chest progress: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
@@ -330,3 +338,235 @@ func _test_invalid_saved_state() -> void:
 		check(not progress.load_progress() and not progress.error.is_empty(), "Invalid pair chest state is rejected")
 		check(fixture.storage.text == saved, "Invalid saves are preserved for recovery")
 		check(progress.begin_pair_round("match", "overwrite", 1).is_empty(), "Failed loads cannot overwrite saved rewards")
+
+
+func _test_memory_performance_tiers() -> void:
+	for tier: int in range(RewardProgress.THEMES.size() + 1):
+		var fixture: Dictionary = _fixture()
+		var progress = fixture.progress
+		var id: String = "performance-%d" % tier
+		var initial: Dictionary = progress.begin_memory_round(id)
+		check(initial.get("policy") == Progress.MEMORY_REWARD_POLICY and initial.tier == 0
+			and initial.pair == 0 and not initial.awarded and not initial.completed and not initial.settled,
+			"A Memory preview does not reserve or award a chest: tier %d" % tier)
+		var writes: int = fixture.storage.save_calls
+		check(progress.begin_memory_round(id) == initial and fixture.storage.save_calls == writes,
+			"Beginning the same Memory round is idempotent")
+		initial.fragment["medal_id"] = "spring-1"
+		check(progress.pair_round("memory").fragment.is_empty(), "Memory snapshots cannot mutate saved contents")
+		progress = _reload(fixture)
+		check(not progress.pair_round("memory").completed and not progress.pair_round("memory").awarded
+			and progress.counts.is_empty(), "Reloading an unfinished preview cannot turn it into a reward")
+		check(not progress.record_pair_reward("memory", id, "summer")
+			and not progress.finish_pair_round("memory", id) and not progress.settle_pair_reward("memory", id)
+			and fixture.storage.save_calls == writes,
+			"Legacy reveal, generic completion, and exit settlement cannot earn a preview")
+		check(progress.finish_memory_round(id, tier, "summer"), "Save final Memory tier %d" % tier)
+		var earned: Dictionary = progress.pair_round("memory")
+		check(earned.completed and earned.tier == tier and earned.awarded == (tier > 0)
+			and not earned.settled and earned.pair == (5 if tier > 0 else 0),
+			"Completion stores the final tier and ownership together")
+		check(earned.theme == ("summer" if tier > 0 else "")
+			and earned.fragment == ({"medal_id": "summer-1", "before": 0, "after": 1, "completed": false} if tier > 0 else {}),
+			"The learning world owns medal contents independently of chest tier")
+		check(progress.count_for("summer-1") == 0 and fixture.storage.save_calls == writes + 1,
+			"Completion is one save and leaves medal contents unopened")
+		writes = fixture.storage.save_calls
+		check(progress.finish_memory_round(id, RewardProgress.THEMES.size() - tier, "winter") and progress.pair_round("memory") == earned
+			and fixture.storage.save_calls == writes,
+			"A duplicate completion cannot reroll the saved tier or medal world")
+		progress = _reload(fixture)
+		check(progress.pair_round("memory") == earned and progress.pair_dry_rounds("memory") == 0,
+			"Reload preserves the exact Memory result without a dry streak")
+		if tier > 0:
+			check(progress.begin_memory_round("replacement").is_empty(), "A new round cannot discard an earned Memory chest")
+			check(progress.settle_pair_reward("memory", id) and progress.count_for("summer-1") == 1,
+				"Memory settlement grants one fragment regardless of coin tier")
+			progress = _reload(fixture)
+			writes = fixture.storage.save_calls
+			check(progress.settle_pair_reward("memory", id) and progress.count_for("summer-1") == 1
+				and fixture.storage.save_calls == writes, "Memory settlement remains exactly once after reload")
+		else:
+			check(not progress.settle_pair_reward("memory", id) and progress.counts.is_empty(),
+				"Tier zero has no chest or fragment to settle")
+		check(not progress.begin_memory_round("next-round").is_empty(), "A consumed or tier-zero Memory result permits a new round")
+		check(not progress.finish_memory_round(id, RewardProgress.THEMES.size(), "spring"), "Late completion cannot affect a newer Memory round")
+
+
+func _test_memory_no_guarantee() -> void:
+	var fixture: Dictionary = _fixture()
+	var progress = fixture.progress
+	for index in range(2):
+		var id: String = "match-dry-%d" % index
+		progress.begin_pair_round("match", id, 0)
+		progress.finish_pair_round("match", id)
+	var match_state: Dictionary = progress.pair_round("match")
+	for index in range(5):
+		var id: String = "memory-dry-%d" % index
+		check(not progress.begin_memory_round(id).is_empty() and progress.finish_memory_round(id, 0, "spring"),
+			"Repeated unsuccessful Memory rounds can finish without a chest")
+		check(progress.pair_dry_rounds("memory") == 0 and not progress.pair_round("memory").awarded,
+			"Memory never accumulates or invokes the random-chest guarantee")
+	check(progress.pair_dry_rounds("match") == 2 and progress.pair_round("match") == match_state,
+		"Memory performance does not change Match's saved guarantee")
+	check(progress.begin_pair_round("match", "match-guaranteed", 0).pair == 1,
+		"Match still guarantees a chest after its two completed dry rounds")
+	progress.begin_memory_round("abandoned")
+	check(not progress.begin_memory_round("restarted").is_empty() and not progress.finish_memory_round("abandoned", RewardProgress.THEMES.size(), "spring"),
+		"Restarting an unfinished Memory board replaces only its callback identity")
+	check(not progress.pair_round("memory").awarded and progress.counts.is_empty(),
+		"Abandoning a top-tier preview gives no reward")
+
+
+func _test_memory_legacy_migration() -> void:
+	var fixture: Dictionary = _fixture()
+	var legacy = fixture.progress
+	legacy.begin_pair_round("memory", "legacy-earned", 2)
+	legacy.record_pair_reward("memory", "legacy-earned", "ocean")
+	var pending: Dictionary = legacy.pair_round("memory")
+	var config := ConfigFile.new()
+	check(config.parse(fixture.storage.text) == OK, "Read legacy Memory migration fixture")
+	config.set_value("pair_chests", "version", 1)
+	fixture.storage.text = config.encode_to_text()
+	var saved: String = fixture.storage.text
+	var writes: int = fixture.storage.save_calls
+	var progress = _reload(fixture)
+	check(progress.pair_round("memory") == pending and fixture.storage.text == saved and fixture.storage.save_calls == writes,
+		"Version-one pending Memory chests load unchanged without a migration write")
+	check(progress.begin_memory_round("new-policy").is_empty() and progress.begin_memory_round("legacy-earned") == pending,
+		"Legacy pending ownership survives both new and repeated begin calls")
+	check(not progress.finish_memory_round("legacy-earned", RewardProgress.THEMES.size(), "spring") and progress.pair_round("memory") == pending,
+		"Legacy chest contents cannot be converted by a new completion callback")
+	check(progress.settle_pair_reward("memory", "legacy-earned") and progress.count_for("ocean-1") == 1,
+		"A legacy midround chest remains recoverable before any new Memory round")
+	check(config.parse(fixture.storage.text) == OK and config.get_value("pair_chests", "version") == 2,
+		"The first successful mutation upgrades the container version atomically")
+	progress = _reload(fixture)
+	check(progress.settle_pair_reward("memory", "legacy-earned") and progress.count_for("ocean-1") == 1,
+		"Migrated legacy settlement cannot duplicate its fragment")
+	check(progress.begin_memory_round("new-policy").get("policy") == Progress.MEMORY_REWARD_POLICY,
+		"Settling a legacy chest allows the next round to adopt the performance policy")
+	var dry_fixture: Dictionary = _fixture()
+	var old = dry_fixture.progress
+	for index in range(2):
+		var id: String = "legacy-dry-%d" % index
+		old.begin_pair_round("memory", id, 0)
+		old.finish_pair_round("memory", id)
+	check(old.pair_dry_rounds("memory") == 2, "Prepare an old Memory guarantee")
+	check(not old.begin_memory_round("new-zero").is_empty() and old.finish_memory_round("new-zero", 0, "spring")
+		and old.pair_dry_rounds("memory") == 0 and not old.pair_round("memory").awarded,
+		"The new Memory policy discards legacy pity without inventing a chest")
+
+
+func _test_memory_write_failures() -> void:
+	var fixture: Dictionary = _fixture()
+	var progress = fixture.progress
+	fixture.storage.writable = false
+	var saved: String = fixture.storage.text
+	check(progress.begin_memory_round("retry").is_empty() and progress.pair_round("memory").is_empty()
+		and fixture.storage.text == saved, "A failed Memory begin publishes no preview ownership")
+	fixture.storage.writable = true
+	progress.begin_memory_round("retry")
+	var initial: Dictionary = progress.pair_round("memory")
+	saved = fixture.storage.text
+	var writes: int = fixture.storage.save_calls
+	check(not progress.finish_memory_round("retry", -1, "spring") and not progress.finish_memory_round("retry", RewardProgress.THEMES.size() + 1, "spring")
+		and not progress.finish_memory_round("retry", RewardProgress.THEMES.size(), "unknown") and not progress.finish_memory_round("missing", 2, "spring")
+		and fixture.storage.save_calls == writes, "Invalid final tiers, medal worlds, and identities never write")
+	fixture.storage.writable = false
+	check(not progress.finish_memory_round("retry", RewardProgress.THEMES.size(), "spring") and progress.pair_round("memory") == initial
+		and fixture.storage.text == saved, "A failed completion changes neither final tier nor ownership")
+	fixture.storage.writable = true
+	check(progress.finish_memory_round("retry", 2, "spring"), "A failed completion can retry the actual final tier")
+	var earned: Dictionary = progress.pair_round("memory")
+	saved = fixture.storage.text
+	fixture.storage.writable = false
+	check(not progress.settle_pair_reward("memory", "retry") and progress.pair_round("memory") == earned
+		and progress.counts.is_empty() and fixture.storage.text == saved,
+		"A failed Memory settlement preserves its exact pending fragment and tier")
+	fixture.storage.writable = true
+	check(progress.settle_pair_reward("memory", "retry") and progress.count_for("spring-1") == 1,
+		"Retry consumes the preserved Memory reward exactly once")
+	var settled: Dictionary = progress.pair_round("memory")
+	saved = fixture.storage.text
+	fixture.storage.writable = false
+	check(progress.begin_memory_round("next").is_empty() and progress.pair_round("memory") == settled
+		and fixture.storage.text == saved, "A failed next-round write cannot erase the previous receipt")
+
+
+func _test_memory_stale_tabs() -> void:
+	var fixture: Dictionary = _fixture()
+	var first = fixture.progress
+	first.begin_memory_round("shared-performance")
+	var stale = _reload(fixture)
+	check(first.finish_memory_round("shared-performance", 2, "summer"), "One browser tab completes Memory")
+	var saved: String = fixture.storage.text
+	check(not stale.finish_memory_round("shared-performance", RewardProgress.THEMES.size(), "spring")
+		and not stale.pair_round("memory").completed and fixture.storage.text == saved,
+		"A stale tab cannot replace a saved Memory tier or learning world")
+	check(stale.load_progress() and stale.pair_round("memory").tier == 2, "Reload exposes the authoritative final tier")
+	check(first.settle_pair_reward("memory", "shared-performance"), "The first tab settles its Memory fragment")
+	saved = fixture.storage.text
+	check(not stale.settle_pair_reward("memory", "shared-performance") and stale.count_for("summer-1") == 0
+		and fixture.storage.text == saved, "A stale settlement cannot duplicate Memory contents")
+	check(stale.load_progress() and stale.settle_pair_reward("memory", "shared-performance")
+		and stale.count_for("summer-1") == 1, "Reloaded recovery confirms the existing receipt without a second grant")
+
+
+func _test_memory_completed_season() -> void:
+	var fixture: Dictionary = _fixture()
+	var progress = fixture.progress
+	for index in range(18):
+		check(progress.claim(progress.next_fragment("winter")), "Fill the Memory fixture's medal world")
+	progress.begin_memory_round("complete-world")
+	check(progress.finish_memory_round("complete-world", RewardProgress.THEMES.size(), "winter") and progress.pair_round("memory").fragment.is_empty(),
+		"A fully collected learning world still earns its performance chest without extra medal contents")
+	check(progress.settle_pair_reward("memory", "complete-world") and progress.completed_count("winter") == 6,
+		"An empty-fragment performance chest still has a durable settlement")
+
+
+func _test_memory_invalid_saved_state() -> void:
+	var fixture: Dictionary = _fixture()
+	fixture.progress.begin_memory_round("valid-performance")
+	fixture.progress.finish_memory_round("valid-performance", 2, "summer")
+	var config := ConfigFile.new()
+	check(config.parse(fixture.storage.text) == OK, "Read a valid Memory performance fixture")
+	var valid: Dictionary = config.get_value("pair_chests", "state")
+	var scenarios: Array[Dictionary] = []
+	for field: String in ["tier", "policy"]:
+		var missing: Dictionary = valid.duplicate(true)
+		missing.memory.round.erase(field)
+		scenarios.append(missing)
+	for bad_tier: Variant in [-1, RewardProgress.THEMES.size() + 1, 2.0, "2", true]:
+		var wrong_tier: Dictionary = valid.duplicate(true)
+		wrong_tier.memory.round.tier = bad_tier
+		scenarios.append(wrong_tier)
+	for change: Array in [["policy", "unknown"], ["completed", false], ["awarded", false], ["pair", 3],
+		["tier", 0], ["theme", "winter"], ["extra", true], ["settled", "true"]]:
+		var changed: Dictionary = valid.duplicate(true)
+		changed.memory.round[change[0]] = change[1]
+		scenarios.append(changed)
+	var wrong_streak: Dictionary = valid.duplicate(true)
+	wrong_streak.memory.dry_rounds = 1
+	scenarios.append(wrong_streak)
+	var wrong_mode: Dictionary = valid.duplicate(true)
+	wrong_mode.match = wrong_mode.memory.duplicate(true)
+	scenarios.append(wrong_mode)
+	var wrong_fragment: Dictionary = valid.duplicate(true)
+	wrong_fragment.memory.round.fragment.after = 2
+	scenarios.append(wrong_fragment)
+	for state: Dictionary in scenarios:
+		config.set_value("pair_chests", "version", 2)
+		config.set_value("pair_chests", "state", state)
+		fixture.storage.text = config.encode_to_text()
+		var saved: String = fixture.storage.text
+		var progress := Progress.new(fixture.path + ".cfg", fixture.path + "-legacy.cfg", fixture.storage)
+		check(not progress.load_progress() and not progress.error.is_empty(), "Malformed Memory performance state is rejected")
+		check(progress.begin_memory_round("overwrite").is_empty() and fixture.storage.text == saved,
+			"Malformed performance saves remain untouched for recovery")
+	for version: Variant in [1, 0, 3, "2", 2.0]:
+		config.set_value("pair_chests", "version", version)
+		config.set_value("pair_chests", "state", valid)
+		fixture.storage.text = config.encode_to_text()
+		var progress := Progress.new(fixture.path + ".cfg", fixture.path + "-legacy.cfg", fixture.storage)
+		check(not progress.load_progress(), "Performance records require the exact supported version-two container")

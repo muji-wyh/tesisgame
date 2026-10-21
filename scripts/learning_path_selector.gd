@@ -34,6 +34,7 @@ var _retry: bool = false
 var _status_text: String = ""
 var _heading: Label
 var _active: Label
+var _compact_path: Label
 var _navigation: HFlowContainer
 var _change_path: Button
 var _change_career: Button
@@ -61,17 +62,29 @@ var _search_word_pattern := RegEx.create_from_string("[a-z0-9]+")
 func _init() -> void:
 	name = "LearningPathSelector"
 	size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_heading = _label("Choose your learning path", 20)
+	_heading = _label("Choose your learning path", 22)
+	_heading.add_theme_font_override("font", Style.HEADING_FONT)
 	add_child(_heading)
-	_active = _label("", 14)
+	_active = _label("", 15)
+	_active.add_theme_color_override("font_color", Style.MUTED)
 	add_child(_active)
 	_navigation = HFlowContainer.new()
 	add_child(_navigation)
+	_compact_path = _label("Everyday English", 15)
+	_compact_path.add_theme_font_override("font", Style.HEADING_FONT)
+	# This short label shares a flow row with the path action. A wrapping label
+	# has no intrinsic width and can make that row much taller than its viewport.
+	_compact_path.autowrap_mode = TextServer.AUTOWRAP_OFF
+	_compact_path.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	_navigation.add_child(_compact_path)
 	_change_path = _button("Change path", "ChangeLearningPath", _show_paths)
+	_change_path.set("accessibility_name", "Change learning path")
 	_navigation.add_child(_change_path)
-	_change_career = _button("Change career", "ChangeCareer", _show_courses)
+	_change_career = _button("Careers", "ChangeCareer", _show_courses)
+	_change_career.set("accessibility_name", "Choose another career")
 	_navigation.add_child(_change_career)
-	_change_module = _button("Change module", "ChangeModule", _show_modules)
+	_change_module = _button("Modules", "ChangeModule", _show_modules)
+	_change_module.set("accessibility_name", "Choose another module")
 	_navigation.add_child(_change_module)
 	_paths = GridContainer.new()
 	add_child(_paths)
@@ -158,40 +171,55 @@ func fit(factor: float, wide: bool) -> void:
 	_paths.columns = 2 if wide else 1
 	_list.columns = 2 if wide else 1
 	for picture in _path_pictures:
-		picture.custom_minimum_size.y = 72.0 / _factor
+		picture.custom_minimum_size.y = (156.0 if wide else 128.0) / _factor
 	for picture in _career_pictures:
 		picture.custom_minimum_size.y = 96.0 / _factor
 	for container in [self, _paths, _list, _navigation, _actions]:
 		container.add_theme_constant_override("separation", ceili(10.0 / _factor))
 		container.add_theme_constant_override("h_separation", ceili(10.0 / _factor))
 		container.add_theme_constant_override("v_separation", ceili(10.0 / _factor))
+	_navigation.add_theme_constant_override("h_separation", ceili(6.0 / _factor))
+	_compact_path.custom_minimum_size.y = 44.0 / _factor
 	for label in _labels:
 		if is_instance_valid(label):
 			label.add_theme_font_size_override("font_size", ceili(float(label.get_meta("font_size", 14)) / _factor))
 	for button in _buttons:
 		if not is_instance_valid(button):
 			continue
-		Style.action_button(button, Style.GOOD, button == _continue)
+		if button in [_change_path, _change_career, _change_module, _cancel]:
+			Style.quiet_button(button, Style.GOOD, 0)
+		else:
+			Style.action_button(button, Style.GOOD, button == _continue)
 		if not _keyboard_focus_visible:
 			button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 		button.custom_minimum_size = Vector2(0, (90.0 if button.has_meta("choice") else 44.0) / _factor)
 		button.add_theme_font_size_override("font_size", ceili(14.0 / _factor))
 		if button.has_meta("choice"):
 			var content: MarginContainer = button.get_meta("choice")
+			var is_path: bool = button.has_meta("path_choice")
 			for edge in ["left", "right", "top", "bottom"]:
-				content.add_theme_constant_override("margin_" + edge, ceili(12.0 / _factor))
+				content.add_theme_constant_override("margin_" + edge, ceili((20.0 if wide and is_path else 16.0 if is_path else 14.0) / _factor))
+			content.get_child(0).add_theme_constant_override("separation", ceili((10.0 if is_path else 6.0) / _factor))
 			button.custom_minimum_size.y = maxf(90.0 / _factor, content.get_combined_minimum_size().y)
-	_search.custom_minimum_size.y = 44.0 / _factor
-	_search.add_theme_font_size_override("font_size", ceili(14.0 / _factor))
-	_search.add_theme_font_override("font", Style.BODY_FONT)
-	_search.add_theme_color_override("font_color", Style.INK)
-	_search.add_theme_color_override("font_placeholder_color", Style.MUTED)
-	_search.add_theme_color_override("caret_color", Style.INK)
-	_search.add_theme_stylebox_override("normal", Style.box(Style.PAPER.lightened(0.5), Style.EDGE, ceili(8.0 / _factor), maxi(1, ceili(1.0 / _factor))))
-	_search.add_theme_stylebox_override("read_only", Style.box(Style.PAPER, Style.EDGE, ceili(8.0 / _factor), maxi(1, ceili(1.0 / _factor))))
-	_search.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, Style.GOOD, ceili(8.0 / _factor), ceili(2.0 / _factor)) \
-		if _keyboard_focus_visible else StyleBoxEmpty.new())
+			if is_path:
+				_style_path_card(button)
+		else:
+			for state: String in ["normal", "hover", "pressed", "disabled", "focus"]:
+				var surface: StyleBox = button.get_theme_stylebox(state)
+				surface.content_margin_left = 10.0 / _factor
+				surface.content_margin_right = 10.0 / _factor
+	Style.text_field(_search, _factor, _keyboard_focus_visible)
 	queue_sort()
+
+
+func _style_path_card(button: Button) -> void:
+	var tint: Color = Color("#edf2e7") if button == _growth_button else Color("#eeedf5")
+	var radius: int = ceili(20.0 / _factor)
+	for state: String in ["normal", "hover", "pressed", "disabled"]:
+		var fill: Color = tint.lightened(0.15) if state == "normal" else tint if state == "hover" else tint.darkened(0.02)
+		var surface := Style.box(fill, Style.EDGE if state in ["normal", "disabled"] else Style.GOOD, radius, maxi(1, ceili(1.0 / _factor)))
+		surface.set_content_margin_all(0)
+		button.add_theme_stylebox_override(state, surface)
 
 
 func _input(event: InputEvent) -> void:
@@ -221,7 +249,8 @@ func snapshot() -> Dictionary:
 	return {"screen": _screen, "selection": _selection.duplicate(true), "course_id": _course.get("id", ""),
 		"visible_rows": _rows.filter(func(row: Dictionary) -> bool: return row.button.visible).size(),
 		"columns": _list.columns, "busy": _busy, "retry": _retry, "status": _status.text,
-		"continue_enabled": _continue.visible and not _continue.disabled, "active_text": _active.text}
+		"continue_enabled": _continue.visible and not _continue.disabled,
+		"active_text": _heading.text + "\n" + _active.text if _screen == "summary" else _active.text}
 
 
 func _show_paths() -> void:
@@ -381,7 +410,7 @@ func _module_progress(module: Dictionary) -> String:
 		"requirements_revision": module.get("requirements_revision")})
 	var fingerprint: String = str(_progress.progress.get("requirements", {}).get(key, ""))
 	if fingerprint.is_empty():
-		return "Mastery details become available when this module opens."
+		return "Progress appears after your first practice."
 	var requirements: Variant = JSON.parse_string(fingerprint)
 	if not requirements is Dictionary or not requirements.get("terms") is Array or not requirements.get("expressions") is Array:
 		return "Progress unavailable"
@@ -421,44 +450,52 @@ func _module_previously_complete(module: Dictionary) -> bool:
 
 
 func _refresh() -> void:
+	var growth_summary: bool = _screen == "summary" and _selection.get("track") == "growth"
 	_heading.text = "Choose your learning path" if _screen == "paths" else "Choose a career" if _screen == "courses" \
 		else str(_course.get("title", "Choose a module")) if _screen == "modules" else "Your learning path"
-	_active.visible = not _selection.is_empty()
-	_active.text = "Growth · Everyday English" if _selection.get("track") == "growth" else "Professional English"
-	if _selection.get("track") == "professional":
+	_heading.visible = not growth_summary
+	_compact_path.visible = growth_summary
+	_active.visible = _screen == "summary" and not growth_summary
+	_active.text = ""
+	if _screen == "summary" and _selection.get("track") == "professional":
 		var selected_course: Dictionary = _course if _course.get("id") == _selection.course_id else _catalog.course(_selection.course_id) if _catalog != null else {}
 		var title: String = str(_selection.module_id)
 		for module in selected_course.get("modules", []):
 			if module.id == _selection.module_id:
 				title = str(module.title)
-		_active.text = "Professional English · %s\n%s" % [selected_course.get("title", _selection.course_id), title]
+		_heading.text = str(selected_course.get("title", _selection.course_id))
+		_active.text = title
 	_paths.visible = _screen == "paths"
 	_search.visible = _screen == "courses"
 	_list.visible = _screen in ["courses", "modules"]
 	_change_path.visible = _screen != "paths"
+	_change_path.text = "Change path" if growth_summary else "All paths"
 	_change_career.visible = _screen in ["modules", "summary"] and (_selection.get("track") == "professional" or not _course.is_empty())
 	_change_module.visible = _screen == "summary" and _selection.get("track") == "professional" and not _course.is_empty()
 	_navigation.visible = _change_path.visible or _change_career.visible or _change_module.visible
 	_empty.visible = _screen == "courses" and _rows.filter(func(row: Dictionary) -> bool: return row.button.visible).is_empty()
 	_empty.text = "No careers match your search." if _catalog != null and not _catalog.courses().is_empty() else "The course catalog is unavailable. Retry to load it."
-	_detail.visible = _screen == "summary"
-	_detail.text = "Continue your Growth journey with Pip."
+	_detail.visible = _screen == "summary" and not growth_summary
+	_detail.text = ""
 	if _selection.get("track") == "professional":
 		var module: Dictionary = _selected_module()
 		_detail.text = "50 terms · 10 expressions"
-		_detail.text += "\n" + _module_progress(module)
+		var progress: String = _module_progress(module)
+		if progress != "Progress appears after your first practice." and (not _busy or progress != "Progress unavailable"):
+			_detail.text += "\n" + progress
 		if _module_complete(module):
 			_detail.text += " · Completed"
 		elif _module_previously_complete(module):
 			_detail.text += "\nPreviously completed"
-		if module.get("status") != "ready":
-			_detail.text += "\nPreparing: this module opens after its content and media reviews are complete."
+		if not _busy and module.get("status") != "ready":
+			_detail.text += "\nPreparing this module. Explore another module while you wait."
 	_status.text = _status_text
 	_status.visible = not _status_text.is_empty()
-	_continue.visible = _screen == "summary"
-	_continue.text = "Continue" if _selected_ready() else "Preparing"
+	_continue.visible = _screen == "summary" and not growth_summary and _selected_ready()
+	_continue.text = "Continue"
 	_retry_button.visible = _retry
 	_cancel.visible = _busy or _retry
+	_actions.visible = _continue.visible or _retry_button.visible or _cancel.visible
 	for button in _buttons:
 		if is_instance_valid(button):
 			button.disabled = _busy and button != _cancel
@@ -518,8 +555,12 @@ func _choice(title: String, copy: String, node_name: String, callback: Callable)
 	var content := VBoxContainer.new()
 	content.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	margin.add_child(content)
-	content.add_child(_label(title, 17))
-	content.add_child(_label(copy, 13))
+	var title_label: Label = _label(title, 17)
+	title_label.add_theme_font_override("font", Style.HEADING_FONT)
+	content.add_child(title_label)
+	var copy_label: Label = _label(copy, 13)
+	copy_label.add_theme_color_override("font_color", Style.MUTED)
+	content.add_child(copy_label)
 	margin.minimum_size_changed.connect(func() -> void:
 		if is_instance_valid(button):
 			button.custom_minimum_size.y = maxf(90.0 / _factor, margin.get_combined_minimum_size().y))
@@ -527,7 +568,10 @@ func _choice(title: String, copy: String, node_name: String, callback: Callable)
 
 
 func _illustrate_path(button: Button, textures: Array) -> void:
+	button.set_meta("path_choice", true)
 	var content: VBoxContainer = button.get_meta("choice").get_child(0)
+	content.get_child(0).set_meta("font_size", 21)
+	content.get_child(1).set_meta("font_size", 14)
 	var pictures := HBoxContainer.new()
 	pictures.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	content.add_child(pictures)
@@ -540,7 +584,7 @@ func _illustrate_path(button: Button, textures: Array) -> void:
 		picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		picture.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		picture.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		picture.custom_minimum_size.y = 72.0 / _factor
+		picture.custom_minimum_size.y = (156.0 if _wide else 128.0) / _factor
 		pictures.add_child(picture)
 		_path_pictures.append(picture)
 

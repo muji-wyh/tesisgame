@@ -1,0 +1,27 @@
+{
+  "notice": "Two exact static component records only. Candidate atlas and accepted Home preview are not installed by this change. Full Software & Data theme and all module gates remain pending.",
+  "resources": [
+    {
+      "id": "sha256:6a3e2fab06a3fb72c78a1414eb8919d7ba7e038fcc0abf73e16fd37203d45062",
+      "sha256": "6a3e2fab06a3fb72c78a1414eb8919d7ba7e038fcc0abf73e16fd37203d45062",
+      "path": "professional-media/6a3e2fab06a3fb72c78a1414eb8919d7ba7e038fcc0abf73e16fd37203d45062.png",
+      "kind": "image",
+      "format": "png",
+      "compressed_bytes": 78312,
+      "decoded_bytes": 4718592,
+      "width": 768,
+      "height": 768
+    },
+    {
+      "id": "sha256:9bf8c55a9a4690f2c90f11ee62741ba49db0f271caa86ffb64195b28717f5b05",
+      "sha256": "9bf8c55a9a4690f2c90f11ee62741ba49db0f271caa86ffb64195b28717f5b05",
+      "path": "professional-media/9bf8c55a9a4690f2c90f11ee62741ba49db0f271caa86ffb64195b28717f5b05.png",
+      "kind": "image",
+      "format": "png",
+      "compressed_bytes": 112959,
+      "decoded_bytes": 4718592,
+      "width": 768,
+      "height": 768
+    }
+  ]
+}

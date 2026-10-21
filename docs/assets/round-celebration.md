@@ -28,30 +28,43 @@ callbacks.
 
 ## Performance and completion
 
-`RoundCelebration` samples one three-second clock: preparation through 0.25 s,
-leap and feet-first landing through 0.9 s, alternating steps and one wink through
-1.65 s, then a presenting gesture as the closed chest appears at 1.8 s. Pip
-settles by 2.4 s. The invitation keeps only subtle breathing and occasional
-blinking. Outside Phrase Builder, earned chests also reveal full-screen paper from 1.8 to 3 s,
+`RoundCelebration` samples one three-second clock. Pip appears at the center,
+prepares through 0.25 s, leaps and lands feet first through 0.9 s, then makes
+two happy steps and a wink. From 1.46 to 1.78 s the whole attached character
+moves quickly to its final side position. The closed chest enters at 1.8 s,
+descends at its final size, and makes a small settling rebound through 2.42 s.
+It remains rigid; the entrance does not scale its body or operate its lid.
+The earned-chest heading follows the landing, then the hold-to-open caption
+appears through 2.72 s. The real chest becomes available at the existing
+three-second/narration gate. The invitation keeps only subtle breathing and
+occasional blinking. Outside Phrase Builder, previously unannounced earned chests
+also reveal full-screen paper from 1.8 to 3 s,
 using the shared renderer and existing licensed atlas documented in
 [Jelly chest fragments](jelly-fragments.md). The burst ends independently of
 long pronunciation and never captures input. Phrase Builder clears its gameplay
 paper when this page opens and shows the entire invitation without confetti.
-Reduced motion uses a static
-happy pose with no moving halo or confetti.
+Reduced motion keeps Pip and the chest in fixed final positions, revealing
+the chest and invitation in the same order without travel, rebound, halo or
+confetti. These changes reuse the inspected integrated Pip growth artwork,
+closed chest models/textures and portal glow above; no assets are acquired or
+replaced. The available Pip poses and source chest clips remain unchanged.
 
 `GameUI` owns the round identity, interruptions and input gate. Every mode uses
 the shared settlement modal over its completed board; standalone result pages
 are removed. Match, Memory and Phrase Builder keep this performance inside the
 modal and wait for both the performance and final pronunciation before enabling
 the real chest in place. There is no Open chest button or extra confirmation.
-`RoundRewardLayout` gives the preview and settlement the same Pip and chest
-rectangles, keeping both subjects still across the handoff. The existing hold
+`RoundRewardLayout` gives the preview and settlement the same final Pip, chest,
+title and instruction rectangles, keeping both subjects still across the handoff.
+Scored results share an additional compact summary row. The existing hold
 gesture drives the cavity glow, opening, cancellation, audio and durable reward save;
 finishing the celebration never opens or awards treasure automatically. Phrase
 accepts completion at this automatic handoff. Match and Memory
 also celebrate rounds without treasure, omitting the chest and confetti before
 offering Play again. Presentation never saves rewards or opens a chest.
+Home remains available throughout the performance. Leaving uses the host's
+existing completed-round settlement, stops the presentation and invalidates
+late callbacks; a held Accept button never becomes an automatic Home press.
 
 The direct chest target has no rectangular button or focus border. Keyboard focus
 and pointer hover brighten the same acquired Bobardo `portal_glow.png` texture
@@ -59,9 +72,13 @@ used by Jelly and Pop settlement, with the existing source and license record in
 [Jelly Finish](jelly-finish.md). This integrated static texture receives only
 runtime placement and opacity changes; no new artwork or source animation is added.
 
-Voice Pop and both Jelly modes show results immediately without this completion
-performance. Voice Pop stops recognition and saves its final chest before opening
-the modal. A zero-chest round still shows its honest result. Jelly Finish uses
+Voice Pop and both Jelly modes use the same performance when a finished round
+has a successfully saved chest. Voice Pop stops recognition and each mode saves
+its final chest identity and tier before starting. The exact score and completed
+word total remain visible during the performance. A save error shows its recovery
+controls directly; restored inventory and zero-chest results remain immediate.
+Already announced gameplay milestones do not replay their reward cue or confetti.
+Jelly Finish uses
 `Round complete`; danger expiry uses `Game over`. Earned chests open inside the
 modal. Jelly `Play again` collects pending chest coins before starting a new
 round. Pop `Play again` also settles its unopened treasure and returns to its
@@ -69,11 +86,11 @@ microphone gate. `Home` settles pending treasure before leaving any completed
 round, and selecting that game again starts a fresh board. Live games still pause
 and offer `Continue` on Home.
 
-Pop and Jelly settlement keep the completed-word total above the reward and place the
-earned level with its chest. The chest artwork is the hold target; `Hold to open`
+Pop and Jelly settlement keep the score, completed-word total and earned level
+in the shared summary row above Pip and the reward. The chest artwork is the hold target; `Hold to open`
 is plain, non-interactive text below it. Keyboard focus brightens the existing
 chest glow instead of outlining the instruction. The compact modal keeps its
-footer reachable and places the result beside the chest on short landscapes.
+footer reachable and uses the same companion stage on phones and short landscapes.
 The result selects the final chest by this round's saved reward identity, including
 after a save retry or inventory reload. Earlier unopened treasure stays intact;
 unfinished upgrade presentations never determine the settlement's chest level.

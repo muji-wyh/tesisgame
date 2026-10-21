@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "reviewer": "Independent AI subagent; direct inspection of four actual native PNGs",
+  "status": "scoped_portrait_match_visual_review_complete_other_viewports_and_memory_pending",
+  "reviewed_at": "2026-10-20",
+  "captures": [
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r01/320x568-match-unmatched.png",
+      "bytes": 57425,
+      "sha256": "552e38b922433b49b118cfdaa20ccdbd595a1f8c074f90796671c3050b929a70"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r01/320x568-match-selected-reader.png",
+      "bytes": 58820,
+      "sha256": "80017983f5232afa7ec70a5796cef394c92c096d038bc2e96b589b17a5c64658"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r01/320x568-match-matched-focus-reader.png",
+      "bytes": 74526,
+      "sha256": "2da4edabf859effc7d0f04ba07dd07b7244ce8c7380af2f083c32955c2380792"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r01/320x568-match-matched-focus-register.png",
+      "bytes": 74450,
+      "sha256": "caabd00de281f0f255b8e88f223a4000b6abbd095d6d7efe56459b8da4f0e06b"
+    }
+  ],
+  "observations": [
+    "At 320 by 568, all six primary image/word cards remain within the screen. The compact payment reader appears as a yellow low body, white keypad, separate blue bank card and projecting receipt; it remains fully visible at approximately 61.49 by 52 displayed source pixels.",
+    "The reader is visually distinct from the integrated cash register, which has an upright pale body, elevated display and broad drawer. The barcode is a black striped code on an orange carton. Shared keypad/receipt cues do not remove the observed silhouette distinction.",
+    "The selected-reader state changes the card fill while preserving the entire reader silhouette and full source opacity. Reader-focused and register-focused matched states show actual pair-colored fills, numbered picture badges and connecting lines; the reader remains distinguishable in both focused and settled states.",
+    "Card-reader and cash-register labels fit on two lines without clipping. The matched picture badge sits beside the reader silhouette rather than covering its primary card/keypad cues.",
+    "The artwork is more saturated and flatter than the register, but the common three-quarter view and complete isolated-object silhouette remain coherent enough for this scoped native comparison. It contains no frightening imagery, merchant branding, readable account data or operational instructions."
+  ],
+  "brief_decision": {
+    "accepted_for_reviewed_scope": true,
+    "brief": "Show a compact bank-card payment reader with a plain card close to the reader, a small screen, a keypad and a secondary receipt. Keep the compact device dominant. Exclude a full cash drawer, merchant branding, readable account numbers, PIN entry and operating instructions. The picture does not claim a particular card-reading method or a completed payment.",
+    "reason": "The depicted device and nearby card support the broad payment-reader noun sense. No hand, contactless symbol, specific reading action, or completed-payment result is depicted; the original contactless-area requirement is not visually established."
+  },
+  "technical_limit": "The first native attempt retained two strict RGBA comparison failures for the existing barcode and shopping-basket reference images. Candidate and register pixel comparisons passed. This visual record neither resolves nor suppresses those failures.",
+  "acceptance_limits": {
+    "scoped_ai_portrait_match_image_review": true,
+    "scoped_ai_picture_brief_review": true,
+    "all_four_viewports_reviewed": false,
+    "memory_reviewed": false,
+    "human_recognition": false,
+    "human_visual_acceptance": false,
+    "final_exercise_acceptance": false,
+    "production_image_integration": false,
+    "audio_or_listening_approval_changed": false,
+    "module_or_release_readiness": false
+  }
+}

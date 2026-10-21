@@ -12,7 +12,7 @@ const OUT = path.join(ROOT, 'build/pip-models');
 const AGES = [0, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 const FACES = ['neutral', 'listening', 'thinking', 'delighted', 'proud', 'encourage', 'surprised', 'sleepy', 'wink', 'blink', 'speaking'];
 const PARTS = ['body', 'head', 'left-wing', 'right-wing', 'left-foot', 'right-foot'];
-const INK = '#b78a52', DARK = '#493b32';
+const INK = '#b78642', DARK = '#49372c';
 // Head half-width, half-height, center, shoulder, hem, torso half-width.
 const FORMS = {
   0: [32, 28, 49, 75, 105, 24], 3: [31, 27, 44, 70, 103, 23],
@@ -37,16 +37,23 @@ const group = (content, transform = '', extra = '') => `<g${transform ? ` transf
 function defs(age) {
   const [cloth, fold] = COLORS[age];
   return `<defs>
-    <linearGradient id="down" x1="0" y1="0" x2=".35" y2="1"><stop stop-color="#ffedaf"/><stop offset=".55" stop-color="#f9dd8a"/><stop offset="1" stop-color="#ebc66f"/></linearGradient>
-    <radialGradient id="face" cx=".43" cy=".32" r=".78"><stop stop-color="#fff0b8"/><stop offset=".67" stop-color="#f9dc87"/><stop offset="1" stop-color="#edc56e"/></radialGradient>
-    <radialGradient id="blush"><stop stop-color="#eaa393" stop-opacity=".72"/><stop offset="1" stop-color="#efb19b" stop-opacity="0"/></radialGradient>
-    <linearGradient id="bill" x2=".25" y2="1"><stop stop-color="#f2b373"/><stop offset="1" stop-color="#e79a60"/></linearGradient>
-    <linearGradient id="cloth" x2=".25" y2="1"><stop stop-color="${cloth}"/><stop offset=".75" stop-color="${cloth}"/><stop offset="1" stop-color="${fold}"/></linearGradient>
-    <linearGradient id="shell" x2="0" y2="1"><stop stop-color="#fff9e8"/><stop offset="1" stop-color="#e8ddbf"/></linearGradient>
+    <radialGradient id="down" cx=".26" cy=".18" r=".96"><stop stop-color="#fff1b3"/><stop offset=".47" stop-color="#f8d87c"/><stop offset=".82" stop-color="#e7b450"/><stop offset="1" stop-color="#ca913b"/></radialGradient>
+    <radialGradient id="down-right" cx=".74" cy=".18" r=".96"><stop stop-color="#fff1b3"/><stop offset=".47" stop-color="#f8d87c"/><stop offset=".82" stop-color="#e7b450"/><stop offset="1" stop-color="#ca913b"/></radialGradient>
+    <radialGradient id="face" cx=".32" cy=".24" r=".82"><stop stop-color="#fff5c8"/><stop offset=".42" stop-color="#ffe39a"/><stop offset=".73" stop-color="#f4ca69"/><stop offset="1" stop-color="#d99c40"/></radialGradient>
+    <radialGradient id="muzzle" cx=".44" cy=".48" r=".55"><stop stop-color="#fff4ce" stop-opacity=".82"/><stop offset=".54" stop-color="#ffe8aa" stop-opacity=".46"/><stop offset="1" stop-color="#f5cf7e" stop-opacity="0"/></radialGradient>
+    <radialGradient id="blush"><stop stop-color="#e99273" stop-opacity=".54"/><stop offset=".55" stop-color="#eeac82" stop-opacity=".28"/><stop offset="1" stop-color="#efbd83" stop-opacity="0"/></radialGradient>
+    <radialGradient id="bill" cx=".33" cy=".18" r=".9"><stop stop-color="#ffd399"/><stop offset=".45" stop-color="#f4b267"/><stop offset=".78" stop-color="#e88d43"/><stop offset="1" stop-color="#c76b31"/></radialGradient>
+    <linearGradient id="bill-lower" x1="0" y1="0" x2=".2" y2="1"><stop stop-color="#cc763a"/><stop offset=".5" stop-color="#eea35c"/><stop offset="1" stop-color="#d9813e"/></linearGradient>
+    <radialGradient id="eye" cx=".35" cy=".22" r=".85"><stop stop-color="#71523c"/><stop offset=".55" stop-color="#403129"/><stop offset="1" stop-color="#2e2926"/></radialGradient>
+    <radialGradient id="cloth" cx=".27" cy=".24" r=".88"><stop stop-color="${cloth}"/><stop offset=".42" stop-color="${cloth}"/><stop offset="1" stop-color="${fold}"/></radialGradient>
+    <linearGradient id="form-shade" x1="0" y1="0" x2="1" y2=".35"><stop stop-color="#765837" stop-opacity=".12"/><stop offset=".3" stop-color="#765837" stop-opacity="0"/><stop offset=".68" stop-color="#765837" stop-opacity="0"/><stop offset="1" stop-color="#765837" stop-opacity=".22"/></linearGradient>
+    <linearGradient id="chin-shade" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#9c6b32" stop-opacity=".28"/><stop offset="1" stop-color="#9c6b32" stop-opacity="0"/></linearGradient>
+    <radialGradient id="shell" cx=".31" cy=".18" r=".9"><stop stop-color="#fffdf1"/><stop offset=".45" stop-color="#f4ecd6"/><stop offset=".78" stop-color="#e1d2ae"/><stop offset="1" stop-color="#c9b68c"/></radialGradient>
+    <radialGradient id="ground"><stop stop-color="#766449" stop-opacity=".24"/><stop offset=".5" stop-color="#766449" stop-opacity=".12"/><stop offset="1" stop-color="#766449" stop-opacity="0"/></radialGradient>
     <filter id="paper" x="-2%" y="-2%" width="104%" height="104%" color-interpolation-filters="sRGB">
       <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="3" seed="19" result="grain"/>
       <feColorMatrix in="grain" type="saturate" values="0"/>
-      <feComponentTransfer><feFuncA type="linear" slope=".16"/></feComponentTransfer>
+      <feComponentTransfer><feFuncA type="linear" slope=".065"/></feComponentTransfer>
       <feComposite operator="in" in2="SourceGraphic"/>
       <feBlend in="SourceGraphic" mode="soft-light"/>
     </filter>
@@ -65,19 +72,22 @@ function head(age, expression = 'neutral') {
     behind = p(`M${60-hw-2} ${bottom-7} C${60-hw-12} ${cy+7} ${60-hw-8} ${top-4} 60 ${top-5} C${60+hw+8} ${top-4} ${60+hw+12} ${cy+7} ${60+hw+2} ${bottom-7} Q60 ${bottom+3} ${60-hw-2} ${bottom-7}Z`, 'url(#cloth)', COLORS[age][1], 1.2);
     behind += line(`M${60-hw-4} ${cy+9} Q${60-hw-8} ${top+2} 58 ${top-2}`, '#fff3da', .9, 'opacity=".6"');
   }
-  let face = p('M-29-10 C-28-23-17-28-4-27 C8-29 23-25 28-14 C32-8 33 1 32 8 C33 18 25 24 16 26 C5 30-10 29-21 24 C-31 20-34 12-32 3 C-33-2-31-6-29-10Z', 'url(#face)', INK, .85);
+  // Broad cheek and forehead planes carry the volume at small header sizes.
+  // The lower cheek feathers interrupt the contour without a furry/noisy edge.
+  let face = p('M-29-10 C-28-22-18-28-5-27 C8-30 23-26 28-15 C31-9 31-3 31 2 Q31 6 32.5 8 Q33.5 10 31 10 Q33 14 30 16 C28 23 18 28 5 29 C-9 30-22 25-28 20 Q-32 16-31 12 Q-34 11-32 8 C-34 1-32-6-29-10Z', 'url(#face)', INK, .62);
+  face += p('M-29 8 Q-30 22-14 26 Q3 33 20 25 Q30 20 31 11 C27 22 14 24 2 24 C-12 25-23 20-29 8Z', '#c58d40', 'none', 0, 'opacity=".15"');
   // Downy crown: one soft hook for Baby, an eager double curl for the youngest,
   // then a calm side-sweep. No hard spikes or extruded hair blades.
   if (age === 0) face += p('M-9-26 C-12-29-11-36-6-35 C-3-33-6-30-4-27 Q0-33 4-30 Q7-27 4-26Z', 'url(#down)', INK, .85);
   else if (age <= 4) face += p('M-9-26 Q-17-34-10-35 Q-4-35-4-28 Q1-36 5-32 Q9-29 7-26Z', 'url(#down)', INK, .85);
-  else if (![5, 8, 10].includes(age)) face += p('M-13-26 Q-8-34 0-32 Q-3-29-2-27 Q6-33 13-29 Q9-26 8-25Z', 'url(#down)', INK, .85);
-  face += line('M-22-13 Q-17-18-13-18 M-24-7 Q-21-9-18-10', '#fff4c8', 1.5, 'opacity=".68"');
-  face += line('M23 7 Q25 9 25 11 M20 13 Q22 15 22 16', '#dbb365', .65, 'opacity=".65"');
-  face += e(-21, 8, 8.5, 5.1, 'url(#blush)') + e(21, 8, 8.5, 5.1, 'url(#blush)');
+  else if (![5, 8, 10].includes(age)) face += p('M-13-25 C-12-29-8-34-2-33 Q1-33-1-31 Q-4-28-2-27 C3-30 9-32 12-29 Q13-28 10-27 L7-25Z', 'url(#down)', INK, .65);
+  face += p('M-25-11 C-21-23-7-27 8-23 C-4-24-16-18-22-7 Q-25-3-25-11Z', '#fff9db', 'none', 0, 'opacity=".16"');
+  face += p('M-22 5 C-18-1-7 0 0 3 C9-1 19 2 23 9 C26 20 12 25 0 24 C-15 24-27 17-22 5Z', 'url(#muzzle)');
+  face += e(-21, 10, 8, 5.5, 'url(#blush)') + e(21, 10.5, 7.5, 5.2, 'url(#blush)');
   const closed = ['blink','sleepy','delighted'].includes(expression);
   const eyeY = age <= 3 ? 0 : -1;
   const eyeX = age <= 3 ? 11.2 : 11;
-  const eyeH = age <= 3 ? 5.4 : 5.0;
+  const eyeH = age <= 3 ? 6.1 : 5.6;
   for (const side of [-1, 1]) {
     const x = side * eyeX, y = eyeY + (expression === 'surprised' ? -1 : 0);
     if (closed || (expression === 'wink' && side === 1)) {
@@ -86,9 +96,10 @@ function head(age, expression = 'neutral') {
     } else {
       const dx = expression === 'thinking' ? 1.4 : expression === 'listening' ? .8 : 0;
       const h = expression === 'proud' ? eyeH*.85 : expression === 'surprised' ? eyeH*1.12 : eyeH;
-      face += p(`M${x+dx-3.5} ${y-1.2} C${x+dx-3.4} ${y-h-1} ${x+dx+3.2} ${y-h-1} ${x+dx+3.7} ${y-1.4} C${x+dx+4.3} ${y+h} ${x+dx-3.8} ${y+h+1} ${x+dx-3.5} ${y-1.2}Z`, DARK);
-      face += e(x+dx-.9, y-2.7, 1.05, 1.2, '#fff8e7');
-      face += e(x+dx+1.3, y+1.6, .48, .55, '#c8996c', 'opacity=".65"');
+      face += p(`M${x+dx-4.1} ${y-1} C${x+dx-4} ${y-h-1.5} ${x+dx+3.7} ${y-h-1.6} ${x+dx+4.1} ${y-1.3} C${x+dx+4.7} ${y+h+.6} ${x+dx-4.6} ${y+h+1.3} ${x+dx-4.1} ${y-1}Z`, 'url(#eye)');
+      face += line(`M${x+dx-3.2} ${y+h*.65} Q${x+dx} ${y+h+1} ${x+dx+2.9} ${y+h*.55}`, '#ae7e50', .65, 'opacity=".66"');
+      face += e(x+dx-1.2, y-2.7, 1.25, 1.6, '#fff9e9', 'transform="rotate(20 '+(x+dx-1.2)+' '+(y-2.7)+')"');
+      face += e(x+dx+1.45, y+1.4, .48, .62, '#f2d3a2', 'opacity=".7"');
     }
     if (['thinking','surprised','listening','encourage'].includes(expression)) {
       const lift = expression === 'thinking' && side === -1 ? -3 : 0;
@@ -96,15 +107,21 @@ function head(age, expression = 'neutral') {
     }
   }
   const open = ['speaking','surprised','delighted'].includes(expression);
+  // A connected lower bill and hinge replace the old oval with a hanging mouth.
+  face += p('M-11 13 Q0 9 11 13 C10 20-8 21-11 13Z', '#b58140', 'none', 0, 'opacity=".13"');
   if (open) {
-    face += p('M-8 11 Q0 8 8 11 Q8 21 0 21 Q-7 20-8 11Z', '#b9724e', '#ba8254', .75);
-    face += p('M-4 18 Q0 15 5 18 Q1 22-4 18Z', '#eda493');
+    const gap = expression === 'surprised' ? 22 : expression === 'delighted' ? 21 : 20;
+    face += p(`M-10 11 Q0 9 10 11 C10 ${gap} 4 ${gap+1} 0 ${gap+1} C-6 ${gap+1}-10 ${gap-2}-10 11Z`, '#85502f', '#bc783b', .55);
+    face += p(`M-5 ${gap-3} Q0 ${gap-6} 5 ${gap-3} Q4 ${gap+1} 0 ${gap} Q-4 ${gap+1}-5 ${gap-3}Z`, '#e9a48a');
+    face += p(`M-9 ${gap-4} Q0 ${gap+3} 9 ${gap-4} Q8 ${gap+2} 0 ${gap+2} Q-8 ${gap+1}-9 ${gap-4}Z`, 'url(#bill-lower)', '#bd7a3b', .5);
+  } else {
+    face += p('M-11 11 C-10 19 10 19 12 11 Q1 7-11 11Z', 'url(#bill-lower)', '#c4813f', .6);
   }
-  face += p('M-11 10 C-10 6-5 6 0 7 C5 5 11 7 12 10 C13 14 6 16 0 16 C-7 16-12 14-11 10Z', 'url(#bill)', '#cd945a', .75);
-  face += line('M-8 11.5 Q0 14.8 9 10.8', '#b67f4e', .75, 'opacity=".8"');
-  face += line('M-7 8.9 Q-3 7.3 0 8', '#ffcf92', .85);
-  // Very quiet feather marks give the cheeks an illustrated finish at result size.
-  face += line('M-25 11 l1.4 1 M-22.5 13 l1.3 .7 M24 11 l-1.3 1 M21 13 l-1.2 .8', '#d89777', .7, 'opacity=".65"');
+  face += p('M-12 10 C-11 7-7 7-4 5.8 Q0 4.2 4 5.8 C7 6.8 12 6.8 13 9.5 C15 13 8 15.3 1 15.5 C-6 15.8-14 14-12 10Z', 'url(#bill)', '#c58b46', .55);
+  face += p('M-9 9 C-7 7.8-4 8-1 7 Q3 6.3 7 8 C1 7.6-3 10-9 9Z', '#ffe2b0', 'none', 0, 'opacity=".65"');
+  face += line('M-10 12.4 Q0 16.2 11 11.5', '#ad672f', .65, 'opacity=".75"');
+  face += e(-3.6,8.3,.65,.4,'#bc8243','opacity=".6"') + e(4.3,8.1,.6,.38,'#bc8243','opacity=".6"');
+  face += line('M-27 12 q1 1.7 2.6 2 M25 14 q-1 1.5-2.4 1.8', '#cf9b53', .65, 'opacity=".6"');
   face = group(face, `translate(60 ${cy}) scale(${hw/32} ${hh/28})`);
   if (age === 4) {
     front += p(`M${60-hw*.92} ${top+9} Q60 ${top+2} ${60+hw*.88} ${top+9} L${60+hw*.92} ${top+12} Q60 ${top+8} ${60-hw*.91} ${top+12}Z`, '#91b9c8', '#6e9eaf', .75);
@@ -135,16 +152,24 @@ function body(age, bare = false) {
   if (age === 6) {
     art += p(`M${left-3} ${top+3} Q${left-9} ${top+4} ${left-8} ${top+17} L${left-6} ${hem-5} Q${left-1} ${hem} ${left+6} ${hem-4} L${right-6} ${hem-4} Q${right+2} ${hem} ${right+7} ${hem-5} L${right+8} ${top+15} Q${right+9} ${top} ${right-4} ${top}Z`, '#9ac2b3', '#76a394', .9);
   }
-  const shape = `M${left+9} ${top} Q60 ${top-4} ${right-9} ${top} C${right+1} ${top+3} ${right+3} ${hem-15} ${right-1} ${hem-6} Q${right-3} ${hem+2} 60 ${hem+2} Q${left+3} ${hem+2} ${left+1} ${hem-6} C${left-3} ${hem-15} ${left-1} ${top+3} ${left+9} ${top}Z`;
+  const shape = `M${left+7} ${top} Q60 ${top-4} ${right-7} ${top} C${right+1} ${top+3} ${right+3} ${hem-15} ${right-1} ${hem-6} Q${right-3} ${hem+2} 60 ${hem+2} Q${left+3} ${hem+2} ${left+1} ${hem-6} C${left-3} ${hem-15} ${left-1} ${top+3} ${left+7} ${top}Z`;
   art += p(shape, age <= 3 || bare ? 'url(#down)' : 'url(#cloth)', age <= 3 || bare ? INK : COLORS[age][1], .95);
-  if(bare) return art + p(`M48 ${top+13} Q60 ${top+8} 72 ${top+14} Q80 ${hem-6} 60 ${hem-2} Q42 ${hem-6} 48 ${top+13}Z`, '#fce8ac', 'none', 0, 'opacity=".6"');
+  art += p(shape, 'url(#form-shade)');
+  art += p(`M${left+10} ${top+2} Q60 ${top-1} ${right-10} ${top+2} L${right-8} ${top+16} Q60 ${top+22} ${left+8} ${top+16}Z`, 'url(#chin-shade)');
+  if(bare) return art + p(`M47 ${top+16} C50 ${top+8} 66 ${top+7} 72 ${top+16} Q79 ${hem-7} 60 ${hem-2} Q42 ${hem-4} 47 ${top+16}Z`, 'url(#muzzle)');
   if (age === 0) {
+    // The inset lip and inner wall give the shell thickness without moving its
+    // anchored body layer. Only the head and wings articulate above it.
+    art += p(`M${left} ${hem-20} Q60 ${hem-28} ${right+1} ${hem-21} L${right-2} ${hem-15} Q60 ${hem-21} ${left+2} ${hem-14}Z`, '#b9a477', '#b19a71', .6);
     art += p(`M${left-1} ${hem-19} Q${left+1} ${hem-24} ${left+4} ${hem-20} L${left+9} ${hem-15} L${left+15} ${hem-21} L${left+21} ${hem-16} L${left+29} ${hem-23} L${left+35} ${hem-17} L${right-3} ${hem-22} Q${right+2} ${hem-24} ${right+2} ${hem-17} Q${right+3} ${hem+3} 60 ${hem+4} Q${left-3} ${hem+3} ${left-1} ${hem-19}Z`, 'url(#shell)', '#c6b997', .9);
-    art += line(`M${left+7} ${hem-6} q5 4 11 4 M${right-10} ${hem-12} l2-4`, '#d5c8a8', .85);
+    art += line(`M${left+3} ${hem-19} L${left+9} ${hem-13.5} L${left+15} ${hem-19.5} L${left+21} ${hem-14.5} L${left+29} ${hem-21.5} L${left+35} ${hem-15.5} L${right-2} ${hem-20}`, '#fffdf1', 1.15);
+    art += p(`M${left+3} ${hem-15} Q${left+5} ${hem-1} 57 ${hem+1} Q${left+1} ${hem+1} ${left+3} ${hem-15}Z`, '#fffef5', 'none', 0, 'opacity=".55"');
+    art += line(`M${right-7} ${hem-12} l-2 4 2 2-2 3`, '#c5b38e', .65);
     art += e(49,hem-6,1.2,.8,'#d7c8a8') + e(68,hem-10,.8,1,'#d7c8a8') + e(65,hem,.9,.6,'#d7c8a8');
   } else if (age === 3) {
     art += p(`M43 ${top+4} Q60 ${top+10} 77 ${top+4} L75 ${top+17} Q60 ${top+30} 45 ${top+17}Z`, 'url(#cloth)', '#7fac9c', .9);
     art += line(`M46 ${top+9} Q60 ${top+14} 74 ${top+9}`, '#c6e2cb', .8);
+    art += line(`M46 ${top+17} Q60 ${top+28} 74 ${top+17}`, '#629e8a', .65, 'opacity=".65"');
     art += p(`M${left+1} ${hem-9} Q60 ${hem-5} ${right-1} ${hem-9} L${right-3} ${hem+1} Q${right-9} ${hem+5} 62 ${hem} L59 ${hem-3} L56 ${hem+1} Q${left+4} ${hem+4} ${left+1} ${hem-9}Z`, '#a9cbbd', '#7fac9c', .8);
     art += p(`M58 ${top+15} q2-3 4 0 q-1 3-4 0Z`, '#fff2bb');
   } else if ([4,9].includes(age)) {
@@ -165,6 +190,9 @@ function body(age, bare = false) {
     art += p(`M53 ${top+3} Q60 ${top+7} 67 ${top+3} L70 ${hem} Q60 ${hem+2} 51 ${hem}Z`, '#fbebce', '#d3b78c', .7);
     art += p(`M51 ${top+2} L57 ${top+10} L49 ${top+14} L53 ${hem} L${left+4} ${hem-1} Q${left} ${top+12} ${left+9} ${top+2}Z`, 'url(#cloth)', COLORS[age][1], .75);
     art += p(`M69 ${top+2} L63 ${top+10} L71 ${top+14} L68 ${hem} L${right-4} ${hem-1} Q${right} ${top+12} ${right-9} ${top+2}Z`, 'url(#cloth)', COLORS[age][1], .75);
+    art += p(`M57 ${top+10} L49 ${top+14} L53 ${hem} L55 ${hem} L51 ${top+15}Z M63 ${top+10} L71 ${top+14} L68 ${hem} L66 ${hem} L69 ${top+15}Z`, '#7c5e46', 'none', 0, 'opacity=".16"');
+    art += line(`M${left+10} ${top+5} L55 ${top+10} L47.8 ${top+14} M${right-10} ${top+5} L65 ${top+10} L72 ${top+14}`, '#fff6df', .7, 'opacity=".58"');
+    art += line(`M${left+6} ${hem-3} Q${left+12} ${hem} 51 ${hem} M69 ${hem} Q${right-10} ${hem} ${right-5} ${hem-3}`, '#fff4da', .65, 'opacity=".5"');
     art += line(`M${left+8} ${hem-13} l6-1 M${right-14} ${hem-14} l6 1`, COLORS[age][1], 1);
     if(age===6) {
       art += line(`M${left+7} ${top+1} Q${left+2} ${top+15} ${left+6} ${hem-9} M${right-7} ${top+1} Q${right-2} ${top+15} ${right-6} ${hem-9}`, '#719e90', 3);
@@ -174,7 +202,10 @@ function body(age, bare = false) {
       art += line(`M45 ${top+2} L78 ${hem-8}`, '#bda381', 4.6);
       art += line(`M45 ${top+2} L78 ${hem-8}`, '#e5d2af', 2.4);
       art += p(`M69 ${hem-16} q9-2 15 1 l-1 14 q-8 3-15-1Z`, '#d2b692', '#ac9274', .9);
+      art += p(`M81 ${hem-14} l3-1-1 14-3 1Z`, '#af9271');
+      art += p(`M69 ${hem-3} q6 2 11 1 l3 1 q-8 3-15-1Z`, '#b69a76');
       art += p(`M69 ${hem-16} q8-2 15 1 l-1 6 q-7 2-14-1Z`, '#e0c9a6', '#ac9274', .7);
+      art += line(`M70 ${hem-15} q6-1 12 1`, '#fff0d2', .7, 'opacity=".7"');
       art += line(`M76 ${hem-12} l0 4`, '#997f64', 1.3);
     }
   } else if(age===7) {
@@ -197,11 +228,26 @@ function body(age, bare = false) {
 }
 function wing(age, side) {
   const [, , , shoulder,, bw] = FORMS[age];
-  const root = 60-bw+1, y=shoulder+1, length=age<=3?20:age<=6?23:27;
-  let art = p(`M${root+5} ${y-3} C${root-3} ${y-5} ${root-12} ${y+5} ${root-10} ${y+13} Q${root-11} ${y+length-1} ${root-5} ${y+length} Q${root-2} ${y+length+3} ${root+1} ${y+length-1} Q${root+5} ${y+length} ${root+7} ${y+length-6} C${root+8} ${y+8} ${root+9} ${y+1} ${root+5} ${y-3}Z`, 'url(#down)', INK, .9);
-  art += line(`M${root-6} ${y+11} Q${root-5} ${y+length-4} ${root-2} ${y+length-3} M${root-1} ${y+10} Q${root} ${y+length-6} ${root+2} ${y+length-5}`, '#dcb465', .75, 'opacity=".75"');
-  art += line(`M${root-5} ${y+3} Q${root-8} ${y+6} ${root-7} ${y+9}`, '#fff1b8', 1.2);
-  return side === 1 ? group(art, 'translate(120 0) scale(-1 1)') : art;
+  const root = 60-bw+8, y=shoulder+4, length=age<=3?16:age<=6?19:23;
+  // Bury the narrow shoulder in the torso. The outer feathers broaden below
+  // that joint instead of forming a separately outlined paddle at the collar.
+  const upper = `M${root+3} ${y-5} C${root-2} ${y-7} ${root-8} ${y-4} ${root-10} ${y+2}`;
+  const contour = `${upper} C${root-13} ${y+9} ${root-11} ${y+length-2} ${root-7} ${y+length+1} Q${root-5} ${y+length+3} ${root-3} ${y+length-1} Q${root} ${y+length+2} ${root+2} ${y+length-2} Q${root+5} ${y+length-1} ${root+5} ${y+length-6} C${root+5} ${y+7} ${root+8} ${y-1} ${root+3} ${y-5}Z`;
+  // The mirrored wing uses the opposite gradient coordinates to preserve the
+  // same upper-left light. Attachment shading stays on its body-facing edge.
+  const mirror = content => side === 1 ? group(content, 'translate(120 0) scale(-1 1)') : content;
+  let art = mirror(p(contour, side===1?'url(#down-right)':'url(#down)', INK, .5));
+  art += mirror(p(`M${root+2} ${y+5} C${root-1} ${y+10} ${root+1} ${y+length-5} ${root-3} ${y+length-1} Q${root} ${y+length+2} ${root+2} ${y+length-2} Q${root+5} ${y+length-1} ${root+5} ${y+length-6} C${root+5} ${y+9} ${root+5} ${y+4} ${root+2} ${y+5}Z`, '#c4903c', 'none', 0, 'opacity=".09"'));
+  art += mirror(p(`M${root-9} ${y+8} C${root-8} ${y+3} ${root-3} ${y-1} ${root} ${y} C${root-3} ${y+4} ${root-3} ${y+10} ${root-6} ${y+13} Q${root-10} ${y+15} ${root-9} ${y+8}Z`, '#fff3bd', 'none', 0, `opacity="${side===1?'.08':'.22'}"`));
+  art += mirror(line(`M${root+1} ${y+12} Q${root+1} ${y+length-4} ${root-3} ${y+length-1} M${root-4} ${y+14} Q${root-5} ${y+length-4} ${root-7} ${y+length+1}`, '#c39345', .55, 'opacity=".55"'));
+  if (age >= 4) {
+    // The sleeve belongs to the moving wing and overlaps the matching jacket,
+    // so its shoulder remains continuous through a raised or lowered pose.
+    art += mirror(p(`${upper} Q${root-11} ${y+5} ${root-11} ${y+8} Q${root-3} ${y+12} ${root+5} ${y+8} C${root+6} ${y+3} ${root+7} ${y-2} ${root+3} ${y-5}Z`, 'url(#cloth)'));
+    art += mirror(line(`M${root-11} ${y+8} Q${root-3} ${y+12} ${root+5} ${y+8}`, COLORS[age][1], .7));
+    art += mirror(line(`M${root-10} ${y+6.8} Q${root-3} ${y+10.3} ${root+4.5} ${y+6.8}`, '#fff4da', .6, 'opacity=".5"'));
+  }
+  return art;
 }
 function foot(age, side) {
   const [, , , , hem] = FORMS[age];
@@ -229,8 +275,8 @@ async function render(age, previewOnly) {
   const art=layers(age);
   const [, ,cy,shoulder,hem,bw]=FORMS[age];
   const metadata={age,style:'storybook',artSource:'tools/pip-growth/storybook.cjs',
-    render:'Authored Pip vector illustration; matte painted gradients and paper grain; transparent 360 px layers',
-    frameOffsetY:3, motionPivots:[[60,hem-2],[60,cy+FORMS[age][1]-5],[60-bw+4,shoulder+3],[60+bw-4,shoulder+3],[age<=3?48:47,hem],[age<=3?72:73,hem]],
+    render:'Authored Pip illustration; directional matte form shading, curved bill and layered feathers; transparent 360 px layers',
+    frameOffsetY:3, motionPivots:[[60,hem-2],[60,cy+FORMS[age][1]-5],[60-bw+8,shoulder+6],[60+bw-8,shoulder+6],[age<=3?48:47,hem],[age<=3?72:73,hem]],
     shadowRadius:age===0?29:28,cellPixels:360,coordinates:'120-unit front illustration',
     form:{headWidth:FORMS[age][0]*2,headHeight:FORMS[age][1]*2,headCenter:cy,shoulder,hem,torsoWidth:bw*2}};
   const full=[4,5,0,1,2,3].map(i=>art[i]).join('');
@@ -277,8 +323,8 @@ function writeLoaderAssets() {
     fs.writeFileSync(path.join(target,`${stem}-parts.svg`),sheet(parts,'parts'));
     const poses=['neutral','speaking','blink','encourage'].map((face,i)=>{
       const frame=renderParts(face);
-      if(i===3) frame[2]=group(frame[2],'rotate(70 41 73)');
-      return e(60,112,27,3,'#879a83','opacity=".13"')+[4,5,0,1,2,3].map(j=>frame[j]).join('');
+      if(i===3) frame[2]=group(frame[2],`rotate(70 ${60-FORMS[age][5]+8} ${FORMS[age][3]+6})`);
+      return e(60,111.5,28,4.5,'url(#ground)')+[4,5,0,1,2,3].map(j=>frame[j]).join('');
     });
     fs.writeFileSync(path.join(target,`${stem}.svg`),sheet(poses,'poses'));
   }

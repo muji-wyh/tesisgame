@@ -13,6 +13,7 @@ const Memory = preload("res://scripts/memory_game_model.gd")
 const WordCard = preload("res://scripts/word_card.gd")
 const IconButton = preload("res://scripts/icon_button.gd")
 const PeekButton = preload("res://scripts/memory_peek_button.gd")
+const PairConnections = preload("res://scripts/match_connections.gd")
 const FEEDBACK_SECONDS: float = 0.7
 
 
@@ -139,6 +140,7 @@ class CardBack:
 var memory = Memory.new()
 var card_buttons: Array[Button] = []
 var study_button: PeekButton
+var start_button: Button
 var status_label: Label
 var reduced_motion: bool = false
 var purchase_peek: Callable
@@ -199,11 +201,18 @@ func _build() -> void:
 	study_button = PeekButton.new()
 	study_button.name = "StudyGarden"
 	study_button.symbol = IconButton.Symbol.EYE
-	_name_control(study_button, "Reveal all cards for 10 seconds the first time, then 5 seconds each time.")
+	_name_control(study_button, "Reveal all cards for 5 seconds.")
 	study_button.pressed.connect(begin_peek)
 	study_button.focus_exited.connect(_clear_peek_input)
 	study_button.tree_entered.connect(_layout)
 	add_child(study_button)
+	start_button = Button.new()
+	start_button.name = "StartMemoryGame"
+	start_button.text = "Start game"
+	start_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	start_button.pressed.connect(start_game)
+	_name_control(start_button, "Start game. Observe all cards for 10 seconds, then choose two cards.")
+	add_child(start_button)
 	_feedback_timer = Timer.new()
 	_feedback_timer.name = "MemoryFeedbackTimer"
 	_feedback_timer.one_shot = true
@@ -235,6 +244,7 @@ func start_round(words: Array, palette: Dictionary, seed_value: int = -1) -> voi
 			button.name = "MemoryCard%d" % (index + 1)
 			button.focus_mode = Control.FOCUS_ALL
 			button.set_reduced_motion(reduced_motion)
+			button.set_pair_badge_on_word(true)
 			button.pressed.connect(_choose.bind(index))
 			_board.add_child(button)
 			var back := CardBack.new()
@@ -249,6 +259,20 @@ func start_round(words: Array, palette: Dictionary, seed_value: int = -1) -> voi
 	_layout()
 	progress_changed.emit(0, 0)
 	prompt_ready.emit()
+
+
+func start_game() -> void:
+	if _paused or not is_visible_in_tree() or not memory.start_game():
+		return
+	var generation: int = _peek_generation
+	var round_model = memory
+	_peek_origin_frame = Engine.get_process_frames()
+	_refresh()
+	if not _same_peek_request(generation, round_model):
+		return
+	peek_feedback.emit(true, 0)
+	if _same_peek_request(generation, round_model):
+		prompt_ready.emit()
 
 
 func pause(value: bool) -> void:
@@ -296,12 +320,36 @@ func controls() -> Array[Control]:
 		return result
 	if not memory.phase in ["waiting", "matching", "feedback"] or card_buttons.is_empty():
 		return result
+	if not memory.started:
+		if is_instance_valid(start_button) and not start_button.disabled:
+			result.append(start_button)
+		return result
 	for button in card_buttons:
 		if not button.disabled:
 			result.append(button)
 	if is_instance_valid(study_button) and study_button.is_visible_in_tree() and not study_button.disabled:
 		result.append(study_button)
 	return result
+
+
+func snapshot() -> Dictionary:
+	var cards: Array[Dictionary] = []
+	for index in range(card_buttons.size()):
+		var card: Dictionary = memory.cards[index]
+		var rect: Rect2 = card_buttons[index].get_global_rect()
+		var revealed: bool = memory.is_revealed(index)
+		var state: Dictionary = {"index": index, "kind": card.kind, "rect": [rect.position.x, rect.position.y, rect.size.x, rect.size.y],
+			"face_up": revealed, "selected": memory.selected_indices.has(index), "matched": memory.matched_word_ids.has(card.word.id)}
+		if revealed:
+			state["word_id"] = card.word.id
+			state["text"] = card.word.text
+		cards.append(state)
+	return {"phase": memory.phase, "started": memory.started,
+		"awaiting_start": not memory.started and memory.phase == "waiting" and not memory.cards.is_empty(),
+		"observing": memory.studying, "peek_remaining": memory.peek_remaining, "peek_duration": memory.peek_duration,
+		"selected_indices": memory.selected_indices.duplicate(), "matched_word_ids": memory.matched_word_ids.duplicate(),
+		"attempts": memory.attempts, "mistakes": memory.mistakes, "reward_tier": memory.reward_tier(),
+		"status": status_label.text if is_instance_valid(status_label) else "", "cards": cards}
 
 
 func set_palette(palette: Dictionary) -> void:
@@ -341,18 +389,15 @@ func _choose(index: int) -> void:
 		return
 	if memory.matched_word_ids.has(memory.cards[index].word.id):
 		return
-	if memory.phase == "feedback":
-		continue_feedback()
-		if _can_play():
-			card_buttons[index].grab_focus()
 	if not _can_play():
 		return
 	var result: String = memory.select(index)
 	if result == "ignored":
 		return
-	# Start the validated card's pronunciation and answer cue before refreshing
-	# all card faces, styles and layout. Publish the updated prompt afterward.
-	if result != "cancelled":
+	# A first selection never exposes its answer. Commit both faces together
+	# before publishing outcome feedback for the attempt.
+	_refresh()
+	if result in ["correct", "wrong"]:
 		var card: Dictionary = memory.cards[index]
 		card_revealed.emit(card.word, card.kind, index)
 	if result in ["correct", "wrong"]:
@@ -360,7 +405,6 @@ func _choose(index: int) -> void:
 	card_buttons[index].play_press()
 	if result in ["correct", "wrong"]:
 		_feedback_timer.start()
-	_refresh()
 	if result in ["correct", "wrong"]:
 		progress_changed.emit(memory.matched_word_ids.size(), memory.attempts)
 	prompt_ready.emit()
@@ -387,11 +431,7 @@ func begin_peek() -> void:
 		study_button.feedback(false)
 		peek_feedback.emit(false, price)
 		return
-	# Payment must succeed before dismissing feedback or clearing a selection.
-	# Commit these model changes together, without an intermediate prompt callback.
-	if memory.phase == "feedback":
-		_feedback_timer.stop()
-		memory.continue_feedback()
+	# Payment succeeds before a selection is cleared or a new clock begins.
 	if not memory.set_study(true):
 		return
 	_peek_origin_frame = Engine.get_process_frames()
@@ -409,9 +449,8 @@ func begin_peek() -> void:
 
 func _can_begin_peek() -> bool:
 	return not _paused and is_visible_in_tree() and is_instance_valid(study_button) \
-		and not study_button.disabled and not memory.cards.is_empty() \
-		and (memory.phase in ["waiting", "matching"] \
-			or (memory.phase == "feedback" and memory.matched_word_ids.size() < 5))
+		and memory.started and not study_button.disabled and not memory.cards.is_empty() \
+		and memory.phase in ["waiting", "matching"]
 
 
 func _same_peek_request(generation: int, round_model) -> bool:
@@ -435,7 +474,7 @@ func _clear_peek_input() -> void:
 
 
 func _can_play() -> bool:
-	return not _paused and is_visible_in_tree() and memory.phase in ["waiting", "matching"]
+	return memory.started and not memory.studying and not _paused and is_visible_in_tree() and memory.phase in ["waiting", "matching"]
 
 
 func _input(event: InputEvent) -> void:
@@ -499,29 +538,37 @@ func _refresh() -> void:
 	var playing: bool = memory.phase in ["waiting", "matching"] and not card_buttons.is_empty()
 	var reviewing: bool = memory.phase == "feedback"
 	var suspended: bool = _paused or not is_visible_in_tree()
+	var awaiting_start: bool = not memory.started and playing
 	_feedback_timer.paused = suspended
 	_board.visible = playing or reviewing or memory.phase == "won"
+	_board.modulate.a = 0.38 if awaiting_start else 1.0
+	start_button.visible = awaiting_start
+	start_button.disabled = suspended or not awaiting_start
+	start_button.focus_mode = Control.FOCUS_NONE if start_button.disabled else Control.FOCUS_ALL
 	if is_instance_valid(study_button):
-		study_button.visible = (playing or reviewing) and is_visible_in_tree()
-		study_button.disabled = suspended or not (playing or (reviewing and memory.matched_word_ids.size() < 5))
+		study_button.visible = memory.started and (playing or reviewing) and is_visible_in_tree()
+		study_button.disabled = suspended or not memory.started or not playing
 		study_button.focus_mode = Control.FOCUS_NONE if study_button.disabled else Control.FOCUS_ALL
 		study_button.engaged = memory.studying
 		study_button.cost = memory.peek_price()
 		study_button.reduced_motion = reduced_motion or suspended
+		if not memory.studying:
+			_name_control(study_button, "Reveal all cards for 5 seconds. Costs %d coins." % memory.peek_price())
 	status_label.hide()
 	if not memory.error.is_empty():
 		status_label.text = memory.error
+	elif awaiting_start:
+		status_label.text = "Start game"
 	elif memory.phase == "feedback":
-		status_label.text = "A new flower!" if memory.last_correct else "Try another pair."
+		status_label.text = "Great match!" if memory.last_correct else "Not a pair."
 	elif memory.phase == "won":
-		status_label.text = "Garden complete!"
+		status_label.text = "All pairs found!"
 	elif memory.studying:
 		_update_peek_status()
 	elif not memory.selected_indices.is_empty():
-		var first: Dictionary = memory.cards[memory.selected_indices[0]]
-		status_label.text = ("Word: " if first.kind == "word" else "Picture: ") + first.word.text
+		status_label.text = "Choose one more card"
 	else:
-		status_label.text = "Find a pair."
+		status_label.text = "Choose two cards"
 	_name_control(status_label, status_label.text)
 	for index in range(card_buttons.size()):
 		var button = card_buttons[index]
@@ -530,7 +577,10 @@ func _refresh() -> void:
 		var revealed: bool = memory.is_revealed(index)
 		var selected: bool = memory.selected_indices.has(index)
 		button.set_reduced_motion(reduced_motion or suspended)
-		button.refresh(_palette, selected and not matched and not reviewing, matched, selected and reviewing and not memory.last_correct, not (playing or reviewing) or suspended or memory.studying)
+		var pair_index: int = memory.matched_word_ids.find(card.word.id)
+		var pair_tint: Color = PairConnections.PAIR_COLORS[maxi(0, pair_index) % PairConnections.PAIR_COLORS.size()]
+		button.refresh(_palette, selected and not matched and not reviewing, matched, selected and reviewing and not memory.last_correct,
+			not playing or awaiting_start or suspended or memory.studying, false, pair_index, pair_tint)
 		button.set_face_up(revealed, not suspended and (playing or reviewing))
 		button.focus_mode = Control.FOCUS_NONE if button.disabled else Control.FOCUS_ALL
 		button.picture.modulate.a = 1.0
@@ -541,7 +591,9 @@ func _refresh() -> void:
 		if revealed:
 			label += ": " + card.word.text
 		if matched:
-			label += ". Planted."
+			label += ". Pair %d." % (pair_index + 1)
+		elif selected and not revealed:
+			label += ". Selected."
 		_name_control(button, label)
 	_layout()
 	peek_clock_changed.emit(memory.peek_remaining, memory.peek_duration)
@@ -568,6 +620,11 @@ func _layout() -> void:
 		header = target
 	_board.position = Vector2(0, header)
 	_board.size = Vector2(size.x, maxf(0, size.y - _board.position.y))
+	if is_instance_valid(start_button):
+		Style.action_button(start_button, _palette.accent, true)
+		start_button.custom_minimum_size = Vector2.ZERO
+		start_button.size = Vector2(minf(220 / ui_scale, maxf(0, size.x - 24 / ui_scale)), 48 / ui_scale)
+		start_button.position = _board.position + (_board.size - start_button.size) * 0.5
 	var columns: int = Style.word_board_columns(_board.size, ui_scale, Vector2.ONE * gap)
 	var rows: int = 10 / columns
 	var card_size := Vector2((_board.size.x - gap * (columns - 1)) / columns, (_board.size.y - gap * (rows - 1)) / rows)

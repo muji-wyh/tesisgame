@@ -1,0 +1,846 @@
+{
+	"cache_lifecycle": {
+		"disposed": {
+			"active_ids": [],
+			"leases": 0,
+			"limit_bytes": 134217728,
+			"pinned_bytes": 0,
+			"reserved_bytes": 0,
+			"resident_bytes": 0,
+			"resources": 0
+		},
+		"lease_only": {
+			"active_ids": [],
+			"leases": 1,
+			"limit_bytes": 134217728,
+			"pinned_bytes": 11879936,
+			"reserved_bytes": 0,
+			"resident_bytes": 11879936,
+			"resources": 4
+		},
+		"loaded": {
+			"active_ids": [
+				"sha256:6a3e2fab06a3fb72c78a1414eb8919d7ba7e038fcc0abf73e16fd37203d45062",
+				"sha256:9bf8c55a9a4690f2c90f11ee62741ba49db0f271caa86ffb64195b28717f5b05",
+				"sha256:90938fc426893b9944501192fa5fb9feae0cc93a0806080aee83898d36bdfb03",
+				"sha256:5c87d4a3045d91aa60a5fb4be951baa43834fb39fbf684a5ee7aa132daece5b2"
+			],
+			"leases": 1,
+			"limit_bytes": 134217728,
+			"pinned_bytes": 11879936,
+			"reserved_bytes": 0,
+			"resident_bytes": 11879936,
+			"resources": 4
+		}
+	},
+	"captures": [
+		{
+			"bytes": 114741,
+			"comparison": "No scaled pixel-equality claim; source reconstruction alone is exact.",
+			"file": "static-768x768.png",
+			"height": 768,
+			"layer_snapshot": {
+				"current_images": 2,
+				"motion_frames": [],
+				"motion_processing": false,
+				"previous_images": 0,
+				"ready": true,
+				"theme_id": "digital_studio_internal_static_fixture",
+				"transitioning": false
+			},
+			"sha256": "b16a84a685b05471097ffe6c455219193cc864c485c6028b30f1ca24b77148b3",
+			"visual_review": "pending_independent_inspection",
+			"width": 768
+		},
+		{
+			"bytes": 73206,
+			"comparison": "No scaled pixel-equality claim; source reconstruction alone is exact.",
+			"file": "static-320x568.png",
+			"height": 568,
+			"layer_snapshot": {
+				"current_images": 2,
+				"motion_frames": [],
+				"motion_processing": false,
+				"previous_images": 0,
+				"ready": true,
+				"theme_id": "digital_studio_internal_static_fixture",
+				"transitioning": false
+			},
+			"sha256": "091236449f56ae8ed8761ce9f3ae8564f870fdda8076ce0a48022599d06debc4",
+			"visual_review": "pending_independent_inspection",
+			"width": 320
+		},
+		{
+			"bytes": 112969,
+			"comparison": "No scaled pixel-equality claim; source reconstruction alone is exact.",
+			"file": "static-390x844.png",
+			"height": 844,
+			"layer_snapshot": {
+				"current_images": 2,
+				"motion_frames": [],
+				"motion_processing": false,
+				"previous_images": 0,
+				"ready": true,
+				"theme_id": "digital_studio_internal_static_fixture",
+				"transitioning": false
+			},
+			"sha256": "cc4016f29ac916b9ef5e5771b8cf2492bc349d61e52704b289409fb3bb86431f",
+			"visual_review": "pending_independent_inspection",
+			"width": 390
+		},
+		{
+			"bytes": 163913,
+			"comparison": "No scaled pixel-equality claim; source reconstruction alone is exact.",
+			"file": "static-844x390.png",
+			"height": 390,
+			"layer_snapshot": {
+				"current_images": 2,
+				"motion_frames": [],
+				"motion_processing": false,
+				"previous_images": 0,
+				"ready": true,
+				"theme_id": "digital_studio_internal_static_fixture",
+				"transitioning": false
+			},
+			"sha256": "ac9e5d2b1fcb3e0c5c0ffda7e9f21ee922204bec4b504b47a6b05a3a48e589db",
+			"visual_review": "pending_independent_inspection",
+			"width": 844
+		},
+		{
+			"bytes": 317979,
+			"comparison": "No scaled pixel-equality claim; source reconstruction alone is exact.",
+			"file": "static-1280x800.png",
+			"height": 800,
+			"layer_snapshot": {
+				"current_images": 2,
+				"motion_frames": [],
+				"motion_processing": false,
+				"previous_images": 0,
+				"ready": true,
+				"theme_id": "digital_studio_internal_static_fixture",
+				"transitioning": false
+			},
+			"sha256": "ac80d85d6ef26b5c695a1b2038913cbca0a65e3a006d941dd66f557a41c83338",
+			"visual_review": "pending_independent_inspection",
+			"width": 1280
+		}
+	],
+	"checks": [
+		{
+			"check": "Explicit local results directory is bounded",
+			"ok": true
+		},
+		{
+			"check": "Process uses the explicitly isolated user directory",
+			"ok": true
+		},
+		{
+			"check": "Previous attempts are preserved; results directory is new",
+			"ok": true
+		},
+		{
+			"check": "Fresh private delivery directory created",
+			"ok": true
+		},
+		{
+			"check": "Input exists: res://data/professional/themes.json",
+			"ok": true
+		},
+		{
+			"check": "Input exists: res://assets/images/professional-previews/software-data.png",
+			"ok": true
+		},
+		{
+			"check": "Input exists: res://build/professional-english/software-data-theme-render-r04/layers-r01/layer-report.json",
+			"ok": true
+		},
+		{
+			"check": "Input exists: res://build/professional-english/software-data-theme-render-r04/layers-r01/composition-rest.png",
+			"ok": true
+		},
+		{
+			"check": "Input exists: res://build/professional-english/software-data-theme-render-r04/motion-r01/composition-rest.png",
+			"ok": true
+		},
+		{
+			"check": "Input exists: res://data/professional/courses/software_data.json",
+			"ok": true
+		},
+		{
+			"check": "Input exists: res://data/professional/catalog.json",
+			"ok": true
+		},
+		{
+			"check": "Input exists: res://project.godot",
+			"ok": true
+		},
+		{
+			"check": "Input exists: res://scripts/professional_media_loader.gd",
+			"ok": true
+		},
+		{
+			"check": "Input exists: res://scripts/professional_media_cache.gd",
+			"ok": true
+		},
+		{
+			"check": "Input exists: res://scripts/professional_media_access.gd",
+			"ok": true
+		},
+		{
+			"check": "Input exists: res://scripts/professional_media_manifest.gd",
+			"ok": true
+		},
+		{
+			"check": "Input exists: res://scripts/learning_theme_art.gd",
+			"ok": true
+		},
+		{
+			"check": "Input exists: res://scripts/learning_theme_motion.gd",
+			"ok": true
+		},
+		{
+			"check": "Input exists: res://tools/check-digital-studio-components.gd",
+			"ok": true
+		},
+		{
+			"check": "Retained layer derivation reports exact source reconstruction",
+			"ok": true
+		},
+		{
+			"check": "Exactly one production Digital Studio profile exists",
+			"ok": true
+		},
+		{
+			"check": "Full theme, home and motion remain pending",
+			"ok": true
+		},
+		{
+			"check": "Existing accepted preview is byte-identical and is not newly approved",
+			"ok": true
+		},
+		{
+			"check": "Exact layer report entry: environment.png",
+			"ok": true
+		},
+		{
+			"check": "Input exists: res://build/professional-english/software-data-theme-render-r04/layers-r01/environment.png",
+			"ok": true
+		},
+		{
+			"check": "Exact candidate SHA-256: environment.png",
+			"ok": true
+		},
+		{
+			"check": "Raw source matches its immutable delivery metadata: res://build/professional-english/software-data-theme-render-r04/layers-r01/environment.png",
+			"ok": true
+		},
+		{
+			"check": "Private raw sidecar is writable: res://build/professional-english/software-data-theme-render-r04/layers-r01/environment.png",
+			"ok": true
+		},
+		{
+			"check": "Exact layer report entry: props.png",
+			"ok": true
+		},
+		{
+			"check": "Input exists: res://build/professional-english/software-data-theme-render-r04/layers-r01/props.png",
+			"ok": true
+		},
+		{
+			"check": "Exact candidate SHA-256: props.png",
+			"ok": true
+		},
+		{
+			"check": "Raw source matches its immutable delivery metadata: res://build/professional-english/software-data-theme-render-r04/layers-r01/props.png",
+			"ok": true
+		},
+		{
+			"check": "Private raw sidecar is writable: res://build/professional-english/software-data-theme-render-r04/layers-r01/props.png",
+			"ok": true
+		},
+		{
+			"check": "Exact layer report entry: motion-sheet.png",
+			"ok": true
+		},
+		{
+			"check": "Input exists: res://build/professional-english/software-data-theme-render-r04/layers-r01/motion-sheet.png",
+			"ok": true
+		},
+		{
+			"check": "Exact candidate SHA-256: motion-sheet.png",
+			"ok": true
+		},
+		{
+			"check": "Raw source matches its immutable delivery metadata: res://build/professional-english/software-data-theme-render-r04/layers-r01/motion-sheet.png",
+			"ok": true
+		},
+		{
+			"check": "Private raw sidecar is writable: res://build/professional-english/software-data-theme-render-r04/layers-r01/motion-sheet.png",
+			"ok": true
+		},
+		{
+			"check": "Raw source matches its immutable delivery metadata: res://assets/images/professional-previews/software-data.png",
+			"ok": true
+		},
+		{
+			"check": "Private raw sidecar is writable: res://assets/images/professional-previews/software-data.png",
+			"ok": true
+		},
+		{
+			"check": "Exactly four resources and 11,879,936 decoded CPU-plus-GPU bytes",
+			"ok": true
+		},
+		{
+			"check": "Static source components decode independently",
+			"ok": true
+		},
+		{
+			"check": "Native unscaled environment plus props reconstruct every rest-source pixel exactly",
+			"ok": true
+		},
+		{
+			"check": "Original rest PNG matches the retained source render identity",
+			"ok": true
+		},
+		{
+			"check": "Derived rest preserves original source pixels despite PNG re-encoding",
+			"ok": true
+		},
+		{
+			"check": "Actual production catalog loads",
+			"ok": true
+		},
+		{
+			"check": "Production Software03 still fails closed: match",
+			"ok": true
+		},
+		{
+			"check": "Production Software03 still fails closed: memory",
+			"ok": true
+		},
+		{
+			"check": "Production Software03 still fails closed: pop",
+			"ok": true
+		},
+		{
+			"check": "Production Software03 still fails closed: jelly",
+			"ok": true
+		},
+		{
+			"check": "Production Software03 still fails closed: word_jelly",
+			"ok": true
+		},
+		{
+			"check": "Production Software03 still fails closed: phrase",
+			"ok": true
+		},
+		{
+			"check": "Internal manifest uses actual schema and budget checks",
+			"ok": true
+		},
+		{
+			"check": "Real native raw loader has no fetch override",
+			"ok": true
+		},
+		{
+			"check": "Real loader decodes and activates the four-image manifest",
+			"ok": true
+		},
+		{
+			"check": "Actual Access acquires one scoped cache lease",
+			"ok": true
+		},
+		{
+			"check": "Exact scoped texture resolves: sha256:6a3e2fab06a3fb72c78a1414eb8919d7ba7e038fcc0abf73e16fd37203d45062",
+			"ok": true
+		},
+		{
+			"check": "Scope returns the actual active cache resource: sha256:6a3e2fab06a3fb72c78a1414eb8919d7ba7e038fcc0abf73e16fd37203d45062",
+			"ok": true
+		},
+		{
+			"check": "Exact decoded dimensions: sha256:6a3e2fab06a3fb72c78a1414eb8919d7ba7e038fcc0abf73e16fd37203d45062",
+			"ok": true
+		},
+		{
+			"check": "Exact decoded source pixels before rendering: sha256:6a3e2fab06a3fb72c78a1414eb8919d7ba7e038fcc0abf73e16fd37203d45062",
+			"ok": true
+		},
+		{
+			"check": "Exact scoped texture resolves: sha256:9bf8c55a9a4690f2c90f11ee62741ba49db0f271caa86ffb64195b28717f5b05",
+			"ok": true
+		},
+		{
+			"check": "Scope returns the actual active cache resource: sha256:9bf8c55a9a4690f2c90f11ee62741ba49db0f271caa86ffb64195b28717f5b05",
+			"ok": true
+		},
+		{
+			"check": "Exact decoded dimensions: sha256:9bf8c55a9a4690f2c90f11ee62741ba49db0f271caa86ffb64195b28717f5b05",
+			"ok": true
+		},
+		{
+			"check": "Exact decoded source pixels before rendering: sha256:9bf8c55a9a4690f2c90f11ee62741ba49db0f271caa86ffb64195b28717f5b05",
+			"ok": true
+		},
+		{
+			"check": "Exact scoped texture resolves: sha256:90938fc426893b9944501192fa5fb9feae0cc93a0806080aee83898d36bdfb03",
+			"ok": true
+		},
+		{
+			"check": "Scope returns the actual active cache resource: sha256:90938fc426893b9944501192fa5fb9feae0cc93a0806080aee83898d36bdfb03",
+			"ok": true
+		},
+		{
+			"check": "Exact decoded dimensions: sha256:90938fc426893b9944501192fa5fb9feae0cc93a0806080aee83898d36bdfb03",
+			"ok": true
+		},
+		{
+			"check": "Exact decoded source pixels before rendering: sha256:90938fc426893b9944501192fa5fb9feae0cc93a0806080aee83898d36bdfb03",
+			"ok": true
+		},
+		{
+			"check": "Exact scoped texture resolves: sha256:5c87d4a3045d91aa60a5fb4be951baa43834fb39fbf684a5ee7aa132daece5b2",
+			"ok": true
+		},
+		{
+			"check": "Scope returns the actual active cache resource: sha256:5c87d4a3045d91aa60a5fb4be951baa43834fb39fbf684a5ee7aa132daece5b2",
+			"ok": true
+		},
+		{
+			"check": "Exact decoded dimensions: sha256:5c87d4a3045d91aa60a5fb4be951baa43834fb39fbf684a5ee7aa132daece5b2",
+			"ok": true
+		},
+		{
+			"check": "Exact decoded source pixels before rendering: sha256:5c87d4a3045d91aa60a5fb4be951baa43834fb39fbf684a5ee7aa132daece5b2",
+			"ok": true
+		},
+		{
+			"check": "Scope denies an unleased hash",
+			"ok": true
+		},
+		{
+			"check": "Unknown scope cannot resolve a known hash",
+			"ok": true
+		},
+		{
+			"check": "Loaded cache owns only four exact resources, exact bytes and one lease",
+			"ok": true
+		},
+		{
+			"check": "One lease retains exact resources after deactivate and trim",
+			"ok": true
+		},
+		{
+			"check": "Lease-only scope still resolves: professional://round1/6a3e2fab06a3fb72c78a1414eb8919d7ba7e038fcc0abf73e16fd37203d45062",
+			"ok": true
+		},
+		{
+			"check": "Lease-only scope still resolves: professional://round1/9bf8c55a9a4690f2c90f11ee62741ba49db0f271caa86ffb64195b28717f5b05",
+			"ok": true
+		},
+		{
+			"check": "Lease-only scope still resolves: professional://round1/90938fc426893b9944501192fa5fb9feae0cc93a0806080aee83898d36bdfb03",
+			"ok": true
+		},
+		{
+			"check": "Lease-only scope still resolves: professional://round1/5c87d4a3045d91aa60a5fb4be951baa43834fb39fbf684a5ee7aa132daece5b2",
+			"ok": true
+		},
+		{
+			"check": "Actual Access binds only the two internal static art descriptors",
+			"ok": true
+		},
+		{
+			"check": "Real theme layer presents the internal static profile",
+			"ok": true
+		},
+		{
+			"check": "Exactly environment and props render without animation",
+			"ok": true
+		},
+		{
+			"check": "Theme layer uses the exact leased environment texture",
+			"ok": true
+		},
+		{
+			"check": "Theme layer uses the exact leased props texture",
+			"ok": true
+		},
+		{
+			"check": "Actual static component screenshot saved: static-768x768.png",
+			"ok": true
+		},
+		{
+			"check": "Real theme layer presents the internal static profile",
+			"ok": true
+		},
+		{
+			"check": "Exactly environment and props render without animation",
+			"ok": true
+		},
+		{
+			"check": "Theme layer uses the exact leased environment texture",
+			"ok": true
+		},
+		{
+			"check": "Theme layer uses the exact leased props texture",
+			"ok": true
+		},
+		{
+			"check": "Actual static component screenshot saved: static-320x568.png",
+			"ok": true
+		},
+		{
+			"check": "Real theme layer presents the internal static profile",
+			"ok": true
+		},
+		{
+			"check": "Exactly environment and props render without animation",
+			"ok": true
+		},
+		{
+			"check": "Theme layer uses the exact leased environment texture",
+			"ok": true
+		},
+		{
+			"check": "Theme layer uses the exact leased props texture",
+			"ok": true
+		},
+		{
+			"check": "Actual static component screenshot saved: static-390x844.png",
+			"ok": true
+		},
+		{
+			"check": "Real theme layer presents the internal static profile",
+			"ok": true
+		},
+		{
+			"check": "Exactly environment and props render without animation",
+			"ok": true
+		},
+		{
+			"check": "Theme layer uses the exact leased environment texture",
+			"ok": true
+		},
+		{
+			"check": "Theme layer uses the exact leased props texture",
+			"ok": true
+		},
+		{
+			"check": "Actual static component screenshot saved: static-844x390.png",
+			"ok": true
+		},
+		{
+			"check": "Real theme layer presents the internal static profile",
+			"ok": true
+		},
+		{
+			"check": "Exactly environment and props render without animation",
+			"ok": true
+		},
+		{
+			"check": "Theme layer uses the exact leased environment texture",
+			"ok": true
+		},
+		{
+			"check": "Theme layer uses the exact leased props texture",
+			"ok": true
+		},
+		{
+			"check": "Actual static component screenshot saved: static-1280x800.png",
+			"ok": true
+		},
+		{
+			"check": "Released scope no longer resolves: professional://round1/6a3e2fab06a3fb72c78a1414eb8919d7ba7e038fcc0abf73e16fd37203d45062",
+			"ok": true
+		},
+		{
+			"check": "Released scope no longer resolves: professional://round1/9bf8c55a9a4690f2c90f11ee62741ba49db0f271caa86ffb64195b28717f5b05",
+			"ok": true
+		},
+		{
+			"check": "Released scope no longer resolves: professional://round1/90938fc426893b9944501192fa5fb9feae0cc93a0806080aee83898d36bdfb03",
+			"ok": true
+		},
+		{
+			"check": "Released scope no longer resolves: professional://round1/5c87d4a3045d91aa60a5fb4be951baa43834fb39fbf684a5ee7aa132daece5b2",
+			"ok": true
+		},
+		{
+			"check": "Disposal clears all cache ownership and budgets",
+			"ok": true
+		},
+		{
+			"check": "No decoded texture survives the layer and cache disposal",
+			"ok": true
+		},
+		{
+			"check": "No decoded texture survives the layer and cache disposal",
+			"ok": true
+		},
+		{
+			"check": "No decoded texture survives the layer and cache disposal",
+			"ok": true
+		},
+		{
+			"check": "No decoded texture survives the layer and cache disposal",
+			"ok": true
+		},
+		{
+			"check": "Input remains byte-identical after run: res://data/professional/themes.json",
+			"ok": true
+		},
+		{
+			"check": "Input remains byte-identical after run: res://assets/images/professional-previews/software-data.png",
+			"ok": true
+		},
+		{
+			"check": "Input remains byte-identical after run: res://build/professional-english/software-data-theme-render-r04/layers-r01/layer-report.json",
+			"ok": true
+		},
+		{
+			"check": "Input remains byte-identical after run: res://build/professional-english/software-data-theme-render-r04/layers-r01/composition-rest.png",
+			"ok": true
+		},
+		{
+			"check": "Input remains byte-identical after run: res://build/professional-english/software-data-theme-render-r04/motion-r01/composition-rest.png",
+			"ok": true
+		},
+		{
+			"check": "Input remains byte-identical after run: res://data/professional/courses/software_data.json",
+			"ok": true
+		},
+		{
+			"check": "Input remains byte-identical after run: res://data/professional/catalog.json",
+			"ok": true
+		},
+		{
+			"check": "Input remains byte-identical after run: res://project.godot",
+			"ok": true
+		},
+		{
+			"check": "Input remains byte-identical after run: res://scripts/professional_media_loader.gd",
+			"ok": true
+		},
+		{
+			"check": "Input remains byte-identical after run: res://scripts/professional_media_cache.gd",
+			"ok": true
+		},
+		{
+			"check": "Input remains byte-identical after run: res://scripts/professional_media_access.gd",
+			"ok": true
+		},
+		{
+			"check": "Input remains byte-identical after run: res://scripts/professional_media_manifest.gd",
+			"ok": true
+		},
+		{
+			"check": "Input remains byte-identical after run: res://scripts/learning_theme_art.gd",
+			"ok": true
+		},
+		{
+			"check": "Input remains byte-identical after run: res://scripts/learning_theme_motion.gd",
+			"ok": true
+		},
+		{
+			"check": "Input remains byte-identical after run: res://tools/check-digital-studio-components.gd",
+			"ok": true
+		},
+		{
+			"check": "Input remains byte-identical after run: res://build/professional-english/software-data-theme-render-r04/layers-r01/environment.png",
+			"ok": true
+		},
+		{
+			"check": "Input remains byte-identical after run: res://build/professional-english/software-data-theme-render-r04/layers-r01/props.png",
+			"ok": true
+		},
+		{
+			"check": "Input remains byte-identical after run: res://build/professional-english/software-data-theme-render-r04/layers-r01/motion-sheet.png",
+			"ok": true
+		}
+	],
+	"decoded_images": [
+		{
+			"decoded_bytes": 4718592,
+			"height": 768,
+			"id": "sha256:6a3e2fab06a3fb72c78a1414eb8919d7ba7e038fcc0abf73e16fd37203d45062",
+			"rgba_sha256_before_render": "2704d8ebd6f72aa2a4d4b8475ba9cbe09708e96ead4ed12ecb93e17b2bedfcf0",
+			"width": 768
+		},
+		{
+			"decoded_bytes": 4718592,
+			"height": 768,
+			"id": "sha256:9bf8c55a9a4690f2c90f11ee62741ba49db0f271caa86ffb64195b28717f5b05",
+			"rgba_sha256_before_render": "856066682fb9339dc140f17972a2aba7ecde8b6a1fc1803cd8da8cf3670ec10e",
+			"width": 768
+		},
+		{
+			"decoded_bytes": 1132032,
+			"height": 536,
+			"id": "sha256:90938fc426893b9944501192fa5fb9feae0cc93a0806080aee83898d36bdfb03",
+			"rgba_sha256_before_render": "f95d322662e20b8076d8a8cee6ca35cd264b5a1fd17c9a049ef8d90c0933f809",
+			"width": 264
+		},
+		{
+			"decoded_bytes": 1310720,
+			"height": 320,
+			"id": "sha256:5c87d4a3045d91aa60a5fb4be951baa43834fb39fbf684a5ee7aa132daece5b2",
+			"rgba_sha256_before_render": "a064a9ead1ef3bde8e209ba3d4be971a9f274e1d43a0351a12a16e7fa133df9a",
+			"width": 512
+		}
+	],
+	"failures": [],
+	"finished_utc": "2026-10-20T10:23:23",
+	"fixture_revision": "digital-studio-static-components-internal-r01",
+	"input_pins": [
+		{
+			"bytes": 91201,
+			"path": "res://data/professional/themes.json",
+			"sha256": "2bf6d483cae7b3d38c96945719612a5394a9aa6e2d94d63db9a12b4b55edc669"
+		},
+		{
+			"bytes": 46113,
+			"path": "res://assets/images/professional-previews/software-data.png",
+			"sha256": "5c87d4a3045d91aa60a5fb4be951baa43834fb39fbf684a5ee7aa132daece5b2"
+		},
+		{
+			"bytes": 5229,
+			"path": "res://build/professional-english/software-data-theme-render-r04/layers-r01/layer-report.json",
+			"sha256": "0715e07f7b17e6fd856d229e5ad80a83f706853825d1bf06d9ce6e54beb0d8ac"
+		},
+		{
+			"bytes": 112440,
+			"path": "res://build/professional-english/software-data-theme-render-r04/layers-r01/composition-rest.png",
+			"sha256": "9727e9a94eed96b2c20770827c2dd5a06d67c3861d19558feab63af85f143694"
+		},
+		{
+			"bytes": 114741,
+			"path": "res://build/professional-english/software-data-theme-render-r04/motion-r01/composition-rest.png",
+			"sha256": "b16a84a685b05471097ffe6c455219193cc864c485c6028b30f1ca24b77148b3"
+		},
+		{
+			"bytes": 34280,
+			"path": "res://data/professional/courses/software_data.json",
+			"sha256": "1a8d214b73d02c887e5f149190b5eba4ec99e6bad0326b0bef4b90c34e1f3e21"
+		},
+		{
+			"bytes": 33355,
+			"path": "res://data/professional/catalog.json",
+			"sha256": "0f7509c742d1784e0d48562e1d4b60ee3ded9cb9310c3330a1ab548c563c17be"
+		},
+		{
+			"bytes": 1185,
+			"path": "res://project.godot",
+			"sha256": "c46da66bda422a1b04ad2bf51c4388c472f8931be32f3c33ef44721f47c29ac3"
+		},
+		{
+			"bytes": 7556,
+			"path": "res://scripts/professional_media_loader.gd",
+			"sha256": "36ec1cc35b43a9d2a0e3dbaf43cc33a36a857b31c497874f5fd1e5db652f6c85"
+		},
+		{
+			"bytes": 6993,
+			"path": "res://scripts/professional_media_cache.gd",
+			"sha256": "65da8faa7b058b250fc963d4a42fa91940982ccaf071e366bd6995b1eb679362"
+		},
+		{
+			"bytes": 3728,
+			"path": "res://scripts/professional_media_access.gd",
+			"sha256": "81c6ce402cb26750d2be4d5b27564ce0572ffc378f5cef12c4a14ed9086f4574"
+		},
+		{
+			"bytes": 14900,
+			"path": "res://scripts/professional_media_manifest.gd",
+			"sha256": "6636d0aad7c75ec344d7a97dcae85f576609ec438ee740e6d1642b180a7ed28e"
+		},
+		{
+			"bytes": 8860,
+			"path": "res://scripts/learning_theme_art.gd",
+			"sha256": "7e6ac9c6fc26fa28f687cd240eaa2035aed13c8bcd7ec2c1aa263f31cc8f35f9"
+		},
+		{
+			"bytes": 2753,
+			"path": "res://scripts/learning_theme_motion.gd",
+			"sha256": "c242e4def2dc7302e7fe2170147000a12299f219006200ff4ee9ee82370b020d"
+		},
+		{
+			"bytes": 18052,
+			"path": "res://tools/check-digital-studio-components.gd",
+			"sha256": "5f989891a9fdd92c79d6be71a4149e409aca5e3d210e30d63f9c4f6d00df8785"
+		},
+		{
+			"bytes": 78312,
+			"path": "res://build/professional-english/software-data-theme-render-r04/layers-r01/environment.png",
+			"sha256": "6a3e2fab06a3fb72c78a1414eb8919d7ba7e038fcc0abf73e16fd37203d45062"
+		},
+		{
+			"bytes": 112959,
+			"path": "res://build/professional-english/software-data-theme-render-r04/layers-r01/props.png",
+			"sha256": "9bf8c55a9a4690f2c90f11ee62741ba49db0f271caa86ffb64195b28717f5b05"
+		},
+		{
+			"bytes": 50025,
+			"path": "res://build/professional-english/software-data-theme-render-r04/layers-r01/motion-sheet.png",
+			"sha256": "90938fc426893b9944501192fa5fb9feae0cc93a0806080aee83898d36bdfb03"
+		}
+	],
+	"limitations": "No production descriptors are edited. Existing accepted preview is unchanged. Fractionally scaled layers require visual inspection; no rendered-pixel tolerance or normalization is used.",
+	"manifest": {
+		"course_id": "software_data",
+		"curriculum_revision": "digital-studio-static-components-internal-r01",
+		"module_id": "component_fixture",
+		"resources": [
+			{
+				"compressed_bytes": 78312,
+				"decoded_bytes": 4718592,
+				"format": "png",
+				"height": 768,
+				"id": "sha256:6a3e2fab06a3fb72c78a1414eb8919d7ba7e038fcc0abf73e16fd37203d45062",
+				"kind": "image",
+				"path": "professional-media/6a3e2fab06a3fb72c78a1414eb8919d7ba7e038fcc0abf73e16fd37203d45062.png",
+				"sha256": "6a3e2fab06a3fb72c78a1414eb8919d7ba7e038fcc0abf73e16fd37203d45062",
+				"width": 768
+			},
+			{
+				"compressed_bytes": 112959,
+				"decoded_bytes": 4718592,
+				"format": "png",
+				"height": 768,
+				"id": "sha256:9bf8c55a9a4690f2c90f11ee62741ba49db0f271caa86ffb64195b28717f5b05",
+				"kind": "image",
+				"path": "professional-media/9bf8c55a9a4690f2c90f11ee62741ba49db0f271caa86ffb64195b28717f5b05.png",
+				"sha256": "9bf8c55a9a4690f2c90f11ee62741ba49db0f271caa86ffb64195b28717f5b05",
+				"width": 768
+			},
+			{
+				"compressed_bytes": 50025,
+				"decoded_bytes": 1132032,
+				"format": "png",
+				"height": 536,
+				"id": "sha256:90938fc426893b9944501192fa5fb9feae0cc93a0806080aee83898d36bdfb03",
+				"kind": "image",
+				"path": "professional-media/90938fc426893b9944501192fa5fb9feae0cc93a0806080aee83898d36bdfb03.png",
+				"sha256": "90938fc426893b9944501192fa5fb9feae0cc93a0806080aee83898d36bdfb03",
+				"width": 264
+			},
+			{
+				"compressed_bytes": 46113,
+				"decoded_bytes": 1310720,
+				"format": "png",
+				"height": 320,
+				"id": "sha256:5c87d4a3045d91aa60a5fb4be951baa43834fb39fbf684a5ee7aa132daece5b2",
+				"kind": "image",
+				"path": "professional-media/5c87d4a3045d91aa60a5fb4be951baa43834fb39fbf684a5ee7aa132daece5b2.png",
+				"sha256": "5c87d4a3045d91aa60a5fb4be951baa43834fb39fbf684a5ee7aa132daece5b2",
+				"width": 512
+			}
+		],
+		"schema_version": 1
+	},
+	"motion_candidate": "Motion sheet bytes are decoded and leased only; no playback or visual motion acceptance.",
+	"production_theme_status": "pending",
+	"schema": 1,
+	"scope": "Standalone actual static theme layer; no Main, full-game, animation, human or device acceptance.",
+	"started_utc": "2026-10-20T10:23:22",
+	"status": "technical_pass_pending_independent_static_visual_review"
+}

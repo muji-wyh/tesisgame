@@ -2,6 +2,8 @@ extends SceneTree
 
 const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
 const Progress = preload("res://scripts/medal_progress.gd")
+const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
+const Economy = preload("res://scripts/coin_economy.gd")
 const SIZES: Array[Vector2i] = [Vector2i(393, 852), Vector2i(844, 390), Vector2i(1366, 768)]
 const CASES: Array[Dictionary] = [
 	{"mode": "match", "earned": true}, {"mode": "memory", "earned": true},
@@ -86,6 +88,7 @@ func _complete_mode(app, mode: String, earned: bool) -> void:
 			app.cards[str(word.id) + ":image"].pressed.emit()
 			app._continue_match()
 	elif mode == "memory":
+		Fixture.start_memory(app)
 		for word: Dictionary in app.model.lesson_words:
 			for index in range(app._memory.memory.cards.size()):
 				if str(app._memory.memory.cards[index].word.id) == str(word.id):
@@ -137,8 +140,8 @@ func _complete_mode(app, mode: String, earned: bool) -> void:
 		view.finish_button.accessibility_requested.emit()
 		check(app._finish_confirmation_open(), mode + ": accessible Finish reaches its confirmation")
 		app._finish_confirmation.finish_button.pressed.emit()
+	Fixture.finish_celebration(app)
 	if mode in ["match", "memory", "phrase"]:
-		Fixture.finish_celebration(app)
 		check(app.model.phase == "won" and app.model.chest_earned,
 			mode + ": completing the real lesson reaches its earned-chest result")
 	app._refresh()
@@ -341,7 +344,7 @@ func _check_navigation(app, mode: String) -> void:
 	# Complete a second round to exercise replay directly, with its chest still closed.
 	await _complete_mode(app, mode, mode in ["match", "memory", "phrase", "pop"])
 	identity = app._round_id
-	var expected_coins: int = coins + (50 if mode in ["match", "memory", "phrase", "pop"] else 0)
+	var expected_coins: int = coins + (Economy.chest_coins(RewardProgress.THEMES.size()) if mode == "memory" else 50 if mode in ["match", "phrase", "pop"] else 0)
 	replay.pressed.emit()
 	await _settle()
 	check(not app._settlement_dialog_open() and app._round_id != identity and _board(app, mode).is_visible_in_tree(),

@@ -24,7 +24,7 @@ func _init() -> void:
 	focus_mode = Control.FOCUS_ALL
 	mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	text = ""
-	_caption = Style.label("Tap to listen", 12)
+	_caption = Style.label("Listen to the phrase", 12)
 	_caption.name = "PhraseAudioCaption"
 	_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_caption.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -43,7 +43,7 @@ func configure(phrase: Dictionary, show_text: bool, accent: Color) -> void:
 	_phrase_text = str(phrase.get("text", ""))
 	_show_text = show_text and not _phrase_text.is_empty()
 	_accent = accent
-	_caption.text = _phrase_text if _show_text else "Tap to listen"
+	_caption.text = _phrase_text if _show_text else "Listen to the phrase"
 	set("accessibility_name", "Listen: %s" % _phrase_text if _show_text else "Listen to the phrase")
 	_layout()
 	_update_activity()
@@ -110,8 +110,8 @@ func _layout() -> void:
 	if not is_instance_valid(_caption):
 		return
 	var s: float = Style.ui_scale(self)
-	var radius: int = ceili(18 / s)
-	var fill: Color = Color("#edf6f0").lerp(_accent.lightened(0.93), 0.2)
+	var radius: int = ceili(14 / s)
+	var fill: Color = Style.SOFT.lerp(_accent.lightened(0.93), 0.2)
 	var edge: Color = _accent.lightened(0.69)
 	for state in ["normal", "hover", "pressed", "disabled"]:
 		var surface := Style.box(fill, edge, radius, maxi(1, roundi(1 / s)))
@@ -130,11 +130,11 @@ func _layout() -> void:
 	custom_minimum_size = Vector2.ZERO
 	var left: float = minf(62 / s, size.x * 0.31)
 	var available: float = maxf(0, size.x - left - 14 / s)
-	var font_size: int = ceili((18 if _show_text else 11) / s)
+	var font_size: int = ceili((18 if _show_text else 12) / s)
 	_caption.add_theme_font_override("font", Style.HEADING_FONT if _show_text else Style.BODY_FONT)
 	_caption.add_theme_color_override("font_color", Style.INK if _show_text else _accent.darkened(0.28))
-	_caption.position = Vector2(left, 4 / s if _show_text else size.y * 0.60)
-	var available_height: float = maxf(0, size.y - 8 / s) if _show_text else size.y * 0.31
+	_caption.position = Vector2(left, 4 / s if _show_text else size.y * 0.58)
+	var available_height: float = maxf(0, size.y - 8 / s) if _show_text else size.y * 0.40
 	if _show_text:
 		var font: Font = Style.HEADING_FONT
 		# Measure the actual wrapped lines, including font ascent and descent.
@@ -176,8 +176,8 @@ func _draw() -> void:
 	var left: float = _caption.position.x + 2 / s
 	var right: float = size.x - 18 / s
 	var wave_width: float = maxf(0, right - left)
-	var center_y: float = size.y * 0.36
-	var max_height: float = minf(16 / s, size.y * 0.23)
+	var center_y: float = size.y * 0.33
+	var max_height: float = minf(16 / s, size.y * 0.21)
 	var count: int = clampi(floori(wave_width * s / 8), 10, 64)
 	var spacing: float = wave_width / maxi(1, count - 1)
 	var stroke: float = minf(4 / s, spacing * 0.46)

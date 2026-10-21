@@ -1,7 +1,8 @@
 # Professional English planning and continuation
 
 - [Development specification](2026-10-15-professional-english-and-morphology.md): the full Growth and Professional English scope.
-- [Implementation checkpoint](professional-english-checkpoint.md): the last content delivery and remaining work, updated on 2026-10-19.
+- [Current implementation checkpoint](2026-10-20-professional-english-checkpoint.md): Retail04 morphology, card-reader media, runtime fixes and remaining work, updated on 2026-10-20.
+- [Previous checkpoint](professional-english-checkpoint.md): the preserved Foundation02 delivery state from 2026-10-19.
 
 ## Workspace consolidation on 2026-10-19
 

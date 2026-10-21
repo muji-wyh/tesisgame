@@ -65,7 +65,7 @@ func _build() -> void:
 	_heading = HBoxContainer.new()
 	_heading.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_heading)
-	title_label = Style.label("All words", 22)
+	title_label = Style.heading("All words", 22)
 	title_label.name = "AgeWordTitle"
 	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title_label.clip_text = true
@@ -75,7 +75,7 @@ func _build() -> void:
 	count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	count_label.add_theme_color_override("font_color", Style.MUTED)
 	_heading.add_child(count_label)
-	meaning_label = Style.label("Tap a word to hear it.", 13)
+	meaning_label = Style.label("Tap a word to hear it.", 14)
 	meaning_label.name = "AgeWordMeaning"
 	meaning_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	meaning_label.add_theme_color_override("font_color", Style.MUTED)
@@ -239,7 +239,7 @@ func _rebuild_words() -> void:
 		picture.set_meta("source", str(word.get("image", "")))
 		column.add_child(picture)
 		picture.visible = not str(word.get("image", "")).is_empty()
-		var caption := Style.label(str(word.get("display_text", word.get("text", ""))), 14)
+		var caption := Style.heading(str(word.get("display_text", word.get("text", ""))), 14)
 		caption.name = "WordLabel"
 		caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -400,7 +400,7 @@ func _layout(reveal_focus: bool = true) -> void:
 	_heading.custom_minimum_size.y = ceilf(30.0 / scale)
 	title_label.add_theme_font_size_override("font_size", ceili(19.0 / scale))
 	count_label.add_theme_font_size_override("font_size", ceili(13.0 / scale))
-	meaning_label.add_theme_font_size_override("font_size", ceili(13.0 / scale))
+	meaning_label.add_theme_font_size_override("font_size", ceili(14.0 / scale))
 	meaning_label.custom_minimum_size.y = ceilf(34.0 / scale)
 	for edge in ["left", "right", "top", "bottom"]:
 		_content.add_theme_constant_override("margin_" + edge, inset)

@@ -16,6 +16,8 @@ const Chest = preload("res://scripts/chest_view.gd")
 const Feel = preload("res://scripts/chest_feel.gd")
 const JellyRewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const TreasureScroll = preload("res://scripts/treasure_scroll.gd")
+const Mascot = preload("res://scripts/duck_mascot.gd")
+const RewardLayout = preload("res://scripts/round_reward_layout.gd")
 const TREASURE_LIGHT = preload("res://assets/chests/particles/portal_glow.png")
 
 var rewards := State.new()
@@ -60,6 +62,10 @@ var _result_context: Dictionary = {}
 var _result_reward_id: String = ""
 var _empty_result_id: String = ""
 var _result_score: Label
+var _result_caption: Label
+var pip: Mascot
+var _companion_theme: String = ""
+var _companion_age: int = 0
 var _collecting: bool = false
 var _collect_pending: bool = false
 
@@ -68,8 +74,8 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_PASS
 	_heading = _label("Your treasure", 28)
 	_progress = _label("", 14)
-	_result_score = _label("", 48)
-	_result_score.add_theme_font_override("font", Style.HEADING_FONT)
+	_result_score = _label("", 14)
+	_result_score.add_theme_color_override("font_color", Style.MUTED)
 	_result_score.hide()
 	for label in [_heading, _progress, _result_score]:
 		label.autowrap_mode = TextServer.AUTOWRAP_OFF
@@ -96,6 +102,16 @@ func _ready() -> void:
 	_heading.reparent(_content)
 	_progress.reparent(_content)
 	_result_score.reparent(_content)
+	_result_caption = _label("", 16)
+	_result_caption.reparent(_content)
+	_result_caption.hide()
+	pip = Mascot.new()
+	pip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pip.focus_mode = Control.FOCUS_NONE
+	pip.set_proactive_allowed(false)
+	_content.add_child(pip)
+	pip.name = "SettlementPip"
+	pip.hide()
 	_notice = _label("", 14)
 	_notice.add_theme_color_override("font_color", Style.WRONG)
 	_back = Button.new()
@@ -135,6 +151,7 @@ func _ready() -> void:
 	Style.action_button(_previous_page, Style.GOOD, true)
 	add_child(_previous_page)
 	_previous_page.pressed.connect(func() -> void: set_page(_page_index - 1))
+	_previous_page.focus_entered.connect(_ensure_result_pager_visible.bind(_previous_page))
 	_next_page = Button.new()
 	_next_page.name = "TreasureNextPage"
 	_next_page.text = "Next"
@@ -142,6 +159,8 @@ func _ready() -> void:
 	Style.action_button(_next_page, Style.GOOD, true)
 	add_child(_next_page)
 	_next_page.pressed.connect(func() -> void: set_page(_page_index + 1))
+	_next_page.focus_entered.connect(_ensure_result_pager_visible.bind(_next_page))
+	_scroll.tap_controls = [_previous_page, _next_page]
 	_page_label = _label("", 16)
 	item_rect_changed.connect(_queue_layout)
 	get_viewport().size_changed.connect(_queue_layout)
@@ -231,6 +250,40 @@ func _is_danger_result() -> bool:
 
 func _is_result_dialog() -> bool:
 	return not _result_context.is_empty()
+
+
+func set_companion(theme_id: String, age: int) -> void:
+	_companion_theme = theme_id
+	_companion_age = age
+	_sync_companion()
+
+
+func _sync_companion() -> void:
+	if not is_instance_valid(pip):
+		return
+	pip.visible = _is_result_dialog()
+	var theme: String = _companion_theme
+	if theme.is_empty():
+		theme = str(_cards[0].theme) if not _cards.is_empty() else "spring"
+	pip.set_growth_age(_companion_age)
+	pip.set_outfit_theme(theme)
+	pip.set_reduced_motion(reduced_motion)
+	pip.set_celebration_progress(1.0)
+	pip.set_idle_paused(_paused or not is_visible_in_tree())
+
+
+func result_summary() -> String:
+	var score: int = maxi(0, int(_result_context.get("score", 0)))
+	var is_pop: bool = _result_context.has("hits")
+	var completed: int = maxi(0, int(_result_context.get("hits" if is_pop else "cleared_pairs", 0)))
+	var words: String = "%d %s" % [completed, "word" if completed == 1 else "words"]
+	var summary: String = "%d %s · %s" % [score, "point" if score == 1 else "points", words] if is_pop or score != completed else words
+	var tier: int = maxi(0, int(_result_context.get("chest_tier", 0)))
+	if tier > 0:
+		summary += " · Level %d chest" % tier
+	elif int(_result_context.get("chest_count", 0)) > 1:
+		summary += " · %d chests" % int(_result_context.chest_count)
+	return summary
 
 
 func _effective_page_size() -> int:
@@ -794,7 +847,7 @@ func _refresh_captions() -> void:
 	var s: float = Style.ui_scale(self)
 	for index in range(_cards.size()):
 		var card: Dictionary = _cards[index]
-		var message: String = "Opened!" if card.opened else "Hold to open"
+		var message: String = "Opened!" if card.opened else ("Hold the chest to open" if _is_result_dialog() else "Hold to open")
 		if _unsaved_index == index:
 			message = "Opened - retry save"
 		elif index == _active:
@@ -827,7 +880,7 @@ func _refresh() -> void:
 	_retry.text = "Resume saved treasure" if storage_kind != "jelly" and max_chests > 0 and rewards.has_pending() and rewards.round_id != _configured_id else "Retry save"
 	_retry.disabled = _opening
 	_notice.text = rewards.error if _save_failed else ""
-	_notice.visible = _save_failed
+	_notice.visible = _save_failed and not _is_result_dialog()
 	var state: Dictionary = snapshot()
 	var result_mode: bool = not _result_context.is_empty()
 	var danger_result: bool = _is_danger_result()
@@ -835,10 +888,16 @@ func _refresh() -> void:
 	_home.disabled = _paused
 	_back.text = "Play again" if result_mode else "Back"
 	_result_score.visible = result_mode
+	_progress.visible = not result_mode
+	_result_caption.visible = result_mode and (_cards.is_empty() or _save_failed)
+	_sync_companion()
 	if result_mode:
-		_heading.text = "Game over" if danger_result else "Round complete"
-		_result_score.text = str(maxi(0, int(_result_context.get("score", 0))))
-		_result_score.accessibility_name = "Score: " + _result_score.text
+		var earned_count: int = maxi(0, int(_result_context.get("chest_count", 0)))
+		_heading.text = ("You earned a chest!" if earned_count == 1 else "You earned chests!") if earned_count > 0 else ("Game over" if danger_result else "Round complete")
+		_result_score.text = result_summary()
+		_result_score.accessibility_name = "Score: %d. %s" % [maxi(0, int(_result_context.get("score", 0))), _result_score.text]
+		_result_caption.text = rewards.error if _save_failed else "No chest this round"
+		_result_caption.add_theme_color_override("font_color", Style.WRONG if _save_failed else Style.MUTED)
 		var tier: int = maxi(0, int(_result_context.get("chest_tier", 0)))
 		var is_pop: bool = _result_context.has("hits")
 		var completed: int = maxi(0, int(_result_context.get("hits" if is_pop else "cleared_pairs", 0)))
@@ -895,6 +954,7 @@ func _layout() -> void:
 	if _is_result_dialog():
 		_layout_result_dialog(s, w, h)
 		return
+	_reparent_pager(self)
 	if _back.get_meta("result_appearance", []) != [s, false]:
 		# Restore ordinary result actions after leaving a result modal, including
 		# physical font and button minimums when the viewport scale changes.
@@ -907,7 +967,7 @@ func _layout() -> void:
 	var heading_height: float = (72 if compact else 80) / s
 	var result_height: float = 60 / s if not _result_context.is_empty() else 0.0
 	heading_height += result_height
-	_heading.add_theme_font_size_override("font_size", ceili((22 if compact else 28) / s))
+	_heading.add_theme_font_size_override("font_size", ceili((24 if compact else 28) / s))
 	_progress.add_theme_font_size_override("font_size", ceili(14 / s))
 	var pager_height: float = 52 / s if _page_count() > 1 else 0.0
 	var footer: float = (110 if _save_failed else 62) / s + pager_height
@@ -939,6 +999,7 @@ func _layout() -> void:
 	_progress.size = Vector2(_scroll.size.x, 24 / s)
 	for index in range(_cards.size()):
 		var card: Dictionary = _cards[index]
+		card.hint.show()
 		card.panel.position = Vector2(left + (index % columns) * (card_w + gap), top + heading_height + floori(float(index) / columns) * (card_h + gap))
 		card.panel.size = Vector2(card_w, card_h)
 		card.button.custom_minimum_size = Vector2(44 / s, 44 / s)
@@ -1000,104 +1061,72 @@ func _layout_result_dialog(s: float, w: float, h: float) -> void:
 		Style.action_button(_previous_page, Style.GOOD)
 		Style.action_button(_next_page, Style.GOOD)
 		_back.set_meta("result_appearance", appearance)
-	var margin: float = 4 / s
+	var layout: Dictionary = RewardLayout.measure(Vector2(w, h), s, not _cards.is_empty(), _save_failed, true)
+	_heading.add_theme_font_size_override("font_size", layout.heading_size)
+	_result_score.add_theme_font_size_override("font_size", layout.summary_size)
+	_result_caption.add_theme_font_size_override("font_size", layout.caption_size)
+	for item: Array in [[_heading, "heading"], [_result_score, "summary"], [pip, "pip"],
+		[_result_caption, "caption"], [_home, "home"], [_back, "replay"], [_retry, "retry"]]:
+		var control: Control = item[0]
+		var rect: Rect2 = layout[item[1]]
+		control.custom_minimum_size = Vector2.ZERO
+		control.position = rect.position
+		control.size = rect.size
 	var gap: float = 8 / s
-	var action_h: float = 48 / s
-	var inner_w: float = maxf(1.0, w - margin * 2)
-	var action_y: float = h - action_h - margin
-	var wide_actions: bool = w * s >= 420.0
-	var action_count: int = 3 if _save_failed and wide_actions else 2
-	var action_w: float = (inner_w - gap * (action_count - 1)) / action_count
-	_home.position = Vector2(margin, action_y)
-	_home.size = Vector2(action_w, action_h)
-	_back.position = Vector2(w - margin - action_w, action_y)
-	_back.size = Vector2(action_w, action_h)
-	var footer_top: float = action_y
-	if _save_failed:
-		if wide_actions:
-			_retry.position = Vector2(margin + action_w + gap, action_y)
-			_retry.size = Vector2(action_w, action_h)
-		else:
-			footer_top -= action_h + gap
-			_retry.position = Vector2(margin, footer_top)
-			_retry.size = Vector2(inner_w, action_h)
-		footer_top -= 40 / s
-		_notice.position = Vector2(margin, footer_top)
-		_notice.size = Vector2(inner_w, 36 / s)
-		_notice.add_theme_font_size_override("font_size", ceili(12 / s))
+	var footer_top: float = minf(_home.position.y, _retry.position.y) if _save_failed else _home.position.y
+	_scroll.position = Vector2.ZERO
+	_scroll.size = Vector2(w, maxf(1.0, footer_top - gap))
+	var caption_rect: Rect2 = layout.caption
+	var content_h: float = _scroll.size.y
+	_reparent_pager(_content)
 	if _page_count() > 1:
-		footer_top -= 54 / s
+		# Earlier unopened treasure stays reachable without moving the new reward
+		# away from the celebration's final pose. Only the pager extends below it.
+		var margin: float = 4 / s
+		var inner_w: float = maxf(1.0, w - margin * 2)
+		var page_y: float = caption_rect.end.y + gap
+		var page_h: float = 48 / s
+		if page_y + page_h > _scroll.size.y:
+			page_y = maxf(page_y, _scroll.size.y + gap)
 		var page_w: float = (inner_w - 56 / s - gap * 2) * 0.5
-		_previous_page.position = Vector2(margin, footer_top)
-		_previous_page.size = Vector2(page_w, action_h)
-		_next_page.position = Vector2(w - margin - page_w, footer_top)
-		_next_page.size = Vector2(page_w, action_h)
-		_page_label.position = Vector2(margin + page_w + gap, footer_top)
-		_page_label.size = Vector2(56 / s, action_h)
+		_previous_page.position = Vector2(margin, page_y)
+		_previous_page.size = Vector2(page_w, page_h)
+		_next_page.position = Vector2(w - margin - page_w, page_y)
+		_next_page.size = Vector2(page_w, page_h)
+		_page_label.position = Vector2(margin + page_w + gap, page_y)
+		_page_label.size = Vector2(56 / s, page_h)
 		_page_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		_page_label.add_theme_font_size_override("font_size", ceili(13 / s))
-	_scroll.position = Vector2(margin, margin)
-	_scroll.size = Vector2(inner_w, maxf(1.0, footer_top - gap - margin))
-	_scroll.scroll_vertical = 0
-	# Fit the reward stage to the modal. A short screen puts the score beside
-	# the chest; a phone uses a single column with a flexible artwork height.
-	var stage_h: float = _scroll.size.y
-	var compact: bool = w * s >= 420.0 and stage_h * s < 340.0 and not _cards.is_empty()
-	var tight: bool = stage_h * s < 170.0
-	var heading_h: float = (24 if tight else 32) / s
-	var score_h: float = (36 if tight else 62) / s
-	var summary_h: float = (20 if tight else 24) / s
-	var label_gap: float = (2 if tight else 4) / s
-	_heading.add_theme_font_size_override("font_size", ceili((18 if tight else 24) / s))
-	_result_score.add_theme_font_size_override("font_size", ceili((30 if tight else 52) / s))
-	_progress.add_theme_font_size_override("font_size", ceili((11 if tight else 13) / s))
-	heading_h = maxf(heading_h, _heading.get_combined_minimum_size().y)
-	score_h = maxf(score_h, _result_score.get_combined_minimum_size().y)
-	summary_h = maxf(summary_h, _progress.get_combined_minimum_size().y)
-	var header_h: float = heading_h + score_h + summary_h + label_gap * 2
-	var info_w: float = inner_w * 0.42 if compact else inner_w
-	var chest_w: float = inner_w - info_w - gap if compact else minf(410 / s, inner_w)
-	var chest_h: float = minf(stage_h, 370 / s) if compact else maxf(0.0, minf(stage_h - header_h - gap, 370 / s))
-	if _cards.is_empty():
-		chest_h = 0.0
-	var content_h: float = maxf(header_h, chest_h) if compact else header_h + (gap + chest_h if chest_h > 0 else 0.0)
-	var top: float = maxf(0.0, (stage_h - content_h) * 0.5)
-	var info_top: float = top + maxf(0.0, (content_h - header_h) * 0.5) if compact else top
-	_content.custom_minimum_size = Vector2.ZERO
-	_content.size = _scroll.size
-	_heading.position = Vector2(0, info_top)
-	_heading.size = Vector2(info_w, heading_h)
-	_result_score.position = Vector2(0, info_top + heading_h + label_gap)
-	_result_score.size = Vector2(info_w, score_h)
-	_progress.position = Vector2(0, info_top + heading_h + score_h + label_gap * 2)
-	_progress.size = Vector2(info_w, summary_h)
+		content_h = maxf(content_h, page_y + page_h + margin)
+	_content.custom_minimum_size = Vector2(0, content_h)
+	_content.size = Vector2(w, content_h)
 	if not _cards.is_empty():
 		var card: Dictionary = _cards[0]
-		var hint_h: float = 28 / s
-		var tier_h: float = (20 if tight else 24) / s if int(card.tier) > 0 else 0.0
-		var art_h: float = maxf(1.0, chest_h - tier_h - hint_h - 4 / s)
-		card.panel.position = Vector2(info_w + gap if compact else (inner_w - chest_w) * 0.5,
-			top if compact else top + header_h + gap)
-		card.panel.size = Vector2(chest_w, chest_h)
-		card.art.position = Vector2(0, tier_h)
-		card.art.size = Vector2(chest_w, art_h)
-		card.tier_label.visible = tier_h > 0
-		card.tier_label.position = Vector2.ZERO
-		card.tier_label.size = Vector2(chest_w, tier_h)
-		card.tier_label.add_theme_font_size_override("font_size", ceili(12 / s))
-		card.light.size = Vector2.ONE * minf(chest_w, art_h * 1.12)
-		card.light.position = Vector2((chest_w - card.light.size.x) * 0.5, tier_h + art_h * 0.55 - card.light.size.y * 0.5)
+		var chest_rect: Rect2 = layout.chest
+		card.panel.position = Vector2.ZERO
+		card.panel.size = _content.size
+		card.art.position = chest_rect.position
+		card.art.size = chest_rect.size
+		card.tier_label.hide()
+		card.light.size = Vector2.ONE * minf(chest_rect.size.x, chest_rect.size.y * 1.15)
+		card.light.position = chest_rect.position + Vector2(chest_rect.size.x * 0.5, chest_rect.size.y * 0.60) - card.light.size * 0.5
 		card.button.custom_minimum_size = Vector2(44 / s, 44 / s)
 		card.button.position = card.art.position
 		card.button.size = card.art.size
-		var hint_w: float = minf(184 / s, chest_w)
-		card.hint.position = Vector2((chest_w - hint_w) * 0.5, tier_h + art_h + 4 / s)
-		card.hint.size = Vector2(hint_w, hint_h)
+		card.hint.visible = not _save_failed
+		card.hint.position = caption_rect.position
+		card.hint.size = caption_rect.size
 		card.caption.position = Vector2.ZERO
-		card.caption.add_theme_font_size_override("font_size", ceili(13 / s))
+		card.caption.add_theme_font_size_override("font_size", layout.caption_size)
 		card.caption.size = card.hint.size
 	_refresh_captions()
 	_update_navigation(1)
+
+
+func _reparent_pager(target: Control) -> void:
+	for control: Control in [_previous_page, _next_page, _page_label]:
+		if control.get_parent() != target:
+			control.reparent(target, false)
 
 
 
@@ -1106,6 +1135,11 @@ func _ensure_chest_visible(control: Control) -> void:
 		return
 	_scroll.cancel_drag()
 	_scroll.ensure_control_visible(control)
+
+
+func _ensure_result_pager_visible(control: Control) -> void:
+	if _is_result_dialog():
+		_ensure_chest_visible(control)
 
 
 func _update_navigation(columns: int) -> void:
@@ -1163,10 +1197,14 @@ func snapshot() -> Dictionary:
 				"width": art_rect.size.x, "height": art_rect.size.y},
 			"rect": {"x": rect.position.x, "y": rect.position.y, "width": rect.size.x, "height": rect.size.y}})
 	var viewport_rect: Rect2 = _scroll.get_global_rect() if is_instance_valid(_scroll) else Rect2()
+	var pip_rect: Rect2 = pip.get_global_rect() if is_instance_valid(pip) else Rect2()
 	return {"round_id": _empty_result_id if not _empty_result_id.is_empty() else _configured_id, "chest_count": batch.size(), "opened_count": opened,
 		"result_context": _result_context.duplicate(true), "collect_pending": _collect_pending,
 		"empty_result": not _empty_result_id.is_empty(), "actions": actions,
-		"score_text": _result_score.text if is_instance_valid(_result_score) and not _result_context.is_empty() else "",
+		"score_text": str(maxi(0, int(_result_context.get("score", 0)))) if not _result_context.is_empty() else "",
+		"summary_text": _result_score.text if is_instance_valid(_result_score) and not _result_context.is_empty() else "",
+		"pip_visible": is_instance_valid(pip) and pip.is_visible_in_tree(),
+		"pip_rect": [pip_rect.position.x, pip_rect.position.y, pip_rect.size.x, pip_rect.size.y],
 		"replay_action": not _result_context.is_empty(),
 		"heading": _heading.text if is_instance_valid(_heading) else "",
 		"progress_text": _progress.text if is_instance_valid(_progress) else "",

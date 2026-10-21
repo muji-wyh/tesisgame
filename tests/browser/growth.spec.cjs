@@ -1,7 +1,8 @@
 const { test, expect } = require('@playwright/test');
 const words = require('../../words.json');
 const { openGame, enterGame, metrics, tap, rendered, chooseMode, discoverMatchCards,
-  boardPoint, memoryPoint, withMemoryPeek, pipHeaderRect } = require('./game-ui.cjs');
+  boardPoint, pipHeaderRect } = require('./game-ui.cjs');
+const { startObservation, startMatching, memoryCardTap } = require('./memory-flow.cjs');
 
 const KEY = 'growWithPip.growth.v1';
 const MASTERY_STREAK = 3;
@@ -226,25 +227,13 @@ test('real Match and Memory answers persist shared streaks while peek is neutral
   await expect.poll(async () => (await growth(page)).streaks[picture.word]).toBe(1);
   await chooseMode(page, 'memory');
   const before = (await growth(page)).streaks;
-  await withMemoryPeek(page, async () => {
-    expect((await growth(page)).streaks).toEqual(before);
-  });
-  await expect(page.locator('#game-status')).toContainText('Find a pair.');
+  const memory = await startObservation(page);
   expect((await growth(page)).streaks).toEqual(before);
-  const memory = [];
-  for (let index = 0; index < 10; index++) {
-    const point = memoryPoint(await metrics(page), index);
-    await tap(page, point.x, point.y);
-    await expect(page.locator('#selection-status')).toHaveText(/^Memory card \d+\. (Word|Picture): [a-z]+\.$/);
-    const [, kind, word] = (await page.locator('#selection-status').textContent()).match(/\. (Word|Picture): ([a-z]+)\.$/);
-    memory.push({ index, kind, word });
-    await tap(page, point.x, point.y);
-    await expect(page.locator('#selection-status')).toBeEmpty();
-  }
+  await startMatching(page);
+  expect((await growth(page)).streaks).toEqual(before);
   const target = memory[0].word;
   for (const card of memory.filter(card => card.word === target)) {
-    const point = memoryPoint(await metrics(page), card.index);
-    await tap(page, point.x, point.y);
+    await memoryCardTap(page, card.index);
   }
   await expect.poll(async () => (await growth(page)).streaks[target]).toBe((before[target] || 0) + 1);
   const saved = (await growth(page)).streaks;

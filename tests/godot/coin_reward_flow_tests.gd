@@ -90,7 +90,7 @@ func make_app(mode: String, storage = null):
 	check(app._presentation.save_preferences(), "Save muted presentation fixture")
 	app._mode_id = mode
 	check(app.medal_progress.load_progress(), "Load isolated medal ledger")
-	if mode in ["match", "memory"] and app.medal_progress.pair_round(mode).is_empty():
+	if mode == "match" and app.medal_progress.pair_round(mode).is_empty():
 		check(not app.medal_progress.begin_pair_round(mode, "reserved", 1).is_empty(), "Reserve one real pair chest")
 	root.add_child(app)
 	await settle()
@@ -115,6 +115,8 @@ func dispose(app) -> void:
 
 
 func finish_single(app) -> void:
+	if app._mode_id == "memory":
+		Fixture.start_memory(app)
 	if app._mode_id in ["match", "memory"]:
 		for word in app.model.lesson_words:
 			if app._mode_id == "match":
@@ -199,23 +201,26 @@ func check_arrival(app, expected: int) -> void:
 
 func check_single(mode: String) -> void:
 	var app = await make_app(mode)
+	var tier: int = RewardProgress.THEMES.size() if mode == "memory" else 1
+	var expected: int = tier * 50
 	app.choose_theme("space")
 	finish_single(app)
 	if mode in ["match", "memory"]:
-		check(app._pair_reward.chest.theme_id == RewardProgress.theme_for_tier(1)
-			and app.chest.theme_id == RewardProgress.theme_for_tier(1), "Pair reward and opening use the ordinary chest independently of the selected theme")
+		check(app.chest.theme_id == RewardProgress.theme_for_tier(tier), "Pair opening uses the earned tier independently of the selected theme")
+		if mode == "match":
+			check(app._pair_reward.chest.theme_id == RewardProgress.theme_for_tier(1), "Match discovery retains its ordinary chest artwork")
 		app.choose_theme("candy")
-		check(app.chest.theme_id == RewardProgress.theme_for_tier(1), "Changing outfit theme cannot upgrade an ordinary chest")
+		check(app.chest.theme_id == RewardProgress.theme_for_tier(tier), "Changing outfit theme cannot change the earned chest tier")
 	app.chest_button.button_down.emit()
 	app._advance_ui(0.3)
 	app.chest_button.button_up.emit()
 	check(app.coin_wallet.balance == 0 and app.model.chest_state == "closed", "Releasing an unfinished hold grants no coins")
 	open_single(app)
-	check_arrival(app, 50)
+	check_arrival(app, expected)
 	var writes: int = app.get_meta("coin_test_storage").coin_writes
 	app._on_chest_opened()
 	app._commit_fragment()
-	check(app.coin_wallet.balance == 50 and app.get_meta("coin_test_storage").coin_writes == writes
+	check(app.coin_wallet.balance == expected and app.get_meta("coin_test_storage").coin_writes == writes
 		and not app._coin_flight.snapshot().active, "Repeated single-chest callbacks cannot save or present another payout")
 	check(app.coin_wallet._receipts.has(app._single_chest_receipt()), "Single chest payout uses the stable mode/round receipt")
 	await dispose(app)
@@ -263,6 +268,7 @@ func check_save_retry(mode: String, fail_coins: bool) -> void:
 
 func check_single_retry(mode: String, fail_coins: bool, reconcile_in_background: bool = false) -> void:
 	var app = await make_app(mode)
+	var expected: int = RewardProgress.THEMES.size() * 50 if mode == "memory" else 50
 	finish_single(app)
 	var storage = app.get_meta("coin_test_storage")
 	storage.coin_writable = not fail_coins
@@ -270,29 +276,29 @@ func check_single_retry(mode: String, fail_coins: bool, reconcile_in_background:
 	open_single(app)
 	check(app._save_error and not app._coin_flight.snapshot().active and app._coin_flight.snapshot().target == 0,
 		"Single-chest persistence failure keeps its coins out of the display")
-	check(app.coin_wallet.balance == (0 if fail_coins else 50), "Single-chest retry retains the actual durable part of its payout")
+	check(app.coin_wallet.balance == (0 if fail_coins else expected), "Single-chest retry retains the actual durable part of its payout")
 	if reconcile_in_background:
-		check(not fail_coins and app._pending_coin_reward.get("amount", 0) == 50,
+		check(not fail_coins and app._pending_coin_reward.get("amount", 0) == expected,
 			"Background retry retains a saved coin payout whose medal consumption is pending")
 		app.on_page_hidden()
-		check(not app._coin_flight.snapshot().active and app._coin_flight.snapshot().target == 50
-			and app._coin_flight.snapshot().displayed == 50.0,
+		check(not app._coin_flight.snapshot().active and app._coin_flight.snapshot().target == expected
+			and app._coin_flight.snapshot().displayed == float(expected),
 			"Backgrounding reconciles the saved wallet before the pending medal retry")
 		app.on_page_visible()
 	storage.coin_writable = true
 	storage.medal_writable = true
 	app._retry_reward_save()
-	check(not app._save_error and app.coin_wallet.balance == 50 and storage.coin_writes == 1,
+	check(not app._save_error and app.coin_wallet.balance == expected and storage.coin_writes == 1,
 		"Single-chest retry completes the same receipt without issuing a second payout")
 	if reconcile_in_background:
 		var state: Dictionary = app._coin_flight.snapshot()
-		check(not state.active and state.target == 50 and state.displayed == 50.0,
+		check(not state.active and state.target == expected and state.displayed == float(expected),
 			"Retry cannot roll back the reconciled display or replay its already-visible reward")
 		app._coin_flight.advance(0.01)
-		check(app._coin_flight.snapshot().displayed == 50.0 and app._pending_coin_reward.is_empty(),
+		check(app._coin_flight.snapshot().displayed == float(expected) and app._pending_coin_reward.is_empty(),
 			"A reconciled retry clears pending visuals without a delayed rollback")
 	else:
-		check_arrival(app, 50)
+		check_arrival(app, expected)
 	app._commit_fragment()
 	check(storage.coin_writes == 1 and not app._coin_flight.snapshot().active, "Single-chest retry completion remains idempotent")
 	await dispose(app)
@@ -355,16 +361,12 @@ func check_pending_reload() -> void:
 func check_startup_pending_memory_retry() -> void:
 	var storage := Storage.new()
 	var app = await make_app("memory", storage)
-	var word: Dictionary = app.model.lesson_words[0]
-	for index in range(app._memory.memory.cards.size()):
-		if app._memory.memory.cards[index].word.id == word.id:
-			app._memory.card_buttons[index].pressed.emit()
-	app._memory._feedback_timer.stop()
+	finish_single(app)
 	var pair: Dictionary = app.medal_progress.pair_round("memory")
 	var receipt: String = app._single_chest_receipt()
 	var fragment: Dictionary = pair.fragment.duplicate(true)
 	check(pair.awarded and not pair.settled and app.coin_wallet.balance == 0,
-		"A real Memory pair leaves one earned chest pending for startup recovery")
+		"A perfect Memory round leaves its highest-tier chest pending for startup recovery")
 	await dispose(app)
 	storage.coin_writable = false
 	app = await make_app("phrase", storage)
@@ -382,24 +384,25 @@ func check_startup_pending_memory_retry() -> void:
 	app._storage_retry_button.pressed.emit()
 	check(app._progress_ready and not app._save_error and not app._pair_save_failed,
 		"The same generic retry completes startup recovery without reloading the scene")
-	check(app.coin_wallet.balance == 50 and storage.coin_writes == 1 and app.coin_wallet._receipts.has(receipt)
+	check(app.coin_wallet.balance == RewardProgress.THEMES.size() * 50 and storage.coin_writes == 1 and app.coin_wallet._receipts.has(receipt)
 		and app.medal_progress.pair_round("memory").settled,
 		"Startup retry credits the original Memory receipt once and settles its pending chest")
 	check(app.medal_progress.count_for(fragment.medal_id) == int(fragment.after)
 		and app.collected_rewards.has(fragment.medal_id),
 		"Startup retry also refreshes the collected reward from the newly settled chest")
-	check(not app._coin_flight.snapshot().active and app._coin_flight.snapshot().target == 50
-		and app._coin_flight.snapshot().displayed == 50.0,
+	check(not app._coin_flight.snapshot().active and app._coin_flight.snapshot().target == RewardProgress.THEMES.size() * 50
+		and app._coin_flight.snapshot().displayed == float(RewardProgress.THEMES.size() * 50),
 		"Recovered startup coins synchronize the HUD without replaying an opening flight")
 	app._retry_storage()
 	Fixture.enter_mode(app, "memory")
 	check(app._mode_id == "memory" and app._memory.is_visible_in_tree() and not app._memory._paused
 		and app._memory.memory.phase == "waiting" and not app._pair_save_failed,
 		"After generic recovery the player can switch directly into a fresh playable Memory round")
+	Fixture.start_memory(app)
 	app._memory.card_buttons[0].pressed.emit()
 	check(app._memory.memory.selected_indices.size() == 1,
 		"The recovered Memory board accepts its first real card input")
-	check(app.coin_wallet.balance == 50 and storage.coin_writes == 1
+	check(app.coin_wallet.balance == RewardProgress.THEMES.size() * 50 and storage.coin_writes == 1
 		and app.medal_progress.count_for(fragment.medal_id) == int(fragment.after)
 		and not app._coin_flight.snapshot().active,
 		"Repeated retry and mode switching cannot duplicate the recovered coins or chest contents")

@@ -271,6 +271,9 @@ func check_queued_finish(mode: String, retained: bool, fail_first_save: bool) ->
 		label + ": persistence contains exactly one new unopened chest with the final tier and theme")
 	if retained:
 		check(saved.entries[0] == old_entry, label + ": appending the final reward preserves the older entry and its index")
+	check(app._round_celebration.is_active() == (not fail_first_save),
+		label + ": saved rewards use the entrance while save recovery remains immediately actionable")
+	Fixture.finish_celebration(app)
 	var card_matches: bool = check_current_card(app, reward_id, label)
 	check(room.snapshot().result_context == app._round_result and app.coin_wallet.balance == coins_before,
 		label + ": showing settlement keeps the final result and does not pay before opening")
@@ -280,12 +283,12 @@ func check_queued_finish(mode: String, retained: bool, fail_first_save: bool) ->
 	check(not view._reward_presentation.is_active() and storage.reward_writes == writes
 		and app._round_result.chest_tier == FINAL_TIER,
 		label + ": late presentation time and repeated Finish cannot downgrade or duplicate the reward")
-	room.home_requested.emit()
+	app._show_collection()
 	await settle()
-	check(app._mode_menu_open(), label + ": Home temporarily leaves the settlement")
-	app.choose_mode(mode)
+	check(app.collection_page.visible, label + ": the word library temporarily covers the settlement")
+	app._hide_collection()
 	await settle()
-	check(app._round_id == round_id, label + ": returning to this mode restores the same finished round")
+	check(app._round_id == round_id, label + ": closing the word library restores the same finished round")
 	card_matches = check_current_card(app, reward_id, label + " reopened") and card_matches
 	if not card_matches:
 		await dispose(app)

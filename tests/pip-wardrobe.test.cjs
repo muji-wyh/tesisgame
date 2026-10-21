@@ -6,6 +6,18 @@ const { THEMES, EXPRESSIONS, readSources, buildExpressionSheet, buildOutfits } =
 const { inlineMascot } = require('../tools/prepare-godot.cjs');
 const root = path.resolve(__dirname, '..');
 
+test('loading animation pivots match the shared age three production artwork', () => {
+  const catalog = JSON.parse(fs.readFileSync(path.join(root, 'data/pip-growth-stages.json'), 'utf8'));
+  const stage = catalog.stages.find(item => item.age === 3);
+  const shell = fs.readFileSync(path.join(root, 'web/shell.html'), 'utf8');
+  const names = ['body', 'head', 'left-wing', 'right-wing', 'left-foot', 'right-foot'];
+  names.forEach((name, index) => {
+    const origin = shell.match(new RegExp(`#loading-pip-${name} \\{ transform-origin: ([\\d.]+)px ([\\d.]+)px; \\}`));
+    assert.ok(origin, `Loading ${name} must declare its artwork-space joint`);
+    assert.deepEqual(origin.slice(1).map(Number), stage.motionPivots[index], `${name} must rotate around the authored source joint`);
+  });
+});
+
 test('all shipped Pip sheets reproduce exactly from their editable wardrobe designs', () => {
   const built = buildOutfits(readSources(root));
   assert.equal(Object.keys(built).length, 40);

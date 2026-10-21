@@ -12,6 +12,28 @@ wing length, leg length and clothing silhouette together. Everyday childhood
 clothing provides an additional recognition cue. These are playful learning
 characters, not claims about a child's development or prescribed interests.
 
+The October 20, 2026 revision of `tools/pip-growth/storybook.cjs` refines this
+existing illustration with dimensional matte shading under an upper-left light,
+a connected upper and lower bill, softer cheek and wing feather contours, a
+thicker eggshell rim, and garment folds and overlap shadows. The source remains
+the project's previously authored Pip illustration, adapted locally by Codex;
+no external artwork, image-generation output, or runtime 3D model is introduced.
+The existing rights record below still applies, including the unrecorded original
+illustrator and absence of a separate illustrator license. The six-part rig,
+expressions, age proportions and choreography are retained. The revision was
+checked with native expression/action renders, actual game headers at three
+viewport sizes, and interactive browser-preview checks. See the
+[October 20 visual comparison and verification](../qa/pip-polish-2026-10-20/README.md)
+for evidence and device/build limitations.
+
+A same-day shoulder revision narrows the feather tips, overlaps the older ages'
+matching short sleeves with the torso, and places each wing joint deeper inside
+the silhouette. The native mascot and browser preview map those joints through
+the torso transform while retaining the wings' independent rotation and scale.
+The loading character uses the same age 3 joints, including seasonal wardrobes.
+The [shoulder attachment review](../qa/pip-wing-2026-10-20/README.md) preserves
+the previous artwork and documents the correction to the initial visual review.
+
 ## Visual progression
 
 | Age | Main silhouette and recognition cues |

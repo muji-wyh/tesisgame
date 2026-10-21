@@ -37,6 +37,7 @@ func _init() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	heading = Style.label("Round complete", 24)
 	heading.name = "SettlementHeading"
+	heading.add_theme_font_override("font", Style.HEADING_FONT)
 	heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	heading.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	add_child(heading)
@@ -119,6 +120,8 @@ func configure(palette: Dictionary, has_chest: bool, saving: bool, save_failed: 
 	_save_failed = save_failed
 	_opened = opened
 	heading.text = "Round complete"
+	if has_chest and not opened:
+		heading.text = "You earned a chest!"
 	if not message.is_empty():
 		caption.text = message
 	elif save_failed:

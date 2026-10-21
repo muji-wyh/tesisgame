@@ -150,9 +150,13 @@ func _fragment_flow_checks(fragments: int) -> void:
 	var saved_entries: Array = app._pop_rewards.rewards.entries.duplicate(true)
 	check(saved_entries.size() == 1 and saved_entries[0].tier == tier,
 		"The durable round batch contains its final tier and no intermediate chest")
-	check(not app._round_celebration.is_active() and app._pop.visible
-		and app._settlement_dialog.is_visible_in_tree() and app._pop_rewards_shown,
-		"The saved reward appears directly in a dialog over the frozen Pop board")
+	check(app._round_celebration.is_active() and app._pop.visible
+		and app._settlement_dialog.is_visible_in_tree() and not app._pop_rewards_shown
+		and app._pop_rewards.snapshot().paused,
+		"The saved reward begins Pip's shared entrance over the frozen Pop board")
+	Fixture.finish_celebration(app)
+	check(not app._round_celebration.is_active() and app._pop_rewards_shown,
+		"The finished entrance hands the same saved reward to the interactive room")
 	if fragments == 9:
 		var first_id: String = app._pop.game.round_id
 		app._pop_rewards._back.pressed.emit()
@@ -264,7 +268,8 @@ func _save_failure_checks() -> void:
 	await _earn_fragments(app, 4)
 	await _finish_pop(app)
 	check(not app._pop_reward_saved and app._pop_rewards.snapshot().save_failed
-		and storage.text == null, "A failed finish save retains a retryable draft of the earned final chest")
+		and storage.text == null and not app._round_celebration.is_active() and app._pop_rewards_shown,
+		"A failed finish save immediately exposes recovery for the earned final chest")
 	Fixture.finish_celebration(app)
 	var round_id: String = app._pop.game.round_id
 	app._pop_rewards._back.pressed.emit()
@@ -275,7 +280,7 @@ func _save_failure_checks() -> void:
 		"Switching modes preserves the same unsaved chest and recovery action")
 	storage.writable = true
 	app._pop_rewards.retry_save()
-	check(not app._pop_rewards.snapshot().save_failed and storage.writes == 1
+	check(not app._pop_rewards.snapshot().save_failed and storage.writes == 1 and not app._round_celebration.is_active()
 		and app._pop_rewards.rewards.entries.size() == 1 and app._pop_rewards.rewards.entries[0].tier == 1,
 		"Retry saves exactly the draft's final tier once")
 	app._pop_rewards._back.pressed.emit()

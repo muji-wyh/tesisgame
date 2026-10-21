@@ -1,0 +1,727 @@
+{
+  "schema": 1,
+  "status": "integrated_exact_image_after_scoped_ai_review",
+  "integrated_on": "2026-10-20",
+  "source_record": {
+    "path": "docs/assets/sources/professional-retail-card-reader/source-record.json",
+    "bytes": 6114,
+    "sha256": "75a8bf28213a33046bc1451efce4bc16ea2516f8bae90602103af4b6d8101df6"
+  },
+  "retained_evidence": {
+    "path": "docs/assets/sources/professional-retail-card-reader/retained-evidence.json",
+    "bytes": 54356,
+    "sha256": "3f7433b80e6d696ea4020d25ffbd219f5b78de708d158313d3cdf8327fdb854b"
+  },
+  "native_review": {
+    "path": "docs/qa/professional-card-reader-r04/independent-visual-review-r04.json",
+    "bytes": 15534,
+    "sha256": "4f32f6103a42ff7ad5b654eb912bfea6a2bb34e94f10f4912baf8a1e8ee93bb3",
+    "checks": 5451,
+    "failures": 0,
+    "captures": 32,
+    "input_pins": 144,
+    "phase": "preintegration_candidate_comparison"
+  },
+  "target": "data/professional/lexemes/retail-pilot.json",
+  "before_file_sha256": "dee9e024d357c343aaa89b75b19cb5edbccdfe9d7d9595ead8613d7b847402c0",
+  "after_file_sha256": "9256f09aa2d99252f409a45381b845ba94d58e4ab9321a294f89562d031b82b7",
+  "resource": {
+    "id": "sha256:67cb3e6f8e0be881b51a7d18ecc28fd1a02fab6b650197a8d60ef9d550b07c59",
+    "path": "professional-media/67cb3e6f8e0be881b51a7d18ecc28fd1a02fab6b650197a8d60ef9d550b07c59.png",
+    "sha256": "67cb3e6f8e0be881b51a7d18ecc28fd1a02fab6b650197a8d60ef9d550b07c59",
+    "kind": "image",
+    "format": "png",
+    "compressed_bytes": 77565,
+    "decoded_bytes": 1773568,
+    "width": 512,
+    "height": 433
+  },
+  "patches": [
+    {
+      "id": "card-reader.payment-device.n",
+      "origin": "res://data/professional/lexemes/retail-pilot.json",
+      "before": {
+        "id": "card-reader.payment-device.n",
+        "text": "card reader",
+        "display_text": "card reader",
+        "pos": "noun",
+        "definition": "A device that reads payment information from a bank card.",
+        "example": "The customer held a card near the card reader.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "card reader"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "pending",
+            "path": null,
+            "sha256": null,
+            "source": null,
+            "creator": null,
+            "license": null,
+            "acquisition_status": "not_started",
+            "review": {
+              "status": "pending"
+            },
+            "brief": "Show a compact payment reader and a plain bank card held near its contactless area. Keep the reader dominant, with the card close enough to explain its purpose. Distinguish it from a pistol-shaped barcode scanner, a full register, and a standalone keypad. Omit account numbers, merchant branding, PIN entry, and operating steps.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": []
+          },
+          "audio": {
+            "status": "integrated",
+            "path": "res://professional-media/acd48c920c631906e6ff0775cf3f373c247687fcb128b41e3ce0f3bdf668ba45.wav",
+            "sha256": "acd48c920c631906e6ff0775cf3f373c247687fcb128b41e3ce0f3bdf668ba45",
+            "source": "res://docs/assets/sources/professional-retail-ava/card-reader-barcode/listening-approval-2026-10-16.json",
+            "creator": "Microsoft Ava Neural; original project term text",
+            "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+            "acquisition_status": "integrated",
+            "review": {
+              "status": "reviewed",
+              "reviewer": "User (exact card reader and barcode samples approved in tesis-iter-4; see card-reader-barcode listening-approval-2026-10-16.json)",
+              "reviewed_at": "2026-10-16"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "professional.card-reader.payment-device.n.morphology.retail03.proposal.v2",
+          "lexeme_id": "card-reader.payment-device.n",
+          "text": "card reader",
+          "kind": "phrase",
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.card",
+              "type": "word",
+              "canonical": "card",
+              "surface": "card",
+              "break_offsets": []
+            },
+            {
+              "id": "p2",
+              "canonical_id": "morph.read",
+              "type": "stem",
+              "canonical": "read",
+              "surface": "read",
+              "break_offsets": []
+            },
+            {
+              "id": "p3",
+              "canonical_id": "affix.er.suffix",
+              "type": "suffix",
+              "canonical": "-er",
+              "surface": "er",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [
+            {
+              "id": "reader",
+              "left": "p2",
+              "right": "p3",
+              "surface": "reader",
+              "rule": "authored-read-plus-er-device",
+              "break_offsets": []
+            },
+            {
+              "id": "whole",
+              "left": "p1",
+              "right": "reader",
+              "surface": "card reader",
+              "rule": "preserve-word-boundary",
+              "break_offsets": [
+                5
+              ]
+            }
+          ],
+          "roots": [
+            "whole"
+          ],
+          "review": {
+            "status": "reviewed",
+            "draft_author": "Codex (AI source consultation; not human or subject-matter approval)",
+            "notes": "Reader retains read plus the deverbal entity suffix. The selected reader is a payment-data device, not a reading person/book or memory-card reader. Card belongs to the flat data-card family, not card a teasel/combing tool. The completed phrase boundary is explicitly preserved. Canonical identity follows the existing Professional pair inventory; a selected contextual meaning does not automatically establish an unrelated homonym. Existing Growth graphs and other Professional analyses remain unchanged.",
+            "references": [
+              "https://www.oxfordlearnersdictionaries.com/definition/english/card-reader",
+              "https://www.dictionary.com/browse/reader",
+              "https://www.dictionary.com/browse/card",
+              "https://www.dictionary.com/browse/read",
+              "https://www.dictionary.com/browse/er"
+            ],
+            "source_record_ids": [
+              "retail03-morph-oxford-card-reader",
+              "retail03-morph-dcom-reader",
+              "retail03-morph-dcom-card",
+              "retail03-morph-dcom-read",
+              "retail03-morph-dcom-er"
+            ],
+            "independent_review": "completed_exact_first10_v2_graph_and_current_stem_depth",
+            "reviewer": "Codex (independent AI morphology review; not human or subject-matter approval)",
+            "reviewed_at": "2026-10-16",
+            "acceptance_record": "data/professional/provenance/retail-module03-morphology-first10-2026-10-16.json"
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "reviewed",
+          "domain": "pending",
+          "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "bls-cashiers",
+            "status": "pending_term_check",
+            "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+          },
+          {
+            "source_id": "bls-food-preparation",
+            "status": "pending_term_check",
+            "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+          },
+          {
+            "source_id": "retail03-square-reader",
+            "status": "verified",
+            "scope": "Selected passage consulted: Opening product description and Dip the chip / Tap contactless sections. The named payment reader accepts chip cards and contactless cards; the page explicitly describes a card held near the reader. Product-specific use confirms the payment sense and example. No rates, capabilities of all readers, operating advice, media rights, or brand endorsement are inferred. This editorial proposal does not approve language, morphology, domain practice, or media."
+          }
+        ],
+        "editorial_notes": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the payment-device noun and contactless example. The consulted commercial source supports this payment sense, not the older punched-card device sense. Retain card reader; a terminal may include additional functions and is not added as an exact alternative. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Required domain review remains pending. Independent AI morphology review was completed on 2026-10-16 for this exact graph at the documented modern-stem depth; this is not human or subject-matter approval. Picture suitability and word-image production remain pending. The exact Ava word recording has user listening approval and is integrated. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready."
+      },
+      "after": {
+        "id": "card-reader.payment-device.n",
+        "text": "card reader",
+        "display_text": "card reader",
+        "pos": "noun",
+        "definition": "A device that reads payment information from a bank card.",
+        "example": "The customer held a card near the card reader.",
+        "difficulty": "A2",
+        "accepted_forms": [
+          "card reader"
+        ],
+        "regions": [
+          "general"
+        ],
+        "practice_modes": [
+          "match",
+          "memory",
+          "pop",
+          "jelly",
+          "word_jelly",
+          "phrase"
+        ],
+        "media": {
+          "image": {
+            "status": "integrated",
+            "path": "res://professional-media/67cb3e6f8e0be881b51a7d18ecc28fd1a02fab6b650197a8d60ef9d550b07c59.png",
+            "sha256": "67cb3e6f8e0be881b51a7d18ecc28fd1a02fab6b650197a8d60ef9d550b07c59",
+            "source": "res://docs/assets/sources/professional-retail-card-reader/source-record.json",
+            "creator": "publicdomainvectors.org (credited publisher; individual artwork creator unconfirmed)",
+            "license": "CC0 1.0 Universal / Public Domain",
+            "acquisition_status": "integrated",
+            "review": {
+              "status": "reviewed",
+              "reviewer": "Codex (independent AI source and all-32 Match/Memory still review; not human or subject-matter approval)",
+              "reviewed_at": "2026-10-20"
+            },
+            "brief": "Show a compact bank-card payment reader with a plain card close to the reader, a small screen, a keypad and a secondary receipt. Keep the compact device dominant. Exclude a full cash drawer, merchant branding, readable account numbers, PIN entry and operating instructions. The picture does not claim a particular card-reading method or a completed payment.",
+            "picture_suitable": true,
+            "available_animations": [],
+            "adaptations": [
+              "Rasterize the original static vector",
+              "Trim transparent margins",
+              "Scale proportionally to a 512-pixel maximum side",
+              "Copy the exact reviewed PNG into professional-media without re-encoding or further pixel changes"
+            ]
+          },
+          "audio": {
+            "status": "integrated",
+            "path": "res://professional-media/acd48c920c631906e6ff0775cf3f373c247687fcb128b41e3ce0f3bdf668ba45.wav",
+            "sha256": "acd48c920c631906e6ff0775cf3f373c247687fcb128b41e3ce0f3bdf668ba45",
+            "source": "res://docs/assets/sources/professional-retail-ava/card-reader-barcode/listening-approval-2026-10-16.json",
+            "creator": "Microsoft Ava Neural; original project term text",
+            "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+            "acquisition_status": "integrated",
+            "review": {
+              "status": "reviewed",
+              "reviewer": "User (exact card reader and barcode samples approved in tesis-iter-4; see card-reader-barcode listening-approval-2026-10-16.json)",
+              "reviewed_at": "2026-10-16"
+            },
+            "voice": "ava-sweet",
+            "voice_settings": {
+              "voice": "en-US-AvaNeural",
+              "rate": "-15%",
+              "pitch": "+8Hz",
+              "volume": "+0%",
+              "postprocessing": false
+            }
+          }
+        },
+        "morphology": {
+          "schema": 1,
+          "id": "professional.card-reader.payment-device.n.morphology.retail03.proposal.v2",
+          "lexeme_id": "card-reader.payment-device.n",
+          "text": "card reader",
+          "kind": "phrase",
+          "parts": [
+            {
+              "id": "p1",
+              "canonical_id": "morph.card",
+              "type": "word",
+              "canonical": "card",
+              "surface": "card",
+              "break_offsets": []
+            },
+            {
+              "id": "p2",
+              "canonical_id": "morph.read",
+              "type": "stem",
+              "canonical": "read",
+              "surface": "read",
+              "break_offsets": []
+            },
+            {
+              "id": "p3",
+              "canonical_id": "affix.er.suffix",
+              "type": "suffix",
+              "canonical": "-er",
+              "surface": "er",
+              "break_offsets": []
+            }
+          ],
+          "nodes": [
+            {
+              "id": "reader",
+              "left": "p2",
+              "right": "p3",
+              "surface": "reader",
+              "rule": "authored-read-plus-er-device",
+              "break_offsets": []
+            },
+            {
+              "id": "whole",
+              "left": "p1",
+              "right": "reader",
+              "surface": "card reader",
+              "rule": "preserve-word-boundary",
+              "break_offsets": [
+                5
+              ]
+            }
+          ],
+          "roots": [
+            "whole"
+          ],
+          "review": {
+            "status": "reviewed",
+            "draft_author": "Codex (AI source consultation; not human or subject-matter approval)",
+            "notes": "Reader retains read plus the deverbal entity suffix. The selected reader is a payment-data device, not a reading person/book or memory-card reader. Card belongs to the flat data-card family, not card a teasel/combing tool. The completed phrase boundary is explicitly preserved. Canonical identity follows the existing Professional pair inventory; a selected contextual meaning does not automatically establish an unrelated homonym. Existing Growth graphs and other Professional analyses remain unchanged.",
+            "references": [
+              "https://www.oxfordlearnersdictionaries.com/definition/english/card-reader",
+              "https://www.dictionary.com/browse/reader",
+              "https://www.dictionary.com/browse/card",
+              "https://www.dictionary.com/browse/read",
+              "https://www.dictionary.com/browse/er"
+            ],
+            "source_record_ids": [
+              "retail03-morph-oxford-card-reader",
+              "retail03-morph-dcom-reader",
+              "retail03-morph-dcom-card",
+              "retail03-morph-dcom-read",
+              "retail03-morph-dcom-er"
+            ],
+            "independent_review": "completed_exact_first10_v2_graph_and_current_stem_depth",
+            "reviewer": "Codex (independent AI morphology review; not human or subject-matter approval)",
+            "reviewed_at": "2026-10-16",
+            "acceptance_record": "data/professional/provenance/retail-module03-morphology-first10-2026-10-16.json"
+          }
+        },
+        "review": {
+          "status": "pending",
+          "language": "reviewed",
+          "domain": "pending",
+          "reviewer": "Codex (independent AI editorial language review; not human or subject-matter approval)",
+          "reviewed_at": "2026-10-16"
+        },
+        "references": [
+          {
+            "source_id": "bls-cashiers",
+            "status": "pending_term_check",
+            "scope": "Occupational or equipment context only; individual meaning, usage, and morphology await review."
+          },
+          {
+            "source_id": "bls-food-preparation",
+            "status": "pending_term_check",
+            "scope": "Authoritative occupational or food-service context consulted; this original draft requires term-level language, food-domain, regional, and morphology review."
+          },
+          {
+            "source_id": "retail03-square-reader",
+            "status": "verified",
+            "scope": "Selected passage consulted: Opening product description and Dip the chip / Tap contactless sections. The named payment reader accepts chip cards and contactless cards; the page explicitly describes a card held near the reader. Product-specific use confirms the payment sense and example. No rates, capabilities of all readers, operating advice, media rights, or brand endorsement are inferred. This editorial proposal does not approve language, morphology, domain practice, or media."
+          }
+        ],
+        "editorial_notes": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the payment-device noun and contactless example. The consulted commercial source supports this payment sense, not the older punched-card device sense. Retain card reader; a terminal may include additional functions and is not added as an exact alternative. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Required domain review remains pending. Independent AI morphology review was completed on 2026-10-16 for this exact graph at the documented modern-stem depth; this is not human or subject-matter approval. The card reader image has completed scoped AI source and Match/Memory still review for the broad payment-device sense; this is not human picture approval. The accepted bank-card reader brief replaces the unsupported contactless-area depiction in the earlier brief, which remains in retained provenance. The exact static SVG-derived PNG is integrated; no particular card-reading method or completed payment is depicted. The exact Ava word recording has user listening approval and is integrated. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready."
+      },
+      "before_sha256": "a73edfbd11c432b4a8c764e88cebb14664789b764516b8a9a1c55527f423e714",
+      "after_sha256": "02a80d9b427ccb208427c5aa715a798e13a5c998cb74c637e19488c5ac8c9429",
+      "protected_fields_sha256": "96a6a78834abc078314f719a0d0f74ba28fc76f4401bb22b7bfd56a2c2cf8476",
+      "allowed_fields": [
+        "media.image",
+        "editorial_notes: one exact obsolete pending-image clause"
+      ],
+      "note_change": {
+        "before": "Picture suitability and word-image production remain pending.",
+        "after": "The card reader image has completed scoped AI source and Match/Memory still review for the broad payment-device sense; this is not human picture approval. The accepted bank-card reader brief replaces the unsupported contactless-area depiction in the earlier brief, which remains in retained provenance. The exact static SVG-derived PNG is integrated; no particular card-reading method or completed payment is depicted."
+      }
+    }
+  ],
+  "protected_other_entries": [
+    {
+      "id": "aisle.passage.n",
+      "json_sha256": "3e1561ab257376846a513a9e07cd48e5d53374f7d77fea1358f38099615ceb5f"
+    },
+    {
+      "id": "checkout.payment-area.n",
+      "json_sha256": "26c4eb794d21582c665961a423511267917f528b6e33513fc347590414ce4515"
+    },
+    {
+      "id": "counter.service-surface.n",
+      "json_sha256": "9720284c13e08b5ab2da521cbe9c39542aeed2f4acf229b51f5e0e5b537aa4bf"
+    },
+    {
+      "id": "cash-register.sales-device.n",
+      "json_sha256": "a390ebd2f4fb6b29f6f6d3f2d3442143ce3b230c0420588b846ad0f95650b0e1"
+    },
+    {
+      "id": "barcode.product-code.n",
+      "json_sha256": "004493bdfd167c3df4dd7883dc8b2a87b46add1dd2b5b45ec5506ffd3857ec21"
+    },
+    {
+      "id": "barcode-scanner.product-reader.n",
+      "json_sha256": "d54f3e5d83394aad0d13b59762e7ee274addd74d54a56b9be218f0bda43ab35f"
+    },
+    {
+      "id": "receipt-printer.sales-device.n",
+      "json_sha256": "84631b809e3d9f9295baeaff59b19fa6efc9746e3482d00dfdea7b0f95582fff"
+    },
+    {
+      "id": "cash-drawer.money-storage.n",
+      "json_sha256": "7a560372fc8c9a29ac6c40a926c030c03954dc50f7980b0bbd9b17c6c92a6910"
+    },
+    {
+      "id": "conveyor-belt.moving-surface.n",
+      "json_sha256": "41214d0dd3ad3a6ddcdec27fd2b332cccd1bd4cb6a62afb1327eb5dc889ff384"
+    },
+    {
+      "id": "shopping-basket.store-container.n",
+      "json_sha256": "317c7f25ad1342fcc0a8c419169077aa6fddad6b354d2d9b6df29569367275f9"
+    },
+    {
+      "id": "shopping-cart.store-trolley.n",
+      "json_sha256": "bb62029c8d2c45555730494c562e55ea33ba9568184c36cf80b8b6916af45e7e"
+    },
+    {
+      "id": "shelf.storage-surface.n",
+      "json_sha256": "3ef2e922efdb7ac8b65cf15d23c8b10b9f66a37196b95fb7a0830f86d6ff1fb7"
+    },
+    {
+      "id": "display-case.glass-cabinet.n",
+      "json_sha256": "53ec215776da989e819173c078c5fcd1652d3e6100d4f805e8b9a1a1e2615409"
+    },
+    {
+      "id": "clothing-rack.garment-stand.n",
+      "json_sha256": "95677dd69fa9f85773006ab6091f67ad37841fb0d9decdfd030898c7d894315d"
+    },
+    {
+      "id": "hanger.garment-support.n",
+      "json_sha256": "bfb45c8e0c75597ee3d2e6c55c733caf1373be86997502d8fdcfc4c09c72f5ed"
+    },
+    {
+      "id": "fitting-room.clothes-try-on.n",
+      "json_sha256": "54d7346b65bb97b93ff67fda69197ed2a097e7b3be0ccb112153149c63d75c59"
+    },
+    {
+      "id": "mannequin.clothing-model.n",
+      "json_sha256": "9f3d40678d71324219b22afe5ac2b2ae6804225a269b1dd6186159f7b114e029"
+    },
+    {
+      "id": "stockroom.goods-storage.n",
+      "json_sha256": "1d94e8bf7a014b5c5d45f1763b03e5b1dcddd27c8b503033b9aebcca9cf8e845"
+    },
+    {
+      "id": "loading-bay.goods-transfer.n",
+      "json_sha256": "3a4a7c99968df356011ffcce9cdd25204422179a86a431f5a7a87fb4df8f2722"
+    },
+    {
+      "id": "pallet.goods-platform.n",
+      "json_sha256": "9eaf2fa7933f015b5f6fc9b6504da2a9af6e3712a3aafda02121ad5cd3b09990"
+    },
+    {
+      "id": "pallet-jack.moving-equipment.n",
+      "json_sha256": "2675e2821a2426f46d6001f16c58c8c7da138bd44b655d88f04195f815f9e72a"
+    },
+    {
+      "id": "hand-truck.moving-frame.n",
+      "json_sha256": "7054e06bfeffb8d94e3abc1b20752f5ba8b4e8c4bfca4cf394e665c7d5ef41a6"
+    },
+    {
+      "id": "price-tag.price-label.n",
+      "json_sha256": "ef8ee4c77c1dd5de6c527592ab661aff2aad730cc871c4130b15e2aea520de1e"
+    },
+    {
+      "id": "label-printer.label-device.n",
+      "json_sha256": "15b8e3833fe55490c8e0b014f9df8ae275dfc8e5d129c420edddca44dc8926fe"
+    },
+    {
+      "id": "freezer.cold-storage.n",
+      "json_sha256": "cf563d8bbe0ca67b15bcf2704ea1743c771a298642f8a69fe95896bfcf0694e7"
+    },
+    {
+      "id": "refrigerator.cold-storage.n",
+      "json_sha256": "34e66abdb364e27bc2b4003f9e65147f9c1ab719fae12164c9b72ba8a959e9f5"
+    },
+    {
+      "id": "security-camera.surveillance-device.n",
+      "json_sha256": "91c11c7e2c657d074c5346be856c4c9f4fd4562152e6dfae15c6118a1fd82ea3"
+    },
+    {
+      "id": "security-tag.anti-theft-device.n",
+      "json_sha256": "6e893e8c567795d00a350f0237b4f7d1356d7cd8d3ecbc56f1abdcf4873f3a17"
+    },
+    {
+      "id": "alarm-gate.anti-theft-detector.n",
+      "json_sha256": "c5d6faf96529d800173e358a69dd77d0eba14b3c5b9c4bd6ead3dff85c32dd26"
+    },
+    {
+      "id": "escalator.moving-stairway.n",
+      "json_sha256": "ef8347d73849fba1749ebef2ca0808610525aa4d80a3b232df37999627e9c3ba"
+    },
+    {
+      "id": "elevator.vertical-transport.n",
+      "json_sha256": "24ec20c12c7eb87f0938b705380d568c5de100aeccf7954f240aa426a3351213"
+    },
+    {
+      "id": "entrance.way-in.n",
+      "json_sha256": "4ec8c9dedb17d082e28856a58598c4ef2cfb04b96560a99c5b4edddc00b0b32e"
+    },
+    {
+      "id": "exit.way-out.n",
+      "json_sha256": "d253d596d26ee6712ed8518ca9893d38ba21f3a74d85157c6dba579c94eaac35"
+    },
+    {
+      "id": "automatic-door.powered-door.n",
+      "json_sha256": "43ed475d2d901d91d96b3c20efb110ca582e937501f322b4f5541b740a018c34"
+    },
+    {
+      "id": "customer-service-desk.help-counter.n",
+      "json_sha256": "7434871eb73daef091d4b83c2e626be49955d3192a720ac8ad96e1781ce549f9"
+    },
+    {
+      "id": "pickup-counter.collection-point.n",
+      "json_sha256": "d62a6adaf665cf74fa9e0d98e3a09da6f34731dd9ced009386f726b6c4b00d96"
+    },
+    {
+      "id": "returns-counter.return-point.n",
+      "json_sha256": "da7854a80c132736cac841be0cf2a2343f13c30ff0b78d18cfc1fdefebce558c"
+    },
+    {
+      "id": "queue-barrier.line-guide.n",
+      "json_sha256": "808b3e451cc7d6ed06cc1481262e3b3f4369df6c8a44aaf5fd8522de3ba06d26"
+    },
+    {
+      "id": "store-directory.location-guide.n",
+      "json_sha256": "cfb457aa1bc5f767e5027ccc368376e7289800c2114aaf65cc24b9eb41cc18f0"
+    },
+    {
+      "id": "window-display.shop-presentation.n",
+      "json_sha256": "73e489494242f9245803c81a3890d27a7fe912d3329543c836507f128f5f1c25"
+    },
+    {
+      "id": "gift-wrap.wrapping-paper.n",
+      "json_sha256": "401ae29f8d864b10de09b9cd5d5ed937257b250768c756deb7c1d8606e0b22b2"
+    },
+    {
+      "id": "shopping-bag.goods-carrier.n",
+      "json_sha256": "25300b5f9d78a6327c16c27143f1aeddd9dba1c41bdd4e42c20f30d36148cc85"
+    },
+    {
+      "id": "receipt-roll.printer-paper.n",
+      "json_sha256": "7b28eb953826bf744e2b28be12c74fa8b13a5c636ddff69c00430cb0a9b0fed2"
+    },
+    {
+      "id": "keypad.input-buttons.n",
+      "json_sha256": "9fc49cc0ed80d35862248af15b2188d42c23077ea3464f4cd0ef00d33e31908b"
+    },
+    {
+      "id": "cash-safe.secure-storage.n",
+      "json_sha256": "b835930980df42dc15943237aa985d3ec6efc2fbd2a55692d1d39e28378a8077"
+    },
+    {
+      "id": "mop.floor-tool.n",
+      "json_sha256": "420752d9efe10082ea093f6bc5b73df71477abdb33724cf6133ab34c2f38b080"
+    },
+    {
+      "id": "waste-bin.rubbish-container.n",
+      "json_sha256": "14bd25a3e043dbeb366f069b8abc2b724b0bd4037e93b5a4bdd09fcadbecdcd2"
+    }
+  ],
+  "approved_audio": {
+    "descriptor": {
+      "status": "integrated",
+      "path": "res://professional-media/acd48c920c631906e6ff0775cf3f373c247687fcb128b41e3ce0f3bdf668ba45.wav",
+      "sha256": "acd48c920c631906e6ff0775cf3f373c247687fcb128b41e3ce0f3bdf668ba45",
+      "source": "res://docs/assets/sources/professional-retail-ava/card-reader-barcode/listening-approval-2026-10-16.json",
+      "creator": "Microsoft Ava Neural; original project term text",
+      "license": "Microsoft Services Agreement applies to synthesized output; client software licensing is separate.",
+      "acquisition_status": "integrated",
+      "review": {
+        "status": "reviewed",
+        "reviewer": "User (exact card reader and barcode samples approved in tesis-iter-4; see card-reader-barcode listening-approval-2026-10-16.json)",
+        "reviewed_at": "2026-10-16"
+      },
+      "voice": "ava-sweet",
+      "voice_settings": {
+        "voice": "en-US-AvaNeural",
+        "rate": "-15%",
+        "pitch": "+8Hz",
+        "volume": "+0%",
+        "postprocessing": false
+      }
+    },
+    "file": {
+      "path": "professional-media/acd48c920c631906e6ff0775cf3f373c247687fcb128b41e3ce0f3bdf668ba45.wav",
+      "bytes": 82598,
+      "sha256": "acd48c920c631906e6ff0775cf3f373c247687fcb128b41e3ce0f3bdf668ba45"
+    },
+    "change": "none"
+  },
+  "protected_curriculum": [
+    {
+      "id": "caregiving",
+      "json_sha256": "b051da77185a583f62eacc96b76d997633826e40cfb86ba045a3657eeb50d355"
+    },
+    {
+      "id": "retail",
+      "json_sha256": "126274a8af6ef92a09c2aa9aa991901120372995e6714c34d2d30015c064a336"
+    },
+    {
+      "id": "food_service",
+      "json_sha256": "f33df53fbda8299362b65464240672d579d76cac63865c4bee5020ba1e5e66ec"
+    },
+    {
+      "id": "nursing",
+      "json_sha256": "726ad4fec74e1591f3505b09ce8b356d1a53c0bb7df377ee1daa307408323134"
+    },
+    {
+      "id": "customer_support",
+      "json_sha256": "865e1de36dc3c123ad0e80031b8af24ad08a94e4cea5a0cd426a0189e10e7a36"
+    },
+    {
+      "id": "office_admin",
+      "json_sha256": "c4b13ea48e0578e3ad52473fd51161dfdf1be311d4ef95852eef97b38d871308"
+    },
+    {
+      "id": "warehouse_logistics",
+      "json_sha256": "5c246fbb6163f622d4b1b917919a4a26a61d1a31b4fa98bec5d8cdabe55c5f1d"
+    },
+    {
+      "id": "hospitality_tourism",
+      "json_sha256": "8aa5e38fd1786ac6bd6cafb926b92c4f4fe2a32c0bd44df5e81c588e50f48c25"
+    },
+    {
+      "id": "transport_delivery",
+      "json_sha256": "a6ec95c6e1e32b0e34e13773717e249feb28b0af3971fdabfc738fc6492fda1d"
+    },
+    {
+      "id": "construction_trades",
+      "json_sha256": "0676239dd81de021c220ab6a664b542aeabf7dc7b1447b263a88ec121d97aee2"
+    },
+    {
+      "id": "cleaning_facilities",
+      "json_sha256": "1cc4db1a89ba949519c3235552a4c37261e872a5c96d6e24ef1bc3cea258f3ec"
+    },
+    {
+      "id": "education_childcare",
+      "json_sha256": "833c9856401eb32bd26a72dc56feded85f482efb7d8b46c12d91a38143bfdd1a"
+    },
+    {
+      "id": "manufacturing_maintenance",
+      "json_sha256": "99b27037f11884657520af21a37a3733f9b9bb89937945b47b5d69e6b42f673f"
+    },
+    {
+      "id": "it_support",
+      "json_sha256": "d6ae1ac162de80d30f16d53fc97b2fda8c19afa7db5cdc9cf0577def097ae145"
+    },
+    {
+      "id": "software_data",
+      "json_sha256": "229b6bb7a87051202c57b515c9c9c6f916cf7735d7ef2ea396cf0dc09f769860"
+    },
+    {
+      "id": "accounting_finance",
+      "json_sha256": "711a65aae83190dfeebada0f6a1dc72b86e5a1373564db0352b47ea3bc209863"
+    },
+    {
+      "id": "sales_marketing",
+      "json_sha256": "817c1e547a405f90113a9c2d685525b5a47162b22c259cfd865a35666719bf60"
+    },
+    {
+      "id": "hr_recruitment",
+      "json_sha256": "9f01e433032376e65679964d27400753953dbba291f88ca92580259c99cfa136"
+    },
+    {
+      "id": "clinical_medicine",
+      "json_sha256": "1ac541967501523da93688c8b804f71d7ffb0c32838a62b6c7bf7d07f341efbc"
+    },
+    {
+      "id": "legal_paralegal",
+      "json_sha256": "23da2ec272c9cb8dbb702d04e2f33ab6d165a538a8b7412c979948acb604e976"
+    }
+  ],
+  "scope": {
+    "scoped_ai_picture_suitability": true,
+    "scoped_ai_picture_brief_review": true,
+    "all_32_native_boards_inspected": true,
+    "original_source_and_license_retained": true,
+    "human_recognition": false,
+    "human_visual_acceptance": false,
+    "full_game_exercise_acceptance": false,
+    "physical_device_acceptance": false,
+    "full_animation_review": false,
+    "audio_or_listening_approval_changed": false,
+    "module_or_release_ready": false
+  },
+  "integration_guards": {
+    "exact_origin_verified": true,
+    "original_before_entry_preserved": true,
+    "all_other_lexical_and_review_fields_unchanged": true,
+    "source_bytes_copied_without_reencoding": true,
+    "historical_records_replayed": false,
+    "module_status_or_membership_changed": false,
+    "runtime_or_generated_files_changed_by_this_installation": false,
+    "post_install_native_validation": "not_run_by_this_installation; parent owns native validation",
+    "preserved_failed_evidence": [
+      "captures-r01",
+      "captures-r02",
+      "captures-r03"
+    ]
+  }
+}

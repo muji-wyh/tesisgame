@@ -1633,19 +1633,26 @@
       },
       "art": {
         "environment": {
-          "status": "pending",
-          "path": null,
-          "sha256": null,
-          "source": null,
-          "creator": null,
-          "license": null,
-          "acquisition_status": "not_started",
+          "status": "integrated",
+          "path": "res://professional-media/6a3e2fab06a3fb72c78a1414eb8919d7ba7e038fcc0abf73e16fd37203d45062.png",
+          "sha256": "6a3e2fab06a3fb72c78a1414eb8919d7ba7e038fcc0abf73e16fd37203d45062",
+          "source": "https://kenney.nl/assets/furniture-kit; https://www.innerscene.com/tools/library/3d-parts/mobile-whiteboard-education-furniture-dee300ef",
+          "creator": "Kenney; Innerscene",
+          "license": "CC0 1.0; CC0 1.0 Universal",
+          "acquisition_status": "integrated",
           "review": {
-            "status": "pending"
+            "status": "reviewed",
+            "reviewer": "Codex bounded static source, current Main and actual raw-media component review",
+            "reviewed_at": "2026-10-20"
           },
-          "brief": "A collaborative digital studio with paired workstations, a review screen, a whiteboard, and a quiet analysis nook.",
+          "brief": "Reviewed Digital Studio static environment component. Full profile, art.home, motion and course readiness remain pending.",
           "available_animations": [],
-          "adaptations": []
+          "adaptations": [
+            "Composed from fourteen exact acquired GLBs with original geometry and materials; provenance and scoped receipt in docs/assets/sources/kenney-innerscene-software-data-theme/.",
+            "Native 768 by 768 orthographic source render with fixed camera and lighting; r04 plant placement [-1.42, 0.05, 0.05], scale 1.4 and yaw 0.",
+            "Source environment plate retains room, review display, mobile whiteboard and static plant.",
+            "Static placement inspected in current Match and Word Jelly; 320 by 568 Word Jelly remains paused by its existing minimum-window policy. This is not full-theme or normal-speed animation acceptance."
+          ]
         },
         "home": {
           "status": "pending",
@@ -1663,19 +1670,26 @@
           "adaptations": []
         },
         "props": {
-          "status": "pending",
-          "path": null,
-          "sha256": null,
-          "source": null,
-          "creator": null,
-          "license": null,
-          "acquisition_status": "not_started",
+          "status": "integrated",
+          "path": "res://professional-media/9bf8c55a9a4690f2c90f11ee62741ba49db0f271caa86ffb64195b28717f5b05.png",
+          "sha256": "9bf8c55a9a4690f2c90f11ee62741ba49db0f271caa86ffb64195b28717f5b05",
+          "source": "https://kenney.nl/assets/furniture-kit; https://www.innerscene.com/tools/library/3d-parts/mobile-whiteboard-education-furniture-dee300ef",
+          "creator": "Kenney; Innerscene",
+          "license": "CC0 1.0; CC0 1.0 Universal",
+          "acquisition_status": "integrated",
           "review": {
-            "status": "pending"
+            "status": "reviewed",
+            "reviewer": "Codex bounded static source, current Main and actual raw-media component review",
+            "reviewed_at": "2026-10-20"
           },
-          "brief": "Distinctive workplace props composed for the same illustrated scene. No geometric substitutes.",
+          "brief": "Reviewed Digital Studio static workstation and analysis-nook props component with source shadows and occlusion. Full theme readiness remains pending.",
           "available_animations": [],
-          "adaptations": []
+          "adaptations": [
+            "Composed from fourteen exact acquired GLBs with original geometry and materials; provenance and scoped receipt in docs/assets/sources/kenney-innerscene-software-data-theme/.",
+            "Native 768 by 768 orthographic source render with fixed camera and lighting; r04 plant placement [-1.42, 0.05, 0.05], scale 1.4 and yaw 0.",
+            "Transparent props layer derived from exact environment/rest differences; source reconstruction includes changed shadows and natural foreground occlusion.",
+            "Static placement inspected in current Match and Word Jelly; 320 by 568 Word Jelly remains paused by its existing minimum-window policy. This is not full-theme or normal-speed animation acceptance."
+          ]
         }
       },
       "ambient_motion": {

@@ -354,6 +354,7 @@ func _check_failed_switch(app) -> void:
 
 func _check_memory_and_collection(app) -> void:
 	await _enter(app, "memory")
+	PlayerFixture.start_memory(app)
 	app._memory.card_buttons[0].pressed.emit()
 	var selected: Array = app._memory.memory.selected_indices.duplicate()
 	check(not selected.is_empty(), "Memory starts a real partial pair")
@@ -361,6 +362,7 @@ func _check_memory_and_collection(app) -> void:
 	check(app._memory.memory.selected_indices == selected, "Returning Home preserves the partial Memory pair")
 	await _enter(app, "memory")
 	check(app._memory.memory.selected_indices == selected, "Reentering Memory restores its selected card")
+	check(app.coin_wallet.credit("fixture:memory-menu-peek", 2).ok, "Fund the paid Memory peek after initial observation")
 	app._memory.begin_peek()
 	check(app._memory.memory.studying, "The Memory peek fixture is visibly active")
 	var attempts: int = app._memory.memory.attempts
@@ -413,13 +415,14 @@ func _check_pop_callbacks(app) -> void:
 func _check_results_and_replay(app) -> void:
 	await _enter(app, "memory")
 	PlayerFixture.reserve_pair_chest(app)
+	PlayerFixture.start_memory(app)
 	for word: Dictionary in app.model.lesson_words:
 		for index in range(app._memory.memory.cards.size()):
 			if app._memory.memory.cards[index].word.id == word.id:
 				app._memory.card_buttons[index].pressed.emit()
 		app._memory._feedback_timer.stop()
 		app._memory.continue_feedback()
-	check(app.model.phase == "won" and app.model.chest_earned, "A completed Memory round earns its reserved chest")
+	check(app.model.phase == "won" and app.model.chest_earned, "A completed Memory round earns its performance chest")
 	PlayerFixture.finish_celebration(app)
 	app._open_chest()
 	app.chest.finish_immediately()

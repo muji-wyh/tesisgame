@@ -24,6 +24,7 @@ func _run() -> void:
 	var model = load("res://scripts/memory_game_model.gd").new()
 	vocabulary = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
 	_test_layout(model)
+	_test_start_gate(model)
 	_test_selections(model)
 	_test_feedback_and_completion(model)
 	_test_matched_visibility(model)
@@ -56,13 +57,36 @@ func _snapshot(model) -> Dictionary:
 	return {"cards": model.cards.duplicate(true), "selected": model.selected_indices.duplicate(),
 		"matched": model.matched_word_ids.duplicate(), "feedback": model.feedback_words.duplicate(true),
 		"attempts": model.attempts, "mistakes": model.mistakes, "last_correct": model.last_correct,
-		"phase": model.phase, "studying": model.studying, "peeks": model.peeks,
+		"phase": model.phase, "started": model.started, "studying": model.studying, "peeks": model.peeks,
 		"peek_remaining": model.peek_remaining, "peek_duration": model.peek_duration}
 
 
 func _pair(model, id: String) -> void:
 	check(model.select(_index(model, id, "word")) == "selected", "An unmatched word starts a pair")
 	check(model.select(_index(model, id, "image")) == "correct", "Its picture completes the correct pair")
+
+
+func _start_matching(model) -> void:
+	check(model.start_game() and model.started and model.studying, "Start game enters the free observation exactly once")
+	check(model.set_study(false), "Start matching ends the initial observation")
+
+
+func _test_start_gate(model) -> void:
+	model.reset(_words(), 71)
+	var waiting: Dictionary = _snapshot(model)
+	check(not model.started and model.reward_tier() == 6, "A prepared round waits for Start game with the highest tier available")
+	check(model.select(0) == "ignored" and not model.set_study(true) and _snapshot(model) == waiting,
+		"Cards and the paid eye cannot bypass Start game")
+	check(model.start_game() and model.started and model.studying and model.peeks == 1
+		and model.peek_duration == 10.0 and model.peek_remaining == 10.0,
+		"Start game starts exactly one free ten-second observation")
+	var observing: Dictionary = _snapshot(model)
+	check(not model.start_game() and model.select(0) == "ignored" and not model.set_study(true)
+		and _snapshot(model) == observing, "Repeated Start and observation taps cannot change the clock or score")
+	check(model.advance_peek(10.0) and model.started and not model.studying and model.phase == "waiting",
+		"Observation expiry enters matching without restarting the round")
+	check(not model.start_game() and model.peeks == 1 and model.peek_price() == 100,
+		"The initial free observation cannot be replayed")
 
 
 func _test_layout(model) -> void:
@@ -98,27 +122,31 @@ func _test_layout(model) -> void:
 
 func _test_selections(model) -> void:
 	model.reset(_words(), 17)
+	_start_matching(model)
 	var board: Array = model.cards.duplicate(true)
 	var cat: int = _index(model, "cat", "word")
 	var dog: int = _index(model, "dog", "word")
 	check(model.continue_feedback() == "ignored", "Continue cannot skip an unfinished pair")
 	check(model.select(cat) == "selected" and model.phase == "matching", "The first card begins an attempt")
-	check(model.selected_indices == [cat] and model.is_revealed(cat), "Only the first selected answer is revealed")
+	check(model.selected_indices == [cat] and not model.is_revealed(cat), "The first selection keeps its answer concealed")
 	var selected: Dictionary = _snapshot(model)
 	check(model.select(-1) == "ignored" and model.select(10) == "ignored"
 		and _snapshot(model) == selected, "Invalid indexes cannot cancel or change a selection")
-	check(model.select(dog) == "reselected" and model.selected_indices == [dog]
-		and not model.is_revealed(cat) and model.is_revealed(dog), "Same-kind selection swaps the reveal without an attempt")
-	check(model.attempts == 0 and model.mistakes == 0, "Browsing cards of one kind does not score")
+	check(model.select(dog) == "wrong" and model.selected_indices == [cat, dog]
+		and model.is_revealed(cat) and model.is_revealed(dog), "Two distinct words commit and reveal one wrong attempt together")
+	check(model.attempts == 1 and model.mistakes == 1 and model.reward_tier() == 5, "A same-kind attempt counts one mistake and lowers the tier")
+	model.continue_feedback()
+	model.select(dog)
 	check(model.select(dog) == "cancelled" and model.phase == "waiting"
 		and model.selected_indices.is_empty() and not model.is_revealed(dog), "Selecting the same first card cancels it")
 	var picture: int = _index(model, "cat", "image")
 	check(model.select(picture) == "selected" and model.select(cat) == "correct", "Pairs can start with the picture")
-	check(model.cards == board, "Reveals and reselection never move cards")
+	check(model.cards == board, "Selection, cancellation and pair reveal never move cards")
 
 
 func _test_feedback_and_completion(model) -> void:
 	model.reset(_words(), 23)
+	_start_matching(model)
 	var board: Array = model.cards.duplicate(true)
 	var cat: int = _index(model, "cat", "word")
 	var dog_picture: int = _index(model, "dog", "image")
@@ -129,6 +157,7 @@ func _test_feedback_and_completion(model) -> void:
 			"Each mismatched word-picture pair counts one exploration attempt")
 		check(model.feedback_words == _words(["cat", "dog"]) and not model.last_correct,
 			"Mismatch feedback supplies both real word-picture associations")
+		check(model.reward_tier() == maxi(0, 5 - attempt), "Each mistake lowers reward tier by one, bounded at zero")
 		check(model.selected_indices == [cat, dog_picture] and model.is_revealed(cat)
 			and model.is_revealed(dog_picture), "The mismatch remains visible until feedback is resolved")
 		var feedback: Dictionary = _snapshot(model)
@@ -167,6 +196,7 @@ func _test_feedback_and_completion(model) -> void:
 
 func _test_matched_visibility(model) -> void:
 	model.reset(_words(), 31)
+	_start_matching(model)
 	_pair(model, "cat")
 	model.continue_feedback()
 	var board: Array = model.cards.duplicate(true)
@@ -184,6 +214,7 @@ func _test_matched_visibility(model) -> void:
 
 func _test_study_and_stop(model) -> void:
 	model.reset(_words(), 29)
+	_start_matching(model)
 	_pair(model, "cat")
 	model.continue_feedback()
 	model.select(_index(model, "dog", "word"))
@@ -216,7 +247,7 @@ func _test_study_and_stop(model) -> void:
 		"Stopped rounds reject delayed controls and repeated Stop is idempotent")
 	check(model.reset(_words(), 29) and model.attempts == 0 and model.matched_word_ids.is_empty()
 		and model.cards == board and not model.last_correct, "Reset after stopping produces a clean playable round")
-	model.set_study(true)
+	model.start_game()
 	model.stop()
 	check(not model.studying and not model.is_revealed(0), "Stopping a Study session clears its global reveal")
 
@@ -227,7 +258,7 @@ func _test_peek_prices(model) -> void:
 	for price: int in [0, 100, 200, 300, 300, 300]:
 		check(model.peek_price() == price, "The next accepted reveal follows the capped per-round price schedule")
 		var before: int = model.peeks
-		check(model.set_study(true) and model.peeks == before + 1,
+		check((model.start_game() if before == 0 else model.set_study(true)) and model.peeks == before + 1,
 			"Only a newly accepted reveal increments the per-round peek count")
 		check(not model.set_study(true) and model.peeks == before + 1,
 			"Repeated countdown activation cannot advance the next reveal price")
@@ -247,10 +278,8 @@ func _test_peek_countdown(model) -> void:
 	model.reset(_words(), 94)
 	check(not model.advance_peek(20.0) and model.peek_remaining == 0.0 and model.peek_duration == 0.0,
 		"An idle countdown cannot reveal cards or consume a use")
-	_pair(model, "cat")
-	model.continue_feedback()
 	var progress: Array = [model.cards.duplicate(true), model.matched_word_ids.duplicate(), model.attempts, model.mistakes]
-	check(model.set_study(true) and model.peek_duration == 10.0 and model.peek_remaining == 10.0,
+	check(model.start_game() and model.peek_duration == 10.0 and model.peek_remaining == 10.0,
 		"The first accepted reveal starts a full ten-second countdown")
 	check(not model.advance_peek(3.0) and model.peek_remaining == 7.0 and model.studying,
 		"Elapsed time reduces the active countdown while cards remain revealed")
@@ -266,15 +295,18 @@ func _test_peek_countdown(model) -> void:
 	check(not model.advance_peek(1.0) and model.peeks == 1,
 		"Expiry reports once and further elapsed time cannot consume another use")
 	for index in range(model.cards.size()):
-		check(model.is_revealed(index) == (model.cards[index].word.id == "cat"),
-			"Expiry preserves earned pair faces and hides only unmatched answers")
+		check(not model.is_revealed(index), "Initial observation expiry conceals every answer")
 	check([model.cards, model.matched_word_ids, model.attempts, model.mistakes] == progress,
 		"A timed reveal never changes board positions or earned progress")
+	_pair(model, "cat")
+	model.continue_feedback()
 	for attempt in range(3):
 		check(model.set_study(true) and model.peek_duration == 5.0 and model.peek_remaining == 5.0,
 			"Every later accepted reveal starts five seconds, including uses after expiry")
 		check(model.advance_peek(5.0) and not model.studying and model.peek_remaining == 0.0,
 			"Exactly five elapsed seconds closes a later reveal")
+		check(model.is_revealed(_index(model, "cat", "word")) and model.is_revealed(_index(model, "cat", "image")),
+			"A later observation expiry preserves earned pair faces")
 	model.set_study(true)
 	model.advance_peek(1.0)
 	check(model.set_study(false) and model.peek_remaining == 0.0 and model.peek_duration == 0.0,
@@ -284,7 +316,7 @@ func _test_peek_countdown(model) -> void:
 	check(model.peek_remaining == 0.0 and model.peek_duration == 0.0 and not model.advance_peek(60.0),
 		"Stopping discards the old countdown and rejects delayed expiry")
 	model.reset(_words(), 95)
-	check(model.peeks == 0 and model.peek_remaining == 0.0 and model.set_study(true)
+	check(model.peeks == 0 and model.peek_remaining == 0.0 and model.start_game()
 		and model.peek_duration == 10.0 and model.peek_remaining == 10.0,
 		"A new round restores the first free ten-second reveal")
 	model.set_study(false)
@@ -292,6 +324,7 @@ func _test_peek_countdown(model) -> void:
 
 func _test_rejected_resets(model) -> void:
 	model.reset(_words(), 42)
+	_start_matching(model)
 	_pair(model, "cat")
 	var before: Dictionary = _snapshot(model)
 	var invalid: Array = [

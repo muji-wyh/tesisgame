@@ -87,7 +87,17 @@ const fifthRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professi
 const retail04FirstRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module04-morphology-first10-2026-10-16.json'), 'utf8'));
 const retail04SecondRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module04-morphology-second10-2026-10-16.json'), 'utf8'));
 const retail04ThirdRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module04-morphology-third10-2026-10-16.json'), 'utf8'));
+const retail04RemainingRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json'), 'utf8'));
+function beforeRetail04Remaining20(entry) {
+  const change = retail04RemainingRecord.candidates.find(item => item.id === entry.id);
+  if (!change) return entry;
+  assert.deepEqual(entry.morphology, change.accepted_morphology, entry.id + ': exact independently reviewed Retail04 continuation');
+  const lexical = Object.fromEntries(Object.entries(entry).filter(([key]) => key !== 'morphology'));
+  assert.equal(crypto.createHash('sha256').update(JSON.stringify(lexical)).digest('hex'), change.nonmorphology_sha256);
+  return {...entry, morphology: structuredClone(change.before_morphology)};
+}
 function beforeRetail04Third10(entry) {
+  entry = beforeRetail04Remaining20(entry);
   const patch = retail04ThirdRecord.patches.find(item => item.id === entry.id);
   if (!patch) return entry;
   assert.deepEqual(entry, patch.after, entry.id + ': exact later Retail04 third-ten morphology-only acceptance');
@@ -131,8 +141,10 @@ const checkoutImageRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/
 const barcodeImageRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-barcode-image-2026-10-16.json'), 'utf8'));
 const cashRegisterImageRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-cash-register-image-2026-10-16.json'), 'utf8'));
 const cardReaderBarcodeAudioRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/retail-card-reader-barcode-approved-audio-2026-10-16.json'), 'utf8'));
+const { beforeCardReaderImage } = require('./helpers/professional-card-reader-history.cjs');
 const retail03MediaRecords = [cartBasketAudioRecord, palletImageRecord, shelfImageRecord, palletShelfAudioRecord, bagWrapAudioRecord, counterImageRecord, counterCheckoutAudioRecord, checkoutImageRecord, barcodeImageRecord, cashRegisterImageRecord, cardReaderBarcodeAudioRecord];
 function beforeRetail03Media(entry, keepRecord = null) {
+  entry = beforeCardReaderImage(entry);
   let historical = beforeFifth10(beforeRetail04First10(entry));
   for (const record of [...retail03MediaRecords].reverse()) {
     if (record === keepRecord) break;
@@ -159,6 +171,7 @@ function beforeCaseFamily(entry) {
 }
 const retail03MorphologyPatches = new Map([...retail03MorphologyReview.patches, ...retail03NextMorphologyReview.patches, ...caseFamilyReview.patches.filter(patch => patch.kind === 'exact_display_case_graph_review'), ...retail03ThirdMorphologyReview.patches, ...retail03FourthMorphologyReview.patches].map(patch => [patch.id, patch]));
 for (const patch of [...retail03MorphologyPatches.values(), ...fifthRecord.patches, ...retail04FirstRecord.patches, ...retail04SecondRecord.patches, ...retail04ThirdRecord.patches]) acceptedMorphologyReviews.set(patch.id, patch.after.morphology.review);
+for (const row of retail04RemainingRecord.candidates) acceptedMorphologyReviews.set(row.id, row.accepted_morphology.review);
 for (const patch of heldSixRecord.lexical_patches.filter(patch => patch.before_id !== patch.after_id)) acceptedMorphologyReviews.set(patch.after_id, patch.after.morphology.review);
 for (const patch of foundation01MorphologyRecord.patches) acceptedMorphologyReviews.set(patch.id, patch.installed_morphology.review);
 const foundation02MorphologyRecord = JSON.parse(fs.readFileSync(path.join(rootDir, 'data/professional/provenance/foundation-module02-morphology-2026-10-17.json'), 'utf8'));
@@ -337,7 +350,7 @@ test('Nine reopened analyses retain exact source-backed families and scoped AI r
   assert.equal(crypto.createHash('sha256').update(JSON.stringify(scopedMorphologyReview.proposal)).digest('hex'), scopedMorphologyReview.accepted_proposal_sha256);
   assert.equal(scopedMorphologyReview.independent_approval.accepted, true);
   assert.equal(scopedMorphologyReview.proposal.patches.length, 9);
-  assert.equal(acceptedMorphologyReviews.size, 189);
+  assert.equal(acceptedMorphologyReviews.size, 209);
   assert.equal(graphRecord.registered_sources.length, 22);
   for (const expected of graphRecord.registered_sources) assert.deepEqual(source.sources.find(record => record.id === expected.id), expected);
   for (const patch of scopedMorphologyReview.proposal.patches) {
@@ -1280,7 +1293,7 @@ test('draft audit preserves the complete scope and reports actual authored cover
   assert.equal(result.summary.vocabulary_memberships_remaining, 0);
   assert.equal(result.summary.expression_memberships_remaining, 0);
   assert.equal(result.summary.reviewed_lexemes, foundation02FifthLanguageRecord.counts.after.reviewed_status);
-  assert.equal(result.summary.integrated_word_images, 10);
+  assert.equal(result.summary.integrated_word_images, 11);
   assert.equal(result.summary.integrated_word_audio, 12);
   for (const course of ['retail', 'nursing', 'software_data']) {
     assert.equal(pilot(source, course).lexeme_ids.length, 50);
@@ -2968,7 +2981,7 @@ test('current Foundation acceptance preserves exact six outputs, unchanged pendi
   const current = auditProfessionalContent({rootDir, data:source});
   assert.equal(current.errors.length, 0, JSON.stringify(current.errors));
   assert.equal(current.summary.reviewed_lexemes, 156);
-  assert.equal(current.summary.morphology_reviewed, 189);
+  assert.equal(current.summary.morphology_reviewed, 209);
   assert.equal(current.summary.ready_modules, 0);
   assert.equal(current.summary.release_ready, false);
 });
@@ -3079,7 +3092,7 @@ test('Foundation01 graph mutations still fail structural validation and cannot b
   }
   const current = auditProfessionalContent({rootDir, data:source});
   assert.equal(current.errors.length, 0, JSON.stringify(current.errors));
-  assert.equal(current.summary.morphology_reviewed, 189);
+  assert.equal(current.summary.morphology_reviewed, 209);
   assert.equal(current.summary.ready_modules, 0); assert.equal(current.summary.release_ready, false);
   const release = auditProfessionalContent({rootDir, data:source, release:true});
   assert.ok(release.errors.length > 0);

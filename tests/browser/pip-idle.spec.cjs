@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const { metrics, tap, rendered, openGame, contentBounds, headerPoint, pipHeaderRect,
-  memoryPoint, peekPoint, discoverMatchCards, boardPoint } = require('./game-ui.cjs');
+  peekPoint, discoverMatchCards, boardPoint } = require('./game-ui.cjs');
+const { memoryState, startObservation, startMatching } = require('./memory-flow.cjs');
 
 test.use({ viewport: { width: 390, height: 844 } });
 
@@ -176,9 +177,13 @@ test('Pip offers six direct reactions on results without changing saved progress
 test('Pip resumes after a timed multi-touch Peek is canceled', async ({ page, browserName }, testInfo) => {
   test.skip(browserName !== 'chromium', 'Trusted multi-touch uses Chromium CDP.');
   await page.addInitScript(() => localStorage.setItem('growWithPip.coinWallet.v1',
-    '[wallet]\nversion=2\nbalance=100\nreceipts={"memory-idle-opening-coins":100}\n'));
+    '[wallet]\nversion=2\nbalance=300\nreceipts={"memory-idle-opening-coins":300}\n'));
   const errors = await openGame(page, { mode: 'memory', reducedMotion: 'no-preference' });
-  const bounds = await metrics(page), card = memoryPoint(bounds, 0), eye = peekPoint(bounds);
+  await startObservation(page);
+  await startMatching(page);
+  const bounds = await metrics(page), eye = peekPoint(bounds);
+  const [x, y, width, height] = (await memoryState(page)).cards[0].rect;
+  const card = { x: x + width / 2, y: y + height / 2 };
   const point = (id, value) => ({ id, x: bounds.x + value.x * bounds.scale, y: bounds.y + value.y * bounds.scale });
   const first = point(1, card), second = point(2, eye);
   const state = await gameState(page);
@@ -199,9 +204,9 @@ test('Pip resumes after a timed multi-touch Peek is canceled', async ({ page, br
       touching = false;
       if (ending === 'touchEnd') {
         await expect(page.locator('#game-status')).toContainText(/Cards hide in \d+ seconds\./);
-        await page.keyboard.press('Escape');
+        await startMatching(page);
       }
-      await expect(page.locator('#game-status')).toContainText('Find a pair.');
+      await expect(page.locator('#game-status')).toContainText('Choose two cards');
       await rendered(page);
       const area = await clips(page), resting = await capture(page, area.body);
       await expectGesture(page, area.body, resting, testInfo, `pip-after-multitouch-${ending}`);

@@ -1,0 +1,26 @@
+{
+  "page": {
+    "url": "https://www.innerscene.com/tools/library/3d-parts/mobile-whiteboard-education-furniture-dee300ef",
+    "final_url": "https://www.innerscene.com/tools/library/3d-parts/mobile-whiteboard-education-furniture-dee300ef",
+    "file": "source-page.html",
+    "status": 200,
+    "content_type": "text/html; charset=utf-8",
+    "bytes": 48252,
+    "sha256": "97b5c500f368ae6462cf954ab58d4b503ffad6be4bdb04ac194b1a279347a831"
+  },
+  "links": [
+    "https://www.innerscene.com/api/library/mobile-whiteboard-education-furniture-dee300ef/preview",
+    "https://fonts.googleapis.com",
+    "https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap",
+    "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Finnerscene-sun-logo-dark.7e771e51.png&w=3840&q=75",
+    "/downloads",
+    "/api/library/mobile-whiteboard-education-furniture-dee300ef/preview",
+    "/api/library/mobile-whiteboard-education-furniture-dee300ef/download",
+    "/tools/library/terms",
+    "/api/library/workbench-with-pegboard-e6179c3f/preview",
+    "/api/library/wire-shelving-with-casters-f3d7a7e6/preview",
+    "/api/library/rolling-tool-chest-c23c4e4c/preview",
+    "/api/library/parts-bin-wall-cf4ceea4/preview",
+    "/terms-and-conditions"
+  ]
+}

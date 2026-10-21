@@ -361,7 +361,8 @@ test('accessible help describes shared settlement and the Pop replay microphone 
   assert.ok(help, 'The canvas has accessible gameplay instructions');
   assert.match(help, /shared settlement dialog over the finished board/);
   assert.match(help, /Voice Pop stops listening.*settlement dialog over the frozen board/);
-  assert.match(help, /Home and Play again preserve unopened Pop treasure/);
+  assert.match(help, /Home or Play again to collect and save all unopened Pop treasure automatically/);
+  assert.match(help, /If saving fails, choose Retry save before leaving/);
   assert.match(help, /Play again returns to the microphone-ready gate; tap Start listening/);
   assert.match(help, /Back returns to the microphone-ready gate without starting the microphone/);
   assert.doesNotMatch(help, /New adventure|bottom-right|lists of popped and missed words|Scroll the result|Play again starts another round immediately/);

@@ -1,0 +1,23 @@
+{
+  "retrieved_at": "2026-10-17T01:34:01.062Z",
+  "records": [
+    {
+      "url": "https://www.innerscene.com/api/library/mobile-whiteboard-education-furniture-dee300ef/download",
+      "final_url": "https://www.innerscene.com/api/library/mobile-whiteboard-education-furniture-dee300ef/download",
+      "filename": "mobile-whiteboard-education-furniture.glb",
+      "bytes": 349108,
+      "sha256": "bfa7cee0ff63a8439b489d8f84146348f6424bb35784c090eb557b9288d931a9",
+      "content_type": "application/octet-stream",
+      "http_status": 200
+    },
+    {
+      "url": "https://www.innerscene.com/api/library/mobile-whiteboard-education-furniture-dee300ef/preview",
+      "final_url": "https://www.innerscene.com/api/library/mobile-whiteboard-education-furniture-dee300ef/preview",
+      "filename": "source-preview.png",
+      "bytes": 13580,
+      "sha256": "6235bb52d243f6e41d18dcbb7f711960d7e9c3175dd5bdb83035424f45a81215",
+      "content_type": "image/jpeg",
+      "http_status": 200
+    }
+  ]
+}

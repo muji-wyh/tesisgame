@@ -16,7 +16,14 @@ class Catalog extends RefCounted:
 	func course(id: String) -> Dictionary:
 		return {"id": id, "title": "Fixture " + id, "curriculum_revision": "v1", "theme_id": "professional_" + id,
 			"modules": [{"id": "module03", "title": "Fixture equipment", "status": "ready"}]}
-	func theme_profile(id: String) -> Dictionary: return {"id": id, "title": "Fixture workplace", "palette": {}, "art": {}}
+	func theme_profile(id: String) -> Dictionary:
+		var palette: Dictionary = {}
+		if id == "professional_retail":
+			palette = {"accent": "#8c4e34", "background": "#f4ece6", "light": "#f4d9c6", "spark": "#b27650"}
+		elif id == "professional_nursing":
+			palette = {"accent": "#376a80", "background": "#e8f2f4", "light": "#d1e8ee", "spark": "#6ba2b6"}
+		return {"id": id, "title": "Fixture workplace", "palette": palette, "art": {},
+			"rewards": {"legacy_theme_id": "spring"}}
 	func resolve(context: Dictionary, _seed: int = -1) -> Dictionary:
 		if reject:
 			return {"ok": false, "error": "Injected unavailable curriculum."}
@@ -83,10 +90,13 @@ func settle() -> void:
 	check(false, "Application reaches a terminal preparation/storage state within bounded frames")
 
 
-func start_course(course: String, mode: String) -> void:
+func start_course(course: String, mode: String, fresh_round: bool = false) -> void:
 	app._show_mode_menu()
 	app._select_learning_context(Context.professional(course, "module03", "v1", mode))
-	app.choose_mode(mode)
+	if fresh_round:
+		app.new_round(-1, false, "", mode, "", false)
+	else:
+		app.choose_mode(mode)
 	var selection: int = app.professional.pending.get("selection", -1)
 	var media_started := false
 	for unused in range(120):
@@ -102,6 +112,32 @@ func start_course(course: String, mode: String) -> void:
 	if media_started:
 		app.professional.loader.media.finish(app.professional.loader.media.generation)
 	await settle()
+
+
+func check_course_palette(course: String, stage: String) -> void:
+	var expected: Dictionary = app.professional.loader.catalog.theme_profile("professional_" + course).palette
+	check(not expected.is_empty() and app.model.theme_id == "spring", stage + ": course colors override a shared legacy reward theme")
+	for target: Dictionary in [
+		{"name": "application", "palette": app._active_palette},
+		{"name": "Memory", "palette": app._memory._palette},
+		{"name": "Phrase", "palette": app._phrase._palette},
+		{"name": "Jelly", "palette": app._jelly._theme},
+		{"name": "Word Jelly", "palette": app._word_jelly._theme}]:
+		var matches := true
+		for key: String in expected:
+			matches = matches and target.palette.get(key) == Color(str(expected[key]))
+		check(matches, stage + ": " + target.name + " retains the selected course palette")
+	var accent := Color(str(expected.accent))
+	if app._mode_id == "match":
+		check(app.cards.size() == 10, stage + ": actual Match cards exist for color verification")
+		for card in app.cards.values():
+			check(card.accent == accent, stage + ": Match card renders the course accent")
+	if app._mode_id == "memory":
+		check(app._memory.card_buttons.size() == 10, stage + ": actual Memory cards exist for color verification")
+		for card in app._memory.card_buttons:
+			check(card.accent == accent and card._back.accent == accent, stage + ": Memory face and back render the course accent")
+	if app._mode_id == "phrase":
+		check(app._phrase.pip.accent == accent, stage + ": Phrase mascot renders the course accent")
 
 
 func _run() -> void:
@@ -126,7 +162,17 @@ func _run() -> void:
 	await settle()
 	var growth_before: Dictionary = app.growth.snapshot()
 	app.growth.ready = false
-	var previous_path := ""
+	await start_course("nursing", "memory")
+	check(app._round_context == Context.professional("nursing", "module03", "v1", "memory"), "Nursing starts with its distinct course theme")
+	check_course_palette("nursing", "Nursing Memory entry")
+	app._memory.start_button.pressed.emit()
+	check(app._memory.memory.studying and app._professional_assisted.is_empty(), "Required Memory observation does not mark professional practice as assisted")
+	app._memory_peek_countdown.action_button.pressed.emit()
+	check(app.coin_wallet.credit("fixture:professional-memory-peek", 2).ok, "Fund an optional professional Memory observation")
+	app._memory.study_button.pressed.emit()
+	check(app._memory.memory.studying and app._professional_assisted.size() == 5, "A purchased observation still records assisted professional practice")
+	app._memory.end_peek()
+	var previous_path: String = app._round_content.words[0].image
 	for mode in ["match", "memory", "phrase", "pop", "jelly", "word_jelly"]:
 		await start_course("retail", mode)
 		if app._round_context != Context.professional("retail", "module03", "v1", mode):
@@ -136,6 +182,7 @@ func _run() -> void:
 		check(app._round_context == Context.professional("retail", "module03", "v1", mode), "Home starts a frozen professional %s round" % mode)
 		check(app._mode_id == mode and not app._mode_menu_open(), "Prepared %s enters its actual view" % mode)
 		check(app.professional.can_play(app._round_id), "Professional %s starts only after saved context is ready" % mode)
+		check_course_palette("retail", "Retail %s entry" % mode)
 		check(not app._message.is_visible_in_tree(), "Unavailable Growth storage does not obscure the independent professional %s game" % mode)
 		check(app.model.cards.size() == (10 if mode in ["match", "memory"] else 0), "No phantom Match lesson for %s" % mode)
 		check(app._professional_button.is_visible_in_tree() and not app._growth_button.is_visible_in_tree(), "Professional %s header replaces the Growth badge with course progress" % mode)
@@ -148,6 +195,13 @@ func _run() -> void:
 		check(app._professional_library.snapshot().image_count == 0 and app._round_context.mode == mode, "Closing the professional library releases its picture and preserves the frozen game")
 		if not previous_path.is_empty():
 			check(Access.resource(previous_path) == null, "Replacing %s releases the prior media scope" % mode)
+		var first_round: String = app._round_id
+		var first_path: String = app._round_content.words[0].image
+		await start_course("retail", mode, true)
+		check(app._round_id != first_round and app._round_context == Context.professional("retail", "module03", "v1", mode)
+			and app.professional.can_play(app._round_id) and not app._mode_menu_open(), "Same-theme %s starts a fresh playable round instead of resuming" % mode)
+		check_course_palette("retail", "Retail %s same-theme fresh round" % mode)
+		check(Access.resource(first_path) == null, "Fresh %s round releases its replaced media scope" % mode)
 		previous_path = app._round_content.words[0].image
 	check(app._word_jelly.game.uses_authored_morphology(), "Actual professional Jelly view uses authored morphology")
 	var round_id: String = app._round_id

@@ -220,13 +220,14 @@ func viewport_touch(index: int, point: Vector2, pressed: bool, canceled: bool = 
 func _test_consumed_touches(app) -> void:
 	app._hide_collection()
 	preload("res://tests/godot/player_flow_fixture.gd").enter_mode(app, "memory")
+	preload("res://tests/godot/player_flow_fixture.gd").start_memory(app)
 	app.set_reduced_motion(false)
 	await settle()
 	for cancel_first in [false, true]:
 		var price: int = app._memory.memory.peek_price()
 		var ordinal: int = app._memory.memory.peeks + 1
 		if price > 0:
-			check(app.coin_wallet.credit("fixture:consumed-peek:" + str(ordinal), price).ok,
+			check(app.coin_wallet.credit("fixture:consumed-peek:" + str(ordinal), ceili(float(price) / 50.0)).ok,
 				"Fund the multi-touch Peek fixture at its current quoted price")
 		var balance: int = app.coin_wallet.balance
 		var receipt_count: int = app.coin_wallet._receipts.size()
@@ -242,7 +243,7 @@ func _test_consumed_touches(app) -> void:
 		check(app._memory.memory.peeks == ordinal and app.coin_wallet.balance == balance - price
 			and (app.coin_wallet._receipts.get(app._round_id + ":memory-peek:" + str(ordinal), 0) == -price
 				if price > 0 else app.coin_wallet._receipts.size() == receipt_count),
-			"The complete tap consumes one use and saves only its quoted debit, keeping the first use free")
+			"The complete tap consumes one optional observation and saves only its quoted debit")
 		check(not observe_idle(app, 18), "A timed reveal keeps Pip quiet after all fingers lift")
 		check(app.duck._attention == "thinking", "Pip studies while the countdown is active")
 		await settle()
@@ -286,10 +287,11 @@ func _test_contextual_attention(app) -> void:
 	app._stop_voice()
 
 	check(app.new_round(84, true, "", "memory"), "A fresh Memory round starts for contextual expressions")
+	preload("res://tests/godot/player_flow_fixture.gd").start_memory(app)
 	app._memory.card_buttons[0].pressed.emit()
 	app._update_duck()
 	check(app.duck._attention == "thinking" and app.duck._gameplay_reaction.is_empty(),
-		"A single revealed Memory card has a thoughtful, unjudged context")
+		"A single selected Memory card has a thoughtful, unjudged context")
 	app._show_mode_menu()
 	check(app.duck._attention.is_empty(), "The game menu clears the covered board's expression")
 	app._hide_mode_menu()

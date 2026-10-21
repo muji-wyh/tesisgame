@@ -1,17 +1,17 @@
 # Pair chest acknowledgement
 
-`scripts/pair_chest_reward.gd` presents Match and Memory pair drops in a reserved
+`scripts/pair_chest_reward.gd` presents Match pair drops in a reserved
 46 CSS-pixel toolbar row above the cards. It does not roll for a drop, grant or
 save treasure, stop gameplay, open a chest, or own keyboard/controller focus.
 The host supplies the round identity, theme manifest and actual earned result.
 
 ## Reward rules
 
-Match and Memory each draw one 50% base chance per round. An eligible round
+Match draws one 50% base chance per round. An eligible round
 chooses one of its five successful pairs as the reveal point; incorrect answers,
 repeated taps and pronunciation replay never draw additional chances. Once a
-chest appears, remaining pairs retain the same single earned chest. Each mode
-tracks its own completed dry rounds: after two without treasure, the next round
+chest appears, remaining pairs retain the same single earned chest. Match
+tracks its completed dry rounds: after two without treasure, the next round
 is guaranteed a chest. The guarantee raises the overall long-run drop rate above
 the base 50%; it is not five independent 50% pair rolls.
 
@@ -28,7 +28,7 @@ Pip completion sequence. That sequence enables the real chest directly in the
 same modal, without an Open chest button, and does not repeat the already-played
 chest cue or confetti. The reserved HUD row does not change
 height when the acknowledgement appears or clears; short landscape uses 34 CSS
-pixels. At heights of 360 CSS pixels or less, Match and Memory use a 44-pixel
+pixels. At heights of 360 CSS pixels or less, the paired-card modes use a 44-pixel
 header and tighter outer spacing to preserve 44-pixel card targets even with
 speech controls visible. Menu, notebook and background pauses hide and freeze
 the inline effect.
@@ -61,12 +61,22 @@ visible controls ignore pointer input, and confetti remains in the current game.
 
 ## Existing assets and rights
 
+Memory uses `scripts/memory_reward_badge.gd` instead of the random pair-drop
+presentation. Its fixed 44/52 CSS-pixel header starts at the highest available
+level, currently Level 6, and steps down one level per mistake to a grey "No chest" state. The existing tier chest artwork
+reacts at its original anchor with a 0.52-second scale and rotation change;
+reduced motion updates the tier without moving it. Reconfiguration never
+replays a downgrade. The full five-pair completion saves the surviving tier and
+uses the shared Pip finale before opening. An unfinished round grants no reward.
+The observation clock shares the same row, reusing the acquired portal glow and
+sparkle assets with a Start matching action. No new art or sound was acquired.
+
 The discovery uses the acquired CC0 recording "Cheers" by AuraVoice /
 Nocturnal_Vanguard from OpenGameArt. The [audio source record](../../assets/audio/pair-chest/SOURCE.md)
 contains its source, license, acquisition status, hashes and trimming settings.
 A dedicated, speech-ducked player keeps subsequent card clicks from cutting it
 off. Mute, navigation and backgrounding stop the cue; resuming never replays it.
-It replaces only Match and Memory's discovery cue and adds no Pip voice.
+It replaces only Match's pair discovery cue and adds no Pip voice.
 
 The existing closed theme design is
 rendered through `ChestView`, including the original Royal, Energy and Crystal

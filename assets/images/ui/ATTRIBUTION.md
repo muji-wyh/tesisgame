@@ -1,5 +1,29 @@
 # Interface icons
 
+## Shared controls
+
+The nine SVGs in `controls/` are acquired Tabler Icons v3.35.0 artwork by
+Paweł Kuna under the MIT License. They were downloaded on October 20, 2026,
+inspected at their 28px display size inside 44px light and dark controls, and
+integrated into the shared icon button. The Home icon also replaces the earlier
+Fluent illustration in game navigation. Vocabulary and game-preview illustrations
+retain their existing artwork.
+
+The icons use the source 24px view box and rounded 2px outline. The filled
+microphone marks active listening without changing the microphone's upright
+orientation; the eye switches between the source closed and open variants.
+Only `currentColor` is replaced with white for runtime theme tinting. Vector
+paths are unchanged. These are static source SVGs, with no animation clips;
+button feedback and the existing price/count badges remain game-authored.
+
+Exact original URLs, source SHA-256 values and integrated SHA-256 values are
+recorded in [controls/sources.json](controls/sources.json). The full
+[MIT license](LICENSE-Tabler.txt) is retained. Godot runtime review follows
+the shared control and page-layout checks; the acquisition record distinguishes
+it from the source-scale inspection.
+
+## Finish and mastery
+
 `finish-flag.svg` is the `flag-check` icon from Tabler Icons v3.35.0 by
 Paweł Kuna, licensed under the MIT License. The source SVG was downloaded on
 October 9, 2026, inspected, and integrated into Jelly Match's Finish button.

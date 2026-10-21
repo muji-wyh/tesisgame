@@ -27,6 +27,7 @@ var _notice: Label
 var _detail: VBoxContainer
 var _picture: TextureRect
 var _title: Label
+var _part_of_speech: Label
 var _definition: Label
 var _example: Label
 var _skills: Label
@@ -52,9 +53,9 @@ func _init() -> void:
 	name = "ProfessionalWordLibrary"
 	size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_heading = _label("Professional word library", 20)
+	_heading = _label("Professional word library", 22, true)
 	add_child(_heading)
-	_summary = _label("Open a prepared module to browse its terms.", 14)
+	_summary = _label("Open a prepared module to browse its terms.", 14, false, true)
 	add_child(_summary)
 	_search = SearchLineEdit.new()
 	_search.name = "ProfessionalWordSearch"
@@ -80,7 +81,7 @@ func _init() -> void:
 	_body.add_child(_pager)
 	_previous = _button("Previous", "PreviousWordPage", _change_page.bind(-1))
 	_pager.add_child(_previous)
-	_page_label = _label("", 13)
+	_page_label = _label("", 13, false, true)
 	_page_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_page_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_pager.add_child(_page_label)
@@ -95,14 +96,17 @@ func _init() -> void:
 	_picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	_picture.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_detail.add_child(_picture)
-	_title = _label("", 22)
+	_title = _label("", 24, true)
 	_detail.add_child(_title)
-	_hear = _button("Hear pronunciation", "HearProfessionalWord", _hear_selected)
-	_detail.add_child(_hear)
+	_part_of_speech = _label("", 13, false, true)
+	_detail.add_child(_part_of_speech)
 	_definition = _label("", 16)
 	_detail.add_child(_definition)
-	_example = _label("", 15)
+	_example = _label("", 15, false, true)
 	_detail.add_child(_example)
+	_hear = _button("Hear pronunciation", "HearProfessionalWord", _hear_selected)
+	_detail.add_child(_hear)
+	_detail.add_child(_label("Practice progress", 16, true))
 	_skills = _label("", 14)
 	_detail.add_child(_skills)
 	resized.connect(func() -> void: fit(_factor))
@@ -184,6 +188,7 @@ func clear() -> void:
 	_pager.hide()
 	_hear.disabled = true
 	_title.text = ""
+	_part_of_speech.text = ""
 	_definition.text = ""
 	_example.text = ""
 	_skills.text = ""
@@ -207,7 +212,7 @@ func fit(scale: float) -> void:
 		if is_instance_valid(label):
 			label.add_theme_font_size_override("font_size", ceili(float(label.get_meta("font_size", 14)) / _factor))
 	for button in _row_buttons + [_previous, _next, _hear]:
-		Style.action_button(button, Style.GOOD)
+		Style.action_button(button, Style.GOOD, button == _hear)
 		button.add_theme_font_size_override("font_size", ceili(14.0 / _factor))
 		button.custom_minimum_size = Vector2(0, 48.0 / _factor)
 		if not _keyboard_focus:
@@ -217,16 +222,7 @@ func fit(scale: float) -> void:
 			for edge in ["left", "right", "top", "bottom"]:
 				content.add_theme_constant_override("margin_" + edge, ceili(10.0 / _factor))
 			button.custom_minimum_size.y = maxf(64.0 / _factor, content.get_combined_minimum_size().y)
-	_search.custom_minimum_size.y = 44.0 / _factor
-	_search.add_theme_font_size_override("font_size", ceili(14.0 / _factor))
-	_search.add_theme_font_override("font", Style.BODY_FONT)
-	_search.add_theme_color_override("font_color", Style.INK)
-	_search.add_theme_color_override("font_placeholder_color", Style.MUTED)
-	_search.add_theme_color_override("caret_color", Style.INK)
-	_search.add_theme_stylebox_override("normal", Style.box(Style.PAPER.lightened(0.5), Style.EDGE, ceili(8.0 / _factor), maxi(1, ceili(1.0 / _factor))))
-	_search.add_theme_stylebox_override("read_only", Style.box(Style.PAPER, Style.EDGE, ceili(8.0 / _factor), maxi(1, ceili(1.0 / _factor))))
-	_search.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, Style.GOOD, ceili(8.0 / _factor), ceili(2.0 / _factor)) \
-		if _keyboard_focus else StyleBoxEmpty.new())
+	Style.text_field(_search, _factor, _keyboard_focus)
 	scroll.custom_minimum_size.y = 120.0 / _factor
 	_picture.custom_minimum_size.y = 150.0 / _factor
 
@@ -295,8 +291,15 @@ func _show_page() -> void:
 		var content := VBoxContainer.new()
 		content.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		margin.add_child(content)
-		content.add_child(_label(str(word.get("display_text", word.text)) + " · " + str(word.get("pos", "")), 16))
-		content.add_child(_label(word.definition, 13))
+		var heading := HBoxContainer.new()
+		heading.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		content.add_child(heading)
+		heading.add_child(_label(str(word.get("display_text", word.text)), 16, true))
+		var part_of_speech := _label(str(word.get("pos", "")), 13, false, true)
+		part_of_speech.autowrap_mode = TextServer.AUTOWRAP_OFF
+		part_of_speech.size_flags_horizontal = Control.SIZE_SHRINK_END
+		heading.add_child(part_of_speech)
+		content.add_child(_label(word.definition, 14, false, true))
 		margin.minimum_size_changed.connect(func() -> void:
 			if is_instance_valid(button):
 				button.custom_minimum_size.y = maxf(64.0 / _factor, margin.get_combined_minimum_size().y))
@@ -320,7 +323,9 @@ func _select(index: int, reveal: bool = true) -> void:
 	if not path.is_empty():
 		_picture.texture = WordArt.texture(path, _picture)
 	_picture.visible = _picture.texture != null
-	_title.text = str(_selected.get("display_text", _selected.text)) + " · " + str(_selected.get("pos", ""))
+	_title.text = str(_selected.get("display_text", _selected.text))
+	_part_of_speech.text = str(_selected.get("pos", ""))
+	_part_of_speech.visible = not _part_of_speech.text.is_empty()
 	_definition.text = str(_selected.definition)
 	_example.text = "Example: " + str(_selected.example)
 	_skills.text = _skill_summary(str(_selected.id))
@@ -398,8 +403,10 @@ func _clear_rows() -> void:
 	_row_revision += 1
 
 
-func _label(text: String, font_size: int) -> Label:
-	var label := Style.label(text, font_size)
+func _label(text: String, font_size: int, heading: bool = false, muted: bool = false) -> Label:
+	var label := Style.heading(text, font_size) if heading else Style.label(text, font_size)
+	if muted:
+		label.add_theme_color_override("font_color", Style.MUTED)
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE

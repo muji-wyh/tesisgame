@@ -1,8 +1,9 @@
 const { test, expect } = require('@playwright/test');
 const {
   openGame, metrics, tap, rendered, chooseMode, openModeMenu, headerPoint,
-  discoverMatchCards, boardPoint, memoryPoint, resultPoint, celebrationState, acceptCelebration
+  discoverMatchCards, boardPoint, resultPoint, celebrationState, acceptCelebration
 } = require('./game-ui.cjs');
+const { startMemory, completeRememberedBoard } = require('./memory-flow.cjs');
 
 // Keep real phone geometry without multiplying the software renderer's fill cost.
 test.use({ deviceScaleFactor: 1, video: 'on' });
@@ -12,11 +13,11 @@ const phraseState = page => page.locator('#game-status').evaluate(element => JSO
 const wallet = page => page.locator('#coin-status').evaluate(element => JSON.parse(element.dataset.snapshot || '{}'));
 
 test.beforeEach(async ({ page }) => {
-  // Existing dry rounds invoke the real pity rule; every reward still requires
-  // playing the round and holding its chest through the normal saving path.
+  // Match's existing dry rounds invoke its pity rule. Memory earns its highest
+  // chest by completing the observed board without mistakes.
   await page.addInitScript(key => {
     localStorage.setItem(key, '[medals]\nversion=1\ncounts={}\n[pair_chests]\nversion=1\n' +
-      'state={"match":{"dry_rounds":2,"round":{}},"memory":{"dry_rounds":2,"round":{}}}\n');
+      'state={"match":{"dry_rounds":2,"round":{}},"memory":{"dry_rounds":0,"round":{}}}\n');
   }, MEDAL_KEY);
 });
 
@@ -48,26 +49,7 @@ async function completeMatch(page) {
 }
 
 async function completeMemory(page) {
-  const cards = [];
-  for (let index = 0; index < 10; index++) {
-    const point = memoryPoint(await metrics(page), index);
-    await tap(page, point.x, point.y);
-    await expect(page.locator('#selection-status')).toHaveText(/^Memory card \d+\. (Word|Picture): [a-z]+\.$/);
-    const [, kind, word] = (await page.locator('#selection-status').textContent()).match(/\. (Word|Picture): ([a-z]+)\.$/);
-    cards.push({ index, kind, word });
-    await tap(page, point.x, point.y);
-    await expect(page.locator('#selection-status')).toBeEmpty();
-  }
-  const words = cards.filter(card => card.kind === 'Word');
-  for (const [index, word] of words.entries()) {
-    const picture = cards.find(card => card.word === word.word && card.kind === 'Picture');
-    for (const card of [word, picture]) {
-      const point = memoryPoint(await metrics(page), card.index);
-      await tap(page, point.x, point.y);
-    }
-    await expect(page.locator('#game-status')).toContainText('A new flower!');
-    if (index < words.length - 1) await expect(page.locator('#game-status')).toContainText('Find a pair.');
-  }
+  await completeRememberedBoard(page, await startMemory(page));
 }
 
 async function visiblePhraseOption(page, id) {
@@ -205,7 +187,7 @@ for (const mode of ['match', 'memory', 'phrase']) {
         await tap(page, replay.x, replay.y);
       }
       await expect.poll(async () => pieceCount(page)).toBe(beforePieces + 1);
-      await expect.poll(async () => (await wallet(page)).balance).toBe(beforeCoins + 50);
+      await expect.poll(async () => (await wallet(page)).balance).toBe(beforeCoins + (mode === 'memory' ? 300 : 50));
       const earnedCoins = (await wallet(page)).balance;
       await page.emulateMedia({ reducedMotion: 'reduce' });
       expect((await metrics(page)).growth.settlement.visible).toBe(false);
@@ -214,7 +196,7 @@ for (const mode of ['match', 'memory', 'phrase']) {
       expect((await metrics(page)).library.current).toBe(mode);
       expect((await metrics(page)).growth.background_game.visible).toBe(true);
       if (mode === 'phrase') await expect.poll(async () => (await phraseState(page)).completed).toBe(0);
-      else await expect(page.locator('#game-status')).toContainText(mode === 'match' ? 'Find 5 word' : 'Find a pair.');
+      else await expect(page.locator('#game-status')).toContainText(mode === 'match' ? 'Find 5 word' : 'Start game');
       expect(await pieceCount(page), 'Departure and reentry cannot claim the previous chest twice.').toBe(beforePieces + 1);
       expect((await wallet(page)).balance).toBe(earnedCoins);
 

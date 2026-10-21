@@ -6,6 +6,8 @@ const GOOD := Color("#346953")
 const WRONG := Color("#b55646")
 const PAPER := Color("#fbf8f0")
 const EDGE := Color("#dce2d7")
+const SURFACE := Color("#fffdf7")
+const SOFT := Color("#edf2e9")
 const BODY_FONT = preload("res://assets/fonts/body.tres")
 const HEADING_FONT = preload("res://assets/fonts/heading.tres")
 
@@ -59,11 +61,12 @@ static func button(control: Button, accent: Color, minimum_width: float = 72.0) 
 	control.add_theme_color_override("font_pressed_color", INK)
 	control.add_theme_color_override("font_hover_pressed_color", INK)
 	control.add_theme_color_override("font_disabled_color", INK)
-	control.add_theme_stylebox_override("normal", box(PAPER.lightened(0.5), EDGE, 14, 1))
-	control.add_theme_stylebox_override("hover", box(accent.lightened(0.92), accent))
-	control.add_theme_stylebox_override("pressed", box(accent.lightened(0.8), accent, 16, 3))
-	control.add_theme_stylebox_override("disabled", box(Color("#edf0f1"), Color("#d8dde1")))
-	control.add_theme_stylebox_override("focus", box(Color.TRANSPARENT, accent, 16, 4))
+	control.add_theme_stylebox_override("normal", box(SURFACE, EDGE, 14, 1))
+	control.add_theme_stylebox_override("hover", box(accent.lightened(0.92), accent.lightened(0.35), 14, 1))
+	control.add_theme_stylebox_override("pressed", box(accent.lightened(0.8), accent, 14, 1))
+	control.add_theme_stylebox_override("disabled", box(SOFT, EDGE, 14, 1))
+	control.add_theme_color_override("font_disabled_color", MUTED)
+	control.add_theme_stylebox_override("focus", box(Color.TRANSPARENT, accent, 14, 2))
 
 
 static func quiet_button(control: Button, accent: Color, minimum_width: float = 72.0) -> void:
@@ -81,12 +84,12 @@ static func action_button(control: Button, accent: Color, primary: bool = false)
 	var scale: float = ui_scale(control)
 	var radius: int = ceili(12 / scale)
 	var border: int = maxi(1, roundi(1 / scale))
-	var fill: Color = accent.darkened(0.12) if primary else PAPER.lightened(0.5)
+	var fill: Color = accent.darkened(0.12) if primary else SURFACE
 	var edge: Color = accent.darkened(0.12) if primary else EDGE
 	control.add_theme_stylebox_override("normal", box(fill, edge, radius, border))
 	control.add_theme_stylebox_override("hover", box(accent.darkened(0.04) if primary else accent.lightened(0.92), edge, radius, border))
 	control.add_theme_stylebox_override("pressed", box(accent.darkened(0.22) if primary else accent.lightened(0.82), accent, radius, border))
-	control.add_theme_stylebox_override("disabled", box(Color("#edf0f1"), Color("#d8dde1"), radius, border))
+	control.add_theme_stylebox_override("disabled", box(SOFT, EDGE, radius, border))
 	control.add_theme_stylebox_override("focus", box(Color.TRANSPARENT, accent, radius, maxi(2, roundi(2 / scale))))
 	for state in ["normal", "hover", "pressed", "disabled", "focus"]:
 		var surface: StyleBox = control.get_theme_stylebox(state)
@@ -95,7 +98,7 @@ static func action_button(control: Button, accent: Color, primary: bool = false)
 		surface.content_margin_top = 6 / scale
 		surface.content_margin_bottom = 6 / scale
 	control.custom_minimum_size = Vector2(0, ceilf(48 / scale))
-	control.add_theme_font_size_override("font_size", ceili(14 / scale))
+	control.add_theme_font_size_override("font_size", ceili(15 / scale))
 	control.autowrap_mode = TextServer.AUTOWRAP_OFF
 	if primary:
 		for state in ["font_color", "font_focus_color", "font_hover_color", "font_pressed_color", "font_hover_pressed_color"]:
@@ -170,3 +173,24 @@ static func label(text: String, font_size: int = 24) -> Label:
 	control.add_theme_color_override("font_color", INK)
 	control.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	return control
+
+
+static func heading(text: String, font_size: int = 24) -> Label:
+	var control := label(text, font_size)
+	control.add_theme_font_override("font", HEADING_FONT)
+	return control
+
+
+static func text_field(control: LineEdit, scale: float = 1.0, keyboard_focus: bool = true) -> void:
+	control.custom_minimum_size.y = 48.0 / scale
+	control.add_theme_font_override("font", BODY_FONT)
+	control.add_theme_font_size_override("font_size", ceili(15 / scale))
+	control.add_theme_color_override("font_color", INK)
+	control.add_theme_color_override("font_placeholder_color", MUTED)
+	control.add_theme_color_override("caret_color", GOOD)
+	for state in ["normal", "read_only"]:
+		var surface := box(SURFACE if state == "normal" else SOFT, EDGE, ceili(12 / scale), maxi(1, roundi(1 / scale)))
+		surface.content_margin_left = 14 / scale
+		surface.content_margin_right = 14 / scale
+		control.add_theme_stylebox_override(state, surface)
+	control.add_theme_stylebox_override("focus", box(Color.TRANSPARENT, GOOD, ceili(12 / scale), maxi(2, roundi(2 / scale))) if keyboard_focus else StyleBoxEmpty.new())

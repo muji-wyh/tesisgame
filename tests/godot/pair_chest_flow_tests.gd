@@ -82,7 +82,8 @@ func pieces(app) -> int:
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(1000, 800)
-	for mode in ["match", "memory"]:
+	# Memory performance tiers are covered through real rounds in memory_scene_tests.
+	for mode in ["match"]:
 		for slot in [1, 5]:
 			await check_reward(mode, slot)
 		await check_failure(mode)

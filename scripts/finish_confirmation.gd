@@ -25,7 +25,7 @@ func _init() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_shade = ColorRect.new()
 	_shade.name = "ModalShade"
-	_shade.color = Color(0.10, 0.18, 0.15, 0.48)
+	_shade.color = Color(Style.INK, 0.52)
 	_shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_shade)
 	_shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -107,7 +107,7 @@ func _layout() -> void:
 		return
 	var s: float = Style.ui_scale(self)
 	var accent: Color = _palette.get("accent", Style.GOOD)
-	var surface := Style.box(Style.PAPER, accent.lightened(0.70), ceili(22 / s), maxi(1, roundi(1 / s)))
+	var surface := Style.box(Style.PAPER, accent.lightened(0.70), ceili(24 / s), maxi(1, roundi(1 / s)))
 	surface.shadow_color = Color(Style.INK, 0.22)
 	surface.shadow_size = ceili(18 / s)
 	surface.shadow_offset = Vector2(0, 6 / s)

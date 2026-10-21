@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const { metrics, tap, chooseMode, rendered, enterGame, openGame, boardPoint,
-  resultPoint, headerPoint, memoryPoint, acceptCelebration } = require('./game-ui.cjs');
+  resultPoint, headerPoint, acceptCelebration } = require('./game-ui.cjs');
+const { startMemory, memoryCardTap } = require('./memory-flow.cjs');
 
 const MEDAL_KEY = 'wordBuddies.medalProgress';
 
@@ -88,9 +89,9 @@ test('unavailable rewards leave practice usable and a visible retry preserves th
   await tap(page, card.x, card.y);
   await expect(page.locator('#selection-status')).toHaveText(/^(Word|Picture): [a-z]+$/);
   await chooseMode(page, 'memory', { recovery: true });
-  const memoryCard = memoryPoint(await metrics(page), 0);
-  await tap(page, memoryCard.x, memoryCard.y);
-  await expect(page.locator('#selection-status')).toHaveText(/^Memory card 1\. (Word|Picture): [a-z]+\.$/);
+  await startMemory(page);
+  await memoryCardTap(page, 0);
+  await expect(page.locator('#selection-status')).toHaveText('Memory card 1 selected. Choose one more card.');
   const selected = await page.locator('#selection-status').textContent();
   await page.screenshot({ path: testInfo.outputPath('unavailable-rewards-memory.png'), scale: 'css' });
   await page.evaluate(() => window.restoreRewardRead());

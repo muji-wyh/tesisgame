@@ -1,0 +1,24 @@
+{
+  "scope": "Primary page and terms only; model acquisition follows inspected download link.",
+  "retrieved_at": "2026-10-17T01:33:36.827Z",
+  "files": [
+    {
+      "url": "https://www.innerscene.com/tools/library/3d-parts/mobile-whiteboard-education-furniture-dee300ef",
+      "final_url": "https://www.innerscene.com/tools/library/3d-parts/mobile-whiteboard-education-furniture-dee300ef",
+      "file": "source-page.html",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 48252,
+      "sha256": "97b5c500f368ae6462cf954ab58d4b503ffad6be4bdb04ac194b1a279347a831"
+    },
+    {
+      "url": "https://www.innerscene.com/tools/library/terms",
+      "final_url": "https://www.innerscene.com/tools/library/terms",
+      "file": "library-terms.html",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 35154,
+      "sha256": "da87451034fbaaf678c3aea9ec900a106ced7ad2222269afd6e9c174647b6d23"
+    }
+  ]
+}

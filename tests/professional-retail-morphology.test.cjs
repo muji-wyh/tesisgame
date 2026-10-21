@@ -129,7 +129,7 @@ function beforeFoundation02FirstLanguage(entry) {
 
 
 function beforeFoundationLanguage(entry) {
-  return beforeFoundation02FirstLanguage(entry);
+  return beforeFoundation02FirstLanguage(beforeRetail04Remaining20(entry));
 }
 const record = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-module03-morphology-first10-2026-10-16.json')));
 const nextRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-module03-morphology-next10-2026-10-16.json')));
@@ -145,7 +145,18 @@ const fifthRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professiona
 const retail04FirstRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-module04-morphology-first10-2026-10-16.json')));
 const retail04SecondRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-module04-morphology-second10-2026-10-16.json'), 'utf8'));
 const retail04ThirdRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-module04-morphology-third10-2026-10-16.json'), 'utf8'));
+const retail04RemainingRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json'), 'utf8'));
+function beforeRetail04Remaining20(entry) {
+  const row = retail04RemainingRecord.candidates.find(row => row.id === entry.id);
+  if (!row) return entry;
+  const protectedFields = Object.fromEntries(Object.entries(entry).filter(([key]) => key !== 'morphology'));
+  assert.equal(hash(protectedFields), row.nonmorphology_sha256, entry.id + ': exact lexical fields around later Retail04 morphology');
+  if (require('node:util').isDeepStrictEqual(entry.morphology, row.before_morphology)) return entry;
+  assert.deepEqual(entry.morphology, row.accepted_morphology, entry.id + ': exact later accepted Retail04 morphology');
+  return {...structuredClone(entry), morphology: structuredClone(row.before_morphology)};
+}
 function beforeRetail04Third10(entry) {
+  entry = beforeRetail04Remaining20(entry);
   const patch = retail04ThirdRecord.patches.find(item => item.id === entry.id);
   if (!patch) return entry;
   assert.deepEqual(entry, patch.after, entry.id + ': exact later Retail04 third-ten morphology-only acceptance');
@@ -165,6 +176,26 @@ function beforeRetail04First10(entry) {
   assert.deepEqual(entry, patch.after, entry.id + ': exact later Retail04 morphology-only acceptance');
   return structuredClone(patch.before);
 }
+
+test('Retail04 remaining twenty historical reversal rejects unrelated lexical and graph drift', () => {
+  for (const row of retail04RemainingRecord.candidates) {
+    const current = data.lexemes.find(entry => entry.id === row.id);
+    const historical = beforeRetail04Remaining20(current);
+    assert.deepEqual(historical.morphology, row.before_morphology);
+    assert.deepEqual(beforeRetail04Remaining20(historical), historical);
+    for (const change of [
+      entry => { entry.definition += ' Unexpected change.'; },
+      entry => { entry.media.audio.status = 'integrated'; },
+      entry => { entry.review.domain = 'unexpected'; },
+      entry => { entry.morphology.review.status = 'pending'; },
+      entry => { entry.morphology.parts[0].canonical_id += '.unexpected'; }
+    ]) {
+      const altered = structuredClone(current);
+      change(altered);
+      assert.throws(() => beforeRetail04Remaining20(altered), row.text);
+    }
+  }
+});
 const shoppingBagImageRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-shopping-bag-image-2026-10-17.json'), 'utf8'));
 function beforeShoppingBagImage(entry) {
   const patches = shoppingBagImageRecord.patches.filter(item => item.id === entry.id);
@@ -188,8 +219,10 @@ const checkoutImageRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/pro
 const barcodeImageRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-barcode-image-2026-10-16.json'), 'utf8'));
 const cashRegisterImageRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-cash-register-image-2026-10-16.json'), 'utf8'));
 const cardReaderBarcodeAudioRecord = JSON.parse(fs.readFileSync(path.join(root, 'data/professional/provenance/retail-card-reader-barcode-approved-audio-2026-10-16.json'), 'utf8'));
+const { beforeCardReaderImage } = require('./helpers/professional-card-reader-history.cjs');
 const mediaRecords = [cartBasketAudioRecord, palletImageRecord, shelfImageRecord, palletShelfAudioRecord, bagWrapAudioRecord, counterImageRecord, counterCheckoutAudioRecord, checkoutImageRecord, barcodeImageRecord, cashRegisterImageRecord, cardReaderBarcodeAudioRecord];
 function beforeCardReaderBarcodeAudio(entry) {
+  entry = beforeCardReaderImage(entry);
   const patch = cardReaderBarcodeAudioRecord.patches.find(item => item.sense_id === entry.id);
   if (!patch) return entry;
   assert.deepEqual(entry, patch.after, entry.id + ': exact later user-approved card reader or barcode audio and note delta');
@@ -234,6 +267,7 @@ function beforeCounterImage(entry) {
   return structuredClone(patch.before);
 }
 function beforeRetailMedia(entry) {
+  entry = beforeCardReaderImage(entry);
   entry = beforeFoundationLanguage(entry);
   let historical = beforeFifth10(beforeRetail04First10(entry));
   for (const record of [...mediaRecords].reverse()) {
@@ -573,7 +607,7 @@ test('Fourth ten retain exact independent graph approval, source provenance and 
     assert.equal(module.status, 'draft');
   }
   for (const snapshot of fourthRecord.protected_expressions) assert.equal(hash(data.expressions.find(entry => entry.id === snapshot.entry.id)), snapshot.json_sha256);
-  assert.equal(data.lexemes.filter(entry => entry.morphology?.review.status === 'reviewed').length, 189);
+  assert.equal(data.lexemes.filter(entry => entry.morphology?.review.status === 'reviewed').length, 209);
   assert.equal(data.courses.find(course => course.id === 'retail').modules.find(module => module.id === 'module03').lexeme_ids.filter(id => data.lexemes.find(entry => entry.id === id).morphology?.review.status === 'reviewed').length, 50);
   assert.ok(data.courses.every(course => course.modules.every(module => module.status === 'draft')));
 });
@@ -881,7 +915,7 @@ test('Retail04 second ten retain declared noun depth, exact new pairs and sense 
   assert.deepEqual(pairs('tissue paper'),[['morph.part.tissue.wrapping-paper','tissue'],['growth.paper','paper']]);assert.deepEqual(graph('tissue paper').nodes,[{id:'whole',left:'p1',right:'p2',surface:'tissue paper',rule:'tissue-plus-paper-word-boundary',break_offsets:[7]}]);assert.deepEqual(r.patches.find(p=>p.after.text==='tissue paper').after.accepted_forms,['tissue paper']);
   assert.deepEqual(r.patches.filter(p=>p.before.morphology===null).map(p=>p.after.text),['ceramic']);assert.equal(r.patches.filter(p=>p.before.morphology?.review.status==='pending').length,9);
   for(const [text,history]of Object.entries({plastic:/Historical molding\/adjectival structure is real/,ceramic:/Greek clay-base\/adjectival structure remains acknowledged/})){const d=r.independent_decisions.decisions.find(d=>d.text===text);assert.match(d.independent_reason,history);assert.equal(d.depth,'whole-current-material-noun exposure only');assert.equal(d.composition_mastery_allowed_by_editorial_review,false);assert.equal(d.production_acceptance,false);}
-  assert.equal(data.courses.find(c=>c.id==='retail').modules.find(m=>m.id==='module04').lexeme_ids.filter(id=>data.lexemes.find(e=>e.id===id).morphology?.review.status==='reviewed').length,30);
+  assert.equal(data.courses.find(c=>c.id==='retail').modules.find(m=>m.id==='module04').lexeme_ids.filter(id=>data.lexemes.find(e=>e.id===id).morphology?.review.status==='reviewed').length,50);
 });
 
 
@@ -937,7 +971,7 @@ test('Retail04 third ten preserve exact packaging and fastening identities and t
   for(const relation of relations){const source=relation.source.source==='actual_growth'?r.protected_growth_entries.find(row=>row.entry.id===relation.source.lexeme_id).entry.analysis:r.protected_related_entries.find(row=>row.entry.id===relation.source.lexeme_id).entry.morphology;assert.equal(source.id,relation.source.analysis_id);assert.deepEqual(source.roots,[relation.source.root]);const part=source.parts.find(p=>p.id===relation.source.part_id);assert.deepEqual([part.canonical_id,part.canonical],relation.source.canonical_pair);assert.equal(hash(relation.target_pair)===hash(relation.source.canonical_pair),relation.pair_compatible);}
   const strapping=relations.find(row=>row.source.lexeme_id==='strapping-machine.machine-for-applying-package-bands.n');assert.equal(strapping.pair_compatible,true);const strappingSource=r.protected_related_entries.find(row=>row.entry.id===strapping.source.lexeme_id).entry.morphology.parts.find(p=>p.id===strapping.source.part_id);assert.equal(strappingSource.surface,'strapp');assert.equal(graph('strap').parts[0].surface,'strap');
   const unbutton=relations.find(row=>row.source.lexeme_id==='unbutton');assert.equal(unbutton.pair_compatible,false);assert.deepEqual(unbutton.source.canonical_pair,['growth.part.button.action','button']);
-  assert.equal(data.courses.find(c=>c.id==='retail').modules.find(m=>m.id==='module04').lexeme_ids.filter(id=>data.lexemes.find(e=>e.id===id).morphology?.review.status==='reviewed').length,30);
+  assert.equal(data.courses.find(c=>c.id==='retail').modules.find(m=>m.id==='module04').lexeme_ids.filter(id=>data.lexemes.find(e=>e.id===id).morphology?.review.status==='reviewed').length,50);
 });
 
 test('Retail04 third ten historical reversal rejects any unrelated entry drift', () => {

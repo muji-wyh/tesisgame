@@ -1,6 +1,9 @@
 """Assemble reviewed illustration layers into the existing 120-unit mascot rig."""
 import argparse
+import io
 import json
+import os
+import tempfile
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
@@ -58,11 +61,27 @@ def compose(parts, heads, pivots, shadow_radius, expression='neutral', pose=None
     return image
 
 
+def write_art(path, data):
+    # Replace complete atlases atomically. Windows image readers can retain an
+    # old file handle; truncating the live atlas in place is unnecessary.
+    if path.exists() and path.read_bytes() == data:
+        return
+    descriptor, temporary = tempfile.mkstemp(prefix=path.stem+'-', suffix='.tmp', dir=path.parent)
+    try:
+        with os.fdopen(descriptor, 'wb') as output:
+            output.write(data)
+        os.replace(temporary, path)
+    finally:
+        Path(temporary).unlink(missing_ok=True)
+
+
 def atlas(images, path):
     result=Image.new('RGBA',(SIZE*len(images),SIZE))
     for i,image in enumerate(images): result.alpha_composite(image,(i*SIZE,0))
-    result.save(path,optimize=True)
-    (PREVIEW/path.name).write_bytes(path.read_bytes())
+    encoded = io.BytesIO()
+    result.save(encoded, format='PNG', optimize=True)
+    write_art(path, encoded.getvalue())
+    write_art(PREVIEW/path.name, encoded.getvalue())
 
 
 if args.preview:

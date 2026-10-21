@@ -68,12 +68,14 @@ func _run() -> void:
 		"Winning presents a settlement dialog over the completed board")
 	check(app._default_focus() == app.chest_button and app.chest_button.has_focus(),
 		"The chest remains the primary controller action after winning")
-	check(app._single_result.replay_button.disabled, "A closed chest has no Play again action")
+	check(not app._single_result.replay_button.disabled, "A closed chest offers Play again with automatic settlement")
 	var earned_lesson: Array = app.model.lesson_words.duplicate(true)
-	app._single_result.replay_button.pressed.emit()
 	check(app.model.chest_state == "closed" and app.model.lesson_words == earned_lesson
-		and app.medal_progress.counts.is_empty(), "A disabled action cannot skip the chest or silently claim its reward")
+		and app.medal_progress.counts.is_empty(), "Showing the result does not claim the chest before an accepted action")
 	app._show_collection()
+	app._single_result.replay_button.pressed.emit()
+	check(app.model.chest_state == "closed" and app.model.lesson_words == earned_lesson and app.medal_progress.counts.is_empty(),
+		"The covered Play again action cannot leave the result or claim its reward")
 	check(not app._focus_candidates().has(app.chest_button)
 		and not app._focus_candidates().has(app._single_result.replay_button),
 		"The collection modal excludes covered chest actions from controller focus")
@@ -82,11 +84,13 @@ func _run() -> void:
 	check(app._default_focus() == app.chest_button, "Closing the collection restores the unopened chest action")
 	app._open_chest()
 	check(app.model.chest_state == "opening" and not app._pending_fragment.is_empty()
-		and app._single_result.replay_button.disabled, "Opening captures one reward while keeping Play again disabled")
+		and not app._single_result.replay_button.disabled, "Opening captures one reward and retains automatic settlement actions")
 	check(app._valid_focus(app._default_focus()), "Opening retains a valid controller destination")
-	app._single_result.replay_button.pressed.emit()
+	var captured: Dictionary = app._pending_fragment.duplicate(true)
+	app._open_chest()
 	check(app.model.chest_state == "opening" and app.model.lesson_words == earned_lesson,
-		"A stale Play again event cannot skip an opening")
+		"A duplicate chest action cannot replace the opening or its lesson")
+	check(app._pending_fragment == captured, "A duplicate opening preserves exactly the captured reward")
 	app.chest.finish_immediately()
 	check(app.medal_progress.count_for("spring-1") == 1 and app._single_result.heading.text == "Round complete"
 		and app._single_result.replay_button.is_visible_in_tree(), "A saved opening exposes the next adventure")
@@ -125,12 +129,18 @@ func _run() -> void:
 		"Repeated mismatches preserve the learned pair and active board")
 	for word in words.slice(1):
 		_match(app, word)
-	check(app.model.phase == "won" and app._single_result.replay_button.disabled,
+	check(app.model.phase == "won" and app.model.chest_earned and app.model.chest_state == "closed",
 		"Finishing after repeated mistakes still earns an unopened chest")
 	root.size = Vector2i(320, 320)
 	await process_frame
 	await process_frame
 	_check_result_bounds(app)
+	var completed_id: String = app._round_id
+	var coins_before_replay: int = app.coin_wallet.balance
+	app._single_result.replay_button.pressed.emit()
+	check(app._round_id != completed_id and app.model.phase == "waiting"
+		and app.coin_wallet.balance == coins_before_replay + 50,
+		"Play again preserves the unopened Match reward once before starting a fresh board")
 	app.audio.set_muted(true)
 	app.new_round(20)
 	_retry_mismatches(app)
@@ -241,10 +251,11 @@ func _check_result_lifecycle_layout(app) -> void:
 			seed_value += 1
 			root.size = dimensions
 			app.new_round(seed_value, false, "", mode)
-			# Use a persisted chest reservation; chance outcomes have separate coverage.
+			# Match chance is fixed; Memory earns its tier through real completion.
 			preload("res://tests/godot/player_flow_fixture.gd").reserve_pair_chest(app)
 			app.set_reduced_motion(false)
 			if mode == "memory":
+				Fixture.start_memory(app)
 				for word in app.model.lesson_words:
 					for index in range(app._memory.memory.cards.size()):
 						if app._memory.memory.cards[index].word.id == word.id:
@@ -259,19 +270,19 @@ func _check_result_lifecycle_layout(app) -> void:
 			if app._settlement_dialog._entrance != null and app._settlement_dialog._entrance.is_valid():
 				app._settlement_dialog._entrance.custom_step(1.0)
 			check(app.model.phase == "won" and app.model.chest_state == "closed"
-				and app._single_result.replay_button.disabled, "%s begins its result with only the closed chest" % mode)
+				and not app._single_result.replay_button.disabled, "%s offers replay with automatic settlement of its closed chest" % mode)
 			_check_result_bounds(app)
 			var stage: Rect2 = app._single_result.get_global_rect()
 			app._open_chest()
 			await process_frame
-			check(app._single_result.replay_button.disabled and app._single_result.get_global_rect().is_equal_approx(stage),
-				"Opening %s keeps the full chest composition and disables the next action at %s" % [mode, dimensions])
+			check(not app._single_result.replay_button.disabled and app._single_result.get_global_rect().is_equal_approx(stage),
+				"Opening %s keeps the full chest composition and its settlement actions at %s" % [mode, dimensions])
 			app.chest.finish_immediately()
 			await process_frame
 			await process_frame
 			check(app._single_result.replay_button.is_visible_in_tree() and not app._single_result.retry_button.visible
 				and app._single_result.get_global_rect().is_equal_approx(stage),
-				"The saved %s opening adds its footer action without moving the chest at %s" % [mode, dimensions])
+				"The saved %s opening preserves its footer action without moving the chest at %s" % [mode, dimensions])
 			check(app._single_result.heading.is_visible_in_tree() and app._single_result.caption.is_visible_in_tree(),
 				"A completed chest retains the dialog heading and collection acknowledgement")
 			_check_result_bounds(app)

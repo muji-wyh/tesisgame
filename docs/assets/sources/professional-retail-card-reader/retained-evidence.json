@@ -1,0 +1,930 @@
+{
+  "schema": 1,
+  "status": "exact_byte_copies_of_original_evidence",
+  "files": [
+    {
+      "source": "build/professional-english/card-reader-freesvg-acquisition-r01/141617-source.html",
+      "path": "docs/assets/sources/professional-retail-card-reader/acquisition-r01/141617-source.html",
+      "bytes": 69826,
+      "sha256": "36f095a821b753a32516cd1a547354e9fef75426e4700d0ddb3e5c22ac6b524c"
+    },
+    {
+      "source": "build/professional-english/card-reader-freesvg-acquisition-r01/141617.svg",
+      "path": "docs/assets/sources/professional-retail-card-reader/acquisition-r01/141617.svg",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "build/professional-english/card-reader-freesvg-acquisition-r01/206301-browser.svg",
+      "path": "docs/assets/sources/professional-retail-card-reader/acquisition-r01/206301-browser.svg",
+      "bytes": 38428,
+      "sha256": "116dca8283535b13345dbd785e846f162bd3701d91816f35603d4aead648a044"
+    },
+    {
+      "source": "build/professional-english/card-reader-freesvg-acquisition-r01/206301-cropped-512.png",
+      "path": "docs/assets/sources/professional-retail-card-reader/acquisition-r01/206301-cropped-512.png",
+      "bytes": 77565,
+      "sha256": "67cb3e6f8e0be881b51a7d18ecc28fd1a02fab6b650197a8d60ef9d550b07c59"
+    },
+    {
+      "source": "build/professional-english/card-reader-freesvg-acquisition-r01/206301-render.png",
+      "path": "docs/assets/sources/professional-retail-card-reader/acquisition-r01/206301-render.png",
+      "bytes": 278605,
+      "sha256": "7857238a51e9f17c7259f310e5a0bddf922a01cdc0b65c77db5ffdd93bab36d4"
+    },
+    {
+      "source": "build/professional-english/card-reader-freesvg-acquisition-r01/206301-size-review-r02.png",
+      "path": "docs/assets/sources/professional-retail-card-reader/acquisition-r01/206301-size-review-r02.png",
+      "bytes": 142632,
+      "sha256": "a2e7ff6239d3ce641da017f0c259ef8ade5f421422fee796c5d98e45ff127da1"
+    },
+    {
+      "source": "build/professional-english/card-reader-freesvg-acquisition-r01/206301-size-review.png",
+      "path": "docs/assets/sources/professional-retail-card-reader/acquisition-r01/206301-size-review.png",
+      "bytes": 139216,
+      "sha256": "2b42f2929b195000f110f1bc237ca2c0c57c6710cd31ba704b121e64f74f8f40"
+    },
+    {
+      "source": "build/professional-english/card-reader-freesvg-acquisition-r01/206301-source.html",
+      "path": "docs/assets/sources/professional-retail-card-reader/acquisition-r01/206301-source.html",
+      "bytes": 70179,
+      "sha256": "fab25e54beca6ca2224fef0d7bdb39db10a62d1f8d1878dfb3db781ca0cb6fdf"
+    },
+    {
+      "source": "build/professional-english/card-reader-freesvg-acquisition-r01/206301.svg",
+      "path": "docs/assets/sources/professional-retail-card-reader/acquisition-r01/206301.svg",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "build/professional-english/card-reader-freesvg-acquisition-r01/acquisition.json",
+      "path": "docs/assets/sources/professional-retail-card-reader/acquisition-r01/acquisition.json",
+      "bytes": 1645,
+      "sha256": "169a42fa375db5193c16b2d5e05454bcf4d1a6045ac5b620d43b6c5296d866d9"
+    },
+    {
+      "source": "build/professional-english/card-reader-freesvg-acquisition-r01/candidate-record.json",
+      "path": "docs/assets/sources/professional-retail-card-reader/acquisition-r01/candidate-record.json",
+      "bytes": 3200,
+      "sha256": "123d5e614f85522b2a2e86e6dc7c545ad0006d249585893f7716b4a669efe38f"
+    },
+    {
+      "source": "build/professional-english/card-reader-freesvg-acquisition-r01/cc0-source.html",
+      "path": "docs/assets/sources/professional-retail-card-reader/acquisition-r01/cc0-source.html",
+      "bytes": 30248,
+      "sha256": "abb4d48fc8b85de52b377dd105532c6c549f515d492a8e1712bc99e7316a1f12"
+    },
+    {
+      "source": "build/professional-english/card-reader-freesvg-acquisition-r01/preparation-receipt.json",
+      "path": "docs/assets/sources/professional-retail-card-reader/acquisition-r01/preparation-receipt.json",
+      "bytes": 2136,
+      "sha256": "42562de5ab32c34a42914c1b7ba4dfc8dab3d30d255994b3245f422e15d0df93"
+    },
+    {
+      "source": "build/professional-english/card-reader-freesvg-acquisition-r01/prepare-preview.cjs",
+      "path": "docs/assets/sources/professional-retail-card-reader/acquisition-r01/prepare-preview.cjs",
+      "bytes": 2543,
+      "sha256": "e7658994b826023c10f6de260577eeba26bfbe354eac13d008cf1e5de044c81b"
+    },
+    {
+      "source": "build/professional-english/card-reader-freesvg-acquisition-r01/prepare-size-sheet-r02.cjs",
+      "path": "docs/assets/sources/professional-retail-card-reader/acquisition-r01/prepare-size-sheet-r02.cjs",
+      "bytes": 1694,
+      "sha256": "cd6449be3cfaf4da0303a15f7f800ff069d8176250dcbe00f74187c4d152e1df"
+    },
+    {
+      "source": "build/professional-english/card-reader-freesvg-acquisition-r01/review-correction-r02.md",
+      "path": "docs/assets/sources/professional-retail-card-reader/acquisition-r01/review-correction-r02.md",
+      "bytes": 1574,
+      "sha256": "6efdc1d6af0f51930929b8f72e3678e6262bf5de16c6b644dcd2a8c2860eb3aa"
+    },
+    {
+      "source": "build/professional-english/card-reader-freesvg-acquisition-r01/size-review-r02-receipt.json",
+      "path": "docs/assets/sources/professional-retail-card-reader/acquisition-r01/size-review-r02-receipt.json",
+      "bytes": 891,
+      "sha256": "67d028544ffc6009ca4f8557d692357f9d6fef7fe2da4b0eaa11eb16adce497c"
+    },
+    {
+      "source": "build/professional-english/card-reader-freesvg-acquisition-r01/visual-observations.md",
+      "path": "docs/assets/sources/professional-retail-card-reader/acquisition-r01/visual-observations.md",
+      "bytes": 3396,
+      "sha256": "9d1eb868815985947c8dcc65340d600a4352b914c94684c62786cc077abc66c9"
+    },
+    {
+      "source": "build/professional-english/card-reader-freesvg-independent-review-r01/README.md",
+      "path": "docs/assets/sources/professional-retail-card-reader/independent-source-review-r01/README.md",
+      "bytes": 2591,
+      "sha256": "b504751d8d43c58166a004174a52ef4e608eb2a8f32039f332ee87b5deb35c3f"
+    },
+    {
+      "source": "build/professional-english/card-reader-freesvg-independent-review-r01/freeze-record.json",
+      "path": "docs/assets/sources/professional-retail-card-reader/independent-source-review-r01/freeze-record.json",
+      "bytes": 3432,
+      "sha256": "98ad9035c3571c9fabc1c0dc83c5dad154c21be0bc7a287191f5da490ce99214"
+    },
+    {
+      "source": "build/professional-english/card-reader-freesvg-independent-review-r01/initial-findings.json",
+      "path": "docs/assets/sources/professional-retail-card-reader/independent-source-review-r01/initial-findings.json",
+      "bytes": 2289,
+      "sha256": "a233576a327e10ce9daba3b3bf7233d3193a9cd108a65461105fddd4762d31e7"
+    },
+    {
+      "source": "build/professional-english/card-reader-freesvg-independent-review-r01/input-pins.json",
+      "path": "docs/assets/sources/professional-retail-card-reader/independent-source-review-r01/input-pins.json",
+      "bytes": 5622,
+      "sha256": "67fe64fee215a5056f1ac678ab8757fbfd57063510cec2f979a05f1a3d944ff0"
+    },
+    {
+      "source": "build/professional-english/card-reader-freesvg-independent-review-r01/inventory.json",
+      "path": "docs/assets/sources/professional-retail-card-reader/independent-source-review-r01/inventory.json",
+      "bytes": 1314,
+      "sha256": "68490fd3f3bf57944e8e986f6a81b1f995958fa7a45d74e23ae6a6c9720fc762"
+    },
+    {
+      "source": "build/professional-english/card-reader-freesvg-independent-review-r01/observation-record.json",
+      "path": "docs/assets/sources/professional-retail-card-reader/independent-source-review-r01/observation-record.json",
+      "bytes": 4225,
+      "sha256": "173a66b7029bedfef764c1bce2039c7a93bc114fafb37538a6679fef1ead5491"
+    },
+    {
+      "source": "build/professional-english/card-reader-freesvg-independent-review-r01/raw-source-observations-r01.json",
+      "path": "docs/assets/sources/professional-retail-card-reader/independent-source-review-r01/raw-source-observations-r01.json",
+      "bytes": 21028,
+      "sha256": "c36f2ffa1ec195e9922e08d49bf58b6cd9ad91ffd2cc21ba90c88f2876fa1004"
+    },
+    {
+      "source": "build/professional-english/card-reader-freesvg-independent-review-r01/review.json",
+      "path": "docs/assets/sources/professional-retail-card-reader/independent-source-review-r01/review.json",
+      "bytes": 9342,
+      "sha256": "04161680ef3013f6b25f406a12aceb6ef6dae49a9f5f061703e5bfc36f4fa23f"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/independent-visual-review-r04.json",
+      "path": "docs/qa/professional-card-reader-r04/independent-visual-review-r04.json",
+      "bytes": 15534,
+      "sha256": "4f32f6103a42ff7ad5b654eb912bfea6a2bb34e94f10f4912baf8a1e8ee93bb3"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/match-portrait-independent-review-r01.json",
+      "path": "docs/qa/professional-card-reader-r04/match-portrait-independent-review-r01.json",
+      "bytes": 4025,
+      "sha256": "f7d773ca1fad4cbeb7a8c266982282227dcf351cd77dd2db9c279b8d4caf400f"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/pixel-readback-investigation.json",
+      "path": "docs/qa/professional-card-reader-r04/pixel-readback-investigation.json",
+      "bytes": 5310,
+      "sha256": "cdb24f668c6576dcefcdd78c84c764a8faaff547c4caea9db7cbad5151dc33a4"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/capture-r02.log",
+      "path": "docs/qa/professional-card-reader-r04/capture-r02.log",
+      "bytes": 1485,
+      "sha256": "6b6abc04256290c4669805a1ea15d137ec8b634edb0e0deab1d73c8601221e1d"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/capture-r03.log",
+      "path": "docs/qa/professional-card-reader-r04/capture-r03.log",
+      "bytes": 1606,
+      "sha256": "6e37d46d871b9caa882dd2e47eb42e3d319987f4abbe0613c136432c25f488e2"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/capture-r04.log",
+      "path": "docs/qa/professional-card-reader-r04/capture-r04.log",
+      "bytes": 371,
+      "sha256": "2b57b0199154e736f6a72c3dc40e21bde7e4bf51c48a0c8be731b99c136e822f"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/diagnose-pixels.gd",
+      "path": "docs/qa/professional-card-reader-r04/diagnose-pixels.gd",
+      "bytes": 3556,
+      "sha256": "4e68f4913db52ee9334c3b1819e439562e5f82829c799e6096577ee912c7d124"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/diagnose-pixels-after-render.gd",
+      "path": "docs/qa/professional-card-reader-r04/diagnose-pixels-after-render.gd",
+      "bytes": 4091,
+      "sha256": "2baf155ae2ddceed9b9a1276ab8d42ebed044fd6f791ea068378726ddc765325"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/pixel-diagnostic-r01.log",
+      "path": "docs/qa/professional-card-reader-r04/pixel-diagnostic-r01.log",
+      "bytes": 6550,
+      "sha256": "ccdaf3b2b9a14aa47572a77d88cfe538a6acd7ead94a6e0b05b9f0503d34cd1f"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/pixel-diagnostic-r02.log",
+      "path": "docs/qa/professional-card-reader-r04/pixel-diagnostic-r02.log",
+      "bytes": 16222,
+      "sha256": "e4891d69c3185c3c500f8a3df15d9fdae84fbda5783ab94de9926a2a95087255"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r01/320x568-match-matched-focus-reader.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r01/320x568-match-matched-focus-reader.png",
+      "bytes": 74526,
+      "sha256": "2da4edabf859effc7d0f04ba07dd07b7244ce8c7380af2f083c32955c2380792"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r01/320x568-match-matched-focus-register.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r01/320x568-match-matched-focus-register.png",
+      "bytes": 74450,
+      "sha256": "caabd00de281f0f255b8e88f223a4000b6abbd095d6d7efe56459b8da4f0e06b"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r01/320x568-match-selected-reader.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r01/320x568-match-selected-reader.png",
+      "bytes": 58820,
+      "sha256": "80017983f5232afa7ec70a5796cef394c92c096d038bc2e96b589b17a5c64658"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r01/320x568-match-unmatched.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r01/320x568-match-unmatched.png",
+      "bytes": 57425,
+      "sha256": "552e38b922433b49b118cfdaa20ccdbd595a1f8c074f90796671c3050b929a70"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r01/report.json",
+      "path": "docs/qa/professional-card-reader-r04/captures-r01/report.json",
+      "bytes": 262756,
+      "sha256": "01147b1bf50106b0f55c2538f471b9bfa932bd189a74197a2b57df8821c10474"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r02/320x568-match-matched-focus-reader.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r02/320x568-match-matched-focus-reader.png",
+      "bytes": 68206,
+      "sha256": "be51274eca30ca196c8c719aeb308ef06a9b7bd31c1b543d151ef70726e18193"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r02/320x568-match-matched-focus-register.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r02/320x568-match-matched-focus-register.png",
+      "bytes": 66380,
+      "sha256": "d31b2bc8db38452feeb9bb0aeb590af44fda55b5fa3cccd80fa018f2c19c1005"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r02/320x568-match-selected-reader.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r02/320x568-match-selected-reader.png",
+      "bytes": 59110,
+      "sha256": "1c78d3d4fe4a2dc8a569312394058c93540fa7d7291dff2f6aff6ecc35b07001"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r02/320x568-match-unmatched.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r02/320x568-match-unmatched.png",
+      "bytes": 57678,
+      "sha256": "40f0f86958a44e55842ec6486dba928215ae8c054d36bdd1aea8cb1d38ebd1b3"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r02/pixel-mismatch-round1-barcode.product-code.n-actual.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r02/pixel-mismatch-round1-barcode.product-code.n-actual.png",
+      "bytes": 27108,
+      "sha256": "45dd1a87e510a34d3103e109e8bccb990f6a824762778e37cf75caf0e6dfceb0"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r02/pixel-mismatch-round1-barcode.product-code.n-expected.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r02/pixel-mismatch-round1-barcode.product-code.n-expected.png",
+      "bytes": 27650,
+      "sha256": "a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r02/pixel-mismatch-round1-shopping-basket.store-container.n-actual.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r02/pixel-mismatch-round1-shopping-basket.store-container.n-actual.png",
+      "bytes": 100378,
+      "sha256": "7e4dcd04d77c9bd59492b2e718a04b40149525a6a73441d30ac4573376c27a03"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r02/pixel-mismatch-round1-shopping-basket.store-container.n-expected.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r02/pixel-mismatch-round1-shopping-basket.store-container.n-expected.png",
+      "bytes": 105604,
+      "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r02/report.json",
+      "path": "docs/qa/professional-card-reader-r04/captures-r02/report.json",
+      "bytes": 264575,
+      "sha256": "ab0d29c2c21c50286503b8cfc8b90d7d49a55a196fd524afde5e265c9c62fd8c"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r03/320x568-match-matched-focus-reader.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r03/320x568-match-matched-focus-reader.png",
+      "bytes": 72107,
+      "sha256": "4c4b0d06c71c5219f4a2568e9b763e068d7af5aa01fae43bb968153c9c09d250"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r03/320x568-match-matched-focus-register.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r03/320x568-match-matched-focus-register.png",
+      "bytes": 70566,
+      "sha256": "fb75401bd86fb484ec0c5812a47dd8c227aaf00f73cac7d9b1ee13914412ef63"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r03/320x568-match-selected-reader.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r03/320x568-match-selected-reader.png",
+      "bytes": 57626,
+      "sha256": "333c8b07b0b90b018d4a701865dc496908667489f3dd91451a42a934b9211bd4"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r03/320x568-match-unmatched.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r03/320x568-match-unmatched.png",
+      "bytes": 57592,
+      "sha256": "4dd691588286b33155e0831320b4a4d88698e5254b467b95d022206d7a5f05a5"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r03/320x568-memory-backs.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r03/320x568-memory-backs.png",
+      "bytes": 42850,
+      "sha256": "455625ccadc68b0c6aefb4db4b5bd41166b63efdd2dea71f3bed29ed6e3bfbaf"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r03/320x568-memory-matched-three.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r03/320x568-memory-matched-three.png",
+      "bytes": 60821,
+      "sha256": "b1b6e43d15c8f2adf19c23b68c7fb41c83a44e298552c3bcfbf94c7bb32a14a1"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r03/320x568-memory-peek-unmatched.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r03/320x568-memory-peek-unmatched.png",
+      "bytes": 57757,
+      "sha256": "307045963a31292c0e5f18bfbe6bb04e848fae7c1575744e6bd443706d53ba60"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r03/320x568-memory-selected-reader.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r03/320x568-memory-selected-reader.png",
+      "bytes": 44811,
+      "sha256": "cc40cb3cbf774a7fecc69fffa38e4e6daa63887eeb02ca7881cea8bdfa32ed0f"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r03/report.json",
+      "path": "docs/qa/professional-card-reader-r04/captures-r03/report.json",
+      "bytes": 425551,
+      "sha256": "374cc4127b5706eb789761afdb5971aa316fa428afa595c77ab3c46da733b6c3"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r03/source-readback-round1-barcode.product-code.n-actual.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r03/source-readback-round1-barcode.product-code.n-actual.png",
+      "bytes": 27108,
+      "sha256": "45dd1a87e510a34d3103e109e8bccb990f6a824762778e37cf75caf0e6dfceb0"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r03/source-readback-round1-barcode.product-code.n-expected.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r03/source-readback-round1-barcode.product-code.n-expected.png",
+      "bytes": 27650,
+      "sha256": "a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r03/source-readback-round1-shopping-basket.store-container.n-actual.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r03/source-readback-round1-shopping-basket.store-container.n-actual.png",
+      "bytes": 100378,
+      "sha256": "7e4dcd04d77c9bd59492b2e718a04b40149525a6a73441d30ac4573376c27a03"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r03/source-readback-round1-shopping-basket.store-container.n-expected.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r03/source-readback-round1-shopping-basket.store-container.n-expected.png",
+      "bytes": 105604,
+      "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/1280x800-match-matched-focus-reader.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/1280x800-match-matched-focus-reader.png",
+      "bytes": 193251,
+      "sha256": "855ef75a643997809618c3ae1d794165824dc37f659a37fa34ff808e556266e0"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/1280x800-match-matched-focus-register.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/1280x800-match-matched-focus-register.png",
+      "bytes": 191723,
+      "sha256": "e07bdd5564e5e0e6d2ea02149f759226a34fc1405c982d5925b672ebc59ab8d8"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/1280x800-match-selected-reader.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/1280x800-match-selected-reader.png",
+      "bytes": 177123,
+      "sha256": "9a4926c319b2c2300869816e5a85eb7c3b54e2c9108ea8f86ff43c316d7dcb82"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/1280x800-match-unmatched.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/1280x800-match-unmatched.png",
+      "bytes": 175515,
+      "sha256": "78ad626889da0aa18373ad8e9b574f64c35eaf53e8cf34303e36f048313ed3bd"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/1280x800-memory-backs.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/1280x800-memory-backs.png",
+      "bytes": 49093,
+      "sha256": "5815093e5cb00d02d569a3e16afbed17f739294adb4970b58b77e82f4539b5aa"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/1280x800-memory-matched-three.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/1280x800-memory-matched-three.png",
+      "bytes": 132202,
+      "sha256": "b706d8737481f074d0a7130df9fff453cf558e06ae71dfe663e5d012eb4b696d"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/1280x800-memory-peek-unmatched.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/1280x800-memory-peek-unmatched.png",
+      "bytes": 184657,
+      "sha256": "cd7a3c3c86010cc2c474efcac4b625912ade2a08069cc2610f28dd84cbb3fa9d"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/1280x800-memory-selected-reader.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/1280x800-memory-selected-reader.png",
+      "bytes": 68933,
+      "sha256": "fce45e28e9341106f84c1fe7b052a74b26d8606ff693d55d6133d5564293c30d"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/320x568-match-matched-focus-reader.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/320x568-match-matched-focus-reader.png",
+      "bytes": 73042,
+      "sha256": "98f7f874f1d86365e81a7b8a91d5ad442d0f332b57a01b2dd1dcb68fe11cd724"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/320x568-match-matched-focus-register.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/320x568-match-matched-focus-register.png",
+      "bytes": 71391,
+      "sha256": "7d0586dbacc49542ee43f780e5180efd250f983bf95d7e5daf5445ad31df2aca"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/320x568-match-selected-reader.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/320x568-match-selected-reader.png",
+      "bytes": 58961,
+      "sha256": "d63634fc3f80046c3de6369e83ce9a8509b8bda71748b8f722c2befc0b88105f"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/320x568-match-unmatched.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/320x568-match-unmatched.png",
+      "bytes": 57561,
+      "sha256": "167113a8501d56f87cd528542efe3dc995a7be7498af929579e944e86e28f759"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/320x568-memory-backs.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/320x568-memory-backs.png",
+      "bytes": 37228,
+      "sha256": "edbb720373ba82ea28bb0db6762a8e4edcf2e2ffb36ea554140e35eb5697d425"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/320x568-memory-matched-three.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/320x568-memory-matched-three.png",
+      "bytes": 60183,
+      "sha256": "dab27e7500afb88493667f3bf444cd871918e2092a7cb8955b4337d3cb7344f3"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/320x568-memory-peek-unmatched.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/320x568-memory-peek-unmatched.png",
+      "bytes": 56724,
+      "sha256": "7b18f86329220c37e7b3b92065d30ad452794ae2a3fa59289bc29eae2ce8eb14"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/320x568-memory-selected-reader.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/320x568-memory-selected-reader.png",
+      "bytes": 41667,
+      "sha256": "06d332f5733333c62397e972abe6436b9fc8a27f951e373686ee1b7c4d7f64b0"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/390x844-match-matched-focus-reader.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/390x844-match-matched-focus-reader.png",
+      "bytes": 125080,
+      "sha256": "b4d6abc94b3eb19a2bb0a36e476339827c0d958ada8e2f129a6e9b81d9524fd0"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/390x844-match-matched-focus-register.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/390x844-match-matched-focus-register.png",
+      "bytes": 125228,
+      "sha256": "a0f7687ac220626bb3682fba439d86de250f441b576c3ab48b3c52bb8382798d"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/390x844-match-selected-reader.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/390x844-match-selected-reader.png",
+      "bytes": 103268,
+      "sha256": "27b2555ee65db4ee9b2f5e844b3ca237fd61ecc3909c0d4603d8466f605bc14d"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/390x844-match-unmatched.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/390x844-match-unmatched.png",
+      "bytes": 101468,
+      "sha256": "2f5be2ba6f0de543ed76bb3223769c11c675e0807e1056edb5d8b851288af9b3"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/390x844-memory-backs.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/390x844-memory-backs.png",
+      "bytes": 58551,
+      "sha256": "c967506ea2697ec05a1d8d20a35cf5dfc6b1e30131af2576d1e56e86747a5fbe"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/390x844-memory-matched-three.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/390x844-memory-matched-three.png",
+      "bytes": 89965,
+      "sha256": "5afd36c246229afa2d0343f3fe95f526beb28a77645605ea684d45977b28352b"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/390x844-memory-peek-unmatched.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/390x844-memory-peek-unmatched.png",
+      "bytes": 103935,
+      "sha256": "9326838d56cf25f4d525c0681ccaf3aae8cd23faa946bc82a05e56242d4af727"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/390x844-memory-selected-reader.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/390x844-memory-selected-reader.png",
+      "bytes": 68155,
+      "sha256": "097d7709b8be425eb708075aaea024b8b93fbd68d9a95def59a938c8350962cb"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/844x390-match-matched-focus-reader.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/844x390-match-matched-focus-reader.png",
+      "bytes": 98532,
+      "sha256": "5d97a5c62c6af1a98d6c18454f84414873f9362a9442e704eb7cb5847ecb9732"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/844x390-match-matched-focus-register.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/844x390-match-matched-focus-register.png",
+      "bytes": 98576,
+      "sha256": "da3b5ab5a4a09175bb34a1b80d1419b10ad3ac898c2a4da64b7a1dd73c3608a6"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/844x390-match-selected-reader.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/844x390-match-selected-reader.png",
+      "bytes": 77262,
+      "sha256": "77701147607ae037d9f854881f769cc4b971a5b526b9ae9fcc1462692256854d"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/844x390-match-unmatched.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/844x390-match-unmatched.png",
+      "bytes": 75644,
+      "sha256": "4b2491f0fe51eebc812fea73782f629e11a52133c8bc8cb310fc303bf745da76"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/844x390-memory-backs.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/844x390-memory-backs.png",
+      "bytes": 40041,
+      "sha256": "992e603161cdb0be44619df36b53173b5d9d1343b269617665b4f78458ea548d"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/844x390-memory-matched-three.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/844x390-memory-matched-three.png",
+      "bytes": 77686,
+      "sha256": "67d7096a540810e7e9de66a4927c09bfd1f2379869347b14ada678225ee461d5"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/844x390-memory-peek-unmatched.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/844x390-memory-peek-unmatched.png",
+      "bytes": 93936,
+      "sha256": "6ddc8a6467392783a67b161b0becdfacf4a778aa5744ad081706cc667d3fa667"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/844x390-memory-selected-reader.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/844x390-memory-selected-reader.png",
+      "bytes": 51339,
+      "sha256": "f321bd593fa1c2eaa3bb62badbeb4ccaaf5d0ae87cc2898b9306152ebde33942"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/report.json",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/report.json",
+      "bytes": 1441964,
+      "sha256": "a0af9f3222a499008dda07a9af5b2c765aaebef4b4046187df99af55a630f0a6"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round1-barcode.product-code.n-actual.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round1-barcode.product-code.n-actual.png",
+      "bytes": 27108,
+      "sha256": "45dd1a87e510a34d3103e109e8bccb990f6a824762778e37cf75caf0e6dfceb0"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round1-barcode.product-code.n-expected.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round1-barcode.product-code.n-expected.png",
+      "bytes": 27650,
+      "sha256": "a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round1-shopping-basket.store-container.n-actual.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round1-shopping-basket.store-container.n-actual.png",
+      "bytes": 100378,
+      "sha256": "7e4dcd04d77c9bd59492b2e718a04b40149525a6a73441d30ac4573376c27a03"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round1-shopping-basket.store-container.n-expected.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round1-shopping-basket.store-container.n-expected.png",
+      "bytes": 105604,
+      "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round2-barcode.product-code.n-actual.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round2-barcode.product-code.n-actual.png",
+      "bytes": 27108,
+      "sha256": "45dd1a87e510a34d3103e109e8bccb990f6a824762778e37cf75caf0e6dfceb0"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round2-barcode.product-code.n-expected.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round2-barcode.product-code.n-expected.png",
+      "bytes": 27650,
+      "sha256": "a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round2-shopping-basket.store-container.n-actual.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round2-shopping-basket.store-container.n-actual.png",
+      "bytes": 100378,
+      "sha256": "7e4dcd04d77c9bd59492b2e718a04b40149525a6a73441d30ac4573376c27a03"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round2-shopping-basket.store-container.n-expected.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round2-shopping-basket.store-container.n-expected.png",
+      "bytes": 105604,
+      "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round3-barcode.product-code.n-actual.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round3-barcode.product-code.n-actual.png",
+      "bytes": 27108,
+      "sha256": "45dd1a87e510a34d3103e109e8bccb990f6a824762778e37cf75caf0e6dfceb0"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round3-barcode.product-code.n-expected.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round3-barcode.product-code.n-expected.png",
+      "bytes": 27650,
+      "sha256": "a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round3-shopping-basket.store-container.n-actual.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round3-shopping-basket.store-container.n-actual.png",
+      "bytes": 100378,
+      "sha256": "7e4dcd04d77c9bd59492b2e718a04b40149525a6a73441d30ac4573376c27a03"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round3-shopping-basket.store-container.n-expected.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round3-shopping-basket.store-container.n-expected.png",
+      "bytes": 105604,
+      "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round4-barcode.product-code.n-actual.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round4-barcode.product-code.n-actual.png",
+      "bytes": 27108,
+      "sha256": "45dd1a87e510a34d3103e109e8bccb990f6a824762778e37cf75caf0e6dfceb0"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round4-barcode.product-code.n-expected.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round4-barcode.product-code.n-expected.png",
+      "bytes": 27650,
+      "sha256": "a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round4-shopping-basket.store-container.n-actual.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round4-shopping-basket.store-container.n-actual.png",
+      "bytes": 100378,
+      "sha256": "7e4dcd04d77c9bd59492b2e718a04b40149525a6a73441d30ac4573376c27a03"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round4-shopping-basket.store-container.n-expected.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round4-shopping-basket.store-container.n-expected.png",
+      "bytes": 105604,
+      "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round5-barcode.product-code.n-actual.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round5-barcode.product-code.n-actual.png",
+      "bytes": 27108,
+      "sha256": "45dd1a87e510a34d3103e109e8bccb990f6a824762778e37cf75caf0e6dfceb0"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round5-barcode.product-code.n-expected.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round5-barcode.product-code.n-expected.png",
+      "bytes": 27650,
+      "sha256": "a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round5-shopping-basket.store-container.n-actual.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round5-shopping-basket.store-container.n-actual.png",
+      "bytes": 100378,
+      "sha256": "7e4dcd04d77c9bd59492b2e718a04b40149525a6a73441d30ac4573376c27a03"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round5-shopping-basket.store-container.n-expected.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round5-shopping-basket.store-container.n-expected.png",
+      "bytes": 105604,
+      "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round6-barcode.product-code.n-actual.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round6-barcode.product-code.n-actual.png",
+      "bytes": 27108,
+      "sha256": "45dd1a87e510a34d3103e109e8bccb990f6a824762778e37cf75caf0e6dfceb0"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round6-barcode.product-code.n-expected.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round6-barcode.product-code.n-expected.png",
+      "bytes": 27650,
+      "sha256": "a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round6-shopping-basket.store-container.n-actual.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round6-shopping-basket.store-container.n-actual.png",
+      "bytes": 100378,
+      "sha256": "7e4dcd04d77c9bd59492b2e718a04b40149525a6a73441d30ac4573376c27a03"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round6-shopping-basket.store-container.n-expected.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round6-shopping-basket.store-container.n-expected.png",
+      "bytes": 105604,
+      "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round7-barcode.product-code.n-actual.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round7-barcode.product-code.n-actual.png",
+      "bytes": 27108,
+      "sha256": "45dd1a87e510a34d3103e109e8bccb990f6a824762778e37cf75caf0e6dfceb0"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round7-barcode.product-code.n-expected.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round7-barcode.product-code.n-expected.png",
+      "bytes": 27650,
+      "sha256": "a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round7-shopping-basket.store-container.n-actual.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round7-shopping-basket.store-container.n-actual.png",
+      "bytes": 100378,
+      "sha256": "7e4dcd04d77c9bd59492b2e718a04b40149525a6a73441d30ac4573376c27a03"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round7-shopping-basket.store-container.n-expected.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round7-shopping-basket.store-container.n-expected.png",
+      "bytes": 105604,
+      "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round8-barcode.product-code.n-actual.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round8-barcode.product-code.n-actual.png",
+      "bytes": 27108,
+      "sha256": "45dd1a87e510a34d3103e109e8bccb990f6a824762778e37cf75caf0e6dfceb0"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round8-barcode.product-code.n-expected.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round8-barcode.product-code.n-expected.png",
+      "bytes": 27650,
+      "sha256": "a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round8-shopping-basket.store-container.n-actual.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round8-shopping-basket.store-container.n-actual.png",
+      "bytes": 100378,
+      "sha256": "7e4dcd04d77c9bd59492b2e718a04b40149525a6a73441d30ac4573376c27a03"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/captures-r04/source-readback-round8-shopping-basket.store-container.n-expected.png",
+      "path": "docs/qa/professional-card-reader-r04/captures-r04/source-readback-round8-shopping-basket.store-container.n-expected.png",
+      "bytes": 105604,
+      "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/pixel-diagnostic-r01/barcode-product-code-n-decoded.png",
+      "path": "docs/qa/professional-card-reader-r04/pixel-diagnostic-r01/barcode-product-code-n-decoded.png",
+      "bytes": 27650,
+      "sha256": "a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/pixel-diagnostic-r01/barcode-product-code-n-source.png",
+      "path": "docs/qa/professional-card-reader-r04/pixel-diagnostic-r01/barcode-product-code-n-source.png",
+      "bytes": 27650,
+      "sha256": "a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/pixel-diagnostic-r01/card-reader-payment-device-n-decoded.png",
+      "path": "docs/qa/professional-card-reader-r04/pixel-diagnostic-r01/card-reader-payment-device-n-decoded.png",
+      "bytes": 92970,
+      "sha256": "2d9a245a8a7d654dcffc486c889db9b7cff3b07e2ef72cc723daf37326e148ea"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/pixel-diagnostic-r01/card-reader-payment-device-n-source.png",
+      "path": "docs/qa/professional-card-reader-r04/pixel-diagnostic-r01/card-reader-payment-device-n-source.png",
+      "bytes": 92970,
+      "sha256": "2d9a245a8a7d654dcffc486c889db9b7cff3b07e2ef72cc723daf37326e148ea"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/pixel-diagnostic-r01/cash-register-sales-device-n-decoded.png",
+      "path": "docs/qa/professional-card-reader-r04/pixel-diagnostic-r01/cash-register-sales-device-n-decoded.png",
+      "bytes": 172442,
+      "sha256": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/pixel-diagnostic-r01/cash-register-sales-device-n-source.png",
+      "path": "docs/qa/professional-card-reader-r04/pixel-diagnostic-r01/cash-register-sales-device-n-source.png",
+      "bytes": 172442,
+      "sha256": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/pixel-diagnostic-r01/report.json",
+      "path": "docs/qa/professional-card-reader-r04/pixel-diagnostic-r01/report.json",
+      "bytes": 4853,
+      "sha256": "ae96f87fee1bdbfaed163b278b2ed98f18bcc1229749788cc728276c9d89501e"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/pixel-diagnostic-r01/shopping-bag-goods-carrier-n-decoded.png",
+      "path": "docs/qa/professional-card-reader-r04/pixel-diagnostic-r01/shopping-bag-goods-carrier-n-decoded.png",
+      "bytes": 147868,
+      "sha256": "ed37df88dcc69ea25ee24f2901d78cdff08f2d95b7706f3e2bd8aac97aea590d"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/pixel-diagnostic-r01/shopping-bag-goods-carrier-n-source.png",
+      "path": "docs/qa/professional-card-reader-r04/pixel-diagnostic-r01/shopping-bag-goods-carrier-n-source.png",
+      "bytes": 147868,
+      "sha256": "ed37df88dcc69ea25ee24f2901d78cdff08f2d95b7706f3e2bd8aac97aea590d"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/pixel-diagnostic-r01/shopping-basket-store-container-n-decoded.png",
+      "path": "docs/qa/professional-card-reader-r04/pixel-diagnostic-r01/shopping-basket-store-container-n-decoded.png",
+      "bytes": 105604,
+      "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/pixel-diagnostic-r01/shopping-basket-store-container-n-source.png",
+      "path": "docs/qa/professional-card-reader-r04/pixel-diagnostic-r01/shopping-basket-store-container-n-source.png",
+      "bytes": 105604,
+      "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/pixel-diagnostic-r02/barcode-product-code-n-decoded.png",
+      "path": "docs/qa/professional-card-reader-r04/pixel-diagnostic-r02/barcode-product-code-n-decoded.png",
+      "bytes": 27108,
+      "sha256": "45dd1a87e510a34d3103e109e8bccb990f6a824762778e37cf75caf0e6dfceb0"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/pixel-diagnostic-r02/barcode-product-code-n-source.png",
+      "path": "docs/qa/professional-card-reader-r04/pixel-diagnostic-r02/barcode-product-code-n-source.png",
+      "bytes": 27650,
+      "sha256": "a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/pixel-diagnostic-r02/card-reader-payment-device-n-decoded.png",
+      "path": "docs/qa/professional-card-reader-r04/pixel-diagnostic-r02/card-reader-payment-device-n-decoded.png",
+      "bytes": 92970,
+      "sha256": "2d9a245a8a7d654dcffc486c889db9b7cff3b07e2ef72cc723daf37326e148ea"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/pixel-diagnostic-r02/card-reader-payment-device-n-source.png",
+      "path": "docs/qa/professional-card-reader-r04/pixel-diagnostic-r02/card-reader-payment-device-n-source.png",
+      "bytes": 92970,
+      "sha256": "2d9a245a8a7d654dcffc486c889db9b7cff3b07e2ef72cc723daf37326e148ea"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/pixel-diagnostic-r02/cash-register-sales-device-n-decoded.png",
+      "path": "docs/qa/professional-card-reader-r04/pixel-diagnostic-r02/cash-register-sales-device-n-decoded.png",
+      "bytes": 172442,
+      "sha256": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/pixel-diagnostic-r02/cash-register-sales-device-n-source.png",
+      "path": "docs/qa/professional-card-reader-r04/pixel-diagnostic-r02/cash-register-sales-device-n-source.png",
+      "bytes": 172442,
+      "sha256": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/pixel-diagnostic-r02/report.json",
+      "path": "docs/qa/professional-card-reader-r04/pixel-diagnostic-r02/report.json",
+      "bytes": 15080,
+      "sha256": "982b7e2668327430e3fc698e3a11445cbc11b107d7901a66bede2fc292b92cb8"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/pixel-diagnostic-r02/shopping-bag-goods-carrier-n-decoded.png",
+      "path": "docs/qa/professional-card-reader-r04/pixel-diagnostic-r02/shopping-bag-goods-carrier-n-decoded.png",
+      "bytes": 147868,
+      "sha256": "ed37df88dcc69ea25ee24f2901d78cdff08f2d95b7706f3e2bd8aac97aea590d"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/pixel-diagnostic-r02/shopping-bag-goods-carrier-n-source.png",
+      "path": "docs/qa/professional-card-reader-r04/pixel-diagnostic-r02/shopping-bag-goods-carrier-n-source.png",
+      "bytes": 147868,
+      "sha256": "ed37df88dcc69ea25ee24f2901d78cdff08f2d95b7706f3e2bd8aac97aea590d"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/pixel-diagnostic-r02/shopping-basket-store-container-n-decoded.png",
+      "path": "docs/qa/professional-card-reader-r04/pixel-diagnostic-r02/shopping-basket-store-container-n-decoded.png",
+      "bytes": 100378,
+      "sha256": "7e4dcd04d77c9bd59492b2e718a04b40149525a6a73441d30ac4573376c27a03"
+    },
+    {
+      "source": "build/professional-english/card-reader-review-20261020/pixel-diagnostic-r02/shopping-basket-store-container-n-source.png",
+      "path": "docs/qa/professional-card-reader-r04/pixel-diagnostic-r02/shopping-basket-store-container-n-source.png",
+      "bytes": 105604,
+      "sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3"
+    },
+    {
+      "source": "tools/capture-professional-card-reader.gd",
+      "path": "docs/qa/professional-card-reader-r04/harness-at-review/capture-professional-card-reader.gd",
+      "bytes": 39067,
+      "sha256": "512123888db3643e105f4f433edb032d22d804c2f90f0128fb408423e1df1e2d"
+    },
+    {
+      "source": "tools/fixtures/professional-card-reader.json",
+      "path": "docs/qa/professional-card-reader-r04/harness-at-review/professional-card-reader.json",
+      "bytes": 10197,
+      "sha256": "02cccb396e1b923354334f49c9d15ab830241d2e39dd2db866526669651dc218"
+    },
+    {
+      "source": "tools/fixtures/professional-card-reader.md",
+      "path": "docs/qa/professional-card-reader-r04/harness-at-review/professional-card-reader.md",
+      "bytes": 3577,
+      "sha256": "d261bdf6a5cdd29663be00cccb3015c6b98d135b980740d153362d087c8e1207"
+    },
+    {
+      "source": "build/professional-english/card-reader-freesvg-acquisition-r01/206301-cropped-512.png",
+      "path": "professional-media/67cb3e6f8e0be881b51a7d18ecc28fd1a02fab6b650197a8d60ef9d550b07c59.png",
+      "bytes": 77565,
+      "sha256": "67cb3e6f8e0be881b51a7d18ecc28fd1a02fab6b650197a8d60ef9d550b07c59"
+    }
+  ]
+}

@@ -4,6 +4,9 @@ extends Control
 signal home_requested
 
 const Style = preload("res://scripts/ui_style.gd")
+const CompanionResult = preload("res://scripts/round_settlement.gd")
+const CompanionCelebration = preload("res://scripts/round_celebration.gd")
+const RewardRoom = preload("res://scripts/pop_reward_room.gd")
 
 var panel: Panel
 var _shade: ColorRect
@@ -20,7 +23,7 @@ func _init() -> void:
 	z_index = 90
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	_shade = ColorRect.new()
-	_shade.color = Color(0.10, 0.18, 0.15, 0.58)
+	_shade.color = Color(Style.INK, 0.52)
 	_shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_shade)
 	_shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -78,16 +81,19 @@ func _layout() -> void:
 		return
 	var s: float = Style.ui_scale(self)
 	var accent: Color = _palette.get("accent", Style.GOOD)
-	var surface := Style.box(Style.PAPER, accent.lightened(0.72), ceili(24 / s), maxi(1, roundi(1 / s)))
-	surface.shadow_color = Color(Style.INK, 0.24)
-	surface.shadow_size = ceili(20 / s)
-	surface.shadow_offset = Vector2(0, 8 / s)
+	var surface := Style.box(Style.PAPER, accent.lightened(0.70), ceili(24 / s), maxi(1, roundi(1 / s)))
+	surface.shadow_color = Color(Style.INK, 0.22)
+	surface.shadow_size = ceili(18 / s)
+	surface.shadow_offset = Vector2(0, 6 / s)
 	panel.add_theme_stylebox_override("panel", surface)
 	# Keep the reward close to its result and actions, even on a large canvas.
 	# A wide, short viewport still needs room for the two-column arrangement.
 	var landscape: bool = size.x * s >= 600 and size.y * s < 480
+	var companion_result: bool = _room is CompanionResult or _room is CompanionCelebration \
+		or (_room is RewardRoom and not _room._result_context.is_empty())
+	var chest_height: float = 460.0 if companion_result else 540.0
 	panel.size = Vector2(minf((560 if landscape else 480) / s, maxf(0, size.x - 32 / s)),
-		minf((540 if _has_chest else 300) / s, maxf(0, size.y - 32 / s)))
+		minf((chest_height if _has_chest else 300) / s, maxf(0, size.y - 32 / s)))
 	panel.position = (size - panel.size) * 0.5
 	panel.pivot_offset = panel.size * 0.5
 	if is_instance_valid(_room):

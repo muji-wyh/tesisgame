@@ -39,6 +39,9 @@ var _bank_max_scroll: float = 0.0
 var _scroll_start: float = 0.0
 var _rail_swiping: bool = false
 var _feedback: Label
+var _answer_hint: Label
+var _bank_heading: Label
+var _bank_hint: Label
 var _preview: Button
 var _palette: Dictionary = {}
 var _theme_id: String = "spring"
@@ -91,7 +94,16 @@ func _init() -> void:
 	_progress_caption = _label("1 / 3", 12)
 	_progress_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_progress_caption.add_theme_color_override("font_color", Style.MUTED)
-	_feedback = _label("Drag words into place.", 14)
+	_feedback = _label("Tap or drag a word.", 14)
+	_answer_hint = _label("Build your phrase here", 15)
+	_answer_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_answer_hint.add_theme_color_override("font_color", Style.MUTED)
+	_bank_heading = _label("Word bank", 12)
+	_bank_heading.add_theme_font_override("font", Style.HEADING_FONT)
+	_bank_heading.add_theme_color_override("font_color", Style.MUTED)
+	_bank_hint = _label("Scroll for more", 12)
+	_bank_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_bank_hint.add_theme_color_override("font_color", Style.GOOD)
 	listen_button = AudioBar.new()
 	listen_button.pressed.connect(play_prompt)
 	add_child(listen_button)
@@ -244,7 +256,7 @@ func stop() -> void:
 	pip.set_idle_paused(true)
 	listen_button.configure({}, false, _palette.get("accent", Style.GOOD))
 	listen_button.set_paused(true)
-	for control in [listen_button, action_button, _progress, _progress_caption, _bank_clip, _answer_clip]:
+	for control in [listen_button, action_button, _progress, _progress_caption, _bank_clip, _answer_clip, _answer_hint, _bank_heading, _bank_hint]:
 		control.hide()
 	action_button.disabled = true
 	_publish.call_deferred()
@@ -688,6 +700,7 @@ func _local_rect(control: Control) -> Rect2:
 func _scroll_bank(value: float) -> void:
 	_bank_scroll = clampf(value, 0.0, _bank_max_scroll)
 	_bank_content.position.x = -_bank_scroll / Style.ui_scale(self)
+	_update_bank_hint()
 	queue_redraw()
 	_publish.call_deferred()
 
@@ -741,6 +754,10 @@ func _draw() -> void:
 		return
 	var s: float = Style.ui_scale(self)
 	var accent: Color = _palette.get("accent", Style.GOOD)
+	var answer_edge: Color = accent if _drop_kind == "answer" else Style.GOOD if game.phase in ["correct", "finished"] else Style.EDGE
+	var answer_surface := Style.box(Style.SOFT if game.phase in ["correct", "finished"] else Style.SURFACE,
+		answer_edge, ceili(14 / s), maxi(1, ceili(1 / s)))
+	answer_surface.draw(get_canvas_item(), _answer_drop)
 	if _learning_backdrop_active:
 		var paper := Style.box(Color("#fffef9"), Color.TRANSPARENT, ceili(8 / s), 0)
 		for caption: Label in [_progress_caption, _feedback]:
@@ -750,8 +767,6 @@ func _draw() -> void:
 		var focus := Style.box(Color.TRANSPARENT, Style.INK, ceili(14 / s), ceili(2 / s))
 		focus.draw(get_canvas_item(), _local_rect(_answer_clip).grow(2 / s))
 	var line_y: float = _answer_drop.end.y - 2 / s
-	draw_line(Vector2(_answer_drop.position.x, line_y), Vector2(_answer_drop.end.x, line_y),
-		accent if _drop_kind == "answer" else Style.GOOD if game.phase in ["correct", "finished"] else Color("#b9cbbf"), 2 / s, true)
 	if _answer_max_scroll > 0:
 		var thumb: float = _answer_drop.size.x * _answer_drop.size.x / (_answer_drop.size.x + _answer_max_scroll / s)
 		var left: float = _answer_drop.position.x + (_answer_drop.size.x - thumb) * _answer_scroll / _answer_max_scroll
@@ -839,7 +854,8 @@ func _refresh() -> void:
 	_progress.value = game.completed
 	_progress.set("accessibility_name", "%d of 3 phrases complete" % game.completed)
 	_progress_caption.text = "%d / 3" % mini(game.question_index + 1, 3)
-	_feedback.text = "Well done!" if correct else "Try again." if wrong else "Drag words onto the line."
+	_feedback.text = "Well done!" if correct else "Try again." if wrong else "Tap or drag a word."
+	_answer_hint.visible = _configured and answer.is_empty() and game.phase == "building"
 	_feedback.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	_feedback.add_theme_color_override("font_color", Style.GOOD if correct else Style.WRONG if wrong else Style.MUTED)
 	for index in range(option_buttons.size()):
@@ -1023,14 +1039,15 @@ func _layout() -> void:
 	var short: bool = h < 234
 	var inner_w: float = minf(w, 820)
 	var x: float = (w - inner_w) * 0.5
-	var gap: float = 3 if short else 6 if compact else 24
+	var gap: float = 3 if short else 6 if compact else 18
 	var progress_h: float = 10 if short else 14 if compact else 24
-	var hero_h: float = 44 if short else 48 if compact else minf(64 if w < 400 else 112, h * 0.18)
+	var hero_h: float = 44 if short else 48 if compact else minf(64 if w < 400 else 80, h * 0.18)
 	var tile_h: float = 44 if compact else 58
 	var answer_h: float = tile_h + (8 if compact else 12)
 	var footer_h: float = 44 if compact else 50
-	var total_h: float = progress_h + hero_h + answer_h + tile_h + 8 + footer_h + gap * 4
-	var top: float = maxf(0, (h - total_h) * 0.38)
+	var bank_heading_h: float = 0 if compact else 22
+	var total_h: float = progress_h + hero_h + answer_h + tile_h + bank_heading_h + 8 + footer_h + gap * 4
+	var top: float = maxf(0, minf(40, (h - total_h) * 0.18))
 	_progress.add_theme_stylebox_override("background", Style.box(Color("#e1e9dd"), Color.TRANSPARENT, ceili(5 / s), 0))
 	_progress.add_theme_stylebox_override("fill", Style.box(accent, Color.TRANSPARENT, ceili(5 / s), 0))
 	for state in ["background", "fill"]:
@@ -1049,9 +1066,16 @@ func _layout() -> void:
 	var answer_y: float = hero_y + hero_h + gap
 	_answer_drop = Rect2(Vector2(x, answer_y) / s, Vector2(inner_w, answer_h) / s)
 	_place(_answer_clip, Rect2(x, answer_y, inner_w, tile_h))
+	_answer_hint.add_theme_font_size_override("font_size", ceili((13 if compact else 15) / s))
+	_place(_answer_hint, Rect2(x + 12, answer_y, inner_w - 24, answer_h))
 	var picture_w: float = 28 if compact else 40
 	_layout_answer()
-	var bank_y: float = answer_y + answer_h + gap
+	var bank_y: float = answer_y + answer_h + gap + bank_heading_h
+	_bank_heading.visible = _configured and not compact
+	_bank_heading.add_theme_font_size_override("font_size", ceili(12 / s))
+	_place(_bank_heading, Rect2(x, bank_y - bank_heading_h, inner_w * 0.5, bank_heading_h))
+	_bank_hint.add_theme_font_size_override("font_size", ceili(12 / s))
+	_place(_bank_hint, Rect2(x + inner_w * 0.5, bank_y - bank_heading_h, inner_w * 0.5, bank_heading_h))
 	_place(_bank_clip, Rect2(x, bank_y, inner_w, tile_h))
 	var cursor: float = 0
 	for index in range(option_buttons.size()):
@@ -1069,6 +1093,7 @@ func _layout() -> void:
 	_bank_scroll = clampf(_bank_scroll, 0, _bank_max_scroll)
 	_bank_content.position = Vector2(-_bank_scroll / s, 0)
 	_bank_drop = Rect2(Vector2(x, bank_y) / s, Vector2(inner_w, tile_h) / s)
+	_update_bank_hint()
 	var footer_y: float = bank_y + tile_h + 8 + gap
 	var action_w: float = minf(184, inner_w)
 	_place(action_button, Rect2(x + inner_w - action_w, footer_y, action_w, footer_h))
@@ -1077,6 +1102,12 @@ func _layout() -> void:
 	_place(_feedback, Rect2(x, footer_y, maxf(0, inner_w - action_w - 12), footer_h))
 	queue_redraw()
 	_publish.call_deferred()
+
+
+func _update_bank_hint() -> void:
+	if not is_instance_valid(_bank_hint):
+		return
+	_bank_hint.visible = _configured and _bank_heading.visible and _bank_max_scroll > 0
 
 
 func _rect_snapshot(rect: Rect2) -> Array:

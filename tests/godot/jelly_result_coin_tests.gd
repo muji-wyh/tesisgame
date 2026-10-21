@@ -141,9 +141,12 @@ func finish_result(app, tier: int) -> void:
 		"Finishing keeps only the final synthesized chest tier")
 	check(app.coin_wallet.balance == 0 and not app._coin_flight.snapshot().active,
 		"Earning a result chest alone does not credit or animate coins")
+	check(app._round_celebration.is_active() == (tier > 0),
+		"Only an earned chest uses the shared Pip entrance before opening")
+	Fixture.finish_celebration(app)
 	check(app._jelly_rewards_shown and app._settlement_dialog.is_visible_in_tree()
 		and app._settlement_dialog.is_ancestor_of(app._jelly_rewards) and not app._round_celebration.is_active(),
-		"Every Finish immediately opens settlement inside the modal without an intermission")
+		"The entrance hands its saved reward to settlement inside the same modal")
 	check(app._jelly_backdrop.is_visible_in_tree() and app._jelly.is_visible_in_tree(),
 		"Interactive settlement keeps the frozen Jelly board behind its shade")
 	check_result_context(app, score, tier)
@@ -160,8 +163,8 @@ func check_result_context(app, score: int, tier: int) -> void:
 	var room = app._jelly_rewards
 	check(int(room.snapshot().result_context.get("score", -1)) == score and int(room.snapshot().result_context.get("chest_tier", -1)) == tier,
 		"The result room retains the actual round score and earned tier")
-	check(room._heading.text == "Round complete" and room._heading.is_visible_in_tree()
-		and room._result_score.text == str(score) and room._result_score.is_visible_in_tree(),
+	check(room._heading.text == ("You earned a chest!" if tier > 0 else "Round complete") and room._heading.is_visible_in_tree()
+		and room.snapshot().score_text == str(score) and room._result_score.is_visible_in_tree(),
 		"Score and result heading remain visible alongside the interactive chest")
 	check(room._back.text == "Play again" and room._back.is_visible_in_tree(),
 		"The interactive result offers a direct Play again action")

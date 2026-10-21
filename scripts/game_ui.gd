@@ -24,6 +24,7 @@ const PricedIcons = preload("res://scripts/priced_icon_button.gd")
 const Economy = preload("res://scripts/coin_economy.gd")
 const MemoryGarden = preload("res://scripts/memory_garden.gd")
 const MemoryPeekCountdown = preload("res://scripts/memory_peek_countdown.gd")
+const MemoryRewardBadge = preload("res://scripts/memory_reward_badge.gd")
 const PhraseGame = preload("res://scripts/phrase_game.gd")
 const RoundCelebration = preload("res://scripts/round_celebration.gd")
 const PairChestReward = preload("res://scripts/pair_chest_reward.gd")
@@ -126,6 +127,8 @@ var _coin_published: String = ""
 var _pair_reward: PairChestReward
 var _pair_reward_row: Control
 var _memory_peek_countdown: MemoryPeekCountdown
+var _memory_reward: MemoryRewardBadge
+var _memory_stage_label: Label
 var _reward_confetti: RewardConfetti
 var _confetti_reward_keys: Dictionary = {}
 var _pair_words: Array[String] = []
@@ -144,6 +147,9 @@ var _collection_margins: MarginContainer
 var _age_choices: VBoxContainer
 var _age_row: HBoxContainer
 var _age_scroll: ReviewScroll
+var _age_navigation: HBoxContainer
+var _age_previous: Icons
+var _age_next: Icons
 var _age_buttons: Dictionary = {}
 var _age_notice: Label
 var _age_catalog: AgeWordCatalog
@@ -612,11 +618,10 @@ func _build_controls() -> void:
 	_header_spacer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_header_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(_header_spacer)
-	_mode_heading_button = Button.new()
+	_mode_heading_button = Icons.new()
+	_mode_heading_button.set("symbol", Icons.Symbol.HOME)
 	_mode_heading_button.name = "Home"
 	_set_accessibility_name(_mode_heading_button, "Home. Return home to choose a game")
-	_mode_heading_button.icon = preload("res://assets/images/ui/home.webp")
-	_mode_heading_button.expand_icon = true
 	_mode_heading_button.pressed.connect(_toggle_mode_menu)
 	_header_spacer.add_child(_mode_heading_button)
 	_coin_counter = CoinCounter.new()
@@ -679,6 +684,16 @@ func _build_controls() -> void:
 	_memory_peek_countdown = MemoryPeekCountdown.new()
 	_memory_peek_countdown.name = "MemoryPeekCountdown"
 	_pair_reward_row.add_child(_memory_peek_countdown)
+	_memory_peek_countdown.skip_requested.connect(_skip_memory_observation)
+	_memory_reward = MemoryRewardBadge.new()
+	_memory_reward.name = "MemoryRewardBadge"
+	_pair_reward_row.add_child(_memory_reward)
+	_memory_stage_label = Style.label("Start game", 17)
+	_memory_stage_label.name = "MemoryStage"
+	_memory_stage_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_memory_stage_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_memory_stage_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_pair_reward_row.add_child(_memory_stage_label)
 	_pair_reward_row.resized.connect(_layout_pair_reward)
 	_voice_space = Control.new()
 	_voice_space.name = "SpeechPanelSpace"
@@ -722,7 +737,6 @@ func _build_controls() -> void:
 	_memory = MemoryGarden.new()
 	_memory.name = "MemoryGarden"
 	_memory.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_memory.card_revealed.connect(_memory_revealed)
 	_memory.answer_chosen.connect(_memory_answer)
 	_memory.round_finished.connect(_memory_finished)
 	_memory.prompt_ready.connect(_memory_prompt)
@@ -1095,12 +1109,14 @@ func _settle_completed_round_rewards() -> bool:
 	# Home and replay share the same durable receipts as opening by hand.
 	# Settle an in-flight opening before leaving, including an incomplete hold.
 	if _is_jelly_mode():
+		_stop_round_celebration()
 		_controller_holding_jelly_chest = false
 		if not _save_jelly_round_reward() or not _jelly_rewards.collect_all_coins():
 			_show_jelly_rewards()
 			_announce_status("Your coins are waiting to be saved. Choose Retry save.")
 			return false
 	elif _mode_id == "pop":
+		_stop_round_celebration()
 		_controller_holding_pop_chest = false
 		if not _save_pop_round_reward() or not _pop_rewards.collect_all_coins():
 			_show_pop_rewards()
@@ -1418,9 +1434,29 @@ func _hear_professional_word(word: Dictionary) -> void:
 func _build_age_choices() -> void:
 	_age_choices = VBoxContainer.new()
 	_collection_column.add_child(_age_choices)
+	_age_navigation = HBoxContainer.new()
+	_age_choices.add_child(_age_navigation)
+	_age_previous = Icons.new()
+	_age_previous.name = "GrowthAgePrevious"
+	_age_previous.symbol = Icons.Symbol.BACK
+	_set_accessibility_name(_age_previous, "Earlier ages")
+	_age_previous.pressed.connect(_scroll_age_choices.bind(-1))
+	UiClick.bind_button(_age_previous)
+	_age_navigation.add_child(_age_previous)
 	_age_scroll = ReviewScroll.new()
 	_age_scroll.interaction_allowed = _can_browse_collection
-	_age_choices.add_child(_age_scroll)
+	_age_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_age_navigation.add_child(_age_scroll)
+	_age_next = Icons.new()
+	_age_next.name = "GrowthAgeNext"
+	_age_next.symbol = Icons.Symbol.NEXT
+	_set_accessibility_name(_age_next, "Later ages")
+	_age_next.pressed.connect(_scroll_age_choices.bind(1))
+	UiClick.bind_button(_age_next)
+	_age_navigation.add_child(_age_next)
+	_age_navigation.resized.connect(_refresh_age_navigation)
+	_age_scroll.get_h_scroll_bar().changed.connect(_refresh_age_navigation)
+	_age_scroll.get_h_scroll_bar().value_changed.connect(func(_value: float) -> void: _refresh_age_navigation())
 	_age_row = HBoxContainer.new()
 	_age_scroll.add_child(_age_row)
 	for band in Data.age_bands():
@@ -1437,6 +1473,25 @@ func _build_age_choices() -> void:
 	_age_notice = Style.label("", 13)
 	_age_notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_age_choices.add_child(_age_notice)
+
+
+func _refresh_age_navigation() -> void:
+	if not is_instance_valid(_age_row):
+		return
+	var overflow: bool = _age_row.get_combined_minimum_size().x > _age_navigation.size.x
+	_age_previous.visible = overflow
+	_age_next.visible = overflow
+	_age_previous.disabled = _age_scroll.scroll_horizontal <= 0
+	var bar := _age_scroll.get_h_scroll_bar()
+	_age_next.disabled = bar.value >= bar.max_value - bar.page - 1
+
+
+func _scroll_age_choices(direction: int) -> void:
+	if not _can_browse_collection():
+		return
+	_age_scroll.cancel_drag()
+	_age_scroll.scroll_horizontal += roundi(_age_scroll.size.x * 0.75) * direction
+	_refresh_age_navigation()
 
 
 func _choose_age_band(id: String) -> void:
@@ -1487,7 +1542,8 @@ func _refresh_age_choices() -> void:
 	for id in _age_buttons:
 		_age_buttons[id].set_pressed_no_signal(int(id) == _catalog_age)
 		_age_buttons[id].set("accessibility_description", "Preview: complete the previous age's words to unlock" if int(id) > growth.learning_age() else "Review this age's words")
-	_age_notice.text = "Preview only. Complete your current age's words to unlock this set." if _catalog_age > growth.learning_age() else "%d correct answers in a row master a word. A mistake resets that word; earned Lv and age stay." % GrowthState.MASTERY_STREAK
+	_age_notice.text = "Preview only · Master your current age's words to unlock this set." if _catalog_age > growth.learning_age() else "Master a word with %d correct answers in a row. Mistakes reset its streak." % GrowthState.MASTERY_STREAK
+	_age_notice.set("accessibility_description", "Earned levels and unlocked ages are kept when a word's streak resets.")
 	if _growth_save_failed:
 		_age_notice.text = "Learning progress could not be saved. Return to the game and choose Retry saving."
 	_refresh_growth()
@@ -1678,7 +1734,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	else:
 		professional.leave()
 	var prepared: bool = model.reset(content.words, seed_value, repeat_lesson, adventure_id,
-		required_word_id, str(growth.learning_age()), true, next_context) if _mode_id in ["match", "memory"] \
+		required_word_id, str(growth.learning_age()), _mode_id == "match", next_context) if _mode_id in ["match", "memory"] \
 		else model.prepare_activity(_mode_id, str(growth.learning_age()), seed_value, repeat_lesson, next_context)
 	if not prepared:
 		_rebuilding = false
@@ -1702,6 +1758,10 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	_pair_save_failed = false
 	_pair_settlement_pending = false
 	_pair_reward.clear()
+	_memory_reward.reset()
+	if _mode_id == "memory":
+		# The header is a potential reward; only completing the round earns it.
+		model.chest_earned = false
 	if _mode_id in ["match", "memory"]:
 		_pair_reward.configure(_round_id, JellyRewardProgress.theme_for_tier(1), data.chests, reduced_motion)
 		_sync_pair_reward()
@@ -1750,6 +1810,9 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 			_jelly_rewards.configure_saved(data.chests, reduced_motion)
 			_jelly_rewards_shown = true
 	_rebuilding = false
+	# New activity views start with the legacy reward palette. Reapply the course
+	# palette even when Home or the preceding round already selected this theme.
+	_learning_theme_key = ""
 	_refresh()
 	_layout()
 	return true
@@ -1797,7 +1860,6 @@ func _configure_pop(seed_value: int = -1, resolved_words: Array = []) -> void:
 	_pop.game.practice_weight_for = _practice_weight
 	_pop.configure(pool, reduced_motion, seed_value)
 	_pop.apply_theme(Data.theme(model.theme_id), data.chests)
-	_pop.retry_button.text = "Play again"
 
 
 func _preflight_professional_round(content: Dictionary, seed_value: int) -> String:
@@ -2108,6 +2170,17 @@ func _show_jelly_rewards() -> void:
 	elif not _jelly_rewards.configure_saved(data.chests, reduced_motion) and not _jelly_rewards.has_pending():
 		return
 	_jelly_rewards.set_result_context(_round_result if _active_jelly().game.phase == "finished" else {}, _round_id)
+	_jelly_rewards.set_companion(_jelly_reward_theme, growth.age)
+	if _jelly_round_ended() and int(_round_result.get("chest_count", 0)) > 0 and _celebration_seen_id != _round_id:
+		if _jelly_reward_saved and not _jelly_rewards._save_failed and not _jelly_settling:
+			_jelly_rewards.pause()
+			_jelly_rewards_shown = false
+			_active_jelly().cancel_input()
+			_begin_round_celebration(int(_round_result.chest_count))
+			_refresh()
+			return
+		# Storage recovery stays actionable instead of waiting behind a performance.
+		_celebration_seen_id = _round_id
 	_stop_controller_actions()
 	_controller_accept_needs_release = _controller_accept_is_pressed()
 	_active_jelly().cancel_input()
@@ -2333,7 +2406,7 @@ func _pop_reward_cue(cue: String) -> void:
 
 
 func _show_pop_rewards() -> void:
-	if _mode_id != "pop" or collection_page.visible or _page_hidden:
+	if _mode_id != "pop" or _round_celebration_active() or collection_page.visible or _page_hidden:
 		return
 	if not _stop_pop_listening():
 		return
@@ -2347,6 +2420,16 @@ func _show_pop_rewards() -> void:
 		if not restored and not _pop_rewards.has_pending():
 			return
 	_pop_rewards.set_result_context(_round_result if _pop.game.phase == "finished" else {}, _round_id)
+	_pop_rewards.set_companion(_pop_reward_theme, growth.age)
+	if _pop.game.phase == "finished" and int(_round_result.get("chest_count", 0)) > 0 and _celebration_seen_id != _round_id:
+		if _pop_reward_saved and not _pop_rewards._save_failed and not _pop_settling:
+			_pop_rewards.pause()
+			_pop_rewards_shown = false
+			_pop.cancel_result_input()
+			_begin_round_celebration(int(_round_result.chest_count))
+			_refresh()
+			return
+		_celebration_seen_id = _round_id
 	_pop.cancel_result_input()
 	_stop_controller_actions()
 	_controller_accept_needs_release = _controller_accept_is_pressed()
@@ -2376,7 +2459,7 @@ func _hide_pop_rewards() -> void:
 
 func _replay_pop() -> void:
 	if _mode_id != "pop" or _pop.game.phase != "finished" or _rebuilding or _page_hidden \
-		or _speech_debug_active or collection_page.visible or _mode_menu_open():
+		or _round_celebration_active() or _speech_debug_active or collection_page.visible or _mode_menu_open():
 		return
 	_controller_holding_pop_chest = false
 	if not _settle_completed_round_rewards():
@@ -2454,7 +2537,7 @@ func _fragment_confetti_requested(mode: String) -> void:
 
 
 func _pair_confetti_requested(round_id: String) -> void:
-	if _mode_id in ["match", "memory"]:
+	if _mode_id == "match":
 		_request_reward_confetti(round_id, _mode_id, 1)
 
 
@@ -2477,7 +2560,7 @@ func _round_celebration_allowed() -> bool:
 
 
 func _begin_round_celebration(chest_count: int) -> void:
-	if _mode_id not in ["match", "memory", "phrase"] \
+	if _mode_id not in ["match", "memory", "phrase", "pop", "jelly", "word_jelly"] \
 		or (chest_count <= 0 and _mode_id not in ["match", "memory"]) or _round_id.is_empty() or _celebration_seen_id == _round_id:
 		return
 	_celebration_seen_id = _round_id
@@ -2486,12 +2569,24 @@ func _begin_round_celebration(chest_count: int) -> void:
 	_controller_accept_needs_release = _controller_accept_is_pressed()
 	duck.settle()
 	var theme_id: String = model.theme_id
+	var score: int = -1
+	var tier: int = 0
+	var summary: String = ""
+	var chest_announced: bool = _mode_id == "match" and model.chest_earned
 	if _mode_id in ["match", "memory"] and not model.reward_theme.is_empty():
 		theme_id = model.reward_theme
+		if _mode_id == "memory":
+			tier = _single_reward_tier()
+	elif _mode_id == "pop" or _is_jelly_mode():
+		theme_id = _pop_reward_theme if _mode_id == "pop" else _jelly_reward_theme
+		score = int(_round_result.get("score", 0))
+		tier = int(_round_result.get("chest_tier", 0))
+		summary = _pop_rewards.result_summary() if _mode_id == "pop" else _jelly_rewards.result_summary()
+		chest_announced = true
 	_settlement_dialog.configure(_round_celebration, Data.theme(model.theme_id), reduced_motion, chest_count > 0, "Round complete")
 	if not _mode_menu_open() and not collection_page.visible and not _page_hidden:
 		_settlement_dialog.open(true)
-	_round_celebration.begin(_round_id, theme_id, data.chests, chest_count, reduced_motion, false, -1, 0, _mode_id in ["match", "memory"] and model.chest_earned)
+	_round_celebration.begin(_round_id, theme_id, data.chests, chest_count, reduced_motion, false, score, tier, chest_announced, summary)
 	_round_celebration.set_narration_playing(audio.voice.playing and not audio.muted and audio.available)
 	if _round_celebration_allowed():
 		_start_round_celebration_audio()
@@ -2563,7 +2658,7 @@ func _on_round_celebration_finished(round_id: String) -> void:
 
 
 func _accept_round_chest(round_id: String) -> void:
-	if round_id != _round_id or not _round_celebration_allowed() or not _round_celebration.is_ready() or _mode_id in ["pop", "jelly", "word_jelly"]:
+	if round_id != _round_id or not _round_celebration_allowed() or not _round_celebration.is_ready():
 		return
 	if _mode_id in ["match", "memory"] and not model.chest_earned:
 		_play_ui_click()
@@ -2577,6 +2672,10 @@ func _accept_round_chest(round_id: String) -> void:
 	_controller_accept_needs_release = _controller_accept_is_pressed()
 	if _mode_id == "phrase":
 		_phrase.accept_completion()
+	elif _mode_id == "pop":
+		_show_pop_rewards()
+	elif _is_jelly_mode():
+		_show_jelly_rewards()
 	else:
 		_refresh()
 	_layout()
@@ -2682,26 +2781,18 @@ func _publish_phrase(state: Dictionary) -> void:
 		_host.phraseStatus(serialized)
 
 
-func _memory_revealed(word: Dictionary, _kind: String, _index: int) -> void:
-	if _mode_id != "memory" or collection_page.visible:
-		return
-	audio.interact(model.theme_id)
-	audio.stop_pair_feedback()
-	audio.cue("select")
-	audio.say("res://" + word.audio)
-	duck.react("curious")
-	_sync_memory_selection()
-
-
 func _memory_answer(words: Array, correct: bool) -> void:
 	if _mode_id != "memory" or collection_page.visible:
 		return
 	_memory_attempt += 1
 	_record_growth("memory-%d" % _memory_attempt, words.map(func(word: Dictionary) -> String: return str(word.id)), correct)
+	audio.interact(model.theme_id)
+	audio.stop_voice()
 	audio.play_pair_feedback(correct)
 	_react_to_gameplay(correct)
 	if correct and not words.is_empty():
 		_pair_matched(str(words[0].id))
+	_sync_pair_presentation()
 
 
 func _memory_finished(won: bool, found: Array) -> void:
@@ -2713,7 +2804,18 @@ func _memory_finished(won: bool, found: Array) -> void:
 
 
 func _memory_status() -> String:
-	return "Memory. %d of 5 pairs grown. %d attempts. %s" % [_memory.memory.matched_word_ids.size(), _memory.memory.attempts, _memory.status_label.text]
+	return "Memory. %d of 5 pairs matched. %d attempts. %s" % [_memory.memory.matched_word_ids.size(), _memory.memory.attempts, _memory.status_label.text]
+
+
+func _skip_memory_observation() -> void:
+	if _mode_id != "memory" or _rebuilding or _page_hidden or collection_page.visible or _mode_menu_open() \
+		or _professional_input_blocked() or not _memory.memory.studying:
+		return
+	_controller_accept_needs_release = _controller_accept_is_pressed()
+	_memory.end_peek()
+	var target: Control = _default_focus()
+	if _valid_focus(target):
+		target.grab_focus()
 
 
 func _purchase_memory_peek(ordinal: int, price: int) -> Dictionary:
@@ -2741,7 +2843,8 @@ func _purchase_memory_peek(ordinal: int, price: int) -> Dictionary:
 
 
 func _memory_peek_feedback(success: bool, price: int) -> void:
-	if success and _round_context.get("track") == "professional":
+	# The required opening observation is part of the game, not a purchased hint.
+	if success and price > 0 and _round_context.get("track") == "professional":
 		for word in model.lesson_words:
 			_professional_assisted[str(word.id)] = true
 	if _mode_id != "memory" or _page_hidden or _mode_menu_open() or collection_page.visible:
@@ -2769,8 +2872,8 @@ func _sync_memory_selection() -> void:
 	var selection := ""
 	if not _memory.memory.selected_indices.is_empty():
 		var index: int = _memory.memory.selected_indices.back()
-		var card: Dictionary = _memory.memory.cards[index]
-		selection = "Memory card %d. %s: %s." % [index + 1, "Word" if card.kind == "word" else "Picture", card.word.text]
+		selection = "Memory card %d selected. Choose one more card." % (index + 1) if _memory.memory.selected_indices.size() == 1 \
+			else "Two cards revealed. " + _memory.status_label.text
 	_host.selectionStatus(selection)
 
 
@@ -2780,8 +2883,10 @@ func _memory_prompt() -> void:
 	if _memory.memory.phase in ["waiting", "won"]:
 		audio.stop_voice()
 	_message.text = _memory_status()
+	_sync_pair_presentation()
 	_announce_status(_message.text)
 	_sync_memory_selection()
+	_publish_growth_view()
 	if _memory.memory.phase == "feedback" or not _valid_focus(get_viewport().gui_get_focus_owner()):
 		var target: Control = _default_focus()
 		if _valid_focus(target):
@@ -2872,8 +2977,8 @@ func _refresh() -> void:
 	_resume_phrase()
 	_pop.visible = _mode_id == "pop" and not collection_page.visible and (not _pop_rewards_shown or _pop.game.phase == "finished")
 	_pop_rewards.visible = playing and _mode_id == "pop" and not collection_page.visible and _pop_rewards_shown
-	_jelly.visible = playing and _mode_id == "jelly" and not collection_page.visible and not celebrating
-	_word_jelly.visible = playing and _mode_id == "word_jelly" and not collection_page.visible and not celebrating
+	_jelly.visible = playing and _mode_id == "jelly" and not collection_page.visible and (not celebrating or _jelly_round_ended())
+	_word_jelly.visible = playing and _mode_id == "word_jelly" and not collection_page.visible and (not celebrating or _jelly_round_ended())
 	_jelly_rewards.visible = playing and _is_jelly_mode() and not collection_page.visible and _jelly_rewards_shown
 	_sync_jelly()
 	_message.hide()
@@ -2914,7 +3019,7 @@ func _refresh() -> void:
 	chest_button.disabled = not earned_chest or model.chest_state == "opened" or chest.opening_committed() or _save_error
 	_set_accessibility_name(chest_button, "Your chest is open. You can let go!" if chest.opening_committed() else "Hold to open the treasure chest")
 	if won:
-		var reward_id: String = JellyRewardProgress.theme_for_tier(1) if _mode_id in ["match", "memory"] else model.reward_theme if not model.reward_theme.is_empty() else model.theme_id
+		var reward_id: String = JellyRewardProgress.theme_for_tier(_single_reward_tier()) if _mode_id in ["match", "memory"] else model.reward_theme if not model.reward_theme.is_empty() else model.theme_id
 		chest.reduced_motion = reduced_motion
 		chest.configure_skin(Data.theme(reward_id), data.chests)
 		_single_result._sync_companion()
@@ -3231,7 +3336,8 @@ func _fit_grid() -> void:
 
 func _fit_mode_buttons() -> void:
 	var css_scale: float = Style.ui_scale(self)
-	_pair_reward_row.custom_minimum_size.y = (34.0 if size.y * css_scale <= 440 else 46.0) / css_scale
+	_pair_reward_row.custom_minimum_size.y = ((44.0 if size.y * css_scale <= 440 else 52.0) if _mode_id == "memory" \
+		else (34.0 if size.y * css_scale <= 440 else 46.0)) / css_scale
 	_layout_pair_reward()
 	var short_header: bool = _short_game_header()
 	_header_spacer.show()
@@ -3251,7 +3357,6 @@ func _fit_mode_buttons() -> void:
 		surface.set_content_margin_all(6.0 / css_scale)
 		surface.set_corner_radius_all(ceili(12.0 / css_scale))
 	_mode_heading_button.set("accessibility_name", "Home. Return home to choose a game")
-	_mode_heading_button.add_theme_constant_override("icon_max_width", ceili(28 / css_scale))
 	_mode_heading.text = str(MODES[_mode_id])
 	_mode_heading.add_theme_font_size_override("font_size", ceili((20 if size.x * css_scale >= 680 else 16) / css_scale))
 	_layout_game_heading()
@@ -3366,7 +3471,7 @@ func _style_voice_button() -> void:
 	_voice_style_accent = accent
 	_voice_style_scale = scale
 	_style_header_action(_voice_button, accent)
-	var radius: int = ceili(10 / scale)
+	var radius: int = ceili(12 / scale)
 	_voice_button.add_theme_stylebox_override("pressed", Style.box(accent.darkened(0.18), accent, radius, 0))
 	_voice_button.add_theme_stylebox_override("hover_pressed", Style.box(accent.darkened(0.12), accent, radius, 0))
 	for state in ["font_pressed_color", "font_hover_pressed_color"]:
@@ -3379,7 +3484,7 @@ func _style_header_action(button: Button, accent: Color) -> void:
 	var scale: float = Style.ui_scale(self)
 	var radius: int = ceili(12 / scale)
 	button.add_theme_stylebox_override("normal", Style.box(accent.lightened(0.94), Color.TRANSPARENT, radius, 0))
-	button.add_theme_stylebox_override("disabled", Style.box(Color("#edf0eb"), Color.TRANSPARENT, radius, 0))
+	button.add_theme_stylebox_override("disabled", Style.box(Style.SOFT, Color.TRANSPARENT, radius, 0))
 
 
 func _layout_collection() -> void:
@@ -3400,14 +3505,20 @@ func _layout_collection() -> void:
 	_collection_header.add_theme_constant_override("separation", ceili(8 / scale))
 	_collection_title.add_theme_font_size_override("font_size", ceili(21 / scale))
 	_growth_summary.add_theme_font_size_override("font_size", ceili(13 / scale))
+	_growth_summary.add_theme_color_override("font_color", Style.MUTED)
 	_age_notice.add_theme_font_size_override("font_size", ceili(12 / scale))
+	_age_notice.add_theme_color_override("font_color", Style.MUTED)
 	_age_scroll.custom_minimum_size.y = ceilf(44 / scale)
+	_age_navigation.add_theme_constant_override("separation", ceili(4 / scale))
+	for arrow in [_age_previous, _age_next]:
+		Style.square_icon_button(arrow, Style.GOOD)
 	_age_row.add_theme_constant_override("separation", ceili(6 / scale))
 	for button in _age_buttons.values():
 		Style.action_button(button, Style.GOOD)
-		button.custom_minimum_size = Vector2(48, 42) / scale
+		button.custom_minimum_size = Vector2(48, 44) / scale
 		button.add_theme_font_size_override("font_size", ceili(14 / scale))
 	Style.square_icon_button(_collection_back, Style.GOOD)
+	_refresh_age_navigation.call_deferred()
 
 
 func _can_request_hint() -> bool:
@@ -3653,7 +3764,7 @@ func _open_chest() -> void:
 		_cancel_chest_hold()
 		return
 	if saved_pair:
-		model.reward_theme = JellyRewardProgress.theme_for_tier(1)
+		model.reward_theme = JellyRewardProgress.theme_for_tier(_single_reward_tier())
 		chest.configure_skin(Data.theme(model.reward_theme), data.chests)
 	_hold_elapsed = 0.0
 	_chest_reward_announced = false
@@ -3727,6 +3838,13 @@ func _single_chest_receipt() -> String:
 	return ("pair:" + _mode_id + ":" if _mode_id in ["match", "memory"] else "phrase:") + _round_id
 
 
+func _single_reward_tier() -> int:
+	if _mode_id != "memory":
+		return 1
+	var pair: Dictionary = medal_progress.pair_round("memory")
+	return int(pair.get("tier", 1)) if pair.get("id", "") == _round_id and pair.get("awarded", false) else 0
+
+
 func _credit_coins(id: String, tier: int) -> Dictionary:
 	if not coin_wallet.ready or not coin_wallet.error.is_empty():
 		coin_wallet.load_state()
@@ -3755,8 +3873,11 @@ func _present_coins(id: String, reward: Dictionary, origin: Vector2, animate: bo
 
 
 func _commit_fragment(explicit_retry: bool = false) -> void:
+	var tier: int = _single_reward_tier()
+	if _mode_id == "memory" and tier == 0:
+		return
 	var receipt: String = _single_chest_receipt()
-	var credit: Dictionary = _credit_coins(receipt, 1)
+	var credit: Dictionary = _credit_coins(receipt, tier)
 	if not credit.ok:
 		_save_error = true
 		_refresh()
@@ -4355,7 +4476,7 @@ func _default_focus() -> Control:
 		return pop_focus if _valid_focus(pop_focus) else collection_button
 	if _mode_id == "memory":
 		if _memory.memory.studying:
-			return _memory.study_button
+			return _memory_peek_countdown.action_button
 		var memory_controls: Array[Control] = _memory.controls()
 		return memory_controls[0] if not memory_controls.is_empty() else collection_button
 	if _mode_id == "phrase":
@@ -5124,7 +5245,7 @@ func _load_collected_rewards() -> void:
 		for mode in ["match", "memory"]:
 			var pair: Dictionary = medal_progress.pair_round(mode)
 			if pair.get("awarded", false) and not pair.get("settled", false):
-				var credit: Dictionary = _credit_coins("pair:" + mode + ":" + str(pair.id), 1)
+				var credit: Dictionary = _credit_coins("pair:" + mode + ":" + str(pair.id), int(pair.get("tier", 1)))
 				_progress_ready = credit.ok and medal_progress.settle_pair_reward(mode, pair.id)
 				if not _progress_ready:
 					break
@@ -5250,7 +5371,7 @@ func _pair_matched(word_id: String) -> void:
 	if _pair_words.has(word_id) or _round_id.is_empty():
 		return
 	_pair_words.append(word_id)
-	if _sync_pair_reward() and not model.chest_earned:
+	if _sync_pair_reward() and not model.chest_earned and _mode_id == "match":
 		_pair_reward.show_pair_result(_round_id, false)
 	_refresh()
 
@@ -5258,6 +5379,8 @@ func _pair_matched(word_id: String) -> void:
 func _sync_pair_reward() -> bool:
 	if _mode_id not in ["match", "memory"] or _round_id.is_empty():
 		return true
+	if _mode_id == "memory":
+		return _sync_memory_reward()
 	var pair: Dictionary = medal_progress.pair_round(_mode_id)
 	if pair.get("id", "") != _round_id:
 		pair = medal_progress.begin_pair_round(_mode_id, _round_id, _pair_proposed_pair)
@@ -5290,6 +5413,29 @@ func _sync_pair_reward() -> bool:
 	return true
 
 
+func _sync_memory_reward() -> bool:
+	var pair: Dictionary = medal_progress.pair_round("memory")
+	if pair.get("id", "") != _round_id:
+		pair = medal_progress.begin_memory_round(_round_id)
+	if pair.is_empty():
+		_pair_save_failed = true
+		_save_error = true
+		return false
+	if model.phase == "won" and not pair.completed:
+		if not medal_progress.finish_memory_round(_round_id, _memory.memory.reward_tier(), model.theme_id):
+			_pair_save_failed = true
+			_save_error = true
+			return false
+		pair = medal_progress.pair_round("memory")
+	model.chest_reward_pair = 0
+	model.chest_earned = bool(pair.awarded)
+	model.reward_theme = JellyRewardProgress.theme_for_tier(int(pair.get("tier", 1))) if pair.awarded else ""
+	if _pair_save_failed:
+		_save_error = false
+	_pair_save_failed = false
+	return true
+
+
 func _settle_pair_reward() -> bool:
 	if _mode_id not in ["match", "memory"] or _round_id.is_empty():
 		return true
@@ -5302,7 +5448,7 @@ func _settle_pair_reward() -> bool:
 	var pair: Dictionary = medal_progress.pair_round(_mode_id)
 	if pair.get("id", "") == _round_id and pair.get("awarded", false):
 		_pair_settlement_pending = true
-		var credit: Dictionary = _credit_coins(_single_chest_receipt(), 1)
+		var credit: Dictionary = _credit_coins(_single_chest_receipt(), int(pair.get("tier", 1)))
 		if not credit.ok or not medal_progress.settle_pair_reward(_mode_id, _round_id):
 			_pair_save_failed = true
 			_save_error = true
@@ -5317,7 +5463,7 @@ func _settle_pair_reward() -> bool:
 
 
 func _pair_reward_revealing() -> bool:
-	if not is_instance_valid(_pair_reward):
+	if _mode_id != "match" or not is_instance_valid(_pair_reward):
 		return false
 	# A slow reveal frame must still leave room for the complete cheer before
 	# final-pair settlement. Mute or navigation cancels its player immediately.
@@ -5333,12 +5479,25 @@ func _sync_pair_presentation() -> void:
 	var allowed: bool = on_board and not _mode_menu_open() and not _settlement_dialog_open()
 	if not allowed and _pair_reward.visible:
 		audio.stop_pair_chest_discovery()
-	_pair_reward.set_paused(not allowed)
-	_pair_reward.visible = allowed
+	_pair_reward.set_paused(not allowed or _mode_id != "match")
+	_pair_reward.visible = allowed and _mode_id == "match"
 	var timed_peek: bool = allowed and _mode_id == "memory" and is_instance_valid(_memory) and _memory.memory.studying
 	_pair_reward.set_status_suppressed(timed_peek)
 	if is_instance_valid(_memory_peek_countdown):
+		_memory_peek_countdown.set_paused(not timed_peek)
 		_memory_peek_countdown.visible = timed_peek
+	if is_instance_valid(_memory_reward):
+		var memory_visible: bool = allowed and _mode_id == "memory" and is_instance_valid(_memory)
+		_memory_reward.visible = memory_visible
+		_memory_reward.set_paused(not memory_visible)
+		if memory_visible:
+			_memory_reward.configure(_round_id, _memory.memory.reward_tier(), data.chests, _active_palette, reduced_motion)
+		_memory_stage_label.visible = memory_visible and not timed_peek
+		if memory_visible:
+			_memory_stage_label.text = _memory.status_label.text
+			var feedback_color: Color = (Style.GOOD if _memory.memory.last_correct else Color("#a94f42")) \
+				if _memory.memory.phase == "feedback" else Style.INK
+			_memory_stage_label.add_theme_color_override("font_color", feedback_color)
 	# Opening the header menu must not move the board behind its overlay.
 	_pair_reward_row.visible = on_board
 
@@ -5349,6 +5508,19 @@ func _layout_pair_reward() -> void:
 	if is_instance_valid(_memory_peek_countdown) and is_instance_valid(_pair_reward_row):
 		var unit: float = 1.0 / Style.ui_scale(self)
 		var row: Vector2 = _pair_reward_row.size
+		if _mode_id == "memory":
+			var width: float = minf(620.0 * unit, row.x)
+			var left: float = (row.x - width) * 0.5
+			var badge_width: float = minf(112.0 * unit, width * 0.29)
+			_memory_reward.position = Vector2(left, 0)
+			_memory_reward.size = Vector2(badge_width, row.y)
+			var inset: float = badge_width + 8.0 * unit
+			_memory_peek_countdown.position = Vector2(left + inset, 0)
+			_memory_peek_countdown.size = Vector2(maxf(0.0, width - inset), row.y)
+			_memory_stage_label.position = _memory_peek_countdown.position
+			_memory_stage_label.size = _memory_peek_countdown.size
+			_memory_stage_label.add_theme_font_size_override("font_size", ceili(16.0 * unit))
+			return
 		var has_chest: bool = model.chest_earned and _mode_id == "memory"
 		var group_width: float = minf(324.0 * unit, row.x)
 		var inset: float = minf(64.0 * unit, row.x * 0.2) if has_chest else 0.0
@@ -5358,7 +5530,7 @@ func _layout_pair_reward() -> void:
 
 func _pair_reward_cue(round_id: String, cue: String) -> void:
 	if round_id != _round_id or _page_hidden or _mode_menu_open() or collection_page.visible or _voice_listening \
-		or _mode_id not in ["match", "memory"] or _settlement_dialog_open():
+		or _mode_id != "match" or _settlement_dialog_open():
 		return
 	if cue == "reward":
 		audio.play_pair_chest_discovery()
@@ -5415,6 +5587,8 @@ func _refresh_growth() -> void:
 	for mascot in [duck, _phrase.pip, _round_celebration.pip, _single_result.pip]:
 		if is_instance_valid(mascot):
 			mascot.set_growth_age(growth.age)
+	for room in [_pop_rewards, _jelly_rewards]:
+		room.set_companion(room.pip.theme_id, growth.age)
 	_growth_button.configure(state)
 	_growth_button.visible = _round_context.get("track") != "professional"
 	_professional_button.visible = not _growth_button.visible
@@ -5440,7 +5614,7 @@ func _refresh_growth() -> void:
 		_collection_title.text = "Word library"
 	var level_summary: String = "Lv99 reached!" if state.level_completed else "%d new %s to Lv%d" % [state.level_remaining, "word" if state.level_remaining == 1 else "words", state.level + 1]
 	var age_target: String = "Age 12+" if state.learning_age == 12 else "Age %d" % state.learning_age
-	_growth_summary.text = "%s · %d words learned\n%s: %d / %d mastered%s" % [level_summary, state.lifetime_mastered, age_target, state.mastered, state.total, " · All ages unlocked!" if state.completed else " · Master this set to help Pip grow."] if state.ready else "Learning progress is unavailable. Retry saving to load it."
+	_growth_summary.text = "%d words learned · %s\n%s · %d / %d mastered%s" % [state.lifetime_mastered, level_summary, age_target, state.mastered, state.total, " · All ages unlocked!" if state.completed else ""] if state.ready else "Learning progress is unavailable. Retry saving to load it."
 	var serialized: String = JSON.stringify(state)
 	if _host != null and serialized != _growth_published:
 		_growth_published = serialized
@@ -5479,7 +5653,22 @@ func _publish_growth_view() -> void:
 	if _mode_id == "memory":
 		var price_area: Rect2 = _memory.study_button.price_rect()
 		price_area.position += _memory.study_button.global_position
-		state["memory"] = {"peek": {"count": _memory.memory.peeks,
+		var memory_cards: Array = []
+		for index in range(_memory.card_buttons.size()):
+			var card: Dictionary = _growth_control(_memory.card_buttons[index])
+			var data_card: Dictionary = _memory.memory.cards[index]
+			card["index"] = index
+			card["kind"] = data_card.kind
+			card["face_up"] = _memory.memory.is_revealed(index)
+			card["word_id"] = data_card.word.id if card.face_up else ""
+			card["selected"] = _memory.memory.selected_indices.has(index)
+			card["pair"] = _memory.memory.matched_word_ids.find(str(data_card.word.id)) + 1
+			memory_cards.append(card)
+		state["memory"] = {"started": _memory.memory.started, "phase": _memory.memory.phase,
+			"start": _growth_control(_memory.start_button), "cards": memory_cards,
+			"mistakes": _memory.memory.mistakes, "attempts": _memory.memory.attempts,
+			"pairs": _memory.memory.matched_word_ids.size(), "reward": _memory_reward.snapshot(),
+			"stage": _growth_control(_memory_stage_label), "peek": {"count": _memory.memory.peeks,
 			"next_price": _memory.memory.peek_price(), "price_text": str(_memory.study_button.cost),
 			"price_rect": [price_area.position.x, price_area.position.y, price_area.size.x, price_area.size.y],
 			"remaining": _memory.memory.peek_remaining, "duration": _memory.memory.peek_duration,

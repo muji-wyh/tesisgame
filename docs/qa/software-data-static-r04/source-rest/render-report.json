@@ -1,0 +1,1846 @@
+{
+	"audio_played": false,
+	"authored_motion": {
+		"angles_degrees": [
+			0.0,
+			0.22961006,
+			0.42426407,
+			0.55432772,
+			0.6,
+			0.55432772,
+			0.42426407,
+			0.22961006,
+			0.0,
+			-0.22961006,
+			-0.42426407,
+			-0.55432772,
+			-0.6,
+			-0.55432772,
+			-0.42426407,
+			-0.22961006
+		],
+		"authored_motion_accepted": false,
+		"axis": "leaf-local Z",
+		"cycle_seconds": 8,
+		"frames_per_second": 2,
+		"lowest_unique_vertices": 1,
+		"pivot_leaf_local": [
+			0.106028020381927,
+			0.0,
+			-0.120732814073563
+		],
+		"pivot_method": "Mean of unique actual vertices at minimum local Y within .00001; source node origin is a corner. Inspect this derived rooted point before accepting motion.",
+		"rest_frame": 0,
+		"source_animations": 0,
+		"source_node": "pottedPlant/pottedPlant(Clone)/plant",
+		"warning": "The original .6 degree proposal has an approximate one-pixel displacement bound. Pixel/shadow change and perceptibility must be assessed from rendered output. Amplitude is not increased here."
+	},
+	"captures": [
+		{
+			"angle_degrees": 0,
+			"bytes": 114741,
+			"height": 768,
+			"path": "composition-rest.png",
+			"sha256": "b16a84a685b05471097ffe6c455219193cc864c485c6028b30f1ca24b77148b3",
+			"source_composition": true,
+			"visual_status": "pending_inspection",
+			"width": 768
+		},
+		{
+			"bytes": 44420,
+			"height": 296,
+			"path": "composition-phone-square-review.png",
+			"scope": "Source-composition readability thumbnail; not actual game UI or device evidence",
+			"sha256": "173187bf8480e0d575544d9a273b1f5f7d7a96920514e83970a7d501d0293fab",
+			"visual_status": "pending_inspection",
+			"width": 296
+		},
+		{
+			"bytes": 79663,
+			"foreground_props_hidden": true,
+			"height": 768,
+			"path": "environment-rest.png",
+			"sha256": "3ec922413d2e20174c2c6f87fe9a6b3506167022ebb5ce8fbede136f8d9d51a2",
+			"visual_status": "pending_inspection",
+			"width": 768
+		},
+		{
+			"angle_degrees": -0.6,
+			"authored_leaf_motion": true,
+			"bytes": 114745,
+			"frame_index": 0,
+			"height": 768,
+			"path": "extreme-00.png",
+			"sha256": "bbaceba0ab9a1696a2e51287fdc1bc7abd1bd442a9e737867971f0265ae8c743",
+			"visual_status": "pending_inspection",
+			"width": 768
+		},
+		{
+			"angle_degrees": 0.6,
+			"authored_leaf_motion": true,
+			"bytes": 114715,
+			"frame_index": 1,
+			"height": 768,
+			"path": "extreme-01.png",
+			"sha256": "f733ba32b2e1e04d8d3f7640c63dc4a58469d52183083f198f6af7b0a06590d6",
+			"visual_status": "pending_inspection",
+			"width": 768
+		},
+		{
+			"angle_degrees": 0,
+			"bytes": 114741,
+			"height": 768,
+			"path": "loop-end.png",
+			"rest_repeat_control": true,
+			"sha256": "b16a84a685b05471097ffe6c455219193cc864c485c6028b30f1ca24b77148b3",
+			"visual_status": "pending_inspection",
+			"width": 768
+		},
+		{
+			"bytes": 129603,
+			"height": 800,
+			"native_aspect": "16:10",
+			"not_home_replacement": true,
+			"path": "composition-wide-review.png",
+			"sha256": "f3e757f64aa3c2c6c7a5a18cfa90e1f9e4e6de5adebe76e4682765b58c486304",
+			"visual_status": "pending_inspection",
+			"width": 1280
+		},
+		{
+			"bytes": 52077,
+			"height": 320,
+			"path": "composition-overview-review.png",
+			"scope": "Source-composition readability thumbnail; not actual game UI or device evidence",
+			"sha256": "3b1ca8a13381c59f393d040c73b98585bcedaa34b88ca7cd9aeacd95d8d28a5a",
+			"visual_status": "pending_inspection",
+			"width": 512
+		},
+		{
+			"bytes": 20895,
+			"height": 512,
+			"orientation_front_back_unaccepted": true,
+			"path": "source-mobile-whiteboard-education-furniture-yaw-0.png",
+			"sha256": "6cf6de32c8a63634868de9b714fa90eb8d645a19e6953b3d5876c8f57b67d191",
+			"source": "mobile-whiteboard-education-furniture.glb",
+			"source_only": true,
+			"visual_status": "pending_inspection",
+			"width": 512,
+			"yaw_degrees": 0.0
+		},
+		{
+			"bytes": 6704,
+			"height": 512,
+			"orientation_front_back_unaccepted": true,
+			"path": "source-mobile-whiteboard-education-furniture-yaw-90.png",
+			"sha256": "053051c8a41ae467c235ae0520d1fa711b8ea3a7f925b3512c1c002c03d347bf",
+			"source": "mobile-whiteboard-education-furniture.glb",
+			"source_only": true,
+			"visual_status": "pending_inspection",
+			"width": 512,
+			"yaw_degrees": 90.0
+		},
+		{
+			"bytes": 20340,
+			"height": 512,
+			"orientation_front_back_unaccepted": true,
+			"path": "source-mobile-whiteboard-education-furniture-yaw-180.png",
+			"sha256": "a778fd2bb771759b75b6999163e1e74d568bd3122d7ad775e69991af62e9455e",
+			"source": "mobile-whiteboard-education-furniture.glb",
+			"source_only": true,
+			"visual_status": "pending_inspection",
+			"width": 512,
+			"yaw_degrees": 180.0
+		},
+		{
+			"bytes": 3594,
+			"height": 512,
+			"orientation_front_back_unaccepted": true,
+			"path": "source-televisionModern-yaw-0.png",
+			"sha256": "02dc8d523ff75adfb36b0fe410fbd717a84e6c4246b7669f77993a41b4702c6e",
+			"source": "televisionModern.glb",
+			"source_only": true,
+			"visual_status": "pending_inspection",
+			"width": 512,
+			"yaw_degrees": 0.0
+		},
+		{
+			"bytes": 3613,
+			"height": 512,
+			"orientation_front_back_unaccepted": true,
+			"path": "source-televisionModern-yaw-90.png",
+			"sha256": "80dd280bde20b1cbcd6adc26935dcfd912c5fe3d0482e484c9504974acfe6f93",
+			"source": "televisionModern.glb",
+			"source_only": true,
+			"visual_status": "pending_inspection",
+			"width": 512,
+			"yaw_degrees": 90.0
+		},
+		{
+			"bytes": 3278,
+			"height": 512,
+			"orientation_front_back_unaccepted": true,
+			"path": "source-televisionModern-yaw-180.png",
+			"sha256": "19ffb9d833144081e15f9989be41831572c2139948bea391b881952bc393b108",
+			"source": "televisionModern.glb",
+			"source_only": true,
+			"visual_status": "pending_inspection",
+			"width": 512,
+			"yaw_degrees": 180.0
+		},
+		{
+			"bytes": 3483,
+			"height": 512,
+			"orientation_front_back_unaccepted": true,
+			"path": "source-laptop-yaw-0.png",
+			"sha256": "bdf8d4fb441b2428906bd963d90b9f0a899875ba45e731025b1b88e0c724f5f1",
+			"source": "laptop.glb",
+			"source_only": true,
+			"visual_status": "pending_inspection",
+			"width": 512,
+			"yaw_degrees": 0.0
+		},
+		{
+			"bytes": 6476,
+			"height": 512,
+			"orientation_front_back_unaccepted": true,
+			"path": "source-laptop-yaw-90.png",
+			"sha256": "b93cd348e712cfc8bc47d1b67a0a15dbd5846209b7b6317eff787d0288fe2b3f",
+			"source": "laptop.glb",
+			"source_only": true,
+			"visual_status": "pending_inspection",
+			"width": 512,
+			"yaw_degrees": 90.0
+		},
+		{
+			"bytes": 4451,
+			"height": 512,
+			"orientation_front_back_unaccepted": true,
+			"path": "source-laptop-yaw-180.png",
+			"sha256": "07e1bf544f654aeb60deaccd5e8e80177cd3b44a154ae47a448dcc2792364f4c",
+			"source": "laptop.glb",
+			"source_only": true,
+			"visual_status": "pending_inspection",
+			"width": 512,
+			"yaw_degrees": 180.0
+		},
+		{
+			"bytes": 6603,
+			"height": 512,
+			"orientation_front_back_unaccepted": true,
+			"path": "source-pottedPlant-yaw-0.png",
+			"sha256": "0e5b56e3b6f36fcac15d936ad576e4c670e7657c284cbe4b1f0d03181746e385",
+			"source": "pottedPlant.glb",
+			"source_only": true,
+			"visual_status": "pending_inspection",
+			"width": 512,
+			"yaw_degrees": 0.0
+		},
+		{
+			"bytes": 6849,
+			"height": 512,
+			"orientation_front_back_unaccepted": true,
+			"path": "source-pottedPlant-yaw-90.png",
+			"sha256": "ceca768e7a49bc7ec41ea03be1d4012b908c563108f265a1ba120757db6d6990",
+			"source": "pottedPlant.glb",
+			"source_only": true,
+			"visual_status": "pending_inspection",
+			"width": 512,
+			"yaw_degrees": 90.0
+		},
+		{
+			"bytes": 6608,
+			"height": 512,
+			"orientation_front_back_unaccepted": true,
+			"path": "source-pottedPlant-yaw-180.png",
+			"sha256": "7590bd2eba47bf50d362254a8a39e6943ed938cb84554f6054b6f93c736ee109",
+			"source": "pottedPlant.glb",
+			"source_only": true,
+			"visual_status": "pending_inspection",
+			"width": 512,
+			"yaw_degrees": 180.0
+		}
+	],
+	"contacts": [
+		{
+			"object": "monitor-left",
+			"source_bounds_contact_only": true,
+			"support": "desk-left.top",
+			"support_bounds_position_size": [
+				-1.20085644721985,
+				0.0500000007450581,
+				-0.344225078821182,
+				1.10171318054199,
+				0.576611340045929,
+				0.588450074195862
+			],
+			"vertical_gap": 0.0
+		},
+		{
+			"object": "monitor-right",
+			"source_bounds_contact_only": true,
+			"support": "desk-right.top",
+			"support_bounds_position_size": [
+				0.199143439531326,
+				0.0500000007450581,
+				-0.34422504901886,
+				1.10171318054199,
+				0.576611340045929,
+				0.588450074195862
+			],
+			"vertical_gap": 0.0
+		},
+		{
+			"object": "keyboard-left",
+			"source_bounds_contact_only": true,
+			"support": "desk-left.top",
+			"support_bounds_position_size": [
+				-1.20085644721985,
+				0.0500000007450581,
+				-0.344225078821182,
+				1.10171318054199,
+				0.576611340045929,
+				0.588450074195862
+			],
+			"vertical_gap": 0.0
+		},
+		{
+			"object": "keyboard-right",
+			"source_bounds_contact_only": true,
+			"support": "desk-right.top",
+			"support_bounds_position_size": [
+				0.199143439531326,
+				0.0500000007450581,
+				-0.34422504901886,
+				1.10171318054199,
+				0.576611340045929,
+				0.588450074195862
+			],
+			"vertical_gap": 0.0
+		},
+		{
+			"object": "mouse-left",
+			"source_bounds_contact_only": true,
+			"support": "desk-left.top",
+			"support_bounds_position_size": [
+				-1.20085644721985,
+				0.0500000007450581,
+				-0.344225078821182,
+				1.10171318054199,
+				0.576611340045929,
+				0.588450074195862
+			],
+			"vertical_gap": 0.0
+		},
+		{
+			"object": "mouse-right",
+			"source_bounds_contact_only": true,
+			"support": "desk-right.top",
+			"support_bounds_position_size": [
+				0.199143439531326,
+				0.0500000007450581,
+				-0.34422504901886,
+				1.10171318054199,
+				0.576611340045929,
+				0.588450074195862
+			],
+			"vertical_gap": 0.0
+		},
+		{
+			"object": "review-display",
+			"source_bounds_contact_only": true,
+			"support": "review-cabinet.top",
+			"support_bounds_position_size": [
+				0.149999976158142,
+				0.0500000007450581,
+				-1.82749998569489,
+				1.20000004768372,
+				0.464999973773956,
+				0.375
+			],
+			"vertical_gap": 0.0
+		},
+		{
+			"object": "analysis-laptop",
+			"source_bounds_contact_only": true,
+			"support": "analysis-desk.top",
+			"support_bounds_position_size": [
+				-2.15499496459961,
+				0.0500000007450581,
+				0.0725910291075706,
+				0.509989976882935,
+				0.499729752540588,
+				0.954818069934845
+			],
+			"vertical_gap": 0.0
+		}
+	],
+	"failures": [],
+	"motion_acceptance": false,
+	"notice": "Real source-model render candidates. No integrated theme, curriculum readiness, game-size visual or listening acceptance is implied.",
+	"objects": {
+		"analysis-chair": {
+			"layer": "props",
+			"position": [
+				-1.12000000476837,
+				0.0500000007450581,
+				0.980000019073486
+			],
+			"source": "chairDesk.glb",
+			"uniform_scale": 1.2,
+			"world_bounds_position_size": [
+				-1.30857944488525,
+				0.0500000007450581,
+				0.779029965400696,
+				0.377158880233765,
+				0.729119896888733,
+				0.401939988136292
+			],
+			"yaw_degrees": 90.0
+		},
+		"analysis-desk": {
+			"layer": "props",
+			"position": [
+				-1.89999997615814,
+				0.0500000007450581,
+				0.550000011920929
+			],
+			"source": "desk.glb",
+			"uniform_scale": 1.3,
+			"world_bounds_position_size": [
+				-2.15499496459961,
+				0.0500000007450581,
+				0.0725910291075706,
+				0.509989976882935,
+				0.499729752540588,
+				0.954818069934845
+			],
+			"yaw_degrees": 90.0
+		},
+		"analysis-lamp": {
+			"layer": "props",
+			"position": [
+				-2.11999988555908,
+				0.0500000007450581,
+				1.35000002384186
+			],
+			"source": "lampRoundFloor.glb",
+			"uniform_scale": 1.45,
+			"world_bounds_position_size": [
+				-2.23022842407227,
+				0.0500000007450581,
+				1.22271907329559,
+				0.220457077026367,
+				1.24699997901917,
+				0.254561901092529
+			],
+			"yaw_degrees": 0.0
+		},
+		"analysis-laptop": {
+			"layer": "props",
+			"position": [
+				-1.97000002861023,
+				0.549729764461517,
+				0.550000011920929
+			],
+			"source": "laptop.glb",
+			"uniform_scale": 1.5,
+			"world_bounds_position_size": [
+				-2.15004873275757,
+				0.549729764461517,
+				0.352000057697296,
+				0.360097646713257,
+				0.242714107036591,
+				0.39599996805191
+			],
+			"yaw_degrees": 90.0
+		},
+		"chair-left": {
+			"layer": "props",
+			"position": [
+				-0.649999976158142,
+				0.0500000007450581,
+				0.759999990463257
+			],
+			"source": "chairDesk.glb",
+			"uniform_scale": 1.3,
+			"world_bounds_position_size": [
+				-0.867717504501343,
+				0.0500000007450581,
+				0.555705606937408,
+				0.435435056686401,
+				0.78987991809845,
+				0.408588707447052
+			],
+			"yaw_degrees": 180.0
+		},
+		"chair-right": {
+			"layer": "props",
+			"position": [
+				0.75,
+				0.0500000007450581,
+				0.759999990463257
+			],
+			"source": "chairDesk.glb",
+			"uniform_scale": 1.3,
+			"world_bounds_position_size": [
+				0.532282471656799,
+				0.0500000007450581,
+				0.555705606937408,
+				0.435435056686401,
+				0.78987991809845,
+				0.408588707447052
+			],
+			"yaw_degrees": 180.0
+		},
+		"desk-left": {
+			"layer": "props",
+			"position": [
+				-0.649999976158142,
+				0.0500000007450581,
+				-0.0500000007450581
+			],
+			"source": "desk.glb",
+			"uniform_scale": 1.5,
+			"world_bounds_position_size": [
+				-1.20085644721985,
+				0.0500000007450581,
+				-0.344225078821182,
+				1.10171318054199,
+				0.576611340045929,
+				0.588450074195862
+			],
+			"yaw_degrees": 180.0
+		},
+		"desk-right": {
+			"layer": "props",
+			"position": [
+				0.75,
+				0.0500000007450581,
+				-0.0500000007450581
+			],
+			"source": "desk.glb",
+			"uniform_scale": 1.5,
+			"world_bounds_position_size": [
+				0.199143439531326,
+				0.0500000007450581,
+				-0.34422504901886,
+				1.10171318054199,
+				0.576611340045929,
+				0.588450074195862
+			],
+			"yaw_degrees": 180.0
+		},
+		"keyboard-left": {
+			"layer": "props",
+			"position": [
+				-0.720000028610229,
+				0.626611351966858,
+				0.119999997317791
+			],
+			"source": "computerKeyboard.glb",
+			"uniform_scale": 1.3,
+			"world_bounds_position_size": [
+				-0.903429985046387,
+				0.626611351966858,
+				0.043175183236599,
+				0.366859972476959,
+				0.0358228087425232,
+				0.153649628162384
+			],
+			"yaw_degrees": 180.0
+		},
+		"keyboard-right": {
+			"layer": "props",
+			"position": [
+				0.680000007152557,
+				0.626611351966858,
+				0.119999997317791
+			],
+			"source": "computerKeyboard.glb",
+			"uniform_scale": 1.3,
+			"world_bounds_position_size": [
+				0.496569991111755,
+				0.626611351966858,
+				0.0431751906871796,
+				0.366860032081604,
+				0.0358228087425232,
+				0.153649628162384
+			],
+			"yaw_degrees": 180.0
+		},
+		"monitor-left": {
+			"layer": "props",
+			"position": [
+				-0.720000028610229,
+				0.626611351966858,
+				-0.180000007152557
+			],
+			"source": "computerScreen.glb",
+			"uniform_scale": 1.3,
+			"world_bounds_position_size": [
+				-0.975247263908386,
+				0.626611351966858,
+				-0.247602611780167,
+				0.510494410991669,
+				0.382570743560791,
+				0.135205209255219
+			],
+			"yaw_degrees": 0.0
+		},
+		"monitor-right": {
+			"layer": "props",
+			"position": [
+				0.680000007152557,
+				0.626611351966858,
+				-0.180000007152557
+			],
+			"source": "computerScreen.glb",
+			"uniform_scale": 1.3,
+			"world_bounds_position_size": [
+				0.424752801656723,
+				0.626611351966858,
+				-0.247602611780167,
+				0.510494351387024,
+				0.382570743560791,
+				0.135205209255219
+			],
+			"yaw_degrees": 0.0
+		},
+		"mouse-left": {
+			"layer": "props",
+			"position": [
+				-0.379999995231628,
+				0.626611351966858,
+				0.150000005960464
+			],
+			"source": "computerMouse.glb",
+			"uniform_scale": 1.3,
+			"world_bounds_position_size": [
+				-0.412304997444153,
+				0.626611351966858,
+				0.0946825444698334,
+				0.0646100044250488,
+				0.0306435823440552,
+				0.110634922981262
+			],
+			"yaw_degrees": 180.0
+		},
+		"mouse-right": {
+			"layer": "props",
+			"position": [
+				1.01999998092651,
+				0.626611351966858,
+				0.150000005960464
+			],
+			"source": "computerMouse.glb",
+			"uniform_scale": 1.3,
+			"world_bounds_position_size": [
+				0.987694978713989,
+				0.626611351966858,
+				0.0946825444698334,
+				0.0646100044250488,
+				0.0306435823440552,
+				0.110634922981262
+			],
+			"yaw_degrees": 180.0
+		},
+		"review-cabinet": {
+			"layer": "environment",
+			"position": [
+				0.75,
+				0.0500000007450581,
+				-1.63999998569489
+			],
+			"source": "cabinetTelevision.glb",
+			"uniform_scale": 1.5,
+			"world_bounds_position_size": [
+				0.149999976158142,
+				0.0500000007450581,
+				-1.82749998569489,
+				1.20000004768372,
+				0.464999973773956,
+				0.375
+			],
+			"yaw_degrees": 0.0
+		},
+		"review-display": {
+			"layer": "environment",
+			"position": [
+				0.75,
+				0.514999985694885,
+				-1.63999998569489
+			],
+			"source": "televisionModern.glb",
+			"uniform_scale": 1.5,
+			"world_bounds_position_size": [
+				0.236400008201599,
+				0.514999985694885,
+				-1.73629999160767,
+				1.0271999835968,
+				0.682124972343445,
+				0.192600011825562
+			],
+			"yaw_degrees": 0.0
+		},
+		"review-whiteboard": {
+			"layer": "environment",
+			"position": [
+				-0.850000023841858,
+				0.0500000007450581,
+				-1.45000004768372
+			],
+			"source": "mobile-whiteboard-education-furniture.glb",
+			"uniform_scale": 0.65,
+			"world_bounds_position_size": [
+				-1.4447500705719,
+				0.0500000007450581,
+				-1.66449999809265,
+				1.18950009346008,
+				1.23012495040894,
+				0.428999900817871
+			],
+			"yaw_degrees": 0.0
+		},
+		"studio-plant": {
+			"layer": "environment_plus_ambient_patch",
+			"position": [
+				-1.41999995708466,
+				0.0500000007450581,
+				0.0500000007450581
+			],
+			"source": "pottedPlant.glb",
+			"uniform_scale": 1.4,
+			"world_bounds_position_size": [
+				-1.56844139099121,
+				0.0500000007450581,
+				-0.119023352861404,
+				0.29688286781311,
+				0.915623486042023,
+				0.338046729564667
+			],
+			"yaw_degrees": 0.0
+		}
+	},
+	"placement_revision": {
+		"authored_recipe_position": [
+			1.82000005245209,
+			0.0500000007450581,
+			-0.379999995231628
+		],
+		"base_renderer_sha256": "a3919fa893a531ed3ccf851b5389a7c0b5ac68b427e65f224932aed7a62d3123",
+		"furniture_aabb_intersections": [],
+		"id": "software-data-plant-placement-r04",
+		"object": "studio-plant",
+		"position": [
+			-1.41999995708466,
+			0.0500000007450581,
+			0.0500000007450581
+		],
+		"previous_r03_position": [
+			-1.45,
+			0.05,
+			-0.2
+		],
+		"projection_is_not_render_acceptance": true,
+		"review_required": "Inspect grounded attached pot, workstation depth and shadows in the complete source composition, then actual Word Jelly action/supply controls. AABB and projection calculations do not establish acceptance.",
+		"scope": "Only plant world position changes. Acquired source geometry/materials, camera, scale, yaw, floor height, lighting and all sixteen motion angles remain unchanged."
+	},
+	"production_modified": false,
+	"renderer": "ANGLE (Microsoft, Microsoft Basic Render Driver (0x0000008C) Direct3D11 vs_5_0 ps_5_0, D3D11-10.0.26100.9711)",
+	"repeated_rest_pixels_equal": true,
+	"room_adjustments": {
+		"basis": "Independent decoded source geometry finds a .025 floor/slab gap after source centering. Actual rendered seam and window trim still require inspection.",
+		"left_wall_x": {
+			"authored_recipe": -2.55,
+			"candidate": -2.525
+		},
+		"rear_wall_z": {
+			"authored_recipe": -2.05,
+			"candidate": -2.025
+		}
+	},
+	"schema": 1,
+	"source_inventory_sha256": "99ce837da0ba0d3d6094a44ae137385a9c0f920bb6327082026cec7167ab6b69",
+	"source_recipe_sha256": "a10c956fbecf8f9c87af4064fe6923d2e1c4c6856a26f69083ae9326390e50e1",
+	"source_records": {
+		"cabinetTelevision.glb": {
+			"bytes": 10524,
+			"creator": "Kenney",
+			"license": "CC0 1.0",
+			"materials_and_geometry_modified": false,
+			"mesh_nodes": [
+				{
+					"local_bounds_position_size": [
+						0.0,
+						0.0,
+						-0.25,
+						0.800000011920929,
+						0.310000002384186,
+						0.25
+					],
+					"name": "cabinetTelevision(Clone)",
+					"node": "cabinetTelevision(Clone)",
+					"source_materials": [
+						"wood"
+					]
+				}
+			],
+			"native_bounds_position_size": [
+				0.0,
+				0.0,
+				-0.25,
+				0.800000011920929,
+				0.310000002384186,
+				0.25
+			],
+			"sha256": "811719593d676ff76f7b5904d52c845ce0396af2bc9a6a2636c4818ead320b99",
+			"source_animations": 0,
+			"source_path": "res://build/professional-english/software-data-theme-proposal-r01/sources/kenney-furniture/models/cabinetTelevision.glb",
+			"source_url": "https://kenney.nl/assets/furniture-kit"
+		},
+		"chairDesk.glb": {
+			"bytes": 39016,
+			"creator": "Kenney",
+			"license": "CC0 1.0",
+			"materials_and_geometry_modified": false,
+			"mesh_nodes": [
+				{
+					"local_bounds_position_size": [
+						0.0236752554774284,
+						0.0,
+						-0.283238291740417,
+						0.287599474191666,
+						0.189999997615814,
+						0.273523360490799
+					],
+					"name": "chairDesk(Clone)",
+					"node": "chairDesk(Clone)",
+					"source_materials": [
+						"metalMedium"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.167475000023842,
+						0.0,
+						-0.154299035668373,
+						0.334950000047684,
+						0.417599976062775,
+						0.314299046993256
+					],
+					"name": "chair",
+					"node": "chairDesk(Clone)/chair",
+					"source_materials": [
+						"carpet",
+						"metalMedium"
+					]
+				}
+			],
+			"native_bounds_position_size": [
+				0.0,
+				0.0,
+				-0.314299046993256,
+				0.334950000047684,
+				0.607599973678589,
+				0.314299046993256
+			],
+			"sha256": "46406619186034cbe92b19b79a5f1a8e3f442a17a70a7524ef2c0ad0f35095c6",
+			"source_animations": 0,
+			"source_path": "res://build/professional-english/software-data-theme-proposal-r01/sources/kenney-furniture/models/chairDesk.glb",
+			"source_url": "https://kenney.nl/assets/furniture-kit"
+		},
+		"computerKeyboard.glb": {
+			"bytes": 3476,
+			"creator": "Kenney",
+			"license": "CC0 1.0",
+			"materials_and_geometry_modified": false,
+			"mesh_nodes": [
+				{
+					"local_bounds_position_size": [
+						0.0,
+						0.00000000000000000000000000000016,
+						-0.118191994726658,
+						0.282200008630753,
+						0.0275560002774,
+						0.118191994726658
+					],
+					"name": "computerKeyboard(Clone)",
+					"node": "computerKeyboard(Clone)",
+					"source_materials": [
+						"metalDark",
+						"metalMedium"
+					]
+				}
+			],
+			"native_bounds_position_size": [
+				0.0,
+				0.00000000000000000000000000000016,
+				-0.118191994726658,
+				0.282200008630753,
+				0.0275560002774,
+				0.118191994726658
+			],
+			"sha256": "9d9135789de2120e9f41ce3f0a56dd1b15f40adcc7888739bb842a2d820da322",
+			"source_animations": 0,
+			"source_path": "res://build/professional-english/software-data-theme-proposal-r01/sources/kenney-furniture/models/computerKeyboard.glb",
+			"source_url": "https://kenney.nl/assets/furniture-kit"
+		},
+		"computerMouse.glb": {
+			"bytes": 5868,
+			"creator": "Kenney",
+			"license": "CC0 1.0",
+			"materials_and_geometry_modified": false,
+			"mesh_nodes": [
+				{
+					"local_bounds_position_size": [
+						-0.0248499996960163,
+						0.0,
+						-0.0851037949323654,
+						0.0496999993920326,
+						0.0235719997435808,
+						0.0851037949323654
+					],
+					"name": "computerMouse(Clone)",
+					"node": "computerMouse(Clone)",
+					"source_materials": [
+						"metalDark"
+					]
+				}
+			],
+			"native_bounds_position_size": [
+				-0.0248499996960163,
+				0.0,
+				-0.0851037949323654,
+				0.0496999993920326,
+				0.0235719997435808,
+				0.0851037949323654
+			],
+			"sha256": "d3ad1a923f0f7707ef367bb969eb94c9076e211c98c830ba52e133fadc5cdfc0",
+			"source_animations": 0,
+			"source_path": "res://build/professional-english/software-data-theme-proposal-r01/sources/kenney-furniture/models/computerMouse.glb",
+			"source_url": "https://kenney.nl/assets/furniture-kit"
+		},
+		"computerScreen.glb": {
+			"bytes": 6404,
+			"creator": "Kenney",
+			"license": "CC0 1.0",
+			"materials_and_geometry_modified": false,
+			"mesh_nodes": [
+				{
+					"local_bounds_position_size": [
+						-0.00000000000000144382282161564,
+						-0.00000000000000000000000000000008,
+						-0.104003995656967,
+						0.392688006162643,
+						0.294285207986832,
+						0.104003995656967
+					],
+					"name": "computerScreen(Clone)",
+					"node": "computerScreen(Clone)",
+					"source_materials": [
+						"metalDark",
+						"metal"
+					]
+				}
+			],
+			"native_bounds_position_size": [
+				-0.00000000000000144382282161564,
+				-0.00000000000000000000000000000008,
+				-0.104003995656967,
+				0.392688006162643,
+				0.294285207986832,
+				0.104003995656967
+			],
+			"sha256": "5942cbad29a2d2b956619569926e81d50a4174403d592fece6556e57632dc643",
+			"source_animations": 0,
+			"source_path": "res://build/professional-english/software-data-theme-proposal-r01/sources/kenney-furniture/models/computerScreen.glb",
+			"source_url": "https://kenney.nl/assets/furniture-kit"
+		},
+		"desk.glb": {
+			"bytes": 15048,
+			"creator": "Kenney",
+			"license": "CC0 1.0",
+			"materials_and_geometry_modified": false,
+			"mesh_nodes": [
+				{
+					"local_bounds_position_size": [
+						-0.00999999977648258,
+						0.0,
+						-0.379999995231628,
+						0.734475433826447,
+						0.384407550096512,
+						0.389999985694885
+					],
+					"name": "desk(Clone)",
+					"node": "desk(Clone)",
+					"source_materials": [
+						"wood"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						0.0,
+						0.000390619155950844,
+						-0.000000000000000721911410807822,
+						0.196799993515015,
+						0.0500000007450581,
+						0.17629998922348
+					],
+					"name": "drawer",
+					"node": "desk(Clone)/drawer",
+					"source_materials": [
+						"wood",
+						"metal"
+					]
+				}
+			],
+			"native_bounds_position_size": [
+				-0.00999999977648258,
+				0.0,
+				-0.379999995231628,
+				0.734475433826447,
+				0.384407550096512,
+				0.392300009727478
+			],
+			"sha256": "0164fe828f028b321730fb8c74502e353583f751be74da1682d42fff7d3c5a42",
+			"source_animations": 0,
+			"source_path": "res://build/professional-english/software-data-theme-proposal-r01/sources/kenney-furniture/models/desk.glb",
+			"source_url": "https://kenney.nl/assets/furniture-kit"
+		},
+		"floorFull.glb": {
+			"bytes": 2260,
+			"creator": "Kenney",
+			"license": "CC0 1.0",
+			"materials_and_geometry_modified": false,
+			"mesh_nodes": [
+				{
+					"local_bounds_position_size": [
+						0.0,
+						0.0,
+						-1.0,
+						1.0,
+						0.0500000007450581,
+						1.0
+					],
+					"name": "floorFull(Clone)",
+					"node": "floorFull(Clone)",
+					"source_materials": [
+						"wood"
+					]
+				}
+			],
+			"native_bounds_position_size": [
+				0.0,
+				0.0,
+				-1.0,
+				1.0,
+				0.0500000007450581,
+				1.0
+			],
+			"sha256": "99fc5df646d8dc605d6fe35001fe5b15bb7b269cc5c65f4f7793fbc76ff3d822",
+			"source_animations": 0,
+			"source_path": "res://build/professional-english/software-data-theme-proposal-r01/sources/kenney-furniture/models/floorFull.glb",
+			"source_url": "https://kenney.nl/assets/furniture-kit"
+		},
+		"lampRoundFloor.glb": {
+			"bytes": 6600,
+			"creator": "Kenney",
+			"license": "CC0 1.0",
+			"materials_and_geometry_modified": false,
+			"mesh_nodes": [
+				{
+					"local_bounds_position_size": [
+						-0.0160197094082832,
+						0.0,
+						-0.147780001163483,
+						0.152039408683777,
+						0.860000014305115,
+						0.175559997558594
+					],
+					"name": "lampRoundFloor(Clone)",
+					"node": "lampRoundFloor(Clone)",
+					"source_materials": [
+						"metal",
+						"lamp"
+					]
+				}
+			],
+			"native_bounds_position_size": [
+				-0.0160197094082832,
+				0.0,
+				-0.147780001163483,
+				0.152039408683777,
+				0.860000014305115,
+				0.175559997558594
+			],
+			"sha256": "50fe1b5b588edf15bfa9cc880f71a02a4fda6036350b24733d0ef4de5cc5e908",
+			"source_animations": 0,
+			"source_path": "res://build/professional-english/software-data-theme-proposal-r01/sources/kenney-furniture/models/lampRoundFloor.glb",
+			"source_url": "https://kenney.nl/assets/furniture-kit"
+		},
+		"laptop.glb": {
+			"bytes": 5540,
+			"creator": "Kenney",
+			"license": "CC0 1.0",
+			"materials_and_geometry_modified": false,
+			"mesh_nodes": [
+				{
+					"local_bounds_position_size": [
+						0.0,
+						0.0,
+						-0.54560261964798,
+						0.600000023841858,
+						0.367748647928238,
+						0.54560261964798
+					],
+					"name": "laptop(Clone)",
+					"node": "laptop(Clone)",
+					"source_materials": [
+						"metalDark",
+						"metal",
+						"metalMedium"
+					]
+				}
+			],
+			"native_bounds_position_size": [
+				0.0,
+				0.0,
+				-0.240065157413483,
+				0.263999998569489,
+				0.161809399724007,
+				0.240065157413483
+			],
+			"sha256": "5fa8a1f4a71ab8d82ef64da77a6973ffd350c6d4557516069a4ffd4bb8d808af",
+			"source_animations": 0,
+			"source_path": "res://build/professional-english/software-data-theme-proposal-r01/sources/kenney-furniture/models/laptop.glb",
+			"source_url": "https://kenney.nl/assets/furniture-kit"
+		},
+		"mobile-whiteboard-education-furniture.glb": {
+			"bytes": 349108,
+			"creator": "Innerscene",
+			"license": "CC0 1.0 Universal",
+			"materials_and_geometry_modified": false,
+			"mesh_nodes": [
+				{
+					"local_bounds_position_size": [
+						-0.0199999995529652,
+						-0.0199999995529652,
+						-0.330000013113022,
+						0.0399999991059303,
+						0.0399999991059303,
+						0.660000026226044
+					],
+					"name": "Board floor rail",
+					"node": "Mobile whiteboard - Education furniture/Board floor rail",
+					"source_materials": [
+						"steel"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.0199999995529652,
+						-0.0199999995529652,
+						-0.330000013113022,
+						0.0399999991059303,
+						0.0399999991059303,
+						0.660000026226044
+					],
+					"name": "Board floor rail_001",
+					"node": "Mobile whiteboard - Education furniture/Board floor rail_001",
+					"source_materials": [
+						"steel"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.0175000000745058,
+						-0.305000007152557,
+						-0.0175000000745058,
+						0.0350000001490116,
+						0.610000014305115,
+						0.0350000001490116
+					],
+					"name": "Board upright",
+					"node": "Mobile whiteboard - Education furniture/Board upright",
+					"source_materials": [
+						"steel"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.0175000000745058,
+						-0.305000007152557,
+						-0.0175000000745058,
+						0.0350000001490116,
+						0.610000014305115,
+						0.0350000001490116
+					],
+					"name": "Board upright_001",
+					"node": "Mobile whiteboard - Education furniture/Board upright_001",
+					"source_materials": [
+						"steel"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.0399999991059303,
+						-0.0125000001862645,
+						-0.0399999991059303,
+						0.0799999982118607,
+						0.025000000372529,
+						0.0799999982118607
+					],
+					"name": "Cast polyurethane wheel",
+					"node": "Mobile whiteboard - Education furniture/Cast polyurethane wheel",
+					"source_materials": [
+						"rubber"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.0399999991059303,
+						-0.0125000001862645,
+						-0.0399999991059303,
+						0.0799999982118607,
+						0.025000000372529,
+						0.0799999982118607
+					],
+					"name": "Cast polyurethane wheel_001",
+					"node": "Mobile whiteboard - Education furniture/Cast polyurethane wheel_001",
+					"source_materials": [
+						"rubber"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.0399999991059303,
+						-0.0125000001862645,
+						-0.0399999991059303,
+						0.0799999982118607,
+						0.025000000372529,
+						0.0799999982118607
+					],
+					"name": "Cast polyurethane wheel_002",
+					"node": "Mobile whiteboard - Education furniture/Cast polyurethane wheel_002",
+					"source_materials": [
+						"rubber"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.0399999991059303,
+						-0.0125000001862645,
+						-0.0399999991059303,
+						0.0799999982118607,
+						0.025000000372529,
+						0.0799999982118607
+					],
+					"name": "Cast polyurethane wheel_003",
+					"node": "Mobile whiteboard - Education furniture/Cast polyurethane wheel_003",
+					"source_materials": [
+						"rubber"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.0120000001043081,
+						-0.0350000001490116,
+						-0.0320000015199184,
+						0.0240000002086163,
+						0.0700000002980232,
+						0.0640000030398369
+					],
+					"name": "Caster fork",
+					"node": "Mobile whiteboard - Education furniture/Caster fork",
+					"source_materials": [
+						"steel"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.0120000001043081,
+						-0.0350000001490116,
+						-0.0320000015199184,
+						0.0240000002086163,
+						0.0700000002980232,
+						0.0640000030398369
+					],
+					"name": "Caster fork_001",
+					"node": "Mobile whiteboard - Education furniture/Caster fork_001",
+					"source_materials": [
+						"steel"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.0120000001043081,
+						-0.0350000001490116,
+						-0.0320000015199184,
+						0.0240000002086163,
+						0.0700000002980232,
+						0.0640000030398369
+					],
+					"name": "Caster fork_002",
+					"node": "Mobile whiteboard - Education furniture/Caster fork_002",
+					"source_materials": [
+						"steel"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.0120000001043081,
+						-0.0350000001490116,
+						-0.0320000015199184,
+						0.0240000002086163,
+						0.0700000002980232,
+						0.0640000030398369
+					],
+					"name": "Caster fork_003",
+					"node": "Mobile whiteboard - Education furniture/Caster fork_003",
+					"source_materials": [
+						"steel"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.028999999165535,
+						-0.00600000005215406,
+						-0.0270000007003546,
+						0.0579999983310699,
+						0.0120000001043081,
+						0.0540000014007092
+					],
+					"name": "Caster mounting plate",
+					"node": "Mobile whiteboard - Education furniture/Caster mounting plate",
+					"source_materials": [
+						"steel"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.028999999165535,
+						-0.00600000005215406,
+						-0.0270000007003546,
+						0.0579999983310699,
+						0.0120000001043081,
+						0.0540000014007092
+					],
+					"name": "Caster mounting plate_001",
+					"node": "Mobile whiteboard - Education furniture/Caster mounting plate_001",
+					"source_materials": [
+						"steel"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.028999999165535,
+						-0.00600000005215406,
+						-0.0270000007003546,
+						0.0579999983310699,
+						0.0120000001043081,
+						0.0540000014007092
+					],
+					"name": "Caster mounting plate_002",
+					"node": "Mobile whiteboard - Education furniture/Caster mounting plate_002",
+					"source_materials": [
+						"steel"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.028999999165535,
+						-0.00600000005215406,
+						-0.0270000007003546,
+						0.0579999983310699,
+						0.0120000001043081,
+						0.0540000014007092
+					],
+					"name": "Caster mounting plate_003",
+					"node": "Mobile whiteboard - Education furniture/Caster mounting plate_003",
+					"source_materials": [
+						"steel"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.0109999999403954,
+						-0.0225000008940697,
+						-0.0109999999403954,
+						0.0219999998807907,
+						0.0450000017881393,
+						0.0219999998807907
+					],
+					"name": "Caster mounting stem",
+					"node": "Mobile whiteboard - Education furniture/Caster mounting stem",
+					"source_materials": [
+						"steel"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.0109999999403954,
+						-0.0225000008940697,
+						-0.0109999999403954,
+						0.0219999998807907,
+						0.0450000017881393,
+						0.0219999998807907
+					],
+					"name": "Caster mounting stem_001",
+					"node": "Mobile whiteboard - Education furniture/Caster mounting stem_001",
+					"source_materials": [
+						"steel"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.0109999999403954,
+						-0.0225000008940697,
+						-0.0109999999403954,
+						0.0219999998807907,
+						0.0450000017881393,
+						0.0219999998807907
+					],
+					"name": "Caster mounting stem_002",
+					"node": "Mobile whiteboard - Education furniture/Caster mounting stem_002",
+					"source_materials": [
+						"steel"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.0109999999403954,
+						-0.0225000008940697,
+						-0.0109999999403954,
+						0.0219999998807907,
+						0.0450000017881393,
+						0.0219999998807907
+					],
+					"name": "Caster mounting stem_003",
+					"node": "Mobile whiteboard - Education furniture/Caster mounting stem_003",
+					"source_materials": [
+						"steel"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.0270000007003546,
+						-0.0175000000745058,
+						-0.0270000007003546,
+						0.0540000014007092,
+						0.0350000001490116,
+						0.0540000014007092
+					],
+					"name": "Caster swivel",
+					"node": "Mobile whiteboard - Education furniture/Caster swivel",
+					"source_materials": [
+						"steel"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.0270000007003546,
+						-0.0175000000745058,
+						-0.0270000007003546,
+						0.0540000014007092,
+						0.0350000001490116,
+						0.0540000014007092
+					],
+					"name": "Caster swivel_001",
+					"node": "Mobile whiteboard - Education furniture/Caster swivel_001",
+					"source_materials": [
+						"steel"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.0270000007003546,
+						-0.0175000000745058,
+						-0.0270000007003546,
+						0.0540000014007092,
+						0.0350000001490116,
+						0.0540000014007092
+					],
+					"name": "Caster swivel_002",
+					"node": "Mobile whiteboard - Education furniture/Caster swivel_002",
+					"source_materials": [
+						"steel"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.0270000007003546,
+						-0.0175000000745058,
+						-0.0270000007003546,
+						0.0540000014007092,
+						0.0350000001490116,
+						0.0540000014007092
+					],
+					"name": "Caster swivel_003",
+					"node": "Mobile whiteboard - Education furniture/Caster swivel_003",
+					"source_materials": [
+						"steel"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.0140000004321337,
+						-0.00600000005215406,
+						-0.0140000004321337,
+						0.0280000008642673,
+						0.0120000001043081,
+						0.0280000008642673
+					],
+					"name": "Caster wheel hub",
+					"node": "Mobile whiteboard - Education furniture/Caster wheel hub",
+					"source_materials": [
+						"steel"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.0140000004321337,
+						-0.00600000005215406,
+						-0.0140000004321337,
+						0.0280000008642673,
+						0.0120000001043081,
+						0.0280000008642673
+					],
+					"name": "Caster wheel hub_001",
+					"node": "Mobile whiteboard - Education furniture/Caster wheel hub_001",
+					"source_materials": [
+						"steel"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.0140000004321337,
+						-0.00600000005215406,
+						-0.0140000004321337,
+						0.0280000008642673,
+						0.0120000001043081,
+						0.0280000008642673
+					],
+					"name": "Caster wheel hub_002",
+					"node": "Mobile whiteboard - Education furniture/Caster wheel hub_002",
+					"source_materials": [
+						"steel"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.0140000004321337,
+						-0.00600000005215406,
+						-0.0140000004321337,
+						0.0280000008642673,
+						0.0120000001043081,
+						0.0280000008642673
+					],
+					"name": "Caster wheel hub_003",
+					"node": "Mobile whiteboard - Education furniture/Caster wheel hub_003",
+					"source_materials": [
+						"steel"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.0140000004321337,
+						-0.00600000005215406,
+						-0.0140000004321337,
+						0.0280000008642673,
+						0.0120000001043081,
+						0.0280000008642673
+					],
+					"name": "Caster wheel hub_004",
+					"node": "Mobile whiteboard - Education furniture/Caster wheel hub_004",
+					"source_materials": [
+						"steel"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.0140000004321337,
+						-0.00600000005215406,
+						-0.0140000004321337,
+						0.0280000008642673,
+						0.0120000001043081,
+						0.0280000008642673
+					],
+					"name": "Caster wheel hub_005",
+					"node": "Mobile whiteboard - Education furniture/Caster wheel hub_005",
+					"source_materials": [
+						"steel"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.0140000004321337,
+						-0.00600000005215406,
+						-0.0140000004321337,
+						0.0280000008642673,
+						0.0120000001043081,
+						0.0280000008642673
+					],
+					"name": "Caster wheel hub_006",
+					"node": "Mobile whiteboard - Education furniture/Caster wheel hub_006",
+					"source_materials": [
+						"steel"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.0140000004321337,
+						-0.00600000005215406,
+						-0.0140000004321337,
+						0.0280000008642673,
+						0.0120000001043081,
+						0.0280000008642673
+					],
+					"name": "Caster wheel hub_007",
+					"node": "Mobile whiteboard - Education furniture/Caster wheel hub_007",
+					"source_materials": [
+						"steel"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.915000021457672,
+						0.707499980926514,
+						-0.0274999998509884,
+						1.83000004291534,
+						1.18500006198883,
+						0.0549999997019768
+					],
+					"name": "Continuous whiteboard perimeter frame",
+					"node": "Mobile whiteboard - Education furniture/Continuous whiteboard perimeter frame",
+					"source_materials": [
+						"aluminum"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.899999976158142,
+						-0.574999988079071,
+						-0.0175000000745058,
+						1.79999995231628,
+						1.14999997615814,
+						0.0350000001490116
+					],
+					"name": "Double-sided writing board",
+					"node": "Mobile whiteboard - Education furniture/Double-sided writing board",
+					"source_materials": [
+						"white"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						-0.550000011920929,
+						-0.0125000001862645,
+						-0.0649999976158142,
+						1.10000002384186,
+						0.025000000372529,
+						0.129999995231628
+					],
+					"name": "Marker tray",
+					"node": "Mobile whiteboard - Education furniture/Marker tray",
+					"source_materials": [
+						"aluminum"
+					]
+				}
+			],
+			"native_bounds_position_size": [
+				-0.915000021457672,
+				0.0,
+				-0.330000013113022,
+				1.83000004291534,
+				1.89250004291534,
+				0.660000026226044
+			],
+			"sha256": "bfa7cee0ff63a8439b489d8f84146348f6424bb35784c090eb557b9288d931a9",
+			"source_animations": 0,
+			"source_path": "res://build/professional-english/software-data-theme-proposal-r01/sources/innerscene-whiteboard/mobile-whiteboard-education-furniture.glb",
+			"source_url": "https://www.innerscene.com/tools/library/3d-parts/mobile-whiteboard-education-furniture-dee300ef"
+		},
+		"pottedPlant.glb": {
+			"bytes": 7576,
+			"creator": "Kenney",
+			"license": "CC0 1.0",
+			"materials_and_geometry_modified": false,
+			"mesh_nodes": [
+				{
+					"local_bounds_position_size": [
+						-0.0428942367434502,
+						0.0,
+						-0.0495299994945526,
+						0.0857884734869003,
+						0.121520005166531,
+						0.0990599989891052
+					],
+					"name": "pottedPlant(Clone)",
+					"node": "pottedPlant(Clone)",
+					"source_materials": [
+						"wood",
+						"woodDark"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						0.0,
+						0.0,
+						-0.24146194756031,
+						0.212059274315834,
+						0.535776793956757,
+						0.24146194756031
+					],
+					"name": "plant",
+					"node": "pottedPlant(Clone)/plant",
+					"source_materials": [
+						"plant"
+					]
+				}
+			],
+			"native_bounds_position_size": [
+				-0.106029637157917,
+				0.0,
+				-0.120730973780155,
+				0.212059274315834,
+				0.6540167927742,
+				0.24146194756031
+			],
+			"sha256": "5b760eda2766f75fda36b2c5df652a1662f82981ef64cd8fa7fe7bcd386b3a15",
+			"source_animations": 0,
+			"source_path": "res://build/professional-english/software-data-theme-proposal-r01/sources/kenney-furniture/models/pottedPlant.glb",
+			"source_url": "https://kenney.nl/assets/furniture-kit"
+		},
+		"televisionModern.glb": {
+			"bytes": 6368,
+			"creator": "Kenney",
+			"license": "CC0 1.0",
+			"materials_and_geometry_modified": false,
+			"mesh_nodes": [
+				{
+					"local_bounds_position_size": [
+						-0.342400014400482,
+						0.0,
+						-0.0641999989748001,
+						0.684800028800964,
+						0.454750001430511,
+						0.1283999979496
+					],
+					"name": "televisionModern(Clone)",
+					"node": "televisionModern(Clone)",
+					"source_materials": [
+						"metalDark",
+						"metal"
+					]
+				}
+			],
+			"native_bounds_position_size": [
+				-0.342400014400482,
+				0.0,
+				-0.0641999989748001,
+				0.684800028800964,
+				0.454750001430511,
+				0.1283999979496
+			],
+			"sha256": "d89519ad0a5f28b5b0dccb0d83209dccf610cda959578238dd21bbf9e219cfc6",
+			"source_animations": 0,
+			"source_path": "res://build/professional-english/software-data-theme-proposal-r01/sources/kenney-furniture/models/televisionModern.glb",
+			"source_url": "https://kenney.nl/assets/furniture-kit"
+		},
+		"wall.glb": {
+			"bytes": 3340,
+			"creator": "Kenney",
+			"license": "CC0 1.0",
+			"materials_and_geometry_modified": false,
+			"mesh_nodes": [
+				{
+					"local_bounds_position_size": [
+						0.0,
+						0.0,
+						-0.0500000007450581,
+						1.0,
+						1.28953170776367,
+						0.0500000007450581
+					],
+					"name": "wall(Clone)",
+					"node": "wall(Clone)",
+					"source_materials": [
+						"wood",
+						"_defaultMat",
+						"metalDark"
+					]
+				}
+			],
+			"native_bounds_position_size": [
+				0.0,
+				0.0,
+				-0.0500000007450581,
+				1.0,
+				1.28953170776367,
+				0.0500000007450581
+			],
+			"sha256": "69273d5d623bddfce41d12d4e5eeb5621ea04f1edcbd8f35c00a60c2fd3258b7",
+			"source_animations": 0,
+			"source_path": "res://build/professional-english/software-data-theme-proposal-r01/sources/kenney-furniture/models/wall.glb",
+			"source_url": "https://kenney.nl/assets/furniture-kit"
+		},
+		"wallWindow.glb": {
+			"bytes": 10744,
+			"creator": "Kenney",
+			"license": "CC0 1.0",
+			"materials_and_geometry_modified": false,
+			"mesh_nodes": [
+				{
+					"local_bounds_position_size": [
+						0.0,
+						0.0,
+						-0.0695500001311302,
+						1.0,
+						1.28953170776367,
+						0.0891000032424927
+					],
+					"name": "wallWindow(Clone)",
+					"node": "wallWindow(Clone)",
+					"source_materials": [
+						"wood",
+						"metalDark",
+						"_defaultMat"
+					]
+				},
+				{
+					"local_bounds_position_size": [
+						0.0,
+						0.0,
+						-0.0345499999821186,
+						0.374583184719086,
+						0.664114952087402,
+						0.024550000205636
+					],
+					"name": "window",
+					"node": "wallWindow(Clone)/window",
+					"source_materials": [
+						"glass",
+						"wood"
+					]
+				}
+			],
+			"native_bounds_position_size": [
+				0.0,
+				0.0,
+				-0.0695500001311302,
+				1.0,
+				1.28953170776367,
+				0.0891000032424927
+			],
+			"sha256": "166a10fddb8a78d942bc2791186913f7015dfee8501d20efd7a7b8f196fc5c3e",
+			"source_animations": 0,
+			"source_path": "res://build/professional-english/software-data-theme-proposal-r01/sources/kenney-furniture/models/wallWindow.glb",
+			"source_url": "https://kenney.nl/assets/furniture-kit"
+		}
+	},
+	"stage": "rest",
+	"status": "source_render_candidates_complete_pending_visual_inspection",
+	"theme_id": "professional_software_data",
+	"theme_ready": false,
+	"visual_acceptance": false
+}

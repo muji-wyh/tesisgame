@@ -46,13 +46,15 @@ func _run() -> void:
 	_enter_mode(app, "memory")
 	check(app._mode_id == "memory" and app._memory.is_visible_in_tree() and not app.grid.visible, "Memory replaces the matching board")
 	check(not app.hint_button.visible and not app._voice_button.visible, "Memory hides Match-only controls")
+	app._memory.start_button.pressed.emit()
 	var word_index := 0
 	while app._memory.memory.cards[word_index].kind != "word":
 		word_index += 1
-	app._memory.card_buttons[word_index].pressed.emit()
 	check(app._memory.card_buttons[word_index].word_label.is_visible_in_tree()
 		and app._memory.card_buttons[word_index].word_label.get_theme_color("font_color") == load("res://scripts/ui_style.gd").INK,
 		"A revealed Memory word retains dark readable text")
+	app._memory_peek_countdown.action_button.pressed.emit()
+	app._memory.card_buttons[word_index].pressed.emit()
 	app.choose_theme("ocean")
 	check(app.model.theme_id == "ocean", "All worlds remain selectable during Memory")
 	var selection: Array = app._memory.memory.selected_indices.duplicate()

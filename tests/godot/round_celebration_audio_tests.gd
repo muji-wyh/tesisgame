@@ -167,11 +167,18 @@ func _check_speech_mix() -> void:
 		and audio._playback_requests[player] == cue_request,
 		"Stopping pronunciation restores the cue gain without replaying the cue")
 	# Use a short real recording on the voice channel to check its natural end.
+	var natural_end := {"finished": false}
+	audio.voice.finished.connect(func() -> void: natural_end.finished = true, CONNECT_ONE_SHOT)
 	audio.say("res://assets/imported-audio/ui-click/select.wav")
 	check(is_equal_approx(player.volume_db, base_gain - 8.0), "A new voice playback reinstates the speech mix")
-	await create_timer(0.25).timeout
-	check(not audio.voice.playing and is_equal_approx(player.volume_db, base_gain),
-		"A natural voice ending restores the celebration cue mix")
+	var recording_duration: float = audio.voice.stream.get_length()
+	var finish_timeout: float = maxf(2.0, recording_duration + 1.0)
+	var finish_deadline: int = Time.get_ticks_msec() + int(finish_timeout * 1000.0)
+	while not natural_end.finished and Time.get_ticks_msec() < finish_deadline:
+		await process_frame
+	check(natural_end.finished and not audio.voice.playing and is_equal_approx(player.volume_db, base_gain),
+		"A natural voice ending restores the celebration cue mix (recording %.3fs, timeout %.1fs, signal %s)"
+		% [recording_duration, finish_timeout, str(natural_end.finished)])
 	audio.say("res://assets/audio/voice/word-apple.wav")
 	voice_request = audio._playback_requests[audio.voice]
 	audio.stop_round_celebration()

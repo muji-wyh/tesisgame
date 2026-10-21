@@ -1,0 +1,133 @@
+{
+  "schema": 1,
+  "date": "2026-10-20",
+  "theme_id": "professional_software_data",
+  "status": "reviewed_static_components_integrated_full_theme_pending",
+  "integrated_roles": [
+    "environment",
+    "props"
+  ],
+  "theme_ready": false,
+  "art_home_changed": false,
+  "accepted_preview_changed": false,
+  "ambient_motion_changed": false,
+  "resources": [
+    {
+      "id": "sha256:6a3e2fab06a3fb72c78a1414eb8919d7ba7e038fcc0abf73e16fd37203d45062",
+      "sha256": "6a3e2fab06a3fb72c78a1414eb8919d7ba7e038fcc0abf73e16fd37203d45062",
+      "path": "professional-media/6a3e2fab06a3fb72c78a1414eb8919d7ba7e038fcc0abf73e16fd37203d45062.png",
+      "kind": "image",
+      "format": "png",
+      "compressed_bytes": 78312,
+      "decoded_bytes": 4718592,
+      "width": 768,
+      "height": 768
+    },
+    {
+      "id": "sha256:9bf8c55a9a4690f2c90f11ee62741ba49db0f271caa86ffb64195b28717f5b05",
+      "sha256": "9bf8c55a9a4690f2c90f11ee62741ba49db0f271caa86ffb64195b28717f5b05",
+      "path": "professional-media/9bf8c55a9a4690f2c90f11ee62741ba49db0f271caa86ffb64195b28717f5b05.png",
+      "kind": "image",
+      "format": "png",
+      "compressed_bytes": 112959,
+      "decoded_bytes": 4718592,
+      "width": 768,
+      "height": 768
+    }
+  ],
+  "static_encoded_bytes": 191271,
+  "static_decoded_bytes": 9437184,
+  "source_archive": "docs/assets/sources/kenney-innerscene-software-data-theme/source-inventory.json",
+  "source_models": 14,
+  "source_animations": 0,
+  "placement": {
+    "revision": "r04",
+    "plant_position": [
+      -1.42,
+      0.05,
+      0.05
+    ],
+    "plant_scale": 1.4,
+    "plant_yaw_degrees": 0,
+    "source_geometry_and_materials_unchanged": true,
+    "camera_and_lighting_unchanged": true
+  },
+  "protected_fields": {
+    "profile_component_change": "profile-component-change-2026-10-20.json",
+    "all_other_profile_fields_identical": true,
+    "all_other_profiles_identical": true,
+    "preview_sha256": "5c87d4a3045d91aa60a5fb4be951baa43834fb39fbf684a5ee7aa132daece5b2",
+    "themes_afterimage_sha256": "e080818ba1302e940e3c73619073bceb2d3d813f3fc5ff6050e92b6d9821524b"
+  },
+  "evidence": {
+    "inventory": "docs/qa/software-data-static-r04/evidence-inventory.json",
+    "main": {
+      "report": "docs/qa/software-data-static-r04/main/report.json",
+      "checks": 131,
+      "failures": 0,
+      "captures": 24,
+      "scope": "Current Main Match and Word Jelly placement using complete source composites and internal synthetic lesson/media fixtures. This is not the production raw loader or post-integration Main."
+    },
+    "components": {
+      "report": "docs/qa/software-data-static-r04/components/report.json",
+      "checks": 133,
+      "failures": 0,
+      "captures": 5,
+      "scope": "Standalone actual LearningThemeArt using real native raw loader, decoder, cache and Access lease. No fetch override or fixture cache. Exact static source reconstruction and decoded pixels; no scaled rendered-pixel equality claim.",
+      "manifest_images": 4,
+      "manifest_encoded_bytes": 287409,
+      "manifest_decoded_bytes": 11879936,
+      "leases": 1,
+      "disposed_resources": 0,
+      "disposed_bytes": 0,
+      "cleared_weak_references": 4
+    }
+  },
+  "static_visual_review": {
+    "reviewer": "Codex scoped static review",
+    "inspected_components": [
+      "768x768",
+      "320x568",
+      "390x844",
+      "844x390",
+      "1280x800"
+    ],
+    "findings": "No visible mask seams, detached pot, shifted foreground shadows or tabletop misreading in the inspected static component views.",
+    "independent_root_review": [
+      "390x844",
+      "844x390",
+      "1280x800"
+    ],
+    "independent_root_scope": "Original standalone component PNGs accepted for scoped static layering only; portrait crop agrees with earlier bounded Main composition."
+  },
+  "motion": {
+    "status": "pending",
+    "installed": false,
+    "candidate_atlas": "docs/qa/software-data-static-r04/candidate-layers/motion-sheet.png",
+    "source_frames": 16,
+    "frames_per_second_proposed": 2,
+    "cycle_seconds_proposed": 8,
+    "amplitude_degrees": 0.6,
+    "source_reconstruction_exact": true,
+    "loop_endpoint_exact": true,
+    "all_frames_statically_inspected": true,
+    "normal_speed_visual_review": false,
+    "native_timing_review": false,
+    "motion_lifecycle_review": false,
+    "notice": "The atlas was decoded and leased in the static resource check but never played. No animation descriptor or readiness was changed."
+  },
+  "gates": {
+    "audit_errors": 0,
+    "professional_modules": 200,
+    "ready_modules": 0,
+    "software03_actual_resolver": "content_pending in match, memory, pop, jelly, word_jelly and phrase before installation",
+    "policy_decisions_changed": false,
+    "release_ready": false
+  },
+  "limitations": [
+    "The 320x568 Main Word Jelly view remains paused by its existing minimum-window policy.",
+    "Natural opaque Match card occlusion is accepted; no art is drawn above controls.",
+    "Other four games, complete lesson-media budgets, participant recognition, physical devices, browser playback, listening and full-theme acceptance remain pending.",
+    "Source reports retain their original pending labels and historical catalog hashes; this receipt adds bounded acceptance without rewriting earlier evidence."
+  ]
+}

@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const { metrics, tap, chooseMode, rendered, openGame, boardPoint,
-  memoryMetrics, memoryPoint, resultPoint, visibleColorCount, acceptCelebration } = require('./game-ui.cjs');
+  memoryPoint, resultPoint, visibleColorCount, acceptCelebration } = require('./game-ui.cjs');
+const { startMemory, memoryState, memoryCardTap, memoryPairs, waitForMemoryInput } = require('./memory-flow.cjs');
 
 async function click(page, point) {
   await tap(page, point.x, point.y);
@@ -91,44 +92,34 @@ test(`Match keeps its board through automatic answers and the chest (${motion})`
   expect(errors).toEqual([]);
 });
 
-test(`Memory keeps remembered positions through automatic corrections and a full garden (${motion})`, async ({ page }, testInfo) => {
+test(`Memory keeps remembered positions through automatic corrections and five numbered pairs (${motion})`, async ({ page }, testInfo) => {
   const errors = await start(page, motion);
   await chooseMode(page, 'memory');
-  const beforeGeometry = await geometry(page), bounds = await memoryMetrics(page), cards = [];
-  for (let index = 0; index < 10; index++) {
-    const point = memoryPoint(bounds, index);
-    await click(page, point);
-    await expect(page.locator('#selection-status')).toHaveText(/^Memory card \d+\. (Word|Picture): [a-z]+\.$/);
-    const [, number, kind, word] = (await page.locator('#selection-status').textContent()).match(/^Memory card (\d+)\. (Word|Picture): ([a-z]+)\.$/);
-    expect(Number(number)).toBe(index + 1);
-    cards.push({ index, kind, word, point });
-    await click(page, point);
-    await expect(page.locator('#selection-status')).toBeEmpty();
-  }
-  const pairs = cards.filter(card => card.kind === 'Word').map(word =>
-    [word, cards.find(card => card.kind === 'Picture' && card.word === word.word)]);
+  const beforeGeometry = await geometry(page), cards = await startMemory(page), bounds = await metrics(page);
+  const pairs = memoryPairs(cards);
   expect(pairs).toHaveLength(5);
   const [word, right] = pairs[0], wrong = pairs[1][1];
-  const untouched = cards.find(card => ![word.index, right.index, wrong.index].includes(card.index));
-  const still = await patch(page, untouched.point);
+  const untouched = cards.find(card => ![word, right, wrong].includes(card.index));
+  const stillPoint = memoryPoint(bounds, untouched.index), still = await patch(page, stillPoint);
   await shot(page, testInfo, 'memory-before');
-  await click(page, word.point);
-  await click(page, wrong.point);
-  await expect(page.locator('#game-status')).toContainText('Try another pair.');
+  await memoryCardTap(page, word);
+  await memoryCardTap(page, wrong);
+  await expect(page.locator('#game-status')).toContainText('Not a pair.');
   await shot(page, testInfo, 'memory-wrong');
-  expect((await patch(page, untouched.point)).equals(still), 'Wrong feedback cannot remove or move hidden cards.').toBe(true);
-  await expect(page.locator('#game-status')).toContainText('Find a pair.');
+  expect((await patch(page, stillPoint)).equals(still), 'Wrong feedback cannot remove or move hidden cards.').toBe(true);
+  await waitForMemoryInput(page);
   for (const [index, pair] of pairs.entries()) {
-    await click(page, pair[0].point);
-    await expect(page.locator('#selection-status')).toHaveText(`Memory card ${pair[0].index + 1}. Word: ${pair[0].word}.`);
-    await click(page, pair[1].point);
-    await expect(page.locator('#game-status')).toContainText('A new flower!');
+    await memoryCardTap(page, pair[0]);
+    expect((await memoryState(page)).cards[pair[0]]).toMatchObject({ selected: true, face_up: false, word_id: '' });
+    await memoryCardTap(page, pair[1]);
+    await expect.poll(async () => (await memoryState(page)).pairs).toBe(index + 1);
     if (index === 0) {
       await shot(page, testInfo, 'memory-correct');
-      expect((await patch(page, untouched.point)).equals(still), 'Growing a flower leaves every other remembered position unchanged.').toBe(true);
+      expect((await patch(page, stillPoint)).equals(still), 'A numbered pair leaves every other remembered position unchanged.').toBe(true);
     }
-    await expect(page.locator('#game-status')).toContainText(index === 4 ? /You did it!|Round complete/ : 'Find a pair.');
+    if (index < 4) await waitForMemoryInput(page);
   }
+  await expect.poll(async () => (await memoryState(page)).phase).toBe('won');
   await shot(page, testInfo, 'memory-complete');
   expect(await geometry(page)).toEqual(beforeGeometry);
   expect(errors).toEqual([]);

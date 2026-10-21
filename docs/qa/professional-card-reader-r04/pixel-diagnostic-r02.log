@@ -1,0 +1,758 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API OpenGL ES 3.0 (ANGLE 2.1.1 git hash: aaebda1c5a40) - Compatibility - Using Device: Google Inc. (Microsoft) - ANGLE (Microsoft, Microsoft Basic Render Driver (0x0000008C) Direct3D11 vs_5_0 ps_5_0, D3D11-10.0.26100.9711)
+
+[
+  {
+    "before_render_sha256": "b1fd43a079c7486d4ccd155ce1c93b8a52ca9712495f43063eebf606d8fd807b",
+    "decoded_format": 5,
+    "decoded_mipmaps": false,
+    "decoded_rgba_bytes": 886784,
+    "decoded_rgba_sha256": "b1fd43a079c7486d4ccd155ce1c93b8a52ca9712495f43063eebf606d8fd807b",
+    "decoded_size": [
+      512,
+      433
+    ],
+    "different_bytes": 0,
+    "different_pixels": 0,
+    "different_visible_pixels": 0,
+    "first_differences": [],
+    "id": "card-reader.payment-device.n",
+    "max_channel_delta": 0,
+    "source": "res://build/professional-english/card-reader-freesvg-acquisition-r01/206301-cropped-512.png",
+    "source_format": 5,
+    "source_mipmaps": false,
+    "source_rgba_bytes": 886784,
+    "source_rgba_sha256": "b1fd43a079c7486d4ccd155ce1c93b8a52ca9712495f43063eebf606d8fd807b",
+    "source_sha256": "67cb3e6f8e0be881b51a7d18ecc28fd1a02fab6b650197a8d60ef9d550b07c59",
+    "source_size": [
+      512,
+      433
+    ]
+  },
+  {
+    "before_render_sha256": "9b4c0719804d15ae2a936830a22e89ccaea48ac5b860bb6ca508856d73959297",
+    "decoded_format": 5,
+    "decoded_mipmaps": false,
+    "decoded_rgba_bytes": 1259520,
+    "decoded_rgba_sha256": "9b4c0719804d15ae2a936830a22e89ccaea48ac5b860bb6ca508856d73959297",
+    "decoded_size": [
+      512,
+      615
+    ],
+    "different_bytes": 0,
+    "different_pixels": 0,
+    "different_visible_pixels": 0,
+    "first_differences": [],
+    "id": "cash-register.sales-device.n",
+    "max_channel_delta": 0,
+    "source": "res://professional-media/f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png",
+    "source_format": 5,
+    "source_mipmaps": false,
+    "source_rgba_bytes": 1259520,
+    "source_rgba_sha256": "9b4c0719804d15ae2a936830a22e89ccaea48ac5b860bb6ca508856d73959297",
+    "source_sha256": "f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262",
+    "source_size": [
+      512,
+      615
+    ]
+  },
+  {
+    "before_render_sha256": "c7f66774d8ea0ab8fa8123c4c15c8813e205eaa0fc71e26a082fd43b0bb9acec",
+    "decoded_format": 5,
+    "decoded_mipmaps": false,
+    "decoded_rgba_bytes": 600064,
+    "decoded_rgba_sha256": "67ef8210bfb3a8678247e7439e0d5ae9d1e754bd61aa99fae272446c065ee8aa",
+    "decoded_size": [
+      512,
+      293
+    ],
+    "different_bytes": 51858,
+    "different_pixels": 18605,
+    "different_visible_pixels": 18605,
+    "first_differences": [
+      {
+        "decoded": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "pixel": 58,
+        "source": [
+          1,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "decoded": [
+          2,
+          1,
+          1,
+          2
+        ],
+        "pixel": 59,
+        "source": [
+          3,
+          2,
+          2,
+          3
+        ]
+      },
+      {
+        "decoded": [
+          95,
+          65,
+          44,
+          95
+        ],
+        "pixel": 61,
+        "source": [
+          96,
+          66,
+          45,
+          96
+        ]
+      },
+      {
+        "decoded": [
+          254,
+          176,
+          121,
+          254
+        ],
+        "pixel": 62,
+        "source": [
+          255,
+          177,
+          122,
+          255
+        ]
+      },
+      {
+        "decoded": [
+          255,
+          174,
+          120,
+          255
+        ],
+        "pixel": 143,
+        "source": [
+          255,
+          175,
+          120,
+          255
+        ]
+      },
+      {
+        "decoded": [
+          255,
+          175,
+          120,
+          255
+        ],
+        "pixel": 176,
+        "source": [
+          255,
+          175,
+          121,
+          255
+        ]
+      },
+      {
+        "decoded": [
+          255,
+          175,
+          121,
+          255
+        ],
+        "pixel": 201,
+        "source": [
+          255,
+          176,
+          122,
+          255
+        ]
+      },
+      {
+        "decoded": [
+          255,
+          206,
+          153,
+          255
+        ],
+        "pixel": 204,
+        "source": [
+          255,
+          207,
+          154,
+          255
+        ]
+      },
+      {
+        "decoded": [
+          255,
+          226,
+          174,
+          255
+        ],
+        "pixel": 205,
+        "source": [
+          255,
+          227,
+          175,
+          255
+        ]
+      },
+      {
+        "decoded": [
+          255,
+          224,
+          172,
+          255
+        ],
+        "pixel": 270,
+        "source": [
+          255,
+          224,
+          173,
+          255
+        ]
+      },
+      {
+        "decoded": [
+          255,
+          224,
+          173,
+          255
+        ],
+        "pixel": 287,
+        "source": [
+          255,
+          225,
+          173,
+          255
+        ]
+      },
+      {
+        "decoded": [
+          255,
+          225,
+          174,
+          255
+        ],
+        "pixel": 312,
+        "source": [
+          255,
+          226,
+          175,
+          255
+        ]
+      },
+      {
+        "decoded": [
+          255,
+          174,
+          120,
+          255
+        ],
+        "pixel": 316,
+        "source": [
+          255,
+          175,
+          121,
+          255
+        ]
+      },
+      {
+        "decoded": [
+          255,
+          175,
+          121,
+          255
+        ],
+        "pixel": 329,
+        "source": [
+          255,
+          176,
+          121,
+          255
+        ]
+      },
+      {
+        "decoded": [
+          255,
+          176,
+          121,
+          255
+        ],
+        "pixel": 455,
+        "source": [
+          255,
+          177,
+          122,
+          255
+        ]
+      },
+      {
+        "decoded": [
+          105,
+          61,
+          41,
+          254
+        ],
+        "pixel": 481,
+        "source": [
+          105,
+          61,
+          41,
+          255
+        ]
+      },
+      {
+        "decoded": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "pixel": 485,
+        "source": [
+          1,
+          0,
+          0,
+          2
+        ]
+      },
+      {
+        "decoded": [
+          2,
+          1,
+          0,
+          2
+        ],
+        "pixel": 570,
+        "source": [
+          3,
+          2,
+          1,
+          3
+        ]
+      },
+      {
+        "decoded": [
+          88,
+          60,
+          41,
+          88
+        ],
+        "pixel": 572,
+        "source": [
+          89,
+          61,
+          42,
+          89
+        ]
+      },
+      {
+        "decoded": [
+          254,
+          177,
+          122,
+          254
+        ],
+        "pixel": 573,
+        "source": [
+          255,
+          178,
+          123,
+          255
+        ]
+      }
+    ],
+    "id": "barcode.product-code.n",
+    "max_channel_delta": 1,
+    "source": "res://professional-media/a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c.png",
+    "source_format": 5,
+    "source_mipmaps": false,
+    "source_rgba_bytes": 600064,
+    "source_rgba_sha256": "c7f66774d8ea0ab8fa8123c4c15c8813e205eaa0fc71e26a082fd43b0bb9acec",
+    "source_sha256": "a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c",
+    "source_size": [
+      512,
+      293
+    ]
+  },
+  {
+    "before_render_sha256": "4c741a0409e4306200a79e1143cf46dc93d71d2f12fb31ee2d5a117859f9bee4",
+    "decoded_format": 5,
+    "decoded_mipmaps": false,
+    "decoded_rgba_bytes": 929792,
+    "decoded_rgba_sha256": "3a081562d517e0ba3232670681e2e5c8c219cc088cfc0205166948abe9bbefc9",
+    "decoded_size": [
+      512,
+      454
+    ],
+    "different_bytes": 63857,
+    "different_pixels": 24663,
+    "different_visible_pixels": 24650,
+    "first_differences": [
+      {
+        "decoded": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "pixel": 8569,
+        "source": [
+          1,
+          1,
+          1,
+          2
+        ]
+      },
+      {
+        "decoded": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "pixel": 9074,
+        "source": [
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "decoded": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "pixel": 9075,
+        "source": [
+          2,
+          2,
+          2,
+          2
+        ]
+      },
+      {
+        "decoded": [
+          51,
+          51,
+          51,
+          49
+        ],
+        "pixel": 9080,
+        "source": [
+          52,
+          52,
+          52,
+          50
+        ]
+      },
+      {
+        "decoded": [
+          127,
+          127,
+          128,
+          176
+        ],
+        "pixel": 9081,
+        "source": [
+          128,
+          128,
+          129,
+          177
+        ]
+      },
+      {
+        "decoded": [
+          137,
+          137,
+          137,
+          147
+        ],
+        "pixel": 9082,
+        "source": [
+          138,
+          138,
+          138,
+          147
+        ]
+      },
+      {
+        "decoded": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "pixel": 9085,
+        "source": [
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "decoded": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "pixel": 9086,
+        "source": [
+          2,
+          2,
+          2,
+          2
+        ]
+      },
+      {
+        "decoded": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "pixel": 9581,
+        "source": [
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "decoded": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "pixel": 9583,
+        "source": [
+          2,
+          2,
+          2,
+          2
+        ]
+      },
+      {
+        "decoded": [
+          2,
+          2,
+          2,
+          2
+        ],
+        "pixel": 9584,
+        "source": [
+          3,
+          3,
+          3,
+          2
+        ]
+      },
+      {
+        "decoded": [
+          61,
+          61,
+          61,
+          61
+        ],
+        "pixel": 9589,
+        "source": [
+          62,
+          62,
+          62,
+          62
+        ]
+      },
+      {
+        "decoded": [
+          179,
+          179,
+          179,
+          179
+        ],
+        "pixel": 9590,
+        "source": [
+          180,
+          180,
+          180,
+          180
+        ]
+      },
+      {
+        "decoded": [
+          236,
+          236,
+          236,
+          236
+        ],
+        "pixel": 9591,
+        "source": [
+          237,
+          237,
+          237,
+          237
+        ]
+      },
+      {
+        "decoded": [
+          242,
+          242,
+          242,
+          242
+        ],
+        "pixel": 9592,
+        "source": [
+          243,
+          243,
+          243,
+          243
+        ]
+      },
+      {
+        "decoded": [
+          249,
+          249,
+          249,
+          253
+        ],
+        "pixel": 9593,
+        "source": [
+          250,
+          250,
+          250,
+          254
+        ]
+      },
+      {
+        "decoded": [
+          247,
+          247,
+          247,
+          248
+        ],
+        "pixel": 9595,
+        "source": [
+          248,
+          248,
+          248,
+          248
+        ]
+      },
+      {
+        "decoded": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "pixel": 9599,
+        "source": [
+          2,
+          2,
+          2,
+          2
+        ]
+      },
+      {
+        "decoded": [
+          3,
+          3,
+          3,
+          3
+        ],
+        "pixel": 9600,
+        "source": [
+          4,
+          4,
+          4,
+          4
+        ]
+      },
+      {
+        "decoded": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "pixel": 10090,
+        "source": [
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    ],
+    "id": "shopping-basket.store-container.n",
+    "max_channel_delta": 1,
+    "source": "res://professional-media/fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3.png",
+    "source_format": 5,
+    "source_mipmaps": false,
+    "source_rgba_bytes": 929792,
+    "source_rgba_sha256": "4c741a0409e4306200a79e1143cf46dc93d71d2f12fb31ee2d5a117859f9bee4",
+    "source_sha256": "fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3",
+    "source_size": [
+      512,
+      454
+    ]
+  },
+  {
+    "before_render_sha256": "7f9ee4507e21c185c15b5f23ee55c3afa5fcd55b1193d5662553b7863767bae3",
+    "decoded_format": 5,
+    "decoded_mipmaps": false,
+    "decoded_rgba_bytes": 847872,
+    "decoded_rgba_sha256": "7f9ee4507e21c185c15b5f23ee55c3afa5fcd55b1193d5662553b7863767bae3",
+    "decoded_size": [
+      414,
+      512
+    ],
+    "different_bytes": 0,
+    "different_pixels": 0,
+    "different_visible_pixels": 0,
+    "first_differences": [],
+    "id": "shopping-bag.goods-carrier.n",
+    "max_channel_delta": 0,
+    "source": "res://professional-media/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png",
+    "source_format": 5,
+    "source_mipmaps": false,
+    "source_rgba_bytes": 847872,
+    "source_rgba_sha256": "7f9ee4507e21c185c15b5f23ee55c3afa5fcd55b1193d5662553b7863767bae3",
+    "source_sha256": "f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb",
+    "source_size": [
+      414,
+      512
+    ]
+  }
+]
+WARNING: Loaded resource as image file, this will not work on export: 'res://professional-media/f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png'. Instead, import the image file as an Image resource and load it normally as a resource.
+   at: load_from_file (core/io/image.cpp:2780)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://build/professional-english/card-reader-review-20261020/diagnose-pixels-after-render.gd:25)
+WARNING: Loaded resource as image file, this will not work on export: 'res://professional-media/a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c.png'. Instead, import the image file as an Image resource and load it normally as a resource.
+   at: load_from_file (core/io/image.cpp:2780)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://build/professional-english/card-reader-review-20261020/diagnose-pixels-after-render.gd:25)
+WARNING: Loaded resource as image file, this will not work on export: 'res://professional-media/fbbdcb9b9eb07999d6891eb900d07ab84de5b9946913c55b6cde36d92b7c9eb3.png'. Instead, import the image file as an Image resource and load it normally as a resource.
+   at: load_from_file (core/io/image.cpp:2780)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://build/professional-english/card-reader-review-20261020/diagnose-pixels-after-render.gd:25)
+WARNING: Loaded resource as image file, this will not work on export: 'res://professional-media/f978a606233240f896d7255e8f1454df0207194b207d88ef9d5502146c4558bb.png'. Instead, import the image file as an Image resource and load it normally as a resource.
+   at: load_from_file (core/io/image.cpp:2780)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://build/professional-english/card-reader-review-20261020/diagnose-pixels-after-render.gd:25)

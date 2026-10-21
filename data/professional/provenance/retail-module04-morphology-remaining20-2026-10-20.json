@@ -1,0 +1,2897 @@
+{
+  "schema": 1,
+  "status": "independently_reviewed_integrated_and_scoped_runtime_tested",
+  "authored_on": "2026-10-20",
+  "author": "Codex professional_content_next (AI morphology author; not human, specialist, media or release approval)",
+  "module": "data/professional/lexemes/retail-module04.json",
+  "before_module_raw_sha256": "d6abaeaec930a02a47460c9a5751d7b0cd55693205e56283249da30768efe4c8",
+  "preservation": {
+    "nonmorphology_sha256": "b508940d518ad431f9334f58ac7e5c48c0d35b324da4e2188f2b162a46d34422",
+    "first30_sha256": "194772de5e8a842b0ae5b3a4eb8ebdd73bedb37597017362a77295e199bb5893",
+    "canonical_migrations": [],
+    "source_catalog_changed": false,
+    "course_status_changed": false,
+    "domain_status_changed": false,
+    "media_changed": false
+  },
+  "scope": "Twenty morphology analyses only. Existing lexical, language, domain, media, expression and release states are retained. Atomic recognition remains exposure only. Prior evidence and completed transaction wrappers are not rewritten or replayed.",
+  "source_basis": {
+    "existing": "Previously consulted lexical sense passages are retained in data/professional/sources.json and build/professional-english/retail-module04-review/consultation-ledger.json; their original dates and limits remain unchanged.",
+    "current_consultations": [
+      {
+        "url": "https://www.merriam-webster.com/dictionary/lining",
+        "publisher": "Merriam-Webster",
+        "consulted_on": "2026-10-20",
+        "method": "Read the selected dictionary passage through the web tool; original paraphrase retained, no page copy or media acquired.",
+        "finding": "Noun sense 1 identifies material covering an inner surface; the related verb links are separately listed. Supports result/material -ing, not automatic activity mastery.",
+        "assets_acquired": false,
+        "domain_approval": false
+      },
+      {
+        "url": "https://www.merriam-webster.com/dictionary/line",
+        "publisher": "Merriam-Webster",
+        "consulted_on": "2026-10-20",
+        "method": "Read the selected dictionary passage through the web tool; original paraphrase retained, no page copy or media acquired.",
+        "finding": "Verb (2), transitive sense 1 is covering an inner surface; it is listed separately from the verb for marking or arranging lines.",
+        "assets_acquired": false,
+        "domain_approval": false
+      },
+      {
+        "url": "https://www.merriam-webster.com/dictionary/refill",
+        "publisher": "Merriam-Webster",
+        "consulted_on": "2026-10-20",
+        "method": "Read the selected dictionary passage through the web tool; original paraphrase retained, no page copy or media acquired.",
+        "finding": "The verb means filling again; noun sense 1 names the replacement product used to replenish a device. Supports the selected action-to-supply family without inventing a noun suffix.",
+        "assets_acquired": false,
+        "domain_approval": false
+      },
+      {
+        "url": "https://www.merriam-webster.com/dictionary/multipack",
+        "publisher": "Merriam-Webster",
+        "consulted_on": "2026-10-20",
+        "method": "Read the selected dictionary passage through the web tool; original paraphrase retained, no page copy or media acquired.",
+        "finding": "The noun denotes several individually packed items sold together as a unit.",
+        "assets_acquired": false,
+        "domain_approval": false
+      },
+      {
+        "url": "https://www.merriam-webster.com/dictionary/multi-",
+        "publisher": "Merriam-Webster",
+        "consulted_on": "2026-10-20",
+        "method": "Read the selected dictionary passage through the web tool; original paraphrase retained, no page copy or media acquired.",
+        "finding": "Combining-form senses include many and more than one. Reuses the existing reviewed many-valued identity.",
+        "assets_acquired": false,
+        "domain_approval": false
+      },
+      {
+        "url": "https://www.merriam-webster.com/dictionary/demonstration",
+        "publisher": "Merriam-Webster",
+        "consulted_on": "2026-10-20",
+        "method": "Read the selected dictionary passage through the web tool; original paraphrase retained, no page copy or media acquired.",
+        "finding": "Noun sense 1 concerns demonstrating, including showing a product to a prospective buyer; the historical noun was borrowed through French/Latin. The graph is a modern family relation, not a historical formation claim.",
+        "assets_acquired": false,
+        "domain_approval": false
+      },
+      {
+        "url": "https://www.merriam-webster.com/dictionary/-ion",
+        "publisher": "Merriam-Webster",
+        "consulted_on": "2026-10-20",
+        "method": "Read the selected dictionary passage through the web tool; original paraphrase retained, no page copy or media acquired.",
+        "finding": "The noun-suffix entry includes act/process and its result; the atomic charged-particle noun is not selected.",
+        "assets_acquired": false,
+        "domain_approval": false
+      },
+      {
+        "url": "https://www.merriam-webster.com/dictionary/waistband",
+        "publisher": "Merriam-Webster",
+        "consulted_on": "2026-10-20",
+        "method": "Read the selected dictionary passage through the web tool; original paraphrase retained, no page copy or media acquired.",
+        "finding": "The noun is explicitly a band fitting around a waist, supporting the two full current constituents.",
+        "assets_acquired": false,
+        "domain_approval": false
+      },
+      {
+        "url": "https://www.merriam-webster.com/dictionary/net",
+        "publisher": "Merriam-Webster",
+        "consulted_on": "2026-10-20",
+        "method": "Read the selected dictionary passage through the web tool; original paraphrase retained, no page copy or media acquired.",
+        "finding": "The adjective meaning after deductions is distinct from the mesh/network noun; existing Collins net-weight evidence binds the selected packaging-exclusion sense.",
+        "assets_acquired": false,
+        "domain_approval": false
+      }
+    ]
+  },
+  "candidate_count": 20,
+  "candidates": [
+    {
+      "id": "seam.joined-cloth-edge.n",
+      "text": "seam",
+      "before_morphology": {
+        "schema": 1,
+        "id": "seam.joined-cloth-edge.n.analysis.v1",
+        "lexeme_id": "seam.joined-cloth-edge.n",
+        "text": "seam",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate; language and boundary review remain pending. Named spelling rules describe this graph only.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical": "seam",
+            "surface": "seam",
+            "type": "atomic",
+            "canonical_id": "morph.seam"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "nonmorphology_sha256": "de7437c03060acc7d76e3b5d1fad6cc4706d5c1d475d8c44d12749dfe1779c8c",
+      "candidate_morphology": {
+        "schema": 1,
+        "id": "professional.seam.joined-cloth-edge.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "seam.joined-cloth-edge.n",
+        "text": "seam",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "morph.seam",
+            "canonical": "seam",
+            "type": "atomic",
+            "surface": "seam",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Keep the current whole clothing-joint noun. The selected meaning is a stitched join, not a geological layer. No productive smaller modern constituents are taught; collecting this whole base is exposure only.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/seam"
+          ],
+          "source_record_ids": [
+            "retail04-seam"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "not_completed"
+        }
+      },
+      "candidate_morphology_sha256": "e5f7b09a2269ef54de2fd48d38996b039dc174b5d3010d1aa43d6a47ba3acff2",
+      "rationale": "Keep the current whole clothing-joint noun. The selected meaning is a stitched join, not a geological layer. No productive smaller modern constituents are taught; collecting this whole base is exposure only.",
+      "composition_mastery_eligible": false,
+      "accepted_morphology": {
+        "schema": 1,
+        "id": "professional.seam.joined-cloth-edge.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "seam.joined-cloth-edge.n",
+        "text": "seam",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "morph.seam",
+            "canonical": "seam",
+            "type": "atomic",
+            "surface": "seam",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "reviewed",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": "Codex root independent AI morphology review; not human or specialist approval",
+          "reviewed_at": "2026-10-20",
+          "notes": "Keep the current whole clothing-joint noun. The selected meaning is a stitched join, not a geological layer. No productive smaller modern constituents are taught; collecting this whole base is exposure only.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/seam"
+          ],
+          "source_record_ids": [
+            "retail04-seam"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "completed_exact_graph_at_declared_teaching_depth",
+          "acceptance_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json"
+        }
+      }
+    },
+    {
+      "id": "sole.shoe-bottom.n",
+      "text": "sole",
+      "before_morphology": {
+        "schema": 1,
+        "id": "sole.shoe-bottom.n.analysis.v1",
+        "lexeme_id": "sole.shoe-bottom.n",
+        "text": "sole",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate; language and boundary review remain pending. Named spelling rules describe this graph only.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical": "sole",
+            "surface": "sole",
+            "type": "atomic",
+            "canonical_id": "morph.sole"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "nonmorphology_sha256": "fb0b437cd77d154f4e4e3174f4f8bcfb7f6dde65b4a682bebbaed7f72d6f3270",
+      "candidate_morphology": {
+        "schema": 1,
+        "id": "professional.sole.shoe-bottom.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "sole.shoe-bottom.n",
+        "text": "sole",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "morph.sole",
+            "canonical": "sole",
+            "type": "atomic",
+            "surface": "sole",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Keep the whole shoe-bottom noun. The fish noun and the only/single adjective are outside this identity. No spelling fragment or invented sole suffix is taught; atomic collection is exposure only.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/sole_2"
+          ],
+          "source_record_ids": [
+            "retail04-sole"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "not_completed"
+        }
+      },
+      "candidate_morphology_sha256": "05cce1b55f21b7b59e679d1434a7d883e6b56a7ca09758831e7225578af18a04",
+      "rationale": "Keep the whole shoe-bottom noun. The fish noun and the only/single adjective are outside this identity. No spelling fragment or invented sole suffix is taught; atomic collection is exposure only.",
+      "composition_mastery_eligible": false,
+      "accepted_morphology": {
+        "schema": 1,
+        "id": "professional.sole.shoe-bottom.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "sole.shoe-bottom.n",
+        "text": "sole",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "morph.sole",
+            "canonical": "sole",
+            "type": "atomic",
+            "surface": "sole",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "reviewed",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": "Codex root independent AI morphology review; not human or specialist approval",
+          "reviewed_at": "2026-10-20",
+          "notes": "Keep the whole shoe-bottom noun. The fish noun and the only/single adjective are outside this identity. No spelling fragment or invented sole suffix is taught; atomic collection is exposure only.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/sole_2"
+          ],
+          "source_record_ids": [
+            "retail04-sole"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "completed_exact_graph_at_declared_teaching_depth",
+          "acceptance_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json"
+        }
+      }
+    },
+    {
+      "id": "heel.raised-shoe-back.n",
+      "text": "heel",
+      "before_morphology": {
+        "schema": 1,
+        "id": "heel.raised-shoe-back.n.analysis.v1",
+        "lexeme_id": "heel.raised-shoe-back.n",
+        "text": "heel",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate; language and boundary review remain pending. Named spelling rules describe this graph only.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical": "heel",
+            "surface": "heel",
+            "type": "atomic",
+            "canonical_id": "morph.heel"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "nonmorphology_sha256": "c6c96fb95dd106cccd9c11b4a35d7aec07819dd8e9d91a354071a8006591ffc1",
+      "candidate_morphology": {
+        "schema": 1,
+        "id": "professional.heel.raised-shoe-back.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "heel.raised-shoe-back.n",
+        "text": "heel",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "morph.heel",
+            "canonical": "heel",
+            "type": "atomic",
+            "surface": "heel",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Keep the whole raised shoe-back noun. The related anatomical heel is not a separate component inside this word. Whole-base recognition does not earn composition mastery.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/heel_1"
+          ],
+          "source_record_ids": [
+            "retail04-heel"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "not_completed"
+        }
+      },
+      "candidate_morphology_sha256": "5703b70626d5b33f2fe5f2091fa5a77107cc129fced1bb7445d9e6abcc879d77",
+      "rationale": "Keep the whole raised shoe-back noun. The related anatomical heel is not a separate component inside this word. Whole-base recognition does not earn composition mastery.",
+      "composition_mastery_eligible": false,
+      "accepted_morphology": {
+        "schema": 1,
+        "id": "professional.heel.raised-shoe-back.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "heel.raised-shoe-back.n",
+        "text": "heel",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "morph.heel",
+            "canonical": "heel",
+            "type": "atomic",
+            "surface": "heel",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "reviewed",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": "Codex root independent AI morphology review; not human or specialist approval",
+          "reviewed_at": "2026-10-20",
+          "notes": "Keep the whole raised shoe-back noun. The related anatomical heel is not a separate component inside this word. Whole-base recognition does not earn composition mastery.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/heel_1"
+          ],
+          "source_record_ids": [
+            "retail04-heel"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "completed_exact_graph_at_declared_teaching_depth",
+          "acceptance_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json"
+        }
+      }
+    },
+    {
+      "id": "sleeve.arm-clothing-part.n",
+      "text": "sleeve",
+      "before_morphology": {
+        "schema": 1,
+        "id": "sleeve.arm-clothing-part.n.analysis.v1",
+        "lexeme_id": "sleeve.arm-clothing-part.n",
+        "text": "sleeve",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate; language and boundary review remain pending. Named spelling rules describe this graph only.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical": "sleeve",
+            "surface": "sleeve",
+            "type": "atomic",
+            "canonical_id": "morph.sleeve"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "nonmorphology_sha256": "189a32c3ee20cdbc060fc0929fb167aae5e9c398736e01113ad9c8c6c7419242",
+      "candidate_morphology": {
+        "schema": 1,
+        "id": "professional.sleeve.arm-clothing-part.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "sleeve.arm-clothing-part.n",
+        "text": "sleeve",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "morph.sleeve",
+            "canonical": "sleeve",
+            "type": "atomic",
+            "surface": "sleeve",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Keep the whole garment-arm noun at current-word depth. The final letters are not a productive suffix. Record sleeves and mechanical sleeves are not selected; atomic collection is exposure only.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/sleeve"
+          ],
+          "source_record_ids": [
+            "retail04-sleeve"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "not_completed"
+        }
+      },
+      "candidate_morphology_sha256": "2c004608149f8bb8bb3f5892b70771a8b1a1c6c1e3bbd96abd1f264fcdcb0354",
+      "rationale": "Keep the whole garment-arm noun at current-word depth. The final letters are not a productive suffix. Record sleeves and mechanical sleeves are not selected; atomic collection is exposure only.",
+      "composition_mastery_eligible": false,
+      "accepted_morphology": {
+        "schema": 1,
+        "id": "professional.sleeve.arm-clothing-part.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "sleeve.arm-clothing-part.n",
+        "text": "sleeve",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "morph.sleeve",
+            "canonical": "sleeve",
+            "type": "atomic",
+            "surface": "sleeve",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "reviewed",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": "Codex root independent AI morphology review; not human or specialist approval",
+          "reviewed_at": "2026-10-20",
+          "notes": "Keep the whole garment-arm noun at current-word depth. The final letters are not a productive suffix. Record sleeves and mechanical sleeves are not selected; atomic collection is exposure only.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/sleeve"
+          ],
+          "source_record_ids": [
+            "retail04-sleeve"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "completed_exact_graph_at_declared_teaching_depth",
+          "acceptance_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json"
+        }
+      }
+    },
+    {
+      "id": "collar.neck-clothing-part.n",
+      "text": "collar",
+      "before_morphology": {
+        "schema": 1,
+        "id": "collar.neck-clothing-part.n.analysis.v1",
+        "lexeme_id": "collar.neck-clothing-part.n",
+        "text": "collar",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate; language and boundary review remain pending. Named spelling rules describe this graph only.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical": "collar",
+            "surface": "collar",
+            "type": "atomic",
+            "canonical_id": "morph.collar"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "nonmorphology_sha256": "59b14eb1bcf47923e829ac11f486c709b065c341f7f09a14aedf444b7555db60",
+      "candidate_morphology": {
+        "schema": 1,
+        "id": "professional.collar.neck-clothing-part.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "collar.neck-clothing-part.n",
+        "text": "collar",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "morph.collar",
+            "canonical": "collar",
+            "type": "atomic",
+            "surface": "collar",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Keep the whole garment-neck noun. Borrowed historical neck vocabulary does not justify a current coll/ar split or an agent suffix. The selected collar is part of clothing, not an animal collar; atomic collection is exposure only.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/collar_1"
+          ],
+          "source_record_ids": [
+            "retail04-collar"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "not_completed"
+        }
+      },
+      "candidate_morphology_sha256": "2665b84c0ba8dacb5b2d0dfd637d740f5678e7dc0bcc9daf73ac4818a464258c",
+      "rationale": "Keep the whole garment-neck noun. Borrowed historical neck vocabulary does not justify a current coll/ar split or an agent suffix. The selected collar is part of clothing, not an animal collar; atomic collection is exposure only.",
+      "composition_mastery_eligible": false,
+      "accepted_morphology": {
+        "schema": 1,
+        "id": "professional.collar.neck-clothing-part.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "collar.neck-clothing-part.n",
+        "text": "collar",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "morph.collar",
+            "canonical": "collar",
+            "type": "atomic",
+            "surface": "collar",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "reviewed",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": "Codex root independent AI morphology review; not human or specialist approval",
+          "reviewed_at": "2026-10-20",
+          "notes": "Keep the whole garment-neck noun. Borrowed historical neck vocabulary does not justify a current coll/ar split or an agent suffix. The selected collar is part of clothing, not an animal collar; atomic collection is exposure only.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/collar_1"
+          ],
+          "source_record_ids": [
+            "retail04-collar"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "completed_exact_graph_at_declared_teaching_depth",
+          "acceptance_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json"
+        }
+      }
+    },
+    {
+      "id": "waistband.waist-clothing-band.n",
+      "text": "waistband",
+      "before_morphology": {
+        "schema": 1,
+        "id": "waistband.waist-clothing-band.n.analysis.v1",
+        "lexeme_id": "waistband.waist-clothing-band.n",
+        "text": "waistband",
+        "kind": "compound",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate; language and boundary review remain pending. Named spelling rules describe this graph only.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical": "waist",
+            "surface": "waist",
+            "type": "stem",
+            "canonical_id": "morph.waist"
+          },
+          {
+            "id": "p2",
+            "canonical": "band",
+            "surface": "band",
+            "type": "stem",
+            "canonical_id": "morph.band"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "waistband",
+            "rule": "closed_compound"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "nonmorphology_sha256": "23b12bed2aae3717d03c4a0b2d2398b7bb85880de2ba61f86e7c2990e69fb6fe",
+      "candidate_morphology": {
+        "schema": 1,
+        "id": "professional.waistband.waist-clothing-band.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "waistband.waist-clothing-band.n",
+        "text": "waistband",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.waist",
+            "canonical": "waist",
+            "type": "stem",
+            "surface": "waist",
+            "break_offsets": []
+          },
+          {
+            "id": "p2",
+            "canonical_id": "growth.part.band.strip",
+            "canonical": "band",
+            "type": "stem",
+            "surface": "band",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "p1",
+            "right": "p2",
+            "surface": "waistband",
+            "rule": "waist-plus-strip-band",
+            "break_offsets": [
+              5
+            ]
+          }
+        ],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Join the waist noun and the physical strip sense of band. Reuse the actual reviewed Growth headband strip identity, not the pending pay-range or network-band identities. The closed compound retains its authored constituent boundary.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/waistband",
+            "https://www.merriam-webster.com/dictionary/waistband"
+          ],
+          "source_record_ids": [
+            "retail04-waistband"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "not_completed"
+        }
+      },
+      "candidate_morphology_sha256": "d0cb1e32231bfd4180c752c9bad8f8812c6a9af26155e21515ba62e352af629f",
+      "rationale": "Join the waist noun and the physical strip sense of band. Reuse the actual reviewed Growth headband strip identity, not the pending pay-range or network-band identities. The closed compound retains its authored constituent boundary.",
+      "composition_mastery_eligible": true,
+      "accepted_morphology": {
+        "schema": 1,
+        "id": "professional.waistband.waist-clothing-band.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "waistband.waist-clothing-band.n",
+        "text": "waistband",
+        "kind": "compound",
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.waist",
+            "canonical": "waist",
+            "type": "stem",
+            "surface": "waist",
+            "break_offsets": []
+          },
+          {
+            "id": "p2",
+            "canonical_id": "growth.part.band.strip",
+            "canonical": "band",
+            "type": "stem",
+            "surface": "band",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "p1",
+            "right": "p2",
+            "surface": "waistband",
+            "rule": "waist-plus-strip-band",
+            "break_offsets": [
+              5
+            ]
+          }
+        ],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "reviewed",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": "Codex root independent AI morphology review; not human or specialist approval",
+          "reviewed_at": "2026-10-20",
+          "notes": "Join the waist noun and the physical strip sense of band. Reuse the actual reviewed Growth headband strip identity, not the pending pay-range or network-band identities. The closed compound retains its authored constituent boundary.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/waistband",
+            "https://www.merriam-webster.com/dictionary/waistband"
+          ],
+          "source_record_ids": [
+            "retail04-waistband"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "completed_exact_graph_at_declared_teaching_depth",
+          "acceptance_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json"
+        }
+      }
+    },
+    {
+      "id": "lining.inner-covering.n",
+      "text": "lining",
+      "before_morphology": {
+        "schema": 1,
+        "id": "lining.inner-covering.n.analysis.v1",
+        "lexeme_id": "lining.inner-covering.n",
+        "text": "lining",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate; language and boundary review remain pending. Named spelling rules describe this graph only.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical": "line",
+            "surface": "line",
+            "type": "stem",
+            "canonical_id": "morph.line"
+          },
+          {
+            "id": "p2",
+            "canonical": "-ing",
+            "surface": "ing",
+            "type": "suffix",
+            "canonical_id": "affix.ing.suffix"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "lining",
+            "rule": "drop_final_e_before_suffix"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "nonmorphology_sha256": "8995eef7ce517dba8760e048164957fe2753e46830d5249621b11b4f043b3b7f",
+      "candidate_morphology": {
+        "schema": 1,
+        "id": "professional.lining.inner-covering.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "lining.inner-covering.n",
+        "text": "lining",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "english.stem.line.cover-inner-surface",
+            "canonical": "line",
+            "type": "stem",
+            "surface": "line",
+            "break_offsets": []
+          },
+          {
+            "id": "p2",
+            "canonical_id": "english.affix.ing.result-noun",
+            "canonical": "-ing",
+            "type": "suffix",
+            "surface": "ing",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "p1",
+            "right": "p2",
+            "surface": "lining",
+            "rule": "line-inner-cover-plus-result-ing-drop-final-e",
+            "break_offsets": [
+              3
+            ]
+          }
+        ],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Join the complete cover-the-inside verb line with the result/material noun use of -ing. Store the full source base line and the exact final-e deletion in lining. The base is distinct from drawn lines, queues and textual lines; the suffix is distinct from activity -ing and participial-adjective -ing. This graph teaches an inner covering material, not the process of installing it.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/lining",
+            "https://www.merriam-webster.com/dictionary/lining",
+            "https://www.merriam-webster.com/dictionary/line"
+          ],
+          "source_record_ids": [
+            "retail04-lining"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "not_completed"
+        }
+      },
+      "candidate_morphology_sha256": "37fba4cfca424f2faf4d5887536554a3cc02f84a26da7385ef9df7f7a1093b8b",
+      "rationale": "Join the complete cover-the-inside verb line with the result/material noun use of -ing. Store the full source base line and the exact final-e deletion in lining. The base is distinct from drawn lines, queues and textual lines; the suffix is distinct from activity -ing and participial-adjective -ing. This graph teaches an inner covering material, not the process of installing it.",
+      "composition_mastery_eligible": true,
+      "accepted_morphology": {
+        "schema": 1,
+        "id": "professional.lining.inner-covering.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "lining.inner-covering.n",
+        "text": "lining",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "english.stem.line.cover-inner-surface",
+            "canonical": "line",
+            "type": "stem",
+            "surface": "line",
+            "break_offsets": []
+          },
+          {
+            "id": "p2",
+            "canonical_id": "english.affix.ing.result-noun",
+            "canonical": "-ing",
+            "type": "suffix",
+            "surface": "ing",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "p1",
+            "right": "p2",
+            "surface": "lining",
+            "rule": "line-inner-cover-plus-result-ing-drop-final-e",
+            "break_offsets": [
+              3
+            ]
+          }
+        ],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "reviewed",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": "Codex root independent AI morphology review; not human or specialist approval",
+          "reviewed_at": "2026-10-20",
+          "notes": "Join the complete cover-the-inside verb line with the result/material noun use of -ing. Store the full source base line and the exact final-e deletion in lining. The base is distinct from drawn lines, queues and textual lines; the suffix is distinct from activity -ing and participial-adjective -ing. This graph teaches an inner covering material, not the process of installing it.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/lining",
+            "https://www.merriam-webster.com/dictionary/lining",
+            "https://www.merriam-webster.com/dictionary/line"
+          ],
+          "source_record_ids": [
+            "retail04-lining"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "completed_exact_graph_at_declared_teaching_depth",
+          "acceptance_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json"
+        }
+      }
+    },
+    {
+      "id": "care-label.fabric-care-tag.n",
+      "text": "care label",
+      "before_morphology": {
+        "schema": 1,
+        "id": "care-label.fabric-care-tag.n.analysis.v1",
+        "lexeme_id": "care-label.fabric-care-tag.n",
+        "text": "care label",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate; language and boundary review remain pending. Named spelling rules describe this graph only.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical": "care",
+            "surface": "care",
+            "type": "stem",
+            "canonical_id": "morph.care"
+          },
+          {
+            "id": "p2",
+            "canonical": "label",
+            "surface": "label",
+            "type": "stem",
+            "canonical_id": "morph.label"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "care label",
+            "rule": "preserve_word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "nonmorphology_sha256": "f0cee382c3a1f2a47504ce5adeaf7dfa72ecee3ffc0c386b60c9c216a1a5ff2e",
+      "candidate_morphology": {
+        "schema": 1,
+        "id": "professional.care-label.fabric-care-tag.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "care-label.fabric-care-tag.n",
+        "text": "care label",
+        "kind": "phrase",
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "growth.care",
+            "canonical": "care",
+            "type": "word",
+            "surface": "care",
+            "break_offsets": []
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.label",
+            "canonical": "label",
+            "type": "word",
+            "surface": "label",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "p1",
+            "right": "p2",
+            "surface": "care label",
+            "rule": "care-maintenance-plus-label-word-boundary",
+            "break_offsets": [
+              5
+            ]
+          }
+        ],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Join care in the maintenance/upkeep sense with an information label. Reuse the reviewed Growth caretaker care constituent for caring for an object or property, and the existing reviewed label-printer label identity. The phrase keeps its space and does not teach washing instructions or approve any care symbols.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/care-label"
+          ],
+          "source_record_ids": [
+            "retail04-care-label"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "not_completed"
+        }
+      },
+      "candidate_morphology_sha256": "7a4673239a83bfcdf6d958aa945c909308ca422b6b28c01eb919b27acced9246",
+      "rationale": "Join care in the maintenance/upkeep sense with an information label. Reuse the reviewed Growth caretaker care constituent for caring for an object or property, and the existing reviewed label-printer label identity. The phrase keeps its space and does not teach washing instructions or approve any care symbols.",
+      "composition_mastery_eligible": true,
+      "accepted_morphology": {
+        "schema": 1,
+        "id": "professional.care-label.fabric-care-tag.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "care-label.fabric-care-tag.n",
+        "text": "care label",
+        "kind": "phrase",
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "growth.care",
+            "canonical": "care",
+            "type": "word",
+            "surface": "care",
+            "break_offsets": []
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.label",
+            "canonical": "label",
+            "type": "word",
+            "surface": "label",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "p1",
+            "right": "p2",
+            "surface": "care label",
+            "rule": "care-maintenance-plus-label-word-boundary",
+            "break_offsets": [
+              5
+            ]
+          }
+        ],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "reviewed",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": "Codex root independent AI morphology review; not human or specialist approval",
+          "reviewed_at": "2026-10-20",
+          "notes": "Join care in the maintenance/upkeep sense with an information label. Reuse the reviewed Growth caretaker care constituent for caring for an object or property, and the existing reviewed label-printer label identity. The phrase keeps its space and does not teach washing instructions or approve any care symbols.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/care-label"
+          ],
+          "source_record_ids": [
+            "retail04-care-label"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "completed_exact_graph_at_declared_teaching_depth",
+          "acceptance_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json"
+        }
+      }
+    },
+    {
+      "id": "ingredient.component-substance.n",
+      "text": "ingredient",
+      "before_morphology": null,
+      "nonmorphology_sha256": "a172224bf4098fe9073e46c4e98a374441a11af5c81f8f7c8791d68ef4bfae54",
+      "candidate_morphology": {
+        "schema": 1,
+        "id": "professional.ingredient.component-substance.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "ingredient.component-substance.n",
+        "text": "ingredient",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "morph.ingredient",
+            "canonical": "ingredient",
+            "type": "atomic",
+            "surface": "ingredient",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Keep the current whole component-substance noun. The borrowed historical formation is not a modern in-plus-gradient lesson. Reuse the existing Professional ingredient family, whose scope includes food and other products; the narrower Growth food-ingredient base remains unchanged. Atomic recognition is exposure only.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/ingredient"
+          ],
+          "source_record_ids": [
+            "retail04-ingredient"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "not_completed"
+        }
+      },
+      "candidate_morphology_sha256": "ecf8013a06a09ab35834850cea953eb993bdf68e99c9389bf337ffe1382db17f",
+      "rationale": "Keep the current whole component-substance noun. The borrowed historical formation is not a modern in-plus-gradient lesson. Reuse the existing Professional ingredient family, whose scope includes food and other products; the narrower Growth food-ingredient base remains unchanged. Atomic recognition is exposure only.",
+      "composition_mastery_eligible": false,
+      "accepted_morphology": {
+        "schema": 1,
+        "id": "professional.ingredient.component-substance.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "ingredient.component-substance.n",
+        "text": "ingredient",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "morph.ingredient",
+            "canonical": "ingredient",
+            "type": "atomic",
+            "surface": "ingredient",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "reviewed",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": "Codex root independent AI morphology review; not human or specialist approval",
+          "reviewed_at": "2026-10-20",
+          "notes": "Keep the current whole component-substance noun. The borrowed historical formation is not a modern in-plus-gradient lesson. Reuse the existing Professional ingredient family, whose scope includes food and other products; the narrower Growth food-ingredient base remains unchanged. Atomic recognition is exposure only.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/ingredient"
+          ],
+          "source_record_ids": [
+            "retail04-ingredient"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "completed_exact_graph_at_declared_teaching_depth",
+          "acceptance_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json"
+        }
+      }
+    },
+    {
+      "id": "allergen.allergy-trigger.n",
+      "text": "allergen",
+      "before_morphology": null,
+      "nonmorphology_sha256": "16119de8710de4fc0e498f4b85b5d61eddd1c777d3e9f730c51213ae9701af29",
+      "candidate_morphology": {
+        "schema": 1,
+        "id": "professional.allergen.allergy-trigger.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "allergen.allergy-trigger.n",
+        "text": "allergen",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "morph.allergen",
+            "canonical": "allergen",
+            "type": "atomic",
+            "surface": "allergen",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Keep the complete allergy-trigger noun at current-term teaching depth, continuing the existing Professional allergen family. Its historical allergy/-gen relationship is not denied, but this delivery does not teach a clipped allerg- source or assert a universal modern spelling rule. No medical, food-safety or allergen-recognition approval follows from this atomic exposure analysis.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/allergen"
+          ],
+          "source_record_ids": [
+            "retail04-allergen"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "not_completed"
+        }
+      },
+      "candidate_morphology_sha256": "5e0a173cc16912613775664ecac8932f7e4f4fd015f08be9abdb1d193d8c4ec8",
+      "rationale": "Keep the complete allergy-trigger noun at current-term teaching depth, continuing the existing Professional allergen family. Its historical allergy/-gen relationship is not denied, but this delivery does not teach a clipped allerg- source or assert a universal modern spelling rule. No medical, food-safety or allergen-recognition approval follows from this atomic exposure analysis.",
+      "composition_mastery_eligible": false,
+      "accepted_morphology": {
+        "schema": 1,
+        "id": "professional.allergen.allergy-trigger.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "allergen.allergy-trigger.n",
+        "text": "allergen",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "morph.allergen",
+            "canonical": "allergen",
+            "type": "atomic",
+            "surface": "allergen",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "reviewed",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": "Codex root independent AI morphology review; not human or specialist approval",
+          "reviewed_at": "2026-10-20",
+          "notes": "Keep the complete allergy-trigger noun at current-term teaching depth, continuing the existing Professional allergen family. Its historical allergy/-gen relationship is not denied, but this delivery does not teach a clipped allerg- source or assert a universal modern spelling rule. No medical, food-safety or allergen-recognition approval follows from this atomic exposure analysis.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/allergen"
+          ],
+          "source_record_ids": [
+            "retail04-allergen"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "completed_exact_graph_at_declared_teaching_depth",
+          "acceptance_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json"
+        }
+      }
+    },
+    {
+      "id": "portion.serving-amount.n",
+      "text": "portion",
+      "before_morphology": null,
+      "nonmorphology_sha256": "3344d0449873e0ab707ff6fa714e4a0a8ec39e0ca034738b36a25f81e1db4c11",
+      "candidate_morphology": {
+        "schema": 1,
+        "id": "professional.portion.serving-amount.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "portion.serving-amount.n",
+        "text": "portion",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "morph.portion",
+            "canonical": "portion",
+            "type": "atomic",
+            "surface": "portion",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Keep the whole food-serving amount noun. Its final letters do not justify port plus -ion in this sense. Reuse the existing food-portion family without prescribing serving quantities; atomic collection is exposure only.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/portion_1"
+          ],
+          "source_record_ids": [
+            "retail04-portion"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "not_completed"
+        }
+      },
+      "candidate_morphology_sha256": "609b873889c13e04d0c9d5cb089d4c6568907ef73fe2d1bc085ea95b170c8c9f",
+      "rationale": "Keep the whole food-serving amount noun. Its final letters do not justify port plus -ion in this sense. Reuse the existing food-portion family without prescribing serving quantities; atomic collection is exposure only.",
+      "composition_mastery_eligible": false,
+      "accepted_morphology": {
+        "schema": 1,
+        "id": "professional.portion.serving-amount.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "portion.serving-amount.n",
+        "text": "portion",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "morph.portion",
+            "canonical": "portion",
+            "type": "atomic",
+            "surface": "portion",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "reviewed",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": "Codex root independent AI morphology review; not human or specialist approval",
+          "reviewed_at": "2026-10-20",
+          "notes": "Keep the whole food-serving amount noun. Its final letters do not justify port plus -ion in this sense. Reuse the existing food-portion family without prescribing serving quantities; atomic collection is exposure only.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/portion_1"
+          ],
+          "source_record_ids": [
+            "retail04-portion"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "completed_exact_graph_at_declared_teaching_depth",
+          "acceptance_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json"
+        }
+      }
+    },
+    {
+      "id": "net-weight.contents-weight.n",
+      "text": "net weight",
+      "before_morphology": {
+        "schema": 1,
+        "id": "net-weight.contents-weight.n.analysis.v1",
+        "lexeme_id": "net-weight.contents-weight.n",
+        "text": "net weight",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate; language and boundary review remain pending. Named spelling rules describe this graph only.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical": "net",
+            "surface": "net",
+            "type": "stem",
+            "canonical_id": "morph.net"
+          },
+          {
+            "id": "p2",
+            "canonical": "weight",
+            "surface": "weight",
+            "type": "stem",
+            "canonical_id": "morph.weight"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "net weight",
+            "rule": "preserve_word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "nonmorphology_sha256": "6e7ef663b80a40e08502aba9295f5f174a9e1198b38722e8af98e3607c6480cd",
+      "candidate_morphology": {
+        "schema": 1,
+        "id": "professional.net-weight.contents-weight.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "net-weight.contents-weight.n",
+        "text": "net weight",
+        "kind": "phrase",
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "english.stem.net.after-deductions",
+            "canonical": "net",
+            "type": "word",
+            "surface": "net",
+            "break_offsets": []
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.weight",
+            "canonical": "weight",
+            "type": "word",
+            "surface": "weight",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "p1",
+            "right": "p2",
+            "surface": "net weight",
+            "rule": "net-after-deductions-plus-weight-word-boundary",
+            "break_offsets": [
+              4
+            ]
+          }
+        ],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Join net meaning after the relevant deductions with the whole current weight noun. Keep net distinct from a catching net or a network component; the prior morph.net identity occurs in both families and is not reused here. Preserve the phrase space. Weight is not split into weigh plus an invented productive t suffix. The exact lexical meaning excludes packaging but teaches no measurement or labeling procedure.",
+          "references": [
+            "https://www.collinsdictionary.com/dictionary/english/net-weight",
+            "https://www.collinsdictionary.com/dictionary/english/tare",
+            "https://www.merriam-webster.com/dictionary/net"
+          ],
+          "source_record_ids": [
+            "retail04-net-weight",
+            "retail04-tare"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "not_completed"
+        }
+      },
+      "candidate_morphology_sha256": "3f4cff3c188d30e718e0329c48f985218bf12a2b6affd9c2b2c31509054a6c44",
+      "rationale": "Join net meaning after the relevant deductions with the whole current weight noun. Keep net distinct from a catching net or a network component; the prior morph.net identity occurs in both families and is not reused here. Preserve the phrase space. Weight is not split into weigh plus an invented productive t suffix. The exact lexical meaning excludes packaging but teaches no measurement or labeling procedure.",
+      "composition_mastery_eligible": true,
+      "accepted_morphology": {
+        "schema": 1,
+        "id": "professional.net-weight.contents-weight.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "net-weight.contents-weight.n",
+        "text": "net weight",
+        "kind": "phrase",
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "english.stem.net.after-deductions",
+            "canonical": "net",
+            "type": "word",
+            "surface": "net",
+            "break_offsets": []
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.weight",
+            "canonical": "weight",
+            "type": "word",
+            "surface": "weight",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "p1",
+            "right": "p2",
+            "surface": "net weight",
+            "rule": "net-after-deductions-plus-weight-word-boundary",
+            "break_offsets": [
+              4
+            ]
+          }
+        ],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "reviewed",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": "Codex root independent AI morphology review; not human or specialist approval",
+          "reviewed_at": "2026-10-20",
+          "notes": "Join net meaning after the relevant deductions with the whole current weight noun. Keep net distinct from a catching net or a network component; the prior morph.net identity occurs in both families and is not reused here. Preserve the phrase space. Weight is not split into weigh plus an invented productive t suffix. The exact lexical meaning excludes packaging but teaches no measurement or labeling procedure.",
+          "references": [
+            "https://www.collinsdictionary.com/dictionary/english/net-weight",
+            "https://www.collinsdictionary.com/dictionary/english/tare",
+            "https://www.merriam-webster.com/dictionary/net"
+          ],
+          "source_record_ids": [
+            "retail04-net-weight",
+            "retail04-tare"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "completed_exact_graph_at_declared_teaching_depth",
+          "acceptance_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json"
+        }
+      }
+    },
+    {
+      "id": "unit-price.price-per-unit.n",
+      "text": "unit price",
+      "before_morphology": {
+        "schema": 1,
+        "id": "unit-price.price-per-unit.n.analysis.v1",
+        "lexeme_id": "unit-price.price-per-unit.n",
+        "text": "unit price",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate; language and boundary review remain pending. Named spelling rules describe this graph only.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical": "unit",
+            "surface": "unit",
+            "type": "stem",
+            "canonical_id": "morph.unit"
+          },
+          {
+            "id": "p2",
+            "canonical": "price",
+            "surface": "price",
+            "type": "stem",
+            "canonical_id": "morph.price"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "unit price",
+            "rule": "preserve_word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "nonmorphology_sha256": "45df2aed90adea023e7fceaaaddf3b8083891dd7b793cfa2f0f20acf811803e2",
+      "candidate_morphology": {
+        "schema": 1,
+        "id": "professional.unit-price.price-per-unit.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "unit-price.price-per-unit.n",
+        "text": "unit price",
+        "kind": "phrase",
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "english.stem.unit.standard-quantity",
+            "canonical": "unit",
+            "type": "word",
+            "surface": "unit",
+            "break_offsets": []
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.price",
+            "canonical": "price",
+            "type": "word",
+            "surface": "price",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "p1",
+            "right": "p2",
+            "surface": "unit price",
+            "rule": "quantity-unit-plus-price-word-boundary",
+            "break_offsets": [
+              5
+            ]
+          }
+        ],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Join a standard measurement/counting quantity with the reviewed amount-charged price constituent. Scope unit away from a hospital department or a test component; those pending analyses are not migrated. Keep the phrase boundary and make no pricing-compliance claim.",
+          "references": [
+            "https://www.collinsdictionary.com/dictionary/english/unit-price"
+          ],
+          "source_record_ids": [
+            "retail04-unit-price"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "not_completed"
+        }
+      },
+      "candidate_morphology_sha256": "65b1cf16745d0217cf452657270ae9ec24fcdcd9b239538809e004e8b0f3036c",
+      "rationale": "Join a standard measurement/counting quantity with the reviewed amount-charged price constituent. Scope unit away from a hospital department or a test component; those pending analyses are not migrated. Keep the phrase boundary and make no pricing-compliance claim.",
+      "composition_mastery_eligible": true,
+      "accepted_morphology": {
+        "schema": 1,
+        "id": "professional.unit-price.price-per-unit.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "unit-price.price-per-unit.n",
+        "text": "unit price",
+        "kind": "phrase",
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "english.stem.unit.standard-quantity",
+            "canonical": "unit",
+            "type": "word",
+            "surface": "unit",
+            "break_offsets": []
+          },
+          {
+            "id": "p2",
+            "canonical_id": "morph.price",
+            "canonical": "price",
+            "type": "word",
+            "surface": "price",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "p1",
+            "right": "p2",
+            "surface": "unit price",
+            "rule": "quantity-unit-plus-price-word-boundary",
+            "break_offsets": [
+              5
+            ]
+          }
+        ],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "reviewed",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": "Codex root independent AI morphology review; not human or specialist approval",
+          "reviewed_at": "2026-10-20",
+          "notes": "Join a standard measurement/counting quantity with the reviewed amount-charged price constituent. Scope unit away from a hospital department or a test component; those pending analyses are not migrated. Keep the phrase boundary and make no pricing-compliance claim.",
+          "references": [
+            "https://www.collinsdictionary.com/dictionary/english/unit-price"
+          ],
+          "source_record_ids": [
+            "retail04-unit-price"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "completed_exact_graph_at_declared_teaching_depth",
+          "acceptance_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json"
+        }
+      }
+    },
+    {
+      "id": "pack-size.package-quantity.n",
+      "text": "pack size",
+      "before_morphology": {
+        "schema": 1,
+        "id": "pack-size.package-quantity.n.analysis.v1",
+        "lexeme_id": "pack-size.package-quantity.n",
+        "text": "pack size",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate; language and boundary review remain pending. Named spelling rules describe this graph only.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical": "pack",
+            "surface": "pack",
+            "type": "stem",
+            "canonical_id": "morph.pack"
+          },
+          {
+            "id": "p2",
+            "canonical": "size",
+            "surface": "size",
+            "type": "stem",
+            "canonical_id": "morph.size"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "pack size",
+            "rule": "preserve_word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "nonmorphology_sha256": "ce2ab62fe44f6c3fd8b419fd68df528f5a21806172198ec72f65221489aa3903",
+      "candidate_morphology": {
+        "schema": 1,
+        "id": "professional.pack-size.package-quantity.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "pack-size.package-quantity.n",
+        "text": "pack size",
+        "kind": "phrase",
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "english.stem.pack.group-of-items",
+            "canonical": "pack",
+            "type": "word",
+            "surface": "pack",
+            "break_offsets": []
+          },
+          {
+            "id": "p2",
+            "canonical_id": "english.stem.size.quantity",
+            "canonical": "size",
+            "type": "word",
+            "surface": "size",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "p1",
+            "right": "p2",
+            "surface": "pack size",
+            "rule": "item-pack-plus-quantity-size-word-boundary",
+            "break_offsets": [
+              5
+            ]
+          }
+        ],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Join a pack of items with size in the amount/count sense. Keep the noun pack distinct from the Growth packing action and carried-bag pack; keep quantity size distinct from the reviewed product-dimensions size. These meanings are related, not asserted to have unrelated origins. Only the selected pack-quantity sense and its preserved word boundary are taught.",
+          "references": [
+            "https://support.shelfplanner.com/en/article/pack-sizes"
+          ],
+          "source_record_ids": [
+            "retail04-pack-size"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "not_completed"
+        }
+      },
+      "candidate_morphology_sha256": "f808978078f3f95240af78e9835a6e209077abbc548b3f2ed757ec9078fa482b",
+      "rationale": "Join a pack of items with size in the amount/count sense. Keep the noun pack distinct from the Growth packing action and carried-bag pack; keep quantity size distinct from the reviewed product-dimensions size. These meanings are related, not asserted to have unrelated origins. Only the selected pack-quantity sense and its preserved word boundary are taught.",
+      "composition_mastery_eligible": true,
+      "accepted_morphology": {
+        "schema": 1,
+        "id": "professional.pack-size.package-quantity.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "pack-size.package-quantity.n",
+        "text": "pack size",
+        "kind": "phrase",
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "english.stem.pack.group-of-items",
+            "canonical": "pack",
+            "type": "word",
+            "surface": "pack",
+            "break_offsets": []
+          },
+          {
+            "id": "p2",
+            "canonical_id": "english.stem.size.quantity",
+            "canonical": "size",
+            "type": "word",
+            "surface": "size",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "p1",
+            "right": "p2",
+            "surface": "pack size",
+            "rule": "item-pack-plus-quantity-size-word-boundary",
+            "break_offsets": [
+              5
+            ]
+          }
+        ],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "reviewed",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": "Codex root independent AI morphology review; not human or specialist approval",
+          "reviewed_at": "2026-10-20",
+          "notes": "Join a pack of items with size in the amount/count sense. Keep the noun pack distinct from the Growth packing action and carried-bag pack; keep quantity size distinct from the reviewed product-dimensions size. These meanings are related, not asserted to have unrelated origins. Only the selected pack-quantity sense and its preserved word boundary are taught.",
+          "references": [
+            "https://support.shelfplanner.com/en/article/pack-sizes"
+          ],
+          "source_record_ids": [
+            "retail04-pack-size"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "completed_exact_graph_at_declared_teaching_depth",
+          "acceptance_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json"
+        }
+      }
+    },
+    {
+      "id": "multipack.combined-item-pack.n",
+      "text": "multipack",
+      "before_morphology": {
+        "schema": 1,
+        "id": "multipack.combined-item-pack.n.analysis.v1",
+        "lexeme_id": "multipack.combined-item-pack.n",
+        "text": "multipack",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate; language and boundary review remain pending. Named spelling rules describe this graph only.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical": "multi-",
+            "surface": "multi",
+            "type": "prefix",
+            "canonical_id": "affix.multi.prefix"
+          },
+          {
+            "id": "p2",
+            "canonical": "pack",
+            "surface": "pack",
+            "type": "stem",
+            "canonical_id": "morph.pack"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "multipack",
+            "rule": "prefix_attachment"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "nonmorphology_sha256": "f617020367a6bae9f9e2d82cfb4e3183a19496d35d22423f093687ed70eae240",
+      "candidate_morphology": {
+        "schema": 1,
+        "id": "professional.multipack.combined-item-pack.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "multipack.combined-item-pack.n",
+        "text": "multipack",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "english.combining.multi.many",
+            "canonical": "multi-",
+            "type": "combining_form",
+            "surface": "multi",
+            "break_offsets": []
+          },
+          {
+            "id": "p2",
+            "canonical_id": "english.stem.pack.group-of-items",
+            "canonical": "pack",
+            "type": "stem",
+            "surface": "pack",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "p1",
+            "right": "p2",
+            "surface": "multipack",
+            "rule": "multi-many-plus-item-pack",
+            "break_offsets": [
+              5
+            ]
+          }
+        ],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Join multi- meaning many/more than one with the same item-pack noun used in pack size. Reuse the reviewed many-valued combining-form identity instead of a spelling-only multi prefix. The term describes combined items, not a guaranteed saving or a special packing procedure.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/multipack",
+            "https://www.merriam-webster.com/dictionary/multipack",
+            "https://www.merriam-webster.com/dictionary/multi-"
+          ],
+          "source_record_ids": [
+            "retail04-multipack"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "not_completed"
+        }
+      },
+      "candidate_morphology_sha256": "4d24e74da403e9e780a1286193d6f2a3ad3a9fc16ce85b96bbf21f64bab34d35",
+      "rationale": "Join multi- meaning many/more than one with the same item-pack noun used in pack size. Reuse the reviewed many-valued combining-form identity instead of a spelling-only multi prefix. The term describes combined items, not a guaranteed saving or a special packing procedure.",
+      "composition_mastery_eligible": true,
+      "accepted_morphology": {
+        "schema": 1,
+        "id": "professional.multipack.combined-item-pack.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "multipack.combined-item-pack.n",
+        "text": "multipack",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "english.combining.multi.many",
+            "canonical": "multi-",
+            "type": "combining_form",
+            "surface": "multi",
+            "break_offsets": []
+          },
+          {
+            "id": "p2",
+            "canonical_id": "english.stem.pack.group-of-items",
+            "canonical": "pack",
+            "type": "stem",
+            "surface": "pack",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "p1",
+            "right": "p2",
+            "surface": "multipack",
+            "rule": "multi-many-plus-item-pack",
+            "break_offsets": [
+              5
+            ]
+          }
+        ],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "reviewed",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": "Codex root independent AI morphology review; not human or specialist approval",
+          "reviewed_at": "2026-10-20",
+          "notes": "Join multi- meaning many/more than one with the same item-pack noun used in pack size. Reuse the reviewed many-valued combining-form identity instead of a spelling-only multi prefix. The term describes combined items, not a guaranteed saving or a special packing procedure.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/multipack",
+            "https://www.merriam-webster.com/dictionary/multipack",
+            "https://www.merriam-webster.com/dictionary/multi-"
+          ],
+          "source_record_ids": [
+            "retail04-multipack"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "completed_exact_graph_at_declared_teaching_depth",
+          "acceptance_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json"
+        }
+      }
+    },
+    {
+      "id": "refill.replacement-contents.n",
+      "text": "refill",
+      "before_morphology": {
+        "schema": 1,
+        "id": "refill.replacement-contents.n.analysis.v1",
+        "lexeme_id": "refill.replacement-contents.n",
+        "text": "refill",
+        "kind": "morphological",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate; language and boundary review remain pending. Named spelling rules describe this graph only.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical": "re-",
+            "surface": "re",
+            "type": "prefix",
+            "canonical_id": "affix.re.prefix"
+          },
+          {
+            "id": "p2",
+            "canonical": "fill",
+            "surface": "fill",
+            "type": "stem",
+            "canonical_id": "morph.fill"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "refill",
+            "rule": "prefix_attachment"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "nonmorphology_sha256": "a5ee8cd716fb2087b3eed1ac96518c087cb66c5d910a728f47503e1f4d3c8540",
+      "candidate_morphology": {
+        "schema": 1,
+        "id": "professional.refill.replacement-contents.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "refill.replacement-contents.n",
+        "text": "refill",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "english.affix.re.again",
+            "canonical": "re-",
+            "type": "prefix",
+            "surface": "re",
+            "break_offsets": []
+          },
+          {
+            "id": "p2",
+            "canonical_id": "growth.fill",
+            "canonical": "fill",
+            "type": "stem",
+            "surface": "fill",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "p1",
+            "right": "p2",
+            "surface": "refill",
+            "rule": "re-again-plus-fill-with-noun-conversion",
+            "break_offsets": [
+              2
+            ]
+          }
+        ],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Join re- meaning again with the reviewed Growth container-filling verb fill. The selected noun denotes the supply used for another filling; the noun conversion contributes no invented visible piece. Keep re-again distinct from re-back. Other refill verbs, medical uses and pending compound analyses retain their existing status.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/refill_2",
+            "https://www.merriam-webster.com/dictionary/refill"
+          ],
+          "source_record_ids": [
+            "retail04-refill"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "not_completed"
+        }
+      },
+      "candidate_morphology_sha256": "0ae32bb416add8da9832a42d58240602d7d3dbfcb66364ccd5c33ec14e0d3f54",
+      "rationale": "Join re- meaning again with the reviewed Growth container-filling verb fill. The selected noun denotes the supply used for another filling; the noun conversion contributes no invented visible piece. Keep re-again distinct from re-back. Other refill verbs, medical uses and pending compound analyses retain their existing status.",
+      "composition_mastery_eligible": true,
+      "accepted_morphology": {
+        "schema": 1,
+        "id": "professional.refill.replacement-contents.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "refill.replacement-contents.n",
+        "text": "refill",
+        "kind": "morphological",
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "english.affix.re.again",
+            "canonical": "re-",
+            "type": "prefix",
+            "surface": "re",
+            "break_offsets": []
+          },
+          {
+            "id": "p2",
+            "canonical_id": "growth.fill",
+            "canonical": "fill",
+            "type": "stem",
+            "surface": "fill",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "p1",
+            "right": "p2",
+            "surface": "refill",
+            "rule": "re-again-plus-fill-with-noun-conversion",
+            "break_offsets": [
+              2
+            ]
+          }
+        ],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "reviewed",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": "Codex root independent AI morphology review; not human or specialist approval",
+          "reviewed_at": "2026-10-20",
+          "notes": "Join re- meaning again with the reviewed Growth container-filling verb fill. The selected noun denotes the supply used for another filling; the noun conversion contributes no invented visible piece. Keep re-again distinct from re-back. Other refill verbs, medical uses and pending compound analyses retain their existing status.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/refill_2",
+            "https://www.merriam-webster.com/dictionary/refill"
+          ],
+          "source_record_ids": [
+            "retail04-refill"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "completed_exact_graph_at_declared_teaching_depth",
+          "acceptance_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json"
+        }
+      }
+    },
+    {
+      "id": "sample.trial-quantity.n",
+      "text": "sample",
+      "before_morphology": {
+        "schema": 1,
+        "id": "sample.trial-quantity.n.analysis.v1",
+        "lexeme_id": "sample.trial-quantity.n",
+        "text": "sample",
+        "kind": "atomic",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate; language and boundary review remain pending. Named spelling rules describe this graph only.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical": "sample",
+            "surface": "sample",
+            "type": "atomic",
+            "canonical_id": "morph.sample"
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "p1"
+        ]
+      },
+      "nonmorphology_sha256": "dd5a41384e1c80f68eeb6b89b832a6993a3e16c7f4857d18e57562108fe3544c",
+      "candidate_morphology": {
+        "schema": 1,
+        "id": "professional.sample.trial-quantity.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "sample.trial-quantity.n",
+        "text": "sample",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "english.stem.sample.product-example",
+            "canonical": "sample",
+            "type": "atomic",
+            "surface": "sample",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Keep the whole commercial trial/example noun, with a scoped product-example identity. A statistical subset and a clinical specimen can share this spelling without being interchangeable complete senses. Their existing pending identities remain unchanged. No sam/ple split or composition mastery is introduced.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/sample_1"
+          ],
+          "source_record_ids": [
+            "retail04-sample"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "not_completed"
+        }
+      },
+      "candidate_morphology_sha256": "8342fdb1ef105fced6fffec9fe037afc19f906ed541e9ae48a6a48b594617dca",
+      "rationale": "Keep the whole commercial trial/example noun, with a scoped product-example identity. A statistical subset and a clinical specimen can share this spelling without being interchangeable complete senses. Their existing pending identities remain unchanged. No sam/ple split or composition mastery is introduced.",
+      "composition_mastery_eligible": false,
+      "accepted_morphology": {
+        "schema": 1,
+        "id": "professional.sample.trial-quantity.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "sample.trial-quantity.n",
+        "text": "sample",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "english.stem.sample.product-example",
+            "canonical": "sample",
+            "type": "atomic",
+            "surface": "sample",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "reviewed",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": "Codex root independent AI morphology review; not human or specialist approval",
+          "reviewed_at": "2026-10-20",
+          "notes": "Keep the whole commercial trial/example noun, with a scoped product-example identity. A statistical subset and a clinical specimen can share this spelling without being interchangeable complete senses. Their existing pending identities remain unchanged. No sam/ple split or composition mastery is introduced.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/sample_1"
+          ],
+          "source_record_ids": [
+            "retail04-sample"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "completed_exact_graph_at_declared_teaching_depth",
+          "acceptance_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json"
+        }
+      }
+    },
+    {
+      "id": "demonstration-model.display-use-product.n",
+      "text": "demonstration model",
+      "before_morphology": null,
+      "nonmorphology_sha256": "6c2c5d1bd022011d4d845aa61a57be9e6d07e2090cae0a4c42012d8612d7c284",
+      "candidate_morphology": {
+        "schema": 1,
+        "id": "professional.demonstration-model.display-use-product.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "demonstration-model.display-use-product.n",
+        "text": "demonstration model",
+        "kind": "phrase",
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.demonstrate",
+            "canonical": "demonstrate",
+            "type": "stem",
+            "surface": "demonstrate",
+            "break_offsets": []
+          },
+          {
+            "id": "p2",
+            "canonical_id": "english.affix.ion.action-result",
+            "canonical": "-ion",
+            "type": "suffix",
+            "surface": "ion",
+            "break_offsets": []
+          },
+          {
+            "id": "p3",
+            "canonical_id": "english.stem.model.product-example",
+            "canonical": "model",
+            "type": "word",
+            "surface": "model",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "demonstration",
+            "left": "p1",
+            "right": "p2",
+            "surface": "demonstration",
+            "rule": "demonstrate-show-plus-action-ion-drop-final-e",
+            "break_offsets": [
+              10
+            ]
+          },
+          {
+            "id": "whole",
+            "left": "demonstration",
+            "right": "p3",
+            "surface": "demonstration model",
+            "rule": "demonstration-plus-product-model-word-boundary",
+            "break_offsets": [
+              10,
+              14
+            ]
+          }
+        ],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "First join the full modern verb demonstrate with the action noun suffix -ion, authoring the exact final-e deletion; then join the product-example noun model. The action relation is contemporary teaching depth, not a claim that the historical English noun was formed after its verb. A model used to show a product is distinct from a digital information model, fashion model or model verb. Preserve the demonstration/model space and do not manufacture de/mon/stration spelling pieces.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/demonstration",
+            "https://www.merriam-webster.com/dictionary/demonstration",
+            "https://www.merriam-webster.com/dictionary/-ion"
+          ],
+          "source_record_ids": [
+            "retail04-demonstration-model"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "not_completed"
+        }
+      },
+      "candidate_morphology_sha256": "fa04936be3e40323dc7b51ac5ebee75a672e9a63ac2f526bdc4129d2aeb9c959",
+      "rationale": "First join the full modern verb demonstrate with the action noun suffix -ion, authoring the exact final-e deletion; then join the product-example noun model. The action relation is contemporary teaching depth, not a claim that the historical English noun was formed after its verb. A model used to show a product is distinct from a digital information model, fashion model or model verb. Preserve the demonstration/model space and do not manufacture de/mon/stration spelling pieces.",
+      "composition_mastery_eligible": true,
+      "accepted_morphology": {
+        "schema": 1,
+        "id": "professional.demonstration-model.display-use-product.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "demonstration-model.display-use-product.n",
+        "text": "demonstration model",
+        "kind": "phrase",
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.demonstrate",
+            "canonical": "demonstrate",
+            "type": "stem",
+            "surface": "demonstrate",
+            "break_offsets": []
+          },
+          {
+            "id": "p2",
+            "canonical_id": "english.affix.ion.action-result",
+            "canonical": "-ion",
+            "type": "suffix",
+            "surface": "ion",
+            "break_offsets": []
+          },
+          {
+            "id": "p3",
+            "canonical_id": "english.stem.model.product-example",
+            "canonical": "model",
+            "type": "word",
+            "surface": "model",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "demonstration",
+            "left": "p1",
+            "right": "p2",
+            "surface": "demonstration",
+            "rule": "demonstrate-show-plus-action-ion-drop-final-e",
+            "break_offsets": [
+              10
+            ]
+          },
+          {
+            "id": "whole",
+            "left": "demonstration",
+            "right": "p3",
+            "surface": "demonstration model",
+            "rule": "demonstration-plus-product-model-word-boundary",
+            "break_offsets": [
+              10,
+              14
+            ]
+          }
+        ],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "reviewed",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": "Codex root independent AI morphology review; not human or specialist approval",
+          "reviewed_at": "2026-10-20",
+          "notes": "First join the full modern verb demonstrate with the action noun suffix -ion, authoring the exact final-e deletion; then join the product-example noun model. The action relation is contemporary teaching depth, not a claim that the historical English noun was formed after its verb. A model used to show a product is distinct from a digital information model, fashion model or model verb. Preserve the demonstration/model space and do not manufacture de/mon/stration spelling pieces.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/demonstration",
+            "https://www.merriam-webster.com/dictionary/demonstration",
+            "https://www.merriam-webster.com/dictionary/-ion"
+          ],
+          "source_record_ids": [
+            "retail04-demonstration-model"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "completed_exact_graph_at_declared_teaching_depth",
+          "acceptance_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json"
+        }
+      }
+    },
+    {
+      "id": "accessory.additional-useful-item.n",
+      "text": "accessory",
+      "before_morphology": null,
+      "nonmorphology_sha256": "2a4f0038ffbb2e994f906724e015a38ca82fce2056e5b2d531a1e392504a497c",
+      "candidate_morphology": {
+        "schema": 1,
+        "id": "professional.accessory.additional-useful-item.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "accessory.additional-useful-item.n",
+        "text": "accessory",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "english.stem.accessory.additional-item",
+            "canonical": "accessory",
+            "type": "atomic",
+            "surface": "accessory",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Keep the whole extra-item noun at current-word depth. The current meaning does not support an access plus ory lesson, and the legal accomplice sense is outside this identity. This bounded choice does not deny deeper borrowed history. Atomic recognition is exposure only.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/accessory_1"
+          ],
+          "source_record_ids": [
+            "retail04-accessory"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "not_completed"
+        }
+      },
+      "candidate_morphology_sha256": "79447f776bfd90eae632fe05c036860e99ef746ab3f2383097561c6f6301847b",
+      "rationale": "Keep the whole extra-item noun at current-word depth. The current meaning does not support an access plus ory lesson, and the legal accomplice sense is outside this identity. This bounded choice does not deny deeper borrowed history. Atomic recognition is exposure only.",
+      "composition_mastery_eligible": false,
+      "accepted_morphology": {
+        "schema": 1,
+        "id": "professional.accessory.additional-useful-item.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "accessory.additional-useful-item.n",
+        "text": "accessory",
+        "kind": "atomic",
+        "parts": [
+          {
+            "id": "whole",
+            "canonical_id": "english.stem.accessory.additional-item",
+            "canonical": "accessory",
+            "type": "atomic",
+            "surface": "accessory",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "reviewed",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": "Codex root independent AI morphology review; not human or specialist approval",
+          "reviewed_at": "2026-10-20",
+          "notes": "Keep the whole extra-item noun at current-word depth. The current meaning does not support an access plus ory lesson, and the legal accomplice sense is outside this identity. This bounded choice does not deny deeper borrowed history. Atomic recognition is exposure only.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/accessory_1"
+          ],
+          "source_record_ids": [
+            "retail04-accessory"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "completed_exact_graph_at_declared_teaching_depth",
+          "acceptance_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json"
+        }
+      }
+    },
+    {
+      "id": "spare-part.replacement-component.n",
+      "text": "spare part",
+      "before_morphology": {
+        "schema": 1,
+        "id": "spare-part.replacement-component.n.analysis.v1",
+        "lexeme_id": "spare-part.replacement-component.n",
+        "text": "spare part",
+        "kind": "phrase",
+        "review": {
+          "status": "pending",
+          "notes": "Explicitly authored modern morphological candidate; language and boundary review remain pending. Named spelling rules describe this graph only.",
+          "references": []
+        },
+        "parts": [
+          {
+            "id": "p1",
+            "canonical": "spare",
+            "surface": "spare",
+            "type": "stem",
+            "canonical_id": "morph.spare"
+          },
+          {
+            "id": "p2",
+            "canonical": "part",
+            "surface": "part",
+            "type": "stem",
+            "canonical_id": "morph.part"
+          }
+        ],
+        "nodes": [
+          {
+            "id": "n1",
+            "left": "p1",
+            "right": "p2",
+            "surface": "spare part",
+            "rule": "preserve_word_boundary"
+          }
+        ],
+        "roots": [
+          "n1"
+        ]
+      },
+      "nonmorphology_sha256": "401c9acfdcc1072c1f013e7a25516e3ec01652984e8e772d9e7069ebd6359359",
+      "candidate_morphology": {
+        "schema": 1,
+        "id": "professional.spare-part.replacement-component.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "spare-part.replacement-component.n",
+        "text": "spare part",
+        "kind": "phrase",
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.spare",
+            "canonical": "spare",
+            "type": "word",
+            "surface": "spare",
+            "break_offsets": []
+          },
+          {
+            "id": "p2",
+            "canonical_id": "english.stem.part.component",
+            "canonical": "part",
+            "type": "word",
+            "surface": "part",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "p1",
+            "right": "p2",
+            "surface": "spare part",
+            "rule": "spare-replacement-plus-component-part-word-boundary",
+            "break_offsets": [
+              6
+            ]
+          }
+        ],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "pending",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": null,
+          "reviewed_at": null,
+          "notes": "Join spare meaning kept available as a replacement with the physical component noun part. The selected component identity is distinct from the partial-amount use in part-time. Preserve the phrase space and do not imply that any component fits safely or teach a replacement procedure.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/spare-part"
+          ],
+          "source_record_ids": [
+            "retail04-spare-part"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "not_completed"
+        }
+      },
+      "candidate_morphology_sha256": "4b9a1990e514f735c4772c35e6f43eecf58c09242fc12d1b471413ff7904c513",
+      "rationale": "Join spare meaning kept available as a replacement with the physical component noun part. The selected component identity is distinct from the partial-amount use in part-time. Preserve the phrase space and do not imply that any component fits safely or teach a replacement procedure.",
+      "composition_mastery_eligible": true,
+      "accepted_morphology": {
+        "schema": 1,
+        "id": "professional.spare-part.replacement-component.n.morphology.retail04.remaining20.v1",
+        "lexeme_id": "spare-part.replacement-component.n",
+        "text": "spare part",
+        "kind": "phrase",
+        "parts": [
+          {
+            "id": "p1",
+            "canonical_id": "morph.spare",
+            "canonical": "spare",
+            "type": "word",
+            "surface": "spare",
+            "break_offsets": []
+          },
+          {
+            "id": "p2",
+            "canonical_id": "english.stem.part.component",
+            "canonical": "part",
+            "type": "word",
+            "surface": "part",
+            "break_offsets": []
+          }
+        ],
+        "nodes": [
+          {
+            "id": "whole",
+            "left": "p1",
+            "right": "p2",
+            "surface": "spare part",
+            "rule": "spare-replacement-plus-component-part-word-boundary",
+            "break_offsets": [
+              6
+            ]
+          }
+        ],
+        "roots": [
+          "whole"
+        ],
+        "review": {
+          "status": "reviewed",
+          "draft_author": "Codex professional_content_next (AI author; not a human or specialist reviewer)",
+          "reviewer": "Codex root independent AI morphology review; not human or specialist approval",
+          "reviewed_at": "2026-10-20",
+          "notes": "Join spare meaning kept available as a replacement with the physical component noun part. The selected component identity is distinct from the partial-amount use in part-time. Preserve the phrase space and do not imply that any component fits safely or teach a replacement procedure.",
+          "references": [
+            "https://www.oxfordlearnersdictionaries.com/definition/english/spare-part"
+          ],
+          "source_record_ids": [
+            "retail04-spare-part"
+          ],
+          "evidence_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json",
+          "independent_review": "completed_exact_graph_at_declared_teaching_depth",
+          "acceptance_record": "data/professional/provenance/retail-module04-morphology-remaining20-2026-10-20.json"
+        }
+      }
+    }
+  ],
+  "independent_review": {
+    "status": "accepted",
+    "reviewed_on": "2026-10-20",
+    "reviewer": "Codex root independent AI morphology review; not human or specialist approval",
+    "scope": "Modern teaching analyses and canonical sense identities only. Source consultation notes are attributed to the author; no new root dictionary consultation, medical, retail-procedure, image, audio, participant or release approval is claimed.",
+    "decisions": [
+      {
+        "id": "seam.joined-cloth-edge.n",
+        "decision": "accept_at_declared_teaching_depth",
+        "reason": "The clothing join is a complete current base; no smaller productive English pieces are proposed."
+      },
+      {
+        "id": "sole.shoe-bottom.n",
+        "decision": "accept_at_declared_teaching_depth",
+        "reason": "The shoe component is a whole base. The current reviewed registry supplies no incompatible sole donor."
+      },
+      {
+        "id": "heel.raised-shoe-back.n",
+        "decision": "accept_at_declared_teaching_depth",
+        "reason": "Whole shoe-component base avoids inventing a suffix or conflating the displayed noun with another pronunciation."
+      },
+      {
+        "id": "sleeve.arm-clothing-part.n",
+        "decision": "accept_at_declared_teaching_depth",
+        "reason": "Sleeve is a whole clothing-part base, not a spelling-chunk composition."
+      },
+      {
+        "id": "collar.neck-clothing-part.n",
+        "decision": "accept_at_declared_teaching_depth",
+        "reason": "Collar is taught as the complete clothing noun; final letters do not justify a productive suffix here."
+      },
+      {
+        "id": "waistband.waist-clothing-band.n",
+        "decision": "accept_at_declared_teaching_depth",
+        "reason": "Waist plus band transparently names the garment strip; the strip-valued Growth band donor is compatible."
+      },
+      {
+        "id": "lining.inner-covering.n",
+        "decision": "accept_at_declared_teaching_depth",
+        "reason": "The inner-covering verb line supports result-noun ing; the authored final-e removal yields lining. Its identity excludes a drawn line."
+      },
+      {
+        "id": "care-label.fabric-care-tag.n",
+        "decision": "accept_at_declared_teaching_depth",
+        "reason": "Care plus label preserves the lexical space and upkeep meaning, sharing the existing label object and care-maintenance families."
+      },
+      {
+        "id": "ingredient.component-substance.n",
+        "decision": "accept_at_declared_teaching_depth",
+        "reason": "Whole-base teaching avoids presenting historically recoverable letters as a transparent productive modern split."
+      },
+      {
+        "id": "allergen.allergy-trigger.n",
+        "decision": "accept_at_declared_teaching_depth",
+        "reason": "Whole-term exposure is a valid declared depth; the rationale does not deny the allergy/gen family or claim medical review."
+      },
+      {
+        "id": "portion.serving-amount.n",
+        "decision": "accept_at_declared_teaching_depth",
+        "reason": "The serving amount is a whole base; port plus ion would be a misleading lesson for this meaning."
+      },
+      {
+        "id": "net-weight.contents-weight.n",
+        "decision": "accept_at_declared_teaching_depth",
+        "reason": "Net after deductions plus weight is transparent and preserves the word boundary; the net identity excludes networking and mesh."
+      },
+      {
+        "id": "unit-price.price-per-unit.n",
+        "decision": "accept_at_declared_teaching_depth",
+        "reason": "Standard-quantity unit plus price expresses the selected noun and avoids an unrelated organizational unit."
+      },
+      {
+        "id": "pack-size.package-quantity.n",
+        "decision": "accept_at_declared_teaching_depth",
+        "reason": "Item-group pack plus quantity size matches the lexical sense; the space remains part of the completed term."
+      },
+      {
+        "id": "multipack.combined-item-pack.n",
+        "decision": "accept_at_declared_teaching_depth",
+        "reason": "Many-valued multi plus the same item-group pack is a transparent formation with a supported combining-form identity."
+      },
+      {
+        "id": "refill.replacement-contents.n",
+        "decision": "accept_at_declared_teaching_depth",
+        "reason": "Re again plus fill supports the refill family; noun conversion is explicit and no invented noun suffix is added."
+      },
+      {
+        "id": "sample.trial-quantity.n",
+        "decision": "accept_at_declared_teaching_depth",
+        "reason": "Complete product-example base is appropriate; its identity excludes independently defined research or specimen senses."
+      },
+      {
+        "id": "demonstration-model.display-use-product.n",
+        "decision": "accept_at_declared_teaching_depth",
+        "reason": "Modern demonstrate plus ion yields demonstration by authored final-e removal, then joins product-example model with a space. The partial is legal without awarding whole-term mastery."
+      },
+      {
+        "id": "accessory.additional-useful-item.n",
+        "decision": "accept_at_declared_teaching_depth",
+        "reason": "The extra product is a whole lexical base; access plus ory would misteach the selected meaning."
+      },
+      {
+        "id": "spare-part.replacement-component.n",
+        "decision": "accept_at_declared_teaching_depth",
+        "reason": "Replacement-valued spare plus component part transparently forms the term while preserving its space and excluding other part senses."
+      }
+    ]
+  },
+  "validation": {
+    "status": "passed_scoped_regression_refresh",
+    "validated_on": "2026-10-20",
+    "native": {
+      "status": "passed",
+      "checks": 272,
+      "failures": 0,
+      "script": {
+        "path": "tests/godot/professional_retail04_morphology_tests.gd",
+        "bytes": 7755,
+        "sha256": "8fcdf43d311b359e91bc1bab44b95f9d716c004213b617de7420a457b56b4941"
+      },
+      "log": {
+        "path": "build/professional-english/continuation-20261020/retail04-native-r01.log",
+        "bytes": 133,
+        "sha256": "bf20a75a4c20942e9bab8875bc2794a62a3cbfbe62f4b0cb3aebe995551c74d9"
+      }
+    },
+    "render": {
+      "status": "passed",
+      "checks": 318,
+      "failures": 0,
+      "captures": 21,
+      "report": {
+        "path": "build/professional-english/retail04-morphology-20261020/render/report.json",
+        "bytes": 46312,
+        "sha256": "7760d79b295ae9d992c8a772656453bd63921e94bb9ea72dddb2faddc55dffe2"
+      },
+      "log": {
+        "path": "build/professional-english/continuation-20261020/retail04-render-r01.log",
+        "bytes": 366,
+        "sha256": "d1f4115f0640c79c9216405599e0f250dda58ad9952b305f0660d1c4ffe91991"
+      },
+      "visual_review": {
+        "path": "build/professional-english/retail04-morphology-20261020/visual-review.json",
+        "bytes": 19213,
+        "sha256": "ab8206fb54c144f6501afa6a6ad39be309ab8922a093d1ce181e9b72ae490ed4"
+      }
+    },
+    "node": {
+      "content_suite": "tests/professional-content.test.cjs",
+      "content_tests_passed": 159,
+      "content_failures": 0,
+      "combined_command_status": "failed_runner_registration; not an all-pass command",
+      "combined_command_tests": 163,
+      "combined_command_passed": 162,
+      "combined_command_failures": 1,
+      "log": {
+        "path": "build/professional-english/continuation-20261020/retail04-node-r02.log",
+        "bytes": 29589,
+        "sha256": "adacaba90543b72b41b459fb1643c96d04a29ceea7723b52eb77ccf4c2c22326"
+      },
+      "follow_up": "Root reported the omitted Foundation02 runner registration corrected. Combined final regressions remain pending; this record does not claim that rerun passed."
+    },
+    "scope": "Focused installed-graph/native and fixture-render validation only. No media, human, specialist, physical-device, full-game or release acceptance. Immutable candidates, prior graphs and independent editorial decisions are unchanged.",
+    "node_refresh": {
+      "status": "passed",
+      "recorded_on": "2026-10-20",
+      "combined": {
+        "tests": 235,
+        "passed": 235,
+        "failures": 0,
+        "log": {
+          "path": "docs/qa/professional-card-reader-r04/postintegration-node/history-r02.log",
+          "bytes": 25627,
+          "sha256": "6183ba5356a0f47477191c485855afc547aa3304d856bfe14f6e2ffacbd00ab2"
+        },
+        "receipt": {
+          "path": "docs/qa/professional-card-reader-r04/postintegration-node/receipt.json",
+          "bytes": 4852,
+          "sha256": "8bd830d8355380bca919c2ec3f860be5da8a01a7c237a77159bdb29be9d8c01c"
+        }
+      },
+      "focused": {
+        "tests": 12,
+        "passed": 12,
+        "failures": 0,
+        "suites": [
+          "tests/professional-retail04-morphology.test.cjs",
+          "tests/professional-approved-audio.test.cjs",
+          "tests/test-runner.test.cjs"
+        ],
+        "log": {
+          "path": "build/professional-english/continuation-20261020/focused-node-r03.log",
+          "bytes": 1361,
+          "sha256": "b1f4740c3d86008822569b2f948c1fa4c03c3aea68e709353d8c4384ca79e690"
+        }
+      },
+      "scope": "Current data regressions including the new Retail04 suite, approved audio preservation and runner registration. The earlier failed command and its original log remain preserved above."
+    },
+    "reusable_capture_check": {
+      "status": "passed_check_only",
+      "script": {
+        "path": "tools/capture-professional-retail04.gd",
+        "bytes": 11325,
+        "sha256": "73796ccd6f38441f0a42ce61ee6366d744d44e3f427045418297e94056bf368e"
+      },
+      "log": {
+        "path": "build/professional-english/continuation-20261020/retail04-capture-check-r01.log",
+        "bytes": 75,
+        "sha256": "83cf0b082206af2aa236c83064fbcfa76be1e00a4aa3558574b2f65965d9481c"
+      },
+      "render_execution": "not_repeated; the original consumed harness produced the retained 21 captures"
+    }
+  },
+  "root_review_raw_sha256": "84f8900757f23a0453acb8e44cb95b89baa852824fb0901dbc5f7a36e91e6d69",
+  "installed_module_raw_sha256": "fd2574b922273ec12e75ea234f4370162c0c6c767b99128cedc2de0864cf3a29"
+}

@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "status": "acquired_candidate_pending_independent_art_and_brief_review",
+  "lexeme_id": "card-reader.payment-device.n",
+  "source": "https://freesvg.org/pos-termina-credit-card-payment",
+  "download_action": "Visible Download SVG link through the source page browser session",
+  "publisher": "publicdomainvectors.org",
+  "individual_creator": null,
+  "creator_limitation": "Not named in the source page or downloaded SVG",
+  "license": "Source page Public Domain designation; linked CC0 1.0 Universal deed",
+  "original": {
+    "path": "206301-browser.svg",
+    "bytes": 38428,
+    "sha256": "116dca8283535b13345dbd785e846f162bd3701d91816f35603d4aead648a044"
+  },
+  "candidate_derivative": {
+    "path": "206301-cropped-512.png",
+    "width": 512,
+    "height": 433,
+    "bytes": 77565,
+    "sha256": "67cb3e6f8e0be881b51a7d18ecc28fd1a02fab6b650197a8d60ef9d550b07c59",
+    "changes": ["Rasterize the original static vector", "Trim transparent margins", "Scale proportionally to a 512-pixel maximum side"]
+  },
+  "available_animations": [],
+  "original_picture_brief": "Show a compact payment reader and a plain bank card held near its contactless area. Keep the reader dominant, with the card close enough to explain its purpose. Distinguish it from a pistol-shaped barcode scanner, a full register, and a standalone keypad. Omit account numbers, merchant branding, PIN entry, and operating steps.",
+  "proposed_picture_brief": "Show a compact bank-card payment reader with a plain card close to the reader, a small screen, a keypad and a secondary receipt. Keep the compact device dominant. Exclude a full cash drawer, merchant branding, readable account numbers, PIN entry and operating instructions. The picture does not claim a particular card-reading method or a completed payment.",
+  "brief_change_reason": "The acquired artwork shows card-payment context but no contactless symbol or hand; the new brief avoids unsupported depiction claims while retaining the broad reviewed device sense.",
+  "definition_preserved": "A device that reads payment information from a bank card.",
+  "example_preserved": "The customer held a card near the card reader.",
+  "root_visual_observations": {
+    "source_preview_and_actual_raster_inspected": true,
+    "review_sizes": [64, 96, 128, 192, 512],
+    "cash_register_comparison": "Actual integrated f3d4af9b28662c135481459cd0eb9f67ef7e30db3633a745a79ce550c00af262.png has a tall display and wide cash drawer. The candidate has a low compact body and separate bank card; these silhouette cues distinguish them.",
+    "barcode_comparison": "Actual integrated a818b742ce3fe1543298ce2330464e59cdfa341508062c67834a62c73774a69c.png depicts a code on a carton. The candidate contains no barcode or scanner.",
+    "style_limitation": "Solid shaded vector facets have less rounded material depth than some existing Retail art. Native caller-size comparison remains required."
+  },
+  "independent_art_review": "pending",
+  "independent_brief_review": "pending",
+  "native_caller_review": "pending",
+  "production_integration": false,
+  "human_visual_acceptance": false,
+  "recording_approval_changed": false,
+  "module_readiness_changed": false
+}

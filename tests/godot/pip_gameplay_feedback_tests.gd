@@ -85,6 +85,7 @@ func _match_answer(app, correct: bool) -> Dictionary:
 
 
 func _memory_answer(app, correct: bool) -> Dictionary:
+	PlayerFixture.start_memory(app)
 	var memory = app._memory
 	var first: Dictionary = memory.memory.cards[0]
 	var second: int = -1
@@ -95,6 +96,8 @@ func _memory_answer(app, correct: bool) -> Dictionary:
 			break
 	check(second >= 0, "The Memory fixture contains the requested result")
 	memory.card_buttons[0].pressed.emit()
+	check(not memory.memory.is_revealed(0) and not app.audio.voice.playing,
+		"The first Memory selection stays hidden and silent")
 	memory.card_buttons[second].pressed.emit()
 	return memory.memory.cards[second].word
 
@@ -152,14 +155,14 @@ func _check_match(app) -> void:
 func _check_memory(app) -> void:
 	for correct in [true, false]:
 		_start(app, "memory")
-		var word: Dictionary = _memory_answer(app, correct)
+		_memory_answer(app, correct)
 		var context: String = "A correct Memory pair" if correct else "A wrong Memory pair"
 		_expect_reaction(app, correct, context)
 		check(app._memory.memory.attempts == 1 and app._memory.memory.mistakes == (0 if correct else 1)
 			and app._memory.memory.matched_word_ids.size() == (1 if correct else 0),
 			context + " preserves the original pair scoring")
-		check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + word.audio),
-			context + " keeps pronouncing the second visible card")
+		check(not app.audio.voice.playing,
+			context + " uses the outcome effect without overlapping card pronunciation")
 		app._update_duck()
 		check(app.duck._gameplay_reaction == ("happy" if correct else "sad"),
 			context + " survives the regular header refresh")

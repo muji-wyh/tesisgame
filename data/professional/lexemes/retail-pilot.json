@@ -578,20 +578,27 @@
       ],
       "media": {
         "image": {
-          "status": "pending",
-          "path": null,
-          "sha256": null,
-          "source": null,
-          "creator": null,
-          "license": null,
-          "acquisition_status": "not_started",
+          "status": "integrated",
+          "path": "res://professional-media/67cb3e6f8e0be881b51a7d18ecc28fd1a02fab6b650197a8d60ef9d550b07c59.png",
+          "sha256": "67cb3e6f8e0be881b51a7d18ecc28fd1a02fab6b650197a8d60ef9d550b07c59",
+          "source": "res://docs/assets/sources/professional-retail-card-reader/source-record.json",
+          "creator": "publicdomainvectors.org (credited publisher; individual artwork creator unconfirmed)",
+          "license": "CC0 1.0 Universal / Public Domain",
+          "acquisition_status": "integrated",
           "review": {
-            "status": "pending"
+            "status": "reviewed",
+            "reviewer": "Codex (independent AI source and all-32 Match/Memory still review; not human or subject-matter approval)",
+            "reviewed_at": "2026-10-20"
           },
-          "brief": "Show a compact payment reader and a plain bank card held near its contactless area. Keep the reader dominant, with the card close enough to explain its purpose. Distinguish it from a pistol-shaped barcode scanner, a full register, and a standalone keypad. Omit account numbers, merchant branding, PIN entry, and operating steps.",
+          "brief": "Show a compact bank-card payment reader with a plain card close to the reader, a small screen, a keypad and a secondary receipt. Keep the compact device dominant. Exclude a full cash drawer, merchant branding, readable account numbers, PIN entry and operating instructions. The picture does not claim a particular card-reading method or a completed payment.",
           "picture_suitable": true,
           "available_animations": [],
-          "adaptations": []
+          "adaptations": [
+            "Rasterize the original static vector",
+            "Trim transparent margins",
+            "Scale proportionally to a 512-pixel maximum side",
+            "Copy the exact reviewed PNG into professional-media without re-encoding or further pixel changes"
+          ]
         },
         "audio": {
           "status": "integrated",
@@ -719,7 +726,7 @@
           "scope": "Selected passage consulted: Opening product description and Dip the chip / Tap contactless sections. The named payment reader accepts chip cards and contactless cards; the page explicitly describes a card held near the reader. Product-specific use confirms the payment sense and example. No rates, capabilities of all readers, operating advice, media rights, or brand endorsement are inferred. This editorial proposal does not approve language, morphology, domain practice, or media."
         }
       ],
-      "editorial_notes": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the payment-device noun and contactless example. The consulted commercial source supports this payment sense, not the older punched-card device sense. Retain card reader; a terminal may include additional functions and is not added as an exact alternative. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Required domain review remains pending. Independent AI morphology review was completed on 2026-10-16 for this exact graph at the documented modern-stem depth; this is not human or subject-matter approval. Picture suitability and word-image production remain pending. The exact Ava word recording has user listening approval and is integrated. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready."
+      "editorial_notes": "Original project-authored definition, example, and image brief. Retail module03 editorial decision: Retain the payment-device noun and contactless example. The consulted commercial source supports this payment sense, not the older punched-card device sense. Retain card reader; a terminal may include additional functions and is not added as an exact alternative. Independent AI editorial language review was completed on 2026-10-16 for the selected noun sense, part of speech, definition, original example, and evidenced accepted forms; no human or subject-matter credential is claimed. Required domain review remains pending. Independent AI morphology review was completed on 2026-10-16 for this exact graph at the documented modern-stem depth; this is not human or subject-matter approval. The card reader image has completed scoped AI source and Match/Memory still review for the broad payment-device sense; this is not human picture approval. The accepted bank-card reader brief replaces the unsupported contactless-area depiction in the earlier brief, which remains in retained provenance. The exact static SVG-derived PNG is integrated; no particular card-reading method or completed payment is depicted. The exact Ava word recording has user listening approval and is integrated. CEFR difficulty remains a provisional editorial estimate. This record alone does not make any course or module ready."
     },
     {
       "id": "barcode.product-code.n",

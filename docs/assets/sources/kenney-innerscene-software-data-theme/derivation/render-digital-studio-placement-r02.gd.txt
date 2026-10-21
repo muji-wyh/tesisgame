@@ -1,0 +1,24 @@
+extends "res://build/professional-english/software-data-theme-render-proposal-r01/render-digital-studio.gd"
+## Unexecuted placement delta. All source assets and the r01 renderer stay frozen.
+## Root must supply a fresh --output under the inherited renderer's output prefix.
+
+
+func _compose() -> void:
+	super._compose()
+	if failed:
+		return
+	var plant: Node3D = placed["studio-plant"]
+	var previous: Vector3 = plant.position
+	plant.position = Vector3(1.50, 0.05, 0.35)
+	var details: Dictionary = report.objects["studio-plant"]
+	details.position = _array3(plant.position)
+	details.world_bounds_position_size = _array_bounds(_world_bounds(plant))
+	report.placement_revision = {
+		"id": "software-data-plant-placement-r02",
+		"object": "studio-plant",
+		"previous_position": _array3(previous),
+		"position": _array3(plant.position),
+		"base_renderer_sha256": "a3919fa893a531ed3ccf851b5389a7c0b5ac68b427e65f224932aed7a62d3123",
+		"scope": "One world-position change before the inherited leaf-pivot preparation; camera, source models, materials, scale, yaw, lighting and all sixteen motion angles remain unchanged.",
+		"projection_is_not_render_acceptance": true
+	}

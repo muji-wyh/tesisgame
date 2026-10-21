@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "status": "preserved_initial_findings_before_r02_corrections",
+  "reviewer": "Independent AI source and visual reviewer",
+  "findings": [
+    {
+      "id": "CR-F01",
+      "severity": "incomplete_review_evidence",
+      "subject": "Original 192-pixel preview is clipped",
+      "evidence": "The original 840 by 560 sheet places a 192 by 192 tile at x 600, y 410. Its tile rectangle ends at y 602, below the canvas. The observed PNG visibly cuts off the bottom of the device.",
+      "source": "build/professional-english/card-reader-freesvg-acquisition-r01/prepare-preview.cjs",
+      "image": "build/professional-english/card-reader-freesvg-acquisition-r01/206301-size-review.png",
+      "image_sha256": "2b42f2929b195000f110f1bc237ca2c0c57c6710cd31ba704b121e64f74f8f40",
+      "consequence": "The original sheet cannot establish a complete 192-pixel inspection. Its complete 64, 96, 128 and 512 views remain useful.",
+      "requested_correction": "Preserve the original and create a new sheet large enough to contain every sample, then inspect it."
+    },
+    {
+      "id": "CR-F02",
+      "severity": "provenance_wording_precision",
+      "subject": "Individual artwork creator is unconfirmed; the page does contain a personal author name",
+      "evidence": "Saved HTML line 13 has meta name=author content=Vedran. Artwork-specific ImageObject creator and SVG published by fields name publicdomainvectors.org. The downloaded SVG contains no creator metadata.",
+      "source": "build/professional-english/card-reader-freesvg-acquisition-r01/206301-source.html",
+      "consequence": "Saying no individual name occurs on the source page is too broad. The page-level author tag does not establish that Vedran created this artwork.",
+      "requested_correction": "Retain publicdomainvectors.org as the credited organization and state no confirmed individual artwork creator. Preserve the original wording and add the clarification separately."
+    }
+  ],
+  "initial_decision": "Promising for native caller comparison, with complete 192-pixel review and precise creator wording pending.",
+  "limits": "These findings concern review evidence and provenance wording. They are not a failed recognition study or a rejection of the artwork's broad payment-device sense."
+}

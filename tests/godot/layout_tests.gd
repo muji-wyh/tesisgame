@@ -115,7 +115,7 @@ func _run() -> void:
 	app._show_collection()
 	await settle()
 	check(app.theme_buttons.all(func(button: Button) -> bool: return not button.is_visible_in_tree()),
-		"Short landscape notebooks keep all theme choices on Home")
+		"Short landscape notebooks do not expose the retired world picker")
 	app._hide_collection()
 	root.size = Vector2i(960, 720)
 	app.size = Vector2(960, 720)
@@ -129,21 +129,23 @@ func _run() -> void:
 	var hints_used: int = app.model.hints_used
 	var lesson_before: Array = app.model.lesson_words.duplicate(true)
 	var progress_before: Array = [app.model.phase, (app.model.matched_ids.size() / 2), app.model.mistakes]
-	check(not selected.is_empty(), "The world-change fixture contains a real selected card")
+	check(not selected.is_empty(), "The Home navigation fixture contains a real selected card")
+	var active_theme: String = app.model.theme_id
+	var preferred_theme: String = app._presentation.preferred_theme
 	app._show_mode_menu()
 	for world_id in ["ocean", "space"]:
 		await settle()
 		check(app.theme_buttons.size() == 8 and app.theme_buttons.all(func(button: Button) -> bool:
-			return app._mode_panel.is_ancestor_of(button) and button.is_visible_in_tree()),
-			"All eight world choices belong to Home")
+			return not button.is_visible_in_tree()),
+			"Home leaves theme selection to the learning path and hides retired world controls")
 		app.theme_buttons[app.Model.THEMES.find(world_id)].pressed.emit()
 		await settle()
-		check(app.model.theme_id == world_id and app._mode_menu_open() and app._presentation.preferred_theme == world_id,
-			"Choosing a world saves the preference and keeps Home open")
+		check(app.model.theme_id == active_theme and app._mode_menu_open() and app._presentation.preferred_theme == preferred_theme,
+			"A stale retired world action cannot override the learning path's theme")
 		check(app._mode_id == "match" and app.model.cards == cards and app.model.selected_id == selected
 			and app.model.hints_used == hints_used and app.model.lesson_words == lesson_before
 			and [app.model.phase, (app.model.matched_ids.size() / 2), app.model.mistakes] == progress_before,
-			"Changing a world on Home preserves the exact round, cards, selection, and hints")
+			"Home preserves the exact round, cards, selection, and hints")
 	app.choose_mode("match")
 	root.size = Vector2i(480, 900)
 	app.size = Vector2(480, 900)

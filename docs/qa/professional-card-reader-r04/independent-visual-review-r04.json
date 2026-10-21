@@ -1,0 +1,402 @@
+{
+  "schema": 1,
+  "status": "accepted_scoped_ai_image_and_brief_suitability",
+  "reviewer": "Independent AI subagent; direct inspection of all 32 full native board PNGs",
+  "reviewed_at": "2026-10-20",
+  "lexeme_id": "card-reader.payment-device.n",
+  "exact_candidate_sha256": "67cb3e6f8e0be881b51a7d18ecc28fd1a02fab6b650197a8d60ef9d550b07c59",
+  "native_report": {
+    "path": "build/professional-english/card-reader-review-20261020/captures-r04/report.json",
+    "bytes": 1441964,
+    "sha256": "a0af9f3222a499008dda07a9af5b2c765aaebef4b4046187df99af55a630f0a6",
+    "checks": 5451,
+    "failures": 0
+  },
+  "reviewed_captures": [
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/320x568-match-unmatched.png",
+      "bytes": 57561,
+      "sha256": "167113a8501d56f87cd528542efe3dc995a7be7498af929579e944e86e28f759",
+      "viewport": [
+        320,
+        568
+      ],
+      "mode": "match",
+      "stage": "unmatched"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/320x568-match-selected-reader.png",
+      "bytes": 58961,
+      "sha256": "d63634fc3f80046c3de6369e83ce9a8509b8bda71748b8f722c2befc0b88105f",
+      "viewport": [
+        320,
+        568
+      ],
+      "mode": "match",
+      "stage": "selected-reader"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/320x568-match-matched-focus-reader.png",
+      "bytes": 73042,
+      "sha256": "98f7f874f1d86365e81a7b8a91d5ad442d0f332b57a01b2dd1dcb68fe11cd724",
+      "viewport": [
+        320,
+        568
+      ],
+      "mode": "match",
+      "stage": "matched-focus-reader"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/320x568-match-matched-focus-register.png",
+      "bytes": 71391,
+      "sha256": "7d0586dbacc49542ee43f780e5180efd250f983bf95d7e5daf5445ad31df2aca",
+      "viewport": [
+        320,
+        568
+      ],
+      "mode": "match",
+      "stage": "matched-focus-register"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/320x568-memory-backs.png",
+      "bytes": 37228,
+      "sha256": "edbb720373ba82ea28bb0db6762a8e4edcf2e2ffb36ea554140e35eb5697d425",
+      "viewport": [
+        320,
+        568
+      ],
+      "mode": "memory",
+      "stage": "backs"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/320x568-memory-peek-unmatched.png",
+      "bytes": 56724,
+      "sha256": "7b18f86329220c37e7b3b92065d30ad452794ae2a3fa59289bc29eae2ce8eb14",
+      "viewport": [
+        320,
+        568
+      ],
+      "mode": "memory",
+      "stage": "peek-unmatched"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/320x568-memory-selected-reader.png",
+      "bytes": 41667,
+      "sha256": "06d332f5733333c62397e972abe6436b9fc8a27f951e373686ee1b7c4d7f64b0",
+      "viewport": [
+        320,
+        568
+      ],
+      "mode": "memory",
+      "stage": "selected-reader"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/320x568-memory-matched-three.png",
+      "bytes": 60183,
+      "sha256": "dab27e7500afb88493667f3bf444cd871918e2092a7cb8955b4337d3cb7344f3",
+      "viewport": [
+        320,
+        568
+      ],
+      "mode": "memory",
+      "stage": "matched-three"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/390x844-match-unmatched.png",
+      "bytes": 101468,
+      "sha256": "2f5be2ba6f0de543ed76bb3223769c11c675e0807e1056edb5d8b851288af9b3",
+      "viewport": [
+        390,
+        844
+      ],
+      "mode": "match",
+      "stage": "unmatched"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/390x844-match-selected-reader.png",
+      "bytes": 103268,
+      "sha256": "27b2555ee65db4ee9b2f5e844b3ca237fd61ecc3909c0d4603d8466f605bc14d",
+      "viewport": [
+        390,
+        844
+      ],
+      "mode": "match",
+      "stage": "selected-reader"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/390x844-match-matched-focus-reader.png",
+      "bytes": 125080,
+      "sha256": "b4d6abc94b3eb19a2bb0a36e476339827c0d958ada8e2f129a6e9b81d9524fd0",
+      "viewport": [
+        390,
+        844
+      ],
+      "mode": "match",
+      "stage": "matched-focus-reader"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/390x844-match-matched-focus-register.png",
+      "bytes": 125228,
+      "sha256": "a0f7687ac220626bb3682fba439d86de250f441b576c3ab48b3c52bb8382798d",
+      "viewport": [
+        390,
+        844
+      ],
+      "mode": "match",
+      "stage": "matched-focus-register"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/390x844-memory-backs.png",
+      "bytes": 58551,
+      "sha256": "c967506ea2697ec05a1d8d20a35cf5dfc6b1e30131af2576d1e56e86747a5fbe",
+      "viewport": [
+        390,
+        844
+      ],
+      "mode": "memory",
+      "stage": "backs"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/390x844-memory-peek-unmatched.png",
+      "bytes": 103935,
+      "sha256": "9326838d56cf25f4d525c0681ccaf3aae8cd23faa946bc82a05e56242d4af727",
+      "viewport": [
+        390,
+        844
+      ],
+      "mode": "memory",
+      "stage": "peek-unmatched"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/390x844-memory-selected-reader.png",
+      "bytes": 68155,
+      "sha256": "097d7709b8be425eb708075aaea024b8b93fbd68d9a95def59a938c8350962cb",
+      "viewport": [
+        390,
+        844
+      ],
+      "mode": "memory",
+      "stage": "selected-reader"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/390x844-memory-matched-three.png",
+      "bytes": 89965,
+      "sha256": "5afd36c246229afa2d0343f3fe95f526beb28a77645605ea684d45977b28352b",
+      "viewport": [
+        390,
+        844
+      ],
+      "mode": "memory",
+      "stage": "matched-three"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/844x390-match-unmatched.png",
+      "bytes": 75644,
+      "sha256": "4b2491f0fe51eebc812fea73782f629e11a52133c8bc8cb310fc303bf745da76",
+      "viewport": [
+        844,
+        390
+      ],
+      "mode": "match",
+      "stage": "unmatched"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/844x390-match-selected-reader.png",
+      "bytes": 77262,
+      "sha256": "77701147607ae037d9f854881f769cc4b971a5b526b9ae9fcc1462692256854d",
+      "viewport": [
+        844,
+        390
+      ],
+      "mode": "match",
+      "stage": "selected-reader"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/844x390-match-matched-focus-reader.png",
+      "bytes": 98532,
+      "sha256": "5d97a5c62c6af1a98d6c18454f84414873f9362a9442e704eb7cb5847ecb9732",
+      "viewport": [
+        844,
+        390
+      ],
+      "mode": "match",
+      "stage": "matched-focus-reader"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/844x390-match-matched-focus-register.png",
+      "bytes": 98576,
+      "sha256": "da3b5ab5a4a09175bb34a1b80d1419b10ad3ac898c2a4da64b7a1dd73c3608a6",
+      "viewport": [
+        844,
+        390
+      ],
+      "mode": "match",
+      "stage": "matched-focus-register"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/844x390-memory-backs.png",
+      "bytes": 40041,
+      "sha256": "992e603161cdb0be44619df36b53173b5d9d1343b269617665b4f78458ea548d",
+      "viewport": [
+        844,
+        390
+      ],
+      "mode": "memory",
+      "stage": "backs"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/844x390-memory-peek-unmatched.png",
+      "bytes": 93936,
+      "sha256": "6ddc8a6467392783a67b161b0becdfacf4a778aa5744ad081706cc667d3fa667",
+      "viewport": [
+        844,
+        390
+      ],
+      "mode": "memory",
+      "stage": "peek-unmatched"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/844x390-memory-selected-reader.png",
+      "bytes": 51339,
+      "sha256": "f321bd593fa1c2eaa3bb62badbeb4ccaaf5d0ae87cc2898b9306152ebde33942",
+      "viewport": [
+        844,
+        390
+      ],
+      "mode": "memory",
+      "stage": "selected-reader"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/844x390-memory-matched-three.png",
+      "bytes": 77686,
+      "sha256": "67d7096a540810e7e9de66a4927c09bfd1f2379869347b14ada678225ee461d5",
+      "viewport": [
+        844,
+        390
+      ],
+      "mode": "memory",
+      "stage": "matched-three"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/1280x800-match-unmatched.png",
+      "bytes": 175515,
+      "sha256": "78ad626889da0aa18373ad8e9b574f64c35eaf53e8cf34303e36f048313ed3bd",
+      "viewport": [
+        1280,
+        800
+      ],
+      "mode": "match",
+      "stage": "unmatched"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/1280x800-match-selected-reader.png",
+      "bytes": 177123,
+      "sha256": "9a4926c319b2c2300869816e5a85eb7c3b54e2c9108ea8f86ff43c316d7dcb82",
+      "viewport": [
+        1280,
+        800
+      ],
+      "mode": "match",
+      "stage": "selected-reader"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/1280x800-match-matched-focus-reader.png",
+      "bytes": 193251,
+      "sha256": "855ef75a643997809618c3ae1d794165824dc37f659a37fa34ff808e556266e0",
+      "viewport": [
+        1280,
+        800
+      ],
+      "mode": "match",
+      "stage": "matched-focus-reader"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/1280x800-match-matched-focus-register.png",
+      "bytes": 191723,
+      "sha256": "e07bdd5564e5e0e6d2ea02149f759226a34fc1405c982d5925b672ebc59ab8d8",
+      "viewport": [
+        1280,
+        800
+      ],
+      "mode": "match",
+      "stage": "matched-focus-register"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/1280x800-memory-backs.png",
+      "bytes": 49093,
+      "sha256": "5815093e5cb00d02d569a3e16afbed17f739294adb4970b58b77e82f4539b5aa",
+      "viewport": [
+        1280,
+        800
+      ],
+      "mode": "memory",
+      "stage": "backs"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/1280x800-memory-peek-unmatched.png",
+      "bytes": 184657,
+      "sha256": "cd7a3c3c86010cc2c474efcac4b625912ade2a08069cc2610f28dd84cbb3fa9d",
+      "viewport": [
+        1280,
+        800
+      ],
+      "mode": "memory",
+      "stage": "peek-unmatched"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/1280x800-memory-selected-reader.png",
+      "bytes": 68933,
+      "sha256": "fce45e28e9341106f84c1fe7b052a74b26d8606ff693d55d6133d5564293c30d",
+      "viewport": [
+        1280,
+        800
+      ],
+      "mode": "memory",
+      "stage": "selected-reader"
+    },
+    {
+      "path": "build/professional-english/card-reader-review-20261020/captures-r04/1280x800-memory-matched-three.png",
+      "bytes": 132202,
+      "sha256": "b706d8737481f074d0a7130df9fff453cf558e06ae71dfe663e5d012eb4b696d",
+      "viewport": [
+        1280,
+        800
+      ],
+      "mode": "memory",
+      "stage": "matched-three"
+    }
+  ],
+  "observations": [
+    "Directly inspected all eight states at each of 320 by 568, 390 by 844, 844 by 390, and 1280 by 800: four Match states and four Memory states. Complete boards and their source-image placement were inspected, not contact sheets alone.",
+    "The reader retains a compact yellow low body, blue bank card, screen, white keypad and secondary receipt. Those cues distinguish it from the upright pale cash register and orange carton barcode in every visible state.",
+    "The smallest visible reader in Match is approximately 61.49 by 52 pixels; the smallest Memory reader is approximately 63.85 by 54 pixels. The body, card and keypad remain distinct there. Larger phone and desktop views show the same complete source silhouette.",
+    "Unmatched and selected states preserve source opacity. Match focused and settled states use actual pair-colored fills and links; Memory matches use the actual generic green fill and badge. The corrected Memory selected state now uses the Professional Retail palette.",
+    "Term labels remain complete and readable without clipping at all four sizes. Card faces, image contain-fit and card/board bounds remain within their visible containers.",
+    "In two Match layouts, the numbered badge touches or covers a small part of the secondary receipt tip. The card, keypad and dominant device body remain unobstructed. This minor secondary-edge overlap does not obscure the taught physical device sense; no claim of zero artwork/badge intersection is made.",
+    "The artwork is more saturated and flatter than the soft pale register, but remains coherent as a clean isolated object in the shared three-quarter view. No frightening design, readable account information, merchant branding, PIN entry or operating instructions is depicted."
+  ],
+  "brief_decision": {
+    "accepted": true,
+    "brief": "Show a compact bank-card payment reader with a plain card close to the reader, a small screen, a keypad and a secondary receipt. Keep the compact device dominant. Exclude a full cash drawer, merchant branding, readable account numbers, PIN entry and operating instructions. The picture does not claim a particular card-reading method or a completed payment.",
+    "reason": "The source supports the broad payment-reader device sense. It does not depict a hand, contactless symbol, completed payment, or any particular card-reading method. The revised brief avoids those unsupported implications while retaining the definition and example."
+  },
+  "technical_interpretation": {
+    "source_and_loader": "Exact encoded asset identities and source uploads are retained. Real loaded textures match independent source textures exactly after the same renderer path, with no numerical tolerance or alpha normalization.",
+    "driver_readback": "The retained diagnostic reproduces one-level post-render readback changes for barcode and shopping basket in ANGLE. Those renderer hashes are explicitly separate from source RGBA hashes.",
+    "source_protection": "All 144 captured current-source inputs passed repeated identity checks; actual real Retail03 remained content_pending for all six checked modes.",
+    "lifecycle": "All eight app/mode cases released scoped URLs, cache budgets and weak resource references."
+  },
+  "acceptance_limits": {
+    "scoped_ai_picture_suitability": true,
+    "scoped_ai_picture_brief_review": true,
+    "all_32_native_boards_inspected": true,
+    "human_recognition": false,
+    "human_visual_acceptance": false,
+    "full_game_exercise_acceptance": false,
+    "full_animation_review": false,
+    "physical_device_acceptance": false,
+    "audio_or_listening_approval_changed": false,
+    "production_integration_at_review": false,
+    "module_or_release_ready": false
+  }
+}

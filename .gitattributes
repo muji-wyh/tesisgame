@@ -38,6 +38,8 @@ docs/qa/continuation-r33/** -text -whitespace
 docs/qa/foundation02-morphology-r01/** -text -whitespace
 docs/qa/growth-break-family-r01/** -text -whitespace
 docs/qa/professional-domain-owner-async-negative-r02/** -text -whitespace
+docs/qa/professional-card-reader-r04/** -text -whitespace
+docs/qa/software-data-static-r04/** -text -whitespace
 docs/qa/professional-domain-owner-async-r01/** -text -whitespace
 docs/qa/professional-domain-package-r01/** -text -whitespace
 docs/qa/professional-domain-runtime-r01/** -text -whitespace

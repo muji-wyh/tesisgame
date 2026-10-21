@@ -31,7 +31,9 @@ const checkout=read('data/professional/provenance/retail-checkout-image-2026-10-
 const barcode=read('data/professional/provenance/retail-barcode-image-2026-10-16.json');
 const cashRegister=read('data/professional/provenance/retail-cash-register-image-2026-10-16.json');
 const cardReaderBarcodeAudio=read('data/professional/provenance/retail-card-reader-barcode-approved-audio-2026-10-16.json');
+const { beforeCardReaderImage, beforeCardReaderImageBytes } = require('./helpers/professional-card-reader-history.cjs');
 function beforeCardReaderBarcodeAudio(entry) {
+  entry = beforeCardReaderImage(entry);
   const patch = cardReaderBarcodeAudio.patches.find(item => item.sense_id === entry.id);
   if (!patch) return entry;
   assert.deepEqual(entry, patch.after, entry.id + ': exact later user-approved card reader or barcode audio and note delta');
@@ -181,7 +183,7 @@ test('the media additions preserve every historical voice and sequential collect
   assert.equal(cardReaderBarcodeAudio.preserved_audio_files.length,1905);
   for(const file of cardReaderBarcodeAudio.preserved_audio_files)assert.equal(raw(file.path),file.sha256,file.path);
   assert.equal(data.lexemes.filter(e=>e.media.audio.status==='integrated').length,12);
-  assert.equal(data.lexemes.filter(e=>e.media.image.status==='integrated').length,10);
+  assert.equal(data.lexemes.filter(e=>e.media.image.status==='integrated').length,11);
 });
 
 test('pallet and shelf approval binds the direct reply to each exact presented recording',()=>{
@@ -489,7 +491,7 @@ test('card reader and barcode audio preserve every prior image, lexical field an
   assert.equal(cardReaderBarcodeAudio.baseline_summary.integrated_word_images,8);
   assert.equal(cardReaderBarcodeAudio.baseline_summary.integrated_word_audio,10);
   for(const patch of cardReaderBarcodeAudio.patches){
-    assert.deepEqual(data.lexemes.find(entry=>entry.id===patch.sense_id),patch.after);
+    assert.deepEqual(beforeCardReaderImage(data.lexemes.find(entry=>entry.id===patch.sense_id)),patch.after);
     assert.equal(hash(patch.before),patch.before_sha256);assert.equal(hash(protectedEntry(patch.before,'audio')),patch.protected_fields_sha256);
     assert.deepEqual(protectedEntry(patch.after,'audio'),protectedEntry(patch.before,'audio'));
     assert.equal(patch.before.editorial_notes.split(patch.note_change.before).length,2);
@@ -582,7 +584,7 @@ test('Shopping-bag addition preserves eight prior images, twelve approved record
   const r=shoppingBagImageRecord,c=r.protected_state;
   assert.equal(r.protected_media.length,20);assert.equal(r.protected_media.filter(item=>item.kind==='image').length,8);assert.equal(r.protected_media.filter(item=>item.kind==='audio').length,12);
   for(const item of r.protected_media){const descriptor=data.lexemes.find(entry=>entry.id===item.sense_id).media[item.kind];assert.deepEqual(descriptor,item.descriptor);assert.equal(hash(descriptor),item.descriptor_json_sha256);assert.equal(raw(item.file.path),item.file.sha256);assert.equal(fs.statSync(path.join(root,item.file.path)).size,item.file.bytes);}
-  assert.equal(data.lexemes.filter(entry=>entry.media.image.status==='integrated').length,10);
+  assert.equal(data.lexemes.filter(entry=>entry.media.image.status==='integrated').length,11);
   assert.equal(data.lexemes.filter(entry=>entry.media.audio.status==='integrated').length,12);
   assert.ok(data.courses.every(course=>course.modules.every(module=>module.status==='draft')));
   assert.equal(cardReaderBarcodeAudio.baseline_summary.integrated_word_images,8);
@@ -638,7 +640,8 @@ test('Gift-wrap image changes exactly three current fields and preserves every o
   }
   assert.deepEqual(entry.media.audio, before.media.audio);
 
-  const currentRetail = read('data/professional/lexemes/retail-pilot.json');
+  const currentRetailBytes = beforeCardReaderImageBytes(fs.readFileSync(path.join(root, 'data/professional/lexemes/retail-pilot.json')));
+  const currentRetail = JSON.parse(currentRetailBytes);
   assert.equal(historicalRetail.lexemes.length, 48);
   assert.deepEqual(currentRetail.lexemes.filter(item => item.id !== id),
     historicalRetail.lexemes.filter(item => item.id !== id));
@@ -646,9 +649,9 @@ test('Gift-wrap image changes exactly three current fields and preserves every o
   expectedRetail.lexemes[expectedRetail.lexemes.findIndex(item => item.id === id)] = after;
   assert.deepEqual(currentRetail, expectedRetail);
   assert.equal(historicalRetailBytes.toString('utf8'), JSON.stringify(historicalRetail, null, 2) + '\n');
-  assert.equal(fs.readFileSync(path.join(root, 'data/professional/lexemes/retail-pilot.json'), 'utf8'),
+  assert.equal(currentRetailBytes.toString('utf8'),
     JSON.stringify(expectedRetail, null, 2) + '\n', 'The serialized delta preserves every unrelated raw byte.');
-  assert.equal(raw('data/professional/lexemes/retail-pilot.json'),
+  assert.equal(crypto.createHash('sha256').update(currentRetailBytes).digest('hex'),
     'dee9e024d357c343aaa89b75b19cb5edbccdfe9d7d9595ead8613d7b847402c0');
   assert.equal(raw('data/professional/catalog.json'),
     '0f7509c742d1784e0d48562e1d4b60ee3ded9cb9310c3330a1ab548c563c17be');

@@ -503,6 +503,11 @@ function memoryLayout(bounds) {
 }
 
 function memoryCardRect(bounds, index) {
+  const published = bounds.growth?.memory?.cards?.find(card => card.index === index)?.rect;
+  if (published) {
+    const [x, y, width, height] = published;
+    return { x, y, width, height };
+  }
   const layout = memoryLayout(bounds), row = Math.floor(index / layout.columns);
   const count = Math.min(layout.columns, 10 - row * layout.columns);
   const inset = (layout.width - count * layout.cardWidth - (count - 1) * layout.gap) / 2;
@@ -521,17 +526,20 @@ function peekPoint(bounds) {
 }
 
 async function withMemoryPeek(page, revealed) {
-  const bounds = await memoryMetrics(page), point = peekPoint(bounds);
-  await tap(page, point.x, point.y);
+  const { memoryState, startObservation, startMatching } = require('./memory-flow.cjs');
+  if (!(await memoryState(page)).started) await startObservation(page);
+  else {
+    const bounds = await memoryMetrics(page), point = peekPoint(bounds);
+    await tap(page, point.x, point.y);
+  }
   await expect(page.locator('#game-status')).toContainText(/Cards hide in \d+ seconds\./);
   try {
-    await revealed(bounds);
+    await revealed(await memoryMetrics(page));
   } finally {
     // Keep shared visual/gameplay fixtures short; timer expiry is exercised by
     // the dedicated countdown tests. Do not dismiss a modal opened by the callback.
     if ((await metrics(page)).growth?.memory?.peek?.studying) {
-      await page.keyboard.press('Escape');
-      await expect.poll(async () => (await metrics(page)).growth.memory.peek.studying).toBe(false);
+      await startMatching(page);
     }
   }
   await rendered(page);

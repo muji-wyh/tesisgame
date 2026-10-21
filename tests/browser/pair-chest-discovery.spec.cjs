@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const {
-  openGame, metrics, tap, rendered, discoverMatchCards, boardPoint, memoryPoint,
+  openGame, metrics, tap, rendered, discoverMatchCards, boardPoint,
   acceptCelebration
 } = require('./game-ui.cjs');
 const {
@@ -23,41 +23,27 @@ test.beforeEach(async ({ page }) => {
   await page.addInitScript(key => {
     // A valid saved pity reservation keeps the reveal on pair one. Starting
     // a real round preserves that reservation; only a real match earns it.
-    const state = Object.fromEntries(['match', 'memory'].map(mode => [mode, {
-      dry_rounds: 2,
-      round: { id: `reserved-${mode}-discovery`, pair: 1, awarded: false,
-        settled: false, completed: false, theme: '', fragment: {} }
-    }]));
+    const state = {
+      match: { dry_rounds: 2, round: { id: 'reserved-match-discovery', pair: 1, awarded: false,
+        settled: false, completed: false, theme: '', fragment: {} } },
+      memory: { dry_rounds: 0, round: {} }
+    };
     localStorage.setItem(key, '[medals]\nversion=1\ncounts={}\n[pair_chests]\nversion=1\n' +
       `state=${JSON.stringify(state)}\n`);
   }, MEDAL_KEY);
 });
 
-async function discoverMemoryCards(page) {
-  const cards = [];
-  for (let index = 0; index < 10; index++) {
-    const point = memoryPoint(await metrics(page), index);
-    await tap(page, point.x, point.y);
-    await expect(page.locator('#selection-status')).toHaveText(/^Memory card \d+\. (Word|Picture): [a-z]+\.$/);
-    const [, kind, word] = (await page.locator('#selection-status').textContent()).match(/\. (Word|Picture): ([a-z]+)\.$/);
-    cards.push({ index, kind, word });
-    await tap(page, point.x, point.y);
-    await expect(page.locator('#selection-status')).toBeEmpty();
-  }
-  return cards;
-}
-
 async function playPair(page, mode, pair) {
   for (const card of pair) {
-    const point = (mode === 'match' ? boardPoint : memoryPoint)(await metrics(page), card.index);
+    const point = boardPoint(await metrics(page), card.index);
     await tap(page, point.x, point.y);
   }
-  await expect(page.locator('#game-status')).toContainText(mode === 'match' ? 'Great match!' : 'A new flower!');
+  await expect(page.locator('#game-status')).toContainText('Great match!');
 }
 
 async function continuePairs(page, mode) {
-  if (mode === 'match') await page.keyboard.press('Escape');
-  await expect(page.locator('#game-status')).toContainText(mode === 'match' ? 'Find 5 word' : 'Find a pair.');
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#game-status')).toContainText('Find 5 word');
 }
 
 async function discoveryPlaybacks(page, from, timing) {
@@ -70,7 +56,7 @@ async function capture(page, info, label) {
   await info.attach(label, { body: screenshot, contentType: 'image/png' });
 }
 
-for (const mode of ['match', 'memory']) {
+for (const mode of ['match']) {
   for (const geometry of GEOMETRIES) {
     test(`${mode} discovers its hidden chest with one cheer and a readable notice on ${geometry.name}`, async ({ page, browserName }, info) => {
       test.setTimeout(150000);
@@ -82,7 +68,7 @@ for (const mode of ['match', 'memory']) {
       if (browserName === 'chromium') expect(available).toBe(true);
       test.skip(!available, 'This browser runtime has no WebAudio.');
       const timing = recordingTiming(DISCOVERY);
-      const cards = mode === 'match' ? await discoverMatchCards(page) : await discoverMemoryCards(page);
+      const cards = await discoverMatchCards(page);
       const pairs = cards.filter(card => card.kind === 'Word').map(word =>
         [word, cards.find(card => card.kind === 'Picture' && card.word === word.word)]);
       expect(pairs).toHaveLength(5);

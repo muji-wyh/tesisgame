@@ -66,7 +66,7 @@ func _state(view) -> Dictionary:
 	return {"cards": view.memory.cards.duplicate(true), "selected": view.memory.selected_indices.duplicate(),
 		"matched": view.memory.matched_word_ids.duplicate(), "feedback": view.memory.feedback_words.duplicate(true),
 		"attempts": view.memory.attempts, "mistakes": view.memory.mistakes, "phase": view.memory.phase,
-		"studying": view.memory.studying, "peeks": view.memory.peeks, "price": view.memory.peek_price(),
+		"started": view.memory.started, "studying": view.memory.studying, "peeks": view.memory.peeks, "price": view.memory.peek_price(),
 		"peek_remaining": view.memory.peek_remaining, "peek_duration": view.memory.peek_duration}
 
 
@@ -75,11 +75,19 @@ func _check_free_and_insufficient(app, storage: BrowserStorage) -> void:
 	var view = app._memory
 	var writes: int = storage.writes
 	view.begin_peek()
+	view.study_button.pressed.emit()
+	view.card_buttons[0].pressed.emit()
+	check(not view.memory.started and not view.memory.studying and view.memory.peeks == 0
+		and view.memory.selected_indices.is_empty() and purchases.is_empty() and storage.writes == writes,
+		"The eye and cards cannot bypass Start game or create a payment before the initial observation")
+	view.start_button.pressed.emit()
+	view.start_button.pressed.emit()
 	view.begin_peek()
 	view.study_button.pressed.emit()
 	check(view.memory.studying and view.memory.peeks == 1 and view.memory.peek_price() == 100
+		and view.memory.peek_duration == 10.0 and view.memory.peek_remaining == 10.0
 		and purchases.is_empty() and storage.writes == writes and app.coin_wallet.balance == 0,
-		"The first click reveals for free once without a zero-cost wallet transaction")
+		"Start game grants one free ten-second observation without a zero-cost wallet transaction")
 	view.end_peek()
 	view.card_buttons[0].pressed.emit()
 	var before: Dictionary = _state(view)
@@ -115,7 +123,10 @@ func _check_price_sequence(app, storage: BrowserStorage) -> void:
 		var before_calls: int = purchases.size()
 		var before_feedback: int = feedback.size()
 		check(view.memory.peek_price() == price, "The next eye price matches its capped per-game schedule")
-		view.begin_peek()
+		if ordinal == 1:
+			view.start_button.pressed.emit()
+		else:
+			view.begin_peek()
 		expected_spend += price
 		check(view.memory.studying and view.memory.peeks == ordinal and app.coin_wallet.balance == initial_balance - expected_spend,
 			"A successful reveal charges exactly its current price before incrementing the count")
@@ -135,6 +146,7 @@ func _check_price_sequence(app, storage: BrowserStorage) -> void:
 		var accepted_feedback: int = feedback.size()
 		view.begin_peek()
 		view.study_button.pressed.emit()
+		view.start_button.pressed.emit()
 		check(purchases.size() == accepted_calls and feedback.size() == accepted_feedback
 			and app.coin_wallet.balance == initial_balance - expected_spend and view.memory.peeks == ordinal
 			and view.memory.peek_remaining == remaining,
@@ -160,7 +172,7 @@ func _check_feedback_failure(app, storage: BrowserStorage) -> void:
 	for correct: bool in [false, true]:
 		await _prepare(app)
 		var view = app._memory
-		view.begin_peek()
+		view.start_button.pressed.emit()
 		view.end_peek()
 		var first: int = -1
 		var second: int = -1
@@ -179,15 +191,30 @@ func _check_feedback_failure(app, storage: BrowserStorage) -> void:
 		var timer_left: float = view._feedback_timer.time_left
 		var balance: int = app.coin_wallet.balance
 		var saved: Variant = storage.text
+		var calls: int = storage.calls
 		storage.fail_write = true
 		view.begin_peek()
-		check(_state(view) == before and storage.text == saved and app.coin_wallet.balance == balance,
-			"A failed save preserves correct or wrong feedback, every face, and the next paid ordinal")
+		view.study_button.pressed.emit()
+		check(_state(view) == before and storage.text == saved and app.coin_wallet.balance == balance
+			and storage.calls == calls and purchases.is_empty() and feedback.size() == 1,
+			"Committed correct or wrong feedback blocks eye input before any payment request or response")
 		check(not view._feedback_timer.is_stopped() and is_equal_approx(view._feedback_timer.time_left, timer_left),
-			"Denied payment does not dismiss or restart the active feedback timer")
+			"Blocked eye input does not dismiss or restart the active feedback timer")
+		check(app._coin_counter.available and app.coin_wallet.error.is_empty(),
+			"An eye tap during feedback cannot reach storage or make the wallet unavailable")
+		view.continue_feedback()
+		for index in range(view.memory.cards.size()):
+			if not view.memory.matched_word_ids.has(view.memory.cards[index].word.id):
+				view.card_buttons[index].pressed.emit()
+				break
+		before = _state(view)
+		view.begin_peek()
+		check(_state(view) == before and storage.text == saved and app.coin_wallet.balance == balance
+			and purchases.size() == 1 and not view.card_buttons[view.memory.selected_indices[0]].face_up,
+			"After feedback, a failed save preserves the concealed selection, progress and next paid ordinal")
 		check(not app._coin_counter.available and not app.coin_wallet.error.is_empty(),
 			"Storage failure is surfaced without pretending a reveal was bought")
-		var calls: int = storage.calls
+		calls = storage.calls
 		view.begin_peek()
 		check(storage.calls == calls + 1 and purchases.size() == 2 and _state(view) == before,
 			"A fresh click may retry a failed write without consuming a use or starting its timer")
@@ -197,7 +224,7 @@ func _check_feedback_failure(app, storage: BrowserStorage) -> void:
 		check(view.memory.studying and view.memory.phase == "waiting" and view.memory.peeks == 2
 			and view.memory.attempts == before.attempts and view.memory.mistakes == before.mistakes
 			and view.memory.matched_word_ids == before.matched and view._feedback_timer.is_stopped(),
-			"A fresh successfully paid click resolves feedback once without replaying the answer")
+			"A successful retry starts observation once while preserving the completed attempt and matched pairs")
 		check(app.coin_wallet.balance == balance - 100 and app._coin_counter.available
 			and app.coin_wallet._receipts.get(app._round_id + ":memory-peek:2", 0) == -100,
 			"Recovery saves one 100-coin receipt for the same previously denied reveal")
@@ -207,7 +234,7 @@ func _check_feedback_failure(app, storage: BrowserStorage) -> void:
 func _check_missing_callback_and_reentry(app) -> void:
 	await _prepare(app)
 	var view = app._memory
-	view.begin_peek()
+	view.start_button.pressed.emit()
 	view.end_peek()
 	view.purchase_peek = Callable()
 	view.begin_peek()
@@ -231,7 +258,7 @@ func _check_missing_callback_and_reentry(app) -> void:
 func _check_paid_interruption(app) -> void:
 	await _prepare(app)
 	var view = app._memory
-	view.begin_peek()
+	view.start_button.pressed.emit()
 	view.end_peek()
 	var balance: int = app.coin_wallet.balance
 	var receipts: int = app.coin_wallet._receipts.size()
@@ -255,7 +282,7 @@ func _check_paid_interruption(app) -> void:
 func _check_lifecycle_and_reset(app) -> void:
 	await _prepare(app)
 	var view = app._memory
-	view.begin_peek()
+	view.start_button.pressed.emit()
 	view.end_peek()
 	for cancellation: String in ["pause", "page", "home", "focus"]:
 		var price: int = view.memory.peek_price()
@@ -280,9 +307,9 @@ func _check_lifecycle_and_reset(app) -> void:
 	var old_round: String = app._round_id
 	var balance: int = app.coin_wallet.balance
 	await _prepare(app)
-	check(app._round_id != old_round and view.memory.peeks == 0 and view.memory.peek_price() == 0,
-		"A new game starts at free with a distinct receipt namespace")
-	view.begin_peek()
+	check(app._round_id != old_round and not view.memory.started and view.memory.peeks == 0 and view.memory.peek_price() == 0,
+		"A new game restores the Start gate and a distinct receipt namespace")
+	view.start_button.pressed.emit()
 	check(view.memory.peek_duration == 10.0 and view.memory.peek_remaining == 10.0,
 		"A new round restores ten seconds even after the previous round reached paid reveals")
 	view.end_peek()

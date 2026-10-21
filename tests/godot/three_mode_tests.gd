@@ -105,15 +105,18 @@ func _run() -> void:
 	check(app._memory.find_child("MemoryFeedback", true, false) == null
 		and app._memory.find_child("MemoryReviewHint", true, false) == null, "Memory has no bottom panel")
 	if app._memory.has_method("begin_peek") and app._memory.has_method("end_peek"):
-		app._memory.begin_peek()
-		check(app._memory.memory.studying, "Activating the eye reveals the board")
-		app._memory.end_peek()
+		check(not app._memory.memory.started and app._memory.start_button.is_visible_in_tree(),
+			"Memory keeps its board behind the initial Start game action")
+		app._memory.start_button.pressed.emit()
+		check(app._memory.memory.studying and app._memory.memory.peeks == 1 and app._memory.memory.peek_duration == 10.0,
+			"Start game begins the free ten-second observation")
+		app._memory_peek_countdown.action_button.pressed.emit()
 		check(not app._memory.memory.studying and range(10).all(func(index: int) -> bool:
 			return not app._memory.memory.is_revealed(index)), "Ending the reveal turns every unmatched face back")
 		var previous_coins: int = app.coin_wallet.balance
 		var credit: Dictionary = app.coin_wallet.credit("fixture:second-memory-peek", 2)
 		check(credit.ok and credit.amount == 100 and app.coin_wallet.balance == previous_coins + 100,
-			"Fund the second Memory hold's 100-coin price while preserving any settled Match reward")
+			"Fund the next Memory reveal's 100-coin price while preserving any settled Match reward")
 		app._coin_flight.sync(app.coin_wallet.balance)
 		app._memory.begin_peek()
 		check(app._memory.memory.studying and app._memory.memory.peeks == 2 and app.coin_wallet.balance == previous_coins,

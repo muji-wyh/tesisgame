@@ -124,7 +124,7 @@ func _run() -> void:
 	root.size = Vector2i(1100, 1000)
 	view.size = Vector2(744, 900)
 	await settle()
-	view.begin_peek()
+	view.start_game()
 	check(view.memory.studying and view.card_buttons.all(func(card: Button) -> bool:
 		return not card.find_child("CardBack", true, false).is_visible_in_tree()), "Timed Peek still reveals the true fronts")
 	view.end_peek()
